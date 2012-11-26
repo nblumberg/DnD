@@ -20,15 +20,21 @@ Initiative.prototype._STYLES = [
 	"div#header * { margin-right: 10px; }",
 	"span#spanLabel { font-size: 1.2em; }",
 	"input#round { width: 30px; }",
+	
+	".creaturePanel { float: left; position: relative; }",
+	".creaturePanel .column { float: left; margin-right: 4px; }",
+	".creaturePanel img.icon { margin-right: 2px; }",
+	".creaturePanel .fullWidth { clear: both; width: 100%; }",
+	".numerator:after { content: '/' }",
+	".bloodied { background-color: red; }",
+	
 	"div#history { float: right; height: 100%; min-width: 30%; padding: 0 5px; }",
 	"div#history h3 { margin: 5px 0; }",
 //		"table#initiative { border-collapse: collapse; }",
-	"div#history, div#history h3, table#initiative th, table#initiative td { border: 3px solid white; font-size: 1.5em; }", 
+	".creaturePanel, div#history, div#history h3, table#initiative th, table#initiative td { border: 3px solid white; font-size: 1.5em; }", 
 	"table#initiative th, table#initiative td { text-align: center; }", 
 	"table#initiative tr.current td { border-color: turquoise; }",
-	"table#initiative tr.bloodied { background-color: red; }",
 	"table#initiative td.hp { font-size: 1.5em; padding: 3px; text-align: left; }",
-	"table#initiative td.hp span.currentHp:after, table#initiative td.hp span.surgesRemaining:after { content: '/' }",
 	"table#initiative .tempHp { font-style: italic; }",
 	"div#attacksDialog { padding: 5px; }",
 	"div#attacksDialog table { width: 98%; }",
@@ -163,77 +169,12 @@ Initiative.prototype._render = function() {
 	
 	for (i = 0; i < this.order.length; i++) {
 		actor = this.actors[ this.order[ i ] ];
-		$tr = jQuery("<tr/>").attr("id", actor.name);
-		if (i === this._current) {
-			$tr.addClass("current");
-		}
-		if (actor.hp.current <= Math.floor(actor.hp.total / 2)) {
-			$tr.addClass("bloodied");
-		}
-		this.$table.append($tr);
-		
-		$td = jQuery("<td/>");
-		$tr.append($td);
-		image = new Image();
-		image.height = 100;
-		image.src = actor.image;
-		$td.append(image);
-		$td.append(jQuery("<div/>").html(actor.name));
-		
-		$td = jQuery("<td/>");
-		$tr.append($td);
-		addDefense = function(className, value, icon) {
-			$div = jQuery("<div/>").addClass(className).attr("title", className.toUpperCase()).html(value);
-			$td.append($div);
-			image = new Image();
-			image.height = 20;
-			image.src = icon;
-			$div.prepend(image);
-		};
-		addDefense("ac", actor.defenses.ac, "http://aux.iconpedia.net/uploads/20429361841025286885.png");
-		addDefense("fort", actor.defenses.fort, "http://www.gettyicons.com/free-icons/101/sigma-medical/png/256/cardiology_256.png"); // "http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png");
-		addDefense("ref", actor.defenses.ref, "http://pictogram-free.com/highresolution/l_163.png");
-		addDefense("will", actor.defenses.will, "http://www.iconhot.com/icon/png/medical-icons/256/brain.png");
-		
-		$td = jQuery("<td/>").addClass("hp").appendTo($tr);
-		addHp = function(src, title, className1, value1, className2, value2) {
-			$div = jQuery("<div/>").appendTo($td);
-			image = new Image();
-			image.height = 20;
-			image.title = title;
-			image.src = src;
-			$div.append(image);
-			$span = jQuery("<span/>").addClass(className1).html(value1).appendTo($div);
-			if (typeof(value2) !== "undefined") {
-				$span = jQuery("<span/>").addClass(className2).html(value2).appendTo($div);
-			}
-		};
-		if (actor.hp.temp) {
-			addHp("http://findicons.com/files/icons/1700/2d/512/clock.png", "Temp HP", "tempHp", actor.hp.temp);
-		}
-		addHp("http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png", "HP", "currentHp", actor.hp.current, "totalHp", actor.hp.total);
-		if (actor.surges && actor.surges.hasOwnProperty("current")) {
-			addHp("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Red_Cross_icon.svg/480px-Red_Cross_icon.svg.png", "Healing Surges", "surgesRemaining", actor.surges.current, "surgesPerDay", actor.surges.perDay);
-		}
-		
-		$td = jQuery("<td/>").addClass("actions");
-		$tr.append($td);
-		addAction = function(title, src, click) {
-			$div = jQuery("<div/>").appendTo($td);
-			image = new Image();
-			image.height = 30;
-			image.title = title;
-			image.src = src;
-			jQuery(image).on({ click: click });
-			$div.append(image);
-		};
-		addAction("Attack", "http://gamereviewhero.com/images/sword_icon.png", this._attack.bind(this, actor));
-		addAction("Heal", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Red_Cross_icon.svg/480px-Red_Cross_icon.svg.png", this._heal.bind(this, actor));
-		
-		$td = jQuery("<td/>").addClass("history");
-		$tr.append($td);
-		$div = jQuery("<div/>").appendTo($td);
-		$div.append(actor.history.$html);
+		actor.createTr({ 
+			$table: this.$table,
+			isCurrent: i === this._current,
+			attack: this._attack.bind(this, actor),
+			heal: this._heal.bind(this, actor)
+		});
 	}
 };
 

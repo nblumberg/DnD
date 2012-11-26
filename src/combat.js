@@ -5,4 +5,5 @@
 		data.actors[ name ] = new Creature(data.actors[ name ]);
 	}
 	initiative = new Initiative(data);
+	jQuery(document).ready(function() { data.actors[ "Kitara" ].createCard(); });
 })();
