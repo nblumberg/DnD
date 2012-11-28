@@ -79,6 +79,42 @@ History.prototype._renderMsg = function(msg, round) {
 	$ul.append($li);
 };
 
+var Effect = function(params) {
+    params = params || {};
+    this.name = typeof(params) === "string" ? params : params.name;
+};
+
+Effect.CONDITIONS = {
+        "-2 attacks": "-2_attacks.jpg",
+        Blinded: "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
+        Dazed: "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
+        Deafened: "http://joeclark.org/ear.gif",
+        Diseased: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnOrSXb8UHvwhgQ-loEdXZvQPTjuBylSfFNiK7Hxyq03IxgUKe",
+        Dominated: "http://fs02.androidpit.info/ali/x90/4186790-1324571166012.png",
+        Dying: "http://iconbug.com/data/61/256/170c6197a99434339f465fa8c9fa4018.png",
+        Dead: "http://t2.gstatic.com/images?q=tbn:ANd9GcTPA7scM15IRChKnwigvYnQUDWNGHLL1cemtAeKxxZKwBDj33MFCxzfyorp",
+        Grabbed: "http://www.filipesabella.com/wp-content/uploads/2010/02/hand_grab.jpg",
+        Helpless: "http://files.softicons.com/download/tv-movie-icons/dexter-icons-by-rich-d/png/128/Tied-Up%20Dexter.png",
+        Immobilized: "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
+        Marked: "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
+        "Ongoing acid": "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
+        "Ongoing cold": "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
+        "Ongoing damage": "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
+        "Ongoing fire": "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
+        "Ongoing lightning": "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
+        "Ongoing necrotic": "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
+        "Ongoing poison": "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
+        "Ongoing psychic": "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
+        "Ongoing radiant": "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
+        Petrified: "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
+        Prone: "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
+        Restrained: "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
+        Slowed: "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
+        Stunned: "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
+        Unconscious: "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
+        Weakened: "http://pictogram-free.com/material/003.png"
+};
+
 var Creature = function(params) {
 	var i;
 	params = params || {};
@@ -96,6 +132,10 @@ var Creature = function(params) {
 	for (i = 0; params.attacks && i < params.attacks.length; i++) {
 		this.attacks.push(new Attack(params.attacks[ i ]));
 	}
+    this.effects = [];
+    for (i = 0; params.effects && i < params.effects.length; i++) {
+        this.effects.push(new Effect(params.effects[ i ]));
+    }
 	this.history = new History(params.history);
 };
 
@@ -122,22 +162,18 @@ Creature.prototype.createTr = function(params) {
 	}
 	params.$table.append($tr);
 	
-	$td = jQuery("<td/>");
+	$td = jQuery("<td/>").addClass("bordered centered");
 	$tr.append($td);
-	image = new Image();
-	image.height = 100;
-	image.src = this.image;
-	$td.append(image);
-	$td.append(jQuery("<div/>").html(this.name));
+	this.createCard({ $parent: $td, isCurrent: params.isCurrent });
 	
-	$td = jQuery("<td/>");
+	$td = jQuery("<td/>").addClass("bordered");
 	$tr.append($td);
 	this._addDefense($td, "ac", this.defenses.ac, "http://aux.iconpedia.net/uploads/20429361841025286885.png");
 	this._addDefense($td, "fort", this.defenses.fort, "http://www.gettyicons.com/free-icons/101/sigma-medical/png/256/cardiology_256.png"); // "http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png");
 	this._addDefense($td, "ref", this.defenses.ref, "http://pictogram-free.com/highresolution/l_163.png");
 	this._addDefense($td, "will", this.defenses.will, "http://www.iconhot.com/icon/png/medical-icons/256/brain.png");
 	
-	$td = jQuery("<td/>").addClass("hp").appendTo($tr);
+	$td = jQuery("<td/>").addClass("hp bordered").appendTo($tr);
 	if (this.hp.temp) {
 		this._addHp($td, "http://findicons.com/files/icons/1700/2d/512/clock.png", "Temp HP", "tempHp", this.hp.temp);
 	}
@@ -146,12 +182,12 @@ Creature.prototype.createTr = function(params) {
 		this._addHp($td, "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Red_Cross_icon.svg/480px-Red_Cross_icon.svg.png", "Healing Surges", "surgesRemaining", this.surges.current, "surgesPerDay", this.surges.perDay);
 	}
 	
-	$td = jQuery("<td/>").addClass("actions");
+	$td = jQuery("<td/>").addClass("actions bordered");
 	$tr.append($td);
 	this._addAction($td, "Attack", "http://gamereviewhero.com/images/sword_icon.png", params.attack);
 	this._addAction($td, "Heal", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Red_Cross_icon.svg/480px-Red_Cross_icon.svg.png", params.heal);
 	
-	$td = jQuery("<td/>").addClass("history");
+	$td = jQuery("<td/>").addClass("history bordered");
 	$tr.append($td);
 	$div = jQuery("<div/>").appendTo($td);
 	$div.append(this.history.$html);
@@ -160,12 +196,13 @@ Creature.prototype.createTr = function(params) {
 /**
  * @param $parent {jQuery(element)} The parent element
  * @param isCurrent {Boolean} Indicates if it is this Creature's turn in the initiative order
+ * @param className {String} Class(es) to apply to the top-level element 
  */
 Creature.prototype.createCard = function(params) {
-	var $parent, $div, $span, image;
+	var $parent, $div, $span, image, i, $effects;
 	params = params || {};
 	$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
-	this.$panel = jQuery("<div/>").attr("id", this.name).addClass("creaturePanel").appendTo($parent);
+	this.$panel = jQuery("<div/>").attr("id", this.name).addClass("creaturePanel centered bordered " + params.className).appendTo($parent);
 	if (params.isCurrent) {
 		this.$panel.addClass("current");
 	}
@@ -173,31 +210,37 @@ Creature.prototype.createCard = function(params) {
 		this.$panel.addClass("bloodied");
 	}
 	
-	$div = jQuery("<div/>").addClass("column identity").appendTo(this.$panel);
 	image = new Image();
 	image.height = 100;
 	image.src = this.image;
-	$div.append(image);
-	$div.append(jQuery("<div/>").html(this.name));
+	this.$panel.append(image);
+	this.$panel.append(jQuery("<div/>").addClass("f2").html(this.name));
+	
+    $effects = jQuery("<div/>").addClass("effects").appendTo(this.$panel);
+    
+	for (i = 0; this.effects && i < this.effects.length; i++) {
+	    this._addCondition($effects, this.effects[i], this.effects.length);
+	}
+};
 
-	$div = jQuery("<div/>").addClass("column defenses").appendTo(this.$panel);
-	this._addDefense($div, "ac", this.defenses.ac, "http://aux.iconpedia.net/uploads/20429361841025286885.png");
-	this._addDefense($div, "fort", this.defenses.fort, "http://www.gettyicons.com/free-icons/101/sigma-medical/png/256/cardiology_256.png"); // "http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png");
-	this._addDefense($div, "ref", this.defenses.ref, "http://pictogram-free.com/highresolution/l_163.png");
-	this._addDefense($div, "will", this.defenses.will, "http://www.iconhot.com/icon/png/medical-icons/256/brain.png");
-	
-	$div = jQuery("<div/>").addClass("column hp").appendTo(this.$panel);
-	if (this.hp.temp) {
-		this._addHp($div, "http://findicons.com/files/icons/1700/2d/512/clock.png", "Temp HP", "tempHp", this.hp.temp);
-	}
-	this._addHp($div, "http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png", "HP", "currentHp", this.hp.current, "totalHp", this.hp.total);
-	if (this.surges && this.surges.hasOwnProperty("current")) {
-		this._addHp($div, "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Red_Cross_icon.svg/480px-Red_Cross_icon.svg.png", "Healing Surges", "surgesRemaining", this.surges.current, "surgesPerDay", this.surges.perDay);
-	}
-	
-	$div = jQuery("<div/>").addClass("fullWidth actions").appendTo(this.$panel);
-	this._addAction($div, "Attack", "http://gamereviewhero.com/images/sword_icon.png", params.attack);
-	this._addAction($div, "Heal", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Red_Cross_icon.svg/480px-Red_Cross_icon.svg.png", params.heal);
+Creature._CARD_SIZE = 120;
+
+Creature.prototype._addCondition = function($parent, effect, total) {
+    var image = new Image();
+    if (total <= 4) {
+        image.height = Creature._CARD_SIZE / 3;
+    }
+    else if (total <= 9) {
+        image.height = Creature._CARD_SIZE / 4;
+    }
+    else {
+        image.height = Creature._CARD_SIZE / 5.4;
+    }
+    image.className = "icon floatLeft";
+    image.title = effect.name;
+    image.src = Effect.CONDITIONS[ effect.name ];
+    jQuery(image).css("background-color", "#FFFFFF");
+    $parent.append(image);
 };
 
 Creature.prototype._addDefense = function($parent, className, value, icon) {
@@ -215,6 +258,9 @@ Creature.prototype._addHp = function($parent, src, title, className1, value1, cl
 	image.className = "icon";
 	image.title = title;
 	image.src = src;
+	image.onload = function() {
+		
+	};
 	$span = jQuery("<span/>").addClass(className1).html(value1);
 	$div = jQuery("<div/>").appendTo($parent).append(image).append($span);
 	if (typeof(value2) !== "undefined") {

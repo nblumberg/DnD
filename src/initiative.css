@@ -1,0 +1,43 @@
+th, td { border-color: white; }
+    
+.alignTop { vertical-align: top; }
+.bordered { border-style: solid; border-width: 3px; }
+.bloodied { background-color: red; }
+.centered { text-align: center; }
+.centered img { display: block; margin-left: auto; margin-right: auto; }
+.current { border-color: blue; border-width: 6px; }
+.f1 { font-size: 1.5em; }
+.f2 { font-size: 1.2em; }
+.floatLeft { float: left; }
+.gridItem { display: inline-block; vertical-align: top; } 
+.fullHeight { height: 100%; }
+.fullWidth { clear: both; width: 100%; }
+.halfWidth { width: 50%; }
+.fullBoth { height: 100%; width: 100%; }
+.numerator:after { content: '/' }
+    
+div#header * { margin-right: 10px; }
+span#spanLabel { font-size: 1.2em; }
+input#round { width: 30px; }
+    
+#history div { text-align: center; }
+    
+#display .creaturePanel {  }
+.creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
+.creaturePanel .column { float: left; margin-right: 4px; }
+.creaturePanel img.icon { margin-right: 2px; }
+.creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
+.creaturePanel .effects { margin: 0 1px 2px 0; }
+        
+div#history { float: right; height: 100%; min-width: 30%; padding: 0 5px; }
+div#history h3 { margin: 5px 0; }
+//  table#initiative { border-collapse: collapse; }
+table#initiative th, table#initiative td { text-align: center; } 
+table#initiative td.hp { padding: 3px; text-align: left; }
+table#initiative .tempHp { font-style: italic; }
+div#attacksDialog { padding: 5px; }
+div#attacksDialog table { width: 98%; }
+div#attacksDialog td { vertical-align: top; }
+div#attacksDialog td.attacks2targets { padding-top: 30%; }
+div#attacksDialog td, div#attacksDialog select { height: 100%; }
+table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }"

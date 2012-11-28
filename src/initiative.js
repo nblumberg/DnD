@@ -4,6 +4,7 @@
  */
 var Initiative = function(params) {
 	params = params || {};
+    this.creatures = params.creatures || {};
 	this.actors = params.actors || {};
 	this.order = params.order;
 	if (!this.order || !this.order.length) {
@@ -16,25 +17,44 @@ var Initiative = function(params) {
 	jQuery(document).ready(this._create.bind(this));
 };
 
-Initiative.prototype._STYLES = [
+Initiative._CARD_SIZE = 120;
+Initiative._STYLES = [
+	"th, td { border-color: white; }",
+	
+	".alignTop { vertical-align: top; }",
+	".bordered { border-style: solid; border-width: 3px; }",
+	".bloodied { background-color: red; }",
+	".centered { text-align: center; }",
+	".centered img { display: block; margin-left: auto; margin-right: auto; }",
+	".current { border-color: blue; border-width: 6px; }",
+	".f1 { font-size: 1.5em; }",
+	".f2 { font-size: 1.2em; }",
+    ".floatLeft { float: left; }",
+    ".gridItem { display: inline-block; vertical-align: top; }", 
+	".fullHeight { height: 100%; }",
+	".fullWidth { clear: both; width: 100%; }",
+	".halfWidth { width: 50%; }",
+	".fullBoth { height: 100%; width: 100%; }",
+	".numerator:after { content: '/' }",
+	
 	"div#header * { margin-right: 10px; }",
 	"span#spanLabel { font-size: 1.2em; }",
 	"input#round { width: 30px; }",
 	
-	".creaturePanel { float: left; position: relative; }",
-	".creaturePanel .column { float: left; margin-right: 4px; }",
-	".creaturePanel img.icon { margin-right: 2px; }",
-	".creaturePanel .fullWidth { clear: both; width: 100%; }",
-	".numerator:after { content: '/' }",
-	".bloodied { background-color: red; }",
+	"#history div { text-align: center; }",
 	
+    "#display .creaturePanel {  }",
+	".creaturePanel { min-height: " + Initiative._CARD_SIZE + "px; margin:2px; position: relative; width: " + Initiative._CARD_SIZE + "px; }",
+	".creaturePanel .column { float: left; margin-right: 4px; }",
+    ".creaturePanel img.icon { margin-right: 2px; }",
+    ".creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }",
+    ".creaturePanel .effects { margin: 0 1px 2px 0; }",
+		
 	"div#history { float: right; height: 100%; min-width: 30%; padding: 0 5px; }",
 	"div#history h3 { margin: 5px 0; }",
 //		"table#initiative { border-collapse: collapse; }",
-	".creaturePanel, div#history, div#history h3, table#initiative th, table#initiative td { border: 3px solid white; font-size: 1.5em; }", 
 	"table#initiative th, table#initiative td { text-align: center; }", 
-	"table#initiative tr.current td { border-color: turquoise; }",
-	"table#initiative td.hp { font-size: 1.5em; padding: 3px; text-align: left; }",
+	"table#initiative td.hp { padding: 3px; text-align: left; }",
 	"table#initiative .tempHp { font-style: italic; }",
 	"div#attacksDialog { padding: 5px; }",
 	"div#attacksDialog table { width: 98%; }",
@@ -45,25 +65,26 @@ Initiative.prototype._STYLES = [
 ];
 
 Initiative.prototype._rollInitiative = function() {
-	var name, i;
+	var actor, i;
 	this.order = [];
-	for (name in this.actors) {
-		this.order.push({ name: name, roll: (new Roll("1d20" + (this.actors[ name ].init < 0 ? "-" : "+") + this.actors[ name ].init)).roll() });
+	for (i = 0; i < this.actors.length; i++) {
+	    actor = this.actors[ i ];
+		this.order.push({ index: i, roll: (new Roll("1d20" + (actor.init < 0 ? "-" : "+") + actor.init)).roll() });
 	}
 	this.order.sort((function(a, b) {
-		return b.roll !== a.roll ? b.roll - a.roll : this.actors[ b.name ].init - this.actors[ a.name ].init;
+		return b.roll !== a.roll ? b.roll - a.roll : this.actors[ b.index ].init - this.actors[ a.index ].init;
 	}).bind(this));
 	for (i = 0; i < this.order.length; i++) {
-		this.order[ i ] = this.order[ i ].name;
+		this.order[ i ] = this.order[ i ].index;
 	}
 };
 
 Initiative.prototype._create = function() {
-	var columns, i, $tr, $td, image, $div, $span;
+	var columns, i, $table, $tr, $td, image, $div, $span;
 	this.$parent = jQuery(this._$target.length ? this._$target : "body");
 	
-	this.$style = jQuery("<style/>").attr("id", "initStyles").html(this._STYLES.join("\n"));
-	this.$parent.append(this.$style);
+//	this.$style = jQuery("<style/>").attr("id", "initStyles").html(Initiative._STYLES.join("\n"));
+//	this.$parent.append(this.$style);
 	
 	this.$attackDialog = jQuery("<div/>").attr("id", "attacksDialog");
 	$table = jQuery("<table/>");
@@ -129,7 +150,9 @@ Initiative.prototype._create = function() {
 		width: "auto" 
 	});
 	
-	$div = jQuery("<div/>").attr("id", "header");
+    this.$display = jQuery("<div/>").attr("id", "display").addClass("fullWidth").appendTo(this.$parent);
+    
+	$div = jQuery("<div/>").attr("id", "header").addClass("fullWidth");
 	this.$parent.append($div);
 	$span = jQuery("<span/>").attr("id", "roundLabel").html("Round");
 	$div.append($span);
@@ -145,27 +168,45 @@ Initiative.prototype._create = function() {
 		this._render();
 	}).bind(this) });
 	$div.append(this.$nextButton);
+    this.$displayButton = jQuery("<button/>").attr("id", "open").html("Open player window").on({ click: (function() {
+        var displayOnLoad = (function() { 
+            if (console && console.info) {
+                console.info("Display loaded");
+            }
+            this._render(); 
+        }).bind(this);
+        this.display = window.open("initiative.html", "Initiative", "location=0,status=0,toolbar=0", false);
+        (function(ow) {
+            ow.addEventListener("load", displayOnLoad, false);
+            ow.attachEvent("onload", displayOnLoad, false);
+        })(this.display);
+        this.display.focus();
+    }).bind(this) });
+    $div.append(this.$displayButton);
 	
-	$div = jQuery("<div/>").attr("id", "history");
-	this.$parent.append($div);
-	jQuery("<h3/>").html("History").appendTo($div);
-	$div.append(this.history.$html);
+	$table = jQuery("<table/>").attr("id", "history").addClass("fullWidth").appendTo(this.$parent);
+	$tr = jQuery("<tr/>").appendTo($table);
+	$td = jQuery("<td/>").addClass("halfWidth").appendTo($tr);
 	
 	this.$table = jQuery("<table/>").attr("id", "initiative");
-	this.$parent.append(this.$table);
-	
+	$td.append(this.$table);
 	columns = [ "Character", "Def", "HP", "Actions", "History" ];
 	for (i = 0; i < columns.length; i++) {
-		this.$table.append(jQuery("<th/>").html(columns[ i ]));
+		this.$table.append(jQuery("<th/>").addClass("bordered f1").html(columns[ i ]));
 	}
+	
+	$td = jQuery("<td/>").attr("id", "history").addClass("halfWidth bordered alignTop").appendTo($tr);
+	jQuery("<div/>").addClass("bordered f1").html("History").appendTo($td);
+	$td.append(this.history.$html);
 	
 	this._render();
 };
 
 Initiative.prototype._render = function() {
-	var i, j, actor, $tr, $td, image, $div, $span, addDefense, addHp, addAction, $ul;
+	var i, actor;
 	
 	this.$table.find("tr").remove();
+	this.$display.children().remove();
 	
 	for (i = 0; i < this.order.length; i++) {
 		actor = this.actors[ this.order[ i ] ];
@@ -175,6 +216,15 @@ Initiative.prototype._render = function() {
 			attack: this._attack.bind(this, actor),
 			heal: this._heal.bind(this, actor)
 		});
+//        actor.createCard({ 
+//            $parent: this.$display,
+//            isCurrent: i === this._current,
+//            className: "gridItem"
+//        });
+	}
+	
+	if (this.display) {
+	    this.display.postMessage(JSON.stringify({ order: this.order, actors: this.actors, current: this._current }), "*");
 	}
 };
 

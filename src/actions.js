@@ -1,23 +1,33 @@
-var Roll = function(str) {
-	var hasDice, extraRegExp, hasExtra, dRegExp;
-	str = str || "";
-	extraRegExp = /[+-]/;
-	hasDice = str.indexOf("d") !== -1;
-	hasExtra = !hasDice && str.length || extraRegExp.test(str); 
-	dRegExp = /^\d+/;
-	this._history = [];
-	this.dieCount = 0;
-	this.dieSides = 0;
-	this.extra = 0;
-	if (hasDice) {
-		this.dieCount = parseInt(str.split("d")[ 0 ]);
-		str = str.split("d")[ 1 ];
-		this.dieSides = parseInt(hasExtra ? dRegExp.exec(str) : str);
-		str = str.substr(("" + this.dieSides).length);
+var Roll = function(params) {
+    this._history = [];
+    this.dieCount = 0;
+    this.dieSides = 0;
+    this.extra = 0;
+	if (typeof(params) === "string") {
+	    this._parse(params);
 	}
-	if (hasExtra) {
-		this.extra = parseInt(str);
+	else if (params) {
+	    this.dieCount = params.dieCount;
+	    this.dieSides = params.dieSides;
+	    this.extra = params.extra;
 	}
+};
+
+Roll.prototype._parse = function(str) {
+    var hasDice, extraRegExp, hasExtra, dRegExp;
+    extraRegExp = /[+-]/;
+    hasDice = str.indexOf("d") !== -1;
+    hasExtra = !hasDice && str.length || extraRegExp.test(str); 
+    dRegExp = /^\d+/;
+    if (hasDice) {
+        this.dieCount = parseInt(str.split("d")[ 0 ]);
+        str = str.split("d")[ 1 ];
+        this.dieSides = parseInt(hasExtra ? dRegExp.exec(str) : str);
+        str = str.substr(("" + this.dieSides).length);
+    }
+    if (hasExtra) {
+        this.extra = parseInt(str);
+    }
 };
 
 Roll.prototype.roll = function() {
@@ -26,7 +36,7 @@ Roll.prototype.roll = function() {
 	h = { dice: [] };
 	this._history.push(h);
 	for (i = 0; i < this.dieCount; i++) {
-		die = Math.floor(Math.random() * this.dieSides);
+		die = Math.ceil(Math.random() * this.dieSides);
 		h.dice.push(die);
 		value += die;
 	}
