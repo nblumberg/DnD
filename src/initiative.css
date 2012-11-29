@@ -21,7 +21,8 @@ span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
     
 #history div { text-align: center; }
-    
+.round .edit textarea { height: 150px; }
+
 #display .creaturePanel {  }
 .creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
 .creaturePanel .column { float: left; margin-right: 4px; }

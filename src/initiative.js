@@ -229,12 +229,13 @@ Initiative.prototype._render = function() {
 };
 
 Initiative.prototype._addHistory = function(actor, msg, method) {
+	var entry = new History.Entry({ msg: msg, round: this.round });
 	if (typeof(method) === "undefined") {
 		method = "info";
 	}
-	actor.history.add(msg, this.round);
+	actor.history.add(entry);
 	msg = actor.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1);
-	this.history.add(msg, this.round);
+	this.history.add(entry);
 	if (console && console[ method ]) {
 		console[ method ](msg);
 	}
@@ -242,7 +243,7 @@ Initiative.prototype._addHistory = function(actor, msg, method) {
 };
 
 Initiative.prototype._attack = function(actor) {
-	var $option, i;
+	var $option, i, a;
 	this.$attackDialog.data("attacker", actor);
 	
 	this.$attacks.html("");
@@ -254,10 +255,11 @@ Initiative.prototype._attack = function(actor) {
 	
 	this.$targets.html("");
 	for (i = 0; i < this.order.length; i++) {
-		if (this.order[ i ] === actor.name) {
+		a = this.actors[ this.order[ i ] ];
+		if (a.name === actor.name) {
 			continue;
 		}
-		$option = jQuery("<option/>").html(this.order[ i ]).data("target", this.actors[ this.order[ i ] ]);
+		$option = jQuery("<option/>").html(a.name).data("target", a);
 		this.$targets.append($option);
 	}
 	this.$targets.attr("size", this.order.length);
