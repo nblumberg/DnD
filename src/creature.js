@@ -95,7 +95,7 @@ Creature.prototype.createTr = function(params) {
 	var $tr, $td, image, $div;
 	params = params || {};
 	
-	$tr = jQuery("<tr/>").attr("id", this.name);
+	$tr = jQuery("<tr/>").attr("id", this.name).data("actor", this);
 	if (params.isCurrent) {
 		$tr.addClass("current");
 	}
@@ -107,6 +107,27 @@ Creature.prototype.createTr = function(params) {
 	$td = jQuery("<td/>").addClass("bordered centered");
 	$tr.append($td);
 	this.createCard({ $parent: $td, isCurrent: params.isCurrent });
+	this.$panel.attr("draggable", "true").addClass("grab").on({ 
+        dragstart: (function(event) {
+            event.dataTransfer.setData("actor", this);
+            this.$panel.addClass("grabbing");
+        }).bind(this),
+        dragover: (function(event) {
+            var actor = event.dataTransfer.getData("actor");
+            if (actor && actor !== this) {
+                event.preventDefault();
+                this.$panel.addClass("droppable");
+            }
+        }).bind(this),
+        drop: (function(event) {
+            var actor = event.dataTransfer.getData("actor");
+            if (actor && actor !== this) {
+                event.preventDefault();
+                this.dispatchEvent({ type: "reorder", move: actor, before: this });
+            }
+            this.$panel.removeClass("grabbing");
+        }).bind(this)
+	});
 	
 	$td = jQuery("<td/>").addClass("bordered");
 	$tr.append($td);
@@ -192,27 +213,48 @@ Creature.prototype._addCondition = function($parent, effect, total) {
 };
 
 Creature.prototype._addDefense = function($parent, className, value, icon) {
-	var image = new Image();
+	var $div, image, editor;
+	$div = jQuery("<div/>").appendTo($parent);
+	image = new Image();
 	image.height = 20;
 	image.className = "icon";
 	image.src = icon;
-	jQuery("<div/>").addClass(className).attr("title", className.toUpperCase()).html(value).prepend(image).appendTo($parent);
+	$div.append(image).addClass(className).attr("title", className.toUpperCase());
+	editor = new Editor({ $parent: $div, tagName: "span", html: value, onchange: (function(v) {
+		this.defenses[ className ] = parseInt(v);
+		this.dispatchEvent("change");
+	}).bind(this) });
 };
 
 Creature.prototype._addHp = function($parent, src, title, className1, value1, className2, value2) {
-	var image, $span, $div;
+	var image, editor, $span, $div;
+	$div = jQuery("<div/>").appendTo($parent);
 	image = new Image();
 	image.height = 20;
 	image.className = "icon";
 	image.title = title;
 	image.src = src;
-	image.onload = function() {
-		
-	};
-	$span = jQuery("<span/>").addClass(className1).html(value1);
-	$div = jQuery("<div/>").appendTo($parent).append(image).append($span);
+	$div.append(image);
+	editor = new Editor({ $parent: $div, tagName: "span", html: value1, onchange: (function(v) {
+		switch (className1) {
+    		case "currentHp": {
+    			this.hp.current = parseInt(v);
+    			break;
+    		}
+    		case "tempHp": {
+    			this.hp.temp = parseInt(v);
+    			break;
+    		}
+    		case "surgesRemaining": {
+    			this.surges.current = parseInt(v);
+    			break;
+    		}
+		}
+		this.dispatchEvent("change");
+	}).bind(this) });
+	editor.$html.addClass(className1);
 	if (typeof(value2) !== "undefined") {
-		$span.addClass("numerator");
+		editor.$html.addClass("numerator");
 		jQuery("<span/>").addClass(className2).html(value2).appendTo($div);
 	}
 };

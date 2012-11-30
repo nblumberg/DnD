@@ -9,7 +9,8 @@ var Initiative = function(params) {
 	this.actors = params.actors || {};
 	for (i = 0; i < this.actors.length; i++) {
 		this.addRoute(this.actors[ i ]);
-		this.addEventListener("change", this._renderDisplay.bind(this, false));
+        this.addEventListener("change", this._renderDisplay.bind(this, false));
+        this.addEventListener("reorder", this._changeInitiative.bind(this));
 	}
 	this.order = params.order;
 	if (!this.order || !this.order.length) {
@@ -84,6 +85,29 @@ Initiative.prototype._rollInitiative = function() {
 	for (i = 0; i < this.order.length; i++) {
 		this.order[ i ] = this.order[ i ].index;
 	}
+};
+
+Initiative.prototype._changeInitiative = function(event) {
+    var getIndex, moveIndex, moveOrder, beforeIndex, beforeOrder;
+    move = event.move;
+    before = event.before;
+    getIndex = (function(actor) {
+        var i, j;
+        for (i = 0; i < this.actors.length; i++) {
+            if (this.actors[ i ] === actor) {
+                return i;
+            }
+        }
+        return -1;
+    }).bind(this);
+    moveIndex = getIndex(event.move);
+    moveOrder = this.order.indexOf(moveIndex);
+    this.order.splice(moveOrder, 1);
+    beforeIndex = getIndex(event.before);
+    beforeOrder = this.order.indexOf(beforeIndex);
+    this.order.splice(beforeOrder, 0, moveIndex);
+    this._addHistory(move, "Moved initiative order to before " + before.name);
+    this._render();
 };
 
 Initiative.prototype._create = function() {
@@ -189,6 +213,11 @@ Initiative.prototype._create = function() {
 	for (i = 0; i < columns.length; i++) {
 		this.$table.append(jQuery("<th/>").addClass("bordered f1").html(columns[ i ]));
 	}
+	this.$table.sortable({ containment: "parent", handle: ".creaturePanel", items: "tr", 
+	    update: (function(event, ui) {
+	        this._changeInitiative({ move: ui.item.data("actor"), before: this.actors[ this.order[ ui.item.index() + 1 ] ] });
+	    }).bind(this) 
+    });
 	
 	$td = jQuery("<td/>").attr("id", "history").addClass("halfWidth bordered alignTop").appendTo($tr);
 	jQuery("<div/>").addClass("bordered f1").html("History").appendTo($td);
@@ -280,7 +309,7 @@ Initiative.prototype._addHistory = function(actor, msg, method) {
 	if (console && console[ method ]) {
 		console[ method ](msg);
 	}
-	window.localStorage.setItem("initiative", JSON.stringify(this));
+	window.localStorage.setItem("initiative", JSON.stringify(this), null, "  ");
 };
 
 Initiative.prototype._attack = function(actor) {
@@ -392,3 +421,13 @@ Initiative.prototype._resolveHeal = function(actor) {
 	this._addHistory(target, msg, method);
 	this._render();
 };
+
+//Initiative.prototype.toJSON = function() {
+//    var json, i;
+//    json = "{";
+//    json += "\n\"order\":" + JSON.stringify(this.order);
+//    json += "\n,\"actors\":[";
+//    for (i = 0; i < this.actors.length; i++) {
+//        json += "{ \"name\":\"" + this.actors[ i ].name + "\"}";
+//    }
+//};
