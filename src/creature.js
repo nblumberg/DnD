@@ -19,173 +19,40 @@ var Surges = function(params) {
 	this.current = params.current || this.perDay;
 };
 
-var History = function(params) {
-	var props, p, i, $ul, $li;
-	
-	params = params || {};
-	this._rounds = params.rounds || {};
-	this._round = params.round || 0;
-	this._count = 0;
-	
-	props = [];
-	for (p in this._rounds) {
-		if (this._rounds.hasOwnProperty(p)) {
-			try {
-				parseInt(p);
-				props.push(p);
-			}
-			catch (e) {}
-		}
-	}
-	props.sort();
-	this.$html = props.length ? jQuery("<ul/>") : jQuery("<span/>").html("No history");
-	for (p = 0; p < props.length; p++) {
-		for (i = 0; i < this._rounds[ props[ p ] ].length; i++) {
-			this._renderMsg(this._rounds[ props[ p ] ][ i ], p, i);
-		}
-	}
-};
-
-History.Entry = function(params) {
-	params = params || {};
-	this.msg = params.msg;
-	this.round = params.round;
-	this.histories = [];
-	this.$htmls = [];
-};
-
-History.Entry.prototype._render = function($parent, index) {
-	var $li = jQuery("<li/>").append(jQuery("<span/>").html(this.msg));
-	$li.on({ click: this._edit.bind(this, $li) });
-	this.index = index;
-	this.$htmls.push($li);
-	$li.data("entry", this);
-	$parent.append($li);
-};
-
-History.Entry.prototype._edit = function($parent, event) {
-	var entry, $span, $input, $save, $delete, i, $ancestor;
-	event.stopPropagation();
-	if ($parent.hasClass("edit")) {
-		return;
-	}
-	$parent.removeClass("entry").addClass("edit");
-	this.$span = $parent.find("span");
-	this.$input = jQuery("<textarea/>").addClass("halfWidth").val(this.$span.html()).appendTo($parent);
-	this.$span.remove();
-	this.$delete = jQuery("<button/>").attr("title", "Delete").html("X").on({ click: this._delete.bind(this) });
-	this.$save = jQuery("<button/>").attr("title", "Save").html("&#x2713;").appendTo($parent).on({ click: this._save.bind(this, $parent) });
-	$parent.append(this.$delete);
-};
-
-History.Entry.prototype._save = function($parent, event) {
-	var i, _self;
-	_self = this;
-	event.stopPropagation();
-	this.$input.remove();
-	this.$save.remove();
-	this.$delete.remove();
-	$parent.append(this.$span);
-	$parent.removeClass("edit").addClass("entry");
-	for (i = 0; i < this.histories.length; i++) {
-		this.histories[ i ]._rounds[ this.round ][ this.index ] = this.$input.val();
-		this.$htmls[ i ].find("span").each(function() { jQuery(this).html(_self.$input.val()); });
-	}
-};
-
-History.Entry.prototype._delete = function(event) {
-	var i, j, $ul, $round, $history;
-	event.stopPropagation();
-	for (i = 0; i < this.histories.length; i++) {
-		this.histories[ i ]._rounds[ this.round ].splice(this.index, 1);
-		$ul = this.$htmls[ i ].parent();
-		$round = $ul.parent();
-		$history = $round.parent();
-		this.$htmls[ i ].remove();
-		// Remove empty rounds as well
-		if (!$ul.children().length) {
-			$ul.remove();
-			$round.remove();
-			if (!$history.children().length) {
-				this.histories[ i ].$html = jQuery("<span/>").html("No history");
-				this.histories[ i ].$html.insertBefore($history);
-				$history.remove();
-			}
-		}
-	}
-	this.$input = null;
-	this.$save = null;
-	this.$delete = null;
-};
-
-History.prototype.add = function(entry) {
-	entry.round = entry.round ? entry.round : this._round;
-	entry.histories.push(this);
-	if (!this._rounds.hasOwnProperty(entry.round)) {
-		this._rounds[ entry.round ] = [];
-	}
-	this._rounds[ entry.round ].push(entry);
-	this._renderMsg(entry, this._rounds[ entry.round ].length - 1);
-};
-
-History.prototype._renderMsg = function(entry, index) {
-	var $tmp, p, i, $ul, $li;
-	if (!this._count) {
-		$tmp = jQuery("<ul/>").insertBefore(this.$html);
-		this.$html.remove();
-		this.$html = $tmp;
-		this.$html.delegate(".entry", "click", this._createMsgEditor);
-	}
-	this._count++;
-	if (this._round !== entry.round) {
-		this._round = entry.round;
-		$li = jQuery("<li/>").addClass("round round" + entry.round).html("Round " + entry.round);
-		this.$html.append($li);
-		$ul = jQuery("<ul/>").appendTo($li);
-		$li.on({ click: function() {
-			jQuery(this).children("ul").toggle();
-		} });
-	}
-	else {
-		$ul = this.$html.children(".round" + entry.round);
-	}
-	entry._render($ul, index);
-};
-
 var Effect = function(params) {
     params = params || {};
     this.name = typeof(params) === "string" ? params : params.name;
 };
 
 Effect.CONDITIONS = {
-        "-2 attacks": "-2_attacks.jpg",
-        Blinded: "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
-        Dazed: "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
-        Deafened: "http://joeclark.org/ear.gif",
-        Diseased: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnOrSXb8UHvwhgQ-loEdXZvQPTjuBylSfFNiK7Hxyq03IxgUKe",
-        Dominated: "http://fs02.androidpit.info/ali/x90/4186790-1324571166012.png",
-        Dying: "http://iconbug.com/data/61/256/170c6197a99434339f465fa8c9fa4018.png",
-        Dead: "http://t2.gstatic.com/images?q=tbn:ANd9GcTPA7scM15IRChKnwigvYnQUDWNGHLL1cemtAeKxxZKwBDj33MFCxzfyorp",
-        Grabbed: "http://www.filipesabella.com/wp-content/uploads/2010/02/hand_grab.jpg",
-        Helpless: "http://files.softicons.com/download/tv-movie-icons/dexter-icons-by-rich-d/png/128/Tied-Up%20Dexter.png",
-        Immobilized: "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
-        Marked: "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
-        "Ongoing acid": "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
-        "Ongoing cold": "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
-        "Ongoing damage": "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
-        "Ongoing fire": "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
-        "Ongoing lightning": "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
-        "Ongoing necrotic": "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
-        "Ongoing poison": "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
-        "Ongoing psychic": "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
-        "Ongoing radiant": "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
-        Petrified: "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
-        Prone: "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
-        Restrained: "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
-        Slowed: "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
-        Stunned: "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
-        Unconscious: "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
-        Weakened: "http://pictogram-free.com/material/003.png"
+        "-2 attacks": "images/symbols/-2_attacks.jpg",
+        Blinded: "images/symbols/blinded.png", // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
+        Dazed: "images/symbols/dazed.jpg", // "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
+        Deafened: "images/symbols/deafened.gif", // "http://joeclark.org/ear.gif",
+        Diseased: "images/symbols/diseased.jpg", // "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnOrSXb8UHvwhgQ-loEdXZvQPTjuBylSfFNiK7Hxyq03IxgUKe",
+        Dominated: "images/symbols/dominated.png", // "http://fs02.androidpit.info/ali/x90/4186790-1324571166012.png",
+        Dying: "images/symbols/dying.png", // "http://iconbug.com/data/61/256/170c6197a99434339f465fa8c9fa4018.png",
+        Dead: "images/symbols/dead.jpg", // "http://t2.gstatic.com/images?q=tbn:ANd9GcTPA7scM15IRChKnwigvYnQUDWNGHLL1cemtAeKxxZKwBDj33MFCxzfyorp",
+        Grabbed: "images/symbols/grabbed.jpg", // "http://www.filipesabella.com/wp-content/uploads/2010/02/hand_grab.jpg",
+        Helpless: "images/symbols/helpless.png", // "http://files.softicons.com/download/tv-movie-icons/dexter-icons-by-rich-d/png/128/Tied-Up%20Dexter.png",
+        Immobilized: "images/symbols/immobilized.gif", // "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
+        Marked: "images/symbols/marked.png", // "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
+        "Ongoing acid": "images/symbols/ongoing_acid.png", // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
+        "Ongoing cold": "images/symbols/ongoing_cold.jpg", // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
+        "Ongoing damage": "images/symbols/ongoing_damage.jpg", // "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
+        "Ongoing fire": "images/symbols/ongoing_fire.jpg", // "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
+        "Ongoing lightning": "images/symbols/ongoing_lightning.png", // "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
+        "Ongoing necrotic": "images/symbols/ongoing_necrotic.jpg", // "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
+        "Ongoing poison": "images/symbols/ongoing_poison.jpg", // "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
+        "Ongoing psychic": "images/symbols/ongoing_psychic.jpg", // "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
+        "Ongoing radiant": "images/symbols/ongoing_radiant.jpg", // "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
+        Petrified: "images/symbols/petrified.gif", // "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
+        Prone: "images/symbols/prone.png", // "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
+        Restrained: "images/symbols/restrained.jpg", // "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
+        Slowed: "images/symbols/slowed.jpg", // "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
+        Stunned: "images/symbols/stunned.jpg", // "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
+        Unconscious: "images/symbols/unconscious.gif", // "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
+        Weakened: "images/symbols/weakened.png", // "http://pictogram-free.com/material/003.png"
 };
 
 var Creature = function(params) {
@@ -211,6 +78,8 @@ var Creature = function(params) {
     }
 	this.history = new History(params.history);
 };
+
+Creature.prototype = new EventDispatcher();
 
 Creature.prototype.isBloodied = function() {
 	return this.hp.current <= Math.floor(this.hp.total / 2);
@@ -312,7 +181,13 @@ Creature.prototype._addCondition = function($parent, effect, total) {
     image.className = "icon floatLeft";
     image.title = effect.name;
     image.src = Effect.CONDITIONS[ effect.name ];
-    jQuery(image).css("background-color", "#FFFFFF");
+    jQuery(image).css("background-color", "#FFFFFF").on({ click: (function(img, event) {
+        if (event.metaKey) {
+            jQuery(img).remove();
+            this.effects.splice(this.effects.indexOf(effect), 1);
+            this.dispatchEvent({ type: "change" });
+        }
+    }).bind(this, image) });
     $parent.append(image);
 };
 

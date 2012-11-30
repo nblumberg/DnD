@@ -3,9 +3,14 @@
  * @param {String} params.target
  */
 var Initiative = function(params) {
+	var i;
 	params = params || {};
     this.creatures = params.creatures || {};
 	this.actors = params.actors || {};
+	for (i = 0; i < this.actors.length; i++) {
+		this.addRoute(this.actors[ i ]);
+		this.addEventListener("change", this._renderDisplay.bind(this, false));
+	}
 	this.order = params.order;
 	if (!this.order || !this.order.length) {
 		this._rollInitiative();
@@ -16,6 +21,8 @@ var Initiative = function(params) {
 	this.history = new History(params.history);
 	jQuery(document).ready(this._create.bind(this));
 };
+
+Initiative.prototype = new EventBus();
 
 Initiative._CARD_SIZE = 120;
 Initiative._STYLES = [
@@ -168,20 +175,8 @@ Initiative.prototype._create = function() {
 		this._render();
 	}).bind(this) });
 	$div.append(this.$nextButton);
-    this.$displayButton = jQuery("<button/>").attr("id", "open").html("Open player window").on({ click: (function() {
-        var displayOnLoad = (function() { 
-            if (console && console.info) {
-                console.info("Display loaded");
-            }
-            this._render(); 
-        }).bind(this);
-        this.display = window.open("initiative.html", "Initiative", "location=0,status=0,toolbar=0", false);
-        (function(ow) {
-            ow.addEventListener("load", displayOnLoad, false);
-            ow.attachEvent("onload", displayOnLoad, false);
-        })(this.display);
-        this.display.focus();
-    }).bind(this) });
+	
+    this.$displayButton = jQuery("<button/>").attr("id", "open").html("Open player window").on({ click: this._renderDisplay.bind(this, true) });
     $div.append(this.$displayButton);
 	
 	$table = jQuery("<table/>").attr("id", "history").addClass("fullWidth").appendTo(this.$parent);
@@ -222,9 +217,55 @@ Initiative.prototype._render = function() {
 //            className: "gridItem"
 //        });
 	}
+	this._renderDisplay(false);
+};
+
+Initiative.prototype._renderDisplay = function(createDisplay, event) {
+	var displayOnLoad, intervalId;
 	
-	if (this.display) {
-	    this.display.postMessage(JSON.stringify({ order: this.order, actors: this.actors, current: this._current }), "*");
+	if (event) {
+		event.stopPropagation = true; // TODO, HACK: why are we getting 80+ hits for the same event?
+	}
+	
+	if (!this.display && createDisplay) {
+		// Log when the other window loads
+		displayOnLoad = (function() { 
+	        if (console && console.info) {
+	            console.info("Display loaded");
+	        }
+	        this._renderDisplay(); 
+	    }).bind(this);
+		// Clean up the old window
+		if (this.display) {
+		    if (this.display.removeEventListener) {
+		    	this.display.removeEventListener("load", displayOnLoad, false);
+		    }
+		    else {
+		    	this.display.detachEvent("onload", displayOnLoad, false);
+		    }
+		}
+		// Create a new window
+	    this.display = window.open("initiative.html", "Initiative", "location=0,status=0,toolbar=0", false);
+	    if (this.display.addEventListener) {
+	    	this.display.addEventListener("load", displayOnLoad, false);
+	    }
+	    else {
+	    	this.display.attachEvent("onload", displayOnLoad, false);
+	    }
+	    this.display.focus();
+	    
+	    intervalId = setInterval((function() {   
+	        if (this.display.closed) {  
+	            clearInterval(this.$displayButton.data("intervalId"));  
+	            this.$displayButton.attr("id", "open").html("Open player window");
+	        }  
+	    }).bind(this), 1000);
+	    this.$displayButton.attr("id", "refresh").html("Refresh").data("intervalId", intervalId);
+	    
+	    return;
+	}
+	else if (this.display) {
+		this.display.postMessage(JSON.stringify({ order: this.order, actors: this.actors, current: this._current }, null, "  "), "*");
 	}
 };
 
