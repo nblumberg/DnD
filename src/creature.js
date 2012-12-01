@@ -60,6 +60,7 @@ var Creature = function(params) {
 	params = params || {};
 	this.name = params.name;
 	this.image = params.image;
+	this.isPC = params.isPC || false;
 	this.hp = new HP(params.hp);
 	this.surges = new Surges(params.surges);
 	this.defenses = params.defenses || new Defenses();
@@ -203,13 +204,13 @@ Creature.prototype.createCard = function(params) {
 Creature.prototype._addCondition = function($parent, effect, total) {
     var image = new Image();
     if (total <= 4) {
-        image.height = Creature._CARD_SIZE / 3;
+        image.height = this.cardSize / 3;
     }
     else if (total <= 9) {
-        image.height = Creature._CARD_SIZE / 4;
+        image.height = this.cardSize / 4;
     }
     else {
-        image.height = Creature._CARD_SIZE / 5.4;
+        image.height = this.cardSize / 5.4;
     }
     image.className = "icon floatLeft";
     image.title = effect.name;

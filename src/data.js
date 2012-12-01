@@ -1,3 +1,35 @@
+function generateName() {
+	var i, NAMES = [
+"Bagn",
+"Bas",
+"Bseman",
+"Bsunm",
+"Dgax",
+"Gkotex",
+"Gnebx",
+"Gukr",
+"Kexabg",
+"Mkagon",
+"Mkasun",
+"Mrozx",
+"Nmagur",
+"Nsemuk",
+"Ran",
+"Sekunx",
+"Tarumg",
+"Tuz",
+"Xgaz",
+"Xum",
+"Zek",
+"Zmadeb",
+"Zsebon",
+"Zurx",
+"Zxotem"
+	             ];
+    i = Math.floor(Math.random() * NAMES.length);
+    return NAMES[ i ];
+}
+
 function randEffect() {
     var i, EFFECTS = [
                    "-2 attacks",                      
@@ -72,7 +104,7 @@ function loadData() {
 	              ],
 		creatures: { 
 		    Barases: { 
-            	 name: "Barases", image: "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg", 
+            	 name: "Barases", image: "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg", isPC: true, 
             	 hp: { total: 80, current: Math.floor(Math.random() * 80), temp: 3 },
             	 surges: { perDay: 11, current: 11 },
             	 defenses: { ac: 24, fort: 23, ref: 17, will: 22 },
@@ -90,7 +122,7 @@ function loadData() {
     	           effects: randEffects()
              },
              Bin: { 
-            	 name: "Bin", image: "http://wizards.com/dnd/images/386_wr_changeling.jpg", 
+            	 name: "Bin", image: "http://wizards.com/dnd/images/386_wr_changeling.jpg", isPC: true,
             	 hp: { total: 74, current: Math.floor(Math.random() * 74) },
             	 surges: { perDay: 9, current: 9 },
             	 defenses: { ac: 24, fort: 20, ref: 21, will: 22 },
@@ -110,7 +142,7 @@ function loadData() {
     	         effects: randEffects()
              },
              Festivus: { 
-            	 name: "Festivus", image: "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg", 
+            	 name: "Festivus", image: "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg", isPC: true,
             	 hp: { total: 73, current: Math.floor(Math.random() * 73) },
             	 surges: { perDay: 9, current: 9 },
             	 defenses: { ac: 21, fort: 20, ref: 19, will: 23 },
@@ -132,7 +164,7 @@ function loadData() {
                  effects: randEffects()
              },
              Kallista: { 
-            	 name: "Kallista", image: "http://www.wizards.com/dnd/images/Dragon_373/11.jpg", 
+            	 name: "Kallista", image: "http://www.wizards.com/dnd/images/Dragon_373/11.jpg", isPC: true, 
             	 hp: { total: 69, current: Math.floor(Math.random() * 69) },
             	 surges: { perDay: 7, current: 7 },
             	 defenses: { ac: 23, fort: 18, ref: 23, will: 22 },
@@ -154,7 +186,7 @@ function loadData() {
                  effects: randEffects()
              },
 			 Karrion: { 
-            	 name: "Karrion", image: "http://rogueartfx.com/images/tiefling03.jpg", 
+            	 name: "Karrion", image: "http://rogueartfx.com/images/tiefling03.jpg", isPC: true, 
             	 hp: { total: 73, current: Math.floor(Math.random() * 73) },
             	 surges: { perDay: 9, current: 9 },
             	 defenses: { ac: 23, fort: 21, ref: 21, will: 19 },
@@ -176,7 +208,7 @@ function loadData() {
                  effects: randEffects()
              },
              Kitara: { 
-            	 name: "Kitara", image: "http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg", 
+            	 name: "Kitara", image: "http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg", isPC: true,
             	 hp: { total: 71, current: Math.floor(Math.random() * 71) },
             	 surges: { perDay: 9, current: 9 },
             	 defenses: { ac: 26, fort: 21, ref: 22, will: 21 },
@@ -202,7 +234,7 @@ function loadData() {
                  effects: randEffects()
              },
    		  	 Lechonero: { 
-            	 name: "Lechonero", image: "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg", 
+            	 name: "Lechonero", image: "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg", isPC: true, 
             	 hp: { total: 71, current: Math.floor(Math.random() * 71) },
             	 surges: { perDay: 8, current: 8 },
             	 defenses: { ac: 24, fort: 21, ref: 23, will: 19 },
