@@ -23,7 +23,7 @@
     function receiveMessage(event) {
         var i, data, creature;
         if (console && console.info) {
-            console.info("receiveMessage");
+            console.info("receiveMessage():\n" + event.data);
         }
         data = JSON.parse(event.data);
         actors = [];

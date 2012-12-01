@@ -21,6 +21,7 @@ var Initiative = function(params) {
 	this._$target = params.target ? jQuery(params.target) : ""; 
 	this.history = new History(params.history || { includeSubject: true });
 	History.central = this.history;
+
 	jQuery(document).ready(this._create.bind(this));
 };
 
@@ -275,7 +276,7 @@ Initiative.prototype._render = function() {
 };
 
 Initiative.prototype._renderDisplay = function(createDisplay, event) {
-	var displayOnLoad, intervalId;
+	var displayOnLoad, intervalId, raw;
 	
 	if (event) {
 		event.stopPropagation = true; // TODO, HACK: why are we getting 80+ hits for the same event?
@@ -319,7 +320,8 @@ Initiative.prototype._renderDisplay = function(createDisplay, event) {
 	    return;
 	}
 	else if (this.display) {
-		this.display.postMessage(JSON.stringify({ order: this.order, actors: this.actors, current: this._current }, null, "  "), "*");
+		raw = this.raw();
+		this.display.postMessage(JSON.stringify(raw, null, "  "), "*");
 	}
 };
 
@@ -447,23 +449,12 @@ Initiative.prototype._resolveHeal = function(actor) {
 	this._render();
 };
 
-Initiative.prototype.toJSON = function() {
-    var json, i;
-    json = "{";
-    json += "\n\t\"round\":" + this.round;
-    json += ",\n\t\"_current\":" + this._current;
-    json += ",\n\t\"order\": " + JSON.stringify(this.order);
-    json += ",\n\t\"actors\": [";
-    for (i = 0; i < this.actors.length; i++) {
-        json += (i ? "," : "") + "\n\t\t" + this.actors[ i ].toJSON();
-    }
-    json += "\n]";
-    json += "\n,\"creatures\": [";
-    for (i = 0; i < this.creatures.length; i++) {
-        json += (i ? "," : "") + "\n\t\t" + this.creatures[ i ].toJSON();
-    }
-    json += "\n\t]";
-    json += ",\n\t\"history\":" + this.history.toJSON();
-    json += "\n}";
-    return json;
+Initiative.prototype.raw = function() {
+	var raw = {
+		order: this.order,
+		actors: this.rawArray(this.actors),
+		creatures: this.creatures,
+		history: this.history.raw()
+	};
+	return raw;
 };

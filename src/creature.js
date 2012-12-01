@@ -78,17 +78,6 @@ var Creature = function(params) {
         this.effects.push(new Effect(params.effects[ i ]));
     }
 	this.history = new History(params.history || { includeSubject: false });
-	this._toJSONProps = [
-	                     "name",
-	                 	"image",
-	                 	"hp",
-	                 	"surges",
-	                 	"defenses",
-	                 	"init",
-	                 	"ap",
-	                 	"effects",
-	                 	"move"
-	                 ];
 };
 
 Creature.prototype = new EventDispatcher();
@@ -107,7 +96,7 @@ Creature.prototype.createTr = function(params) {
 	var $tr, $td, image, $div;
 	params = params || {};
 	
-	$tr = jQuery("<tr/>").attr("id", this.name).data("actor", this);
+	$tr = jQuery("<tr/>").attr("id", this.name + "_row").data("actor", this);
 	if (params.isCurrent) {
 		$tr.addClass("current");
 	}
@@ -180,7 +169,7 @@ Creature.prototype.createCard = function(params) {
 	params = params || {};
 	this.cardSize = params.cardSize || Creature._CARD_SIZE;
 	$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
-	this.$panel = jQuery("<div/>").attr("id", this.name).addClass("creaturePanel centered bordered " + params.className).appendTo($parent);
+	this.$panel = jQuery("<div/>").attr("id", this.name + "_panel").addClass("creaturePanel centered bordered " + params.className).appendTo($parent);
 	if (params.isCurrent) {
 		this.$panel.addClass("current");
 	}
@@ -281,18 +270,3 @@ Creature.prototype._addAction = function($parent, title, src, click) {
 	$parent.append(image);
 };
 
-Creature.prototype.toJSON = function() {
-    var json, i;
-    json = "{";
-    for (i = 0; i < this._toJSONProps.length; i++) {
-        json += (i ? "," : "") + "\n\t\"" + this._toJSONProps[ i ] + "\":" + JSON.stringify(this[ this._toJSONProps[ i ] ]);
-    }
-    json += ",\n\t\"attacks\": [";
-    for (i = 0; i < this.attacks.length; i++) {
-        json += (i ? "," : "") + "\n\t\t" + this.attacks[ i ].toJSON();
-    }
-    json += "\n]";
-    json += ",\n\t\"history\":" + this.history.toJSON();
-    json += "\n}";
-    return json;	
-};

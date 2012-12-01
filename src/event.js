@@ -3,6 +3,8 @@ var EventListener = function(bus) {
     this._listeners = {};
 };
 
+EventListener.prototype = new Serializable();
+
 EventListener.prototype.addEventListener = function(eventType, callback) {
     if (!this._listeners.hasOwnProperty(eventType)) {
         this._listeners[ eventType ] = [];

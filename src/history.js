@@ -6,7 +6,6 @@ var History = function(params) {
 	this._round = params.round || 0;
 	this._count = 0;
 	this._includeSubject = params.includeSubject;
-	this._toJSONProps = [ "_round", "_count", "includeSubject", "messages" ];
 	
 	this.$html = this._rounds.length > 0 ? jQuery("<ul/>") : jQuery("<span/>").html("No history");
 	for (i = 0; i < this._rounds.length; i++) {
@@ -19,6 +18,9 @@ var History = function(params) {
 };
 
 History.central = null;
+
+
+History.prototype = new Serializable();
 
 History.prototype.add = function(entry) {
 	entry.round = entry.round ? entry.round : this._round;
@@ -85,16 +87,25 @@ History.prototype._editEntry = function($entry, history) {
 	$entry.data("entry")._edit($entry, history);
 };
 
-History.prototype.toJSON = function() {
-    var json, i;
-    json = "{";
-    for (i = 0; i < this._toJSONProps.length; i++) {
-        json += (i ? "," : "") + "\n\t\"" + this._toJSONProps[ i ] + "\":" + JSON.stringify(this[ this._toJSONProps[ i ] ]);
-    }
-    json += "\n}";
-    return json;
+History.prototype.raw = function() {
+	var raw, prop;
+	raw = {};
+	for each (prop in this) {
+		if (this.hasOwnProperty(prop)) {
+			if (this[ prop ] && this[ prop ].hasOwnProperty("raw")) {
+				raw[ prop ] = this[ prop ].raw();
+			}
+			else {
+				raw[ prop ] = JSON.stringify(this[ prop ], null, "  ");
+			}
+		}
+	}
+    return raw;
 };
 
+History.prototype.toJSON = function() {
+    return JSON.stringify(this.raw(), null, "  ");
+};
 
 
 History.Editor = function(params) {
@@ -113,12 +124,17 @@ History.Editor = function(params) {
 	}).bind(this) });
 };
 
+History.Editor.prototype = new Serializable();
+
 History.Editor.prototype.remove = function() {
 	this.$input.remove();
 	this.$save.off("click").remove();
 	this.$cancel.off("click").remove();
 };
 
+History.Editor.prototype.raw = function() {
+	return null;
+};
 
 
 History.Entry = function(params) {
@@ -128,7 +144,6 @@ History.Entry = function(params) {
 	this.subject = params.subject;
 	this.message = params.message;
 	this.round = params.round;
-	this._toJSONProps = [ "id", "subject", "msg", "round" ];
 };
 
 History.Entry.prototype = new EventDispatcher();
@@ -216,12 +231,22 @@ History.Entry.prototype._delete = function($entry, $span, $input, $save, $delete
 	delete History.Entry.entries[ this.id ];
 };
 
-History.Entry.prototype.toJSON = function() {
-    var json, i;
-    json = "{";
-    for (i = 0; i < this._toJSONProps.length; i++) {
-        json += (i ? "," : "") + "\n\t\"" + this._toJSONProps[ i ] + "\":" + JSON.stringify(this[ this._toJSONProps[ i ] ]);
-    }
-    return json;
+History.Entry.prototype.raw = function() {
+	var raw, prop;
+	raw = {};
+	for each (prop in this) {
+		if (this.hasOwnProperty(prop)) {
+			if (this[ prop ] && this[ prop ].hasOwnProperty("raw")) {
+				raw[ prop ] = this[ prop ].raw();
+			}
+			else {
+				raw[ prop ] = JSON.stringify(this[ prop ], null, "  ");
+			}
+		}
+	}
+    return raw;
 };
 
+History.Entry.prototype.toJSON = function() {
+    return JSON.stringify(this.raw(), null, "  ");
+};
