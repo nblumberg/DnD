@@ -9,7 +9,7 @@ var Initiative = function(params) {
 	this.actors = params.actors || {};
 	for (i = 0; i < this.actors.length; i++) {
 		this.addRoute(this.actors[ i ]);
-        this.addEventListener("change", this._renderDisplay.bind(this, false));
+        this.addEventListener("change", this._render.bind(this));
         this.addEventListener("reorder", this._changeInitiative.bind(this));
 	}
 	this.order = params.order;
@@ -19,7 +19,8 @@ var Initiative = function(params) {
 	this.round = 1;
 	this._current = 0;
 	this._$target = params.target ? jQuery(params.target) : ""; 
-	this.history = new History(params.history);
+	this.history = new History(params.history || { includeSubject: true });
+	History.central = this.history;
 	jQuery(document).ready(this._create.bind(this));
 };
 
@@ -107,6 +108,11 @@ Initiative.prototype._changeInitiative = function(event) {
     beforeOrder = this.order.indexOf(beforeIndex);
     this.order.splice(beforeOrder, 0, moveIndex);
     this._addHistory(move, "Moved initiative order to before " + before.name);
+    var test = "[ ";
+    for (var i = 0; i < this.order.length; i++) {
+    	test += (i ? ", " : "") + this.actors[ this.order[ i ] ].name;
+    }
+    console.info("New order: " + test + " ]");
     this._render();
 };
 
@@ -298,16 +304,16 @@ Initiative.prototype._renderDisplay = function(createDisplay, event) {
 	}
 };
 
-Initiative.prototype._addHistory = function(actor, msg, method) {
-	var entry = new History.Entry({ msg: msg, round: this.round });
+Initiative.prototype._addHistory = function(actor, message, method) {
+	var entry = new History.Entry({ round: this.round, subject: actor, message: message });
 	if (typeof(method) === "undefined") {
 		method = "info";
 	}
 	actor.history.add(entry);
-	msg = actor.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1);
+	message = actor.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
 	this.history.add(entry);
 	if (console && console[ method ]) {
-		console[ method ](msg);
+		console[ method ](message);
 	}
 	window.localStorage.setItem("initiative", JSON.stringify(this), null, "  ");
 };
@@ -422,12 +428,23 @@ Initiative.prototype._resolveHeal = function(actor) {
 	this._render();
 };
 
-//Initiative.prototype.toJSON = function() {
-//    var json, i;
-//    json = "{";
-//    json += "\n\"order\":" + JSON.stringify(this.order);
-//    json += "\n,\"actors\":[";
-//    for (i = 0; i < this.actors.length; i++) {
-//        json += "{ \"name\":\"" + this.actors[ i ].name + "\"}";
-//    }
-//};
+Initiative.prototype.toJSON = function() {
+    var json, i;
+    json = "{";
+    json += "\n\t\"round\":" + this.round;
+    json += ",\n\t\"_current\":" + this._current;
+    json += ",\n\t\"order\": " + JSON.stringify(this.order);
+    json += ",\n\t\"actors\": [";
+    for (i = 0; i < this.actors.length; i++) {
+        json += (i ? "," : "") + "\n\t\t" + this.actors[ i ].toJSON();
+    }
+    json += "\n]";
+    json += "\n,\"creatures\": [";
+    for (i = 0; i < this.creatures.length; i++) {
+        json += (i ? "," : "") + "\n\t\t" + this.creatures[ i ].toJSON();
+    }
+    json += "\n\t]";
+    json += ",\n\t\"history\":" + this.history.toJSON();
+    json += "\n}";
+    return json;
+};

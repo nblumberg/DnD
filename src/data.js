@@ -50,6 +50,7 @@ function loadData() {
 //		return JSON.parse(window.localStorage.getItem("initiative"));
 //	}
 	return {
+		history: { includeSubject: true },
 	    actors: [ 
 	              "Barases", 
 	              "Bin", 

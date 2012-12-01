@@ -76,7 +76,18 @@ var Creature = function(params) {
     for (i = 0; params.effects && i < params.effects.length; i++) {
         this.effects.push(new Effect(params.effects[ i ]));
     }
-	this.history = new History(params.history);
+	this.history = new History(params.history || { includeSubject: false });
+	this._toJSONProps = [
+	                     "name",
+	                 	"image",
+	                 	"hp",
+	                 	"surges",
+	                 	"defenses",
+	                 	"init",
+	                 	"ap",
+	                 	"effects",
+	                 	"move"
+	                 ];
 };
 
 Creature.prototype = new EventDispatcher();
@@ -106,27 +117,27 @@ Creature.prototype.createTr = function(params) {
 	
 	$td = jQuery("<td/>").addClass("bordered centered");
 	$tr.append($td);
-	this.createCard({ $parent: $td, isCurrent: params.isCurrent });
+	this.createCard({ $parent: $td, isCurrent: params.isCurrent, cardSize: 120 });
 	this.$panel.attr("draggable", "true").addClass("grab").on({ 
-        dragstart: (function(event) {
-            event.dataTransfer.setData("actor", this);
-            this.$panel.addClass("grabbing");
-        }).bind(this),
-        dragover: (function(event) {
-            var actor = event.dataTransfer.getData("actor");
-            if (actor && actor !== this) {
-                event.preventDefault();
-                this.$panel.addClass("droppable");
-            }
-        }).bind(this),
-        drop: (function(event) {
-            var actor = event.dataTransfer.getData("actor");
-            if (actor && actor !== this) {
-                event.preventDefault();
-                this.dispatchEvent({ type: "reorder", move: actor, before: this });
-            }
-            this.$panel.removeClass("grabbing");
-        }).bind(this)
+//        dragstart: (function(event) {
+//            event.dataTransfer.setData("actor", this);
+//            this.$panel.addClass("grabbing");
+//        }).bind(this),
+//        dragover: (function(event) {
+//            var actor = event.dataTransfer.getData("actor");
+//            if (actor && actor !== this) {
+//                event.preventDefault();
+//                this.$panel.addClass("droppable");
+//            }
+//        }).bind(this),
+//        drop: (function(event) {
+//            var actor = event.dataTransfer.getData("actor");
+//            if (actor && actor !== this) {
+//                event.preventDefault();
+//                this.dispatchEvent({ type: "reorder", move: actor, before: this });
+//            }
+//            this.$panel.removeClass("grabbing");
+//        }).bind(this)
 	});
 	
 	$td = jQuery("<td/>").addClass("bordered");
@@ -156,6 +167,8 @@ Creature.prototype.createTr = function(params) {
 	$div.append(this.history.$html);
 };
 
+Creature._CARD_SIZE = 240;
+
 /**
  * @param $parent {jQuery(element)} The parent element
  * @param isCurrent {Boolean} Indicates if it is this Creature's turn in the initiative order
@@ -164,6 +177,7 @@ Creature.prototype.createTr = function(params) {
 Creature.prototype.createCard = function(params) {
 	var $parent, $div, $span, image, i, $effects;
 	params = params || {};
+	this.cardSize = params.cardSize || Creature._CARD_SIZE;
 	$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
 	this.$panel = jQuery("<div/>").attr("id", this.name).addClass("creaturePanel centered bordered " + params.className).appendTo($parent);
 	if (params.isCurrent) {
@@ -174,7 +188,7 @@ Creature.prototype.createCard = function(params) {
 	}
 	
 	image = new Image();
-	image.height = 100;
+	image.height = this.cardSize * 100/120;
 	image.src = this.image;
 	this.$panel.append(image);
 	this.$panel.append(jQuery("<div/>").addClass("f2").html(this.name));
@@ -185,8 +199,6 @@ Creature.prototype.createCard = function(params) {
 	    this._addCondition($effects, this.effects[i], this.effects.length);
 	}
 };
-
-Creature._CARD_SIZE = 120;
 
 Creature.prototype._addCondition = function($parent, effect, total) {
     var image = new Image();
@@ -268,3 +280,18 @@ Creature.prototype._addAction = function($parent, title, src, click) {
 	$parent.append(image);
 };
 
+Creature.prototype.toJSON = function() {
+    var json, i;
+    json = "{";
+    for (i = 0; i < this._toJSONProps.length; i++) {
+        json += (i ? "," : "") + "\n\t\"" + this._toJSONProps[ i ] + "\":" + JSON.stringify(this[ this._toJSONProps[ i ] ]);
+    }
+    json += ",\n\t\"attacks\": [";
+    for (i = 0; i < this.attacks.length; i++) {
+        json += (i ? "," : "") + "\n\t\t" + this.attacks[ i ].toJSON();
+    }
+    json += "\n]";
+    json += ",\n\t\"history\":" + this.history.toJSON();
+    json += "\n}";
+    return json;	
+};

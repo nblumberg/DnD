@@ -27,7 +27,8 @@ input#round { width: 30px; }
 .round .edit textarea { height: 150px; }
 
 #display .creaturePanel {  }
-.creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
+.creaturePanel { min-height: 240px; margin:2px; position: relative; width: 240px; }
+#initiative .creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
 .creaturePanel .column { float: left; margin-right: 4px; }
 .creaturePanel img.icon { margin-right: 2px; }
 .creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }

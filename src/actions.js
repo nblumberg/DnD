@@ -88,10 +88,29 @@ var Attack = function(params) {
 	this.damage = new Roll(params.damage);
 	this.damageType = params.damageType;
 	this.crit = new Roll(params.crit);
+	this._toJSONProps = [
+	                     "name",
+	                 	"type",
+	                 	"defense",
+	                 	"extra",
+	                 	"damageType"
+	                 ];
 };
 
 Attack.prototype = new Roll("1d20");
 
 Attack.prototype.anchor = function() {
 	return "<a href=\"javascript:void(0);\" title=\"" + this.breakdown() + " = " + this._getLastRoll().total + " vs. " + this.defense +"\">" + this.name + " attack</a>";
+};
+
+Attack.prototype.toJSON = function() {
+    var json, i;
+    json = "{";
+    for (i = 0; i < this._toJSONProps.length; i++) {
+        json += (i ? "," : "") + "\n\t\"" + this._toJSONProps[ i ] + "\":" + JSON.stringify(this[ this._toJSONProps[ i ] ]);
+    }
+    json += (i ? "," : "") + "\n\t\"damage\":" + this.damage.toString();
+    json += (i ? "," : "") + "\n\t\"crit\":" + this.crit.toString();
+    json += "\n}";
+    return json;	
 };
