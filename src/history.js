@@ -20,8 +20,6 @@ var History = function(params) {
 
 History.central = null;
 
-History.prototype = new EventBus();
-
 History.prototype.add = function(entry) {
 	entry.round = entry.round ? entry.round : this._round;
 	this._rounds.push(entry.id);
@@ -99,6 +97,29 @@ History.prototype.toJSON = function() {
 
 
 
+History.Editor = function(params) {
+	params = params || {};
+	this.$parent = params.$parent;
+	this.$input = jQuery("<textarea/>").addClass("halfWidth").val(params.message).appendTo(this.$parent);
+	this.$save = jQuery("<button/>").attr("title", "Save").html("&#x2713;").appendTo(this.$parent).on({ click: (function() { 
+		if (params.save) {
+			params.save(this.$input.val());
+		} 
+	}).bind(this) });
+	this.$cancel = jQuery("<button/>").attr("title", "Delete").html("X").appendTo(this.$parent).on({ click: (function() {
+		if (params.cancel) {
+			params.cancel();
+		} 
+	}).bind(this) });
+};
+
+History.Editor.prototype.remove = function() {
+	this.$input.remove();
+	this.$save.off("click").remove();
+	this.$cancel.off("click").remove();
+};
+
+
 
 History.Entry = function(params) {
 	params = params || {};
@@ -107,8 +128,6 @@ History.Entry = function(params) {
 	this.subject = params.subject;
 	this.message = params.message;
 	this.round = params.round;
-	this.histories = [];
-	this.$htmls = [];
 	this._toJSONProps = [ "id", "subject", "msg", "round" ];
 };
 

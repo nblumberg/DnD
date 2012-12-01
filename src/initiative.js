@@ -117,7 +117,7 @@ Initiative.prototype._changeInitiative = function(event) {
 };
 
 Initiative.prototype._create = function() {
-	var columns, i, $table, $tr, $td, image, $div, $span;
+	var columns, i, $table, $tr, $td, image, $div, $span, $select, $option;
 	this.$parent = jQuery(this._$target.length ? this._$target : "body");
 	
 //	this.$style = jQuery("<style/>").attr("id", "initStyles").html(Initiative._STYLES.join("\n"));
@@ -143,7 +143,7 @@ Initiative.prototype._create = function() {
 	$tr.append($td);
 	this.$targets = jQuery("<select/>").attr("id", "targetSelect").attr("multiple", "true");
 	$td.append(this.$targets);
-	jQuery(this.$attacks, this.$targets).on({ dblclick: this._resolveAttack.bind(this) });
+	jQuery(this.$targets).on({ dblclick: this._resolveAttack.bind(this) });
 	this.$attackDialog.dialog({ 
 		autoOpen: false, 
 		buttons: { 
@@ -228,6 +228,25 @@ Initiative.prototype._create = function() {
 	$td = jQuery("<td/>").attr("id", "history").addClass("halfWidth bordered alignTop").appendTo($tr);
 	jQuery("<div/>").addClass("bordered f1").html("History").appendTo($td);
 	$td.append(this.history.$html);
+
+	
+	// Editor for adding arbitrary history
+	$div = jQuery("<div/>").attr("id", "freeFormHistory");
+	$td.append($div);
+	$select = jQuery("<select/>").appendTo($div);
+	for (i = 0; i < this.actors.length; i++) {
+		a = this.actors[ i ];
+		$option = jQuery("<option/>").attr("value", a.name).html(a.name).data("actor", a).appendTo($select);
+	}
+	this.freeFormHistory = new History.Editor({ 
+		$parent: $div, 
+		save: (function(value) {
+			$option = jQuery($select[0].options[ $select[0].selectedIndex ]);
+			this._addHistory($option.data("actor"), value);
+		}).bind(this), 
+		cancel: function() {} 
+	});
+	this.freeFormHistory.$cancel.hide();
 	
 	this._render();
 };
