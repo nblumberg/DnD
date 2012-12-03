@@ -368,8 +368,5 @@ Creature.prototype.attack = function(attack, targets, combatAdvantage, callback)
         if (callback) {
             callback(target, msg);
         }
-        if (console && console.info) {
-            console.info(target.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1));
-        }
     }
 };

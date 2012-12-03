@@ -81,7 +81,7 @@ Roll.prototype.breakdown = function(conditional) {
 	if (conditional) {
 	    output += conditional;
 	}
-	return output;
+	return "[" + this.toString() + "] " + output;
 };
 
 Roll.prototype.anchor = function(type) {
@@ -171,7 +171,7 @@ Attack.prototype._anchorHtml = function() {
 Attack.prototype.anchor = function(conditional) {
     conditional = conditional || {};
     conditional = jQuery.extend({ breakdown: "", text: "" }, conditional);
-    conditional.breakdown += " = " + this._getLastRoll().total + " vs. " + this.defense;
+    conditional.breakdown += this.isCritical() || this.isFumble() ? "" : " = " + this._getLastRoll().total + " vs. " + this.defense;
     return Roll.prototype.anchor.call(this, conditional);
 };
 
