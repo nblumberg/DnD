@@ -24,6 +24,8 @@ var Effect = function(params) {
     this.name = typeof(params) === "string" ? params : params.name;
 };
 
+Effect.prototype = new Serializable();
+
 Effect.CONDITIONS = {
         "-2 attacks": "images/symbols/-2_attacks.jpg",
         Blinded: "images/symbols/blinded.png", // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",

@@ -6,6 +6,8 @@
         if (console && console.info) {
             console.info("DOM ready");
         }
+        window.opener.postMessage("ready", "*");
+
         $body = jQuery("body");
         for (i = 0; i < actors.length; i++) {
             createCard(actors[ i ], i);

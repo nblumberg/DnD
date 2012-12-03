@@ -144,7 +144,7 @@ Initiative.prototype._create = function() {
 	$tr.append($td);
 	this.$targets = jQuery("<select/>").attr("id", "targetSelect").attr("multiple", "true");
 	$td.append(this.$targets);
-	jQuery(this.$targets).on({ dblclick: this._resolveAttack.bind(this) });
+	jQuery(this.$targets).dblclick(this._resolveAttack.bind(this));
 	this.$attackDialog.dialog({ 
 		autoOpen: false, 
 		buttons: { 
@@ -275,8 +275,15 @@ Initiative.prototype._render = function() {
 	this._renderDisplay(false);
 };
 
+Initiative.prototype._displayLoadHandler = function(event) {
+    if (console && console.info) {
+        console.info("Display loaded");
+    }
+    this._renderDisplay(); 
+};
+
 Initiative.prototype._renderDisplay = function(createDisplay, event) {
-	var displayOnLoad, intervalId, raw;
+	var listen, stopListening, eventType, intervalId, raw;
 	
 	if (event) {
 		event.stopPropagation = true; // TODO, HACK: why are we getting 80+ hits for the same event?
@@ -284,29 +291,23 @@ Initiative.prototype._renderDisplay = function(createDisplay, event) {
 	
 	if (!this.display && createDisplay) {
 		// Log when the other window loads
-		displayOnLoad = (function() { 
-	        if (console && console.info) {
-	            console.info("Display loaded");
-	        }
-	        this._renderDisplay(); 
-	    }).bind(this);
+		if (window.addEventListener) {
+			listen = "addEventListener";
+			stopListening = "removeEventListener";
+			eventType = "message";
+		}
+		else {
+			listen = "attachEvent";
+			stopListening = "detachEvent";
+			eventType = "onmessage";
+		}
 		// Clean up the old window
 		if (this.display) {
-		    if (this.display.removeEventListener) {
-		    	this.display.removeEventListener("load", displayOnLoad, false);
-		    }
-		    else {
-		    	this.display.detachEvent("onload", displayOnLoad, false);
-		    }
+			this.display[ stopListening ](eventType, this._displayLoadHandler.bind(this), false);
 		}
 		// Create a new window
 	    this.display = window.open("initiative.html", "Initiative", "location=0,status=0,toolbar=0", false);
-	    if (this.display.addEventListener) {
-	    	this.display.addEventListener("load", displayOnLoad, false);
-	    }
-	    else {
-	    	this.display.attachEvent("onload", displayOnLoad, false);
-	    }
+	    window[ listen ](eventType, this._displayLoadHandler.bind(this), false);
 	    this.display.focus();
 	    
 	    intervalId = setInterval((function() {   
