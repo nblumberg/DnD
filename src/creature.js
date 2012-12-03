@@ -272,3 +272,104 @@ Creature.prototype._addAction = function($parent, title, src, click) {
 	$parent.append(image);
 };
 
+
+Creature.prototype.hasCondition = function(condition) {
+    var i;
+    for (i = 0; i < this.effects.length; i++) {
+        if (this.effects[ i ].name === condition) {
+            return true;
+        }
+    }
+    return false;
+};
+
+Creature.prototype.grantsCombatAdvantage = function(isMelee) {
+    var i;
+    for (i = 0; i < this.effects.length; i++) {
+        switch (this.effects[ i ].name) {
+            case "blinded":
+            case "dazed":
+            case "dominated":
+            case "dying":
+            case "helpless":
+            case "petrified":
+            case "restrained":
+            case "stunned":
+            case "surprised":
+            case "unconscious": {
+                return true;
+            }
+            case "prone": {
+                return isMelee;
+            }
+        }
+    }
+    return false;
+};
+
+Creature.prototype.defenseModifier = function(isMelee) {
+    var i, mod = 0;
+    for (i = 0; i < this.effects.length; i++) {
+        switch (this.effects[ i ].name) {
+            case "unconscious":
+            {
+                mod -= 5;
+                break;
+            }
+            case "prone": {
+                mod += isMelee ? 0 : 2;
+                break;
+            }
+        }
+    }
+    return mod;
+};
+
+Creature.prototype.attack = function(attack, targets, combatAdvantage, callback) {
+    var i, targets, toHit, toHitRoll, isCrit, isFumble, toHitCond, def, defCondMod, damage, target, msg, temp;
+    toHitRoll = attack.roll();
+    isCrit = attack.isCritical();
+    isFumble = attack.isFumble();
+    if (!isCrit && !isFumble) {
+        toHitCond = attack.toHitModifiers(this.effects);
+    }
+    
+    for (i = 0; i < targets.length; i++) {
+        target = targets[ i ];
+        
+        if (!isFumble && !isCrit) {
+            toHit = toHitRoll + toHitCond.mod + (target.grantsCombatAdvantage() ? 2 : 0);
+            def = target.defenses[ attack.defense.toLowerCase() ];
+            defCondMod = target.defenseModifier(attack.isMelee);
+        }
+        if (!isFumble && (isCrit || toHit >= def + defCondMod)) {
+            if (!damage) {
+                damage = attack.damage.roll() + (isCrit ? attack.crit.roll() : 0);
+                if (this.hasCondition("weakened")) {
+                    damage = Math.floor(damage / 2);
+                }
+            }
+            msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for " + attack.damage.anchor();
+            if (target.hp.temp) {
+                temp = target.hp.temp;
+                target.hp.temp = Math.max(temp - damage, 0);
+                damage -= Math.max(damage - temp, 0);
+                msg += " (" + Math.min(damage, temp) + " absorbed by temporary HP)";
+            }
+            target.hp.current -= damage;
+            if (target.hp.current < 0 && !target.hasCondition("dying")) {
+                target.effects.push({ name: "dying" });
+                msg += "; " + target.name + " falls unconscious and is dying";
+            }
+        }
+        else {
+            msg = "Missed by " + this.name + "'s " + attack.anchor(toHitCond);
+        }
+        if (callback) {
+            callback(target, msg);
+        }
+        if (console && console.info) {
+            console.info(target.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1));
+        }
+    }
+};

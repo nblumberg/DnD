@@ -3,6 +3,7 @@ var Roll = function(params) {
     this.dieCount = 0;
     this.dieSides = 0;
     this.extra = 0;
+    this.crits = false;
 	if (typeof(params) === "string") {
 	    this._parse(params);
 	}
@@ -10,6 +11,7 @@ var Roll = function(params) {
 	    this.dieCount = params.dieCount;
 	    this.dieSides = params.dieSides;
 	    this.extra = params.extra;
+	    this.crits = params.crits;
 	}
 };
 
@@ -60,15 +62,24 @@ Roll.prototype.isFumble = function() {
 	return h.dice[0] === 1;
 };
 
-Roll.prototype.breakdown = function() {
+Roll.prototype.breakdown = function(conditional) {
 	var h, value, output, i;
 	h = this._getLastRoll();
 	output = "";
 	for (i = 0; i < h.dice.length; i++) {
-		output += (output ? " + " : "") + h.dice[ i ];
+		output += (output ? " + " : "");
+		if (this.crits && (this.isCritical() || this.isFumble())) {
+	        output += this.isCritical() ? "CRIT" : "FUMBLE";
+		}
+		else {
+	        output += h.dice[ i ];
+		}
 	}
-	if (this.extra) {
+	if (this.extra && !(this.crits && (this.isCritical() || this.isFumble()))) {
 		output += (output ? " + " : "") + this.extra;
+	}
+	if (conditional) {
+	    output += conditional;
 	}
 	return output;
 };
@@ -85,6 +96,38 @@ Roll.prototype.raw = function() {
 	return this.toString();
 };
 
+Roll.prototype._anchorHtml = function(conditional) {
+    return "" + (this._history[ this._history.length - 1 ].total + (conditional && conditional.total ? conditional.total : 0)) + (conditional && conditional.text ? conditional.text : "");
+};
+
+Roll.prototype.anchor = function(conditional) {
+    return "<a href=\"javascript:void(0);\" title=\"" + this.breakdown(conditional && conditional.breakdown ? conditional.breakdown : null) + "\">" + this._anchorHtml(conditional) + "</a>";
+};
+
+
+
+
+var Damage = function(params) {
+    params = params || {};
+    this.type = "";
+    this.crit = null;
+    if (typeof(params) === "string") {
+        this._parse(params);
+    }
+    else {
+        this.type = params.type || "";
+        this.crit = params.crit ? new Damage(params.crit) : null;
+    }
+};
+
+Damage.prototype = new Roll({ dieCount: 1, dieSides: 6, extra: 0, crits: false });
+
+Damage.prototype.anchor = function(conditional) {
+    conditional = conditional || {};
+    conditional = jQuery.extend({ text: "" }, conditional);
+    conditional.text += (this.type ? " " + this.type : "") + " damage";
+    return Roll.prototype.anchor.call(this, conditional);
+};
 
 
 var Attack = function(params) {
@@ -93,15 +136,43 @@ var Attack = function(params) {
 	this.type = params.type;
 	this.defense = params.defense;
 	this.extra = this.toHit = params.toHit;
-	this.damage = new Roll(params.damage);
+	this.damage = new Damage(params.damage);
 	this.damageType = params.damageType;
 	this.crit = new Roll(params.crit);
 };
 
-Attack.prototype = new Roll("1d20");
+Attack.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: true });
 
-Attack.prototype.anchor = function() {
-	return "<a href=\"javascript:void(0);\" title=\"" + this.breakdown() + " = " + this._getLastRoll().total + " vs. " + this.defense +"\">" + this.name + " attack</a>";
+Attack.prototype.toHitModifiers = function(effects) {
+    var i, result = { mod: 0, effects: [] };
+    for (i = 0; i < effects.length; i++) {
+        switch (effects[ i ].name) {
+            case "blinded": {
+                result.mod -= 5;
+                result.effects.push(effects[ i ].name);
+                break;
+            }
+            case "prone": 
+            case "restrained": {
+                result.mod -= 2;
+                result.effects.push(effects[ i ].name);
+                break;
+            }
+        }
+    }
+    result.text = result.effects.join(" + ");
+    return result;
+};
+
+Attack.prototype._anchorHtml = function() {
+    return this.name + " attack";
+};
+
+Attack.prototype.anchor = function(conditional) {
+    conditional = conditional || {};
+    conditional = jQuery.extend({ breakdown: "", text: "" }, conditional);
+    conditional.breakdown += " = " + this._getLastRoll().total + " vs. " + this.defense;
+    return Roll.prototype.anchor.call(this, conditional);
 };
 
 Attack.prototype.raw = Serializable.prototype.raw;

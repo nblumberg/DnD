@@ -365,44 +365,19 @@ Initiative.prototype._attack = function(actor) {
 };
 
 Initiative.prototype._resolveAttack = function() {
-	var attacker, attack, i, targets, toHit, isCrit, def, damage, target, msg, temp;
+	var attacker, attack, i, targets, toHit, isCrit, def, combatAdvantage, damage, target, msg, temp;
 	if (this.$attacks.val() && this.$targets.val()) {
 		this.$attackDialog.dialog("close");
 		attacker = this.$attackDialog.data("attacker");
 		attack = jQuery(this.$attacks[0].options[ this.$attacks[0].selectedIndex ]).data("attack");
 		targets = [];
-		
-		toHit = attack.roll();
-		damage = attack.damage.roll() + (isCrit ? attack.crit.roll() : 0);
-		
 		for (i = 0; i < this.$targets[0].options.length; i++) {
 			if (this.$targets[0].options[ i ].selected) {
 				targets.push(jQuery(this.$targets[0].options[ i ]).data("target"));
 			}
 		}
-		for (i = 0; i < targets.length; i++) {
-			target = targets[ i ];
-			if (toHit >= target.defenses[ attack.defense.toLowerCase() ]) {
-				msg = "Hit by " + attacker.name + "'s " + attack.anchor(toHit) + " for " + attack.damage.anchor();
-				if (target.hp.temp) {
-					temp = target.hp.temp;
-					target.hp.temp -= damage;
-					damage -= temp;
-					msg += " (" + temp + " absorbed by temporary HP)";
-				}
-				target.hp.current -= damage;
-				if (target.hp.current < 0) {
-					msg += "; " + target.name + " falls unconscious";
-				}
-			}
-			else {
-				msg = "Missed by " + attacker.name + "'s " + attack.anchor(toHit);
-			}
-			this._addHistory(target, msg);
-			if (console && console.info) {
-				console.info(target.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1));
-			}
-		}
+		combatAdvantage = false; // TODO: get combat advantage from dialog
+		attacker.attack(attack, targets, combatAdvantage, this._addHistory.bind(this));
 		this._render();
 	} 
 	else {
