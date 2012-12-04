@@ -20,11 +20,31 @@ var Surges = function(params) {
 };
 
 var Effect = function(params) {
+    var i;
     params = params || {};
     this.name = typeof(params) === "string" ? params : params.name;
+    this.saveEnds = params.saveEnds || false;
+    this.duration = params.duration || -1;
+    this.children = [];
+    for (i = 0; params.children && i < params.children.length; i++) {
+        this.children.push(new Effect(params.children[ i ]));
+    }
 };
 
 Effect.prototype = new Serializable();
+
+Effect.prototype.toString = function() {
+    var name, i;
+    name = this.name;
+    if (this.children && this.children.length) {
+        name += " [";
+        for (i = 0; i < this.children.length; i++) {
+            name += (i ? ", " : "") + this.children[ i ].name;
+        }
+        name += " ]";
+    }
+    return name;
+};
 
 Effect.CONDITIONS = {
         "-2 attacks": "images/symbols/-2_attacks.jpg",
@@ -193,7 +213,14 @@ Creature.prototype.createCard = function(params) {
 };
 
 Creature.prototype._addCondition = function($parent, effect, total) {
-    var image = new Image();
+    var i, image;
+    if (effect.children && effect.children.length) {
+        for (i = 0; i < effect.children.length; i++) {
+            this._addCondition($parent, effect.children[ i ], total);
+        }
+        return;
+    }
+    image = new Image();
     if (total <= 4) {
         image.height = this.cardSize / 3;
     }
@@ -273,20 +300,24 @@ Creature.prototype._addAction = function($parent, title, src, click) {
 };
 
 
-Creature.prototype.hasCondition = function(condition) {
+Creature.prototype.getCondition = function(condition) {
     var i;
     for (i = 0; i < this.effects.length; i++) {
         if (this.effects[ i ].name === condition) {
-            return true;
+            return this.effects[ i ];
         }
     }
-    return false;
+    return null;
+};
+
+Creature.prototype.hasCondition = function(condition) {
+    return this.getCondition(condition) !== null;
 };
 
 Creature.prototype.grantsCombatAdvantage = function(isMelee) {
     var i;
     for (i = 0; i < this.effects.length; i++) {
-        switch (this.effects[ i ].name) {
+        switch (this.effects[ i ].name.toLowerCase()) {
             case "blinded":
             case "dazed":
             case "dominated":
@@ -310,7 +341,7 @@ Creature.prototype.grantsCombatAdvantage = function(isMelee) {
 Creature.prototype.defenseModifier = function(isMelee) {
     var i, mod = 0;
     for (i = 0; i < this.effects.length; i++) {
-        switch (this.effects[ i ].name) {
+        switch (this.effects[ i ].name.toLowerCase()) {
             case "unconscious":
             {
                 mod -= 5;
@@ -325,42 +356,39 @@ Creature.prototype.defenseModifier = function(isMelee) {
     return mod;
 };
 
-Creature.prototype.attack = function(attack, targets, combatAdvantage, callback) {
-    var i, targets, toHit, toHitRoll, isCrit, isFumble, toHitCond, def, defCondMod, damage, target, msg, temp;
+Creature.prototype.attack = function(attack, targets, combatAdvantage, round, callback) {
+    var i, targets, toHit, toHitRoll, isCrit, isFumble, toHitCond, def, defCondMod, damage, dmgCond, target, msg, temp;
     toHitRoll = attack.roll();
     isCrit = attack.isCritical();
     isFumble = attack.isFumble();
     if (!isCrit && !isFumble) {
         toHitCond = attack.toHitModifiers(this.effects);
+        if (combatAdvantage) {
+            toHitCond.breakdown += " + combat advantage"; 
+        }
     }
     
     for (i = 0; i < targets.length; i++) {
         target = targets[ i ];
         
         if (!isFumble && !isCrit) {
-            toHit = toHitRoll + toHitCond.mod + (target.grantsCombatAdvantage() ? 2 : 0);
+            toHit = toHitRoll + toHitCond.mod + (combatAdvantage || target.grantsCombatAdvantage() ? 2 : 0);
             def = target.defenses[ attack.defense.toLowerCase() ];
             defCondMod = target.defenseModifier(attack.isMelee);
         }
         if (!isFumble && (isCrit || toHit >= def + defCondMod)) {
             if (!damage) {
                 damage = attack.damage.roll() + (isCrit ? attack.crit.roll() : 0);
+                dmgCond = { mod: 0, breakdown: "", effects: [] };
                 if (this.hasCondition("weakened")) {
+                    dmgCond.mod = -1 * Math.ceil(damage / 2);
+                    dmgCond.breakdown += " [1/2 for weakened]";
+                    dmgCond.effects.push("weakened");
                     damage = Math.floor(damage / 2);
                 }
             }
-            msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for " + attack.damage.anchor();
-            if (target.hp.temp) {
-                temp = target.hp.temp;
-                target.hp.temp = Math.max(temp - damage, 0);
-                damage -= Math.max(damage - temp, 0);
-                msg += " (" + Math.min(damage, temp) + " absorbed by temporary HP)";
-            }
-            target.hp.current -= damage;
-            if (target.hp.current < 0 && !target.hasCondition("dying")) {
-                target.effects.push({ name: "dying" });
-                msg += "; " + target.name + " falls unconscious and is dying";
-            }
+            msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for " + attack.damage.anchor(dmgCond);
+            msg += target.takeDamage(damage, attack.effects);
         }
         else {
             msg = "Missed by " + this.name + "'s " + attack.anchor(toHitCond);
@@ -369,4 +397,56 @@ Creature.prototype.attack = function(attack, targets, combatAdvantage, callback)
             callback(target, msg);
         }
     }
+};
+
+Creature.prototype.takeDamage = function(damage, effects) {
+    var temp, msg, i;
+    msg = "";
+    // TODO: resistance
+    if (this.hp.temp) {
+        temp = this.hp.temp;
+        this.hp.temp = Math.max(temp - damage, 0);
+        damage -= Math.max(damage - temp, 0);
+        msg += " (" + Math.min(damage, temp) + " absorbed by temporary HP)";
+    }
+    if (damage > 0 && effects && effects.length) {
+        for (i = 0; i < effects.length; i++) {
+            this.effects.push(effects[ i ]);
+            msg += ", " + effects[ i ].toString();
+        }
+    }
+    this.hp.current -= damage;
+    if (this.hp.current < 0 && !this.hasCondition("dying")) {
+        this.effects.push({ name: "dying" });
+        msg += "; " + this.name + " falls unconscious and is dying";
+    }
+    return msg;
+};
+
+Creature.prototype.startTurn = function() {
+    var i, effect, ongoingEffects = [ "Ongoing acid", "Ongoing cold", "Ongoing damage", "Ongoing fire", "Ongoing lightning", "Ongoing necrotic", "Ongoing poison", "Ongoing psychic", "Ongoing radiant" ];
+    for (i = 0; this.effects && this.effects.length && i < ongoingEffects.length; i++) {
+        effect = this.getCondition(ongoingEffects[ i ]);
+        if (effect !== null) {
+            this.takeDamage(effect.damage);
+        }
+    }
+};
+
+Creature.prototype.endTurn = function() {
+    var i, j, savingThrow, savingThrowRoll, msg;
+    for (i = 0; i < this.effects.length; i++) {
+        effect = this.effects[ i ];
+        if (effect !== null && effect.saveEnds) {
+            savingThrow = new SavingThrow({ effect: effect });
+            savingThrowRoll = savingThrow.roll();
+            if (savingThrowRoll >= 10) {
+                this.effects.splice(i, 1);
+                i--;
+            }
+            msg = savingThrow.anchor();
+            this.history.add(new History.Entry({ round: this.history._round, subject: this, message: msg }));
+        }
+    }
+    return msg;
 };

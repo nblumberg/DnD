@@ -268,10 +268,11 @@ function loadData() {
                           { name: "Slam", type: "At-Will", range: "melee", toHit: 13, defense: "AC", damage: "1d8+3" },
                           { name: "Blowgun Dart", type: "At-Will", range: 5, toHit: 16, defense: "AC", targeting: "blast 5", damage: "1d10+6", effects: [ { name: "Dazed", saveEnds: true } ] },
                           { name: "Dart Flurry", type: "Recharge", recharge: 4, range: "blast 5", toHit: 16, defense: "AC", targeting: "blast 5", damage: "1d10+6", effects: [ 
-                                                                                                                                                                              { name: "Dazed", saveEnds: "all" }, 
-                                                                                                                                                                              { name: "-2 attacks", saveEnds: "all" } 
-                                                                                                                                                                              ]
-                          }
+                            { name: "multiple effects", saveEnds: true, children: [
+                                    { name: "Dazed" }, 
+                                    { name: "-2 attacks" } 
+                                ] }
+                            ] }
                   ]
             },
             "Slystone Dwarf Ruffian": { 

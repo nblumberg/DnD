@@ -130,7 +130,28 @@ Damage.prototype.anchor = function(conditional) {
 };
 
 
+var SavingThrow = function(params) {
+    params = params || {};
+    this.effect = params.effect;
+};
+
+SavingThrow.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: false });
+
+SavingThrow.prototype._anchorHtml = function(conditional) {
+    var success = (this._history[ this._history.length - 1 ].total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
+    return (success ? "Saves" : "Fails to save") + " against " + this.effect.toString();
+};
+
+SavingThrow.prototype.anchor = function(conditional) {
+    conditional = conditional || {};
+    conditional = jQuery.extend({ text: "" }, conditional);
+    conditional.text += (this.type ? " " + this.type : "") + " damage";
+    return Roll.prototype.anchor.call(this, conditional);
+};
+
+
 var Attack = function(params) {
+    var i;
 	params = params || {};
 	this.name = params.name;
 	this.type = params.type;
@@ -139,14 +160,18 @@ var Attack = function(params) {
 	this.damage = new Damage(params.damage);
 	this.damageType = params.damageType;
 	this.crit = new Roll(params.crit);
+    this.effects = [];
+    for (i = 0; params.effects && i < params.effects.length; i++) {
+        this.effects.push(new Effect(params.effects[ i ]));
+    }
 };
 
 Attack.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: true });
 
 Attack.prototype.toHitModifiers = function(effects) {
-    var i, result = { mod: 0, effects: [] };
+    var i, result = { mod: 0, effects: [], breakdown: "" };
     for (i = 0; i < effects.length; i++) {
-        switch (effects[ i ].name) {
+        switch (effects[ i ].name.toLowerCase()) {
             case "blinded": {
                 result.mod -= 5;
                 result.effects.push(effects[ i ].name);

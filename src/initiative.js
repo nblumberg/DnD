@@ -27,53 +27,6 @@ var Initiative = function(params) {
 
 Initiative.prototype = new EventBus();
 
-Initiative._CARD_SIZE = 120;
-Initiative._STYLES = [
-	"th, td { border-color: white; }",
-	
-	".alignTop { vertical-align: top; }",
-	".bordered { border-style: solid; border-width: 3px; }",
-	".bloodied { background-color: red; }",
-	".centered { text-align: center; }",
-	".centered img { display: block; margin-left: auto; margin-right: auto; }",
-	".current { border-color: blue; border-width: 6px; }",
-	".f1 { font-size: 1.5em; }",
-	".f2 { font-size: 1.2em; }",
-    ".floatLeft { float: left; }",
-    ".gridItem { display: inline-block; vertical-align: top; }", 
-	".fullHeight { height: 100%; }",
-	".fullWidth { clear: both; width: 100%; }",
-	".halfWidth { width: 50%; }",
-	".fullBoth { height: 100%; width: 100%; }",
-	".numerator:after { content: '/' }",
-	
-	"div#header * { margin-right: 10px; }",
-	"span#spanLabel { font-size: 1.2em; }",
-	"input#round { width: 30px; }",
-	
-	"#history div { text-align: center; }",
-	
-    "#display .creaturePanel {  }",
-	".creaturePanel { min-height: " + Initiative._CARD_SIZE + "px; margin:2px; position: relative; width: " + Initiative._CARD_SIZE + "px; }",
-	".creaturePanel .column { float: left; margin-right: 4px; }",
-    ".creaturePanel img.icon { margin-right: 2px; }",
-    ".creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }",
-    ".creaturePanel .effects { margin: 0 1px 2px 0; }",
-		
-	"div#history { float: right; height: 100%; min-width: 30%; padding: 0 5px; }",
-	"div#history h3 { margin: 5px 0; }",
-//		"table#initiative { border-collapse: collapse; }",
-	"table#initiative th, table#initiative td { text-align: center; }", 
-	"table#initiative td.hp { padding: 3px; text-align: left; }",
-	"table#initiative .tempHp { font-style: italic; }",
-	"div#attacksDialog { padding: 5px; }",
-	"div#attacksDialog table { width: 98%; }",
-	"div#attacksDialog td { vertical-align: top; }",
-	"div#attacksDialog td.attacks2targets { padding-top: 30%; }",
-	"div#attacksDialog td, div#attacksDialog select { height: 100%; }",
-	"table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }"
-];
-
 Initiative.prototype._rollInitiative = function() {
 	var actor, i;
 	this.order = [];
@@ -87,6 +40,29 @@ Initiative.prototype._rollInitiative = function() {
 	for (i = 0; i < this.order.length; i++) {
 		this.order[ i ] = this.order[ i ].index;
 	}
+};
+
+Initiative.prototype._next = function() {
+    var msg, i;
+    msg = this.actors[ this.order[ this._current ] ].endTurn();
+    if (msg) {
+        this._addHistory(this.actors[ this.order[ this._current ] ], msg);
+    }
+    this._current++;
+    if (this._current >= this.order.length) {
+        this._current = 0;
+        this.round++;
+        this.$round.val(this.round);
+    }
+    for (i = 0; i < this.actors.length; i++) {
+        this.actors[ i ].history._round = this.round;
+    }
+    this.history._round = this.round;
+    msg = this.actors[ this.order[ this._current ] ].startTurn();
+    if (msg) {
+        this._addHistory(this.actors[ this.order[ this._current ] ], msg);
+    }
+    this._render();
 };
 
 Initiative.prototype._changeInitiative = function(event) {
@@ -121,9 +97,6 @@ Initiative.prototype._create = function() {
 	var columns, i, $table, $tr, $td, image, $div, $span, $select, $option;
 	this.$parent = jQuery(this._$target.length ? this._$target : "body");
 	
-//	this.$style = jQuery("<style/>").attr("id", "initStyles").html(Initiative._STYLES.join("\n"));
-//	this.$parent.append(this.$style);
-	
 	this.$attackDialog = jQuery("<div/>").attr("id", "attacksDialog");
 	$table = jQuery("<table/>");
 	$table.attr("id", "attacks");
@@ -138,7 +111,12 @@ Initiative.prototype._create = function() {
 	$tr.append($td);
 	image = new Image();
 	image.height = 30;
-	image.src = "http://gamereviewhero.com/images/sword_icon.png";
+	image.src = "images/symbols/attack.png";
+	this.$combatAdvantage = jQuery(image).data("combatAdvantage", false).on({ click: function() {
+	    var combatAdvantage = this.src.indexOf("images/symbols/attack.png") !== -1;
+	    this.src = combatAdvantage ? "images/symbols/combat_advantage.png" : "images/symbols/attack.png";
+	    jQuery(this).data("combatAdvantage", combatAdvantage);
+	} });
 	$td.append(image);
 	$td = jQuery("<td/>");
 	$tr.append($td);
@@ -196,15 +174,7 @@ Initiative.prototype._create = function() {
 	$div.append($span);
 	this.$round = jQuery("<input/>").attr("id", "round").attr("type", "text").attr("disabled", "disabled").val(this.round);
 	$div.append(this.$round);
-	this.$nextButton = jQuery("<button/>").attr("id", "next").html("Next").on({ click: (function() {
-		this._current++;
-		if (this._current >= this.order.length) {
-			this._current = 0;
-			this.round++;
-			this.$round.val(this.round);
-		}
-		this._render();
-	}).bind(this) });
+	this.$nextButton = jQuery("<button/>").attr("id", "next").html("Next").on({ click: (this._next).bind(this) });
 	$div.append(this.$nextButton);
 	
     this.$displayButton = jQuery("<button/>").attr("id", "open").html("Open player window").on({ click: this._renderDisplay.bind(this, true) });
@@ -222,7 +192,15 @@ Initiative.prototype._create = function() {
 	}
 	this.$table.sortable({ containment: "parent", handle: ".creaturePanel", items: "tr", 
 	    update: (function(event, ui) {
-	        this._changeInitiative({ move: ui.item.data("actor"), before: this.actors[ this.order[ ui.item.index() + 1 ] ] });
+	        var i, move, before;
+	        move = ui.item.data("actor");
+	        for (i = 0; i < this.$table[0].rows.length; i++) {
+	            if (jQuery(this.$table[0].rows[ i ]).data("actor") === ui.item.data("actor")) {
+	                before = this.actors[ this.order[ i ] ];
+	                break;
+	            }
+	        }
+	        this._changeInitiative({ move: move, before: before });
 	    }).bind(this) 
     });
 	
@@ -344,6 +322,9 @@ Initiative.prototype._attack = function(actor) {
 	var $option, i, a;
 	this.$attackDialog.data("attacker", actor);
 	
+	if (this.$combatAdvantage.data("combatAdvantage")) {
+	    this.$combatAdvantage.click();
+	}
 	this.$attacks.html("");
 	for (i = 0; i < actor.attacks.length; i++) {
 		$option = jQuery("<option/>").html(actor.attacks[ i ].name).data("attack", actor.attacks[ i ]);
@@ -365,7 +346,7 @@ Initiative.prototype._attack = function(actor) {
 };
 
 Initiative.prototype._resolveAttack = function() {
-	var attacker, attack, i, targets, toHit, isCrit, def, combatAdvantage, damage, target, msg, temp;
+	var attacker, attack, i, targets, combatAdvantage;
 	if (this.$attacks.val() && this.$targets.val()) {
 		this.$attackDialog.dialog("close");
 		attacker = this.$attackDialog.data("attacker");
@@ -376,8 +357,8 @@ Initiative.prototype._resolveAttack = function() {
 				targets.push(jQuery(this.$targets[0].options[ i ]).data("target"));
 			}
 		}
-		combatAdvantage = false; // TODO: get combat advantage from dialog
-		attacker.attack(attack, targets, combatAdvantage, this._addHistory.bind(this));
+		combatAdvantage = this.$combatAdvantage.data("combatAdvantage");
+		attacker.attack(attack, targets, combatAdvantage, this.round, this._addHistory.bind(this));
 		this._render();
 	} 
 	else {

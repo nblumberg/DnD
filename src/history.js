@@ -2,14 +2,14 @@ var History = function(params) {
 	var i, entry;
 	
 	params = params || {};
-	this._rounds = params.rounds || [];
+	this._entries = params.entries || [];
 	this._round = params.round || 0;
 	this._count = 0;
 	this._includeSubject = params.includeSubject;
 	
-	this.$html = this._rounds.length > 0 ? jQuery("<ul/>") : jQuery("<span/>").html("No history");
-	for (i = 0; i < this._rounds.length; i++) {
-		entry = History.Entry.entries[ this._rounds[ i ] ];
+	this.$html = this._entries.length > 0 ? jQuery("<ul/>") : jQuery("<span/>").html("No history");
+	for (i = 0; i < this._entries.length; i++) {
+		entry = History.Entry.entries[ this._entries[ i ] ];
 		if (!entry) {
 			continue;
 		}
@@ -19,12 +19,11 @@ var History = function(params) {
 
 History.central = null;
 
-
 History.prototype = new Serializable();
 
 History.prototype.add = function(entry) {
 	entry.round = entry.round ? entry.round : this._round;
-	this._rounds.push(entry.id);
+	this._entries.push(entry.id);
 	entry._addToRound(this._getRound(entry), this._includeSubject);
 };
 
@@ -78,7 +77,7 @@ History.prototype._getRound = function(entry) {
 		$ul = jQuery("<ul/>").appendTo($li);
 	}
 	else {
-		$ul = this.$html.children(".round" + entry.round);
+		$ul = this.$html.children(".round" + entry.round).children("ul");
 	}
 	return $ul;
 };
