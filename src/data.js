@@ -205,7 +205,7 @@ function loadData() {
             	 attacks: [
             	           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 14, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee" ] },
             	           { name: "Ranged Basic", type: "At-Will", toHit: 16, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged" ] },
-            	           { name: "Duelist's Flurry", type: "At-Will", toHit: 17, defense: "AC", damage: "0+DEX", keywords: [ "weapon", "martial", "melee" ] },
+            	           { name: "Duelist's Flurry", type: "At-Will", toHit: 17, defense: "AC", damage: "DEX", keywords: [ "weapon", "martial", "melee" ] },
             	           { name: "Sly Flourish", type: "At-Will", toHit: 17, defense: "AC", damage: "1[W]+DEX+CHA", keywords: [ "weapon", "martial" ] },
             	           { name: "Demonic Frenzy", type: "Encounter", toHit: 99, defense: "AC", damage: "1d6", keywords: [ "elemental" ] },
             	           { name: "Acrobat's Blade Trick", type: "Encounter", toHit: 17, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
@@ -245,7 +245,7 @@ function loadData() {
             	           { name: "Invigorating Assault", type: "Daily", toHit: 13, defense: "AC", damage: "3[W]+DEX", keywords: [ "weapon", "martial", "ranged", "miss half" ] },
             	           { name: "Infernal Wrath", type: "Encounter", toHit: 99, defense: "AC", damage: "1d6+INT^CHA", keywords: [ "fire" ] },
             	           { name: "Spirit Fangs", type: "Encounter", toHit: 8, defense: "Ref", damage: "1d10+WIS", keywords: [ "implement", "primal", "spirit" ] },
-            	           { name: "Hunter's Thorn Trap", type: "Encounter", toHit: 99, defense: "AC", damage: "0+8", keywords: [ "primal", "zone" ] },
+            	           { name: "Hunter's Thorn Trap", type: "Encounter", toHit: 99, defense: "AC", damage: "5+WIS", keywords: [ "primal", "zone" ] },
             	           { name: "Hunter's Quarry", type: "At-Will", toHit: 99, defense: "AC", damage: "1d8" }
             	           ],
                  effects: randEffects()

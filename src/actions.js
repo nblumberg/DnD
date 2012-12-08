@@ -132,32 +132,80 @@ var Damage = function(params, creature) {
 
 Damage.prototype = new Roll({ dieCount: 1, dieSides: 0, extra: 0, crits: false });
 
+/**
+ * @param str {String} grammar: 
+ * # = "(+|-)*\d", 
+ * A = "(+|-)(STR|DEX|CON|INT|WIS|CHA)",
+ * D = "#d#(#|A)*" 
+ */
 Damage.prototype._parseDamageString = function(str, creature) {
-	var extra;
+	var extra, i, value, regeExW_A, regExOr, regExMax;
 	if (!str) {
 		return;
 	}
-	if (str.indexOf("[W]") === -1) {
+	regeExW_A = /(\[W\]|STR|DEX|CON|INT|WIS|CHA)/;
+	if (!regeExW_A.test(str)) {
 		this._parseString(str);
 		return;
 	}
-	this.needsWeapon = true;
-	this.weaponMultiplier = parseInt(str.split("[W]")[ 0 ]);
-	extra = str.split("[W]+")[ 1 ];
-	switch (extra) {
-		case "STR":
-		case "DEX":
-		case "CON":
-		case "INT":
-		case "WIS":
-		case "CHA": {
-			this.extra = creature.abilities[ extra + "mod" ];
-			break;
-		}
-		default: {
-			this.extra = parseInt(extra);
-			break;
-		}
+	if (str.indexOf("[W]") !== -1) {
+	    this.needsWeapon = true;
+	    this.weaponMultiplier = parseInt(str.split("[W]")[ 0 ]);
+	    extra = str.split("[W]")[ 1 ];
+	}
+	else {
+	    value = str.split("+")[ 0 ];
+	    if (!value) {
+	        return;
+	    }
+	    if (!regeExW_A.test(value)) {
+	        this._parseString(value);
+	        extra = str.substr(str.indexOf("+") + 1);
+	    }
+	    else {
+	        extra = value;
+	    }
+	}
+    if (!extra) {
+        return;
+    }
+    extra = extra.split("+");
+	for (i = 0; extra && i < extra.length; i++) {
+	    switch (extra[ i ]) {
+            case "": {
+                break;
+            }
+	        case "STR":
+	        case "DEX":
+	        case "CON":
+	        case "INT":
+	        case "WIS":
+	        case "CHA": {
+	            this.extra += creature.abilities[ extra[ i ] + "mod" ];
+	            break;
+	        }
+	        default: {
+	            try {
+	                value = parseInt(extra[ i ]);
+	            }
+	            catch (e) {}
+	            if (!isNaN(value)) {
+	                this.extra += value;
+	            }
+	            else {
+                    regExOr = /^(\w{3}\/\w{3})$/;
+                    regExMax = /^(\w{3}\^\w{3})$/;
+	                if (regExOr.test(extra[ i ])) {
+                        this.meleeExta = creature.abilities[ "STRmod" ];
+                        this.rangedExta = creature.abilities[ "DEXmod" ];
+	                }
+	                else if (regExMax.test(extra[ i ])) {
+	                    this.extra += Math.max(creature.abilities[ extra[ i ].split("^")[ 0 ] + "mod" ], creature.abilities[ extra[ i ].split("^")[ 1 ] + "mod" ]);
+	                }
+	            }
+	            break;
+	        }
+	    }
 	}
 };
 
