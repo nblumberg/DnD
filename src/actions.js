@@ -274,14 +274,14 @@ Damage.prototype.rollItem = function(item, isCrit) {
         }
     }
     else {
-        total += this[ isCrit ? "max" : "roll" ]() + (item.enhancement ? item.enhancement : 0);
+        total += this[ isCrit ? "max" : "roll" ]() + (item && item.enhancement ? item.enhancement : 0);
     }
     if (isCrit) {
-        if (item) {
-            total += item.crit ? item.crit.roll() : 0;
+        if (item && item.crit) {
+            total += item.crit.roll();
             dice = dice.concat(item.crit._history[ item.crit._history.length - 1 ].dice);
         }
-        else {
+        else if (this.crit) {
             total += this.crit.roll();
             dice = dice.concat(this.crit._history[ this.crit._history.length - 1 ].dice);
         }
@@ -305,7 +305,7 @@ Damage.prototype.anchor = function(conditional) {
 
 Damage.prototype.toString = function() {
     if (this.str) {
-        if (this.str.indexOf("[W]") !== -1 && this._getLastRoll().itemStr) {
+        if (this.str.indexOf("[W]") !== -1 && this._getLastRoll() && this._getLastRoll().itemStr) {
             return this.str.replace("[W]", "[" + this._getLastRoll().itemStr +  "]");
         }
         return this.str;

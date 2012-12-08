@@ -38,7 +38,7 @@ Serializable.prototype.rawMap = function(obj) {
 	if (r) {
 		for (p in obj) {
 			if (obj.hasOwnProperty(p)) {
-				r[ p ] = obj[ p ].raw();
+				r[ p ] = obj[ p ] && obj[ p ].raw ? obj[ p ].raw() : obj[ p ];
 			}
 		}
 		return r;
