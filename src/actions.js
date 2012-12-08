@@ -5,19 +5,23 @@ var Roll = function(params) {
     this.extra = 0;
     this.crits = false;
 	if (typeof(params) === "string") {
-	    this._parse(params);
+	    this._parseString(params);
 	}
 	else if (params) {
-	    this.dieCount = params.dieCount;
-	    this.dieSides = params.dieSides;
-	    this.extra = params.extra;
-	    this.crits = params.crits;
+		this._parseObject(params);
 	}
 };
 
 Roll.prototype = new Serializable();
 
-Roll.prototype._parse = function(str) {
+Roll.prototype._parseObject = function(obj) {
+    this.dieCount = obj.dieCount;
+    this.dieSides = obj.dieSides;
+    this.extra = obj.extra;
+    this.crits = obj.crits;
+};
+
+Roll.prototype._parseString = function(str) {
     var hasDice, extraRegExp, hasExtra, dRegExp;
     extraRegExp = /[+-]/;
     hasDice = str.indexOf("d") !== -1;
@@ -107,20 +111,55 @@ Roll.prototype.anchor = function(conditional) {
 
 
 
-var Damage = function(params) {
+var Damage = function(params, creature) {
     params = params || {};
     this.type = "";
     this.crit = null;
     if (typeof(params) === "string") {
-        this._parse(params);
+        this._parseDamageString(params, creature);
     }
     else {
+        if (typeof(params.amount) === "string") {
+            this._parseDamageString(params.amount, creature);
+        }
+        else if (params.amount) {
+            this._parseObject(params.amount);
+        }
         this.type = params.type || "";
         this.crit = params.crit ? new Damage(params.crit) : null;
     }
 };
 
-Damage.prototype = new Roll({ dieCount: 1, dieSides: 6, extra: 0, crits: false });
+Damage.prototype = new Roll({ dieCount: 1, dieSides: 0, extra: 0, crits: false });
+
+Damage.prototype._parseDamageString = function(str, creature) {
+	var extra;
+	if (!str) {
+		return;
+	}
+	if (str.indexOf("[W]") === -1) {
+		this._parseString(str);
+		return;
+	}
+	this.needsWeapon = true;
+	this.weaponMultiplier = parseInt(str.split("[W]")[ 0 ]);
+	extra = str.split("[W]+")[ 1 ];
+	switch (extra) {
+		case "STR":
+		case "DEX":
+		case "CON":
+		case "INT":
+		case "WIS":
+		case "CHA": {
+			this.extra = creature.abilities[ extra + "mod" ];
+			break;
+		}
+		default: {
+			this.extra = parseInt(extra);
+			break;
+		}
+	}
+};
 
 Damage.prototype.anchor = function(conditional) {
     conditional = conditional || {};
@@ -150,19 +189,21 @@ SavingThrow.prototype.anchor = function(conditional) {
 };
 
 
-var Attack = function(params) {
+var Attack = function(params, creature) {
     var i;
 	params = params || {};
 	this.name = params.name;
 	this.type = params.type;
 	this.defense = params.defense;
 	this.extra = this.toHit = params.toHit;
-	this.damage = new Damage(params.damage);
-	this.damageType = params.damageType;
-	this.crit = new Roll(params.crit);
+	this.damage = new Damage(params.damage, creature);
     this.effects = [];
     for (i = 0; params.effects && i < params.effects.length; i++) {
         this.effects.push(new Effect(params.effects[ i ]));
+    }
+    this.keywords = [];
+    for (i = 0; params.keywords && i < params.keywords.length; i++) {
+        this.keywords.push(params.keywords[ i ]);
     }
 };
 

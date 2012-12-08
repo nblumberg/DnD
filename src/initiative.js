@@ -43,10 +43,11 @@ Initiative.prototype._rollInitiative = function() {
 };
 
 Initiative.prototype._next = function() {
-    var msg, i;
-    msg = this.actors[ this.order[ this._current ] ].endTurn();
+    var msg, i, actor;
+    actor = this.actors[ this.order[ this._current ] ];
+    msg = actor.endTurn();
     if (msg) {
-        this._addHistory(this.actors[ this.order[ this._current ] ], msg);
+        this._addHistory(actor, msg);
     }
     this._current++;
     if (this._current >= this.order.length) {
@@ -58,9 +59,10 @@ Initiative.prototype._next = function() {
         this.actors[ i ].history._round = this.round;
     }
     this.history._round = this.round;
-    msg = this.actors[ this.order[ this._current ] ].startTurn();
+    actor = this.actors[ this.order[ this._current ] ];
+    msg = actor.startTurn();
     if (msg) {
-        this._addHistory(this.actors[ this.order[ this._current ] ], msg);
+        this._addHistory(actor, msg);
     }
     this._render();
 };
@@ -105,7 +107,9 @@ Initiative.prototype._create = function() {
 	$table.append($tr);
 	$td = jQuery("<td/>");
 	$tr.append($td);
-	this.$attacks = jQuery("<select/>").attr("id", "attackSelect");
+    this.$weapons = jQuery("<select/>").attr("id", "weaponSelect").css("display", "block");
+    $td.append(this.$weapons);
+	this.$attacks = jQuery("<select/>").attr("id", "attackSelect").on({ change: this._selectAttack.bind(this) });
 	$td.append(this.$attacks);
 	$td = jQuery("<td/>").addClass("attacks2targets");
 	$tr.append($td);
@@ -322,6 +326,8 @@ Initiative.prototype._attack = function(actor) {
 	var $option, i, a;
 	this.$attackDialog.data("attacker", actor);
 	
+	this.$weapons.html("").hide();
+	
 	if (this.$combatAdvantage.data("combatAdvantage")) {
 	    this.$combatAdvantage.click();
 	}
@@ -330,7 +336,9 @@ Initiative.prototype._attack = function(actor) {
 		$option = jQuery("<option/>").html(actor.attacks[ i ].name).data("attack", actor.attacks[ i ]);
 		this.$attacks.append($option);
 	}
-	this.$attacks.attr("size", actor.attacks.length);
+	this.$attacks.attr("size", Math.max(actor.attacks.length, 2));
+	
+	this._selectAttack();
 	
 	this.$targets.html("");
 	for (i = 0; i < this.order.length; i++) {
@@ -341,8 +349,43 @@ Initiative.prototype._attack = function(actor) {
 		$option = jQuery("<option/>").html(a.name).data("target", a);
 		this.$targets.append($option);
 	}
-	this.$targets.attr("size", this.order.length);
+	this.$targets.attr("size", Math.max(this.order.length, 2));
 	this.$attackDialog.dialog("open");
+};
+
+Initiative.prototype._selectAttack = function() {
+    var attack, actor, needsWeapon, needsImplement, items, isMelee, isRanged, i, item;
+    if (this.$attacks[0].selectedIndex === -1) {
+        this.$weapons.hide();
+        return;
+    }
+    attack = jQuery(this.$attacks[0].options[ this.$attacks[0].selectedIndex ]).data("attack");
+    actor = this.$attackDialog.data("attacker");
+    if (attack.keywords) {
+        needsWeapon = attack.keywords.indexOf("weapon") !== -1;
+        isMelee = needsWeapon && attack.keywords.indexOf("melee") !== -1;
+        isRanged = needsWeapon && attack.keywords.indexOf("ranged") !== -1;
+        needsImplement = attack.keywords.indexOf("implement") !== -1;
+        items = needsWeapon ? actor.weapons: null;
+        if (!items && needsImplement) {
+            items = actor[ "implements" ];
+        }
+    }
+    if (needsWeapon || needsImplement) {
+        this.$weapons.html("");
+        for (i = 0; items && i < items.length; i++) {
+            if (needsWeapon && (!!items[ i ].isMelee !== !!isMelee || !items[ i ].isMelee !== !!isRanged)) {
+                continue;
+            }
+            $option = jQuery("<option/>").html(items[ i ].name).data("item", items[ i ]);
+            this.$weapons.append($option);
+        }
+//        this.$weapons.attr("size", items.length);
+        this.$weapons.show();
+    }
+    else {
+        this.$weapons.hide();
+    }
 };
 
 Initiative.prototype._resolveAttack = function() {

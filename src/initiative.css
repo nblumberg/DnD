@@ -45,5 +45,5 @@ div#attacksDialog table { width: 98%; }
 div#attacksDialog td { vertical-align: top; }
 div#attacksDialog td.attacks2targets { padding-top: 30%; }
 div#attacksDialog td.attacks2targets img { display: block; }
-div#attacksDialog td, div#attacksDialog select { height: 100%; }
+div#attacksDialog td { height: 100%; }
 table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }"

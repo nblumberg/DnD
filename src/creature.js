@@ -77,12 +77,48 @@ Effect.CONDITIONS = {
         Weakened: "images/symbols/weakened.png", // "http://pictogram-free.com/material/003.png"
 };
 
+
+var Implement = function(params) {
+	this._init(params);
+};
+
+Implement.prototype._init = function(params) {
+	params = params || {};
+	this.name = params.name;
+	this.enhancement = params.enhancement;
+	this.crit = new Damage(params.crit);
+};
+
+
+var Weapon = function(params) {
+	params = params || {};
+	this._init(params);
+	this.isMelee = params.isMelee;
+	this.proficiency = params.proficiency || 0;
+	this.damage = new Damage(params.damage);
+};
+
+Weapon.prototype = new Implement();
+
+
+var Abilities = function(params) {
+	var i, ability, abilities = [ "STR", "DEX", "CON", "INT", "WIS", "CHA" ];
+	params = params || {};
+	for (i = 0; i < abilities.length; i++) {
+		ability = abilities[ i ];
+		this[ ability ] = params[ ability ] || 10;
+		this[ ability + "mod" ] = Math.floor((this[ ability ] - 10) / 2);
+	}
+};
+
 var Creature = function(params) {
 	var i;
 	params = params || {};
 	this.name = params.name;
 	this.image = params.image;
 	this.isPC = params.isPC || false;
+	this.level = params.level || false;
+	this.abilities = new Abilities(params.abilities);
 	this.hp = new HP(params.hp);
 	this.surges = new Surges(params.surges);
 	this.defenses = params.defenses || new Defenses();
@@ -91,9 +127,17 @@ var Creature = function(params) {
 	this.ap = params.ap || 0;
 	this.effects = [];
 	this.move = params.move || 6;
+	this[ "implements" ] = [];
+	for (i = 0; params[ "implements" ] && i < params[ "implements" ].length; i++) {
+		this[ "implements" ].push(new Implement(params[ "implements" ][ i ]));
+	}
+	this.weapons = [];
+	for (i = 0; params.weapons && i < params.weapons.length; i++) {
+		this.weapons.push(new Weapon(params.weapons[ i ]));
+	}
 	this.attacks = [];
 	for (i = 0; params.attacks && i < params.attacks.length; i++) {
-		this.attacks.push(new Attack(params.attacks[ i ]));
+		this.attacks.push(new Attack(params.attacks[ i ], this));
 	}
     this.effects = [];
     for (i = 0; params.effects && i < params.effects.length; i++) {
