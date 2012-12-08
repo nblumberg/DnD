@@ -14,6 +14,17 @@ var Roll = function(params) {
 
 Roll.prototype = new Serializable();
 
+Roll.prototype.clone = function(clone) {
+    if (!clone) {
+        clone = new Roll();
+    }
+    clone.dieCount = this.dieCount;
+    clone.dieSides = this.dieSides;
+    clone.extra = this.extra;
+    clone.crits = this.crits;
+    return clone;
+};
+
 Roll.prototype._parseObject = function(obj) {
     this.dieCount = obj.dieCount;
     this.dieSides = obj.dieSides;
@@ -39,17 +50,31 @@ Roll.prototype._parseString = function(str) {
 };
 
 Roll.prototype.roll = function() {
-	var value, h, i, die;
-	value = 0;
-	h = { dice: [] };
-	this._history.push(h);
-	for (i = 0; i < this.dieCount; i++) {
-		die = Math.ceil(Math.random() * this.dieSides);
-		h.dice.push(die);
-		value += die;
-	}
-	h.total = value + this.extra;
-	return h.total;
+    var value, h, i, die;
+    value = 0;
+    h = { dice: [] };
+    this._history.push(h);
+    for (i = 0; i < this.dieCount; i++) {
+        die = Math.ceil(Math.random() * this.dieSides);
+        h.dice.push(die);
+        value += die;
+    }
+    h.total = value + this.extra;
+    return h.total;
+};
+
+Roll.prototype.max = function() {
+    var value, h, i, die;
+    value = 0;
+    h = { dice: [] };
+    this._history.push(h);
+    for (i = 0; i < this.dieCount; i++) {
+        die = this.dieSides;
+        h.dice.push(die);
+        value += die;
+    }
+    h.total = value + this.extra;
+    return h.total;
 };
 
 Roll.prototype._getLastRoll = function() {
@@ -70,17 +95,20 @@ Roll.prototype.breakdown = function(conditional) {
 	var h, value, output, i;
 	h = this._getLastRoll();
 	output = "";
-	for (i = 0; i < h.dice.length; i++) {
-		output += (output ? " + " : "");
-		if (this.crits && (this.isCritical() || this.isFumble())) {
-	        output += this.isCritical() ? "CRIT" : "FUMBLE";
-		}
-		else {
-	        output += h.dice[ i ];
-		}
-	}
+    if (this.crits && (this.isCritical() || this.isFumble())) {
+        output += this.isCritical() ? "CRIT" : "FUMBLE";
+    }
+    else {
+    	for (i = 0; i < h.dice.length; i++) {
+    		output += (output ? " + " : "");
+            output += h.dice[ i ];
+    	}
+    }
 	if (this.extra && !(this.crits && (this.isCritical() || this.isFumble()))) {
 		output += (output ? " + " : "") + this.extra;
+	}
+	if (h.breakdown) {
+	    output += h.breakdown;
 	}
 	if (conditional) {
 	    output += conditional;
@@ -89,7 +117,7 @@ Roll.prototype.breakdown = function(conditional) {
 };
 
 Roll.prototype.anchor = function(type) {
-	return "<a href=\"javascript:void(0);\" title=\"" + this.breakdown() + "\">" + this._history[ this._history.length - 1 ].total + (type ? " " + type : "") + " damage</a>";
+	return "<a href=\"javascript:void(0);\" title=\"" + this.breakdown() + "\">" + this._getLastRoll().total + (type ? " " + type : "") + " damage</a>";
 };
 
 Roll.prototype.toString = function() {
@@ -101,7 +129,7 @@ Roll.prototype.raw = function() {
 };
 
 Roll.prototype._anchorHtml = function(conditional) {
-    return "" + (this._history[ this._history.length - 1 ].total + (conditional && conditional.total ? conditional.total : 0)) + (conditional && conditional.text ? conditional.text : "");
+    return "" + (this._getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) + (conditional && conditional.text ? conditional.text : "");
 };
 
 Roll.prototype.anchor = function(conditional) {
@@ -115,6 +143,10 @@ var Damage = function(params, creature) {
     params = params || {};
     this.type = "";
     this.crit = null;
+    this.needsWeapon = false;
+    this.weaponMultiplier = 0;
+    this.meleeExta = 0;
+    this.rangedExta = 0;
     if (typeof(params) === "string") {
         this._parseDamageString(params, creature);
     }
@@ -132,6 +164,20 @@ var Damage = function(params, creature) {
 
 Damage.prototype = new Roll({ dieCount: 1, dieSides: 0, extra: 0, crits: false });
 
+Damage.prototype.clone = function(clone) {
+    if (!clone) {
+        clone = new Damage();
+    }
+    Roll.prototype.clone.call(this, clone);
+    clone.type = this.type;
+    clone.crit = this.crit.clone();
+    clone.needsWeapon = this.needsWeapon;
+    clone.weaponMultiplier = this.weaponMultiplier;
+    clone.meleeExtra = this.meleeExtra;
+    clone.rangedExtra = this.rangedExtra;
+    return clone;
+};
+
 /**
  * @param str {String} grammar: 
  * # = "(+|-)*\d", 
@@ -143,6 +189,7 @@ Damage.prototype._parseDamageString = function(str, creature) {
 	if (!str) {
 		return;
 	}
+	this.str = str;
 	regeExW_A = /(\[W\]|STR|DEX|CON|INT|WIS|CHA)/;
 	if (!regeExW_A.test(str)) {
 		this._parseString(str);
@@ -196,8 +243,8 @@ Damage.prototype._parseDamageString = function(str, creature) {
                     regExOr = /^(\w{3}\/\w{3})$/;
                     regExMax = /^(\w{3}\^\w{3})$/;
 	                if (regExOr.test(extra[ i ])) {
-                        this.meleeExta = creature.abilities[ "STRmod" ];
-                        this.rangedExta = creature.abilities[ "DEXmod" ];
+                        this.meleeExtra = creature.abilities[ "STRmod" ];
+                        this.rangedExtra = creature.abilities[ "DEXmod" ];
 	                }
 	                else if (regExMax.test(extra[ i ])) {
 	                    this.extra += Math.max(creature.abilities[ extra[ i ].split("^")[ 0 ] + "mod" ], creature.abilities[ extra[ i ].split("^")[ 1 ] + "mod" ]);
@@ -209,12 +256,65 @@ Damage.prototype._parseDamageString = function(str, creature) {
 	}
 };
 
+Damage.prototype.rollItem = function(item, isCrit) {
+    var dice, i, total, h;
+    dice = [];
+    total = this.extra;
+    h = { breakdown: "" };
+    if (item && item.damage) {
+        h.itemStr = item.damage.toString();
+    }
+    if (item && this.needsWeapon) {
+        if (item.enhancement) {
+            h.breakdown += " + " + this.weaponMultiplier + "x[+" + item.enhancement + " weapon]";
+        }
+        for (i = 0; i < this.weaponMultiplier; i++) {
+            total += item.damage[ isCrit ? "max" : "roll" ]() + (item.enhancement ? item.enhancement : 0);
+            dice = dice.concat(item.damage._history[ item.damage._history.length - 1 ].dice);
+        }
+    }
+    else {
+        total += this[ isCrit ? "max" : "roll" ]() + (item.enhancement ? item.enhancement : 0);
+    }
+    if (isCrit) {
+        if (item) {
+            total += item.crit ? item.crit.roll() : 0;
+            dice = dice.concat(item.crit._history[ item.crit._history.length - 1 ].dice);
+        }
+        else {
+            total += this.crit.roll();
+            dice = dice.concat(this.crit._history[ this.crit._history.length - 1 ].dice);
+        }
+    }
+    h.total = total;
+    h.dice = dice;
+    this._history.push(h);
+    return total;
+};
+
+Damage.prototype.rollCrit = function(item) {
+    return this.rollItem(item, true);
+};
+
 Damage.prototype.anchor = function(conditional) {
     conditional = conditional || {};
     conditional = jQuery.extend({ text: "" }, conditional);
     conditional.text += (this.type ? " " + this.type : "") + " damage";
     return Roll.prototype.anchor.call(this, conditional);
 };
+
+Damage.prototype.toString = function() {
+    if (this.str) {
+        if (this.str.indexOf("[W]") !== -1 && this._getLastRoll().itemStr) {
+            return this.str.replace("[W]", "[" + this._getLastRoll().itemStr +  "]");
+        }
+        return this.str;
+    }
+    return Roll.prototype.toString.call(this);
+};
+
+
+
 
 
 var SavingThrow = function(params) {
@@ -225,7 +325,7 @@ var SavingThrow = function(params) {
 SavingThrow.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: false });
 
 SavingThrow.prototype._anchorHtml = function(conditional) {
-    var success = (this._history[ this._history.length - 1 ].total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
+    var success = (this._getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
     return (success ? "Saves" : "Fails to save") + " against " + this.effect.toString();
 };
 

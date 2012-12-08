@@ -400,9 +400,9 @@ Creature.prototype.defenseModifier = function(isMelee) {
     return mod;
 };
 
-Creature.prototype.attack = function(attack, targets, combatAdvantage, round, callback) {
-    var i, targets, toHit, toHitRoll, isCrit, isFumble, toHitCond, def, defCondMod, damage, dmgCond, target, msg, temp;
-    toHitRoll = attack.roll();
+Creature.prototype.attack = function(attack, item, targets, combatAdvantage, round, callback) {
+    var i, j, targets, toHit, toHitRoll, isCrit, isFumble, toHitCond, def, defCondMod, damage, dmgCond, target, msg, temp;
+    toHitRoll = attack.roll() + (item && item.enhancement ? item.enhancement : 0);
     isCrit = attack.isCritical();
     isFumble = attack.isFumble();
     if (!isCrit && !isFumble) {
@@ -421,15 +421,13 @@ Creature.prototype.attack = function(attack, targets, combatAdvantage, round, ca
             defCondMod = target.defenseModifier(attack.isMelee);
         }
         if (!isFumble && (isCrit || toHit >= def + defCondMod)) {
-            if (!damage) {
-                damage = attack.damage.roll() + (isCrit ? attack.crit.roll() : 0);
-                dmgCond = { mod: 0, breakdown: "", effects: [] };
-                if (this.hasCondition("weakened")) {
-                    dmgCond.mod = -1 * Math.ceil(damage / 2);
-                    dmgCond.breakdown += " [1/2 for weakened]";
-                    dmgCond.effects.push("weakened");
-                    damage = Math.floor(damage / 2);
-                }
+            damage = attack.damage.rollItem(item, isCrit);
+            dmgCond = { mod: 0, breakdown: "", effects: [] };
+            if (this.hasCondition("weakened")) {
+                dmgCond.mod = -1 * Math.ceil(damage / 2);
+                dmgCond.breakdown += " [1/2 for weakened]";
+                dmgCond.effects.push("weakened");
+                damage = Math.floor(damage / 2);
             }
             msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for " + attack.damage.anchor(dmgCond);
             msg += target.takeDamage(damage, attack.effects);

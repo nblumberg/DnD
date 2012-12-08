@@ -389,11 +389,14 @@ Initiative.prototype._selectAttack = function() {
 };
 
 Initiative.prototype._resolveAttack = function() {
-	var attacker, attack, i, targets, combatAdvantage;
+	var attacker, attack, item, i, targets, combatAdvantage;
 	if (this.$attacks.val() && this.$targets.val()) {
 		this.$attackDialog.dialog("close");
 		attacker = this.$attackDialog.data("attacker");
 		attack = jQuery(this.$attacks[0].options[ this.$attacks[0].selectedIndex ]).data("attack");
+		if (attack.keywords && (attack.keywords.indexOf("weapon") !== -1 || attack.keywords.indexOf("implement") !== -1)) {
+		    item = jQuery(this.$weapons[0].options[ this.$weapons[0].selectedIndex ]).data("item");
+		}
 		targets = [];
 		for (i = 0; i < this.$targets[0].options.length; i++) {
 			if (this.$targets[0].options[ i ].selected) {
@@ -401,7 +404,7 @@ Initiative.prototype._resolveAttack = function() {
 			}
 		}
 		combatAdvantage = this.$combatAdvantage.data("combatAdvantage");
-		attacker.attack(attack, targets, combatAdvantage, this.round, this._addHistory.bind(this));
+		attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this));
 		this._render();
 	} 
 	else {
