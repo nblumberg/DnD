@@ -65,6 +65,10 @@ Initiative.prototype._next = function() {
     if (msg) {
         this._addHistory(actor, msg);
     }
+    if (actor.hasCondition("dead")) {
+        this._next();
+        return;
+    }
     this._render();
 };
 

@@ -259,7 +259,7 @@ Damage.prototype._parseDamageString = function(str, creature) {
 Damage.prototype.rollItem = function(item, isCrit) {
     var dice, i, total, h;
     dice = [];
-    total = this.extra;
+    total = 0;
     h = { breakdown: "" };
     if (item && item.damage) {
         h.itemStr = item.damage.toString();
@@ -272,9 +272,12 @@ Damage.prototype.rollItem = function(item, isCrit) {
             total += item.damage[ isCrit ? "max" : "roll" ]() + (item.enhancement ? item.enhancement : 0);
             dice = dice.concat(item.damage._history[ item.damage._history.length - 1 ].dice);
         }
+        total += this.extra;
     }
     else {
         total += this[ isCrit ? "max" : "roll" ]() + (item && item.enhancement ? item.enhancement : 0);
+        h = this._history.pop();
+        dice = h.dice;
     }
     if (isCrit) {
         if (item && item.crit) {
