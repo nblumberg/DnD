@@ -23,8 +23,9 @@ var Effect = function(params) {
     var i;
     params = params || {};
     this.name = typeof(params) === "string" ? params : params.name;
-    this.saveEnds = params.saveEnds || false;
+    this.amount = params.amount || 0;
     this.duration = params.duration || -1;
+    this.saveEnds = params.saveEnds || false;
     this.children = [];
     for (i = 0; params.children && i < params.children.length; i++) {
         this.children.push(new Effect(params.children[ i ]));
@@ -47,34 +48,34 @@ Effect.prototype.toString = function() {
 };
 
 Effect.CONDITIONS = {
-        "-2 attacks": "images/symbols/-2_attacks.jpg",
-        Blinded: "images/symbols/blinded.png", // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
-        Dazed: "images/symbols/dazed.jpg", // "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
-        Deafened: "images/symbols/deafened.gif", // "http://joeclark.org/ear.gif",
-        Diseased: "images/symbols/diseased.jpg", // "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnOrSXb8UHvwhgQ-loEdXZvQPTjuBylSfFNiK7Hxyq03IxgUKe",
-        Dominated: "images/symbols/dominated.png", // "http://fs02.androidpit.info/ali/x90/4186790-1324571166012.png",
-        Dying: "images/symbols/dying.png", // "http://iconbug.com/data/61/256/170c6197a99434339f465fa8c9fa4018.png",
-        Dead: "images/symbols/dead.jpg", // "http://t2.gstatic.com/images?q=tbn:ANd9GcTPA7scM15IRChKnwigvYnQUDWNGHLL1cemtAeKxxZKwBDj33MFCxzfyorp",
-        Grabbed: "images/symbols/grabbed.jpg", // "http://www.filipesabella.com/wp-content/uploads/2010/02/hand_grab.jpg",
-        Helpless: "images/symbols/helpless.png", // "http://files.softicons.com/download/tv-movie-icons/dexter-icons-by-rich-d/png/128/Tied-Up%20Dexter.png",
-        Immobilized: "images/symbols/immobilized.gif", // "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
-        Marked: "images/symbols/marked.png", // "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
-        "Ongoing acid": "images/symbols/ongoing_acid.png", // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
-        "Ongoing cold": "images/symbols/ongoing_cold.jpg", // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
-        "Ongoing damage": "images/symbols/ongoing_damage.jpg", // "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
-        "Ongoing fire": "images/symbols/ongoing_fire.jpg", // "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
-        "Ongoing lightning": "images/symbols/ongoing_lightning.png", // "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
-        "Ongoing necrotic": "images/symbols/ongoing_necrotic.jpg", // "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
-        "Ongoing poison": "images/symbols/ongoing_poison.jpg", // "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
-        "Ongoing psychic": "images/symbols/ongoing_psychic.jpg", // "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
-        "Ongoing radiant": "images/symbols/ongoing_radiant.jpg", // "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
-        Petrified: "images/symbols/petrified.gif", // "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
-        Prone: "images/symbols/prone.png", // "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
-        Restrained: "images/symbols/restrained.jpg", // "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
-        Slowed: "images/symbols/slowed.jpg", // "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
-        Stunned: "images/symbols/stunned.jpg", // "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
-        Unconscious: "images/symbols/unconscious.gif", // "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
-        Weakened: "images/symbols/weakened.png", // "http://pictogram-free.com/material/003.png"
+        "Attack penalty": { image: "images/symbols/attack_penalty.jpg", color: "white" },
+        Blinded: { image: "images/symbols/blinded.png" }, // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
+        Dazed: { image: "images/symbols/dazed.jpg" }, // "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
+        Deafened: { image: "images/symbols/deafened.gif" }, // "http://joeclark.org/ear.gif",
+        Diseased: { image: "images/symbols/diseased.jpg" }, // "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnOrSXb8UHvwhgQ-loEdXZvQPTjuBylSfFNiK7Hxyq03IxgUKe",
+        Dominated: { image: "images/symbols/dominated.png" }, // "http://fs02.androidpit.info/ali/x90/4186790-1324571166012.png",
+        Dying: { image: "images/symbols/dying.png" }, // "http://iconbug.com/data/61/256/170c6197a99434339f465fa8c9fa4018.png",
+        Dead: { image: "images/symbols/dead.jpg" }, // "http://t2.gstatic.com/images?q=tbn:ANd9GcTPA7scM15IRChKnwigvYnQUDWNGHLL1cemtAeKxxZKwBDj33MFCxzfyorp",
+        Grabbed: { image: "images/symbols/grabbed.jpg" }, // "http://www.filipesabella.com/wp-content/uploads/2010/02/hand_grab.jpg",
+        Helpless: { image: "images/symbols/helpless.png" }, // "http://files.softicons.com/download/tv-movie-icons/dexter-icons-by-rich-d/png/128/Tied-Up%20Dexter.png",
+        Immobilized: { image: "images/symbols/immobilized.gif" }, // "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
+        Marked: { image: "images/symbols/marked.png" }, // "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
+        "Ongoing acid": { image: "images/symbols/ongoing_acid.png", color: "#00FF00" }, // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
+        "Ongoing cold": { image: "images/symbols/ongoing_cold.jpg", color: "#6666FF" }, // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
+        "Ongoing damage": { image: "images/symbols/ongoing_damage.jpg", color: "#FFFFFF" }, // "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
+        "Ongoing fire": { image: "images/symbols/ongoing_fire.jpg", color: "#555555" }, // "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
+        "Ongoing lightning": { image: "images/symbols/ongoing_lightning.png", color: "#CCCCFF" }, // "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
+        "Ongoing necrotic": { image: "images/symbols/ongoing_necrotic.jpg", color: "purple" }, // "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
+        "Ongoing poison": { image: "images/symbols/ongoing_poison.jpg", color: "#00FF00" }, // "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
+        "Ongoing psychic": { image: "images/symbols/ongoing_psychic.jpg", color: "cyan" }, // "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
+        "Ongoing radiant": { image: "images/symbols/ongoing_radiant.jpg", color: "#FFFFFF" }, // "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
+        Petrified: { image: "images/symbols/petrified.gif" }, // "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
+        Prone: { image: "images/symbols/prone.png" }, // "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
+        Restrained: { image: "images/symbols/restrained.jpg" }, // "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
+        Slowed: { image: "images/symbols/slowed.jpg" }, // "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
+        Stunned: { image: "images/symbols/stunned.jpg" }, // "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
+        Unconscious: { image: "images/symbols/unconscious.gif" }, // "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
+        Weakened: { image: "images/symbols/weakened.png" }, // "http://pictogram-free.com/material/003.png"
 };
 
 
@@ -114,6 +115,7 @@ var Abilities = function(params) {
 var Creature = function(params) {
 	var i;
 	params = params || {};
+	this._listeners = {};
 	this.name = params.name;
 	this.image = params.image;
 	this.isPC = params.isPC || false;
@@ -257,13 +259,26 @@ Creature.prototype.createCard = function(params) {
 };
 
 Creature.prototype._addCondition = function($parent, effect, total) {
-    var i, image;
+    var i, $div, image, clickHandler;
     if (effect.children && effect.children.length) {
         for (i = 0; i < effect.children.length; i++) {
             this._addCondition($parent, effect.children[ i ], total);
         }
         return;
     }
+    $div = jQuery("<div/>").addClass("condition");
+    if (Effect.CONDITIONS[ effect.name ].color) {
+        $div.css({ color: Effect.CONDITIONS[ effect.name ].color });
+    }
+    clickHandler = (function($this, event) {
+        if (event.metaKey) {
+            $this.off({ click: clickHandler });
+            $this.remove();
+            this.effects.splice(this.effects.indexOf(effect), 1);
+            this.dispatchEvent({ type: "change" });
+        }
+    }).bind(this, $div);
+    $div.on({ click: clickHandler });
     image = new Image();
     if (total <= 4) {
         image.height = this.cardSize / 3;
@@ -274,17 +289,14 @@ Creature.prototype._addCondition = function($parent, effect, total) {
     else {
         image.height = this.cardSize / 5.4;
     }
-    image.className = "icon floatLeft";
+    image.className = "icon";
     image.title = effect.name;
-    image.src = Effect.CONDITIONS[ effect.name ];
-    jQuery(image).css("background-color", "#FFFFFF").on({ click: (function(img, event) {
-        if (event.metaKey) {
-            jQuery(img).remove();
-            this.effects.splice(this.effects.indexOf(effect), 1);
-            this.dispatchEvent({ type: "change" });
-        }
-    }).bind(this, image) });
-    $parent.append(image);
+    image.src = Effect.CONDITIONS[ effect.name ].image;
+    $div.append(image);
+    if (effect.amount) {
+        $div.append(jQuery("<span/>").css({ "line-height": image.height + "px" }).html(effect.amount)); 
+    }
+    $parent.append($div);
 };
 
 Creature.prototype._addDefense = function($parent, className, value, icon) {
@@ -459,7 +471,7 @@ Creature.prototype.takeDamage = function(damage, effects) {
     }
     this.hp.current -= damage;
     if (this.hp.current < 0 && !this.hasCondition("dying")) {
-        this.effects.push({ name: "dying" });
+        this.effects.push({ name: "Dying" });
         msg += "; " + this.name + " falls unconscious and is dying";
     }
     return msg;

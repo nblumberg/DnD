@@ -3,14 +3,15 @@
  * @param {String} params.target
  */
 var Initiative = function(params) {
-	var i;
+	var i, actor;
 	params = params || {};
     this.creatures = params.creatures || {};
 	this.actors = params.actors || {};
 	for (i = 0; i < this.actors.length; i++) {
-		this.addRoute(this.actors[ i ]);
-        this.addEventListener("change", this._render.bind(this));
-        this.addEventListener("reorder", this._changeInitiative.bind(this));
+	    actor = this.actors[ i ];
+//		this.addRoute(actor);
+        actor.addEventListener("change", this._render.bind(this));
+        actor.addEventListener("reorder", this._changeInitiative.bind(this));
 	}
 	this.order = params.order;
 	if (!this.order || !this.order.length) {

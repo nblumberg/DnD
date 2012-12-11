@@ -32,7 +32,7 @@ function generateName() {
 
 function randEffect() {
     var i, EFFECTS = [
-                   "-2 attacks",                      
+                   "Attack penalty",                      
                    "Blinded",
                    "Dazed",
                    "Deafened",
@@ -63,7 +63,7 @@ function randEffect() {
                    "Weakened"
                ];
     i = Math.floor(Math.random() * EFFECTS.length);
-    return EFFECTS[ i ];
+    return { name: EFFECTS[ i ] };
 }
 
 function randEffects() {
@@ -331,7 +331,7 @@ function loadData() {
                           { name: "Dart Flurry", type: "Recharge", recharge: 4, range: "blast 5", toHit: 16, defense: "AC", targeting: "blast 5", damage: "1d10+6", effects: [ 
                             { name: "multiple effects", saveEnds: true, children: [
                                     { name: "Dazed" }, 
-                                    { name: "-2 attacks" } 
+                                    { name: "Attack penalty", amount: -2 } 
                                 ] }
                             ] }
                   ]

@@ -39,6 +39,7 @@ EventListener.prototype.removeEventListener = function(eventType, callback) {
 };
 
 var EventDispatcher = function() {
+    this._listeners = {};
 };
 
 EventDispatcher.id = 1;
@@ -51,9 +52,11 @@ EventDispatcher.prototype.dispatchEvent = function(event) {
 	}
 	event.id = event.type + EventDispatcher.id++;
 	event.target = this;
-	if (this._doDispatch) {
-		this._doDispatch(event);
-	}
+	event.receivedBy = [];
+//	if (this._doDispatch) {
+//		this._doDispatch(event);
+//	}
+	this.receiveEvent(event);
 };
 
 var EventBus = function() {

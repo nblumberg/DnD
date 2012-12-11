@@ -30,7 +30,8 @@ input#round { width: 30px; }
 .creaturePanel { min-height: 240px; margin:2px; position: relative; width: 240px; }
 #initiative .creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
 .creaturePanel .column { float: left; margin-right: 4px; }
-.creaturePanel img.icon { margin-right: 2px; }
+.creaturePanel div.condition { background-color: #FFFFFF; color: #FFFFFF; float: left; margin-right: 2px; position: relative; text-align: center; vertical-align: middle; }
+.creaturePanel div.condition span { bottom: 0; font-size: 1.3em; font-weight: bold; left: 0; margin: auto; position: absolute; right: 0; text-shadow: 3px 3px black; top: 0; vertical-align: middle; }
 .creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
 .creaturePanel .effects { margin: 0 1px 2px 0; }
         
