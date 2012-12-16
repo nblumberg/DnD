@@ -90,7 +90,11 @@ Implement.prototype._init = function(params) {
 	this.crit = new Damage(params.crit);
 };
 
+Implement.prototype.toString = function() {
+    return "[Implement \"" + this.name + "\"]";
+};
 
+    
 var Weapon = function(params) {
 	params = params || {};
 	this._init(params);
@@ -101,6 +105,10 @@ var Weapon = function(params) {
 
 Weapon.prototype = new Implement();
 
+Weapon.prototype.toString = function() {
+    return "[Weapon \"" + this.name + "\"]";
+};
+    
 
 var Abilities = function(params) {
 	var i, ability, abilities = [ "STR", "DEX", "CON", "INT", "WIS", "CHA" ];
@@ -115,6 +123,8 @@ var Abilities = function(params) {
 var Creature = function(params) {
 	var i;
 	params = params || {};
+	this.id = params.id || Creature.id++;
+	Creature.creatures[ this.id ] = this;
 	this._listeners = {};
 	this.name = params.name;
 	this.image = params.image;
@@ -147,6 +157,9 @@ var Creature = function(params) {
     }
 	this.history = new History(params.history || { includeSubject: false });
 };
+
+Creature.id = (new Date()).getTime();
+Creature.creatures = {};
 
 Creature.prototype = new EventDispatcher();
 
@@ -233,7 +246,7 @@ Creature._CARD_SIZE = 240;
  * @param className {String} Class(es) to apply to the top-level element 
  */
 Creature.prototype.createCard = function(params) {
-	var $parent, $div, $span, image, i, $effects;
+	var $parent, $div, $span, image, $name, editor, i, $effects;
 	params = params || {};
 	this.cardSize = params.cardSize || Creature._CARD_SIZE;
 	$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
@@ -246,10 +259,16 @@ Creature.prototype.createCard = function(params) {
 	}
 	
 	image = new Image();
+    image.className = "handle";
 	image.height = this.cardSize * 100/120;
 	image.src = this.image;
 	this.$panel.append(image);
-	this.$panel.append(jQuery("<div/>").addClass("f2").html(this.name));
+	$name = jQuery("<div/>").addClass("f2").html(this.name);
+	this.$panel.append($name);
+//    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
+//        this.name = v;
+//        this.dispatchEvent("change");
+//    }).bind(this) });
 	
     $effects = jQuery("<div/>").addClass("effects").appendTo(this.$panel);
     
@@ -260,6 +279,10 @@ Creature.prototype.createCard = function(params) {
 
 Creature.prototype._addCondition = function($parent, effect, total) {
     var i, $div, image, clickHandler;
+    if ((effect.name === "Dying" || effect.name === "Dead") && this.hp.current >= 0) {
+        this.effects.splice(this.effects.indexOf(effect), 1);
+        return;
+    }
     if (effect.children && effect.children.length) {
         for (i = 0; i < effect.children.length; i++) {
             this._addCondition($parent, effect.children[ i ], total);
@@ -267,7 +290,7 @@ Creature.prototype._addCondition = function($parent, effect, total) {
         return;
     }
     $div = jQuery("<div/>").addClass("condition");
-    if (Effect.CONDITIONS[ effect.name ].color) {
+    if (Effect.CONDITIONS[ effect.name ] && Effect.CONDITIONS[ effect.name ].color) {
         $div.css({ color: Effect.CONDITIONS[ effect.name ].color });
     }
     clickHandler = (function($this, event) {
@@ -290,8 +313,8 @@ Creature.prototype._addCondition = function($parent, effect, total) {
         image.height = this.cardSize / 5.4;
     }
     image.className = "icon";
-    image.title = effect.name;
-    image.src = Effect.CONDITIONS[ effect.name ].image;
+    image.title = effect.name + (effect.attacker ? " (" + effect.attacker + ")" : "");
+    image.src = Effect.CONDITIONS[ effect.name ] ? Effect.CONDITIONS[ effect.name ].image : ""; // TODO
     $div.append(image);
     if (effect.amount) {
         $div.append(jQuery("<span/>").css({ "line-height": image.height + "px" }).html(effect.amount)); 
@@ -442,7 +465,7 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
                 damage = Math.floor(damage / 2);
             }
             msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for " + attack.damage.anchor(dmgCond);
-            msg += target.takeDamage(damage, attack.effects);
+            msg += target.takeDamage(this, damage, attack.effects);
         }
         else {
             msg = "Missed by " + this.name + "'s " + attack.anchor(toHitCond);
@@ -453,7 +476,7 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
     }
 };
 
-Creature.prototype.takeDamage = function(damage, effects) {
+Creature.prototype.takeDamage = function(attacker, damage, effects) {
     var temp, msg, i;
     msg = "";
     // TODO: resistance
@@ -465,6 +488,9 @@ Creature.prototype.takeDamage = function(damage, effects) {
     }
     if (damage > 0 && effects && effects.length) {
         for (i = 0; i < effects.length; i++) {
+            if (effects[ i ].name === "Marked") {
+                effects[ i ].attacker = attacker.name;
+            }
             this.effects.push(effects[ i ]);
             msg += ", " + effects[ i ].toString();
         }
@@ -504,3 +530,13 @@ Creature.prototype.endTurn = function() {
     }
     return msg;
 };
+
+Creature.prototype.toString = function() {
+    return "[Creature \"" + this.name + "\"]";
+};
+
+//Creature.prototype.raw = function() {
+//    var raw = Serializable.raw.call(this);
+//    
+//    return raw;
+//};

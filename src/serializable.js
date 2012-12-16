@@ -2,48 +2,50 @@ var Serializable = function() {};
 
 Serializable.prototype.rawObj = function(obj) {
 	var p, r;
-	if (obj && obj.raw) {
+    if (typeof(obj) === "undefined" || obj === null || jQuery.isFunction(obj)) {
+        return null;
+    }
+    else if (obj && obj.raw) {
 		return obj.raw();
 	}
-	else {
-		if (obj !== null) {
-			return this.rawMap(obj);
-		}
+	else if (jQuery.isArray(obj)) {
+	    return this.rawArray(obj);
 	}
-	return obj;
+	else {
+	    r = null;
+	    // Has complex properties with .raw()?
+	    for (p in obj) {
+	        if (obj.hasOwnProperty(p) && obj[ p ].raw) {
+	            r = {};
+	            break;
+	        }
+	    }
+	    if (r) {
+	        for (p in obj) {
+	            if (obj.hasOwnProperty(p) && p.indexOf("$") !== 0 && p.indexOf("$") !== 1) {
+	                r[ p ] = this.rawObj(obj[ p ]);
+	            }
+	        }
+	        return r;
+	    }
+	    return obj;
+	}
 };
 
-Serializable.prototype.rawArray = function(obj) {
-	var i, raw = [];
-	if (!obj) {
-		return "raw FAILED";
+Serializable.prototype.rawArray = function(array) {
+	var i, raw, obj;
+	raw = [];
+	if (!array) {
+		return null; // "raw FAILED";
 	}
-	for (i = 0; i < obj.length; i++) {
-		raw.push(this.rawObj(obj[ i ]));
+	for (i = 0; i < array.length; i++) {
+	    obj = array[ i ];
+	    if (obj.name === "Lechonero") { // TODO: remove
+	        var x = 1;
+	    }
+	    raw.push(this.rawObj(obj));
 	}
 	return raw;
-};
-
-Serializable.prototype.rawMap = function(obj) {
-	var p, r = null;
-	if (!obj) {
-		return "raw FAILED";
-	}
-	for (p in obj) {
-		if (obj.hasOwnProperty(p) && obj[ p ].raw) {
-			r = {};
-			break;
-		}
-	}
-	if (r) {
-		for (p in obj) {
-			if (obj.hasOwnProperty(p)) {
-				r[ p ] = obj[ p ] && obj[ p ].raw ? obj[ p ].raw() : obj[ p ];
-			}
-		}
-		return r;
-	}
-	return obj;
 };
 
 Serializable.prototype.raw = function() {
@@ -52,16 +54,16 @@ Serializable.prototype.raw = function() {
 	for (prop in this) {
 		if (this.hasOwnProperty(prop)) {
 			obj = this[ prop ];
-			if (prop.indexOf("$") === 0 || prop.indexOf("$") === 1) {
+			if (prop === "history") {
+			    var x = 1;
+			}
+			if (prop.indexOf("$") === 0 || prop.indexOf("$") === 1 || jQuery.isFunction(obj)) {
 				continue;
 			}
 			else if (jQuery.isArray(obj)) {
 				raw[ prop ] = this.rawArray(obj);
 			}
 			else {
-				if (!this.rawObj) {
-					console.info(this.toString());
-				}
 				raw[ prop ] = this.rawObj(obj);
 			}
 		}

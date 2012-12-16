@@ -3,30 +3,63 @@
  * @param {String} params.target
  */
 var Initiative = function(params) {
-	var i, actor;
-	params = params || {};
-    this.creatures = params.creatures || {};
-	this.actors = params.actors || {};
-	for (i = 0; i < this.actors.length; i++) {
-	    actor = this.actors[ i ];
-//		this.addRoute(actor);
-        actor.addEventListener("change", this._render.bind(this));
-        actor.addEventListener("reorder", this._changeInitiative.bind(this));
-	}
-	this.order = params.order;
-	if (!this.order || !this.order.length) {
-		this._rollInitiative();
-	}
-	this.round = 1;
-	this._current = 0;
-	this._$target = params.target ? jQuery(params.target) : ""; 
-	this.history = new History(params.history || { includeSubject: true });
-	History.central = this.history;
-
-	jQuery(document).ready(this._create.bind(this));
+    if (params) {
+        this._init(params);
+    }
 };
 
 Initiative.prototype = new EventBus();
+
+Initiative.prototype._init = function(params) {
+    var i, actor;
+    params = params || {};
+
+    History.Entry.init(params.historyEntries);
+    this.history = new History(params.history || { includeSubject: true });
+    History.central = this.history;
+    this.creatures = params.creatures || {};
+    this.actors = params.actors || {};
+    
+    for (i = 0; i < this.actors.length; i++) {
+        actor = this.actors[ i ];
+        
+        isNew = typeof(actor) === "string";
+        actor = this.actors[ i ] = isNew ? new Creature(this.creatures[ actor ]) : new Creature(actor);
+        if (isNew && !this.actors[ i ].isPC) {
+            this.actors[ i ].name = generateName();
+        }
+        
+//      this.addRoute(actor);
+        actor.addEventListener("change", this._render.bind(this));
+        actor.addEventListener("reorder", this._changeInitiative.bind(this));
+    }
+    this.order = params.order;
+    if (!this.order || !this.order.length) {
+        this._rollInitiative();
+    }
+    this.round = 1;
+    this._current = 0;
+    this._$target = params.target ? jQuery(params.target) : ""; 
+
+    jQuery(document).ready(this._create.bind(this));
+};
+
+Initiative.prototype.initFromLocalStorage = function() {
+	var data;
+	if (window.localStorage.getItem("initiative")) {
+	    data = JSON.parse(window.localStorage.getItem("initiative"));
+	    if (window.console && window.console.info) {
+	        window.console.info("Loaded from localStorage");
+	    }
+		this._init(data);
+		return true;
+	}
+	return false;
+};
+
+Initiative.prototype.initFromDataJs = function() {
+    this._init(loadData());
+};
 
 Initiative.prototype._rollInitiative = function() {
 	var actor, i;
@@ -43,66 +76,10 @@ Initiative.prototype._rollInitiative = function() {
 	}
 };
 
-Initiative.prototype._next = function() {
-    var msg, i, actor;
-    actor = this.actors[ this.order[ this._current ] ];
-    msg = actor.endTurn();
-    if (msg) {
-        this._addHistory(actor, msg);
-    }
-    this._current++;
-    if (this._current >= this.order.length) {
-        this._current = 0;
-        this.round++;
-        this.$round.val(this.round);
-    }
-    for (i = 0; i < this.actors.length; i++) {
-        this.actors[ i ].history._round = this.round;
-    }
-    this.history._round = this.round;
-    actor = this.actors[ this.order[ this._current ] ];
-    msg = actor.startTurn();
-    if (msg) {
-        this._addHistory(actor, msg);
-    }
-    if (actor.hasCondition("dead")) {
-        this._next();
-        return;
-    }
-    this._render();
-};
-
-Initiative.prototype._changeInitiative = function(event) {
-    var getIndex, moveIndex, moveOrder, beforeIndex, beforeOrder;
-    move = event.move;
-    before = event.before;
-    getIndex = (function(actor) {
-        var i, j;
-        for (i = 0; i < this.actors.length; i++) {
-            if (this.actors[ i ] === actor) {
-                return i;
-            }
-        }
-        return -1;
-    }).bind(this);
-    moveIndex = getIndex(event.move);
-    moveOrder = this.order.indexOf(moveIndex);
-    this.order.splice(moveOrder, 1);
-    beforeIndex = getIndex(event.before);
-    beforeOrder = this.order.indexOf(beforeIndex);
-    this.order.splice(beforeOrder, 0, moveIndex);
-    this._addHistory(move, "Moved initiative order to before " + before.name);
-    var test = "[ ";
-    for (var i = 0; i < this.order.length; i++) {
-    	test += (i ? ", " : "") + this.actors[ this.order[ i ] ].name;
-    }
-    console.info("New order: " + test + " ]");
-    this._render();
-};
-
 Initiative.prototype._create = function() {
 	var columns, i, $table, $tr, $td, image, $div, $span, $select, $option;
 	this.$parent = jQuery(this._$target.length ? this._$target : "body");
+	this.$parent.children().remove();
 	
 	this.$attackDialog = jQuery("<div/>").attr("id", "attacksDialog");
 	$table = jQuery("<table/>");
@@ -188,7 +165,16 @@ Initiative.prototype._create = function() {
 	
     this.$displayButton = jQuery("<button/>").attr("id", "open").html("Open player window").on({ click: this._renderDisplay.bind(this, true) });
     $div.append(this.$displayButton);
-	
+    
+    this.$loadStockButton = jQuery("<button/>").attr("id", "loadDataJs").html("Load stock").on({ click: this.initFromDataJs.bind(this) });
+    $div.append(this.$loadStockButton);
+    
+    this.$importButton = jQuery("<button/>").attr("id", "import").html("Import").on({ click: this._import.bind(this) });
+    $div.append(this.$importButton);
+    
+    this.$exportButton = jQuery("<button/>").attr("id", "export").html("Export").on({ click: this._export.bind(this) });
+    $div.append(this.$exportButton);
+    
 	$table = jQuery("<table/>").attr("id", "history").addClass("fullWidth").appendTo(this.$parent);
 	$tr = jQuery("<tr/>").appendTo($table);
 	$td = jQuery("<td/>").addClass("halfWidth").appendTo($tr);
@@ -270,7 +256,8 @@ Initiative.prototype._displayLoadHandler = function(event) {
 };
 
 Initiative.prototype._renderDisplay = function(createDisplay, event) {
-	var listen, stopListening, eventType, intervalId, raw;
+	var listen, stopListening, eventType, intervalId, json;
+	json = this.toJSON();
 	
 	if (event) {
 		event.stopPropagation = true; // TODO, HACK: why are we getting 80+ hits for the same event?
@@ -308,9 +295,78 @@ Initiative.prototype._renderDisplay = function(createDisplay, event) {
 	    return;
 	}
 	else if (this.display) {
-		raw = this.raw();
-		this.display.postMessage(JSON.stringify(raw, null, "  "), "*");
+		this.display.postMessage(json, "*");
 	}
+	this._autoSave(json);
+};
+
+Initiative.prototype.toString = function() {
+    return "[Initiative]";
+}
+
+Initiative.prototype.toJSON = function() {
+    var raw = this.raw();
+    return JSON.stringify(raw, null, "  ");
+};
+
+Initiative.prototype._autoSave = function(data) {
+    data = data ? data : this.toJSON();
+    window.localStorage.setItem("initiative", data);
+};
+
+Initiative.prototype._import = function() {
+    var data, $textarea;
+    if (!this.$importDialog) {
+        $textarea = jQuery("<textarea/>").css({ height: "100%", width: "100%" });
+        this.$importDialog = jQuery("<div/>").append($textarea).dialog({ 
+            autoOpen: false, 
+            modal: true, 
+            title: "Import", 
+            height: 800, 
+            width: "85%",
+            position: [ "center", 50 ],
+            buttons: [
+                      { 
+                          text: "Load", click: (function() {
+                              try {
+                                  this._init(JSON.parse($textarea.val()));
+                              }
+                              catch (e) {
+                                  if (window.console && window.console.error) {
+                                      window.console.error(e.toString());
+                                  }
+                              }
+                          }).bind(this) 
+                      }
+            ]
+        });
+    }
+    else {
+        $textarea = this.$exportDialog.find("textarea");
+    }
+    this.$importDialog.dialog("open");
+};
+
+Initiative.prototype._export = function() {
+    var data, $textarea;
+    if (!this.$exportDialog) {
+        $textarea = jQuery("<textarea/>").css({ height: "100%", width: "100%" });
+        this.$exportDialog = jQuery("<div/>").append($textarea).dialog({ 
+            autoOpen: false, 
+            modal: true, 
+            title: "Export", 
+            height: 800, 
+            width: "85%",
+            position: [ "center", 50 ]
+        });
+    }
+    else {
+        $textarea = this.$exportDialog.find("textarea");
+    }
+    data = window.localStorage.getItem("initiative");
+    $textarea.val(data);
+    this.$exportDialog.dialog("open");
+    $textarea[0].select();
 };
 
 Initiative.prototype._addHistory = function(actor, message, method) {
@@ -324,7 +380,64 @@ Initiative.prototype._addHistory = function(actor, message, method) {
 	if (console && console[ method ]) {
 		console[ method ](message);
 	}
-	window.localStorage.setItem("initiative", JSON.stringify(this), null, "  ");
+    this._autoSave();
+};
+
+Initiative.prototype._next = function() {
+    var msg, i, actor;
+    actor = this.actors[ this.order[ this._current ] ];
+    msg = actor.endTurn();
+    if (msg) {
+        this._addHistory(actor, msg);
+    }
+    this._current++;
+    if (this._current >= this.order.length) {
+        this._current = 0;
+        this.round++;
+        this.$round.val(this.round);
+    }
+    for (i = 0; i < this.actors.length; i++) {
+        this.actors[ i ].history._round = this.round;
+    }
+    this.history._round = this.round;
+    actor = this.actors[ this.order[ this._current ] ];
+    msg = actor.startTurn();
+    if (msg) {
+        this._addHistory(actor, msg);
+    }
+    if (actor.hasCondition("dead")) {
+        this._next();
+        return;
+    }
+    this._render();
+};
+
+Initiative.prototype._changeInitiative = function(event) {
+    var getIndex, moveIndex, moveOrder, beforeIndex, beforeOrder;
+    move = event.move;
+    before = event.before;
+    getIndex = (function(actor) {
+        var i, j;
+        for (i = 0; i < this.actors.length; i++) {
+            if (this.actors[ i ] === actor) {
+                return i;
+            }
+        }
+        return -1;
+    }).bind(this);
+    moveIndex = getIndex(event.move);
+    moveOrder = this.order.indexOf(moveIndex);
+    this.order.splice(moveOrder, 1);
+    beforeIndex = getIndex(event.before);
+    beforeOrder = this.order.indexOf(beforeIndex);
+    this.order.splice(beforeOrder, 0, moveIndex);
+    this._addHistory(move, "Moved initiative order to before " + before.name);
+    var test = "[ ";
+    for (var i = 0; i < this.order.length; i++) {
+    	test += (i ? ", " : "") + this.actors[ this.order[ i ] ].name;
+    }
+    console.info("New order: " + test + " ]");
+    this._render();
 };
 
 Initiative.prototype._attack = function(actor) {
@@ -462,7 +575,8 @@ Initiative.prototype.raw = function() {
 		order: this.order,
 		actors: this.rawArray(this.actors),
 		creatures: this.creatures,
-		history: this.history.raw()
+		history: this.history.raw(),
+		historyEntries: this.rawObj(History.Entry.entries)
 	};
 	return raw;
 };

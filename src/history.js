@@ -2,10 +2,10 @@ var History = function(params) {
 	var i, entry;
 	
 	params = params || {};
-	this._entries = params.entries || [];
-	this._round = params.round || 0;
+	this._entries = params._entries || [];
+	this._round = 0;
 	this._count = 0;
-	this._includeSubject = params.includeSubject;
+	this._includeSubject = params._includeSubject;
 	
 	this.$html = this._entries.length > 0 ? jQuery("<ul/>") : jQuery("<span/>").html("No history");
 	for (i = 0; i < this._entries.length; i++) {
@@ -86,20 +86,24 @@ History.prototype._editEntry = function($entry, history) {
 	$entry.data("entry")._edit($entry, history);
 };
 
-History.prototype.raw = function() {
-	var raw, prop;
-	raw = {};
-	for each (prop in this) {
-		if (this.hasOwnProperty(prop)) {
-			if (this[ prop ] && this[ prop ].hasOwnProperty("raw")) {
-				raw[ prop ] = this[ prop ].raw();
-			}
-			else {
-				raw[ prop ] = JSON.stringify(this[ prop ], null, "  ");
-			}
-		}
-	}
-    return raw;
+//History.prototype.raw = function() {
+//	var raw, prop;
+//	raw = {};
+//	for each (prop in this) {
+//		if (this.hasOwnProperty(prop)) {
+//			if (this[ prop ] && this[ prop ].hasOwnProperty("raw")) {
+//				raw[ prop ] = this[ prop ].raw();
+//			}
+//			else {
+//				raw[ prop ] = JSON.stringify(this[ prop ], null, "  ");
+//			}
+//		}
+//	}
+//    return raw;
+//};
+
+History.prototype.toString = function() {
+    return "[History]";
 };
 
 History.prototype.toJSON = function() {
@@ -138,17 +142,38 @@ History.Editor.prototype.raw = function() {
 
 History.Entry = function(params) {
 	params = params || {};
-	this.id = History.Entry.id++;
+	this.id = params.id || History.Entry.id++;
 	History.Entry.entries[ this.id ] = this;
-	this.subject = params.subject;
+	if (typeof(params.subject) === "string") {
+	    params.subject = parseInt(params.subject);
+	}
+	if (typeof(params.subject) === "number") {
+	    this.subject = Creature.creatures[ params.subject ];
+	}
+	else {
+	    this.subject = params.subject;
+	}
 	this.message = params.message;
 	this.round = params.round;
 };
 
 History.Entry.prototype = new EventDispatcher();
 
-History.Entry.id = 1;
+History.Entry.id = (new Date()).getTime();
 History.Entry.entries = {};
+History.Entry.init = function(params) {
+    var p;
+    params = params || {};
+    History.Entry.entries = {};
+    for (p in params) {
+        if (params.hasOwnProperty(p)) {
+            new History.Entry(params[ p ]);
+        }
+    }
+};
+History.Entry.prototype.toString = function() {
+    return "[History Entry]";
+};
 
 History.Entry.prototype._addToRound = function($round, includeSubject) {
 	var message, $li, $span;
@@ -231,18 +256,9 @@ History.Entry.prototype._delete = function($entry, $span, $input, $save, $delete
 };
 
 History.Entry.prototype.raw = function() {
-	var raw, prop;
-	raw = {};
-	for each (prop in this) {
-		if (this.hasOwnProperty(prop)) {
-			if (this[ prop ] && this[ prop ].hasOwnProperty("raw")) {
-				raw[ prop ] = this[ prop ].raw();
-			}
-			else {
-				raw[ prop ] = JSON.stringify(this[ prop ], null, "  ");
-			}
-		}
-	}
+	var raw;
+	raw = Serializable.prototype.raw.call(this);
+	raw.subject = raw.subject.id;
     return raw;
 };
 

@@ -100,7 +100,9 @@ function loadData() {
                   "Cyclops Guard",
                   "Cyclops Guard",
                   "Cyclops Guard",
-                  "Cyclops Guard"
+                  "Cyclops Guard",
+                  "Dragonborn Gladiator",
+                  "Dragonborn Gladiator"
 	              ],
 		creatures: { 
 		    Barases: { 
@@ -366,7 +368,26 @@ function loadData() {
                 defenses: { ac: 27, fort: 26, ref: 23, will: 23 },
                 init: 8, speed: 6,
                 attacks: [ { name: "Battleaxe", type: "At-Will", range: "2", toHit: 17, defense: "AC", damage: "7" } ]
-            }
+            },
+            "Dragonborn Gladiator": { 
+                name: "Dragonborn Gladiator", image: "images/portraits/dragonborn_gladiator.jpg", // "http://img213.imageshack.us/img213/2721/dragonborn29441748300x3.jpg",
+                hp: { total: 106 },
+                defenses: { ac: 24, fort: 23, ref: 20, will: 21 },
+                init: 9, speed: 5,
+                attacks: [
+                          { name: "Bastard Sword", type: "At-Will", range: "melee", toHit: 15, defense: "AC", damage: "1d10+5" },
+                          { name: "Bastard Sword (bloodied)", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: "1d10+5" },
+                          { name: "Bastard Sword (lone fighter)", type: "At-Will", range: "melee", toHit: 17, defense: "AC", damage: "1d10+5" },
+                          { name: "Bastard Sword (bloodied, lone fighter)", type: "At-Will", range: "melee", toHit: 18, defense: "AC", damage: "1d10+5" },
+                          { name: "Finishing Blow", type: "At-Will", range: "melee", toHit: 15, defense: "AC", damage: "1d10+5" },
+                          { name: "Finishing Blow (bloodied)", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: "1d10+5" },
+                          { name: "Finishing Blow (lone fighter)", type: "At-Will", range: "melee", toHit: 17, defense: "AC", damage: "1d10+5" },
+                          { name: "Finishing Blow (bloodied, lone fighter)", type: "At-Will", range: "melee", toHit: 18, defense: "AC", damage: "1d10+5" },
+                          { name: "Howl", type: "At-Will", range: "blast 3", toHit: 16, defense: "Fort", damage: "1d6+6", damageType: "thunder" },
+                          { name: "Shriek of Pain", type: "Encounter", range: "blast 5", toHit: 16, defense: "Fort", damage: "3d6+6", damageType: "thunder", miss: "half damage" },
+                          { name: "Shriek of Pain (bloodied)", type: "Encounter", range: "blast 5", toHit: 16, defense: "Fort", damage: "3d6+11", damageType: "thunder", miss: "half damage" }
+                  ]
+            },
 		}
     };
 }

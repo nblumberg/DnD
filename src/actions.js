@@ -339,6 +339,10 @@ SavingThrow.prototype.anchor = function(conditional) {
     return Roll.prototype.anchor.call(this, conditional);
 };
 
+SavingThrow.prototype.toString = function() {
+    return "[Saving Throw]";
+};
+
 
 var Attack = function(params, creature) {
     var i;
@@ -390,6 +394,10 @@ Attack.prototype.anchor = function(conditional) {
     conditional = jQuery.extend({ breakdown: "", text: "" }, conditional);
     conditional.breakdown += this.isCritical() || this.isFumble() ? "" : " = " + this._getLastRoll().total + " vs. " + this.defense;
     return Roll.prototype.anchor.call(this, conditional);
+};
+
+Attack.prototype.toString = function() {
+    return "[Attack \"" + this.name + "\"]";
 };
 
 Attack.prototype.raw = Serializable.prototype.raw;
