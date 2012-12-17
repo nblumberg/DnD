@@ -14,9 +14,7 @@ Initiative.prototype._init = function(params) {
     var p, i, actor, count;
     params = params || {};
 
-    History.Entry.init(params.historyEntries);
-    this.history = new History(params.history || { _includeSubject: true });
-    History.central = this.history;
+    History.Entry.init(params.historyEntries); // NOTE: must come before this.actors is initialized because Creature.history references it
     
     Creature.creatures = {};
     for (p in params.creatures) {
@@ -32,6 +30,10 @@ Initiative.prototype._init = function(params) {
         actor.addEventListener("change", this._render.bind(this));
         actor.addEventListener("reorder", this._changeInitiative.bind(this));
     }
+    
+    this.history = new History(params.history || { _includeSubject: true }); // NOTE: must come after this.actors is initialized because of _includeSubject
+    History.central = this.history;
+
     this.order = params.order;
     if (!this.order || !this.order.length) {
         this._rollInitiative();

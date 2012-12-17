@@ -229,18 +229,18 @@ Creature.prototype.createTr = function(params) {
 	
 	$td = jQuery("<td/>").addClass("bordered");
 	$tr.append($td);
-	this._addDefense($td, "ac", this.defenses.ac, "http://aux.iconpedia.net/uploads/20429361841025286885.png");
-	this._addDefense($td, "fort", this.defenses.fort, "http://www.gettyicons.com/free-icons/101/sigma-medical/png/256/cardiology_256.png"); // "http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png");
-	this._addDefense($td, "ref", this.defenses.ref, "http://pictogram-free.com/highresolution/l_163.png");
-	this._addDefense($td, "will", this.defenses.will, "http://www.iconhot.com/icon/png/medical-icons/256/brain.png");
+	this._addDefense($td, "ac", this.defenses.ac, "images/symbols/ac.png"); // "http://aux.iconpedia.net/uploads/20429361841025286885.png"
+	this._addDefense($td, "fort", this.defenses.fort, "images/symbols/fort.png"); // "http://www.gettyicons.com/free-icons/101/sigma-medical/png/256/cardiology_256.png"); // "http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png");
+	this._addDefense($td, "ref", this.defenses.ref, "images/symbols/ref.png"); // "http://pictogram-free.com/highresolution/l_163.png");
+	this._addDefense($td, "will", this.defenses.will, "images/symbols/will.png"); // "http://www.iconhot.com/icon/png/medical-icons/256/brain.png");
 	
 	$td = jQuery("<td/>").addClass("hp bordered").appendTo($tr);
 	if (this.hp.temp) {
-		this._addHp($td, "http://findicons.com/files/icons/1700/2d/512/clock.png", "Temp HP", "tempHp", this.hp.temp);
+		this._addHp($td, "images/symbols/temp_hp.png", "Temp HP", "tempHp", this.hp.temp);
 	}
-	this._addHp($td, "http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png", "HP", "currentHp", this.hp.current, "totalHp", this.hp.total);
+	this._addHp($td, "images/symbols/hp.png", "HP", "currentHp", this.hp.current, "totalHp", this.hp.total);
 	if (this.surges && this.surges.hasOwnProperty("current")) {
-		this._addHp($td, "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Red_Cross_icon.svg/480px-Red_Cross_icon.svg.png", "Healing Surges", "surgesRemaining", this.surges.current, "surgesPerDay", this.surges.perDay);
+		this._addHp($td, "images/symbols/surge.png", "Healing Surges", "surgesRemaining", this.surges.current, "surgesPerDay", this.surges.perDay);
 	}
 	
 	$td = jQuery("<td/>").addClass("actions bordered");

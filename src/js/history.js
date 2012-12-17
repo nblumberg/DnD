@@ -148,7 +148,8 @@ History.Entry = function(params) {
 	    params.subject = parseInt(params.subject);
 	}
 	if (typeof(params.subject) === "number") {
-	    this.subject = Creature.actors[ params.subject ];
+	    // Creature.actors may not be initialized yet, if not, preserve subject id for resolving at need
+	    this.subject = Creature.actors[ params.subject ] ? Creature.actors[ params.subject ] : params.subject;
 	}
 	else {
 	    this.subject = params.subject;
@@ -179,7 +180,11 @@ History.Entry.prototype._addToRound = function($round, includeSubject) {
 	var message, $li, $span;
 	message = this.message;
 	if (includeSubject) {
-		message = this.subject.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
+	    if (typeof(this.subject) === "number") {
+	        // Creature.actors wasn't initialized at creation time, resolve subject id now
+	        this.subject = Creature.actors[ this.subject ] ? Creature.actors[ this.subject ] : this.subject;
+	    }
+		message = (this.subject ? this.subject.name : "UNKNOWN") + " " + message.charAt(0).toLowerCase() + message.substr(1);
 	}
 	$span = jQuery("<span/>").addClass(includeSubject ? "includeSubject" : "").html(message);
 	$li = jQuery("<li/>").addClass("entry entry" + this.id).append($span).appendTo($round).data("entry", this); //.on({ click: this._edit.bind(this, $li) });
@@ -258,7 +263,7 @@ History.Entry.prototype._delete = function($entry, $span, $input, $save, $delete
 History.Entry.prototype.raw = function() {
 	var raw;
 	raw = Serializable.prototype.raw.call(this);
-	raw.subject = raw.subject ? raw.subject.id : null;
+	raw.subject = this.subject ? this.subject.id : null;
     return raw;
 };
 
