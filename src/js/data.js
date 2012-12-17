@@ -1,35 +1,3 @@
-function generateName() {
-	var i, NAMES = [
-        "Agongori",
-        "Agwet",
-        "Bamangwe",
-        "Bavalironab",
-        "Chatuna",
-        "Drini",
-        "Drircan",
-        "Egorul",
-        "Faurg",
-        "Gliturcaindu",
-        "Grogor",
-        "Hirchet",
-        "Korodr",
-        "Lallka",
-        "Latungorothalo",
-        "Mincab",
-        "Morororo",
-        "Ngormm",
-        "Onazglog",
-        "Ongiro",
-        "Rolangu",
-        "Ungba",
-        "Vanarn",
-        "Wethet",
-        "Weturondr"
-    ];
-    i = Math.floor(Math.random() * NAMES.length);
-    return NAMES[ i ];
-}
-
 function randEffect() {
     var i, EFFECTS = [
                    "Attack penalty",                      
@@ -82,7 +50,7 @@ function loadData() {
 //		return JSON.parse(window.localStorage.getItem("initiative"));
 //	}
 	return {
-		history: { includeSubject: true },
+		history: { _includeSubject: true },
 	    actors: [ 
 	              "Barases", 
 	              "Bin", 

@@ -11,24 +11,23 @@ var Initiative = function(params) {
 Initiative.prototype = new EventBus();
 
 Initiative.prototype._init = function(params) {
-    var i, actor;
+    var p, i, actor, count;
     params = params || {};
 
     History.Entry.init(params.historyEntries);
-    this.history = new History(params.history || { includeSubject: true });
+    this.history = new History(params.history || { _includeSubject: true });
     History.central = this.history;
-    this.creatures = params.creatures || {};
-    this.actors = params.actors || {};
     
+    Creature.creatures = {};
+    for (p in params.creatures) {
+        new Creature(params.creatures[ p ]);
+    }
+
+    this.actors = params.actors || {};
     for (i = 0; i < this.actors.length; i++) {
         actor = this.actors[ i ];
-        
-        isNew = typeof(actor) === "string";
-        actor = this.actors[ i ] = isNew ? new Creature(this.creatures[ actor ]) : new Creature(actor);
-        if (isNew && !this.actors[ i ].isPC) {
-            this.actors[ i ].name = generateName();
-        }
-        
+        count = typeof(actor) === "string" && !Creature.creatures[ actor ].isPC ? this._countActorsByType(actor) : 0;
+        actor = this.actors[ i ] = typeof(actor) === "string" ? Creature.creatures[ actor ].toActor(count) : new Creature(actor, true);
 //      this.addRoute(actor);
         actor.addEventListener("change", this._render.bind(this));
         actor.addEventListener("reorder", this._changeInitiative.bind(this));
@@ -61,6 +60,26 @@ Initiative.prototype.initFromDataJs = function() {
     this._init(loadData());
 };
 
+Initiative.prototype._countActorsByType = function(type) {
+    var i, actor, potential, count;
+    potential = count = 0;
+    for (i = 0; this.actors && i < this.actors.length; i++) {
+        actor = this.actors[ i ];
+        if (typeof(actor) === "string") {
+            if (actor.indexOf(type) === 0) {
+                potential++;
+            }
+        }
+        else if (actor.name.indexOf(type) === 0) {
+            potential++;
+            if (actor instanceof Creature) {
+                count++;
+            }
+        }
+    }
+    return potential > 1 ? count + 1 : 0;
+};
+
 Initiative.prototype._rollInitiative = function() {
 	var actor, i;
 	this.order = [];
@@ -77,7 +96,7 @@ Initiative.prototype._rollInitiative = function() {
 };
 
 Initiative.prototype._create = function() {
-	var columns, i, $table, $tr, $td, image, $div, $span, $select, $option;
+	var columns, i, $li, $table, $tr, $td, image, $div, $span, $select, $option, menu;
 	this.$parent = jQuery(this._$target.length ? this._$target : "body");
 	this.$parent.children().remove();
 	
@@ -166,14 +185,62 @@ Initiative.prototype._create = function() {
     this.$displayButton = jQuery("<button/>").attr("id", "open").html("Open player window").on({ click: this._renderDisplay.bind(this, true) });
     $div.append(this.$displayButton);
     
-    this.$loadStockButton = jQuery("<button/>").attr("id", "loadDataJs").html("Load stock").on({ click: this.initFromDataJs.bind(this) });
-    $div.append(this.$loadStockButton);
+    this.$loadButton = jQuery("<button/>").attr("id", "file").html("File").on({ 
+    	click: (function(event) {
+    		event.stopPropagation();
+    		this.$loadMenu.toggle(); 
+		}).bind(this) 
+	});
+    $div.append(this.$loadButton);
+    menu = [ 
+            { id: "loadDataJs", html: "Load stock", click: this.initFromDataJs.bind(this) }, 
+            { id: "import", html: "Import", click: this._import.bind(this) }, 
+            { id: "export", html: "Export", click: this._export.bind(this) }
+           ];
+    this.$loadMenu = jQuery("<ul/>").attr("id", "loadMenu").css({ position: "absolute", left: this.$loadButton.position().left }).delegate("li", "click", (function() { 
+		event.stopPropagation();
+    	this.$loadMenu.toggle(); 
+	}).bind(this));
+    $div.append(this.$loadMenu);
+    for (i = 0; i < menu.length; i++) {
+    	$li = jQuery("<li/>").attr("id", menu[ i ].id).append(jQuery("<a/>").attr("href", "javascript:void(0);").html(menu[ i ].html)).on({ click: menu[ i ].click }).appendTo(this.$loadMenu);
+    }
+    this.$loadMenu.menu().hide();
     
-    this.$importButton = jQuery("<button/>").attr("id", "import").html("Import").on({ click: this._import.bind(this) });
-    $div.append(this.$importButton);
+    this.$creatureButton = jQuery("<button/>").attr("id", "creatures").html("Creatures").on({ 
+    	click: (function(event) {
+    		event.stopPropagation();
+    		this.$creaturesMenu.toggle();
+		}).bind(this) 
+	});
+    $div.append(this.$creatureButton);
+    this.$creaturesMenu = jQuery("<ul/>").attr("id", "creaturesMenu").css({ position: "absolute", left: this.$creatureButton.position().left }).delegate("li", "click", (function() { 
+		event.stopPropagation();
+    	this.$creaturesMenu.toggle();
+	}).bind(this));
+    $div.append(this.$creaturesMenu);
+    for (i in Creature.creatures) {
+//    	if (Creature.creatures[ i ].isPC) {
+//    		continue;
+//    	}
+    	$li = jQuery("<li/>").attr("id", Creature.creatures[ i ].name).append(jQuery("<a/>").attr("href", "javascript:void(0);").html(Creature.creatures[ i ].name)).on({ 
+    		click: (function(creature) {
+    		    var count, actor;
+    	        count = creature.isPC ? 0 : this._countActorsByType(creature.name);
+    		    actor = creature.toActor(count);
+    		    this.actors.push(actor);
+    		    this.order.push(this.actors.length - 1);
+    		    this._render();
+    		    this._addHistory(actor, "Joins the fight");
+    		}).bind(this, Creature.creatures[ i ]) 
+    	}).appendTo(this.$creaturesMenu);
+    }
+    this.$creaturesMenu.menu().hide();
     
-    this.$exportButton = jQuery("<button/>").attr("id", "export").html("Export").on({ click: this._export.bind(this) });
-    $div.append(this.$exportButton);
+    jQuery("body").on({ click: (function() { 
+    	this.$loadMenu.hide(); 
+    	this.$creaturesMenu.hide(); 
+	}).bind(this) });
     
 	$table = jQuery("<table/>").attr("id", "history").addClass("fullWidth").appendTo(this.$parent);
 	$tr = jQuery("<tr/>").appendTo($table);
@@ -574,7 +641,7 @@ Initiative.prototype.raw = function() {
 	var raw = {
 		order: this.order,
 		actors: this.rawArray(this.actors),
-		creatures: this.creatures,
+		creatures: this.rawObj(Creature.creatures),
 		history: this.history.raw(),
 		historyEntries: this.rawObj(History.Entry.entries)
 	};

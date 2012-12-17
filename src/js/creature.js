@@ -4,6 +4,7 @@ var Defenses = function(params) {
 	this.fort = params.fort || 10;
 	this.ref = params.ref || 10;
 	this.will = params.will || 10;
+	this.toString = function() { "[Defenses]"; };
 };
 
 var HP = function(params) {
@@ -11,13 +12,17 @@ var HP = function(params) {
 	this.total = params.total || 1;
 	this.current = params.current || this.total;
 	this.temp = params.temp || 0;
+    this.toString = function() { "[HP]"; };
 };
 
 var Surges = function(params) {
 	params = params || {};
 	this.perDay = params.perDay || 0;
 	this.current = params.current || this.perDay;
+    this.toString = function() { "[Surges]"; };
 };
+
+
 
 var Effect = function(params) {
     var i;
@@ -79,6 +84,7 @@ Effect.CONDITIONS = {
 };
 
 
+
 var Implement = function(params) {
 	this._init(params);
 };
@@ -110,6 +116,7 @@ Weapon.prototype.toString = function() {
 };
     
 
+
 var Abilities = function(params) {
 	var i, ability, abilities = [ "STR", "DEX", "CON", "INT", "WIS", "CHA" ];
 	params = params || {};
@@ -118,15 +125,23 @@ var Abilities = function(params) {
 		this[ ability ] = params[ ability ] || 10;
 		this[ ability + "mod" ] = Math.floor((this[ ability ] - 10) / 2);
 	}
+    this.toString = function() { "[Abilities]"; };
 };
 
-var Creature = function(params) {
+
+
+var Creature = function(params, isActor) {
 	var i;
 	params = params || {};
 	this.id = params.id || Creature.id++;
-	Creature.creatures[ this.id ] = this;
-	this._listeners = {};
 	this.name = params.name;
+    if (isActor) {
+        Creature.actors[ this.id ] = this;
+    }
+    else {
+        Creature.creatures[ this.name ] = this;
+    }
+	this._listeners = {};
 	this.image = params.image;
 	this.isPC = params.isPC || false;
 	this.level = params.level || false;
@@ -159,6 +174,7 @@ var Creature = function(params) {
 };
 
 Creature.id = (new Date()).getTime();
+Creature.actors = {};
 Creature.creatures = {};
 
 Creature.prototype = new EventDispatcher();
@@ -229,8 +245,8 @@ Creature.prototype.createTr = function(params) {
 	
 	$td = jQuery("<td/>").addClass("actions bordered");
 	$tr.append($td);
-	this._addAction($td, "Attack", "http://gamereviewhero.com/images/sword_icon.png", params.attack);
-	this._addAction($td, "Heal", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Red_Cross_icon.svg/480px-Red_Cross_icon.svg.png", params.heal);
+	this._addAction($td, "Attack", "images/symbols/attack.png", params.attack);
+	this._addAction($td, "Heal", "images/symbols/heal.png", params.heal);
 	
 	$td = jQuery("<td/>").addClass("history bordered");
 	$tr.append($td);
@@ -531,12 +547,15 @@ Creature.prototype.endTurn = function() {
     return msg;
 };
 
+Creature.prototype.toActor = function(count) {
+    var actor = new Creature(this.raw(), true);
+    if (!actor.isPC) {
+        actor.type = actor.name;
+        actor.name = actor.name + (count ? " #" + count : "");
+    }
+    return actor;
+};
+
 Creature.prototype.toString = function() {
     return "[Creature \"" + this.name + "\"]";
 };
-
-//Creature.prototype.raw = function() {
-//    var raw = Serializable.raw.call(this);
-//    
-//    return raw;
-//};

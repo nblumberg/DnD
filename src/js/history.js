@@ -148,7 +148,7 @@ History.Entry = function(params) {
 	    params.subject = parseInt(params.subject);
 	}
 	if (typeof(params.subject) === "number") {
-	    this.subject = Creature.creatures[ params.subject ];
+	    this.subject = Creature.actors[ params.subject ];
 	}
 	else {
 	    this.subject = params.subject;
@@ -258,7 +258,7 @@ History.Entry.prototype._delete = function($entry, $span, $input, $save, $delete
 History.Entry.prototype.raw = function() {
 	var raw;
 	raw = Serializable.prototype.raw.call(this);
-	raw.subject = raw.subject.id;
+	raw.subject = raw.subject ? raw.subject.id : null;
     return raw;
 };
 
