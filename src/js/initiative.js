@@ -131,7 +131,7 @@ Initiative.prototype.initFromJs = function() {
     this._init(data);
 };
 
-Initiative.prototype._countActorsByType = function(type) {
+Initiative.prototype._countActorsByType = function(type, adding) {
     var i, actor, potential, count;
     potential = count = 0;
     for (i = 0; this.actors && i < this.actors.length; i++) {
@@ -148,7 +148,13 @@ Initiative.prototype._countActorsByType = function(type) {
             }
         }
     }
-    return potential > 1 ? count + 1 : 0;
+    if (potential > 1) {
+    	return count + 1;
+    }
+    if (adding) {
+    	return count === 0 ? 0 : count + 1;
+    }
+    return 0;
 };
 
 Initiative.prototype._rollInitiative = function() {
@@ -364,7 +370,7 @@ Initiative.prototype._createCreatureDialog = function() {
                 }
                 for (i = 0; i < toAdd.length; i++) {
                     creature = toAdd[ i ];
-                    count = creature.isPC ? 0 : this._countActorsByType(creature.name);
+                    count = creature.isPC ? 0 : this._countActorsByType(creature.name, true);
                     actor = creature.toActor(count);
                     this.actors.push(actor);
                     jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
