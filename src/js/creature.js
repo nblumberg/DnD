@@ -482,7 +482,7 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
         }
         if (!isFumble && (isCrit || toHit >= def + defCondMod)) {
             damage = attack.damage.rollItem(item, isCrit);
-            dmgCond = { mod: 0, breakdown: (item && item.enhancement ? " +" + item.enhancement + " (item)" : ""), effects: [] };
+            dmgCond = { mod: 0, breakdown: (item && item.enhancement ? " + " + item.enhancement + " (item)" : ""), effects: [] };
             if (this.hasCondition("weakened")) {
                 dmgCond.mod = -1 * Math.ceil(damage / 2);
                 dmgCond.breakdown += " [1/2 for weakened]";
