@@ -12,6 +12,7 @@ var HP = function(params) {
 	this.total = params.total || 1;
 	this.current = params.current || this.total;
 	this.temp = params.temp || 0;
+	this.regeneration = params.regeneration || 0;
     this.toString = function() { "[HP]"; };
 };
 
@@ -521,7 +522,12 @@ Creature.prototype.takeDamage = function(attacker, damage, effects) {
 };
 
 Creature.prototype.startTurn = function() {
-    var i, effect, ongoingEffects = [ "Ongoing acid", "Ongoing cold", "Ongoing damage", "Ongoing fire", "Ongoing lightning", "Ongoing necrotic", "Ongoing poison", "Ongoing psychic", "Ongoing radiant" ];
+    var regen, i, effect, ongoingEffects = [ "Ongoing acid", "Ongoing cold", "Ongoing damage", "Ongoing fire", "Ongoing lightning", "Ongoing necrotic", "Ongoing poison", "Ongoing psychic", "Ongoing radiant" ];
+    if (this.hp.regeneration && this.hp.current < this.hp.total) {
+    	regen = Math.min(this.hp.regeneration, this.hp.total - this.hp.current);
+    	this.hp.current += regen;
+        this.history.add(new History.Entry({ round: this.history._round, subject: this, message: "Regenerated " + regen + " HP" }));
+    }
     for (i = 0; this.effects && this.effects.length && i < ongoingEffects.length; i++) {
         effect = this.getCondition(ongoingEffects[ i ]);
         if (effect !== null) {

@@ -28,6 +28,7 @@ div#header * { margin-right: 10px; }
 span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
     
+#history > tr > td, #history > tbody > tr > td { vertical-align: top; }
 #history div { text-align: center; }
 .round .edit textarea { height: 150px; }
 

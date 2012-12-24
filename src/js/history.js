@@ -23,8 +23,14 @@ History.prototype = new Serializable();
 
 History.prototype.add = function(entry) {
 	entry.round = entry.round ? entry.round : this._round;
+	if (this._entries.indexOf(entry.id) !== -1) {
+		return;
+	}
 	this._entries.push(entry.id);
 	entry._addToRound(this._getRound(entry), this._includeSubject);
+	if (this !== History.central) {
+		History.central.add(entry);
+	}
 };
 
 History.prototype.update = function(entry) {
@@ -71,13 +77,11 @@ History.prototype._getRound = function(entry) {
 		});
 	}
 	this._count++;
-	if (this._round !== entry.round) {
+	$ul = this.$html.children(".round" + entry.round).children("ul");
+	if (!$ul.length) {
 		this._round = entry.round;
 		$li = jQuery("<li/>").addClass("round round" + entry.round).html("Round " + entry.round).appendTo(this.$html);
 		$ul = jQuery("<ul/>").appendTo($li);
-	}
-	else {
-		$ul = this.$html.children(".round" + entry.round).children("ul");
 	}
 	return $ul;
 };

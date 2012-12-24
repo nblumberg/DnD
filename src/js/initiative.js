@@ -33,7 +33,7 @@ Initiative.prototype._init = function(params) {
     }
     
     if (params.creatures) {
-        Creature.creatures = {};
+//        Creature.creatures = {};
         for (p in params.creatures) {
             new Creature(params.creatures[ p ]);
         }
@@ -102,11 +102,13 @@ Initiative.prototype.loadInitFromJs = function() {
 
 Initiative.prototype.loadMonstersFromJs = function() {
 	var data = loadMonsters();
+	data.creatures = data.monsters;
 	this._init(data);
 };
 
 Initiative.prototype.loadPartyFromJs = function() {
 	var data = loadParty();
+	data.creatures = data.party;
 	this._init(data);
 };
 
@@ -161,6 +163,9 @@ Initiative.prototype._rollInitiative = function() {
 	}).bind(this));
 	for (i = 0; i < this.order.length; i++) {
 		this.order[ i ] = this.order[ i ].index;
+	}
+	if (this.order.length) {
+		this.actors[ this.order[ 0 ] ].startTurn();
 	}
 };
 
@@ -275,6 +280,7 @@ Initiative.prototype._createHealDialog = function() {
 
 Initiative.prototype._createFileMenu = function() {
     var columns, i, j, $ul, $li, $a, menu;
+    
     this.$fileButton = jQuery("<button/>").attr("id", "fileButton").html("File").on({ 
         click: (function(event) {
             event.stopPropagation();
@@ -460,6 +466,8 @@ Initiative.prototype._hideMenus = function() {
 Initiative.prototype._render = function() {
 	var i, actor;
 	
+    this.$round.val(this.round);
+    
 	this.$table.find("tr").remove();
 	this.$display.children().remove();
 	
@@ -613,6 +621,8 @@ Initiative.prototype._clearAll = function() {
     this.$freeFormHistorySubject.children().remove();
     this.actors = [];
     this.order = [];
+    this.round = 1;
+    this._current = 0;
     this._render();
 };
 
@@ -641,7 +651,6 @@ Initiative.prototype._next = function() {
     if (this._current >= this.order.length) {
         this._current = 0;
         this.round++;
-        this.$round.val(this.round);
     }
     for (i = 0; i < this.actors.length; i++) {
         this.actors[ i ].history._round = this.round;
