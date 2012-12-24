@@ -316,13 +316,34 @@ Initiative.prototype._createFileMenu = function() {
 };
 
 Initiative.prototype._createCreatureDialog = function() {
-    var columns, i, $li, $table, $tr, $td, image, $div, $span, $select, $option, menu;
+    var i, pcs, npcs, sort, $li, $div, $span, $select, $option, menu;
     
     this.$creatureDialog = jQuery("<div/>").attr("id", "creatureDialog");
     this.$creatures = jQuery("<select/>").attr("id", "creatureSelect").attr("multiple", "true").attr("size", 10);
     this.$creatureDialog.append(this.$creatures);
+    pcs = [];
+    npcs = [];
     for (i in Creature.creatures) {
-        jQuery("<option/>").html(Creature.creatures[ i ].name).data("creature", Creature.creatures[ i ]).appendTo(this.$creatures);
+    	if (Creature.creatures[ i ].isPC) {
+    		pcs.push(Creature.creatures[ i ]);
+    	}
+    	else {
+    		npcs.push(Creature.creatures[ i ]);
+    	}
+    }
+    sort = function(a, b) {
+    	return a.name >= b.name ? 1 : -1;
+    };
+    pcs.sort(sort);
+    npcs.sort(sort);
+    for (i = 0; i < pcs.length; i++) {
+        jQuery("<option/>").html(pcs[ i ].name).data("creature", pcs[ i ]).appendTo(this.$creatures);
+    }
+    if (pcs.length && npcs.length) {
+        jQuery("<option/>").html("------------").appendTo(this.$creatures).on({ click: function() { this.selected = false; } });
+    }
+    for (i = 0; i < npcs.length; i++) {
+        jQuery("<option/>").html(npcs[ i ].name).data("creature", npcs[ i ]).appendTo(this.$creatures);
     }
     this.$creatureDialog.dialog({ 
         autoOpen: false, 
