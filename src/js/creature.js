@@ -247,6 +247,7 @@ Creature.prototype.createTr = function(params) {
 	$tr.append($td);
 	this._addAction($td, "Attack", "images/symbols/attack.png", params.attack);
 	this._addAction($td, "Heal", "images/symbols/heal.png", params.heal);
+	this._addAction($td, "Exit", "images/symbols/exit.jpg", params.exit);
 	
 	$td = jQuery("<td/>").addClass("history bordered");
 	$tr.append($td);
