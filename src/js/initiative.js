@@ -809,12 +809,13 @@ Initiative.prototype._exit = function(actor) {
                     	  var i, index;
                     	  index = this.actors.indexOf(actor);
                     	  this.order.splice(this.order.indexOf(index), 1);
-                    	  this.actors.splice(index, 1);
-                    	  for (i = 0; i < this.order.length; i++) {
-                    		  if (this.order[ i ] > index) {
-                    			  this.order[ i ]--;
-                    		  }
-                    	  }
+                    	  this._addHistory(actor, "Leaves the fight");
+//                    	  this.actors.splice(index, 1);
+//                    	  for (i = 0; i < this.order.length; i++) {
+//                    		  if (this.order[ i ] > index) {
+//                    			  this.order[ i ]--;
+//                    		  }
+//                    	  }
                     	  this._render();
                     	  $dialog.dialog("destroy");
                       }).bind(this)
