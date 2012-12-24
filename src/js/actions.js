@@ -113,7 +113,7 @@ Roll.prototype.breakdown = function(conditional) {
 	if (conditional) {
 	    output += conditional;
 	}
-	return "[" + this.toString() + "] " + output;
+	return "[" + Roll.prototype.toString.call(this) + "] " + output;
 };
 
 Roll.prototype.anchor = function(type) {
@@ -145,8 +145,8 @@ var Damage = function(params, creature) {
     this.crit = null;
     this.needsWeapon = false;
     this.weaponMultiplier = 0;
-    this.meleeExta = 0;
-    this.rangedExta = 0;
+    this.meleeExtra = 0;
+    this.rangedExtra = 0;
     if (typeof(params) === "string") {
         this._parseDamageString(params, creature);
     }
@@ -304,6 +304,12 @@ Damage.prototype.anchor = function(conditional) {
     conditional = jQuery.extend({ text: "" }, conditional);
     conditional.text += (this.type ? " " + this.type : "") + " damage";
     return Roll.prototype.anchor.call(this, conditional);
+};
+
+Damage.prototype.raw = function() {
+	var raw = Serializable.prototype.raw.call(this);
+	raw.amount = Roll.prototype.raw.call(this);
+	return raw;
 };
 
 Damage.prototype.toString = function() {

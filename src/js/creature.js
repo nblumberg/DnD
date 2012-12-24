@@ -4,6 +4,7 @@ var Defenses = function(params) {
 	this.fort = params.fort || 10;
 	this.ref = params.ref || 10;
 	this.will = params.will || 10;
+	this.resistances = params.resistances || {};
 	this.toString = function() { "[Defenses]"; };
 };
 
@@ -137,9 +138,15 @@ var Creature = function(params, isActor) {
 	this.id = params.id || Creature.id++;
 	this.name = params.name;
     if (isActor) {
+    	if (console && console.debug && Creature.actors[ this.name ]) {
+    		console.debug("Replacing Creature.actors[ " + this.name + " ]");
+    	}
         Creature.actors[ this.id ] = this;
     }
     else {
+    	if (console && console.debug && Creature.creatures[ this.name ]) {
+    		console.debug("Replacing Creature.creatures[ " + this.name + " ]");
+    	}
         Creature.creatures[ this.name ] = this;
     }
 	this._listeners = {};
@@ -475,7 +482,7 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
         }
         if (!isFumble && (isCrit || toHit >= def + defCondMod)) {
             damage = attack.damage.rollItem(item, isCrit);
-            dmgCond = { mod: 0, breakdown: "", effects: [] };
+            dmgCond = { mod: 0, breakdown: (item && item.enhancement ? " +" + item.enhancement + " (item)" : ""), effects: [] };
             if (this.hasCondition("weakened")) {
                 dmgCond.mod = -1 * Math.ceil(damage / 2);
                 dmgCond.breakdown += " [1/2 for weakened]";
@@ -483,7 +490,7 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
                 damage = Math.floor(damage / 2);
             }
             msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for " + attack.damage.anchor(dmgCond);
-            msg += target.takeDamage(this, damage, attack.effects);
+            msg += target.takeDamage(this, damage, attack.damage.type, attack.effects);
         }
         else {
             msg = "Missed by " + this.name + "'s " + attack.anchor(toHitCond);
@@ -494,10 +501,14 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
     }
 };
 
-Creature.prototype.takeDamage = function(attacker, damage, effects) {
+Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
     var temp, msg, i;
     msg = "";
-    // TODO: resistance
+    if (type && this.defenses.resistances.hasOwnProperty(type)) {
+    	temp = this.defenses.resistances[ type ];
+        msg += " (resisted " + Math.min(damage, temp) + ")";
+    	damage = Math.max(damage - this.defenses.resistances[ type ], 0);
+    }
     if (this.hp.temp) {
         temp = this.hp.temp;
         this.hp.temp = Math.max(temp - damage, 0);
@@ -531,7 +542,7 @@ Creature.prototype.startTurn = function() {
     for (i = 0; this.effects && this.effects.length && i < ongoingEffects.length; i++) {
         effect = this.getCondition(ongoingEffects[ i ]);
         if (effect !== null) {
-            this.takeDamage(effect.damage);
+            this.takeDamage(null, effect.amount, ongoingEffects[ i ].split(" ")[ 1 ] !== "damage" ? ongoingEffects[ i ].split(" ")[ 1 ] : null);
         }
     }
 };

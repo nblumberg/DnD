@@ -35,7 +35,7 @@ Initiative.prototype._init = function(params) {
     if (params.creatures) {
 //        Creature.creatures = {};
         for (p in params.creatures) {
-            new Creature(params.creatures[ p ]);
+            new Creature(params.creatures[ p ], false);
         }
     }
 
@@ -64,6 +64,8 @@ Initiative.prototype._init = function(params) {
     this._current = params._current || 0;
     this._$target = params.target ? jQuery(params.target) : ""; 
 
+    this._autoSave();
+    
     jQuery(document).ready(this._create.bind(this));
 };
 
@@ -110,25 +112,6 @@ Initiative.prototype.loadPartyFromJs = function() {
 	var data = loadParty();
 	data.creatures = data.party;
 	this._init(data);
-};
-
-Initiative.prototype.initFromJs = function() {
-    var data, p, creatures;
-    data = loadData();
-    data.creatures = {};
-    creatures = loadParty().party;
-    for (p in creatures) {
-        if (creatures.hasOwnProperty(p)) {
-            data.creatures[ p ] = creatures[ p ];
-        }
-    }
-    creatures = loadMonsters().monsters;
-    for (p in creatures) {
-        if (creatures.hasOwnProperty(p)) {
-            data.creatures[ p ] = creatures[ p ];
-        }
-    }
-    this._init(data);
 };
 
 Initiative.prototype._countActorsByType = function(type, adding) {
@@ -208,7 +191,18 @@ Initiative.prototype._create = function() {
 };
 
 Initiative.prototype._createAttackDialog = function() {
-    var columns, i, $li, $table, $tr, $td, image, $div, $span, $select, $option, menu;
+    var i, $li, $table, $tr, $td, image, $div, $span, $select, $option;
+    
+    if (this.$attackDialog && this.$attackDialog.length) {
+    	try {
+        	this.$attackDialog.dialog("destroy").remove();
+    	}
+    	catch (e) {
+    	}
+    	finally {
+        	this.$attackDialog.remove();
+    	}
+    }
     this.$attackDialog = jQuery("<div/>").attr("id", "attacksDialog");
     $table = jQuery("<table/>");
     $table.attr("id", "attacks");
@@ -250,6 +244,17 @@ Initiative.prototype._createAttackDialog = function() {
 
 Initiative.prototype._createHealDialog = function() {
     var columns, i, $li, $table, $tr, $td, image, $div, $span, $select, $option, menu;
+
+    if (this.$healDialog && this.$healDialog.length) {
+    	try {
+        	this.$healDialog.dialog("destroy").remove();
+    	}
+    	catch (e) {
+    	}
+    	finally {
+        	this.$healDialog.remove();
+    	}
+    }
     this.$healDialog = jQuery("<div/>").attr("id", "healDialog");
     $div = jQuery("<div/>").appendTo(this.$healDialog);
     jQuery("<span/>").html("Description:").appendTo($div);
@@ -330,6 +335,16 @@ Initiative.prototype._createFileMenu = function() {
 Initiative.prototype._createCreatureDialog = function() {
     var i, pcs, npcs, sort, $li, $div, $span, $select, $option, menu;
     
+    if (this.$creatureDialog && this.$creatureDialog.length) {
+    	try {
+        	this.$creatureDialog.dialog("destroy").remove();
+    	}
+    	catch (e) {
+    	}
+    	finally {
+        	this.$creatureDialog.remove();
+    	}
+    }
     this.$creatureDialog = jQuery("<div/>").attr("id", "creatureDialog");
     this.$creatures = jQuery("<select/>").attr("id", "creatureSelect").attr("multiple", "true").attr("size", 10);
     this.$creatureDialog.append(this.$creatures);

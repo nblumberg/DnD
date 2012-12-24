@@ -74,16 +74,16 @@ function loadParty() {
                  attacks: [
                            { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 14, defense: "AC", damage: "1[W]+5", keywords: [ "weapon", "melee" ]  },
                            { name: "Ranged Basic", type: "At-Will", toHit: 8, defense: "AC", damage: "1[W]", keywords: [ "weapon", "ranged" ]  },
-                           { name: "Blazing Starfall", type: "At-Will", toHit: 12, defense: "Ref", damage: { amount: "1d4+10", crit: "1d8" }, keywords: [ "arcane", "fire", "implement", "radiant", "zone" ] },
-                           { name: "Vicious Mockery", type: "At-Will", toHit: 12, defense: "Will", damage: { amount: "1d6+9", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
-                           { name: "Explosive Pyre", type: "Encounter", toHit: 12, defense: "Ref", damage: { amount: "2d8+10", crit: "1d8" }, keywords: [ "arcane", "fire", "implement" ] },
-                           { name: "Eyebite", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "1d6+9", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
-                           { name: "Dissonant Strain", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "2d6+9", crit: "1d8" }, keywords: [ "arcane", "implement", "psychic" ] },
-                           { name: "Chaos Ray", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "2d8+13", crit: "1d8" }, keywords: [ "arcane", "implement", "psychic", "teleportation" ] },
-                           { name: "Stirring Shout", type: "Daily", toHit: 12, defense: "Will", damage: { amount: "2d6+9", crit: "1d8" }, keywords: [ "arcane", "healing", "implement", "psychic" ] },
-                           { name: "Reeling Torment", type: "Daily", toHit: 12, defense: "Will", damage: { amount: "3d8+13", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
+                           { name: "Blazing Starfall", type: "At-Will", toHit: 12, defense: "Ref", damage: { amount: "1d4+10", type: "radiant", crit: "1d8" }, keywords: [ "arcane", "fire", "implement", "radiant", "zone" ] },
+                           { name: "Vicious Mockery", type: "At-Will", toHit: 12, defense: "Will", damage: { amount: "1d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
+                           { name: "Explosive Pyre", type: "Encounter", toHit: 12, defense: "Ref", damage: { amount: "2d8+10", type: "fire", crit: "1d8" }, keywords: [ "arcane", "fire", "implement" ] },
+                           { name: "Eyebite", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "1d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
+                           { name: "Dissonant Strain", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "2d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "implement", "psychic" ] },
+                           { name: "Chaos Ray", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "2d8+13", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "implement", "psychic", "teleportation" ] },
+                           { name: "Stirring Shout", type: "Daily", toHit: 12, defense: "Will", damage: { amount: "2d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "healing", "implement", "psychic" ] },
+                           { name: "Reeling Torment", type: "Daily", toHit: 12, defense: "Will", damage: { amount: "3d8+13", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
                            { name: "Counterpoint", type: "Daily", toHit: 12, defense: "Will", damage: { amount: "2d8+8", crit: "1d8" }, keywords: [ "arcane", "implement" ] },
-                           { name: "Dragon Breath", type: "Encounter", toHit: 11, defense: "Ref", damage: { amount: "1d6+3", crit: "" }, keywords: [ "acid" ] }
+                           { name: "Dragon Breath", type: "Encounter", toHit: 11, defense: "Ref", damage: { amount: "1d6+3", type: "acid", crit: "" }, keywords: [ "acid" ] }
                            ],
                  effects: []
              },
@@ -92,7 +92,7 @@ function loadParty() {
                  abilities: { STR: 14, CON: 12, DEX: 20, INT: 14, WIS: 12, CHA: 22 },
                  hp: { total: 69 },
                  surges: { perDay: 7, current: 7 },
-                 defenses: { ac: 23, fort: 18, ref: 23, will: 22 },
+                 defenses: { ac: 23, fort: 18, ref: 23, will: 22, resistances: { fire: 10 } },
                  init: 10, speed: 6,
                  weapons: [ 
                            { name: "Wicked Fang Longsword +3", isMelee: true, enhancement: 3, proficiency: 3, damage: { amount: "1d8", crit: "3d8" } },
@@ -122,7 +122,7 @@ function loadParty() {
                  abilities: { STR: 19, CON: 16, DEX: 19, INT: 18, WIS: 16, CHA: 16 },
                  hp: { total: 73 },
                  surges: { perDay: 9, current: 9 },
-                 defenses: { ac: 23, fort: 21, ref: 21, will: 19 },
+                 defenses: { ac: 23, fort: 21, ref: 21, will: 19, resistances: { fire: 10 } },
                  init: 11, speed: 6,
                  weapons: [ 
                            { name: "Lightning Spiked Chain +1", isMelee: true, enhancement: 1, proficiency: 3, damage: "2d4", crit: "1d6" },
