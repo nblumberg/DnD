@@ -174,6 +174,8 @@ Initiative.prototype._create = function() {
 	this.$menuBar.append($span);
 	this.$round = jQuery("<input/>").attr("id", "round").attr("type", "text").attr("disabled", "disabled").val(this.round);
 	this.$menuBar.append(this.$round);
+	this.$previousButton = jQuery("<button/>").attr("id", "previous").html("Previous").on({ click: (this._previous).bind(this) });
+	this.$menuBar.append(this.$previousButton);
 	this.$nextButton = jQuery("<button/>").attr("id", "next").html("Next").on({ click: (this._next).bind(this) });
 	this.$menuBar.append(this.$nextButton);
 	
@@ -309,7 +311,12 @@ Initiative.prototype._createFileMenu = function() {
             }, 
             { id: "import", html: "Import", click: this._import.bind(this) }, 
             { id: "export", html: "Export", click: this._export.bind(this) },
-            { id: "clearAll", html: "Clear all", click: this._clearAll.bind(this) },
+            { id: "clear", html: "Clear", submenu: [
+                                                  { id: "clearAll", html: "all", click: this._clearAll.bind(this) },
+                                                  { id: "history", html: "history", click: this._clearHistory.bind(this) },
+                                                  { id: "monsters", html: "monsters", click: this._clearMonsters.bind(this) }
+                                              ]
+                                            }
            ];
     this.$fileMenu = jQuery("<ul/>").attr("id", "fileMenu").css({ position: "absolute", left: this.$fileButton.position().left }).delegate("li", "click", (function(event) { 
         event.stopPropagation();
@@ -647,18 +654,64 @@ Initiative.prototype._clearAll = function() {
     this._render();
 };
 
+Initiative.prototype._clearHistory = function() {
+	var i, actor;
+	// WTF? it's entering the for loop even when i !< this.actors.length
+	for (i = 0; i < this.actors.length; i++) {
+		actor = this.actors[ i ];
+		if (actor) {
+			actor.history.clear();
+		}
+	}
+	this.history.clear();
+	History.Entry.init();
+    this._render();
+};
+
+Initiative.prototype._clearMonsters = function() {
+	var i;
+	for (i = 0; i < this.actors.length; i++) {
+		if (!this.actors[ i ].isPC) {
+			this.actors.splice(i, 1);
+			i--;
+		}
+	}
+    this._render();
+};
+
 Initiative.prototype._addHistory = function(actor, message, method) {
 	var entry = new History.Entry({ round: this.round, subject: actor, message: message });
 	if (typeof(method) === "undefined") {
 		method = "info";
 	}
-	actor.history.add(entry);
-	message = actor.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
+	if (actor) {
+		actor.history.add(entry);
+		message = actor.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
+	}
 	this.history.add(entry);
 	if (console && console[ method ]) {
 		console[ method ](message);
 	}
     this._autoSave();
+};
+
+Initiative.prototype._previous = function() {
+    var msg, i, actor;
+    this._current--;
+    if (this._current < 0) {
+        this._current = this.order.length - 1;
+        this.round--;
+    }
+    for (i = 0; i < this.actors.length; i++) {
+        this.actors[ i ].history._round = this.round;
+    }
+    this.history._round = this.round;
+    actor = this.actors[ this.order[ this._current ] ];
+    msg = "Moved back in initiative order to " + actor.name + "'s turn";
+    if (msg) {
+        this._addHistory(null, msg);
+    }
+    this._render();
 };
 
 Initiative.prototype._next = function() {

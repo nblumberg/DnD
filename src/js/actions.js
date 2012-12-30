@@ -307,8 +307,12 @@ Damage.prototype.anchor = function(conditional) {
 };
 
 Damage.prototype.raw = function() {
-	var raw = Serializable.prototype.raw.call(this);
+	var tmp, raw;
+	tmp = this._history;
+	this._history = [];
+	raw = Serializable.prototype.raw.call(this);
 	raw.amount = Roll.prototype.raw.call(this);
+	this._history = tmp;
 	return raw;
 };
 

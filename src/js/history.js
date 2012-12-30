@@ -43,6 +43,10 @@ History.prototype.update = function(entry) {
 
 History.prototype.remove = function(entry) {
 	var $entry, $ul, $round, $tmp;
+	if (!entry) {
+		return;
+	}
+	entry = typeof(entry) === "object" ? entry : { id: entry };
 	$entry = this.$html.find("li.entry" + entry.id);
 	$ul = $entry.parent();
 	$round = $ul.parent();
@@ -59,6 +63,15 @@ History.prototype.remove = function(entry) {
 			this.$html = $tmp;
 		}
 	}
+};
+
+History.prototype.clear = function() {
+	var i;
+	for (i = 0; i < this._entries.length; i++) {
+		this.remove(History.Entry.entries[ this._entries[ i ] ]);
+	}
+	this._round = 0;
+	this._count = 0;
 };
 
 History.prototype._getRound = function(entry) {
@@ -188,7 +201,9 @@ History.Entry.prototype._addToRound = function($round, includeSubject) {
 	        // Creature.actors wasn't initialized at creation time, resolve subject id now
 	        this.subject = Creature.actors[ this.subject ] ? Creature.actors[ this.subject ] : this.subject;
 	    }
-		message = (this.subject ? this.subject.name : "UNKNOWN") + " " + message.charAt(0).toLowerCase() + message.substr(1);
+	    if (this.subject) {
+			message = this.subject.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
+	    }
 	}
 	$span = jQuery("<span/>").addClass(includeSubject ? "includeSubject" : "").html(message);
 	$li = jQuery("<li/>").addClass("entry entry" + this.id).append($span).appendTo($round).data("entry", this); //.on({ click: this._edit.bind(this, $li) });
