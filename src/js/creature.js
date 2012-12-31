@@ -528,7 +528,7 @@ Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
     if (type && this.defenses.resistances.hasOwnProperty(type)) {
     	temp = this.defenses.resistances[ type ];
         msg += " (resisted " + Math.min(damage, temp) + ")";
-    	damage = Math.max(damage - this.defenses.resistances[ type ], 0);
+    	damage = Math.max(damage - temp, 0);
     }
     if (this.hp.temp) {
         temp = this.hp.temp;
