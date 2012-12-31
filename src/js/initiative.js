@@ -329,8 +329,8 @@ Initiative.prototype._createFileMenu = function() {
             { id: "export", html: "Export", click: this._export.bind(this) },
             { id: "clear", html: "Clear", submenu: [
                                                   { id: "clearAll", html: "all", click: this._clearAll.bind(this) },
-                                                  { id: "history", html: "history", click: this._clearHistory.bind(this) },
-                                                  { id: "monsters", html: "monsters", click: this._clearMonsters.bind(this) }
+                                                  { id: "clearHistory", html: "history", click: this._clearHistory.bind(this) },
+                                                  { id: "clearMonsters", html: "monsters", click: this._clearMonsters.bind(this) }
                                               ]
                                             }
            ];
@@ -479,7 +479,7 @@ Initiative.prototype._createTable = function() {
         }).bind(this) 
     });
     
-    $td = jQuery("<td/>").attr("id", "history").addClass("halfWidth bordered alignTop").appendTo($tr);
+    $td = jQuery("<td/>").attr("id", "historyTd").addClass("halfWidth bordered alignTop").appendTo($tr);
     jQuery("<div/>").addClass("bordered f1").html("History").appendTo($td);
     $td.append(this.history.$html);
 
