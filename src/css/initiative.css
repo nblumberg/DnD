@@ -48,9 +48,12 @@ table#initiative th, table#initiative td { text-align: center; }
 table#initiative td.hp { padding: 3px; text-align: left; }
 table#initiative .tempHp { font-style: italic; }
 div#attacksDialog { padding: 5px; }
-div#attacksDialog table { width: 98%; }
+div#attacksDialog table { color: black; width: 98%; }
 div#attacksDialog td { vertical-align: top; }
 div#attacksDialog td.attacks2targets { padding-top: 30%; }
 div#attacksDialog td.attacks2targets img { display: block; }
 div#attacksDialog td { height: 100%; }
+div#attacksDialog td select { display: block; width: 100%; }
+div#attacksDialog td.playerAttack input { max-width: 50%; }
+div#attacksDialog td.playerAttack select { display: inline; width: auto; }
 table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }"

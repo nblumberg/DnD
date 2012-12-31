@@ -213,7 +213,7 @@ Initiative.prototype._createAttackDialog = function() {
     $table.append($tr);
     $td = jQuery("<td/>");
     $tr.append($td);
-    this.$weapons = jQuery("<select/>").attr("id", "weaponSelect").css("display", "block");
+    this.$weapons = jQuery("<select/>").attr("id", "weaponSelect");
     $td.append(this.$weapons);
     this.$attacks = jQuery("<select/>").attr("id", "attackSelect").on({ change: this._selectAttack.bind(this) });
     $td.append(this.$attacks);
@@ -233,6 +233,22 @@ Initiative.prototype._createAttackDialog = function() {
     this.$targets = jQuery("<select/>").attr("id", "targetSelect").attr("multiple", "true");
     $td.append(this.$targets);
     jQuery(this.$targets).dblclick(this._resolveAttack.bind(this));
+
+    $tr = jQuery("<tr/>");
+    $table.append($tr);
+    $td = jQuery("<td/>").addClass("playerAttack");
+    $tr.append($td);
+    this.$playerAttackRoll = jQuery("<input/>").attr("id", "playerAttackRoll").attr("type", "number").attr("placeholder", "Attack roll").appendTo($td);
+    this.$playerAttackCrit = jQuery("<select/>").attr("id", "playerAttackCrit").attr("title", "Critical").appendTo($td);
+    jQuery("<option/>").attr("value", "").html("----").appendTo(this.$playerAttackCrit);
+    jQuery("<option/>").attr("value", "crit").html("CRIT").appendTo(this.$playerAttackCrit);
+    jQuery("<option/>").attr("value", "fail").html("FAIL").appendTo(this.$playerAttackCrit);
+    $td = jQuery("<td/>").html("Player rolls");
+    $tr.append($td);
+    $td = jQuery("<td/>");
+    $tr.append($td);
+    this.$playerDamageRoll = jQuery("<input/>").attr("id", "playerDamageRoll").attr("type", "number").attr("placeholder", "Damage roll").appendTo($td);
+    
     this.$attackDialog.dialog({ 
         autoOpen: false, 
         buttons: { 
@@ -837,7 +853,7 @@ Initiative.prototype._selectAttack = function() {
 };
 
 Initiative.prototype._resolveAttack = function() {
-	var attacker, attack, item, i, targets, combatAdvantage;
+	var attacker, attack, item, i, targets, combatAdvantage, playerRolls;
 	if (this.$attacks.val() && this.$targets.val()) {
 		this.$attackDialog.dialog("close");
 		attacker = this.$attackDialog.data("attacker");
@@ -852,7 +868,10 @@ Initiative.prototype._resolveAttack = function() {
 			}
 		}
 		combatAdvantage = this.$combatAdvantage.data("combatAdvantage");
-		attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this));
+		if (this.$playerAttackRoll.val() || this.$playerAttackCrit.val() || this.$playerDamageRoll.val()) {
+			playerRolls = { attack: { roll: parseInt(this.$playerAttackRoll.val()), isCritical: this.$playerAttackCrit.val() === "crit", isFumble: this.$playerAttackCrit.val() === "fail" }, damage: parseInt(this.$playerDamageRoll.val()) };
+		}
+		attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
 		this._render();
 	} 
 	else {

@@ -460,9 +460,24 @@ Creature.prototype.defenseModifier = function(isMelee) {
     return mod;
 };
 
-Creature.prototype.attack = function(attack, item, targets, combatAdvantage, round, callback) {
+Creature.prototype.attack = function(attack, item, targets, combatAdvantage, round, callback, playerRolls) {
     var i, j, targets, toHit, toHitRoll, isCrit, isFumble, toHitCond, def, defCondMod, damage, dmgCond, target, msg, temp;
-    toHitRoll = attack.roll() + (item && item.enhancement ? item.enhancement : 0);
+    
+    if (playerRolls && playerRolls.attack && (playerRolls.attack.roll || playerRolls.attack.isCritical || playerRolls.attack.isFumble)) {
+        toHitRoll = playerRolls.attack.roll;
+        if (playerRolls.attack.isCritical) {
+            attack.add(20 + attack.extra);
+        }
+        else if (playerRolls.attack.isFumble) {
+            attack.add(1 + attack.extra);
+        }
+        else {
+            attack.add(playerRolls.attack.roll - (item && item.enhancement ? item.enhancement : 0));
+        }
+    }
+    else {
+        toHitRoll = attack.roll() + (item && item.enhancement ? item.enhancement : 0);
+    }
     isCrit = attack.isCritical();
     isFumble = attack.isFumble();
     if (!isCrit && !isFumble) {
@@ -481,8 +496,14 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
             defCondMod = target.defenseModifier(attack.isMelee);
         }
         if (!isFumble && (isCrit || toHit >= def + defCondMod)) {
-            damage = attack.damage.rollItem(item, isCrit);
-            dmgCond = { mod: 0, breakdown: (item && item.enhancement ? " + " + item.enhancement + " (item)" : ""), effects: [] };
+        	if (playerRolls && playerRolls.damage) {
+                damage = playerRolls.damage;
+                attack.damage.addItem(playerRolls.damage, item, isCrit);
+        	}
+        	else {
+                damage = attack.damage.rollItem(item, isCrit);
+        	}
+            dmgCond = { mod: 0, effects: [] }; // { mod: 0, breakdown: (item && item.enhancement ? " + " + item.enhancement + " (item)" : ""), effects: [] };
             if (this.hasCondition("weakened")) {
                 dmgCond.mod = -1 * Math.ceil(damage / 2);
                 dmgCond.breakdown += " [1/2 for weakened]";

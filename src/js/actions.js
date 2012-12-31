@@ -73,8 +73,22 @@ Roll.prototype.max = function() {
         h.dice.push(die);
         value += die;
     }
+    h.isMax = true;
     h.total = value + this.extra;
     return h.total;
+};
+
+Roll.prototype.add = function(total) {
+    var value, remainder, h, dice, i, die;
+    value = Math.floor((total - this.extra) / this.dieCount);
+    remainder = (total - this.extra) % this.dieCount;
+    dice = [];
+    for (i = 0; i < this.dieCount; i++) {
+        die = Math.floor(value) + (i === this.dieCount - 1 && remainder ? remainder : 0);
+        dice.push(die);
+    }
+    h = { total: total, dice: dice, manual: true };
+    this._history.push(h);
 };
 
 Roll.prototype._getLastRoll = function() {
@@ -83,12 +97,12 @@ Roll.prototype._getLastRoll = function() {
 
 Roll.prototype.isCritical = function() {
 	var h = this._getLastRoll();
-	return h.dice[0] === 20;
+	return h ? h.dice[0] === 20 : false;
 };
 
 Roll.prototype.isFumble = function() {
 	var h = this._getLastRoll();
-	return h.dice[0] === 1;
+	return h ? h.dice[0] === 1 : false;
 };
 
 Roll.prototype.breakdown = function(conditional) {
@@ -113,7 +127,11 @@ Roll.prototype.breakdown = function(conditional) {
 	if (conditional) {
 	    output += conditional;
 	}
-	return "[" + Roll.prototype.toString.call(this) + "] " + output;
+	return "[" + this._breakdownToString() + "] " + output;
+};
+
+Roll.prototype._breakdownToString = function() {
+	return this.toString();
 };
 
 Roll.prototype.anchor = function(type) {
@@ -256,8 +274,8 @@ Damage.prototype._parseDamageString = function(str, creature) {
 	}
 };
 
-Damage.prototype.rollItem = function(item, isCrit) {
-    var dice, i, total, h;
+Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
+    var dice, i, total, h, forcedDie, forcedRemainder;
     dice = [];
     total = 0;
     h = { breakdown: "" };
@@ -268,35 +286,75 @@ Damage.prototype.rollItem = function(item, isCrit) {
         if (item.enhancement) {
             h.breakdown += " + " + this.weaponMultiplier + "x[+" + item.enhancement + " weapon]";
         }
+        if (forcedTotal) {
+        	if (!isCrit) {
+        		total = forcedTotal - (item.enhancement ? this.weaponMultiplier * item.enhancement : 0) - this.extra;
+            	forcedDie = Math.floor(total / this.weaponMultiplier);
+            	forcedRemainder = total % this.weaponMultiplier;
+        	}
+    		total = forcedTotal - this.extra; // cancelled out below
+        }
         for (i = 0; i < this.weaponMultiplier; i++) {
-            total += item.damage[ isCrit ? "max" : "roll" ]() + (item.enhancement ? item.enhancement : 0);
+        	if (forcedTotal) {
+        		if (isCrit) {
+        			item.damage.max();
+        		}
+        		else {
+            		item.damage.add(forcedDie + (i === this.weaponMultiplier - 1 ? forcedRemainder : 0));
+        		}
+        	}
+        	else {
+                total += item.damage[ isCrit ? "max" : "roll" ]() + (item.enhancement ? item.enhancement : 0);
+        	}
             dice = dice.concat(item.damage._history[ item.damage._history.length - 1 ].dice);
         }
         total += this.extra;
     }
     else {
-        total += this[ isCrit ? "max" : "roll" ]() + (item && item.enhancement ? item.enhancement : 0);
+    	if (forcedTotal) {
+    		total = forcedTotal;
+            this.add(forcedTotal - (item && item.enhancement ? item.enhancement : 0) - this.extra);
+    	}
+    	else {
+            total += this[ isCrit ? "max" : "roll" ]() + (item && item.enhancement ? item.enhancement : 0);
+    	}
         h = this._history.pop();
         dice = h.dice;
     }
     if (isCrit) {
-        if (item && item.crit) {
-            total += item.crit.roll();
-            dice = dice.concat(item.crit._history[ item.crit._history.length - 1 ].dice);
+        if (item && item.damage.crit) {
+        	if (forcedTotal) {
+        		item.damage.crit.add(forcedTotal - item.damage._getLastRoll().total - (item.enhancement ? this.weaponMultiplier * item.enhancement : 0) - this.extra);
+        	}
+        	else {
+                total += item.damage.crit.roll();
+        	}
+            dice = dice.concat(item.damage.crit._history[ item.damage.crit._history.length - 1 ].dice);
+            h.critStr = item.damage.crit.toString();
         }
         else if (this.crit) {
-            total += this.crit.roll();
+        	if (forcedTotal) {
+        		this.crit.add(forcedTotal - h.total - (item.enhancement ? item.enhancement : 0));
+        	}
+        	else {
+                total += this.crit.roll();
+        	}
             dice = dice.concat(this.crit._history[ this.crit._history.length - 1 ].dice);
         }
     }
     h.total = total;
     h.dice = dice;
+    h.isCrit = isCrit;
     this._history.push(h);
     return total;
 };
 
 Damage.prototype.rollCrit = function(item) {
     return this.rollItem(item, true);
+};
+
+Damage.prototype.addItem = function(total, item, isCrit) {
+	return this.rollItem(item, isCrit, total);
 };
 
 Damage.prototype.anchor = function(conditional) {
@@ -317,11 +375,23 @@ Damage.prototype.raw = function() {
 };
 
 Damage.prototype.toString = function() {
+	var str = "";
     if (this.str) {
         if (this.str.indexOf("[W]") !== -1 && this._getLastRoll() && this._getLastRoll().itemStr) {
-            return this.str.replace("[W]", "[" + this._getLastRoll().itemStr +  "]");
+            str = this.str.replace("[W]", "[" + this._getLastRoll().itemStr +  "]");
         }
-        return this.str;
+        else {
+        	str = this.str;
+        }
+        if (this._getLastRoll() && this._getLastRoll().isCrit) {
+        	if (str.indexOf("+") !== -1) {
+        		str = str.replace("+", "+" + (this._getLastRoll().critStr || this.crit.toString()) + "+");
+        	}
+        	else {
+                str += "+" + (this._getLastRoll().critStr || this.crit.toString());
+        	}
+        }
+        return str;
     }
     return Roll.prototype.toString.call(this);
 };
@@ -393,6 +463,10 @@ Attack.prototype.toHitModifiers = function(effects) {
     }
     result.text = result.effects.join(" + ");
     return result;
+};
+
+Attack.prototype._breakdownToString = function() {
+	return Roll.prototype.toString.call(this);
 };
 
 Attack.prototype._anchorHtml = function() {
