@@ -350,7 +350,7 @@ Creature.prototype._addCondition = function($parent, effect, total) {
 
 Creature.prototype._addDefense = function($parent, className, value, icon) {
 	var $div, image, editor;
-	$div = jQuery("<div/>").appendTo($parent);
+	$div = jQuery("<div/>").addClass("nowrap").appendTo($parent);
 	image = new Image();
 	image.height = 20;
 	image.className = "icon";
@@ -364,7 +364,7 @@ Creature.prototype._addDefense = function($parent, className, value, icon) {
 
 Creature.prototype._addHp = function($parent, src, title, className1, value1, className2, value2) {
 	var image, editor, $span, $div;
-	$div = jQuery("<div/>").appendTo($parent);
+	$div = jQuery("<div/>").addClass("nowrap").appendTo($parent);
 	image = new Image();
 	image.height = 20;
 	image.className = "icon";

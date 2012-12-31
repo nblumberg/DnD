@@ -19,6 +19,7 @@ th, td { border-color: white; }
 .fullWidth { clear: both; width: 100%; }
 .halfWidth { width: 50%; }
 .fullBoth { height: 100%; width: 100%; }
+.nowrap { white-space: nowrap; }
 .numerator:after { content: '/' }
 .grab { cursor: url(https://mail.google.com/mail/images/2/openhand.cur) 8 8, move; }
 .grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
