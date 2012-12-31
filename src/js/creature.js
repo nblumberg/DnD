@@ -256,6 +256,7 @@ Creature.prototype.createTr = function(params) {
 	this._addAction($td, "Attack", "images/symbols/attack.png", params.attack);
 	this._addAction($td, "Heal", "images/symbols/heal.png", params.heal);
 	this._addAction($td, "Exit", "images/symbols/exit.jpg", params.exit);
+	this._addAction($td, "Rename", "images/symbols/rename.png", params.rename);
 	
 	$td = jQuery("<td/>").addClass("history bordered");
 	$tr.append($td);
@@ -289,11 +290,11 @@ Creature.prototype.createCard = function(params) {
 	image.src = this.image;
 	this.$panel.append(image);
 	$name = jQuery("<div/>").addClass("f2").html(this.name);
-	this.$panel.append($name);
-//    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
-//        this.name = v;
-//        this.dispatchEvent("change");
-//    }).bind(this) });
+//	this.$panel.append($name);
+    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
+        this.name = v;
+        this.dispatchEvent("change");
+    }).bind(this) });
 	
     $effects = jQuery("<div/>").addClass("effects").appendTo(this.$panel);
     
@@ -399,7 +400,7 @@ Creature.prototype._addAction = function($parent, title, src, click) {
 	image.height = 30;
 	image.title = title;
 	image.src = src;
-	jQuery(image).on({ click: click });
+	jQuery(image).css("display", "block").on({ click: click });
 	$parent.append(image);
 };
 

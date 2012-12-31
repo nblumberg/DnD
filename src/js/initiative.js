@@ -522,7 +522,8 @@ Initiative.prototype._render = function() {
 			isCurrent: i === this._current,
 			attack: this._attack.bind(this, actor),
 			heal: this._heal.bind(this, actor),
-			exit: this._exit.bind(this, actor)
+			exit: this._exit.bind(this, actor),
+			rename: this._rename.bind(this, actor)
 		});
 //        actor.createCard({ 
 //            $parent: this.$display,
@@ -939,6 +940,32 @@ Initiative.prototype._exit = function(actor) {
 //                    			  this.order[ i ]--;
 //                    		  }
 //                    	  }
+                    	  this._render();
+                    	  $dialog.dialog("destroy");
+                      }).bind(this)
+                  },
+                  {
+                	  text: "Cancel", click: function() { $dialog.dialog("destroy"); }
+                  }
+        ]
+    }).dialog("open");
+};
+
+Initiative.prototype._rename = function(actor) {
+	var $dialog, $input;
+	$input = jQuery("<input/>").attr("id", "rename").val(actor.name);
+	$dialog = jQuery("<div/>").html($input).dialog({ 
+        autoOpen: false, 
+        modal: true, 
+        title: "Rename " + actor.name, 
+        position: [ "center", 50 ],
+        buttons: [
+                  { 
+                      text: "Rename", click: (function() {
+                    	  if ($input.val()) {
+                        	  this._addHistory(actor, "Changed name from " + actor.name + " to " + $input.val());
+                        	  actor.name = $input.val();
+                    	  }
                     	  this._render();
                     	  $dialog.dialog("destroy");
                       }).bind(this)

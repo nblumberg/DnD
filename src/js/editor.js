@@ -6,7 +6,7 @@ var Editor = function(params) {
 	this._html = params.html;
     this._onchange = params.onchange;
 	this.$parent = jQuery("<span/>").appendTo(this.$grandparent);
-	this.$html = jQuery("<" + this._tagName + "/>").addClass(this._className).appendTo(this.$parent).html(this._html).data("this", this).on({ click: this._edit.bind(this) });
+	this.$html = jQuery("<" + this._tagName + "/>").addClass(this._className).appendTo(this.$parent).html(this._html).data("this", this).on({ dblclick: this._edit.bind(this), click: this._edit.bind(this) });
 };
 
 Editor.prototype._edit = function(event) {

@@ -46,6 +46,7 @@ div#history h3 { margin: 5px 0; }
 //  table#initiative { border-collapse: collapse; }
 table#initiative th, table#initiative td { text-align: center; } 
 table#initiative td.hp { padding: 3px; text-align: left; }
+table#initiative td.actions img { display: block; margin: 5px auto; }
 table#initiative .tempHp { font-style: italic; }
 div#attacksDialog { padding: 5px; }
 div#attacksDialog table { color: black; width: 98%; }
