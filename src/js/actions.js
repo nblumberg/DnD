@@ -345,6 +345,7 @@ Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
     h.total = total;
     h.dice = dice;
     h.isCrit = isCrit;
+    h.manual = forcedTotal > 0;
     this._history.push(h);
     return total;
 };

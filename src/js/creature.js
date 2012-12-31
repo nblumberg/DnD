@@ -533,8 +533,8 @@ Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
     if (this.hp.temp) {
         temp = this.hp.temp;
         this.hp.temp = Math.max(temp - damage, 0);
-        damage -= Math.max(damage - temp, 0);
         msg += " (" + Math.min(damage, temp) + " absorbed by temporary HP)";
+        damage = Math.max(damage - temp, 0);
     }
     if (damage > 0 && effects && effects.length) {
         for (i = 0; i < effects.length; i++) {
