@@ -397,6 +397,7 @@ Initiative.prototype._createCreatureDialog = function() {
     }
     this.$creatureDialog.dialog({ 
         autoOpen: false, 
+        position: [ "center", 50 ],
         buttons: { 
             "Add":  (function() {
                 var i, toAdd, count, creature, actor;
