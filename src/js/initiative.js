@@ -788,7 +788,7 @@ Initiative.prototype._changeInitiative = function(event) {
     this._render();
 };
 
-Initiative.prototype._attack = function(actor) {
+Initiative.prototype._attack = function(actor, event) {
 	var $option, i, a;
 	this.$attackDialog.data("attacker", actor);
 	
@@ -816,6 +816,7 @@ Initiative.prototype._attack = function(actor) {
 		this.$targets.append($option);
 	}
 	this.$targets.attr("size", Math.max(this.order.length, 2));
+	this.$attackDialog.dialog("option", "position", [ "center", event.screenY - 300 ]);
 	this.$attackDialog.dialog("open");
 };
 
@@ -881,11 +882,12 @@ Initiative.prototype._resolveAttack = function() {
 	}
 };
 
-Initiative.prototype._heal = function(actor) {
+Initiative.prototype._heal = function(actor, event) {
 	this.$healDialog.data("patient", actor);
 	this.$usesHealingSurge.data("healingSurgeValue", Math.floor(actor.hp.total / 4));
 	this.$healingAmount.val(this.$usesHealingSurge.data("healingSurgeValue"));
 	this.$healingExtra.val(0);
+	this.$healDialog.dialog("option", "position", [ "center", event.screenY - 300 ]);
 	this.$healDialog.dialog("open");
 };
 
@@ -921,13 +923,13 @@ Initiative.prototype._resolveHeal = function(actor) {
 	this._render();
 };
 
-Initiative.prototype._exit = function(actor) {
+Initiative.prototype._exit = function(actor, event) {
 	var $dialog;
 	$dialog = jQuery("<div/>").html("Remove " + actor.name + " from play?").dialog({ 
         autoOpen: false, 
         modal: true, 
         title: "Remove " + actor.name, 
-        position: [ "center", 50 ],
+        position: [ "center", event.screenY - 300 ],
         buttons: [
                   { 
                       text: "Remove", click: (function() {
@@ -952,14 +954,14 @@ Initiative.prototype._exit = function(actor) {
     }).dialog("open");
 };
 
-Initiative.prototype._rename = function(actor) {
+Initiative.prototype._rename = function(actor, event) {
 	var $dialog, $input;
 	$input = jQuery("<input/>").attr("id", "rename").val(actor.name);
 	$dialog = jQuery("<div/>").html($input).dialog({ 
         autoOpen: false, 
         modal: true, 
         title: "Rename " + actor.name, 
-        position: [ "center", 50 ],
+        position: [ "center", event.screenY - 300 ],
         buttons: [
                   { 
                       text: "Rename", click: (function() {
