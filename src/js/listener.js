@@ -10,15 +10,16 @@
 
         $body = jQuery("body");
         for (i = 0; i < actors.length; i++) {
-            createCard(actors[ i ], i);
+            createCard(actors[ i ], i, actors.length);
         }
     });
     
-    function createCard(creature, i) {
+    function createCard(creature, i, total) {
         creature.createCard({ 
             $parent: $body,
             isCurrent: i === current,
-            className: "gridItem"
+            className: "gridItem",
+            cardSize: Math.floor(Math.sqrt((screen.availWidth * screen.availHeight) / total) - 25)
         });
     }
     
@@ -29,7 +30,7 @@
         }
         data = JSON.parse(event.data);
         actors = [];
-        current = data.current;
+        current = data._current;
         if ($body.length) {
             $body.children().remove();
         }
@@ -37,7 +38,7 @@
             creature = new Creature(data.actors[ data.order[ i ] ]);
             actors.push(creature);
             if ($body.length) {
-                createCard(creature, i);
+                createCard(creature, i, data.order.length);
             }
         }
     }

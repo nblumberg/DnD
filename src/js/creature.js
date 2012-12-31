@@ -290,11 +290,11 @@ Creature.prototype.createCard = function(params) {
 	image.src = this.image;
 	this.$panel.append(image);
 	$name = jQuery("<div/>").addClass("f2").html(this.name);
-//	this.$panel.append($name);
-    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
-        this.name = v;
-        this.dispatchEvent("change");
-    }).bind(this) });
+	this.$panel.append($name);
+//    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
+//        this.name = v;
+//        this.dispatchEvent("change");
+//    }).bind(this) });
 	
     $effects = jQuery("<div/>").addClass("effects").appendTo(this.$panel);
     

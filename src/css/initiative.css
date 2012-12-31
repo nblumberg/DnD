@@ -14,7 +14,7 @@ th, td { border-color: white; }
 .f1 { font-size: 1.5em; }
 .f2 { font-size: 1.2em; }
 .floatLeft { float: left; }
-.gridItem { display: inline-block; vertical-align: top; } 
+.gridItem { display: inline-block; font-size: 24px; vertical-align: top; } 
 .fullHeight { height: 100%; }
 .fullWidth { clear: both; width: 100%; }
 .halfWidth { width: 50%; }
@@ -24,16 +24,18 @@ th, td { border-color: white; }
 .grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
 .droppable { border-color: green; border-width: 6px; }
 
+div#header { background-color: black; margin-top: -20px; position: fixed; width: 100%; z-index: 5; }
 div#header * { margin-right: 10px; }
 span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
-    
+
+#history { margin-top: 20px; }
 #history > tr > td, #history > tbody > tr > td { vertical-align: top; }
 #history div { text-align: center; }
 .round .edit textarea { height: 150px; }
 
 #display .creaturePanel {  }
-.creaturePanel { min-height: 240px; margin:2px; position: relative; width: 240px; }
+.creaturePanel { margin:2px; position: relative; }
 #initiative .creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
 .creaturePanel .column { float: left; margin-right: 4px; }
 .creaturePanel div.condition { background-color: #FFFFFF; color: #FFFFFF; float: left; margin-right: 2px; position: relative; text-align: center; vertical-align: middle; }
