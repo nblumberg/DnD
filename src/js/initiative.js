@@ -607,7 +607,7 @@ Initiative.prototype._import = function() {
             autoOpen: false, 
             modal: true, 
             title: "Import", 
-            height: 800, 
+            height: window.innerHeight - 200, 
             width: "85%",
             position: [ "center", 50 ],
             buttons: [
@@ -640,7 +640,7 @@ Initiative.prototype._export = function() {
             autoOpen: false, 
             modal: true, 
             title: "Export", 
-            height: 800, 
+            height: window.innerHeight - 200, 
             width: "85%",
             position: [ "center", 50 ]
         });
