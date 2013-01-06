@@ -477,7 +477,7 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
         }
     }
     else {
-        toHitRoll = attack.roll() + (item && item.enhancement ? item.enhancement : 0);
+        toHitRoll = item ? attack.rollItem(item) : attack.roll();
     }
     isCrit = attack.isCritical();
     isFumble = attack.isFumble();

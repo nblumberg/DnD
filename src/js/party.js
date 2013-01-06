@@ -217,6 +217,39 @@ function loadParty() {
                            { name: "Hunter's Quarry", type: "At-Will", toHit: 99, defense: "AC", damage: "1d8" }
                            ],
                effects: []
+            },
+            Melvin: { 
+                 name: "Melvin", isPC: true, level: 9, image: "images/portraits/melvin.jpg", 
+                 abilities: { STR: 18, CON: 18, DEX: 19, INT: 14, WIS: 19, CHA: 14 },
+                 hp: { total: 70 },
+                 surges: { perDay: 12, current: 9 },
+                 defenses: { ac: 23, fort: 23, ref: 22, will: 22 },
+                 init: 8, speed: 7,
+                 weapons: [ 
+                           { name: "Monk unarmed strike (Iron Body Ki Focus +2)", isMelee: true, enhancement: 2, proficiency: 0, damage: "1d8", crit: "2d10" },
+                           { name: "Monk unarmed strike (Abduction Ki Focus +1)", isMelee: true, enhancement: 1, proficiency: 0, damage: "1d8", crit: "1d6" },
+                           { name: "Rhythm Blade Dagger +1", isMelee: true, enhancement: 1, proficiency: 2, damage: "1d4", crit: "1d6" }
+                            ],
+                 "implements": [
+                                { name: "Iron Body Ki Focus +2", enhancement: 2, crit: "2d10" },
+                                { name: "Abduction Ki Focus +1", enhancement: 1, crit: "1d6" } 
+                                ],
+                 attacks: [
+                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee" ] },
+                           { name: "Ranged Basic", type: "At-Will", toHit: 11, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged" ] },
+                           { name: "Dancing Cobra", type: "At-Will", toHit: 11, defense: "Ref", damage: "1d10+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
+                           { name: "Five Storms", type: "At-Will", toHit: 11, defense: "Ref", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
+                           { name: "Centered Flurry of Blows", type: "At-Will", toHit: 99, defense: "AC", damage: "2+WIS", keywords: [ "psionic", "melee" ] },
+                           { name: "Drunken Monkey", type: "Encounter", toHit: 11, defense: "Will", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
+                           { name: "Eternal Mountain", type: "Encounter", toHit: 11, defense: "Will", damage: "2d8+DEX", effects: [ "prone" ], keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
+                           { name: "Wind Fury Assault", type: "Encounter", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+WIS", keywords: [ "elemental", "melee", "weapon" ] },
+                           { name: "Arc of the Flashing Storm", type: "Encounter", toHit: 11, defense: "Ref", damage: "2d10+DEX", effects: [ { name: "attack penalty", amount: -2, duration: 1 } ], keywords: [ "full discipline", "implement", "psionic", "melee", "lightning", "teleportation" ] },
+                           { name: "Goring Charge", type: "Encounter", toHit: 15, defense: "AC", damage: "1d6+DEX", effects: [ "prone" ], keywords: [ "racial", "melee" ] },
+                           { name: "Masterful Spiral", type: "Daily", toHit: 11, defense: "Ref", damage: { amount: "3d8+DEX", type: "force" }, keywords: [ "force", "implement", "psionic", "melee", "close burst", "miss half", "stance" ] },
+                           { name: "One Hundred Leaves", type: "Daily", toHit: 11, defense: "Ref", damage: "3d8+DEX", keywords: [ "implement", "psionic", "melee", "close blast", "miss half" ] },
+                           { name: "Strength to Weakness", type: "Daily", toHit: 11, defense: "Ref", damage: "0", effects: [ { name: "ongoing damage", amount: "15+DEX" } ], keywords: [ "implement", "psionic", "melee" ] }
+                           ],
+               effects: []
             }
         }
     };

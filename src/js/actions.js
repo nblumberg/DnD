@@ -134,10 +134,6 @@ Roll.prototype._breakdownToString = function() {
 	return this.toString();
 };
 
-Roll.prototype.anchor = function(type) {
-	return "<a href=\"javascript:void(0);\" title=\"" + this.breakdown() + "\">" + this._getLastRoll().total + (type ? " " + type : "") + " damage</a>";
-};
-
 Roll.prototype.toString = function() {
 	return "" + this.dieCount + "d" + this.dieSides + (this.extra ? (this.extra > 0 ? "+" : "-") + this.extra : "");
 };
@@ -376,20 +372,24 @@ Damage.prototype.raw = function() {
 };
 
 Damage.prototype.toString = function() {
-	var str = "";
+	var str, lastRoll, critStr;
+	str = "";
+	lastRoll = this._getLastRoll();
+	critStr = lastRoll && lastRoll.critStr ? lastRoll.critStr : null;
+	critStr = critStr === null && this.crit ? this.crit.toString() : null;
     if (this.str) {
-        if (this.str.indexOf("[W]") !== -1 && this._getLastRoll() && this._getLastRoll().itemStr) {
-            str = this.str.replace("[W]", "[" + this._getLastRoll().itemStr +  "]");
+        if (this.str.indexOf("[W]") !== -1 && lastRoll && lastRoll.itemStr) {
+            str = this.str.replace("[W]", "[" + lastRoll.itemStr +  "]");
         }
         else {
         	str = this.str;
         }
-        if (this._getLastRoll() && this._getLastRoll().isCrit) {
+        if (lastRoll && lastRoll.isCrit && critStr) {
         	if (str.indexOf("+") !== -1) {
-        		str = str.replace("+", "+" + (this._getLastRoll().critStr || this.crit.toString()) + "+");
+        		str = str.replace("+", "+" + critStr + "+");
         	}
         	else {
-                str += "+" + (this._getLastRoll().critStr || this.crit.toString());
+                str += "+" + critStr;
         	}
         }
         return str;
@@ -466,8 +466,15 @@ Attack.prototype.toHitModifiers = function(effects) {
     return result;
 };
 
-Attack.prototype._breakdownToString = function() {
-	return Roll.prototype.toString.call(this);
+Attack.prototype.rollItem = function(item) {
+	var h, total = Roll.prototype.roll.call(this);
+	if (item && item.enhancement) {
+		h = this._getLastRoll();
+		h.breakdown = " + " + item.enhancement + " (enhancement)";
+		h.total += item.enhancement;
+		total += item.enhancement;
+	}
+	return total;
 };
 
 Attack.prototype._anchorHtml = function() {
@@ -479,6 +486,10 @@ Attack.prototype.anchor = function(conditional) {
     conditional = jQuery.extend({ breakdown: "", text: "" }, conditional);
     conditional.breakdown += this.isCritical() || this.isFumble() ? "" : " = " + this._getLastRoll().total + " vs. " + this.defense;
     return Roll.prototype.anchor.call(this, conditional);
+};
+
+Attack.prototype._breakdownToString = function() {
+	return Roll.prototype.toString.call(this);
 };
 
 Attack.prototype.toString = function() {
