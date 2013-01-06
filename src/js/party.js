@@ -168,7 +168,7 @@ function loadParty() {
                            { name: "Magic Missile", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "2+INT", type: "force" }, keywords: [ "arcane", "evocation", "force", "implement" ] },
                            { name: "Lightning Ring", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "5", type: "lightning" }, keywords: [ "arcane", "bladespell", "lightning" ] },
                            { name: "Lightning Ring (secondary)", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "5", type: "lightning" }, keywords: [ "arcane", "bladespell", "lightning" ] },
-                           { name: "Shadow Sever", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "5", type: "necrotic" }, effects: [ { name: "prone" } ], keywords: [ "arcane", "bladespell", "necrotic" ] },
+                           { name: "Shadow Sever", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "5", type: "necrotic" }, effects: [ { name: "Prone" } ], keywords: [ "arcane", "bladespell", "necrotic" ] },
                            { name: "Unseen Hand", type: "At-Will", toHit: 14, defense: "AC", damage: { amount: "5", type: "force" }, keywords: [ "arcane", "bladespell", "force" ] },
                            { name: "Gaze of the Evil Eye", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "2", type: "psychic" }, keywords: [ "arcane", "psychic" ] },
                            { name: "Burning Hands", type: "Encounter", toHit: 14, defense: "Ref", damage: { amount: "2d6+INT", type: "fire" }, keywords: [ "arcane", "evocation", "fire", "implement" ] },
@@ -179,7 +179,7 @@ function loadParty() {
                            { name: "Fountain of Flame", type: "Daily", toHit: 14, defense: "Ref", damage: { amount: "3d8+INT", type: "fire" }, keywords: [ "arcane", "evocation", "fire", "implement", "zone" ] },
                            { name: "Fountain of Flame (secondary)", type: "Daily", toHit: 99, defense: "Ref", damage: { amount: "5", type: "fire" }, keywords: [ "arcane", "evocation", "fire", "implement", "zone" ] },
                            { name: "Phantom Chasm", type: "Daily", toHit: 14, defense: "Will", damage: { amount: "2d6+INT", type: "psychic" }, effects: [ { name: "immobilized", duration: 1 } ], keywords: [ "arcane", "illusion", "psychic", "implement", "zone", "miss half" ] },
-                           { name: "Phantom Chasm (secondary)", type: "Daily", toHit: 99, defense: "Will", damage: "0", effects: [ { name: "prone" } ], keywords: [ "arcane", "illusion", "psychic", "implement", "zone" ] },
+                           { name: "Phantom Chasm (secondary)", type: "Daily", toHit: 99, defense: "Will", damage: "0", effects: [ { name: "Prone" } ], keywords: [ "arcane", "illusion", "psychic", "implement", "zone" ] },
                            { name: "Rolling Thunder", type: "Daily", toHit: 14, defense: "Ref", damage: { amount: "3d6+INT", type: "thunder" }, keywords: [ "arcane", "conjuration", "evocation", "implement", "thunder", "miss half" ] },
                            { name: "Rolling Thunder (secondary)", type: "Daily", toHit: 14, defense: "Ref", damage: { amount: "5", type: "thunder" }, keywords: [ "arcane", "conjuration", "evocation", "implement", "thunder", "miss half" ] }
                            // TODO: What are Kitara's other powers?
@@ -241,10 +241,10 @@ function loadParty() {
                            { name: "Five Storms", type: "At-Will", toHit: 11, defense: "Ref", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
                            { name: "Centered Flurry of Blows", type: "At-Will", toHit: 99, defense: "AC", damage: "2+WIS", keywords: [ "psionic", "melee" ] },
                            { name: "Drunken Monkey", type: "Encounter", toHit: 11, defense: "Will", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
-                           { name: "Eternal Mountain", type: "Encounter", toHit: 11, defense: "Will", damage: "2d8+DEX", effects: [ "prone" ], keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
+                           { name: "Eternal Mountain", type: "Encounter", toHit: 11, defense: "Will", damage: "2d8+DEX", effects: [ "Prone" ], keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
                            { name: "Wind Fury Assault", type: "Encounter", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+WIS", keywords: [ "elemental", "melee", "weapon" ] },
                            { name: "Arc of the Flashing Storm", type: "Encounter", toHit: 11, defense: "Ref", damage: "2d10+DEX", effects: [ { name: "attack penalty", amount: -2, duration: 1 } ], keywords: [ "full discipline", "implement", "psionic", "melee", "lightning", "teleportation" ] },
-                           { name: "Goring Charge", type: "Encounter", toHit: 15, defense: "AC", damage: "1d6+DEX", effects: [ "prone" ], keywords: [ "racial", "melee" ] },
+                           { name: "Goring Charge", type: "Encounter", toHit: 15, defense: "AC", damage: "1d6+DEX", effects: [ "Prone" ], keywords: [ "racial", "melee" ] },
                            { name: "Masterful Spiral", type: "Daily", toHit: 11, defense: "Ref", damage: { amount: "3d8+DEX", type: "force" }, keywords: [ "force", "implement", "psionic", "melee", "close burst", "miss half", "stance" ] },
                            { name: "One Hundred Leaves", type: "Daily", toHit: 11, defense: "Ref", damage: "3d8+DEX", keywords: [ "implement", "psionic", "melee", "close blast", "miss half" ] },
                            { name: "Strength to Weakness", type: "Daily", toHit: 11, defense: "Ref", damage: "0", effects: [ { name: "ongoing damage", amount: "15+DEX" } ], keywords: [ "implement", "psionic", "melee" ] }

@@ -305,6 +305,9 @@ Creature.prototype.createCard = function(params) {
 
 Creature.prototype._addCondition = function($parent, effect, total) {
     var i, $div, image, clickHandler;
+    if (effect && effect.name) {
+    	effect.name = effect.name.substring(0, 1).toUpperCase() + effect.name.substr(1);
+    }
     if ((effect.name === "Dying" || effect.name === "Dead") && this.hp.current >= 0) {
         this.effects.splice(this.effects.indexOf(effect), 1);
         return;
