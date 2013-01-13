@@ -19,7 +19,7 @@
             $parent: $body,
             isCurrent: i === current,
             className: "gridItem",
-            cardSize: Math.floor(Math.sqrt((screen.availWidth * screen.availHeight) / total) - 25)
+            cardSize: Math.floor(Math.sqrt((screen.availWidth * screen.availHeight) / total) - 100)
         });
     }
     

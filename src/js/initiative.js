@@ -841,9 +841,11 @@ Initiative.prototype._selectAttack = function() {
     if (needsWeapon || needsImplement) {
         this.$weapons.html("");
         for (i = 0; items && i < items.length; i++) {
-            if (needsWeapon && (!!items[ i ].isMelee !== !!isMelee || !items[ i ].isMelee !== !!isRanged)) {
-                continue;
-            }
+        	if (needsWeapon && (isMelee || isRanged)) {
+                if (!!items[ i ].isMelee !== !!isMelee || !items[ i ].isMelee !== !!isRanged) {
+                    continue;
+                }
+        	}
             $option = jQuery("<option/>").html(items[ i ].name).data("item", items[ i ]);
             this.$weapons.append($option);
         }

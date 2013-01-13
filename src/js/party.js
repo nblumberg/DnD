@@ -9,23 +9,38 @@ function loadParty() {
                  defenses: { ac: 24, fort: 23, ref: 17, will: 22 },
                  init: 5, speed: 6,
                  weapons: [ 
-                           { name: "Vicious Quarterstaff +2", isMelee: true, enhancement: 2, damage: { amount: "1d12", crit: "2d12" } },
+                           { name: "Vicious Quarterstaff +2", isMelee: true, enhancement: 2, proficiency: 2, damage: { amount: "1d12", crit: "2d12" } },
                            { name: "Distance Sling +1", isMelee: false, enhancement: 1, damage: "1d6" }
                             ],
                  "implements": [
                                { name: "Staff", enhancement: 0, crit: "" }
                                 ],
                  attacks: [
-                           { name: "Melee Basic", type: "At-Will", toHit: 10, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee" ] },
-                           { name: "Ranged Basic", type: "At-Will", toHit: 8, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged" ] },
-                           { name: "Tending Strike", type: "At-Will", toHit: 15, defense: "AC", damage: "1[W]+WIS", keywords: [ "weapon", "melee", "primal" ] },
-                           { name: "Combined Attack", type: "Encounter", toHit: 15, defense: "AC", damage: "1[W]+WIS", keywords: [ "weapon", "melee", "primal" ] },
-                           { name: "Vexing Overgrowth", type: "Daily", range: 1, toHit: 15, defense: "AC", damage: "2[W]+WIS", keywords: [ "weapon", "primal", "close burst" ] },
-                           { name: "Life Blood Harvest", type: "Daily", toHit: 15, defense: "AC", damage: "3[W]+WIS", keywords: [ "weapon", "melee", "primal", "healing" ] },
+                           { name: "Melee Basic", type: "At-Will", toHit: 10, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
+                           { name: "Ranged Basic", type: "At-Will", toHit: 8, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
+                           { name: "Tending Strike", type: "At-Will", toHit: 11, defense: "AC", damage: "1[W]+WIS", keywords: [ "weapon", "melee", "primal" ] },
+                           { name: "Combined Attack", type: "Encounter", toHit: 11, defense: "AC", damage: "1[W]+WIS", keywords: [ "weapon", "melee", "primal" ] },
+                           { name: "Combined Attack (beast)", type: "At-Will", toHit: 15, defense: "AC", damage: "1d12+9", crit: "", keywords: [ "melee", "primal", "beast" ] },
+                           { name: "Vexing Overgrowth", type: "Daily", target: { area: "close burst", size: 1 }, toHit: 11, defense: "AC", damage: "2[W]+WIS", miss: { halfDamage: true }, keywords: [ "weapon", "primal" ] },
+                           { name: "Life Blood Harvest", type: "Daily", toHit: 15, defense: "AC", damage: "3[W]+WIS", miss: { halfDamage: true }, keywords: [ "weapon", "melee", "primal", "healing" ] },
                            { name: "Bear Beast", type: "At-Will", range: 5, toHit: 15, defense: "AC", damage: "1d12+9", crit: "", keywords: [ "implement", "primal", "summoning" ] },
                            { name: "Crocodile Beast", type: "At-Will", toHit: 10, defense: "AC", damage: "1d8+WIS", crit: "", keywords: [ "weapon", "melee", "beast" ] }
                            ],
                    effects: []
+             },
+             Smack: { 
+                 name: "Smack", isPC: true, level: 10, image: "images/portraits/smack.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862  
+                 abilities: { STR: 20, CON: 17, DEX: 12, INT: 2, WIS: 16, CHA: 6 },
+                 hp: { total: 40 },
+                 surges: { perDay: 0, current: 0 },
+                 defenses: { ac: 13, fort: 15, ref: 11, will: 15 },
+                 init: 5, speed: 6,
+                 weapons: [],
+                 "implements": [],
+                 attacks: [
+                           { name: "Animal Attack", type: "At-Will", toHit: 15, defense: "AC", damage: "1d12+9", keywords: [ "melee", "beast", "basic" ] }
+                          ],
+                 effects: []
              },
              Bin: { 
                  name: "Bin", isPC: true, level: 10, image: "images/portraits/bin.jpg", // "http://wizards.com/dnd/images/386_wr_changeling.jpg", 
@@ -44,15 +59,15 @@ function loadParty() {
                                { name: "Aversion Staff +2", enhancement: 2, crit: "2d8" }
                                 ],
                  attacks: [
-                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+STR" },
-                           { name: "Ranged Basic", type: "At-Will", toHit: 11, defense: "AC", damage: "1[W]+DEX" },
+                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
+                           { name: "Ranged Basic", type: "At-Will", toHit: 11, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
                            { name: "Magic Weapon", type: "At-Will", toHit: 15, defense: "AC", damage: "1d8+7", crit: "2d8" },
                            { name: "Thundering Armor", type: "At-Will", toHit: 13, defense: "Fort", damage: "1d8+8", crit: "2d8" },
                            { name: "Stone Panoply", type: "Encounter", toHit: 14, defense: "AC", damage: "1d8+7", crit: "2d8" },
                            { name: "Shielding Cube", type: "Encounter", toHit: 13, defense: "Ref", damage: "2d6+8", crit: "2d8" },
                            { name: "Lightning Sphere", type: "Encounter", toHit: 13, defense: "Fort", damage: "1d8+8", crit: "2d8" },
                            { name: "Vampiric Weapons", type: "Encounter", toHit: 15, defense: "AC", damage: "1d8+6", crit: "2d8" },
-                           { name: "Caustic Rampart", type: "Daily", toHit: 99, defense: "AC", damage: "1d6+5", crit: "" },
+                           { name: "Caustic Rampart", type: "Daily", toHit: "automatic", defense: "AC", damage: "1d6+5", crit: "" },
                            { name: "Lightning Motes", type: "Daily", toHit: 13, defense: "Ref", damage: "2d6+8", crit: "2d8" }
                            ],
                  effects: []
@@ -71,19 +86,28 @@ function loadParty() {
                                { name: "Wand of Psychic Ravaging +1", enhancement: 1, crit: "1d8" },
                                { name: "Harmonic Songblade +1", enhancement: 1, crit: "1d6" }
                                 ],
+                 attackBonuses: [ 
+                                  { name: "Dragonborn Fury", status: [ "bloodied" ], toHit: 1 }, 
+                                  { name: "White Lotus Dueling Expertise", keywords: [ "basic" ], toHit: 1 }, 
+                                  { name: "White Lotus Dueling Expertise", keywords: [ "implement" ], toHit: 1 },  
+                                  { name: "White Lotus Dueling Expertise", keywords: [ "implement" ], toHit: 1 },  
+                                  { name: "Wand of Psychic Ravaging", keywords: [ "implement", "psychic" ], damage: 1 },  
+                                  { name: "Resplendent Gloves", defense: "Will", damage: 2 }  
+                              ],
                  attacks: [
-                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 14, defense: "AC", damage: "1[W]+5", keywords: [ "weapon", "melee" ]  },
-                           { name: "Ranged Basic", type: "At-Will", toHit: 8, defense: "AC", damage: "1[W]", keywords: [ "weapon", "ranged" ]  },
-                           { name: "Blazing Starfall", type: "At-Will", toHit: 12, defense: "Ref", damage: { amount: "1d4+10", type: "radiant", crit: "1d8" }, keywords: [ "arcane", "fire", "implement", "radiant", "zone" ] },
-                           { name: "Vicious Mockery", type: "At-Will", toHit: 12, defense: "Will", damage: { amount: "1d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
-                           { name: "Explosive Pyre", type: "Encounter", toHit: 12, defense: "Ref", damage: { amount: "2d8+10", type: "fire", crit: "1d8" }, keywords: [ "arcane", "fire", "implement" ] },
-                           { name: "Eyebite", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "1d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
-                           { name: "Dissonant Strain", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "2d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "implement", "psychic" ] },
-                           { name: "Chaos Ray", type: "Encounter", toHit: 12, defense: "Will", damage: { amount: "2d8+13", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "implement", "psychic", "teleportation" ] },
-                           { name: "Stirring Shout", type: "Daily", toHit: 12, defense: "Will", damage: { amount: "2d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "healing", "implement", "psychic" ] },
-                           { name: "Reeling Torment", type: "Daily", toHit: 12, defense: "Will", damage: { amount: "3d8+13", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
-                           { name: "Counterpoint", type: "Daily", toHit: 12, defense: "Will", damage: { amount: "2d8+8", crit: "1d8" }, keywords: [ "arcane", "implement" ] },
-                           { name: "Dragon Breath", type: "Encounter", toHit: 11, defense: "Ref", damage: { amount: "1d6+3", type: "acid", crit: "" }, keywords: [ "acid" ] }
+                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+5", keywords: [ "weapon", "melee", "basic" ]  },
+                           { name: "Ranged Basic", type: "At-Will", toHit: "DEX", defense: "AC", damage: "1[W]", keywords: [ "weapon", "ranged", "basic" ]  },
+                           { name: "Blazing Starfall", type: "At-Will", toHit: "CHA", defense: "Ref", damage: { amount: "1d4+10", type: "radiant", crit: "1d8" }, keywords: [ "arcane", "fire", "implement", "radiant", "zone" ] },
+                           { name: "Vicious Mockery", type: "At-Will", toHit: "CHA", defense: "Will", damage: { amount: "1d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
+                           { name: "Explosive Pyre", type: "Encounter", toHit: "CHA", defense: "Ref", damage: { amount: "2d8+10", type: "fire", crit: "1d8" }, keywords: [ "arcane", "fire", "implement" ] },
+                           { name: "Explosive Pyre (secondary)", type: "Encounter", toHit: "CHA", defense: "Ref", damage: { amount: "2d8+10", type: "fire", crit: "1d8" }, keywords: [ "arcane", "fire", "implement" ] },
+                           { name: "Eyebite", type: "Encounter", toHit: "CHA", defense: "Will", damage: { amount: "1d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
+                           { name: "Dissonant Strain", type: "Encounter", toHit: "CHA", defense: "Will", damage: { amount: "2d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "implement", "psychic" ] },
+                           { name: "Chaos Ray", type: "Encounter", toHit: "CHA", defense: "Will", damage: { amount: "2d8+13", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "implement", "psychic", "teleportation" ] },
+                           { name: "Stirring Shout", type: "Daily", toHit: "CHA", defense: "Will", damage: { amount: "2d6+9", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "healing", "implement", "psychic" ] },
+                           { name: "Reeling Torment", type: "Daily", toHit: "CHA", defense: "Will", damage: { amount: "3d8+13", type: "psychic", crit: "1d8" }, keywords: [ "arcane", "charm", "implement", "psychic" ] },
+                           { name: "Counterpoint", type: "Daily", toHit: "CHA", defense: "Will", damage: { amount: "2d8+8", crit: "1d8" }, keywords: [ "arcane", "implement" ] },
+                           { name: "Dragon Breath", type: "Encounter", toHit: "STR^CON^DEX+2", defense: "Ref", damage: { amount: "1d6+3", type: "acid" }, keywords: [ "acid" ] }
                            ],
                  effects: []
              },
@@ -93,6 +117,7 @@ function loadParty() {
                  hp: { total: 69 },
                  surges: { perDay: 7, current: 7 },
                  defenses: { ac: 23, fort: 18, ref: 23, will: 22, resistances: { fire: 10 } },
+                 resistances: { fire: 10 },
                  init: 10, speed: 6,
                  weapons: [ 
                            { name: "Wicked Fang Longsword +3", isMelee: true, enhancement: 3, proficiency: 3, damage: { amount: "1d8", crit: "3d8" } },
@@ -100,20 +125,25 @@ function loadParty() {
                             ],
                  "implements": [
                                 ],
+                 attackBonuses: [ 
+                                 { name: "Bloodhunt", foeStatus: [ "bloodied" ], toHit: 1 }, 
+                                 { name: "Master at Arms", keywords: [ "weapon" ], toHit: 1 }, 
+                                 { name: "Sneak Attack", foeStatus: [ "combat advantage" ], damage: "2d8+2", oncePerRound: true }
+                            ],
                  attacks: [
-                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 14, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee" ] },
-                           { name: "Ranged Basic", type: "At-Will", toHit: 16, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged" ] },
-                           { name: "Duelist's Flurry", type: "At-Will", toHit: 17, defense: "AC", damage: "DEX", keywords: [ "weapon", "martial", "melee" ] },
-                           { name: "Sly Flourish", type: "At-Will", toHit: 17, defense: "AC", damage: "1[W]+DEX+CHA", keywords: [ "weapon", "martial" ] },
-                           { name: "Demonic Frenzy", type: "Encounter", toHit: 99, defense: "AC", damage: "1d6", keywords: [ "elemental" ] },
-                           { name: "Acrobat's Blade Trick", type: "Encounter", toHit: 17, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
-                           { name: "Flailing Shove", type: "Encounter", toHit: 17, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
-                           { name: "Flailing Shove (secondary)", type: "Encounter", toHit: 99, defense: "AC", damage: "2+STR", keywords: [ "weapon", "martial", "melee" ] },
-                           { name: "Cloud of Steel", type: "Encounter", toHit: 16, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
-                           { name: "Bloodbath", type: "Daily", toHit: 17, defense: "Fort", damage: "1[W]+DEX", effects: [ { name: "ongoing damage", amount: "2d6" } ], keywords: [ "weapon", "martial" ] },
-                           { name: "Burst Fire", type: "Daily", toHit: 16, defense: "Ref", damage: "2[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
-                           { name: "Duelists Prowess", type: "Immediate Interrupt", toHit: 17, defense: "Ref", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
-                           { name: "Sneak Attack", type: "At-Will", toHit: 99, defense: "AC", damage: "2d8" }
+                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
+                           { name: "Ranged Basic", type: "At-Will", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
+                           { name: "Duelist's Flurry", type: "At-Will", toHit: "DEX", defense: "AC", damage: "DEX", keywords: [ "weapon", "martial", "melee" ] },
+                           { name: "Sly Flourish", type: "At-Will", toHit: "DEX", defense: "AC", damage: "1[W]+DEX+CHA", keywords: [ "weapon", "martial" ] },
+                           { name: "Demonic Frenzy", type: "Encounter", toHit: "automatic", defense: "AC", damage: "1d6", keywords: [ "elemental" ] },
+                           { name: "Acrobat's Blade Trick", type: "Encounter", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
+                           { name: "Flailing Shove", type: "Encounter", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
+                           { name: "Flailing Shove (secondary)", type: "Encounter", toHit: "automatic", defense: "AC", damage: "2+STR", keywords: [ "weapon", "martial", "melee" ] },
+                           { name: "Cloud of Steel", type: "Encounter", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
+                           { name: "Bloodbath", type: "Daily", toHit: "DEX", defense: "Fort", damage: "1[W]+DEX", effects: [ { name: "ongoing damage", amount: "2d6" } ], keywords: [ "weapon", "martial" ] },
+                           { name: "Burst Fire", type: "Daily", toHit: "DEX", defense: "Ref", damage: "2[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
+                           { name: "Duelists Prowess", type: "Immediate Interrupt", toHit: "DEX", defense: "Ref", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
+                           { name: "Sneak Attack", type: "At-Will", toHit: "automatic", defense: "AC", damage: "2d8" }
                            ],
                  effects: []
              },
@@ -123,6 +153,7 @@ function loadParty() {
                  hp: { total: 73 },
                  surges: { perDay: 9, current: 9 },
                  defenses: { ac: 23, fort: 21, ref: 21, will: 19, resistances: { fire: 10 } },
+                 resistances: { fire: 10 },
                  init: 11, speed: 6,
                  weapons: [ 
                            { name: "Lightning Spiked Chain +1", isMelee: true, enhancement: 1, proficiency: 3, damage: "2d4", crit: "1d6" },
@@ -131,20 +162,24 @@ function loadParty() {
                  "implements": [
                                 { name: "Totem", enhancement: 0 },
                                 ],
+                 attackBonuses: [ 
+                                { name: "Bloodhunt", foeStatus: [ "bloodied" ], toHit: 1 }, 
+                                { name: "Hunter's Quarry", foeStatus: [ "combat advantage" ], damage: "1d8", oncePerRound: true }
+                           ],
                  attacks: [
-                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 14, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee" ] },
-                           { name: "Ranged Basic", type: "At-Will", toHit: 13, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged" ] },
+                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 14, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
+                           { name: "Ranged Basic", type: "At-Will", toHit: 13, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
                            { name: "Marauder's Rush", type: "At-Will", toHit: 14, defense: "AC", damage: "1[W]+STR+WIS", keywords: [ "weapon", "martial", "melee" ] },
                            { name: "Twin Strike", type: "At-Will", toHit: 14, defense: "AC", damage: "1[W]", keywords: [ "weapon", "martial" ] },
                            { name: "Dire Wolverine Strike", type: "Encounter", toHit: 14, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "martial", "melee" ] },
                            { name: "Thundertusk Boar Strike", type: "Encounter", toHit: 14, defense: "AC", damage: "1[W]+STR/DEX", keywords: [ "weapon", "martial" ] },
                            { name: "Sweeping Whirlwind", type: "Encounter", isMelee: true, toHit: 14, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "martial", "melee" ] },
                            { name: "Boar Assault", type: "Daily", toHit: 14, defense: "AC", damage: "2[W]+STR/DEX", keywords: [ "weapon", "martial" ] },
-                           { name: "Invigorating Assault", type: "Daily", toHit: 13, defense: "AC", damage: "3[W]+DEX", keywords: [ "weapon", "martial", "ranged", "miss half" ] },
-                           { name: "Infernal Wrath", type: "Encounter", toHit: 99, defense: "AC", damage: "1d6+INT^CHA", keywords: [ "fire" ] },
+                           { name: "Invigorating Assault", type: "Daily", toHit: 13, defense: "AC", damage: "3[W]+DEX", miss: { halfDamage: true }, keywords: [ "weapon", "martial", "ranged" ] },
+                           { name: "Infernal Wrath", type: "Encounter", toHit: "automatic", defense: "AC", damage: "1d6+INT^CHA", keywords: [ "fire" ] },
                            { name: "Spirit Fangs", type: "Encounter", toHit: 8, defense: "Ref", damage: "1d10+WIS", keywords: [ "implement", "primal", "spirit" ] },
-                           { name: "Hunter's Thorn Trap", type: "Encounter", toHit: 99, defense: "AC", damage: "5+WIS", keywords: [ "primal", "zone" ] },
-                           { name: "Hunter's Quarry", type: "At-Will", toHit: 99, defense: "AC", damage: "1d8" }
+                           { name: "Hunter's Thorn Trap", type: "Encounter", toHit: "automatic", defense: "AC", damage: "5+WIS", keywords: [ "primal", "zone" ] },
+                           { name: "Hunter's Quarry", type: "At-Will", toHit: "automatic", defense: "AC", damage: "1d8" }
                            ],
                  effects: []
              },
@@ -160,29 +195,41 @@ function loadParty() {
                             ],
                  "implements": [ 
                                  { name: "Supremely Vicious Bastard Sword +2", enhancement: 2, crit: "2d8" },
-                                 { name: "Orb of Nimble Thoughts +1", enhancement: 1, crit: "1d6" } 
+                                 { name: "Orb of Nimble Thoughts +1", enhancement: 1, crit: "1d6" }
                                  ],
                  attacks: [
-                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 16, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee" ] },
-                           { name: "Ranged Basic", type: "At-Will", toHit: 99, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged" ] },
-                           { name: "Magic Missile", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "2+INT", type: "force" }, keywords: [ "arcane", "evocation", "force", "implement" ] },
-                           { name: "Lightning Ring", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "5", type: "lightning" }, keywords: [ "arcane", "bladespell", "lightning" ] },
-                           { name: "Lightning Ring (secondary)", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "5", type: "lightning" }, keywords: [ "arcane", "bladespell", "lightning" ] },
-                           { name: "Shadow Sever", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "5", type: "necrotic" }, effects: [ { name: "Prone" } ], keywords: [ "arcane", "bladespell", "necrotic" ] },
-                           { name: "Unseen Hand", type: "At-Will", toHit: 14, defense: "AC", damage: { amount: "5", type: "force" }, keywords: [ "arcane", "bladespell", "force" ] },
-                           { name: "Gaze of the Evil Eye", type: "At-Will", toHit: 99, defense: "AC", damage: { amount: "2", type: "psychic" }, keywords: [ "arcane", "psychic" ] },
-                           { name: "Burning Hands", type: "Encounter", toHit: 14, defense: "Ref", damage: { amount: "2d6+INT", type: "fire" }, keywords: [ "arcane", "evocation", "fire", "implement" ] },
-                           { name: "Icy Rays", type: "Encounter", toHit: 14, defense: "Ref", damage: { amount: "1d10+INT", type: "cold" }, effects: [ { name: "immobilized", duration: 1 } ], keywords: [ "arcane", "evocation", "cold", "implement" ] },
-                           { name: "Pinioning Vortex", type: "Encounter", toHit: 14, defense: "Fort", damage: "2d6+INT", effects: [ { name: "immobilized", duration: 1 }, { name: "dazed", duration: 1 } ], keywords: [ "arcane", "evocation", "implement" ] },
-                           { name: "Acid Arrow", type: "Daily", toHit: 14, defense: "Ref", damage: { amount: "2d8+INT", type: "acid" }, effects: [ { name: "ongoing acid", amount: 5, saveEnds: true } ], keywords: [ "arcane", "evocation", "acid", "implement", "miss half", "miss ongoing half" ] },
-                           { name: "Acid Arrow, secondary", type: "Daily", toHit: 14, defense: "Ref", damage: { amount: "1d8+INT", type: "acid" }, keywords: [ "arcane", "evocation", "acid", "implement" ] },
-                           { name: "Fountain of Flame", type: "Daily", toHit: 14, defense: "Ref", damage: { amount: "3d8+INT", type: "fire" }, keywords: [ "arcane", "evocation", "fire", "implement", "zone" ] },
-                           { name: "Fountain of Flame (secondary)", type: "Daily", toHit: 99, defense: "Ref", damage: { amount: "5", type: "fire" }, keywords: [ "arcane", "evocation", "fire", "implement", "zone" ] },
-                           { name: "Phantom Chasm", type: "Daily", toHit: 14, defense: "Will", damage: { amount: "2d6+INT", type: "psychic" }, effects: [ { name: "immobilized", duration: 1 } ], keywords: [ "arcane", "illusion", "psychic", "implement", "zone", "miss half" ] },
-                           { name: "Phantom Chasm (secondary)", type: "Daily", toHit: 99, defense: "Will", damage: "0", effects: [ { name: "Prone" } ], keywords: [ "arcane", "illusion", "psychic", "implement", "zone" ] },
-                           { name: "Rolling Thunder", type: "Daily", toHit: 14, defense: "Ref", damage: { amount: "3d6+INT", type: "thunder" }, keywords: [ "arcane", "conjuration", "evocation", "implement", "thunder", "miss half" ] },
-                           { name: "Rolling Thunder (secondary)", type: "Daily", toHit: 14, defense: "Ref", damage: { amount: "5", type: "thunder" }, keywords: [ "arcane", "conjuration", "evocation", "implement", "thunder", "miss half" ] }
-                           // TODO: What are Kitara's other powers?
+                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 16, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
+                           { name: "Ranged Basic", type: "At-Will", toHit: "automatic", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
+                           { name: "Magic Missile", type: "At-Will", toHit: "automatic", defense: "AC", damage: { amount: "2+INT", type: "force" }, keywords: [ "arcane", "evocation", "force", "implement" ] },
+                           { name: "Lightning Ring", type: "At-Will", toHit: "automatic", defense: "AC", damage: { amount: "5", type: "lightning" }, keywords: [ "arcane", "bladespell", "lightning" ] },
+                           { name: "Lightning Ring (secondary)", type: "At-Will", toHit: "automatic", defense: "AC", damage: { amount: "5", type: "lightning" }, keywords: [ "arcane", "bladespell", "lightning" ] },
+                           { name: "Shadow Sever", type: "At-Will", toHit: "automatic", defense: "AC", damage: { amount: "5", type: "necrotic" }, effects: [ { name: "Prone" } ], keywords: [ "arcane", "bladespell", "necrotic" ] },
+                           { name: "Unseen Hand", type: "At-Will", toHit: 12, defense: "AC", damage: { amount: "5", type: "force" }, keywords: [ "arcane", "bladespell", "force" ] },
+                           { name: "Gaze of the Evil Eye", type: "At-Will", toHit: "automatic", defense: "AC", damage: { amount: "2", type: "psychic" }, keywords: [ "arcane", "psychic" ] },
+                           { name: "Orbmaster's Incendiary Detonation", type: "Encounter", toHit: 14, defense: "Ref", damage: { amount: "1d6+INT", type: "force" }, effects: [ "Prone" ], keywords: [ "arcane", "evocation", "fire", "implement", "force", "zone" ] },
+                           { name: "Orbmaster's Incendiary Detonation (zone)", type: "Encounter", toHit: "automatic", defense: "Ref", damage: { amount: "2", type: "fire" }, effects: [ "Prone" ], keywords: [ "arcane", "evocation", "fire", "force", "zone" ] },
+                           { name: "Burning Hands", type: "Encounter", toHit: 12, defense: "Ref", damage: { amount: "2d6+INT", type: "fire" }, miss: { halfDamage: true }, keywords: [ "arcane", "evocation", "fire", "implement" ] },
+                           { name: "Skewering Spikes", type: "Encounter", toHit: 12, defense: "Ref", damage: "1d8+INT", keywords: [ "arcane", "evocation", "implement" ] },
+                           { name: "Skewering Spikes (single target)", type: "Encounter", toHit: 12, defense: "Ref", damage: "2d8+INT", keywords: [ "arcane", "evocation", "implement" ] },
+                           { name: "Glorious Presence", type: "Encounter", toHit: 12, range: 2, defense: "Will", damage: { amount: "2d6+INT", type: "radiant" }, keywords: [ "arcane", "charm", "echantment", "implement", "radiant", "close burst" ] },
+                           { name: "Ray of Enfeeblement", type: "Encounter", toHit: 12, range: 10, defense: "Fort", damage: { amount: "1d10+INT", type: "necrotic" }, effects: [ { name: "Weakened", duration: 1 } ], keywords: [ "arcane", "implement", "necromancy", "necrotic", "ranged" ] },
+                           { name: "Grim Shadow", type: "Encounter", toHit: 12, range: 3, defense: "Will", damage: { amount: "2d8+INT", type: "necrotic" }, effects: [ { name: "Attack penalty", amount: -2, duration: 1 } ], keywords: [ "arcane", "fear", "implement", "necromancy", "necrotic", "close blast" ] },
+                           { name: "Icy Rays", type: "Encounter", toHit: 12, defense: "Ref", damage: { amount: "1d10+INT", type: "cold" }, effects: [ { name: "immobilized", duration: 1 } ], miss: { effects: [ { name: "slowed", duration: 1 } ] }, keywords: [ "arcane", "evocation", "cold", "implement", "ranged" ] },
+                           { name: "Pinioning Vortex", type: "Encounter", toHit: 12, range: 10, defense: "Fort", damage: "2d6+INT", effects: [ { name: "immobilized", duration: 1 }, { name: "dazed", duration: 1 } ], keywords: [ "arcane", "evocation", "implement", "ranged" ] },
+                           { name: "Phantom Chasm", type: "Daily", target: { area: "burst", size: 1, range: 10 }, toHit: 12, defense: "Will", damage: { amount: "2d6+INT", type: "psychic" }, effects: [ "Prone", { name: "immobilized", duration: 1 } ], miss: { halfDamage: true, effects: [ "Prone" ] }, keywords: [ "arcane", "illusion", "psychic", "implement", "zone" ] },
+                           { name: "Phantom Chasm (zone)", type: "Daily", toHit: "automatic", defense: "Will", damage: "0", effects: [ "Prone" ], keywords: [ "arcane", "illusion", "psychic", "zone" ] },
+                           { name: "Fountain of Flame", type: "Daily", target: { area: "burst", size: 1, range: 10 }, toHit: 12, defense: "Ref", damage: { amount: "3d8+INT", type: "fire" }, miss: { halfDamage: true }, keywords: [ "arcane", "evocation", "fire", "implement", "zone" ] },
+                           { name: "Fountain of Flame (zone)", type: "Daily", toHit: "automatic", defense: "Ref", damage: { amount: "5", type: "fire" }, keywords: [ "arcane", "evocation", "fire", "zone" ] },
+                           { name: "Slimy Transmutation", type: "Daily", toHit: 12, range: 10, defense: "Fort", damage: "0", effects: [ { name: "Polymorph (Tiny Toad)", saveEnds: true } ], miss: { effects: [ { name: "Polymorph (Tiny Toad)", duration: 1 } ] }, keywords: [ "arcane", "implement", "polymorph", "transmutation" ] },
+                           { name: "Acid Arrow", type: "Daily", toHit: 12, defense: "Ref", damage: { amount: "2d8+INT", type: "acid" }, effects: [ { name: "ongoing damage", type: "acid", amount: 5, saveEnds: true } ], miss: { halfDamage: true, effects: [ { name: "ongoing damage", type: "acid", amount: 2, saveEnds: true } ] }, keywords: [ "arcane", "evocation", "acid", "implement" ] },
+                           { name: "Acid Arrow (secondary)", type: "Daily", toHit: 12, defense: "Ref", damage: { amount: "1d8+INT", type: "acid" }, effects: [ { name: "ongoing damage", type: "acid", amount: 5, saveEnds: true } ], keywords: [ "arcane", "evocation", "acid", "implement" ] },
+                           { name: "Rolling Thunder", type: "Daily", toHit: 12, defense: "Ref", damage: { amount: "3d6+INT", type: "thunder" }, miss: { halfDamage: true }, keywords: [ "arcane", "conjuration", "evocation", "implement", "thunder" ] },
+                           { name: "Rolling Thunder (secondary)", type: "Daily", toHit: 12, defense: "Ref", damage: { amount: "5", type: "thunder" }, keywords: [ "arcane", "conjuration", "evocation", "thunder" ] },
+                           { name: "Fireball", type: "Daily", target: { area: "burst", size: 3, range: 20 }, toHit: 12, defense: "Ref", damage: { amount: "4d6+INT", type: "fire" }, miss: { halfDamage: true }, keywords: [ "arcane", "evocation", "implement", "fire" ] },
+                           { name: "Grasp of the Grave", type: "Daily", target: { area: "burst", size: 2, range: 20, enemiesOnly: true }, toHit: 12, defense: "Ref", damage: { amount: "1d10+INT", type: "necrotic" }, effects: [ { name: "Dazed", duration: 1 } ], miss: { damage: { amount: "1d10+INT", type: "necrotic" } }, keywords: [ "arcane", "implement", "necromancy", "necrotic" ] },
+                           { name: "Grasp of the Grave (zone)", type: "Daily", target: { area: "burst", size: 2, range: 20, enemiesOnly: true }, toHit: "automatic", defense: "Ref", damage: { amount: "5", type: "necrotic" }, keywords: [ "arcane", "necromancy", "necrotic" ] },
+                           { name: "Scattering Shock", type: "Daily", target: { area: "burst", size: 3, range: 10 }, toHit: 12, defense: "Fort", damage: "0", keywords: [ "arcane", "evocation", "implement", "lightning" ] },
+                           { name: "Scattering Shock (secondary)", type: "Daily", target: { area: "creature", size: 1 }, toHit: 12, defense: "Ref", damage: { amount: "2d8+INT", type: "lightning" }, miss: { halfDamage: true }, keywords: [ "arcane", "evocation", "implement", "lightning" ] }
                            ],
                  effects: []
              },
@@ -201,27 +248,57 @@ function loadParty() {
                  "implements": [
                                 ],
                  attacks: [
-                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 12, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee" ] },
-                           { name: "Ranged Basic", type: "At-Will", toHit: 15, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged" ] },
+                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 12, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
+                           { name: "Ranged Basic", type: "At-Will", toHit: 15, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
                            { name: "Rapid Shot", type: "At-Will", toHit: 13, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
                            { name: "Twin Strike", type: "At-Will", toHit: 15, defense: "AC", damage: "1[W]", keywords: [ "weapon", "martial" ] },
                            { name: "Hindering Shot", type: "Encounter", toHit: 15, defense: "AC", damage: "2[W]+DEX", effects: [ { name: "slowed", duration: 1 } ], keywords: [ "weapon", "martial", "ranged" ] },
                            { name: "Covering Volley", type: "Encounter", toHit: 15, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
-                           { name: "Covering Volley (secondary)", type: "Encounter", toHit: 99, defense: "AC", damage: "5", keywords: [ "martial", "ranged" ] },
+                           { name: "Covering Volley (secondary)", type: "Encounter", toHit: "automatic", defense: "AC", damage: "5", keywords: [ "martial", "ranged" ] },
                            { name: "Spikes of the Manticore", type: "Encounter", toHit: 15, defense: "AC", damage: "2[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
                            { name: "Spikes of the Manticore (secondary)", type: "Encounter", toHit: 15, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
                            { name: "Sure Shot", type: "Daily", toHit: 15, defense: "AC", damage: "3[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
                            { name: "Flying Steel", type: "Daily", toHit: 15, defense: "AC", damage: "2[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
                            { name: "Marked for Death", type: "Daily", toHit: 15, defense: "AC", damage: "3[W]+STR/DEX", effects: [ { name: "marked", duration: 1 } ], keywords: [ "weapon", "martial" ] },
-                           { name: "Beast Melee Basic", type: "At-Will", toHit: 12, defense: "AC", damage: "1d12+3", keywords: [ "beast", "melee" ] },
-                           { name: "Hunter's Quarry", type: "At-Will", toHit: 99, defense: "AC", damage: "1d8" }
+                           { name: "Hunter's Quarry", type: "At-Will", toHit: "automatic", defense: "AC", damage: "1d8" }
                            ],
                effects: []
+            },
+            Balugh: { 
+                name: "Balugh", image: "images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+                hp: { total: 116 },
+                abilities: { STR: 16, CON: 14, DEX: 12, INT: 6, WIS: 12, CHA: 6 },
+                defenses: { ac: 22, fort: 24, ref: 20, will: 22 },
+                init: 12, speed: 5,
+                attacks: [
+                          { name: "Beast Melee Basic", type: "At-Will", toHit: 12, defense: "AC", damage: "1d12+3", keywords: [ "beast", "melee", "basic" ] }
+                  ]
+            },
+            Ringo: { 
+                name: "Ringo", image: "images/portraits/ringo.jpg", // http://beta.ditzie.com/gallery/main.php?g2_view=core.DownloadItem&g2_itemId=14896&g2_serialNumber=1
+                hp: { total: 62 },
+                defenses: { ac: 19, fort: 17, ref: 13, will: 14 },
+                init: 2, speed: 6,
+                attacks: [
+                          { name: "Bite", type: "At-Will", range: "reach", toHit: 10, defense: "AC", damage: "1d10+4", keywords: [ "melee" ] },
+                          { name: "Entangling Spittle", type: "recharge", target: { range: 5 }, recharge: 4, toHit: 8, defense: "Ref", damage: "0", effects: [ { name: "immobilized", aveEnds: true } ], keywords: [ "ranged" ] }
+                  ]
+            },
+            Smudge: { 
+                name: "Smudge", image: "images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+                hp: { total: 97 },
+                defenses: { ac: 25, fort: 25, ref: 22, will: 21 },
+                init: 7, speed: 4,
+                attacks: [
+                          { name: "Bite", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: { amount: "1d10+4", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "melee", "fire" ] },
+                          { name: "Fire Belch", type: "At-Will", target: { range: 12 }, toHit: 15, defense: "Ref", damage: { amount: "2d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "ranged", "fire" ] },
+                          { name: "Fire Burst", type: "recharge", target: { area: "burst", size: 2, range: 10 }, recharge: 5, toHit: 15, defense: "Ref", damage: { amount: "3d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], miss: { halfDamage: true }, keywords: [ "ranged", "fire" ] }
+                  ]
             },
             Melvin: { 
                  name: "Melvin", isPC: true, level: 9, image: "images/portraits/melvin.jpg", 
                  abilities: { STR: 18, CON: 18, DEX: 19, INT: 14, WIS: 19, CHA: 14 },
-                 hp: { total: 70 },
+                 hp: { total: 70, current: 62 },
                  surges: { perDay: 12, current: 9 },
                  defenses: { ac: 23, fort: 23, ref: 22, will: 22 },
                  init: 8, speed: 7,
@@ -235,16 +312,16 @@ function loadParty() {
                                 { name: "Abduction Ki Focus +1", enhancement: 1, crit: "1d6" } 
                                 ],
                  attacks: [
-                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee" ] },
-                           { name: "Ranged Basic", type: "At-Will", toHit: 11, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged" ] },
+                           { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
+                           { name: "Ranged Basic", type: "At-Will", toHit: 11, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
                            { name: "Dancing Cobra", type: "At-Will", toHit: 11, defense: "Ref", damage: "1d10+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
                            { name: "Five Storms", type: "At-Will", toHit: 11, defense: "Ref", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
-                           { name: "Centered Flurry of Blows", type: "At-Will", toHit: 99, defense: "AC", damage: "2+WIS", keywords: [ "psionic", "melee" ] },
+                           { name: "Centered Flurry of Blows", type: "At-Will", toHit: "automatic", defense: "AC", damage: "2+WIS", keywords: [ "psionic", "melee" ] },
                            { name: "Drunken Monkey", type: "Encounter", toHit: 11, defense: "Will", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
                            { name: "Eternal Mountain", type: "Encounter", toHit: 11, defense: "Will", damage: "2d8+DEX", effects: [ "Prone" ], keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
                            { name: "Wind Fury Assault", type: "Encounter", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+WIS", keywords: [ "elemental", "melee", "weapon" ] },
                            { name: "Arc of the Flashing Storm", type: "Encounter", toHit: 11, defense: "Ref", damage: "2d10+DEX", effects: [ { name: "attack penalty", amount: -2, duration: 1 } ], keywords: [ "full discipline", "implement", "psionic", "melee", "lightning", "teleportation" ] },
-                           { name: "Goring Charge", type: "Encounter", toHit: 15, defense: "AC", damage: "1d6+DEX", effects: [ "Prone" ], keywords: [ "racial", "melee" ] },
+                           { name: "Goring Charge", type: "Encounter", toHit: 15, defense: "AC", damage: "1d6+DEX", effects: [ "Prone" ], keywords: [ "racial", "melee", "basic" ] },
                            { name: "Masterful Spiral", type: "Daily", toHit: 11, defense: "Ref", damage: { amount: "3d8+DEX", type: "force" }, keywords: [ "force", "implement", "psionic", "melee", "close burst", "miss half", "stance" ] },
                            { name: "One Hundred Leaves", type: "Daily", toHit: 11, defense: "Ref", damage: "3d8+DEX", keywords: [ "implement", "psionic", "melee", "close blast", "miss half" ] },
                            { name: "Strength to Weakness", type: "Daily", toHit: 11, defense: "Ref", damage: "0", effects: [ { name: "ongoing damage", amount: "15+DEX" } ], keywords: [ "implement", "psionic", "melee" ] }

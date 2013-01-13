@@ -157,6 +157,7 @@ var Creature = function(params, isActor) {
 	this.hp = new HP(params.hp);
 	this.surges = new Surges(params.surges);
 	this.defenses = params.defenses || new Defenses();
+	this.attackBonuses = params.attackBonuses || [];
 	this.attacks = params.attacks || [];
 	this.init = params.init || 0;
 	this.ap = params.ap || 0;
@@ -360,7 +361,15 @@ Creature.prototype._addDefense = function($parent, className, value, icon) {
 	image.src = icon;
 	$div.append(image).addClass(className).attr("title", className.toUpperCase());
 	editor = new Editor({ $parent: $div, tagName: "span", html: value, onchange: (function(v) {
+		var old, entry;
+		old = this.defenses[ className ];
 		this.defenses[ className ] = parseInt(v);
+		entry = new History.Entry({ 
+			subject: this, 
+			message: "Manually changed " + className.toUpperCase() + " from " + old + " to " + this.defenses[ className ], 
+			round: this.history._round // TODO: make History.Entry inherit the round from the History instance 
+		});
+		this.history.add();
 		this.dispatchEvent("change");
 	}).bind(this) });
 };
@@ -465,60 +474,94 @@ Creature.prototype.defenseModifier = function(isMelee) {
 };
 
 Creature.prototype.attack = function(attack, item, targets, combatAdvantage, round, callback, playerRolls) {
-    var i, j, targets, toHit, toHitRoll, isCrit, isFumble, toHitCond, def, defCondMod, damage, dmgCond, target, msg, temp;
+    var i, j, isAutomaticHit, toHit, toHitRoll, isCrit, isFumble, isHit, toHitCond, def, defCondMod, damage, missDamage, dmgCond, target, msg, temp;
     
-    if (playerRolls && playerRolls.attack && (playerRolls.attack.roll || playerRolls.attack.isCritical || playerRolls.attack.isFumble)) {
-        toHitRoll = playerRolls.attack.roll;
-        if (playerRolls.attack.isCritical) {
-            attack.add(20 + attack.extra);
-        }
-        else if (playerRolls.attack.isFumble) {
-            attack.add(1 + attack.extra);
+    // Calculate to hit roll
+    isAutomaticHit = typeof(attack.toHit) === "string" && attack.toHit.toLowerCase() === "automatic";
+	isCrit = false;
+	isFumble = false;
+	toHitCond = { mod: 0 };
+    if (!isAutomaticHit) {
+        if (playerRolls && playerRolls.attack && (playerRolls.attack.roll || playerRolls.attack.isCritical || playerRolls.attack.isFumble)) {
+            toHitRoll = playerRolls.attack.roll;
+            if (playerRolls.attack.isCritical) {
+                attack.add(20 + attack.extra);
+            }
+            else if (playerRolls.attack.isFumble) {
+                attack.add(1 + attack.extra);
+            }
+            else {
+                attack.add(playerRolls.attack.roll - (item && item.enhancement ? item.enhancement : 0));
+            }
         }
         else {
-            attack.add(playerRolls.attack.roll - (item && item.enhancement ? item.enhancement : 0));
+            toHitRoll = item ? attack.rollItem(item) : attack.roll();
         }
-    }
-    else {
-        toHitRoll = item ? attack.rollItem(item) : attack.roll();
-    }
-    isCrit = attack.isCritical();
-    isFumble = attack.isFumble();
-    if (!isCrit && !isFumble) {
-        toHitCond = attack.toHitModifiers(this.effects);
-        if (combatAdvantage) {
-            toHitCond.breakdown += " + combat advantage"; 
+        isCrit = attack.isCritical();
+        isFumble = attack.isFumble();
+        if (!isCrit && !isFumble) {
+            toHitCond = attack.toHitModifiers(this.effects);
+            if (combatAdvantage) {
+                toHitCond.breakdown += " + combat advantage"; 
+            }
         }
     }
     
+    // Calculate initial damage (and potential miss damage if applicable) for all targets
+    dmgCond = { mod: 0, effects: [] }; // { mod: 0, breakdown: (item && item.enhancement ? " + " + item.enhancement + " (item)" : ""), effects: [] };
+	damage = 0;
+	missDamage = 0;
+    if (playerRolls && playerRolls.damage) {
+        damage = playerRolls.damage;
+        attack.damage.addItem(playerRolls.damage, item, isCrit);
+	}
+	else {
+        damage = attack.damage.rollItem(item, isCrit);
+	}
+    if (attack.hasOwnProperty("miss")) {
+    	if (attack.miss.halfDamage) {
+    		missDamage = Math.floor(damage / 2);
+    		attack.miss.damage.addItem(damage, item, false);
+    	}
+    	else if (attack.miss.hasOwnProperty(damage)) {
+        	missDamage = attack.miss.damage.rollItem(item, false);
+    	}
+    }
+    if (this.hasCondition("weakened")) {
+        dmgCond.mod = -1 * Math.ceil(damage / 2);
+        dmgCond.breakdown += " [1/2 for weakened]";
+        dmgCond.effects.push("weakened");
+        damage = Math.floor(damage / 2);
+        missDamage = Math.floor(missDamage / 2);
+    }
+	
+    // For each target, determine if the to hit roll succeeds
     for (i = 0; i < targets.length; i++) {
         target = targets[ i ];
         
-        if (!isFumble && !isCrit) {
+        // Calculate hit (for this target)
+        if (!isAutomaticHit && !isFumble && !isCrit) {
             toHit = toHitRoll + toHitCond.mod + (combatAdvantage || target.grantsCombatAdvantage() ? 2 : 0);
             def = target.defenses[ attack.defense.toLowerCase() ];
             defCondMod = target.defenseModifier(attack.isMelee);
         }
-        if (!isFumble && (isCrit || toHit >= def + defCondMod)) {
-        	if (playerRolls && playerRolls.damage) {
-                damage = playerRolls.damage;
-                attack.damage.addItem(playerRolls.damage, item, isCrit);
-        	}
-        	else {
-                damage = attack.damage.rollItem(item, isCrit);
-        	}
-            dmgCond = { mod: 0, effects: [] }; // { mod: 0, breakdown: (item && item.enhancement ? " + " + item.enhancement + " (item)" : ""), effects: [] };
-            if (this.hasCondition("weakened")) {
-                dmgCond.mod = -1 * Math.ceil(damage / 2);
-                dmgCond.breakdown += " [1/2 for weakened]";
-                dmgCond.effects.push("weakened");
-                damage = Math.floor(damage / 2);
-            }
+        
+        // Compare the to hit roll to the target's defense
+        isHit = isAutomaticHit || isCrit || toHit >= def + defCondMod;
+        
+        // Apply damage or miss
+        if (isHit) {
             msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for " + attack.damage.anchor(dmgCond);
             msg += target.takeDamage(this, damage, attack.damage.type, attack.effects);
         }
         else {
             msg = "Missed by " + this.name + "'s " + attack.anchor(toHitCond);
+            if (missDamage) {
+            	msg += " but takes " + attack.miss.damage.anchor(dmgCond) + " on a miss";
+            }
+            if (missDamage || attack.hasOwnProperty("miss")) {
+                msg += target.takeDamage(this, missDamage, attack.miss.damage.type, attack.miss.effects);
+            }
         }
         if (callback) {
             callback(target, msg);
@@ -529,7 +572,7 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
 Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
     var temp, msg, i;
     msg = "";
-    if (type && this.defenses.resistances.hasOwnProperty(type)) {
+    if (type && this.defenses.resistances && this.defenses.resistances.hasOwnProperty(type)) {
     	temp = this.defenses.resistances[ type ];
         msg += " (resisted " + Math.min(damage, temp) + ")";
     	damage = Math.max(damage - temp, 0);

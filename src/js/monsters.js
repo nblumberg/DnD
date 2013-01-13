@@ -67,6 +67,20 @@ function loadMonsters() {
                           { name: "Shriek of Pain (bloodied)", type: "Encounter", range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+11", type: "thunder" }, miss: "half damage", keywords: [ "ranged" ] }
                   ]
             },
+            "Dragonborn Raider": { 
+                name: "Dragonborn Raider", image: "images/portraits/dragonborn_raider.jpg", // "http://1-media-cdn.foolz.us/ffuuka/board/tg/image/1336/87/1336876770629.jpg
+                hp: { total: 129 },
+                defenses: { ac: 27, fort: 23, ref: 24, will: 21 },
+                init: 13, speed: 7,
+                attacks: [
+                          { name: "Katar", type: "At-Will", range: "melee", toHit: 19, defense: "AC", damage: "1d6+4", keywords: [ "melee" ] },
+                          { name: "Katar (combat advantage)", type: "At-Will", range: "melee", toHit: 19, defense: "AC", damage: "2d6+4", keywords: [ "melee", "combat advantage" ] },
+                          { name: "Katar (bloodied)", type: "At-Will", range: "melee", toHit: 20, defense: "AC", damage: "1d6+4", keywords: [ "melee", "bloodied" ] },
+                          { name: "Katar (bloodied, combat advantage)", type: "At-Will", range: "melee", toHit: 20, defense: "AC", damage: "2d6+4", keywords: [ "melee", "bloodied", "combat advantage" ] },
+                          { name: "Dragon Breath", type: "At-Will", range: 3, toHit: 14, defense: "Ref", damage: { amount: "1d6+3", type: "fire" }, keywords: [ "close blast" ] },
+                          { name: "Dragon Breath (bloodied)", type: "At-Will", range: 3, toHit: 15, defense: "Ref", damage: { amount: "1d6+3", type: "fire" }, keywords: [ "close blast" ] }
+                  ]
+            },
             "Eidolon": { 
                 name: "Eidolon", image: "images/portraits/eidolon.png", // "http://gallery.rptools.net/d/12751-1/Rogue+Eidolon+_L_.png",
                 hp: { total: 132 },
@@ -108,7 +122,119 @@ function loadMonsters() {
                 attacks: [
                           { name: "Claw", type: "At-Will", range: "reach", toHit: 13, defense: "AC", damage: "2d6+6", keywords: [ "melee" ] }
                   ]
+            },
+            "Two-Headed Troll": { 
+                name: "Two-Headed Troll", image: "images/portraits/two_headed_troll.jpg",
+                hp: { total: 264, regeneration: 10 },
+                defenses: { ac: 25, fort: 27, ref: 19, will: 20 },
+                savingThrows: 2,
+                init: 5, speed: 6,
+                attacks: [
+                          { name: "Claw", type: "At-Will", range: "reach", toHit: 13, defense: "AC", damage: "3d6+7", keywords: [ "melee" ] },
+                          { name: "Smackdown", type: "At-Will", range: "reach", toHit: 11, defense: "Fort", damage: "0", effects: [ "Prone" ], keywords: [ "melee" ] }
+                  ]
+            },
+            "War Troll": { 
+                name: "War Troll", image: "images/portraits/war_troll.jpg", // http://www.wizards.com/dnd/images/iw_war_troll.jpg
+                hp: { total: 110, regeneration: 10 },
+                defenses: { ac: 30, fort: 29, ref: 25, will: 25 },
+                init: 12, speed: 7,
+                attacks: [
+                          { name: "Greatsword", type: "At-Will", range: "reach", toHit: 20, defense: "AC", damage: "1d12+7", effects: [ { name: "Marked", duration: 1 } ], keywords: [ "melee" ] },
+                          { name: "Claw", type: "At-Will", range: "reach", toHit: 20, defense: "AC", damage: "2d6+7", keywords: [ "melee" ] },
+                          { name: "Longbow", type: "At-Will", range: 20, toHit: 20, defense: "AC", damage: "1d12+3", keywords: [ "ranged" ] },
+                          { name: "Sweeping Strike", type: "At-Will", range: 2, toHit: 20, defense: "AC", damage: "1d12+7", effects: [ "Prone" ], keywords: [ "melee", "close blast" ] }
+                  ]
+            },
+            "Redspawn Firebelcher": { 
+                name: "Redspawn Firebelcher", image: "images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+                hp: { total: 97 },
+                defenses: { ac: 25, fort: 25, ref: 22, will: 21 },
+                init: 7, speed: 4,
+                attacks: [
+                          { name: "Bite", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: { amount: "1d10+4", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "melee", "fire" ] },
+                          { name: "Fire Belch", type: "At-Will", target: { range: 12 }, toHit: 15, defense: "Ref", damage: { amount: "2d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "ranged", "fire" ] },
+                          { name: "Fire Burst", type: "recharge", target: { area: "burst", size: 2, range: 10 }, recharge: 5, toHit: 15, defense: "Ref", damage: { amount: "3d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], miss: { halfDamage: true }, keywords: [ "ranged", "fire" ] }
+                  ]
+            },
+            "Berbalang": { 
+                name: "Berbalang", image: "images/portraits/berbalang.jpg", // http://www.rpgblog.net/wp-content/berbalang.jpg
+                hp: { total: 408 },
+                defenses: { ac: 25, fort: 22, ref: 25, will: 21 },
+                savingThrows: 5,
+                init: 13, speed: { walk: 6, fly: 8 },
+                attacks: [
+                          { name: "Claw", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "1d8+6", keywords: [ "melee" ] },
+                          { name: "Claw (sneak attack)", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "2d8+6", keywords: [ "melee", "requires combat advantage" ] },
+                          { name: "Sacrifice", type: "At-Will", range: 1, toHit: 11, defense: "Fort", damage: "2d6+6", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "close burst", "effects on miss" ] }
+                  ]
+            },
+            "Zithiruun, the Broken General": { 
+                name: "Zithiruun, the Broken General", image: "images/portraits/zithiruun.jpg", // http://cdn.obsidianportal.com/images/145622/zith.jpg
+                hp: { total: 280 },
+                defenses: { ac: 30, fort: 26, ref: 29, will: 28 },
+                savingThrows: { general: 2, charm: 4 },
+                init: 15, speed: { walk: 6, fly: 5 },
+                attacks: [
+                          { name: "Silver Saber", type: "At-Will", range: "melee", toHit: 19, defense: "AC", damage: { amount: "2d8+6", type: "psychic" }, keywords: [ "melee", "psychic", "weapon" ] },
+                          { name: "Thrown Saber", type: "At-Will", range: 5, toHit: 19, defense: "AC", damage: { amount: "2d8+6", type: "psychic" }, keywords: [ "ranged", "thrown", "psychic", "weapon" ] },
+                          { name: "Silver Flurry", type: "recharge", recharge: 5, range: "melee", toHit: 19, defense: "AC", damage: { amount: "4d8+6", type: "psychic" }, keywords: [ "melee", "psychic", "weapon" ] }
+                  ]
+            },
+            "Rathoraiax": { 
+                name: "Rathoraiax", image: "images/portraits/zombie_dragon.jpg", // http://4.bp.blogspot.com/-rclvSPUh9iM/ToBowVvsz_I/AAAAAAAADKI/wwQ5VTfwAeU/s1600/02-The-Dragons_Zombie-Dragon.jpg
+                hp: { total: 328 },
+                defenses: { ac: 27, fort: 29, ref: 22, will: 24 },
+                resistances: { necrotic: 15 },
+                vulnerabilities: { radiant: 15 },
+                immunities: [ "disease", "poison" ],
+                savingThrows: 2,
+                init: 5, speed: { walk: 4, fly: 8 },
+                attacks: [
+                          { name: "Claw", type: "At-Will", range: "reach", toHit: 16, defense: "AC", damage: "2d10+6", effects: [ "Prone"], keywords: [ "melee" ] },
+                          { name: "Tail Crush", type: "At-Will", range: "reach", toHit: 14, defense: "Fort", damage: "3d8+6", keywords: [ "melee", "prone" ] },
+                          { name: "Breath of the Grave", type: "Encounter", range: 5, toHit: 14, defense: "Fort", damage: { amount: "4d10+6", type: [ "poison", "necrotic" ] }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "Ongoing necrotic", amount: 10 }, "Weakened" ] } ], keywords: [ "close blast", "necrotic", "poison" ] },
+                          { name: "Loose stones", type: "At-Will", range: 1, toHit: 14, defense: "Ref", damage: "2d6+10", effects: [ "Prone" ], keywords: [ "burst" ] }
+                  ]
+            },
+            "Slaad Tadpole": { 
+                name: "Slaad Tadpole", image: "images/portraits/slaad_tadpole.jpg",
+                hp: { total: 44 },
+                defenses: { ac: 21, fort: 18, ref: 20, will: 18 },
+                init: 7, speed: 4,
+                attacks: [
+                          { name: "Bite", type: "At-Will", range: "melee", toHit: 10, defense: "AC", damage: "1d8", keywords: [ "melee" ] }
+                  ]
+            },
+            "Slaad Midwife": { 
+                name: "Slaad Midwife", image: "images/portraits/slaad_midwife.jpg",
+                hp: { total: 70 },
+                defenses: { ac: 20, fort: 19, ref: 17, will: 17 },
+                init: 7, speed: 5,
+                attacks: [
+                          { name: "Claw", type: "At-Will", range: "melee", toHit: 11, defense: "AC", damage: "1d6+10", keywords: [ "melee" ] },
+                          { name: "Fiery Spines", type: "Recharge", recharge: 5, range: "close blast 5", toHit: 9, defense: "Ref", damage: { amount: "2d8+8", type: "fire" }, effects: [ { name: "Ongoing poison", amount: 5, type: "poison", saveEnds: true } ], keywords: [ "close blast" ] }
+                  ]
+            },
+            "Flux Slaad": { 
+                name: "Flux Slaad", image: "images/portraits/flux_slaad.jpg",
+                hp: { total: 98 },
+                defenses: { ac: 23, fort: 23, ref: 21, will: 21 },
+                init: 8, speed: { walk: 7, teleport: 2 },
+                attacks: [
+                          { name: "Claw Slash", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "2d8+3", keywords: [ "melee" ] }
+                  ]
+            },
+            "Slaad Guard": { 
+                name: "Slaad Guard", image: "images/portraits/flux_slaad.jpg",
+                hp: { total: 98 },
+                defenses: { ac: 23, fort: 23, ref: 21, will: 21 },
+                init: 8, speed: { walk: 7, teleport: 2 },
+                attacks: [
+                          { name: "Claw Slash", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "2d8+3", keywords: [ "melee" ] }
+                  ]
             }
+            
         }
     };
 }

@@ -318,7 +318,7 @@ Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
         dice = h.dice;
     }
     if (isCrit) {
-        if (item && item.damage.crit) {
+        if (item && item.damage && item.damage.crit) {
         	if (forcedTotal) {
         		item.damage.crit.add(forcedTotal - item.damage._getLastRoll().total - (item.enhancement ? this.weaponMultiplier * item.enhancement : 0) - this.extra);
         	}
@@ -338,7 +338,7 @@ Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
             dice = dice.concat(this.crit._history[ this.crit._history.length - 1 ].dice);
         }
     }
-    h.total = total;
+    h.total = Math.floor(total * (this.rollMultiplier || 1));
     h.dice = dice;
     h.isCrit = isCrit;
     h.manual = forcedTotal > 0;
@@ -352,6 +352,14 @@ Damage.prototype.rollCrit = function(item) {
 
 Damage.prototype.addItem = function(total, item, isCrit) {
 	return this.rollItem(item, isCrit, total);
+};
+
+Damage.prototype._breakdownToString = function() {
+	var str = Roll.prototype._breakdownToString.call(this);
+    if (this.rollMultiplier && this.rollMultiplier != 1) {
+    	str += " * " + this.rollMultiplier;
+    }
+	return str;
 };
 
 Damage.prototype.anchor = function(conditional) {
@@ -431,8 +439,23 @@ var Attack = function(params, creature) {
 	this.name = params.name;
 	this.type = params.type;
 	this.defense = params.defense;
-	this.extra = this.toHit = params.toHit;
+	this.toHit = params.toHit;
+	if (typeof(this.toHit) === "string") {
+		// If it's not a straight up numeric value
+		this._toHitFromString(this.toHit, creature);
+	}
+	else {
+		this.extra = this.toHit;
+	}
 	this.damage = new Damage(params.damage, creature);
+	this.halfDamage = params.halfDamage;
+	if (params.miss) {
+		this.miss = new Attack(params.miss, creature);
+		if (params.miss.halfDamage) {
+			this.miss.damage = new Damage(this.damage.raw(), creature);
+			this.miss.damage.rollMultiplier = 0.5;
+		}
+	}
     this.effects = [];
     for (i = 0; params.effects && i < params.effects.length; i++) {
         this.effects.push(new Effect(params.effects[ i ]));
@@ -444,6 +467,37 @@ var Attack = function(params, creature) {
 };
 
 Attack.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: true });
+
+Attack.prototype._toHitFromString = function(str, creature) {
+    var i, abilities, mods;
+    
+    if (str.toLowerCase() === "automatic") {
+    	this.extra = 99;
+    	return;
+    }
+    
+	this.extra = Math.floor(creature.level / 2);
+	i = str.search(/[+\-]/);
+	if (i !== -1) {
+		this.extra = parseInt(str.substring(i + 1));
+		str = str.substring(0, i);
+	}
+
+	if (creature.abilities.hasOwnProperty(str)) {
+		// If it's an ability modifier + 1/2 level
+		this.extra += creature.abilities[ this.toHit + "mod" ];
+	}
+	else if (str.indexOf("^") !== -1) {
+		// If it's the highest ability modifier from a set
+		abilities = str.split("^");
+		mods = [];
+		for (i = 0; i < abilities.length; i++) {
+			mods.push(creature.abilities[ abilities[ i ] + "mod" ]);
+		}
+		mods.sort();
+		this.extra += mods.pop();
+	}
+};
 
 Attack.prototype.toHitModifiers = function(effects) {
     var i, result = { mod: 0, effects: [], breakdown: "" };
