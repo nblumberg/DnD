@@ -91,23 +91,23 @@ Roll.prototype.add = function(total) {
     this._history.push(h);
 };
 
-Roll.prototype._getLastRoll = function() {
+Roll.prototype.getLastRoll = function() {
 	return this._history[ this._history.length - 1 ];
 };
 
 Roll.prototype.isCritical = function() {
-	var h = this._getLastRoll();
+	var h = this.getLastRoll();
 	return h ? h.dice[0] === 20 : false;
 };
 
 Roll.prototype.isFumble = function() {
-	var h = this._getLastRoll();
+	var h = this.getLastRoll();
 	return h ? h.dice[0] === 1 : false;
 };
 
 Roll.prototype.breakdown = function(conditional) {
 	var h, value, output, i;
-	h = this._getLastRoll();
+	h = this.getLastRoll();
 	output = "";
     if (this.crits && (this.isCritical() || this.isFumble())) {
         output += this.isCritical() ? "CRIT" : "FUMBLE";
@@ -143,7 +143,7 @@ Roll.prototype.raw = function() {
 };
 
 Roll.prototype._anchorHtml = function(conditional) {
-    return "" + (this._getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) + (conditional && conditional.text ? conditional.text : "");
+    return "" + (this.getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) + (conditional && conditional.text ? conditional.text : "");
 };
 
 Roll.prototype.anchor = function(conditional) {
@@ -154,6 +154,7 @@ Roll.prototype.anchor = function(conditional) {
 
 
 var Damage = function(params, creature) {
+	this._history = [];
     params = params || {};
     this.type = "";
     this.crit = null;
@@ -320,7 +321,7 @@ Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
     if (isCrit) {
         if (item && item.damage && item.damage.crit) {
         	if (forcedTotal) {
-        		item.damage.crit.add(forcedTotal - item.damage._getLastRoll().total - (item.enhancement ? this.weaponMultiplier * item.enhancement : 0) - this.extra);
+        		item.damage.crit.add(forcedTotal - item.damage.getLastRoll().total - (item.enhancement ? this.weaponMultiplier * item.enhancement : 0) - this.extra);
         	}
         	else {
                 total += item.damage.crit.roll();
@@ -342,8 +343,11 @@ Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
     h.dice = dice;
     h.isCrit = isCrit;
     h.manual = forcedTotal > 0;
+    if (item) {
+        h.item = item;
+    }
     this._history.push(h);
-    return total;
+    return h.total;
 };
 
 Damage.prototype.rollCrit = function(item) {
@@ -382,7 +386,7 @@ Damage.prototype.raw = function() {
 Damage.prototype.toString = function() {
 	var str, lastRoll, critStr;
 	str = "";
-	lastRoll = this._getLastRoll();
+	lastRoll = this.getLastRoll();
 	critStr = lastRoll && lastRoll.critStr ? lastRoll.critStr : null;
 	critStr = critStr === null && this.crit ? this.crit.toString() : null;
     if (this.str) {
@@ -417,7 +421,7 @@ var SavingThrow = function(params) {
 SavingThrow.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: false });
 
 SavingThrow.prototype._anchorHtml = function(conditional) {
-    var success = (this._getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
+    var success = (this.getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
     return (success ? "Saves" : "Fails to save") + " against " + this.effect.toString();
 };
 
@@ -447,7 +451,15 @@ var Attack = function(params, creature) {
 	else {
 		this.extra = this.toHit;
 	}
-	this.damage = new Damage(params.damage, creature);
+	if (Object.prototype.toString.call(params.damage) === "[object Array]") {
+		this.damage = [];
+		for (i = 0; i < params.damage.length; i++) {
+			this.damage.push(new Damage(params.damage[ i ], creature));
+		}
+	}
+	else {
+		this.damage = new Damage(params.damage, creature);
+	}
 	this.halfDamage = params.halfDamage;
 	if (params.miss) {
 		this.miss = new Attack(params.miss, creature);
@@ -523,7 +535,7 @@ Attack.prototype.toHitModifiers = function(effects) {
 Attack.prototype.rollItem = function(item) {
 	var h, total = Roll.prototype.roll.call(this);
 	if (item && item.enhancement) {
-		h = this._getLastRoll();
+		h = this.getLastRoll();
 		h.breakdown = " + " + item.enhancement + " (enhancement)";
 		h.total += item.enhancement;
 		total += item.enhancement;
@@ -538,7 +550,7 @@ Attack.prototype._anchorHtml = function() {
 Attack.prototype.anchor = function(conditional) {
     conditional = conditional || {};
     conditional = jQuery.extend({ breakdown: "", text: "" }, conditional);
-    conditional.breakdown += this.isCritical() || this.isFumble() ? "" : " = " + this._getLastRoll().total + " vs. " + this.defense;
+    conditional.breakdown += this.isCritical() || this.isFumble() ? "" : " = " + this.getLastRoll().total + " vs. " + this.defense;
     return Roll.prototype.anchor.call(this, conditional);
 };
 

@@ -99,8 +99,8 @@ function loadMonsters() {
                 defenses: { ac: 26, fort: 22, ref: 22, will: 23 },
                 init: 12, speed: { walk: 6, climb: 4 },
                 attacks: [
-                          { name: "Claw", type: "At-Will", range: "melee", toHit: 17, defense: "AC", damage: { amount: "2d6+5", type: "poison" }, keywords: [ "melee" ] },
-                          { name: "Javelin", type: "At-Will", range: "ranged", toHit: 17, defense: "AC", damage: { amount: "2d6+5", type: "poison" }, keywords: [ "ranged" ] },
+                          { name: "Claw", type: "At-Will", range: "melee", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6", type: "poison" } ], keywords: [ "melee" ] },
+                          { name: "Javelin", type: "At-Will", range: "ranged", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6", type: "poison" } ], keywords: [ "ranged" ] },
                           { name: "Acid Spit", type: "At-Will", range: "ranged", toHit: 15, defense: "Ref", damage: { amount: "1d6", type: "acid" }, keywords: [ "ranged" ] }
                   ]
             },

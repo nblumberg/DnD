@@ -517,18 +517,43 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
 	missDamage = 0;
     if (playerRolls && playerRolls.damage) {
         damage = playerRolls.damage;
-        attack.damage.addItem(playerRolls.damage, item, isCrit);
+		if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
+	        attack.damage[ 0 ].addItem(playerRolls.damage, item, isCrit);
+		}
+		else {
+	        attack.damage.addItem(playerRolls.damage, item, isCrit);
+		}
 	}
 	else {
-        damage = attack.damage.rollItem(item, isCrit);
+		if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
+			for (i = 0; i < attack.damage.length; i++) {
+				temp = attack.damage[ i ];
+		        damage += temp.rollItem(item, isCrit);
+			}
+		}
+		else {
+	        damage = attack.damage.rollItem(item, isCrit);
+		}
 	}
     if (attack.hasOwnProperty("miss")) {
     	if (attack.miss.halfDamage) {
     		missDamage = Math.floor(damage / 2);
-    		attack.miss.damage.addItem(damage, item, false);
+    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+    			attack.miss.damage.addItem(damage, item, false);
+    		}
+    		else {
+    			attack.miss.damage.addItem(damage, item, false);
+    		}
     	}
     	else if (attack.miss.hasOwnProperty(damage)) {
-        	missDamage = attack.miss.damage.rollItem(item, false);
+    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+    			for (i = 0; i < attack.damage.length; i++) {
+    		        missDamage += attack.miss.damage[ i ].rollItem(item, false);
+    			}
+    		}
+    		else {
+            	missDamage = attack.miss.damage.rollItem(item, false);
+    		}
     	}
     }
     if (this.hasCondition("weakened")) {
@@ -553,18 +578,48 @@ Creature.prototype.attack = function(attack, item, targets, combatAdvantage, rou
         // Compare the to hit roll to the target's defense
         isHit = isAutomaticHit || isCrit || toHit >= def + defCondMod;
         
-        // Apply damage or miss
+        // Apply hit or miss damage/effects
         if (isHit) {
-            msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for " + attack.damage.anchor(dmgCond);
-            msg += target.takeDamage(this, damage, attack.damage.type, attack.effects);
+        	// Hit
+            msg = "Hit by " + this.name + "'s " + attack.anchor(toHitCond) + " for ";
+    		if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
+    			for (j = 0; j < attack.damage.length; j++) {
+    				damage = attack.damage[ j ];
+                    msg += (j > 0 && j < attack.damage.length - 1 ? ", " : "") + (j > 0 && j === attack.damage.length - 1 ? " and " : "") + damage.anchor(dmgCond);
+                    msg += target.takeDamage(this, damage.getLastRoll().total, damage.type, j === 0 ? attack.effects : null);
+    			}
+    		}
+    		else {
+                msg += attack.damage.anchor(dmgCond);
+                msg += target.takeDamage(this, damage, attack.damage.type, attack.effects);
+    		}
         }
         else {
+        	// Miss
             msg = "Missed by " + this.name + "'s " + attack.anchor(toHitCond);
             if (missDamage) {
-            	msg += " but takes " + attack.miss.damage.anchor(dmgCond) + " on a miss";
+            	msg += " but takes ";
+	    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+	    			for (j = 0; j < attack.miss.damage.length; j++) {
+	    				damage = attack.miss.damage[ j ];
+	                    msg += (j > 0 && j < attack.miss.damage.length - 1 ? ", " : "") + (j > 0 && j === attack.miss.damage.length - 1 ? " and " : "") + damage.anchor(dmgCond);
+	    			}
+	    		}
+	    		else {
+	                msg += attack.miss.damage.anchor(dmgCond);
+	    		}
+            	msg += " on a miss";
             }
             if (missDamage || attack.hasOwnProperty("miss")) {
-                msg += target.takeDamage(this, missDamage, attack.miss.damage.type, attack.miss.effects);
+	    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+	    			for (j = 0; j < attack.miss.damage.length; j++) {
+	    				damage = attack.miss.damage[ j ];
+	                	msg += target.takeDamage(this, damage.getLastRoll().total, damage.type, j === 0 ? attack.miss.effects : null);
+	    			}
+	    		}
+	    		else {
+	            	msg += target.takeDamage(this, missDamage, attack.miss.damage.type, attack.miss.effects);
+	    		}
             }
         }
         if (callback) {
