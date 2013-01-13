@@ -329,8 +329,9 @@ Initiative.prototype._createFileMenu = function() {
             { id: "export", html: "Export", click: this._export.bind(this) },
             { id: "clear", html: "Clear", submenu: [
                                                   { id: "clearAll", html: "all", click: this._clearAll.bind(this) },
-                                                  { id: "clearHistory", html: "history", click: this._clearHistory.bind(this) },
-                                                  { id: "clearMonsters", html: "monsters", click: this._clearMonsters.bind(this) }
+                                                  { id: "clearCreatures", html: "creatures", click: this._clearCreatures.bind(this) },
+                                                  { id: "clearMonsters", html: "monsters", click: this._clearMonsters.bind(this) },
+                                                  { id: "clearHistory", html: "history", click: this._clearHistory.bind(this) }
                                               ]
                                             }
            ];
@@ -669,6 +670,11 @@ Initiative.prototype._clearAll = function() {
     this.order = [];
     this.round = 1;
     this._current = 0;
+    this._render();
+};
+
+Initiative.prototype._clearCreatures = function() {
+	Creature.creatures = {};
     this._render();
 };
 

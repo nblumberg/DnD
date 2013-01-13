@@ -43,7 +43,8 @@ input#round { width: 30px; }
 .creaturePanel div.condition span { bottom: 0; font-size: 1.3em; font-weight: bold; left: 0; margin: auto; position: absolute; right: 0; text-shadow: 3px 3px black; top: 0; vertical-align: middle; }
 .creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
 .creaturePanel .effects { margin: 0 1px 2px 0; }
-        
+.creaturePanel .name .hp { padding-left: 1em; white-space: nowrap; }
+
 div#history { float: right; height: 100%; min-width: 30%; padding: 0 5px; }
 div#history h3 { margin: 5px 0; }
 //  table#initiative { border-collapse: collapse; }

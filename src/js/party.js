@@ -265,7 +265,7 @@ function loadParty() {
                effects: []
             },
             Balugh: { 
-                name: "Balugh", image: "images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+                name: "Balugh", isPC: true, image: "images/portraits/balugh.jpg", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
                 hp: { total: 116 },
                 abilities: { STR: 16, CON: 14, DEX: 12, INT: 6, WIS: 12, CHA: 6 },
                 defenses: { ac: 22, fort: 24, ref: 20, will: 22 },
@@ -275,7 +275,7 @@ function loadParty() {
                   ]
             },
             Ringo: { 
-                name: "Ringo", image: "images/portraits/ringo.jpg", // http://beta.ditzie.com/gallery/main.php?g2_view=core.DownloadItem&g2_itemId=14896&g2_serialNumber=1
+                name: "Ringo", isPC: true, image: "images/portraits/ringo.jpg", // http://beta.ditzie.com/gallery/main.php?g2_view=core.DownloadItem&g2_itemId=14896&g2_serialNumber=1
                 hp: { total: 62 },
                 defenses: { ac: 19, fort: 17, ref: 13, will: 14 },
                 init: 2, speed: 6,
@@ -285,7 +285,7 @@ function loadParty() {
                   ]
             },
             Smudge: { 
-                name: "Smudge", image: "images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+                name: "Smudge", isPC: true, image: "images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
                 hp: { total: 97 },
                 defenses: { ac: 25, fort: 25, ref: 22, will: 21 },
                 init: 7, speed: 4,

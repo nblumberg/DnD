@@ -273,7 +273,7 @@ Creature._CARD_SIZE = 240;
  * @param className {String} Class(es) to apply to the top-level element 
  */
 Creature.prototype.createCard = function(params) {
-	var $parent, $div, $span, image, $name, editor, i, $effects;
+	var $parent, $div, $span, image, $name, $hp, editor, i, $effects;
 	params = params || {};
 	this.cardSize = params.cardSize || Creature._CARD_SIZE;
 	$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
@@ -290,8 +290,12 @@ Creature.prototype.createCard = function(params) {
 	image.height = this.cardSize * 100/120;
 	image.src = this.image;
 	this.$panel.append(image);
-	$name = jQuery("<div/>").addClass("f2").html(this.name);
+	$name = jQuery("<div/>").addClass("name f2").html(this.name);
 	this.$panel.append($name);
+	if (params.showPcHp && this.isPC) {
+		$hp = jQuery("<span/>").addClass("hp").html(this.hp.current + (this.hp.temp ? " (" + (this.hp.temp + this.hp.current) + ")" : "") + " / " + this.hp.total);
+		$name.append($hp);
+	}
 //    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
 //        this.name = v;
 //        this.dispatchEvent("change");
