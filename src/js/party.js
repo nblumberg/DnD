@@ -164,7 +164,7 @@ function loadParty() {
                                 ],
                  attackBonuses: [ 
                                 { name: "Bloodhunt", foeStatus: [ "bloodied" ], toHit: 1 }, 
-                                { name: "Hunter's Quarry", foeStatus: [ "combat advantage" ], damage: "1d8", oncePerRound: true }
+                                { name: "Hunter's Quarry", foeStatus: [ "hunter's quarry" ], damage: "1d8", oncePerRound: true }
                            ],
                  attacks: [
                            { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 14, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
