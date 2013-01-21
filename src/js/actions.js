@@ -326,8 +326,9 @@ Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
         	else {
                 total += item.damage.crit.roll();
         	}
-            dice = dice.concat(item.damage.crit._history[ item.damage.crit._history.length - 1 ].dice);
             h.critStr = item.damage.crit.toString();
+        	h.critDice = [].concat(item.damage.crit._history[ item.damage.crit._history.length - 1 ].dice);
+//            dice = dice.concat(item.damage.crit._history[ item.damage.crit._history.length - 1 ].dice);
         }
         else if (this.crit) {
         	if (forcedTotal) {
@@ -336,7 +337,9 @@ Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
         	else {
                 total += this.crit.roll();
         	}
-            dice = dice.concat(this.crit._history[ this.crit._history.length - 1 ].dice);
+            h.critStr = this.crit.toString();
+        	h.critDice = [].concat(this.crit._history[ this.crit._history.length - 1 ].dice);
+//            dice = dice.concat(this.crit._history[ this.crit._history.length - 1 ].dice);
         }
     }
     h.total = Math.floor(total * (this.rollMultiplier || 1));

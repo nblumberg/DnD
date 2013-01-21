@@ -55,34 +55,36 @@ Effect.prototype.toString = function() {
 };
 
 Effect.CONDITIONS = {
-        "Attack penalty": { image: "images/symbols/attack_penalty.jpg", color: "white" },
-        Blinded: { image: "images/symbols/blinded.png" }, // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
-        Dazed: { image: "images/symbols/dazed.jpg" }, // "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
-        Deafened: { image: "images/symbols/deafened.gif" }, // "http://joeclark.org/ear.gif",
-        Diseased: { image: "images/symbols/diseased.jpg" }, // "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnOrSXb8UHvwhgQ-loEdXZvQPTjuBylSfFNiK7Hxyq03IxgUKe",
-        Dominated: { image: "images/symbols/dominated.png" }, // "http://fs02.androidpit.info/ali/x90/4186790-1324571166012.png",
-        Dying: { image: "images/symbols/dying.png" }, // "http://iconbug.com/data/61/256/170c6197a99434339f465fa8c9fa4018.png",
-        Dead: { image: "images/symbols/dead.jpg" }, // "http://t2.gstatic.com/images?q=tbn:ANd9GcTPA7scM15IRChKnwigvYnQUDWNGHLL1cemtAeKxxZKwBDj33MFCxzfyorp",
-        Grabbed: { image: "images/symbols/grabbed.jpg" }, // "http://www.filipesabella.com/wp-content/uploads/2010/02/hand_grab.jpg",
-        Helpless: { image: "images/symbols/helpless.png" }, // "http://files.softicons.com/download/tv-movie-icons/dexter-icons-by-rich-d/png/128/Tied-Up%20Dexter.png",
-        Immobilized: { image: "images/symbols/immobilized.gif" }, // "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
-        Marked: { image: "images/symbols/marked.png" }, // "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
-        "Ongoing acid": { image: "images/symbols/ongoing_acid.png", color: "#00FF00" }, // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
-        "Ongoing cold": { image: "images/symbols/ongoing_cold.jpg", color: "#6666FF" }, // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
-        "Ongoing damage": { image: "images/symbols/ongoing_damage.jpg", color: "#FFFFFF" }, // "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
-        "Ongoing fire": { image: "images/symbols/ongoing_fire.jpg", color: "#555555" }, // "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
-        "Ongoing lightning": { image: "images/symbols/ongoing_lightning.png", color: "#CCCCFF" }, // "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
-        "Ongoing necrotic": { image: "images/symbols/ongoing_necrotic.jpg", color: "purple" }, // "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
-        "Ongoing poison": { image: "images/symbols/ongoing_poison.jpg", color: "#00FF00" }, // "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
-        "Ongoing psychic": { image: "images/symbols/ongoing_psychic.jpg", color: "cyan" }, // "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
-        "Ongoing radiant": { image: "images/symbols/ongoing_radiant.jpg", color: "#FFFFFF" }, // "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
-        Petrified: { image: "images/symbols/petrified.gif" }, // "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
-        Prone: { image: "images/symbols/prone.png" }, // "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
-        Restrained: { image: "images/symbols/restrained.jpg" }, // "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
-        Slowed: { image: "images/symbols/slowed.jpg" }, // "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
-        Stunned: { image: "images/symbols/stunned.jpg" }, // "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
-        Unconscious: { image: "images/symbols/unconscious.gif" }, // "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
-        Weakened: { image: "images/symbols/weakened.png" }, // "http://pictogram-free.com/material/003.png"
+        "attack penalty": { image: "images/symbols/attack_penalty.jpg", color: "white" },
+        blinded: { image: "images/symbols/blinded.png" }, // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
+        dazed: { image: "images/symbols/dazed.jpg" }, // "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
+        deafened: { image: "images/symbols/deafened.gif" }, // "http://joeclark.org/ear.gif",
+        diseased: { image: "images/symbols/diseased.jpg" }, // "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnOrSXb8UHvwhgQ-loEdXZvQPTjuBylSfFNiK7Hxyq03IxgUKe",
+        dominated: { image: "images/symbols/dominated.png" }, // "http://fs02.androidpit.info/ali/x90/4186790-1324571166012.png",
+        dying: { image: "images/symbols/dying.png" }, // "http://iconbug.com/data/61/256/170c6197a99434339f465fa8c9fa4018.png",
+        dead: { image: "images/symbols/dead.jpg" }, // "http://t2.gstatic.com/images?q=tbn:ANd9GcTPA7scM15IRChKnwigvYnQUDWNGHLL1cemtAeKxxZKwBDj33MFCxzfyorp",
+        grabbed: { image: "images/symbols/grabbed.jpg" }, // "http://www.filipesabella.com/wp-content/uploads/2010/02/hand_grab.jpg",
+        helpless: { image: "images/symbols/helpless.png" }, // "http://files.softicons.com/download/tv-movie-icons/dexter-icons-by-rich-d/png/128/Tied-Up%20Dexter.png",
+        immobilized: { image: "images/symbols/immobilized.gif" }, // "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
+        marked: { image: "images/symbols/marked.png" }, // "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
+        "ongoing damage": {
+            untyped: { image: "images/symbols/ongoing_damage.jpg", color: "#FFFFFF" }, // "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
+            acid: { image: "images/symbols/ongoing_acid.png", color: "#00FF00" }, // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
+            cold: { image: "images/symbols/ongoing_cold.jpg", color: "#6666FF" }, // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
+            fire: { image: "images/symbols/ongoing_fire.jpg", color: "#FF0000" }, // "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
+            lightning: { image: "images/symbols/ongoing_lightning.png", color: "#CCCCFF" }, // "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
+            necrotic: { image: "images/symbols/ongoing_necrotic.jpg", color: "purple" }, // "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
+            poison: { image: "images/symbols/ongoing_poison.jpg", color: "#00FF00" }, // "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
+            psychic: { image: "images/symbols/ongoing_psychic.jpg", color: "cyan" }, // "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
+            radiant: { image: "images/symbols/ongoing_radiant.jpg", color: "#FFFFFF" } // "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
+        },
+        petrified: { image: "images/symbols/petrified.gif" }, // "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
+        prone: { image: "images/symbols/prone.png" }, // "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
+        restrained: { image: "images/symbols/restrained.jpg" }, // "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
+        slowed: { image: "images/symbols/slowed.jpg" }, // "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
+        stunned: { image: "images/symbols/stunned.jpg" }, // "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
+        unconscious: { image: "images/symbols/unconscious.gif" }, // "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
+        weakened: { image: "images/symbols/weakened.png" }, // "http://pictogram-free.com/material/003.png"
 };
 
 
@@ -273,14 +275,13 @@ Creature._CARD_SIZE = 240;
  * @param className {String} Class(es) to apply to the top-level element 
  */
 Creature.prototype.createCard = function(params) {
-	var $parent, $div, $span, image, $name, $hp, editor, i, $effects;
+	var $parent, image, editor, i;
 	params = params || {};
+	this.subPanel = {};
 	this.cardSize = params.cardSize || Creature._CARD_SIZE;
 	$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
-	this.$panel = jQuery("<div/>").attr("id", this.name + "_panel").addClass("creaturePanel centered bordered " + params.className).appendTo($parent);
-	if (params.isCurrent) {
-		this.$panel.addClass("current");
-	}
+	this.$panel = jQuery("<div/>").attr("id", this.name.replace(/\s/g, "_") + "_panel").addClass("creaturePanel centered bordered " + params.className).appendTo($parent);
+	this.makeCurrent(params.isCurrent);
 	if (this.isBloodied()) {
 		this.$panel.addClass("bloodied");
 	}
@@ -290,30 +291,59 @@ Creature.prototype.createCard = function(params) {
 	image.height = this.cardSize * 100/120;
 	image.src = this.image;
 	this.$panel.append(image);
-	$name = jQuery("<div/>").addClass("name f2").html(this.name);
-	this.$panel.append($name);
+	this.subPanel.portrait = image;
+	this.subPanel.$name = jQuery("<div/>").addClass("name f2").html(this.name);
+	this.$panel.append(this.subPanel.$name);
 	if (params.showPcHp && this.isPC) {
-		$hp = jQuery("<span/>").addClass("hp").html(this.hp.current + (this.hp.temp ? " (" + (this.hp.temp + this.hp.current) + ")" : "") + " / " + this.hp.total);
-		$name.append($hp);
+		this.subPanel.$hp = jQuery("<span/>").addClass("hp").html(this.hp.current + (this.hp.temp ? " (" + (this.hp.temp + this.hp.current) + ")" : "") + " / " + this.hp.total);
+		this.subPanel.$name.append(this.subPanel.$hp);
 	}
 //    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
 //        this.name = v;
 //        this.dispatchEvent("change");
 //    }).bind(this) });
 	
-    $effects = jQuery("<div/>").addClass("effects").appendTo(this.$panel);
+    this.subPanel.$effects = jQuery("<div/>").addClass("effects").appendTo(this.$panel);
     
 	for (i = 0; this.effects && i < this.effects.length; i++) {
-	    this._addCondition($effects, this.effects[i], this.effects.length);
+	    this._addCondition(this.subPanel.$effects, this.effects[i], this.effects.length);
 	}
 };
 
+Creature.prototype.refreshCard = function(isCurrent) {
+	if (!this.$panel) {
+		this.createCard();
+		return;
+	}
+	if (typeof(isCurrent) !== "undefined") {
+		this.makeCurrent(isCurrent);
+	}
+	this.$panel[ this.isBloodied() ? "addClass" : "removeClass" ]("bloodied");
+	this.subPanel.$name.html(this.name);
+	this.subPanel.$hp.html(this.hp.current + (this.hp.temp ? " (" + (this.hp.temp + this.hp.current) + ")" : "") + " / " + this.hp.total);
+    this.subPanel.$effects.children().remove();
+	for (i = 0; this.effects && i < this.effects.length; i++) {
+	    this._addCondition(this.subPanel.$effects, this.effects[i], this.effects.length);
+	}
+};
+
+Creature.prototype.makeCurrent = function(isCurrent) {
+	if (!this.$panel) {
+		return;
+	}
+	this.$panel[ isCurrent ? "addClass" : "removeClass" ]("current");
+}
+
 Creature.prototype._addCondition = function($parent, effect, total) {
-    var i, $div, image, clickHandler;
+    var name, i, $div, image, clickHandler, condition;
+    if (typeof(effect) === "string") {
+    	effect = { name: effect };
+    }
     if (effect && effect.name) {
     	effect.name = effect.name.substring(0, 1).toUpperCase() + effect.name.substr(1);
     }
-    if ((effect.name === "Dying" || effect.name === "Dead") && this.hp.current >= 0) {
+    name = effect.name.toLowerCase();
+    if ((name === "dying" || name === "dead") && this.hp.current >= 0) {
         this.effects.splice(this.effects.indexOf(effect), 1);
         return;
     }
@@ -324,9 +354,6 @@ Creature.prototype._addCondition = function($parent, effect, total) {
         return;
     }
     $div = jQuery("<div/>").addClass("condition");
-    if (Effect.CONDITIONS[ effect.name ] && Effect.CONDITIONS[ effect.name ].color) {
-        $div.css({ color: Effect.CONDITIONS[ effect.name ].color });
-    }
     clickHandler = (function($this, event) {
         if (event.metaKey) {
             $this.off({ click: clickHandler });
@@ -347,13 +374,52 @@ Creature.prototype._addCondition = function($parent, effect, total) {
         image.height = this.cardSize / 5.4;
     }
     image.className = "icon";
-    image.title = effect.name + (effect.attacker ? " (" + effect.attacker + ")" : "");
-    image.src = Effect.CONDITIONS[ effect.name ] ? Effect.CONDITIONS[ effect.name ].image : ""; // TODO
+    condition = Effect.CONDITIONS[ name ];
+    if (name === "ongoing damage") {
+    	condition = condition[ effect.type ? effect.type.toLowerCase() : "untyped" ];
+        image.title = (condition.type ? "Ongoing " + condition.type + " damage" : "Ongoing damage") + (effect.attacker ? " (" + effect.attacker + ")" : "");
+    }
+    else {
+        image.title = effect.name + (effect.attacker ? " (" + effect.attacker + ")" : "");
+    }
+    if (condition && condition.image) {
+        image.src = condition.image;
+    }
+    else {
+        image.src = "images/symbols/unknown.png";
+    }
     $div.append(image);
     if (effect.amount) {
-        $div.append(jQuery("<span/>").css({ "line-height": image.height + "px" }).html(effect.amount)); 
+        $div.append(jQuery("<span/>").css({ "line-height": image.height + "px", "color": condition && condition.color ? condition.color : "red" }).html(effect.amount));
     }
     $parent.append($div);
+};
+
+Creature.prototype.addDamageIndicator = function(damage, type) {
+    var height, $div, image, condition;
+    height = this.cardSize - Math.floor(this.cardSize / 4);
+    this.subPanel.$effects.find("div.damage").remove();
+    $div = jQuery("<div/>").addClass("damage").css({ height: height + 30 + "px" });
+    image = new Image();
+    image.height = height;
+    image.className = "icon";
+    if (type) {
+    	if (Effect.CONDITIONS[ "ongoing damage" ][ type ] && Effect.CONDITIONS[ "ongoing damage" ][ type ].image) {
+        	condition = Effect.CONDITIONS[ "ongoing damage" ][ type ];
+    	}
+    }
+    if (!condition) {
+    	condition = Effect.CONDITIONS[ "ongoing damage" ].untyped;
+    }
+	image.src = condition.image;
+    $div.append(image);
+    if (damage) {
+        $div.append(jQuery("<span/>").css({ "line-height": image.height + "px", "color": condition && condition.color ? condition.color : "red" }).html(damage));
+    }
+    this.subPanel.$effects.append($div);
+    setTimeout(function() {
+    	$div.remove();
+    }, 30000);
 };
 
 Creature.prototype._addDefense = function($parent, className, value, icon) {
@@ -423,8 +489,9 @@ Creature.prototype._addAction = function($parent, title, src, click) {
 
 Creature.prototype.getCondition = function(condition) {
     var i;
-    for (i = 0; i < this.effects.length; i++) {
-        if (this.effects[ i ].name === condition) {
+    condition = condition ? condition.toLowerCase() : "";
+    for (i = 0; condition && i < this.effects.length; i++) {
+        if (this.effects[ i ].name.toLowerCase() === condition) {
             return this.effects[ i ];
         }
     }
@@ -478,12 +545,18 @@ Creature.prototype.defenseModifier = function(isMelee) {
 };
 
 Creature.prototype.attack = function(attack, item, targets, combatAdvantage, round, callback, manualRolls) {
-    var toHit, damage, i;
+    var toHit, damage, i, result, hits;
+    hits = [];
     toHit = this._attackToHit(attack, item, combatAdvantage, manualRolls);
     damage = this._attackDamage(attack, item, toHit.isCrit, manualRolls);
     for (i = 0; i < targets.length; i++) {
-        this._attackTarget(attack, item, combatAdvantage, targets[ i ], toHit, damage, round, callback);
+        result = this._attackTarget(attack, item, combatAdvantage, targets[ i ], toHit, damage, round, callback);
+        if (result.hit) {
+        	result.target = targets[ i ].raw();
+        	hits.push(result);
+        }
     }
+    return hits;
 };
 
 Creature.prototype._attackBonuses = function(attack, item, target, combatAdvantage) {
@@ -644,7 +717,9 @@ Creature.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
 };
 
 Creature.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage, round, callback) {
-	var attackBonuses, i, toHitTarget, targetDamage, tmp, targetDefense, msg;
+	var attackBonuses, i, toHitTarget, targetDamage, tmp, targetDefense, msg, result;
+	
+	result = { hit: false, damage: [] };
 
 	toHitTarget = { 
 		roll: toHit.roll + (toHit.conditional.mod ? toHit.conditional.mod : 0),
@@ -690,16 +765,21 @@ Creature.prototype._attackTarget = function(attack, item, combatAdvantage, targe
     // Apply hit or miss damage/effects
     if (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense) {
     	// Hit
+    	result.hit = true;
         msg = "Hit by " + this.name + "'s " + attack.anchor(toHitTarget.conditional) + " for ";
 		if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
 			for (i = 0; i < attack.damage.length; i++) {
                 msg += (i > 0 && i < attack.damage.length - 1 ? ", " : "") + (i > 0 && i === attack.damage.length - 1 ? " and " : "") + attack.damage[ i ].anchor(targetDamage.conditional);
-                msg += target.takeDamage(this, attack.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.damage[ i ].type, i === 0 ? attack.effects : null);
+                tmp = target.takeDamage(this, attack.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.damage[ i ].type, i === 0 ? attack.effects : null);
+                msg += tmp.msg;
+            	result.damage.push({ amount: tmp.damage, type: attack.damage[ i ].type });
 			}
 		}
 		else {
             msg += attack.damage.anchor(targetDamage.conditional);
-            msg += target.takeDamage(this, targetDamage.amount, attack.damage.type, attack.effects);
+            tmp = target.takeDamage(this, targetDamage.amount, attack.damage.type, attack.effects);
+            msg += tmp.msg;
+        	result.damage.push({ amount: tmp.damage, type: attack.damage.type });
 		}
     }
     else {
@@ -720,21 +800,26 @@ Creature.prototype._attackTarget = function(attack, item, combatAdvantage, targe
         if (targetDamage.missAmount || attack.hasOwnProperty("miss")) {
     		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
     			for (i = 0; i < attack.miss.damage.length; i++) {
-                	msg += target.takeDamage(this, attack.miss.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.miss.damage[ i ].type, i === 0 ? attack.miss.effects : null);
+                	tmp = target.takeDamage(this, attack.miss.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.miss.damage[ i ].type, i === 0 ? attack.miss.effects : null);
+                	msg += tmp.msg;
+                	result.damage.push({ amount: tmp.damage, type: attack.miss.damage[ i ].type });
     			}
     		}
     		else {
-            	msg += target.takeDamage(this, attack.miss.damage.getLastRoll() + targetDamage.conditional.mod, attack.miss.damage.type, attack.miss.effects);
+            	tmp = target.takeDamage(this, attack.miss.damage.getLastRoll() + targetDamage.conditional.mod, attack.miss.damage.type, attack.miss.effects);
+            	msg += tmp.msg;
+            	result.damage.push({ amount: tmp.damage, type: attack.miss.damage.type });
     		}
         }
     }
     if (callback) {
         callback(target, msg);
     }
+    return result;
 };
 
 Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
-    var temp, msg, i;
+    var temp, msg, i, result;
     msg = "";
     if (type && this.defenses.resistances && this.defenses.resistances.hasOwnProperty(type)) {
     	temp = this.defenses.resistances[ type ];
@@ -749,7 +834,7 @@ Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
     }
     if (damage > 0 && effects && effects.length) {
         for (i = 0; i < effects.length; i++) {
-            if (effects[ i ].name === "Marked") {
+            if (effects[ i ].name.toLowerCase() === "marked") {
                 effects[ i ].attacker = attacker.name;
             }
             this.effects.push(effects[ i ]);
@@ -761,7 +846,15 @@ Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
         this.effects.push({ name: "Dying" });
         msg += "; " + this.name + " falls unconscious and is dying";
     }
-    return msg;
+//    this.addDamageIndicator(damage, type);
+//    this.dispatchEvent({ type: "takeDamage", damage: { amount: damage, type: type } });
+    result = {
+    		msg: msg,
+    		damage: damage,
+    		type: type
+    };
+
+    return result;
 };
 
 Creature.prototype.startTurn = function() {
@@ -772,9 +865,8 @@ Creature.prototype.startTurn = function() {
         this.history.add(new History.Entry({ round: this.history._round, subject: this, message: "Regenerated " + regen + " HP" }));
     }
     for (i = 0; this.effects && this.effects.length && i < ongoingEffects.length; i++) {
-        effect = this.getCondition(ongoingEffects[ i ]);
-        if (effect !== null) {
-            this.takeDamage(null, effect.amount, ongoingEffects[ i ].split(" ")[ 1 ] !== "damage" ? ongoingEffects[ i ].split(" ")[ 1 ] : null);
+        if (effect.name.toLowerCase() === "ongoing damage") {
+            this.takeDamage(null, effect.amount, effect.type, null);
         }
     }
 };

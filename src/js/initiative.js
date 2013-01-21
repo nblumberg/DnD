@@ -39,31 +39,29 @@ Initiative.prototype._init = function(params) {
         }
     }
 
+    this.actors = [];
     if (params.actors) {
-        this.actors = params.actors;
-        for (i = 0; i < this.actors.length; i++) {
-            actor = this.actors[ i ];
-            count = typeof(actor) === "string" && !Creature.creatures[ actor ].isPC ? this._countActorsByType(actor) : 0;
-            actor = this.actors[ i ] = typeof(actor) === "string" ? Creature.creatures[ actor ].toActor(count) : new Creature(actor, true);
-//          this.addRoute(actor);
-            actor.addEventListener("change", this._render.bind(this));
-            actor.addEventListener("reorder", this._changeInitiative.bind(this));
+        for (i = 0; i < params.actors.length; i++) {
+            actor = params.actors[ i ];
+            actor = typeof(actor) === "string" ? Creature.creatures[ actor ] : new Creature(actor, true);
+            actor = this._addActor(actor, params.actors);
         }
     }
     
+    this.order = params.order;
+    if (!this.order || !this.order.length) {
+        this._rollInitiative();
+    }
+
     if (params.history) {
         this.history = new History(params.history); // NOTE: must come after this.actors is initialized because of _includeSubject
         History.central = this.history;
     }
 
-    this.order = params.order;
-    if (!this.order || !this.order.length) {
-        this._rollInitiative();
-    }
     this.round = params.round || 1;
     this._current = params._current || 0;
     this._$target = params.target ? jQuery(params.target) : ""; 
-
+    
     this._autoSave();
     
     jQuery(document).ready(this._create.bind(this));
@@ -114,11 +112,14 @@ Initiative.prototype.loadPartyFromJs = function() {
 	this._init(data);
 };
 
-Initiative.prototype._countActorsByType = function(type, adding) {
+Initiative.prototype._countActorsByType = function(type, actors, adding) {
     var i, actor, potential, count;
+    if (!actors) {
+    	actors = this.actors;
+    }
     potential = count = 0;
-    for (i = 0; this.actors && i < this.actors.length; i++) {
-        actor = this.actors[ i ];
+    for (i = 0; actors && i < actors.length; i++) {
+        actor = actors[ i ];
         if (typeof(actor) === "string") {
             if (actor.indexOf(type) === 0) {
                 potential++;
@@ -138,6 +139,30 @@ Initiative.prototype._countActorsByType = function(type, adding) {
     	return count === 0 ? 0 : count + 1;
     }
     return 0;
+};
+
+Initiative.prototype._addActor = function(creature, actors) {
+	var count, actor;
+    if (!this.actors) {
+    	this.actors = [];
+    }
+	if (!actors) {
+		actors = this.actors;
+	}
+    count = creature.isPC ? 0 : this._countActorsByType(creature.name, actors, true);
+    actor = creature.toActor(count);
+    this.actors.push(actor);
+    jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
+    if (this.order) {
+        this.order.push(this.actors.length - 1);
+    }
+    if (History.central) {
+        this._addHistory(actor, "Joins the fight");
+    }
+    actor.addEventListener("change", this._render.bind(this, true));
+    actor.addEventListener("reorder", this._changeInitiative.bind(this));
+    actor.addEventListener("takeDamage", this._displayDamage.bind(this));
+    return actor;
 };
 
 Initiative.prototype._rollInitiative = function() {
@@ -189,7 +214,7 @@ Initiative.prototype._create = function() {
     
     this._createTable();
 	
-	this._render();
+	this._render(true);
 };
 
 Initiative.prototype._createAttackDialog = function() {
@@ -410,14 +435,9 @@ Initiative.prototype._createCreatureDialog = function() {
                 }
                 for (i = 0; i < toAdd.length; i++) {
                     creature = toAdd[ i ];
-                    count = creature.isPC ? 0 : this._countActorsByType(creature.name, true);
-                    actor = creature.toActor(count);
-                    this.actors.push(actor);
-                    jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
-                    this.order.push(this.actors.length - 1);
-                    this._addHistory(actor, "Joins the fight");
+                    this._addActor(creature);
                 }
-                this._render();
+                this._render(true);
             }).bind(this)
         }, 
         modal: true, 
@@ -433,25 +453,6 @@ Initiative.prototype._createCreatureDialog = function() {
         }).bind(this) 
     });
     this.$menuBar.append(this.$creatureButton);
-//    this.$creaturesMenu = jQuery("<ul/>").attr("id", "creaturesMenu").css({ position: "absolute", left: this.$creatureButton.position().left }).delegate("li", "click", (function(event) { 
-//        event.stopPropagation();
-//        this.$creaturesMenu.toggle();
-//    }).bind(this));
-//    this.$menuBar.append(this.$creaturesMenu);
-//    for (i in Creature.creatures) {
-//        $li = jQuery("<li/>").attr("id", Creature.creatures[ i ].name).append(jQuery("<a/>").attr("href", "javascript:void(0);").html(Creature.creatures[ i ].name)).on({ 
-//            click: (function(creature) {
-//                var count, actor;
-//                count = creature.isPC ? 0 : this._countActorsByType(creature.name);
-//                actor = creature.toActor(count);
-//                this.actors.push(actor);
-//                this.order.push(this.actors.length - 1);
-//                this._render();
-//                this._addHistory(actor, "Joins the fight");
-//            }).bind(this, Creature.creatures[ i ]) 
-//        }).appendTo(this.$creaturesMenu);
-//    }
-//    this.$creaturesMenu.menu().hide();
 };
 
 Initiative.prototype._createTable = function() {
@@ -509,7 +510,7 @@ Initiative.prototype._hideMenus = function() {
 //    this.$creaturesMenu.hide(); 
 };
 
-Initiative.prototype._render = function() {
+Initiative.prototype._render = function(updateDisplay) {
 	var i, actor;
 	
     this.$round.val(this.round);
@@ -533,7 +534,9 @@ Initiative.prototype._render = function() {
 //            className: "gridItem"
 //        });
 	}
-	this._renderDisplay(false);
+	if (updateDisplay) {
+		this._renderDisplay(false);
+	}
 };
 
 Initiative.prototype._displayLoadHandler = function(event) {
@@ -544,14 +547,28 @@ Initiative.prototype._displayLoadHandler = function(event) {
 };
 
 Initiative.prototype._renderDisplay = function(createDisplay, event) {
-	var listen, stopListening, eventType, intervalId, json;
-	json = this.toJSON();
-	
+	var data;
 	if (event) {
 		event.stopPropagation = true; // TODO, HACK: why are we getting 80+ hits for the same event?
 	}
+	data = {
+			order: this.order,
+			actors: this.rawObj(this.actors),
+			current: this._current,
+			type: "refresh"
+	};
+	this._messageDisplay(data, createDisplay);
+	this._autoSave(this.toJSON());
+};
+
+Initiative.prototype._displayDamage = function(event) {
+	this._messageDisplay({ actor: event.target.raw(), damage: event.damage }, false);
+};
+
+Initiative.prototype._messageDisplay = function(msg, createDisplay) {
+	var listen, stopListening, eventType, intervalId, json;
 	
-	if (!this.display && createDisplay) {
+	if (createDisplay) {
 		// Log when the other window loads
 		if (window.addEventListener) {
 			listen = "addEventListener";
@@ -579,13 +596,17 @@ Initiative.prototype._renderDisplay = function(createDisplay, event) {
 	        }  
 	    }).bind(this), 1000);
 	    this.$displayButton.attr("id", "refresh").html("Refresh").data("intervalId", intervalId);
-	    
-	    return;
 	}
-	else if (this.display) {
+	if (this.display) {
+		if (typeof(msg) !== "string") {
+			json = JSON.stringify(msg, null, "  "); // msg.toJSON();
+		}
+		else {
+			json = msg;
+		}
 		this.display.postMessage(json, "*");
 	}
-	this._autoSave(json);
+	return json;
 };
 
 Initiative.prototype.toString = function() {
@@ -670,12 +691,12 @@ Initiative.prototype._clearAll = function() {
     this.order = [];
     this.round = 1;
     this._current = 0;
-    this._render();
+    this._render(true);
 };
 
 Initiative.prototype._clearCreatures = function() {
 	Creature.creatures = {};
-    this._render();
+    this._render(true);
 };
 
 Initiative.prototype._clearHistory = function() {
@@ -689,7 +710,7 @@ Initiative.prototype._clearHistory = function() {
 	}
 	this.history.clear();
 	History.Entry.init();
-    this._render();
+    this._render(false);
 };
 
 Initiative.prototype._clearMonsters = function() {
@@ -700,7 +721,7 @@ Initiative.prototype._clearMonsters = function() {
 			i--;
 		}
 	}
-    this._render();
+    this._render(true);
 };
 
 Initiative.prototype._addHistory = function(actor, message, method) {
@@ -735,12 +756,15 @@ Initiative.prototype._previous = function() {
     if (msg) {
         this._addHistory(null, msg);
     }
-    this._render();
+    this._render(false);
+    this._messageDisplay({ type: "changeTurn", current: this_current }, false);
 };
 
 Initiative.prototype._next = function() {
-    var msg, i, actor;
+    var msg, i, actors, actor;
+    actors = [];
     actor = this.actors[ this.order[ this._current ] ];
+    actors.push(actor);
     msg = actor.endTurn();
     if (msg) {
         this._addHistory(actor, msg);
@@ -755,6 +779,7 @@ Initiative.prototype._next = function() {
     }
     this.history._round = this.round;
     actor = this.actors[ this.order[ this._current ] ];
+    actors.push(actor);
     msg = actor.startTurn();
     if (msg) {
         this._addHistory(actor, msg);
@@ -763,7 +788,8 @@ Initiative.prototype._next = function() {
         this._next();
         return;
     }
-    this._render();
+    this._render(false);
+    this._messageDisplay({ type: "changeTurn", current: this_current, actors: this.rawArray(actors) }, false);
 };
 
 Initiative.prototype._changeInitiative = function(event) {
@@ -791,7 +817,7 @@ Initiative.prototype._changeInitiative = function(event) {
     	test += (i ? ", " : "") + this.actors[ this.order[ i ] ].name;
     }
     console.info("New order: " + test + " ]");
-    this._render();
+    this._render(true);
 };
 
 Initiative.prototype._attack = function(actor, event) {
@@ -864,7 +890,7 @@ Initiative.prototype._selectAttack = function() {
 };
 
 Initiative.prototype._resolveAttack = function() {
-	var attacker, attack, item, i, targets, combatAdvantage, playerRolls;
+	var attacker, attack, item, i, targets, combatAdvantage, playerRolls, hits;
 	if (this.$attacks.val() && this.$targets.val()) {
 		this.$attackDialog.dialog("close");
 		attacker = this.$attackDialog.data("attacker");
@@ -882,8 +908,9 @@ Initiative.prototype._resolveAttack = function() {
 		if (this.$playerAttackRoll.val() || this.$playerAttackCrit.val() || this.$playerDamageRoll.val()) {
 			playerRolls = { attack: { roll: parseInt(this.$playerAttackRoll.val()), isCritical: this.$playerAttackCrit.val() === "crit", isFumble: this.$playerAttackCrit.val() === "fail" }, damage: parseInt(this.$playerDamageRoll.val()) };
 		}
-		attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
-		this._render();
+		hits = attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
+		this._render(false);
+		this._messageDisplay({ type: "takeDamage", hits: hits }, false);
 	} 
 	else {
 		alert("Please select both an attack and 1 or more valid target(s)");
@@ -928,7 +955,7 @@ Initiative.prototype._resolveHeal = function(actor) {
 		}
 	}
 	this._addHistory(target, msg, method);
-	this._render();
+	this._render(true);
 };
 
 Initiative.prototype._exit = function(actor, event) {
@@ -951,7 +978,7 @@ Initiative.prototype._exit = function(actor, event) {
 //                    			  this.order[ i ]--;
 //                    		  }
 //                    	  }
-                    	  this._render();
+                    	  this._render(true);
                     	  $dialog.dialog("destroy");
                       }).bind(this)
                   },
@@ -977,7 +1004,7 @@ Initiative.prototype._rename = function(actor, event) {
                         	  this._addHistory(actor, "Changed name from " + actor.name + " to " + $input.val());
                         	  actor.name = $input.val();
                     	  }
-                    	  this._render();
+                    	  this._render(true);
                     	  $dialog.dialog("destroy");
                       }).bind(this)
                   },
