@@ -537,6 +537,7 @@ Initiative.prototype._render = function(updateDisplay) {
 	if (updateDisplay) {
 		this._renderDisplay(false);
 	}
+	this._autoSave(this.toJSON());
 };
 
 Initiative.prototype._displayLoadHandler = function(event) {
@@ -558,7 +559,6 @@ Initiative.prototype._renderDisplay = function(createDisplay, event) {
 			type: "refresh"
 	};
 	this._messageDisplay(data, createDisplay);
-	this._autoSave(this.toJSON());
 };
 
 Initiative.prototype._displayDamage = function(event) {

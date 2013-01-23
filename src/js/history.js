@@ -70,6 +70,7 @@ History.prototype.clear = function() {
 	for (i = 0; i < this._entries.length; i++) {
 		this.remove(History.Entry.entries[ this._entries[ i ] ]);
 	}
+	this._entries = [];
 	this._round = 0;
 	this._count = 0;
 };
