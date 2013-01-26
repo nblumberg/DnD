@@ -789,7 +789,7 @@ Initiative.prototype._next = function() {
         return;
     }
     this._render(false);
-    this._messageDisplay({ type: "changeTurn", current: this_current, actors: this.rawArray(actors) }, false);
+    this._messageDisplay({ type: "changeTurn", current: this._current, actors: this.rawArray(actors) }, false);
 };
 
 Initiative.prototype._changeInitiative = function(event) {

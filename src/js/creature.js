@@ -85,6 +85,7 @@ Effect.CONDITIONS = {
         stunned: { image: "images/symbols/stunned.jpg" }, // "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
         unconscious: { image: "images/symbols/unconscious.gif" }, // "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
         weakened: { image: "images/symbols/weakened.png" }, // "http://pictogram-free.com/material/003.png"
+        "will penalty": { image: "images/symbols/will.png", color: "purple" }
 };
 
 
