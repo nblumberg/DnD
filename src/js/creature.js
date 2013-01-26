@@ -68,7 +68,7 @@ Effect.CONDITIONS = {
         immobilized: { image: "images/symbols/immobilized.gif" }, // "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
         marked: { image: "images/symbols/marked.png" }, // "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
         "ongoing damage": {
-            untyped: { image: "images/symbols/ongoing_damage.jpg", color: "#FFFFFF" }, // "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
+            untyped: { image: "images/symbols/ongoing_damage.jpg", color: "#FF0000" }, // "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
             acid: { image: "images/symbols/ongoing_acid.png", color: "#00FF00" }, // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
             cold: { image: "images/symbols/ongoing_cold.jpg", color: "#6666FF" }, // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
             fire: { image: "images/symbols/ongoing_fire.jpg", color: "#FF0000" }, // "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
@@ -395,30 +395,39 @@ Creature.prototype._addCondition = function($parent, effect, total) {
     $parent.append($div);
 };
 
-Creature.prototype.addDamageIndicator = function(damage, type) {
-    var height, $div, image, condition;
-    height = this.cardSize - Math.floor(this.cardSize / 4);
+Creature.prototype.addDamageIndicator = function(damage) {
+    var height, $damage, $type, i, dmg, image, condition, $amount;
+    if (!damage) {
+    	return;
+    }
+    if (Object.prototype.toString.call(damage) !== "[object Array]") {
+    	damage = [ damage ];
+    }
     this.subPanel.$effects.find("div.damage").remove();
-    $div = jQuery("<div/>").addClass("damage").css({ height: height + 30 + "px" });
-    image = new Image();
-    image.height = height;
-    image.className = "icon";
-    if (type) {
-    	if (Effect.CONDITIONS[ "ongoing damage" ][ type ] && Effect.CONDITIONS[ "ongoing damage" ][ type ].image) {
-        	condition = Effect.CONDITIONS[ "ongoing damage" ][ type ];
-    	}
+    $damage = jQuery("<div/>").addClass("damage").appendTo(this.subPanel.$effects);
+	height = Math.floor(75 / damage.length);
+    for (i = 0; i < damage.length; i++) {
+    	dmg = damage[ i ];
+    	$type = jQuery("<div/>").appendTo($damage).addClass("type").css({ height: height + "%" });
+        image = new Image();
+        image.height = $type.height();
+        image.className = "icon";
+        if (dmg.type) {
+        	if (Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ] && Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ].image) {
+            	condition = Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ];
+        	}
+        }
+        if (!condition) {
+        	condition = Effect.CONDITIONS[ "ongoing damage" ].untyped;
+        }
+    	image.src = condition.image;
+        $type.append(image);
+        if (dmg.amount) {
+        	$amount = jQuery("<span/>").addClass("amount").css({ "font-size": Math.floor(image.height / 2) + "px", "line-height": image.height + "px", "color": condition && condition.color ? condition.color : "red" }).html(dmg.amount).appendTo($type);
+        }
     }
-    if (!condition) {
-    	condition = Effect.CONDITIONS[ "ongoing damage" ].untyped;
-    }
-	image.src = condition.image;
-    $div.append(image);
-    if (damage) {
-        $div.append(jQuery("<span/>").css({ "line-height": image.height + "px", "color": condition && condition.color ? condition.color : "red" }).html(damage));
-    }
-    this.subPanel.$effects.append($div);
     setTimeout(function() {
-    	$div.remove();
+    	$damage.remove();
     }, 30000);
 };
 

@@ -41,11 +41,11 @@ input#round { width: 30px; }
 .creaturePanel .column { float: left; margin-right: 4px; }
 .creaturePanel div.condition, .creaturePanel div.damage { color: #FFFFFF; position: relative; text-align: center; vertical-align: middle; }
 .creaturePanel div.condition { background-color: #FFFFFF; float: left; margin-right: 2px; position: relative; }
-.creaturePanel div.damage { background-clip: content-box; background-image: url('../images/symbols/pow.png'); background-position: 50% 90%; background-repeat: no-repeat; background-size: 110%; margin: auto; position: relative; }
+.creaturePanel .damage { background-clip: border-box; background-image: url('../images/symbols/pow.png'); background-position: auto auto; background-repeat: no-repeat; background-size: auto auto; height: 75%; margin: 5% 0 0 0; overflow: hidden; padding: 35% 0 0 0; position: relative; }
+.creaturePanel .damage .type { margin: auto; position: relative; }
 .creaturePanel div.damage img.background { margin: auto; position: absolute; }
 .creaturePanel div.condition span, .creaturePanel div.damage span { bottom: 0; font-size: 1.3em; font-weight: bold; left: 0; margin: auto; position: absolute; right: 0; text-shadow: 3px 3px black; top: 0; vertical-align: middle; }
-.creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
-.creaturePanel .effects { margin: 0 1px 2px 0; }
+.creaturePanel .effects { bottom: 1.2em; left: 0; margin: 10px; position: absolute; right:0; top: 0; }
 .creaturePanel .name .hp { padding-left: 1em; white-space: nowrap; }
 
 div#history { float: right; height: 100%; min-width: 30%; padding: 0 5px; }

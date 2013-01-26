@@ -87,13 +87,14 @@
     }
     
     function takeDamage(data) {
-    	var i, actor, damage, msg;
+    	var i, hit, actor, damage, msg;
     	msg = "Received \"takeDamage\" message for ";
         for (i = 0; i < data.hits.length; i++) {
-            actor = findActor(data.hits[ i ].target);
+        	hit = data.hits[ i ];
+            actor = findActor(hit.target);
             if (actor) {
-            	damage = data.hits[ i ].damage[ 0 ];
-                actor.addDamageIndicator(damage.amount, damage.type);
+            	damage = hit.damage;
+                actor.addDamageIndicator(damage);
                 msg += "\n\t" + actor.name + " (" + damage.amount + " " + damage.type + ")";
             }
         }
