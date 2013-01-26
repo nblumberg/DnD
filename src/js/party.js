@@ -6,7 +6,7 @@ function loadParty() {
                  abilities: { STR: 11, CON: 18, DEX: 10, INT: 10, WIS: 20, CHA: 10 },
                  hp: { total: 80 },
                  surges: { perDay: 11, current: 11 },
-                 defenses: { ac: 24, fort: 23, ref: 17, will: 22 },
+                 defenses: { ac: 24, fort: 25, ref: 19, will: 24 },
                  init: 5, speed: 6,
                  weapons: [ 
                            { name: "Vicious Quarterstaff +2", isMelee: true, enhancement: 2, proficiency: 2, damage: { amount: "1d12", crit: "2d12" } },
@@ -197,6 +197,9 @@ function loadParty() {
                                  { name: "Supremely Vicious Bastard Sword +2", enhancement: 2, crit: "2d8" },
                                  { name: "Orb of Nimble Thoughts +1", enhancement: 1, crit: "1d6" }
                                  ],
+                 attackBonuses: [ 
+                                 { name: "Dual Implement Spellcaster", status: [ "implement" ], damage: 1 }
+                             ],
                  attacks: [
                            { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 16, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
                            { name: "Ranged Basic", type: "At-Will", toHit: "automatic", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },

@@ -92,17 +92,17 @@ Roll.prototype.add = function(total) {
 };
 
 Roll.prototype.getLastRoll = function() {
-	return this._history[ this._history.length - 1 ];
+	return this._history && this._history.length ? this._history[ this._history.length - 1 ] : { dice: [], total: 0 };
 };
 
 Roll.prototype.isCritical = function() {
 	var h = this.getLastRoll();
-	return h ? h.dice[0] === 20 : false;
+	return h && h.dice && h.dice.length ? h.dice[0] === 20 : false;
 };
 
 Roll.prototype.isFumble = function() {
 	var h = this.getLastRoll();
-	return h ? h.dice[0] === 1 : false;
+	return h && h.dice && h.dice.length ? h.dice[0] === 1 : false;
 };
 
 Roll.prototype.breakdown = function(conditional) {
@@ -113,7 +113,7 @@ Roll.prototype.breakdown = function(conditional) {
         output += this.isCritical() ? "CRIT" : "FUMBLE";
     }
     else {
-    	for (i = 0; i < h.dice.length; i++) {
+    	for (i = 0; h && h.dice && i < h.dice.length; i++) {
     		output += (output ? " + " : "");
             output += h.dice[ i ];
     	}
@@ -143,7 +143,8 @@ Roll.prototype.raw = function() {
 };
 
 Roll.prototype._anchorHtml = function(conditional) {
-    return "" + (this.getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) + (conditional && conditional.text ? conditional.text : "");
+	var h = this.getLastRoll();
+    return "" + ((h && h.total ? h.total : 0) + (conditional && conditional.total ? conditional.total : 0)) + (conditional && conditional.text ? conditional.text : "");
 };
 
 Roll.prototype.anchor = function(conditional) {
@@ -558,6 +559,9 @@ Attack.prototype.anchor = function(conditional) {
 };
 
 Attack.prototype._breakdownToString = function() {
+    if (typeof(this.toHit) === "string" && this.toHit.toLowerCase() === "automatic") {
+        return "automatic hit";
+    }
 	return Roll.prototype.toString.call(this);
 };
 

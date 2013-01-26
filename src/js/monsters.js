@@ -89,7 +89,7 @@ function loadMonsters() {
                 attacks: [
                           { name: "Slam", type: "At-Will", range: "reach", toHit: 19, defense: "AC", damage: "2d8+6", keywords: [ "melee" ] },
                           { name: "Divine Retribution", type: "At-Will", range: "20", toHit: 17, defense: "Ref", damage: { amount: "2d8+5", type: "radiant" }, keywords: [ "ranged", "miss half" ] },
-                          { name: "Vengeful Flames", type: "At-Will", range: "20", toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "fire" }, effects: [ { name: "ongoing_fire", amount: 5, saveEnds: true } ], keywords: [ "ranged", "miss half" ] },
+                          { name: "Vengeful Flames", type: "At-Will", range: "20", toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, saveEnds: true } ], keywords: [ "ranged", "miss half" ] },
                           { name: "Hallowed Stance", type: "At-Will", range: "ranged", toHit: 99, defense: "AC", damage: { amount: "1d8", type: "radiant" } }
                   ]
             },

@@ -673,8 +673,7 @@ Creature.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
 	damage = {
 			amount: 0,
 			missAmount: 0,
-			conditional: { mod: 0, effects: [] },
-			
+			conditional: { mod: 0, effects: [], breakdown: "" }
 	};
 
     if (manualRolls && manualRolls.damage) {
@@ -718,6 +717,14 @@ Creature.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
     		}
     	}
     }
+    if (item && item.enhancement) {
+    	if (attack.weaponMultiplier && attack.weaponMultiplier > 1) {
+            damage.conditional.breakdown += " + " + attack.weaponMultiplier + "x[+" + item.enhancement + " weapon]";
+    	}
+    	else {
+            damage.conditional.breakdown += " [+" + item.enhancement + " weapon]";
+    	}
+    }
     if (this.hasCondition("weakened")) {
         damage.conditional.mod = -1 * Math.ceil(damage.amount / 2);
         damage.conditional.breakdown += " [1/2 for weakened]";
@@ -741,7 +748,7 @@ Creature.prototype._attackTarget = function(attack, item, combatAdvantage, targe
 	targetDamage = { 
 		amount: damage.amount, 
 		missAmount: damage.missAmount,
-		conditional: jQuery.extend({ mod: 0, breakdown: "" }, damage.conditional)
+		conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
 	};
 	
     attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
@@ -754,6 +761,9 @@ Creature.prototype._attackTarget = function(attack, item, combatAdvantage, targe
     	}
     	if (attackBonus.damage) {
     		targetDamage.amount += attackBonus.damage;
+    		targetDamage.conditional.mod += attackBonus.damage;
+    		targetDamage.conditional.total += attackBonus.damage;
+    		targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
     		if (attack.miss && targetDamage.missAmount) {
         		if (attack.miss.halfDamage) {
         			tmp = Math.floor(attackBonus.damage / 2);
@@ -848,7 +858,7 @@ Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
     if (damage > 0 && effects && effects.length) {
         for (i = 0; i < effects.length; i++) {
             if (effects[ i ].name.toLowerCase() === "marked") {
-                effects[ i ].attacker = attacker.name;
+                effects[ i ].attacker = attacker ? attacker.name : "ongoing damage";
             }
             this.effects.push(effects[ i ]);
             msg += ", " + effects[ i ].toString();
@@ -877,7 +887,8 @@ Creature.prototype.startTurn = function() {
     	this.hp.current += regen;
         this.history.add(new History.Entry({ round: this.history._round, subject: this, message: "Regenerated " + regen + " HP" }));
     }
-    for (i = 0; this.effects && this.effects.length && i < ongoingEffects.length; i++) {
+    for (i = 0; this.effects && i < this.effects.length; i++) {
+    	effect = this.effects[ i ];
         if (effect.name.toLowerCase() === "ongoing damage") {
             this.takeDamage(null, effect.amount, effect.type, null);
         }
