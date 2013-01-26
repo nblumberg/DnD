@@ -275,7 +275,7 @@ Creature._CARD_SIZE = 240;
  * @param className {String} Class(es) to apply to the top-level element 
  */
 Creature.prototype.createCard = function(params) {
-	var $parent, image, editor, i;
+	var $parent, $div, editor, i;
 	params = params || {};
 	this.subPanel = {};
 	this.cardSize = params.cardSize || Creature._CARD_SIZE;
@@ -286,12 +286,13 @@ Creature.prototype.createCard = function(params) {
 		this.$panel.addClass("bloodied");
 	}
 	
-	image = new Image();
-    image.className = "handle";
-	image.height = this.cardSize * 100/120;
-	image.src = this.image;
-	this.$panel.append(image);
-	this.subPanel.portrait = image;
+	this.subPanel.$images = jQuery("<div/>").addClass("images").appendTo(this.$panel);
+	
+	this.subPanel.portrait = new Image();
+	this.subPanel.portrait.className = "handle";
+	this.subPanel.portrait.height = this.cardSize * 100/120;
+	this.subPanel.portrait.src = this.image;
+	this.subPanel.$images.append(this.subPanel.portrait);
 	this.subPanel.$name = jQuery("<div/>").addClass("name f2").html(this.name);
 	this.$panel.append(this.subPanel.$name);
 	if (params.showPcHp && this.isPC) {
@@ -303,7 +304,7 @@ Creature.prototype.createCard = function(params) {
 //        this.dispatchEvent("change");
 //    }).bind(this) });
 	
-    this.subPanel.$effects = jQuery("<div/>").addClass("effects").appendTo(this.$panel);
+    this.subPanel.$effects = jQuery("<div/>").addClass("effects").appendTo(this.subPanel.$images);
     
 	for (i = 0; this.effects && i < this.effects.length; i++) {
 	    this._addCondition(this.subPanel.$effects, this.effects[i], this.effects.length);
@@ -396,7 +397,7 @@ Creature.prototype._addCondition = function($parent, effect, total) {
 };
 
 Creature.prototype.addDamageIndicator = function(damage) {
-    var height, $damage, $type, i, dmg, image, condition, $amount;
+    var height, $damage, $centered, $types, $type, i, dmg, image, condition, $amount;
     if (!damage) {
     	return;
     }
@@ -405,10 +406,12 @@ Creature.prototype.addDamageIndicator = function(damage) {
     }
     this.subPanel.$effects.find("div.damage").remove();
     $damage = jQuery("<div/>").addClass("damage").appendTo(this.subPanel.$effects);
-	height = Math.floor(75 / damage.length);
+    $centered = jQuery("<div/>").addClass("centered").appendTo($damage);
+    $types = jQuery("<div/>").addClass("types").appendTo($centered);
+	height = Math.floor(100 / damage.length);
     for (i = 0; i < damage.length; i++) {
     	dmg = damage[ i ];
-    	$type = jQuery("<div/>").appendTo($damage).addClass("type").css({ height: height + "%" });
+    	$type = jQuery("<div/>").addClass("type").appendTo($types).css({ height: height + "%" });
         image = new Image();
         image.height = $type.height();
         image.className = "icon";
@@ -426,9 +429,9 @@ Creature.prototype.addDamageIndicator = function(damage) {
         	$amount = jQuery("<span/>").addClass("amount").css({ "font-size": Math.floor(image.height / 2) + "px", "line-height": image.height + "px", "color": condition && condition.color ? condition.color : "red" }).html(dmg.amount).appendTo($type);
         }
     }
-    setTimeout(function() {
-    	$damage.remove();
-    }, 30000);
+//    setTimeout(function() {
+//    	$damage.remove();
+//    }, 30000);
 };
 
 Creature.prototype._addDefense = function($parent, className, value, icon) {
