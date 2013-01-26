@@ -757,7 +757,7 @@ Initiative.prototype._previous = function() {
         this._addHistory(null, msg);
     }
     this._render(false);
-    this._messageDisplay({ type: "changeTurn", current: this_current }, false);
+    this._messageDisplay({ type: "changeTurn", current: this._current }, false);
 };
 
 Initiative.prototype._next = function() {
