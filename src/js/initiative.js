@@ -11,7 +11,7 @@ var Initiative = function(params) {
 Initiative.prototype = new EventBus();
 
 Initiative.prototype._init = function(params) {
-    var p, i, actor, count;
+    var p, i, j, actor, creature, count;
     params = params || {
     	historyEntries: {},
     	creatures: {},
@@ -33,19 +33,39 @@ Initiative.prototype._init = function(params) {
     }
     
     if (params.creatures) {
-//        Creature.creatures = {};
         for (p in params.creatures) {
             new Creature(params.creatures[ p ], false);
         }
     }
 
-    this.actors = [];
-    if (params.actors) {
+    if (params.actors && params.actors.length) {
         for (i = 0; i < params.actors.length; i++) {
             actor = params.actors[ i ];
             actor = typeof(actor) === "string" ? Creature.creatures[ actor ] : new Creature(actor, true);
             actor = this._addActor(actor, params.actors);
         }
+    }
+    
+    // Overwrite existing actors with their updated Creature template
+    if (this.actors && params.creatures && (!params.actors || !params.actors.length)) {
+        for (i in Creature.creatures) {
+        	creature = Creature.creatures[ i ];
+            for (j = 0; j < this.actors.length; j++) {
+            	actor = this.actors[ j ];
+            	if (actor.type === creature.name) {
+            		this.actors.splice(j, 1, creature.toActor());
+            		this.actors[ j ].name = actor.name;
+            		this.actors[ j ].hp.current = actor.hp.current;
+            		this.actors[ j ].hp.temp = actor.hp.temp;
+            		this.actors[ j ].surges.current = actor.surges.current;
+            		this.actors[ j ].effects = actor.effects;
+            	}
+            }
+        }
+    }
+    
+    if (!this.actors) {
+        this.actors = [];
     }
     
     this.order = params.order;
@@ -101,14 +121,16 @@ Initiative.prototype.loadInitFromJs = function() {
 };
 
 Initiative.prototype.loadMonstersFromJs = function() {
-	var data = loadMonsters();
-	data.creatures = data.monsters;
+	var data = {
+		creatures: loadMonsters()
+	};
 	this._init(data);
 };
 
 Initiative.prototype.loadPartyFromJs = function() {
-	var data = loadParty();
-	data.creatures = data.party;
+	var data = {
+		creatures: loadParty()
+	};
 	this._init(data);
 };
 

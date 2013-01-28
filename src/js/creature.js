@@ -141,12 +141,18 @@ var Creature = function(params, isActor) {
 	this.id = params.id || Creature.id++;
 	this.name = params.name;
     if (isActor) {
+    	if (!Creature.actors) {
+    		Creature.actors = {};
+    	}
     	if (console && console.debug && Creature.actors[ this.name ]) {
     		console.debug("Replacing Creature.actors[ " + this.name + " ]");
     	}
         Creature.actors[ this.id ] = this;
     }
     else {
+    	if (!Creature.creatures) {
+    		Creature.creatures = {};
+    	}
     	if (console && console.debug && Creature.creatures[ this.name ]) {
     		console.debug("Replacing Creature.creatures[ " + this.name + " ]");
     	}
@@ -673,13 +679,27 @@ Creature.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
 	damage = {
 			amount: 0,
 			missAmount: 0,
-			conditional: { mod: 0, effects: [], breakdown: "" }
+			conditional: { mod: 0, effects: [], breakdown: "" },
+			isManual: false
 	};
 
     if (manualRolls && manualRolls.damage) {
         damage.amount = manualRolls.damage;
+        damage.isManual = true;
 		if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
-	        attack.damage[ 0 ].addItem(manualRolls.damage, item, isCrit);
+			for (i = 0; i < attack.damage.length; i++) {
+		        attack.damage[ i ].addItem(Math.round(manualRolls.damage / attack.damage.length), item, isCrit);
+			}
+		    if (attack.hasOwnProperty("miss")) {
+		    	if (attack.miss.halfDamage) {
+					for (i = 0; attack.hasOwnProperty("miss") && i < attack.miss.damage.length; i++) {
+				        attack.miss.damage[ i ].addItem(Math.round(manualRolls.damage / attack.damage.length / 2), item, isCrit);
+					}
+		    	}
+		    	else {
+	    			attack.miss.damage.addItem(manualRolls.damage, item, false);
+		    	}
+		    }
 		}
 		else {
 	        attack.damage.addItem(manualRolls.damage, item, isCrit);
@@ -695,28 +715,28 @@ Creature.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
 		else {
 	        damage.amount = attack.damage.rollItem(item, isCrit);
 		}
+	    if (attack.hasOwnProperty("miss")) {
+	    	if (attack.miss.halfDamage) {
+	    		damage.missAmount = Math.floor(damage.amount / 2);
+	    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+	    			attack.miss.damage[0].addItem(damage.amount, item, false);
+	    		}
+	    		else {
+	    			attack.miss.damage.addItem(damage.amount, item, false);
+	    		}
+	    	}
+	    	else if (attack.miss.hasOwnProperty("damage")) {
+	    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+	    			for (i = 0; i < attack.damage.length; i++) {
+	    		        damage.missAmount += attack.miss.damage[ i ].rollItem(item, false);
+	    			}
+	    		}
+	    		else {
+	    			damage.missAmount = attack.miss.damage.rollItem(item, false);
+	    		}
+	    	}
+	    }
 	}
-    if (attack.hasOwnProperty("miss")) {
-    	if (attack.miss.halfDamage) {
-    		damage.missAmount = Math.floor(damage.amount / 2);
-    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
-    			attack.miss.damage[0].addItem(damage.amount, item, false);
-    		}
-    		else {
-    			attack.miss.damage.addItem(damage.amount, item, false);
-    		}
-    	}
-    	else if (attack.miss.hasOwnProperty("damage")) {
-    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
-    			for (i = 0; i < attack.damage.length; i++) {
-    		        damage.missAmount += attack.miss.damage[ i ].rollItem(item, false);
-    			}
-    		}
-    		else {
-    			damage.missAmount = attack.miss.damage.rollItem(item, false);
-    		}
-    	}
-    }
     if (item && item.enhancement) {
     	if (attack.weaponMultiplier && attack.weaponMultiplier > 1) {
             damage.conditional.breakdown += " + " + attack.weaponMultiplier + "x[+" + item.enhancement + " weapon]";
@@ -751,33 +771,35 @@ Creature.prototype._attackTarget = function(attack, item, combatAdvantage, targe
 		conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
 	};
 	
-    attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
-    for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
-    	attackBonus = attackBonuses[ i ];
-    	if (attackBonus.toHit) {
-    		toHitTarget.roll += attackBonus.toHit; 
-    		toHitTarget.conditional.mod += attackBonus.toHit;
-    		toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
-    	}
-    	if (attackBonus.damage) {
-    		targetDamage.amount += attackBonus.damage;
-    		targetDamage.conditional.mod += attackBonus.damage;
-    		targetDamage.conditional.total += attackBonus.damage;
-    		targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
-    		if (attack.miss && targetDamage.missAmount) {
-        		if (attack.miss.halfDamage) {
-        			tmp = Math.floor(attackBonus.damage / 2);
-            		targetDamage.missAmount += tmp;
-            		targetDamage.conditional.mod += tmp;
-            		targetDamage.conditional.breakdown += (tmp >= 0 ? " +" : "") + tmp + " (" + attackBonus.name + ")";
-        		}
-        		else {
-        			targetDamage.missAmount += attackBonus.damage;
-            		targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
-        		}
-    		}
-    	}
-    }
+	if (!damage.isManual) {
+	    attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
+	    for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
+	    	attackBonus = attackBonuses[ i ];
+	    	if (attackBonus.toHit) {
+	    		toHitTarget.roll += attackBonus.toHit; 
+	    		toHitTarget.conditional.mod += attackBonus.toHit;
+	    		toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
+	    	}
+	    	if (attackBonus.damage) {
+	    		targetDamage.amount += attackBonus.damage;
+	    		targetDamage.conditional.mod += attackBonus.damage;
+	    		targetDamage.conditional.total += attackBonus.damage;
+	    		targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
+	    		if (attack.miss && targetDamage.missAmount) {
+	        		if (attack.miss.halfDamage) {
+	        			tmp = Math.floor(attackBonus.damage / 2);
+	            		targetDamage.missAmount += tmp;
+	            		targetDamage.conditional.mod += tmp;
+	            		targetDamage.conditional.breakdown += (tmp >= 0 ? " +" : "") + tmp + " (" + attackBonus.name + ")";
+	        		}
+	        		else {
+	        			targetDamage.missAmount += attackBonus.damage;
+	            		targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
+	        		}
+	    		}
+	    	}
+	    }
+	}
 
     // Calculate hit (for this target)
     if (!toHit.isAutomaticHit && !toHit.isFumble && !toHit.isCrit) {
@@ -915,8 +937,8 @@ Creature.prototype.endTurn = function() {
 
 Creature.prototype.toActor = function(count) {
     var actor = new Creature(this.raw(), true);
+    actor.type = actor.name;
     if (!actor.isPC) {
-        actor.type = actor.name;
         actor.name = actor.name + (count ? " #" + count : "");
     }
     return actor;
