@@ -737,14 +737,14 @@ Creature.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
 	    	}
 	    }
 	}
-    if (item && item.enhancement) {
-    	if (attack.weaponMultiplier && attack.weaponMultiplier > 1) {
-            damage.conditional.breakdown += " + " + attack.weaponMultiplier + "x[+" + item.enhancement + " weapon]";
-    	}
-    	else {
-            damage.conditional.breakdown += " [+" + item.enhancement + " weapon]";
-    	}
-    }
+//    if (item && item.enhancement) {
+//    	if (attack.weaponMultiplier && attack.weaponMultiplier > 1) {
+//            damage.conditional.breakdown += " + " + attack.weaponMultiplier + "x[+" + item.enhancement + " weapon]";
+//    	}
+//    	else {
+//            damage.conditional.breakdown += " [+" + item.enhancement + " weapon]";
+//    	}
+//    }
     if (this.hasCondition("weakened")) {
         damage.conditional.mod = -1 * Math.ceil(damage.amount / 2);
         damage.conditional.breakdown += " [1/2 for weakened]";

@@ -54,6 +54,7 @@ Initiative.prototype._init = function(params) {
             	actor = this.actors[ j ];
             	if (actor.type === creature.name) {
             		this.actors.splice(j, 1, creature.toActor());
+            		this.actors[ j ].id = actor.id;
             		this.actors[ j ].name = actor.name;
             		this.actors[ j ].hp.current = actor.hp.current;
             		this.actors[ j ].hp.temp = actor.hp.temp;
@@ -68,7 +69,9 @@ Initiative.prototype._init = function(params) {
         this.actors = [];
     }
     
-    this.order = params.order;
+    if (params.order) {
+        this.order = params.order;
+    }
     if (!this.order || !this.order.length) {
         this._rollInitiative();
     }

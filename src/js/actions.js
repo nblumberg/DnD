@@ -282,7 +282,7 @@ Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
     }
     if (item && this.needsWeapon) {
         if (item.enhancement) {
-            h.breakdown += " + " + this.weaponMultiplier + "x[+" + item.enhancement + " weapon]";
+            h.breakdown += (this.weaponMultiplier > 1 ? " + " + this.weaponMultiplier + "x" : " ") + "[+" + item.enhancement + " weapon]";
         }
         if (forcedTotal) {
         	if (!isCrit) {
@@ -540,7 +540,7 @@ Attack.prototype.rollItem = function(item) {
 	var h, total = Roll.prototype.roll.call(this);
 	if (item && item.enhancement) {
 		h = this.getLastRoll();
-		h.breakdown = " + " + item.enhancement + " (enhancement)";
+		h.breakdown = " [+" + item.enhancement + " weapon]";
 		h.total += item.enhancement;
 		total += item.enhancement;
 	}
