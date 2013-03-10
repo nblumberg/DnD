@@ -24,6 +24,9 @@ th, td { border-color: white; }
 .grab { cursor: url(https://mail.google.com/mail/images/2/openhand.cur) 8 8, move; }
 .grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
 .droppable { border-color: green; border-width: 6px; }
+.action { cursor: pointer; display: block; margin-bottom: 5px; }
+div.order { color: red; font-weight: bold; font-size: 30px; }
+input.order { margin-right: 10px; width: 30px; }
 
 div#header { background-color: black; margin-top: -20px; position: fixed; width: 100%; z-index: 5; }
 div#header * { margin-right: 10px; }

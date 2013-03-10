@@ -73,7 +73,7 @@ Initiative.prototype._init = function(params) {
         this.order = params.order;
     }
     if (!this.order || !this.order.length) {
-        this._rollInitiative();
+        this._randomInitiative();
     }
 
     if (params.history) {
@@ -179,7 +179,7 @@ Initiative.prototype._addActor = function(creature, actors) {
     this.actors.push(actor);
     jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
     if (this.order) {
-        this.order.push(this.actors.length - 1);
+        this.order.push(actor.id);
     }
     if (History.central) {
         this._addHistory(actor, "Joins the fight");
@@ -190,29 +190,32 @@ Initiative.prototype._addActor = function(creature, actors) {
     return actor;
 };
 
-Initiative.prototype._rollInitiative = function() {
+
+Initiative.prototype._randomInitiative = function() {
 	var actor, i;
 	this.order = [];
 	for (i = 0; i < this.actors.length; i++) {
 	    actor = this.actors[ i ];
-		this.order.push({ index: i, roll: (new Roll("1d20" + (actor.init < 0 ? "-" : "+") + actor.init)).roll() });
+		this.order.push({ id: actor.id, roll: (new Roll("1d20" + (actor.init < 0 ? "-" : "+") + actor.init)).roll() });
 	}
 	this.order.sort((function(a, b) {
-		return b.roll !== a.roll ? b.roll - a.roll : this.actors[ b.index ].init - this.actors[ a.index ].init;
+		return b.roll !== a.roll ? b.roll - a.roll : Creature.actors[ b.id ].init - Creature.actors[ a.id ].init;
 	}).bind(this));
 	for (i = 0; i < this.order.length; i++) {
-		this.order[ i ] = this.order[ i ].index;
+		this.order[ i ] = this.order[ i ].id;
 	}
 	if (this.order.length) {
-		this.actors[ this.order[ 0 ] ].startTurn();
+		Creature.actors[ this.order[ 0 ] ].startTurn();
 	}
 };
+
 
 Initiative.prototype._create = function() {
 	var columns, i, $li, $table, $tr, $td, image, $div, $span, $select, $option, menu;
 	this.$parent = jQuery(this._$target.length ? this._$target : "body");
 	this.$parent.children().remove();
 	
+	this._createInitiativeDialog();
 	this._createAttackDialog();
 	this._createHealDialog();
 	
@@ -222,8 +225,8 @@ Initiative.prototype._create = function() {
 	this.$parent.append(this.$menuBar);
 	$span = jQuery("<span/>").attr("id", "roundLabel").html("Round");
 	this.$menuBar.append($span);
-	this.$round = jQuery("<input/>").attr("id", "round").attr("type", "text").attr("disabled", "disabled").val(this.round);
-	this.$menuBar.append(this.$round);
+//	this.$round = jQuery("<input/>").attr("id", "round").attr("type", "text").attr("disabled", "disabled").val(this.round);
+//	this.$menuBar.append(this.$round);
 	this.$previousButton = jQuery("<button/>").attr("id", "previous").html("Previous").on({ click: (this._previous).bind(this) });
 	this.$menuBar.append(this.$previousButton);
 	this.$nextButton = jQuery("<button/>").attr("id", "next").html("Next").on({ click: (this._next).bind(this) });
@@ -357,6 +360,45 @@ Initiative.prototype._createHealDialog = function() {
     });
 };
 
+
+Initiative.prototype._createInitiativeDialog = function() {
+    if (this.$initiativeDialog && this.$initiativeDialog.length) {
+    	try {
+        	this.$initiativeDialog.dialog("destroy").remove();
+    	}
+    	catch (e) {
+    	}
+    	finally {
+        	this.$initiativeDialog.remove();
+    	}
+    }
+    this.$initiativeDialog = jQuery("<div/>").attr("id", "initiativeDialog");
+    this._populateSetInitiative();
+    this.$initiativeDialog.dialog({ 
+        autoOpen: false, 
+        buttons: { 
+            "Roll":  this._rollInitiative.bind(this),
+            "Update":  this._resolveInitiative.bind(this)
+        }, 
+        modal: true, 
+        title: "Set Initiative Order", 
+        width: "auto" 
+    });
+};
+
+
+Initiative.prototype._populateSetInitiative = function() {
+    var i, actor, $div, $input, $span;
+    this.$initiativeDialog.html("");
+    for (i = 0; i < this.order.length; i++) {
+    	actor = Creature.actors[ this.order[ i ] ];
+        $div = jQuery("<div/>").appendTo(this.$initiativeDialog);
+        $input = jQuery("<input/>").attr("type", "number").attr("min", "1").attr("step", 1).addClass("order").attr("name", actor.id).val(this.order.length - i).attr("placeholder", this.order.length - i).appendTo($div);
+        $span = jQuery("<span/>").html(actor.name).appendTo($div);
+    }
+};
+
+
 Initiative.prototype._createFileMenu = function() {
     var columns, i, j, $ul, $li, $a, menu;
     
@@ -488,23 +530,24 @@ Initiative.prototype._createTable = function() {
     
     this.$table = jQuery("<table/>").attr("id", "initiative");
     $td.append(this.$table);
-    columns = [ "Character", "Def", "HP", "Actions", "History" ];
+    columns = [ "<input id=\"round\" type=\"text\" disabled=\"disabled\" value=\"" + this.round + "\" />", "Character", "Def", "HP", "Actions", "History" ];
     for (i = 0; i < columns.length; i++) {
         this.$table.append(jQuery("<th/>").addClass("bordered f1").html(columns[ i ]));
     }
-    this.$table.sortable({ containment: "parent", handle: ".creaturePanel", items: "tr", 
-        update: (function(event, ui) {
-            var i, move, before;
-            move = ui.item.data("actor");
-            for (i = 0; i < this.$table[0].rows.length; i++) {
-                if (jQuery(this.$table[0].rows[ i ]).data("actor") === ui.item.data("actor")) {
-                    before = this.actors[ this.order[ i ] ];
-                    break;
-                }
-            }
-            this._changeInitiative({ move: move, before: before });
-        }).bind(this) 
-    });
+	this.$round = jQuery("input#round");
+//    this.$table.sortable({ containment: "parent", handle: ".creaturePanel", items: "tr", 
+//        update: (function(event, ui) {
+//            var i, move, before;
+//            move = ui.item.data("actor");
+//            for (i = 0; i < this.$table[0].rows.length; i++) {
+//                if (jQuery(this.$table[0].rows[ i ]).data("actor") === ui.item.data("actor")) {
+//                    before = this.actors[ this.order[ i ] ];
+//                    break;
+//                }
+//            }
+//            this._changeInitiative({ move: move, before: before });
+//        }).bind(this) 
+//    });
     
     $td = jQuery("<td/>").attr("id", "historyTd").addClass("halfWidth bordered alignTop").appendTo($tr);
     jQuery("<div/>").addClass("bordered f1").html("History").appendTo($td);
@@ -544,10 +587,15 @@ Initiative.prototype._render = function(updateDisplay) {
 	this.$display.children().remove();
 	
 	for (i = 0; i < this.order.length; i++) {
-		actor = this.actors[ this.order[ i ] ];
+		actor = Creature.actors[ this.order[ i ] ];
 		actor.createTr({ 
 			$table: this.$table,
 			isCurrent: i === this._current,
+			order: {
+				up: this._reorder.bind(this, actor, -1),
+				set: this._setInitiative.bind(this),
+				down: this._reorder.bind(this, actor, 1)
+			},
 			attack: this._attack.bind(this, actor),
 			heal: this._heal.bind(this, actor),
 			exit: this._exit.bind(this, actor),
@@ -776,7 +824,7 @@ Initiative.prototype._previous = function() {
         this.actors[ i ].history._round = this.round;
     }
     this.history._round = this.round;
-    actor = this.actors[ this.order[ this._current ] ];
+    actor = Creature.actors[ this.order[ this._current ] ];
     msg = "Moved back in initiative order to " + actor.name + "'s turn";
     if (msg) {
         this._addHistory(null, msg);
@@ -788,7 +836,7 @@ Initiative.prototype._previous = function() {
 Initiative.prototype._next = function() {
     var msg, i, actors, actor;
     actors = [];
-    actor = this.actors[ this.order[ this._current ] ];
+    actor = Creature.actors[ this.order[ this._current ] ];
     actors.push(actor);
     msg = actor.endTurn();
     if (msg) {
@@ -803,7 +851,7 @@ Initiative.prototype._next = function() {
         this.actors[ i ].history._round = this.round;
     }
     this.history._round = this.round;
-    actor = this.actors[ this.order[ this._current ] ];
+    actor = Creature.actors[ this.order[ this._current ] ];
     actors.push(actor);
     msg = actor.startTurn();
     if (msg) {
@@ -818,7 +866,7 @@ Initiative.prototype._next = function() {
 };
 
 Initiative.prototype._changeInitiative = function(event) {
-    var getIndex, moveIndex, moveOrder, beforeIndex, beforeOrder;
+    var getIndex, moveIndex, moveOrder, beforeIndex, beforeOrder, test, i;
     move = event.move;
     before = event.before;
     getIndex = (function(actor) {
@@ -837,13 +885,80 @@ Initiative.prototype._changeInitiative = function(event) {
     beforeOrder = this.order.indexOf(beforeIndex);
     this.order.splice(beforeOrder, 0, moveIndex);
     this._addHistory(move, "Moved initiative order to before " + before.name);
-    var test = "[ ";
-    for (var i = 0; i < this.order.length; i++) {
-    	test += (i ? ", " : "") + this.actors[ this.order[ i ] ].name;
+    test = "[ ";
+    for (i = 0; i < this.order.length; i++) {
+    	test += (i ? ", " : "") + Creature.actors[ this.order[ i ] ].name;
     }
     console.info("New order: " + test + " ]");
     this._render(true);
 };
+
+
+Initiative.prototype._reorder = function(actor, delta) {
+	var index, other, test, i;
+	index = this.order.indexOf(actor.id);
+	this.order.splice(index, 1);
+	if (index + delta < 0 || index + delta === this.order.length - 1) {
+		this.order.push(actor.id);
+	    this._addHistory(actor, "Moved down to the bottom of the initiative order");
+	}
+	else if (index + delta >= this.order.length) {
+		this.order.unshift(actor.id);
+	    this._addHistory(actor, "Moved up to the top of the initiative order");
+	}
+	else {
+		other = Creature.actors[ this.order[ index + delta ] ];
+		this.order.splice(index + delta, 0, actor.id);
+	    this._addHistory(actor, "Moved " + (delta > 0 ? "down" : "up") + " initiative order to before " + other.name);
+	}
+    test = "[ ";
+    for (i = 0; i < this.order.length; i++) {
+    	test += (i ? ", " : "") + Creature.actors[ this.order[ i ] ].name;
+    }
+    console.info("New order: " + test + " ]");
+    this._render(true);
+};
+
+
+Initiative.prototype._setInitiative = function(event) {
+    this._populateSetInitiative();
+	this.$initiativeDialog.dialog("option", "position", [ "center", event.screenY - 300 ]);
+    this.$initiativeDialog.dialog("open");
+};
+
+
+Initiative.prototype._rollInitiative = function() {
+	this.$initiativeDialog.find("input.order").each(function() {
+		var $input, actor;
+		$input = jQuery(this);
+		actor = Creature.actors[ parseInt($input.attr("name")) ];
+		$input.val((new Roll("1d20" + (actor.init < 0 ? "-" : "+") + actor.init)).roll());
+	});
+};
+
+
+Initiative.prototype._resolveInitiative = function() {
+	var entries, test, i, actor;
+	entries = [];
+	this.$initiativeDialog.find("input.order").each(function() {
+		var $input = jQuery(this);
+		entries.push({ id: parseInt($input.attr("name")), order: parseInt($input.val()) || parseInt($input.attr("placeholder")) });
+	});
+	entries.sort(function(a, b) { return b.order - a.order; });
+    test = "[ ";
+	for (i = 0; i < entries.length; i++) {
+		actor = Creature.actors[ entries[ i ].id ];
+		if (this.order[ i ] !== entries[ i ].id) {
+		    this._addHistory(actor, "Moved to #" + (i + 1) + " in the initiative order");
+			this.order[ i ] = entries[ i ].id;
+		}
+    	test += (i ? ", " : "") + actor.name;
+	}
+    console.info("New order: " + test + " ]");
+    this.$initiativeDialog.dialog("close");
+    this._render(true);
+};
+
 
 Initiative.prototype._attack = function(actor, event) {
 	var $option, i, a;

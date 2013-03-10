@@ -204,6 +204,9 @@ Creature.prototype.isBloodied = function() {
 /**
  * @param $table {jQuery("<table/>")} The parent table element
  * @param isCurrent {Boolean} Indicates if it is this Creature's turn in the initiative order
+ * @param order {Object} The click handlers for the move initiative order actions
+ * @param order.up {Function} The click handler for the move initiative order up action
+ * @param order.down {Function} The click handler for the move initiative order down action
  * @param attack {Function} The click handler for the attack action
  * @param heal {Function} The click handler for the heal action
  */
@@ -219,6 +222,12 @@ Creature.prototype.createTr = function(params) {
 		$tr.addClass("bloodied");
 	}
 	params.$table.append($tr);
+	
+	$td = jQuery("<td/>").addClass("bordered centered");
+	$tr.append($td);
+	this._addAction({ $parent: $td, className: "up", title: "Move up initiative order", src: "images/symbols/up.png", click: params.order.up });
+	this._addAction({ $parent: $td, className: "order", title: "Set initiative order", text: "#", click: params.order.set });
+	this._addAction({ $parent: $td, className: "down", title: "Move down initiative order", src: "images/symbols/down.png", click: params.order.down });
 	
 	$td = jQuery("<td/>").addClass("bordered centered");
 	$tr.append($td);
@@ -263,10 +272,10 @@ Creature.prototype.createTr = function(params) {
 	
 	$td = jQuery("<td/>").addClass("actions bordered");
 	$tr.append($td);
-	this._addAction($td, "Attack", "images/symbols/attack.png", params.attack);
-	this._addAction($td, "Heal", "images/symbols/heal.png", params.heal);
-	this._addAction($td, "Exit", "images/symbols/exit.jpg", params.exit);
-	this._addAction($td, "Rename", "images/symbols/rename.png", params.rename);
+	this._addAction({ $parent: $td, className: "attack", title: "Attack", src: "images/symbols/attack.png", click: params.attack });
+	this._addAction({ $parent: $td, className: "heal", title: "Heal", src: "images/symbols/heal.png", click: params.heal });
+	this._addAction({ $parent: $td, className: "exit", title: "Exit", src: "images/symbols/exit.jpg", click: params.exit });
+	this._addAction({ $parent: $td, className: "rename", title: "Rename", src: "images/symbols/rename.png", click: params.rename });
 	
 	$td = jQuery("<td/>").addClass("history bordered");
 	$tr.append($td);
@@ -496,13 +505,27 @@ Creature.prototype._addHp = function($parent, src, title, className1, value1, cl
 	}
 };
 
-Creature.prototype._addAction = function($parent, title, src, click) {
-	var image = new Image();
-	image.height = 30;
-	image.title = title;
-	image.src = src;
-	jQuery(image).css("display", "block").on({ click: click });
-	$parent.append(image);
+/**
+ * @param params {Object}
+ * @param params.$parent {jQuery Selection} The parent element to add the action element to
+ * @param params.title {String} The title of the img element
+ * @param [params.className] {String} The optional className of the img element
+ * @param params.src {String} The src of the img element
+ * @param params.click {Function} The click handler of the img element
+ */
+Creature.prototype._addAction = function(params) {
+	var action;
+	if (params.src) {
+		action = new Image();
+		action.height = 30;
+		action.title = params.title;
+		action.src = params.src;
+		jQuery(action).addClass("action " + (params.className ? params.className : "")).on({ click: params.click });
+	}
+	else {
+		action = jQuery("<div/>").html(params.text).css({ height: "30px", width: "30px" }).attr("title", params.title ? params.title : "").addClass("action " + (params.className ? params.className : "")).on({ click: params.click });
+	}
+	params.$parent.append(action);
 };
 
 
