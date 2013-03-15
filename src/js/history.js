@@ -1,6 +1,19 @@
 var History = function(params) {
 	var i, entry;
 	
+	if (!History.initialized) {
+		jQuery(document).on("click", "li.round", function(event) {
+			jQuery(this).children("ul").toggle();
+		}).on("click", "li.entry", function(event) {
+			var $entry, history;
+			event.stopPropagation();
+			$entry = jQuery(this);
+			history = $entry.closest(".history").data("history");
+			history._editEntry($entry, history);
+		});
+		History.initialized = true;
+	}
+	
 	params = params || {};
 	this._entries = params._entries || [];
 	this._round = 0;
@@ -16,6 +29,8 @@ var History = function(params) {
 		entry._addToRound(this._getRound(entry), this._includeSubject);
 	}
 };
+
+History.initialized = false;
 
 History.central = null;
 
@@ -79,23 +94,23 @@ History.prototype._getRound = function(entry) {
 	var $tmp, _self, $ul, $li;
 	_self = this;
 	if (!this._count) {
-		$tmp = jQuery("<ul/>").insertBefore(this.$html);
+		$tmp = jQuery("<ul/>").addClass("history").data("history", this).insertBefore(this.$html);
 		this.$html.remove();
 		this.$html = $tmp;
-		this.$html.delegate(".round", "click", function(event) {
-			jQuery(this).children("ul").toggle();
-		});
-		this.$html.delegate(".entry", "click", function(event) {
-			event.stopPropagation();
-			_self._editEntry(jQuery(this), _self); 
-		});
+//		this.$html.delegate(".round", "click", function(event) {
+//			jQuery(this).children("ul").toggle();
+//		});
+//		this.$html.delegate(".entry", "click", function(event) {
+//			event.stopPropagation();
+//			_self._editEntry(jQuery(this), _self); 
+//		});
 	}
 	this._count++;
 	$ul = this.$html.children(".round" + entry.round).children("ul");
 	if (!$ul.length) {
 		this._round = entry.round;
-		$li = jQuery("<li/>").addClass("round round" + entry.round).html("Round " + entry.round).appendTo(this.$html);
-		$ul = jQuery("<ul/>").appendTo($li);
+		$li = jQuery("<li/>").addClass("round round" + entry.round).html("Round " + entry.round).data("history", this).appendTo(this.$html);
+		$ul = jQuery("<ul/>").addClass("round round" + entry.round).appendTo($li);
 	}
 	return $ul;
 };
