@@ -74,3 +74,12 @@ Serializable.prototype.raw = function() {
 Serializable.prototype.toJSON = function() {
     return JSON.stringify(this.raw(), null, "  ");
 };
+
+var Console = {
+	_isAvailable: function(method) {
+		return window.console && window.console[ method ];
+	},
+	log: function(method) {
+		return this._isAvailable(method) ? window.console[ method ] : function(msg) {}; 
+	}
+};

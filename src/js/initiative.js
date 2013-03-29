@@ -34,14 +34,14 @@ Initiative.prototype._init = function(params) {
     
     if (params.creatures) {
         for (p in params.creatures) {
-            new Creature(params.creatures[ p ], false);
+            new Creature(params.creatures[ p ]);
         }
     }
 
     if (params.actors && params.actors.length) {
         for (i = 0; i < params.actors.length; i++) {
             actor = params.actors[ i ];
-            actor = typeof(actor) === "string" ? Creature.creatures[ actor ] : new Creature(actor, true);
+            actor = typeof(actor) === "string" ? Creature.creatures[ actor ] : actor;
             actor = this._addActor(actor, params.actors);
         }
     }
@@ -94,9 +94,7 @@ Initiative.prototype.initFromLocalStorage = function() {
 	var data;
 	if (window.localStorage.getItem("initiative")) {
 	    data = JSON.parse(window.localStorage.getItem("initiative"));
-	    if (window.console && window.console.info) {
-	        window.console.info("Loaded from localStorage");
-	    }
+	    Console.log("info")("Loaded from localStorage");
 		this._init(data);
 		return true;
 	}
@@ -166,16 +164,20 @@ Initiative.prototype._countActorsByType = function(type, actors, adding) {
     return 0;
 };
 
-Initiative.prototype._addActor = function(creature, actors) {
+Initiative.prototype._addActor = function(params, actors) {
 	var count, actor;
+	// in case "-------" or "        " was selected in the Creature dialog or we've encountered junk data
+	if (!params || !params.name || !params.image) {
+		return Console.log("warn")("Skipping adding invalid actor " + params.name);
+	}
     if (!this.actors) {
     	this.actors = [];
     }
 	if (!actors) {
 		actors = this.actors;
 	}
-    count = creature.isPC ? 0 : this._countActorsByType(creature.name, actors, true);
-    actor = creature.toActor(count);
+    count = params.isPC ? 0 : this._countActorsByType(params.name, actors, true);
+    actor = new Actor(params, count);
     this.actors.push(actor);
     jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
     if (this.order) {
@@ -392,6 +394,10 @@ Initiative.prototype._populateSetInitiative = function() {
     this.$initiativeDialog.html("");
     for (i = 0; i < this.order.length; i++) {
     	actor = Creature.actors[ this.order[ i ] ];
+    	if (!actor) {
+    		Console.log("warn")("Skipping order #" + i + " (actor id " + this.order[ i ] + "), not found in Creature.actors");
+    		continue;
+    	}
         $div = jQuery("<div/>").appendTo(this.$initiativeDialog);
         $input = jQuery("<input/>").attr("type", "number").attr("min", "1").attr("step", 1).addClass("order").attr("name", actor.id).val(this.order.length - i).attr("placeholder", this.order.length - i).appendTo($div);
         $span = jQuery("<span/>").html(actor.name).appendTo($div);
@@ -614,9 +620,7 @@ Initiative.prototype._render = function(updateDisplay) {
 };
 
 Initiative.prototype._displayLoadHandler = function(event) {
-    if (console && console.info) {
-        console.info("Display loaded");
-    }
+	Console.log("info")("Display loaded");
     this._renderDisplay(); 
 };
 
@@ -714,9 +718,7 @@ Initiative.prototype._import = function() {
                                   this._init(JSON.parse($textarea.val()));
                               }
                               catch (e) {
-                                  if (window.console && window.console.error) {
-                                      window.console.error(e.toString());
-                                  }
+                            	  Console.log("error")(e.toString());
                               }
                           }).bind(this) 
                       }
@@ -807,9 +809,7 @@ Initiative.prototype._addHistory = function(actor, message, method) {
 		message = actor.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
 	}
 	this.history.add(entry);
-	if (console && console[ method ]) {
-		console[ method ](message);
-	}
+	Console.log(method)(message);
     this._autoSave();
 };
 
@@ -889,7 +889,7 @@ Initiative.prototype._changeInitiative = function(event) {
     for (i = 0; i < this.order.length; i++) {
     	test += (i ? ", " : "") + Creature.actors[ this.order[ i ] ].name;
     }
-    console.info("New order: " + test + " ]");
+    Console.log("info")("New order: " + test + " ]");
     this._render(true);
 };
 
@@ -915,7 +915,7 @@ Initiative.prototype._reorder = function(actor, delta) {
     for (i = 0; i < this.order.length; i++) {
     	test += (i ? ", " : "") + Creature.actors[ this.order[ i ] ].name;
     }
-    console.info("New order: " + test + " ]");
+    Console.log("info")("New order: " + test + " ]");
     this._render(true);
 };
 
@@ -954,7 +954,7 @@ Initiative.prototype._resolveInitiative = function() {
 		}
     	test += (i ? ", " : "") + actor.name;
 	}
-    console.info("New order: " + test + " ]");
+    Console.log("info")("New order: " + test + " ]");
     this.$initiativeDialog.dialog("close");
     this._render(true);
 };

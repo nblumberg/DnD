@@ -135,29 +135,35 @@ var Abilities = function(params) {
 
 
 
-var Creature = function(params, isActor) {
-	var i;
+var Creature = function(params) {
 	params = params || {};
+	
+	// Basic properties
 	this.id = params.id || Creature.id++;
 	this.name = params.name;
-    if (isActor) {
-    	if (!Creature.actors) {
-    		Creature.actors = {};
-    	}
-    	if (console && console.debug && Creature.actors[ this.name ]) {
-    		console.debug("Replacing Creature.actors[ " + this.name + " ]");
-    	}
-        Creature.actors[ this.id ] = this;
-    }
-    else {
-    	if (!Creature.creatures) {
-    		Creature.creatures = {};
-    	}
-    	if (console && console.debug && Creature.creatures[ this.name ]) {
-    		console.debug("Replacing Creature.creatures[ " + this.name + " ]");
-    	}
-        Creature.creatures[ this.name ] = this;
-    }
+
+	// Store in singleton
+	if (!Creature.creatures) {
+		Creature.creatures = {};
+	}
+	if (console && console.debug && Creature.creatures.hasOwnProperty(this.name)) {
+		console.debug("Replacing Creature.creatures[ " + this.name + " ]");
+	}
+    Creature.creatures[ this.name ] = this;
+
+    // Other properties
+	this._init(params);
+};
+
+Creature.id = (new Date()).getTime();
+Creature.actors = {};
+Creature.creatures = {};
+
+Creature.prototype = new EventDispatcher();
+
+Creature.prototype._init = function(params) {
+	var i;
+	params = params || {};
 	this._listeners = {};
 	this.image = params.image;
 	this.isPC = params.isPC || false;
@@ -190,12 +196,6 @@ var Creature = function(params, isActor) {
     }
 	this.history = new History(params.history || { includeSubject: false });
 };
-
-Creature.id = (new Date()).getTime();
-Creature.actors = {};
-Creature.creatures = {};
-
-Creature.prototype = new EventDispatcher();
 
 Creature.prototype.isBloodied = function() {
 	return this.hp.current <= Math.floor(this.hp.total / 2);
@@ -958,15 +958,38 @@ Creature.prototype.endTurn = function() {
     return msg;
 };
 
-Creature.prototype.toActor = function(count) {
-    var actor = new Creature(this.raw(), true);
-    actor.type = actor.name;
-    if (!actor.isPC) {
-        actor.name = actor.name + (count ? " #" + count : "");
-    }
-    return actor;
-};
-
 Creature.prototype.toString = function() {
     return "[Creature \"" + this.name + "\"]";
 };
+
+
+
+var Actor = function(params, count) {
+	if (params instanceof Creature) {
+		params = params.raw();
+		params.id = 0;
+	}
+	
+	// Basic properties
+	this.id = params.id || Creature.id++;
+	this.type = params.name;
+	this.name = params.name + (!params.isPC && count ? " #" + count : "");
+
+	// Store in singleton
+	if (!Creature.actors) {
+		Creature.actors = {};
+	}
+	if (console && console.debug && Creature.actors.hasOwnProperty(this.id)) {
+		console.debug("Replacing Creature.actors[ " + this.name + " ]");
+	}
+    Creature.actors[ this.id ] = this;
+    
+	this._init(params);
+};
+
+Actor.prototype = new Creature();
+
+Actor.prototype.toString = function() {
+    return "[Actor \"" + this.name + "\"]";
+};
+
