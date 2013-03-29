@@ -146,10 +146,12 @@ var Creature = function(params) {
 	if (!Creature.creatures) {
 		Creature.creatures = {};
 	}
-	if (console && console.debug && Creature.creatures.hasOwnProperty(this.name)) {
-		console.debug("Replacing Creature.creatures[ " + this.name + " ]");
-	}
-    Creature.creatures[ this.name ] = this;
+    if (params && params.name) {
+        if (console && console.debug && Creature.creatures.hasOwnProperty(this.name)) {
+            console.debug("Replacing Creature.creatures[ " + this.name + " ]");
+        }
+        Creature.creatures[ this.name ] = this;
+    }
 
     // Other properties
 	this._init(params);
@@ -337,6 +339,10 @@ Creature.prototype.refreshCard = function(isCurrent) {
 	}
 	this.$panel[ this.isBloodied() ? "addClass" : "removeClass" ]("bloodied");
 	this.subPanel.$name.html(this.name);
+    if (this.isPC && this.subPanel.$hp && this.subPanel.$hp.length) {
+        this.subPanel.$hp = jQuery("<span/>").addClass("hp").html(this.hp.current + (this.hp.temp ? " (" + (this.hp.temp + this.hp.current) + ")" : "") + " / " + this.hp.total);
+        this.subPanel.$name.append(this.subPanel.$hp);
+    }
 	this.subPanel.$hp.html(this.hp.current + (this.hp.temp ? " (" + (this.hp.temp + this.hp.current) + ")" : "") + " / " + this.hp.total);
     this.subPanel.$effects.children().remove();
 	for (i = 0; this.effects && i < this.effects.length; i++) {

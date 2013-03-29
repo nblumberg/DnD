@@ -29,7 +29,7 @@
     }
     
     function refresh(data) {
-        var msg, i, creature;
+        var msg, i, j, actor;
         msg = "Received \"refresh\" message:\n\tactors: [ ";
         for (i = 0; i < data.actors.length; i++) {
         	msg += (i > 0 ? ", " : "") + data.actors[ i ].name;
@@ -42,10 +42,15 @@
             $body.children().remove();
         }
         for (i = 0; i < data.order.length; i++) {
-            creature = new Creature(data.actors[ data.order[ i ] ]);
-            actors.push(creature);
-            if ($body.length) {
-                createCard(creature, i, data.order.length);
+            for (j = 0; j < data.actors.length; j++) {
+                if (data.actors[ j ].id === data.order[ i ]) {
+                    actor = new Actor(data.actors[ j ]);
+                    actors.push(actor);
+                    if ($body.length) {
+                        createCard(actor, i, data.order.length);
+                    }
+                    break;
+                }
             }
         }
     }
