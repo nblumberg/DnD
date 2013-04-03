@@ -960,6 +960,16 @@ Initiative.prototype._resolveInitiative = function() {
 };
 
 
+Initiative.prototype._getActor = function(id) {
+    var i;
+    for (i = 0; i < this.actors.length; i++) {
+        if (this.actors[ i ] && this.actors[ i ].id === id) {
+            return this.actors[ i ]; 
+        }
+    }
+    return null;
+};
+
 Initiative.prototype._attack = function(actor, event) {
 	var $option, i, a;
 	this.$attackDialog.data("attacker", actor);
@@ -980,8 +990,8 @@ Initiative.prototype._attack = function(actor, event) {
 	
 	this.$targets.html("");
 	for (i = 0; i < this.order.length; i++) {
-		a = this.actors[ this.order[ i ] ];
-		if (a.name === actor.name) {
+		a = this._getActor(this.order[ i ]);
+		if (a.id === actor.id) {
 			continue;
 		}
 		$option = jQuery("<option/>").html(a.name).data("target", a);
@@ -1109,15 +1119,11 @@ Initiative.prototype._exit = function(actor, event) {
                   { 
                       text: "Remove", click: (function() {
                     	  var i, index;
-                    	  index = this.actors.indexOf(actor);
-                    	  this.order.splice(this.order.indexOf(index), 1);
+                    	  index = this.order.indexOf(actor.id);
+                    	  this.order.splice(index, 1);
                     	  this._addHistory(actor, "Leaves the fight");
-//                    	  this.actors.splice(index, 1);
-//                    	  for (i = 0; i < this.order.length; i++) {
-//                    		  if (this.order[ i ] > index) {
-//                    			  this.order[ i ]--;
-//                    		  }
-//                    	  }
+                          index = this.actors.indexOf(actor);
+                    	  this.actors.splice(index, 1);
                     	  this._render(true);
                     	  $dialog.dialog("destroy");
                       }).bind(this)

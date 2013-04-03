@@ -10,14 +10,14 @@ th, td { border-color: white; }
 .bloodied { background-color: red; }
 .centered { text-align: center; }
 .centered img { display: block; margin-left: auto; margin-right: auto; }
-.current { border-color: blue; border-width: 6px; }
+.current { border-color: lime; border-width: 6px; }
 .f1 { font-size: 1.5em; }
 .f2 { font-size: 1.2em; }
 .floatLeft { float: left; }
 .gridItem { display: inline-block; font-size: 24px; vertical-align: top; } 
 .fullHeight { height: 100%; }
 .fullWidth { clear: both; width: 100%; }
-.halfWidth { width: 50%; }
+.halfWidth { max-width: 50%; width: 50%; }
 .fullBoth { height: 100%; width: 100%; }
 .nowrap { white-space: nowrap; }
 .numerator:after { content: '/' }

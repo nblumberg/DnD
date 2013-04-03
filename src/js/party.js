@@ -92,6 +92,47 @@ function loadParty() {
                        ],
              effects: []
          },
+         Camulos: { 
+             name: "Camulos", isPC: true, level: 10, image: "images/portraits/camulos.png", 
+             abilities: { STR: 23, CON: 19, DEX: 12, INT: 11, WIS: 11, CHA: 9 },
+             skills: { acrobatics: 6, arcana: 5, athletics: 18, bluff: 4, diplomacy: 4, dungeoneering: 5, endurance: 14, heal: 10, history: 5, insight: 7, intimidate: 4, nature: 7, perception: 7, religion: 5, stealth: 6, streetwise: 4, thievery: 6 },
+             hp: { total: 94 },
+             surges: { perDay: 13 },
+             defenses: { ac: 28, fort: 25, ref: 20, will: 18 },
+             init: 10, speed: 6,
+             weapons: [ 
+                       { name: "Defensive Warhammer +2", isMelee: true, enhancement: 2, proficiency: 2, damage: "1d10", crit: "2d6" }
+                        ],
+             "implements": [
+                            ],
+            attackBonuses: [ 
+                            { name: "Battle Wrath", keywords: [ "Battle Wrath" ], damage: 3 }, 
+                            { name: "Defend the Line", keywords: [ "Defend the Line" ], effects: [ { name: "Slowed", duration: 1 } ] } 
+                        ],
+             attacks: [
+                       { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+STR", miss: { damage: "CON" }, keywords: [ "weapon", "melee", "basic" ] },
+                       { name: "Ranged Basic", type: "At-Will", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
+                       { name: "Battle Guardian", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+STR", miss: { damage: "STR" }, keywords: [ "weapon", "melee", "basic" ] },
+                       { name: "Hammer Rhythm", type: "At-Will", toHit: "automatic", defense: "AC", damage: "CON", keywords: [ "martial", "melee" ] },
+                       { name: "Power Strike", type: "Encounter", toHit: "automatic", defense: "AC", damage: "1[W]", keywords: [ "martial", "weapon", "melee" ] },
+                       { name: "Come and Get It", type: "Encounter", target: { area: "close", size: 3 }, toHit: "STR", defense: "Will", damage: "1[W]", miss: { damage: "CON" }, keywords: [ "psionic", "melee" ] },
+                       
+                       { name: "Melee Basic (Battle Wrath)", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+STR", miss: { damage: "CON" }, keywords: [ "weapon", "melee", "basic", "Battle Wrath" ] },
+                       { name: "Ranged Basic (Battle Wrath)", type: "At-Will", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic", "Battle Wrath" ] },
+                       { name: "Battle Guardian (Battle Wrath)", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+STR", miss: { damage: "STR" }, keywords: [ "weapon", "melee", "basic", "Battle Wrath" ] },
+                       { name: "Hammer Rhythm (Battle Wrath)", type: "At-Will", toHit: "automatic", defense: "AC", damage: "CON", keywords: [ "martial", "melee", "Battle Wrath" ] },
+                       { name: "Power Strike (Battle Wrath)", type: "Encounter", toHit: "automatic", defense: "AC", damage: "1[W]", keywords: [ "martial", "weapon", "melee", "Battle Wrath" ] },
+                       { name: "Come and Get It (Battle Wrath)", type: "Encounter", target: { area: "close", size: 3 }, toHit: "STR", defense: "Will", damage: "1[W]", miss: { damage: "CON" }, keywords: [ "psionic", "melee", "Battle Wrath" ] },
+
+                       { name: "Melee Basic (Defend the Line)", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+STR", miss: { damage: "CON" }, keywords: [ "weapon", "melee", "basic", "Defend the Line" ] },
+                       { name: "Ranged Basic (Defend the Line)", type: "At-Will", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic", "Defend the Line" ] },
+                       { name: "Battle Guardian (Defend the Line)", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+STR", miss: { damage: "STR" }, keywords: [ "weapon", "melee", "basic", "Defend the Line" ] },
+                       { name: "Hammer Rhythm (Defend the Line)", type: "At-Will", toHit: "automatic", defense: "AC", damage: "CON", keywords: [ "martial", "melee", "Defend the Line" ] },
+                       { name: "Power Strike (Defend the Line)", type: "Encounter", toHit: "automatic", defense: "AC", damage: "1[W]", keywords: [ "martial", "weapon", "melee", "Defend the Line" ] },
+                       { name: "Come and Get It (Defend the Line)", type: "Encounter", target: { area: "close", size: 3 }, toHit: "STR", defense: "Will", damage: "1[W]", miss: { damage: "CON" }, keywords: [ "psionic", "melee", "Defend the Line" ] }
+                       ],
+           effects: []
+        },
          Festivus: { 
              name: "Festivus", isPC: true, level: 11, image: "images/portraits/festivus.jpg", // "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg",
              abilities: { STR: 19, CON: 17, DEX: 11, INT: 17, WIS: 11, CHA: 21 },
@@ -332,37 +373,38 @@ function loadParty() {
               ]
         },
         Melvin: { 
-             name: "Melvin", isPC: true, level: 9, image: "images/portraits/melvin.jpg", 
-             abilities: { STR: 18, CON: 18, DEX: 19, INT: 14, WIS: 19, CHA: 14 },
-             hp: { total: 70, current: 62 },
-             surges: { perDay: 12, current: 9 },
-             defenses: { ac: 23, fort: 23, ref: 22, will: 22 },
-             init: 8, speed: 7,
-             weapons: [ 
-                       { name: "Monk unarmed strike (Iron Body Ki Focus +2)", isMelee: true, enhancement: 2, proficiency: 0, damage: "1d8", crit: "2d10" },
-                       { name: "Monk unarmed strike (Abduction Ki Focus +1)", isMelee: true, enhancement: 1, proficiency: 0, damage: "1d8", crit: "1d6" },
-                       { name: "Rhythm Blade Dagger +1", isMelee: true, enhancement: 1, proficiency: 2, damage: "1d4", crit: "1d6" }
-                        ],
-             "implements": [
-                            { name: "Iron Body Ki Focus +2", enhancement: 2, crit: "2d10" },
-                            { name: "Abduction Ki Focus +1", enhancement: 1, crit: "1d6" } 
-                            ],
-             attacks: [
-                       { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
-                       { name: "Ranged Basic", type: "At-Will", toHit: 11, defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
-                       { name: "Dancing Cobra", type: "At-Will", toHit: 11, defense: "Ref", damage: "1d10+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
-                       { name: "Five Storms", type: "At-Will", toHit: 11, defense: "Ref", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
-                       { name: "Centered Flurry of Blows", type: "At-Will", toHit: "automatic", defense: "AC", damage: "2+WIS", keywords: [ "psionic", "melee" ] },
-                       { name: "Drunken Monkey", type: "Encounter", toHit: 11, defense: "Will", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
-                       { name: "Eternal Mountain", type: "Encounter", toHit: 11, defense: "Will", damage: "2d8+DEX", effects: [ "Prone" ], keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
-                       { name: "Wind Fury Assault", type: "Encounter", isMelee: true, toHit: 11, defense: "AC", damage: "1[W]+WIS", keywords: [ "elemental", "melee", "weapon" ] },
-                       { name: "Arc of the Flashing Storm", type: "Encounter", toHit: 11, defense: "Ref", damage: "2d10+DEX", effects: [ { name: "attack penalty", amount: -2, duration: 1 } ], keywords: [ "full discipline", "implement", "psionic", "melee", "lightning", "teleportation" ] },
-                       { name: "Goring Charge", type: "Encounter", toHit: 15, defense: "AC", damage: "1d6+DEX", effects: [ "Prone" ], keywords: [ "racial", "melee", "basic" ] },
-                       { name: "Masterful Spiral", type: "Daily", toHit: 11, defense: "Ref", damage: { amount: "3d8+DEX", type: "force" }, keywords: [ "force", "implement", "psionic", "melee", "close burst", "miss half", "stance" ] },
-                       { name: "One Hundred Leaves", type: "Daily", toHit: 11, defense: "Ref", damage: "3d8+DEX", keywords: [ "implement", "psionic", "melee", "close blast", "miss half" ] },
-                       { name: "Strength to Weakness", type: "Daily", toHit: 11, defense: "Ref", damage: "0", effects: [ { name: "ongoing damage", amount: "15+DEX" } ], keywords: [ "implement", "psionic", "melee" ] }
+            name: "Melvin", isPC: true, level: 10, image: "images/portraits/melvin.jpg", 
+            abilities: { STR: 18, CON: 18, DEX: 19, INT: 14, WIS: 19, CHA: 14 },
+            skills: { acrobatics: 16, arcana: 7, athletics: 16, bluff: 7, diplomacy: 7, dungeoneering: 9, endurance: 9, heal: 9, history: 7, insight: 10, intimidate: 7, nature: 11, perception: 19, religion: 7, stealth: 14, streetwise: 7, thievery: 9 },
+            hp: { total: 75 },
+            surges: { perDay: 12 },
+            defenses: { ac: 24, fort: 24, ref: 23, will: 23 },
+            init: 9, speed: 7,
+            weapons: [ 
+                      { name: "Monk unarmed strike (Iron Body Ki Focus +2)", isMelee: true, enhancement: 2, proficiency: 0, damage: "1d8", crit: "2d10" },
+                      { name: "Monk unarmed strike (Abduction Ki Focus +1)", isMelee: true, enhancement: 1, proficiency: 0, damage: "1d8", crit: "1d6" },
+                      { name: "Rhythm Blade Dagger +1", isMelee: true, enhancement: 1, proficiency: 2, damage: "1d4", crit: "1d6" }
                        ],
-           effects: []
-        }
+            "implements": [
+                           { name: "Iron Body Ki Focus +2", enhancement: 2, crit: "2d10" },
+                           { name: "Abduction Ki Focus +1", enhancement: 1, crit: "1d6" } 
+                           ],
+            attacks: [
+                      { name: "Melee Basic", type: "At-Will", isMelee: true, toHit: "STR", defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
+                      { name: "Ranged Basic", type: "At-Will", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "ranged", "basic" ] },
+                      { name: "Dancing Cobra", type: "At-Will", toHit: "DEX", defense: "Ref", damage: "1d10+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
+                      { name: "Five Storms", type: "At-Will", toHit: "DEX", defense: "Ref", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
+                      { name: "Centered Flurry of Blows", type: "At-Will", toHit: "automatic", defense: "AC", damage: "2+WIS", keywords: [ "psionic", "melee" ] },
+                      { name: "Drunken Monkey", type: "Encounter", toHit: "DEX", defense: "Will", damage: "1d8+DEX", keywords: [ "full discipline", "implement", "psionic", "melee" ] },
+                      { name: "Eternal Mountain", type: "Encounter", toHit: "DEX", defense: "Will", damage: "2d8+DEX", effects: [ "Prone" ], keywords: [ "full discipline", "implement", "psionic", "melee", "close burst" ] },
+                      { name: "Wind Fury Assault", type: "Encounter", isMelee: true, toHit: "DEX", defense: "AC", damage: "1[W]+WIS", keywords: [ "elemental", "melee", "weapon" ] },
+                      { name: "Arc of the Flashing Storm", type: "Encounter", toHit: "DEX", defense: "Ref", damage: "2d10+DEX", effects: [ { name: "attack penalty", amount: -2, duration: 1 } ], keywords: [ "full discipline", "implement", "psionic", "melee", "lightning", "teleportation" ] },
+                      { name: "Goring Charge", type: "Encounter", toHit: "DEX+4", defense: "AC", damage: "1d6+DEX", effects: [ "Prone" ], keywords: [ "racial", "melee", "basic" ] },
+                      { name: "Masterful Spiral", type: "Daily", toHit: "DEX", defense: "Ref", damage: { amount: "3d8+DEX", type: "force" }, keywords: [ "force", "implement", "psionic", "melee", "close burst", "miss half", "stance" ] },
+                      { name: "One Hundred Leaves", type: "Daily", toHit: "DEX", defense: "Ref", damage: "3d8+DEX", keywords: [ "implement", "psionic", "melee", "close blast", "miss half" ] },
+                      { name: "Strength to Weakness", type: "Daily", toHit: "DEX", defense: "Ref", damage: "0", effects: [ { name: "ongoing damage", amount: "15+DEX" } ], keywords: [ "implement", "psionic", "melee" ] }
+                      ],
+          effects: []
+       }
     };
 }

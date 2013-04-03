@@ -94,7 +94,8 @@ History.prototype._getRound = function(entry) {
 	var $tmp, _self, $ul, $li;
 	_self = this;
 	if (!this._count) {
-		$tmp = jQuery("<ul/>").addClass("history").data("history", this).insertBefore(this.$html);
+		$tmp = jQuery("<ul/>").addClass("history").insertBefore(this.$html);
+		$tmp.data("history", this);
 		this.$html.remove();
 		this.$html = $tmp;
 //		this.$html.delegate(".round", "click", function(event) {

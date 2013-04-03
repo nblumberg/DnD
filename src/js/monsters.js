@@ -98,6 +98,26 @@ function loadMonsters() {
                       { name: "Claw Slash", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "2d8+3", keywords: [ "melee" ] }
               ]
         },
+        "Foulspawn Seer": { 
+            name: "Foulspawn Seer", image: "images/portraits/foulspawn.jpg",
+            hp: { total: 86 },
+            defenses: { ac: 24, fort: 19, ref: 23, will: 21 },
+            init: 7, speed: { walk: 6, teleport: 3 },
+            attacks: [
+                      { name: "Twisted Staff", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "1d8+6", keywords: [ "melee", "basic" ] },
+                      { name: "Warp Orb", type: "At-Will", range: "10", toHit: 16, defense: "Ref", damage: "1d8+6", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "ranged", "basic" ] },
+                      { name: "Distortion Blast", type: "Daily", range: "blast 5", toHit: 12, defense: "Fort", damage: "2d8+6", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "ranged" ] }
+              ]
+        },
+        "Grimlock Ambusher": { 
+            name: "Grimlock Ambusher", image: "images/portraits/grimlock.jpg",
+            hp: { total: 110 },
+            defenses: { ac: 26, fort: 25, ref: 23, will: 23 },
+            init: 9, speed: { walk: 6 },
+            attacks: [
+                      { name: "Greataxe", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: "1d12+5", keywords: [ "melee", "basic" ] }
+              ]
+        },
         "Hethralga": { 
             name: "Hethralga", image: "images/portraits/night_hag.jpg",
             hp: { total: 126 },
@@ -108,6 +128,17 @@ function loadMonsters() {
                       { name: "Howl", type: "At-Will", range: "blast 3", toHit: 16, defense: "Fort", damage: { amount: "1d6+6", type: "thunder" }, keywords: [ "ranged" ] },
                       { name: "Shriek of Pain", type: "Encounter", range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+6", type: "thunder" }, keywords: [ "ranged", "miss half" ] },
                       { name: "Shriek of Pain (bloodied)", type: "Encounter", range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+11", type: "thunder" }, keywords: [ "ranged", "miss half" ] }
+              ]
+        },
+        "Mezzodemon": { 
+            name: "Mezzodemon", image: "images/portraits/mezzodemon.jpg",
+            hp: { total: 113 },
+            defenses: { ac: 27, fort: 25, ref: 22, will: 23 },
+            init: 9, speed: { walk: 6 },
+            attacks: [
+                      { name: "Trident", type: "At-Will", range: 2, toHit: 18, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
+                      { name: "Skewering Tines", type: "At-Will", range: 2, toHit: 18, defense: "AC", damage: "1d8+5", effects: [ { name: "multiple", saveEnds: true, children: [ { name: "Ongoing damage", amount: 5 }, "Restrained" ] } ], keywords: [ "ranged", "basic" ] },
+                      { name: "Poison Breath", type: "recharge", recharge: 5, range: "blast 3", toHit: 16, defense: "Fort", damage: { amount: "2d6+3", type: "poison" }, effects: [ { name: "Ongoing damage", type: "poison", amount: 5, saveEnds: true } ], keywords: [ "ranged", "poison" ] }
               ]
         },
         "Redspawn Firebelcher": { 
