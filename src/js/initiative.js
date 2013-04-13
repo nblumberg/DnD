@@ -239,6 +239,7 @@ Initiative.prototype._create = function() {
     
     this._createFileMenu();
     this._createCreatureDialog();
+    this._createImageDialog();
     
     jQuery("body").on({ click: this._hideMenus.bind(this) });
     
@@ -526,6 +527,101 @@ Initiative.prototype._createCreatureDialog = function() {
         }).bind(this) 
     });
     this.$menuBar.append(this.$creatureButton);
+};
+
+Initiative.prototype._createImageDialog = function() {
+	var handleFileSelection, $table, $tr, $td, $images, $fullSize;
+	handleFileSelection = (function(files) { // FileList object
+    	var i, f, reader;
+        // files is a FileList of File objects ({ name: String, type: String, size: Number, lastModifiedDate: Date }).
+        for (i = 0, f; f = files[i]; i++) {
+        	if (f) {
+        		reader = new FileReader();
+        		reader.onload = (function(theFile, e) {
+        				var $img, img = new Image();
+	        			img.title = theFile.name;
+	        			img.height = 40;
+	        			img.src = e.target.result;
+	        			$img = jQuery(img).on({ click: (function(image) {
+		        			$fullSize.attr("src", image.src).show();
+		        			this.$imageDialog.dialog("option", "position", [ "center", 50 ]);
+	        			}).bind(this, img) });
+	        			$images.append($img);
+        			}).bind(this, f);
+        		reader.readAsDataURL(f);
+        	}
+        }
+	}).bind(this);
+    if (this.$imageDialog && this.$imageDialog.length) {
+    	try {
+        	this.$imageDialog.dialog("destroy").remove();
+    	}
+    	catch (e) {
+    	}
+    	finally {
+        	this.$imageDialog.remove();
+    	}
+    }
+    this.$imageDialog = jQuery("<div/>").attr("id", "imageDialog").css({ "border": "3px solid black", "padding": "30px" });
+    // Setup the drag-and-drop listeners
+    this.$imageDialog[0].addEventListener("dragover", function(event) {
+	        event.stopPropagation();
+	        event.preventDefault();
+	        event.dataTransfer.dropEffect = "copy"; // Explicitly show this is a copy.
+    	}, false);
+    this.$imageDialog[0].addEventListener("drop", function(event) {
+	        event.stopPropagation();
+	        event.preventDefault();
+	        handleFileSelection(event.dataTransfer.files); // FileList object
+    	}, false);
+    $table = jQuery("<table/>").appendTo(this.$imageDialog);
+    $tr = jQuery("<tr/>").appendTo($table);
+    $td = jQuery("<td/>").attr("id", "imageFileDropZone").css({ color: "black" }).html("Drop files here or").appendTo($tr);
+    $td = jQuery("<td/>").attr("id", "fullSizeContainer").attr("rowspan", "3").appendTo($tr);
+    $fullSize = jQuery("<img/>").attr("id", "fullSize").hide().on({ 
+    	click: (function(event) {
+    		var offset, position;
+            event.stopPropagation();
+            offset = jQuery(event.target).offset();
+            position = { x: event.clientX + window.pageXOffset - offset.left, y: event.clientY + window.pageYOffset - offset.top };
+            //this.info("highlightImage { x: " + position.x + ", y: " + position.y + " }");
+    		this._messageDisplay({ type: "highlightImage", position: position }, false);
+    	}).bind(this) 
+	}).appendTo($td);
+    $tr = jQuery("<tr/>").appendTo($table);
+    $td = jQuery("<td/>").attr("id", "imageFileInputContainer").appendTo($tr);
+    this.$imageFileInput = jQuery("<input/>").attr("id", "imageFileInput").attr("type", "file").attr("multiple", "multiple").on({ 
+    	change: function(event) {
+	        event.stopPropagation();
+	        event.preventDefault();
+    		handleFileSelection(event.target.files || [ event.target.file ]); 
+    	}
+	}).appendTo($td);
+    $tr = jQuery("<tr/>").appendTo($table);
+    $images = jQuery("<td/>").attr("id", "images").appendTo($tr);
+    
+    this.$imageDialog.dialog({ 
+        autoOpen: false, 
+        position: [ "center", 50 ],
+        buttons: { 
+            "Display":  (function() {
+            	if ($fullSize && $fullSize.attr("src")) {
+            		this._messageDisplay({ type: "displayImage", src: $fullSize.attr("src") }, false);
+            	}
+            }).bind(this)
+        }, 
+        modal: true, 
+        title: "Image", 
+        width: "auto" 
+    });
+    
+    this.$imageButton = jQuery("<button/>").attr("id", "images").html("Image").on({ 
+        click: (function(event) {
+            event.stopPropagation();
+            this.$imageDialog.dialog("open");
+        }).bind(this) 
+    });
+    this.$menuBar.append(this.$imageButton);
 };
 
 Initiative.prototype._createTable = function() {
@@ -1173,3 +1269,10 @@ Initiative.prototype.raw = function() {
 	};
 	return raw;
 };
+
+Initiative.prototype.info = function(msg) {
+    if (console && console.info) {
+        console.info(msg);
+    }
+}
+

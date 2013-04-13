@@ -1,5 +1,5 @@
 (function() {
-    var $body = {}, actors = [], current;
+    var $body = {}, actors = [], current, $img, $highlight;
     
     jQuery(document).ready(function() {
         var i;
@@ -106,6 +106,41 @@
     	info(msg);
     }
     
+    function displayImage(data) {
+    	if ($img && $img.length) {
+        	try {
+            	$img.dialog("destroy").remove();
+        	}
+        	catch (e) {
+        	}
+        	finally {
+            	$img.remove();
+        	}
+    		$img.remove();
+    	}
+    	$img = jQuery("<img/>").attr("src", data.src).dialog({ 
+            autoOpen: false, 
+            position: [ "center", 50 ], 
+            modal: true, 
+            title: "Image", 
+            width: "auto" 
+        });
+        $img.dialog("open");
+    }
+    
+    function highlightImage(data) {
+    	var offset;
+    	if (!$img || !$img.length || !data || !data.position) {
+    		return;
+    	}
+    	if ($highlight) {
+    		$highlight.remove();
+    	}
+        info("Received \"highlightImage\" message { x: " + data.position.x + ", y: " + data.position.y + " }");
+    	offset = { left: $img[0].offsetLeft, top: $img[0].offsetTop };
+    	$highlight = jQuery("<div/>").css({ "background-color": "lime", height: "20px", left: offset.left + data.position.x, position: "absolute", top: offset.top + data.position.y, width: "20px" }).appendTo($img.parent());
+    }
+    
     function receiveMessage(event) {
         var data;
         data = JSON.parse(event.data);
@@ -116,6 +151,14 @@
 	        }
 	        case "takeDamage": {
 	        	takeDamage(data);
+	        	break;
+	        }
+	        case "displayImage": {
+	        	displayImage(data);
+	        	break;
+	        }
+	        case "highlightImage": {
+	        	highlightImage(data);
 	        	break;
 	        }
 	        case "refresh":
