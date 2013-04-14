@@ -583,8 +583,8 @@ Initiative.prototype._createImageDialog = function() {
     		var offset, position;
             event.stopPropagation();
             offset = jQuery(event.target).offset();
-            position = { x: event.clientX + window.pageXOffset - offset.left, y: event.clientY + window.pageYOffset - offset.top };
-            //this.info("highlightImage { x: " + position.x + ", y: " + position.y + " }");
+            position = { x: (event.clientX + window.pageXOffset - offset.left) / event.target.width, y: (event.clientY + window.pageYOffset - offset.top) / event.target.height };
+            this.info("highlightImage { x: " + (100 * position.x) + "%, y: " + (100 * position.y) + "% }");
     		this._messageDisplay({ type: "highlightImage", position: position }, false);
     	}).bind(this) 
 	}).appendTo($td);
@@ -608,6 +608,9 @@ Initiative.prototype._createImageDialog = function() {
             	if ($fullSize && $fullSize.attr("src")) {
             		this._messageDisplay({ type: "displayImage", src: $fullSize.attr("src") }, false);
             	}
+            }).bind(this),
+            "Hide":  (function() {
+        		this._messageDisplay({ type: "hideImage" }, false);
             }).bind(this)
         }, 
         modal: true, 

@@ -70,3 +70,5 @@ div#attacksDialog td select { display: block; width: 100%; }
 div#attacksDialog td.playerAttack input { max-width: 50%; }
 div#attacksDialog td.playerAttack select { display: inline; width: auto; }
 table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }"
+
+.reticle { background-image: url("../images/symbols/reticle.png"); }
