@@ -71,4 +71,5 @@ div#attacksDialog td.playerAttack input { max-width: 50%; }
 div#attacksDialog td.playerAttack select { display: inline; width: auto; }
 table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
 
-#imageDialog #images img { margin-right: 3px; }
+#imageDialog #images { max-width: 250px; }
+#imageDialog #images img { margin: 0 3px 3px 0; }
