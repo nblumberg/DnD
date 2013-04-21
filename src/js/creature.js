@@ -951,7 +951,7 @@ Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
 };
 
 Creature.prototype.startTurn = function() {
-    var regen, i, effect, ongoingEffects = [ "Ongoing acid", "Ongoing cold", "Ongoing damage", "Ongoing fire", "Ongoing lightning", "Ongoing necrotic", "Ongoing poison", "Ongoing psychic", "Ongoing radiant" ];
+    var regen, i, j, effect, ongoingDamage;
     
 	this._turnTimer = (new Date()).getTime();
     if (this.hp.regeneration && this.hp.current < this.hp.total) {
@@ -959,10 +959,21 @@ Creature.prototype.startTurn = function() {
     	this.hp.current += regen;
         this.history.add(new History.Entry({ round: this.history._round, subject: this, message: "Regenerated " + regen + " HP" }));
     }
+    ongoingDamage = (function(amount, type) {
+        this.takeDamage(null, amount, type, null);
+        this.history.add(new History.Entry({ round: this.history._round, subject: this, message: "Took " + amount + " ongoing " + (type ? type : "") + " damage" }));
+    }).bind(this);
     for (i = 0; this.effects && i < this.effects.length; i++) {
     	effect = this.effects[ i ];
         if (effect.name.toLowerCase() === "ongoing damage") {
-            this.takeDamage(null, effect.amount, effect.type, null);
+        	ongoingDamage(effect.amount, effect.type);
+        }
+        else if (effect.children && effect.children.length) {
+        	for (j = 0; j < effect.children.length; j++) {
+                if (effect.children[ j ].name.toLowerCase() === "ongoing damage") {
+                	ongoingDamage(effect.children[ j ].amount, effect.children[ j ].type);
+                }
+        	}
         }
     }
 };
