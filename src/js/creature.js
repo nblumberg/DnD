@@ -45,9 +45,15 @@ Effect.prototype.toString = function() {
     var name, i;
     name = this.name;
     if (this.children && this.children.length) {
-        name += " [";
+        name += " [ ";
         for (i = 0; i < this.children.length; i++) {
-            name += (i ? ", " : "") + this.children[ i ].name;
+        	if (i && i < this.children.length - 1) {
+        		name += ", ";
+        	}
+        	else if (i === this.children.length - 1) {
+        		name += " and ";
+        	}
+            name += this.children[ i ].name;
         }
         name += " ]";
     }
@@ -962,7 +968,7 @@ Creature.prototype.startTurn = function() {
 };
 
 Creature.prototype.endTurn = function() {
-    var i, j, savingThrow, savingThrowRoll, msg;
+    var i, effect, name, savingThrow, savingThrowRoll, msg;
 
     if (this._turnTimer) {
     	this._turnDurations[ this.history._round ] = (new Date()).getTime() - this._turnTimer;
@@ -973,7 +979,13 @@ Creature.prototype.endTurn = function() {
         effect = this.effects[ i ];
         if (effect !== null && effect.saveEnds) {
             savingThrow = new SavingThrow({ effect: effect });
-            savingThrowRoll = savingThrow.roll();
+        	if (this.isPC) {
+                savingThrowRoll = confirm("Did " + this.name + " save against " + effect.toString() + "?") ? 20 : 1;
+    			savingThrow.add(savingThrowRoll);
+        	}
+        	else {
+                savingThrowRoll = savingThrow.roll();
+        	}
             if (savingThrowRoll >= 10) {
                 this.effects.splice(i, 1);
                 i--;
