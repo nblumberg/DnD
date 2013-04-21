@@ -16,8 +16,9 @@ var History = function(params) {
 	
 	params = params || {};
 	this._entries = params._entries || [];
-	this._round = 0;
+	this._round = 0; // the current round
 	this._count = 0;
+	this._roundTimes = {}; // the duration of each round
 	this._includeSubject = params._includeSubject;
 	
 	this.$html = this._entries.length > 0 ? jQuery("<ul/>") : jQuery("<span/>").html("No history");
@@ -26,7 +27,7 @@ var History = function(params) {
 		if (!entry) {
 			continue;
 		}
-		entry._addToRound(this._getRound(entry), this._includeSubject);
+		entry._addToRound(this._getRound(entry, true), this._includeSubject);
 	}
 };
 
@@ -42,7 +43,7 @@ History.prototype.add = function(entry) {
 		return;
 	}
 	this._entries.push(entry.id);
-	entry._addToRound(this._getRound(entry), this._includeSubject);
+	entry._addToRound(this._getRound(entry, true), this._includeSubject);
 	if (this !== History.central) {
 		History.central.add(entry);
 	}
@@ -90,30 +91,63 @@ History.prototype.clear = function() {
 	this._count = 0;
 };
 
-History.prototype._getRound = function(entry) {
-	var $tmp, _self, $ul, $li;
-	_self = this;
+History.prototype.setRoundTime = function(milliseconds, round) {
+	var $ul, $span, minutes, seconds;
+	this._roundTimes[ round ] = milliseconds;
 	if (!this._count) {
-		$tmp = jQuery("<ul/>").addClass("history").insertBefore(this.$html);
-		$tmp.data("history", this);
-		this.$html.remove();
-		this.$html = $tmp;
-//		this.$html.delegate(".round", "click", function(event) {
-//			jQuery(this).children("ul").toggle();
-//		});
-//		this.$html.delegate(".entry", "click", function(event) {
-//			event.stopPropagation();
-//			_self._editEntry(jQuery(this), _self); 
-//		});
+		return false;
 	}
-	this._count++;
-	$ul = this.$html.children(".round" + entry.round).children("ul");
+	if (!round) {
+		round = this._round;
+	}
+	$ul = this._getRound(round, true);
+	$span = $ul.parent().children(".time");
+	if (!$span.length) {
+		return false;
+	}
+	this._setRoundTime($span, milliseconds);
+};
+
+History.prototype._getRound = function(round, create) {
+	var $tmp, $ul, $li;
+	if (!this._count) {
+		if (create) {
+			$tmp = jQuery("<ul/>").addClass("history").insertBefore(this.$html);
+			$tmp.data("history", this);
+			this.$html.remove();
+			this.$html = $tmp;
+		}
+		else {
+			return null;
+		}
+	}
+	round = typeof(round) === "number" ? round : round.round;
+	$ul = this.$html.children(".round" + round).children("ul");
 	if (!$ul.length) {
-		this._round = entry.round;
-		$li = jQuery("<li/>").addClass("round round" + entry.round).html("Round " + entry.round).data("history", this).appendTo(this.$html);
-		$ul = jQuery("<ul/>").addClass("round round" + entry.round).appendTo($li);
+		if (create) {
+			this._count++;
+			this._round = round;
+			$li = jQuery("<li/>").addClass("round round" + this._round).data("history", this).appendTo(this.$html);
+			$tmp = jQuery("<span/>").addClass("round").html("Round " + this._round).appendTo($li);
+			$tmp = jQuery("<span/>").addClass("time").appendTo($li);
+			if (this._roundTimes.hasOwnProperty(round)) {
+				this._setRoundTime($tmp, this._roundTimes[ round ]);
+			}
+			$ul = jQuery("<ul/>").addClass("entries round round" + this._round).appendTo($li);
+		}
+		else {
+			$ul = null;
+		}
 	}
 	return $ul;
+};
+
+History.prototype._setRoundTime = function($time, milliseconds) {
+	var seconds = Math.floor(milliseconds / 1000), minutes = Math.floor(seconds / 60);
+	minutes = ("" + minutes).length < 2 ? "0" + minutes : minutes;
+	seconds = seconds % 60;
+	seconds = ("" + seconds.length) < 2 ? "0" + seconds : seconds;
+	$time.html(minutes + ":" + seconds);
 };
 
 History.prototype._editEntry = function($entry, history) {

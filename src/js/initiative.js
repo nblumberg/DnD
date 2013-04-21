@@ -53,7 +53,7 @@ Initiative.prototype._init = function(params) {
             for (j = 0; j < this.actors.length; j++) {
             	actor = this.actors[ j ];
             	if (actor.type === creature.name) {
-            		this.actors.splice(j, 1, creature.toActor());
+            		this.actors.splice(j, 1, new Actor(creature));
             		this.actors[ j ].id = actor.id;
             		this.actors[ j ].name = actor.name;
             		this.actors[ j ].hp.current = actor.hp.current;
@@ -82,6 +82,7 @@ Initiative.prototype._init = function(params) {
     }
 
     this.round = params.round || 1;
+    this._roundTimer = (new Date()).getTime();
     this._current = params._current || 0;
     this._$target = params.target ? jQuery(params.target) : ""; 
     

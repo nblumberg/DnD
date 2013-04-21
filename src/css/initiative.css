@@ -36,6 +36,7 @@ input#round { width: 30px; }
 #history { margin-top: 20px; }
 #history > tr > td, #history > tbody > tr > td { vertical-align: top; }
 #history div { text-align: center; }
+.round .time { padding-left: 5px; }
 .round .edit textarea { height: 150px; }
 
 #display .creaturePanel {  }

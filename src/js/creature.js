@@ -197,6 +197,8 @@ Creature.prototype._init = function(params) {
         this.effects.push(new Effect(params.effects[ i ]));
     }
 	this.history = new History(params.history || { includeSubject: false });
+	this._turnTimer = (new Date()).getTime();
+	this._turnDurations = {};
 };
 
 Creature.prototype.isBloodied = function() {
@@ -933,6 +935,8 @@ Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
 
 Creature.prototype.startTurn = function() {
     var regen, i, effect, ongoingEffects = [ "Ongoing acid", "Ongoing cold", "Ongoing damage", "Ongoing fire", "Ongoing lightning", "Ongoing necrotic", "Ongoing poison", "Ongoing psychic", "Ongoing radiant" ];
+    
+	this._turnTimer = (new Date()).getTime();
     if (this.hp.regeneration && this.hp.current < this.hp.total) {
     	regen = Math.min(this.hp.regeneration, this.hp.total - this.hp.current);
     	this.hp.current += regen;
@@ -948,6 +952,12 @@ Creature.prototype.startTurn = function() {
 
 Creature.prototype.endTurn = function() {
     var i, j, savingThrow, savingThrowRoll, msg;
+
+    if (this._turnTimer) {
+    	this._turnDurations[ this.history._round ] = (new Date()).getTime() - this._turnTimer;
+        this._turnTimer = null;
+        this.history.setRoundTime(this._turnDurations[ this.history._round ], this.history._round);
+    }
     for (i = 0; i < this.effects.length; i++) {
         effect = this.effects[ i ];
         if (effect !== null && effect.saveEnds) {
