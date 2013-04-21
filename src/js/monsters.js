@@ -1,5 +1,20 @@
 function loadMonsters() {
     return { 
+    	"Antharosk": {    	
+            name: "Antharosk", image: "images/portraits/antharosk.jpg",
+            hp: { total: 428 },
+            defenses: { ac: 26, fort: 23, ref: 24, will: 23 },
+            resistances: { poison: 20 },
+            savingThrows: 5,
+            init: 10, speed: { walk: 8, fly: 12 },
+            attacks: [
+                      { name: "Bite", type: "At-Will", range: "reach", toHit: 15, defense: "AC", damage: "1d10+5", effects: [ { name: "ongoing damage", amount: 5, type: "poison", saveEnds: true } ], keywords: [ "melee", "basic", "poison" ] },
+                      { name: "Claw", type: "At-Will", range: "reach", toHit: 15, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
+                      { name: "Tail Sweep", type: "Immediate Reaction", toHit: 13, defense: "Ref", damage: "1d8+5", effects: [ "Prone" ], keywords: [ "melee", "prone" ] },
+                      { name: "Breath Weapon", type: "recharge", recharge: 5, target: { area: "close blast", size: 5 }, toHit: 13, defense: "Fort", damage: { amount: "1d10+4", type: "poison" }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "Ongoing damage", amount: 5 }, "Slowed" ] } ], keywords: [ "close blast", "poison" ] },
+                      { name: "Frightful Presence", type: "Encounter", target: { area: "close burst", size: 5 }, toHit: 13, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: 1 } ], keywords: [ "close", "burst" ] }
+              ]
+        },
         "Banshrae Dartswarmer": { 
             name: "Banshrae Dartswarmer", image: "images/portraits/banshrae_dartswarmer.jpg",
             hp: { total: 89 },
@@ -26,6 +41,21 @@ function loadMonsters() {
                       { name: "Claw", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "1d8+6", keywords: [ "melee" ] },
                       { name: "Claw (sneak attack)", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "2d8+6", keywords: [ "melee", "requires combat advantage" ] },
                       { name: "Sacrifice", type: "At-Will", range: 1, toHit: 11, defense: "Fort", damage: "2d6+6", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "close burst", "effects on miss" ] }
+              ]
+        },
+    	"Calaunxin": {    	
+            name: "Calaunxin", image: "images/portraits/calaunxin.jpg",
+            hp: { total: 408 },
+            defenses: { ac: 23, fort: 26, ref: 21, will: 22 },
+            resistances: { poison: 20 },
+            savingThrows: 5,
+            init: 5, speed: { walk: 8, fly: 12 },
+            attacks: [
+                      { name: "Bite", type: "At-Will", range: "reach", toHit: 12, defense: "AC", damage: "1d8+5", effects: [ { name: "ongoing damage", amount: 5, type: "poison", saveEnds: true } ], keywords: [ "melee", "basic", "poison" ] },
+                      { name: "Claw", type: "At-Will", range: "reach", toHit: 12, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
+                      { name: "Luring Glare", type: "At-Will", target: { range: 10 }, toHit: 10, defense: "Will", damage: "0", keywords: [ "melee", "forced movement" ] },
+                      { name: "Breath Weapon", type: "recharge", recharge: 5, target: { area: "close blast", size: 5 }, toHit: 10, defense: "Ref", damage: { amount: "2d6+6", type: "poison" }, effects: [ { name: "multiple", saveEnds: true, children: [ "Slowed" ] } ], keywords: [ "close blast", "poison" ] },
+                      { name: "Frightful Presence", type: "Encounter", target: { area: "close burst", size: 5 }, toHit: 10, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: 1 } ], keywords: [ "close", "burst" ] }
               ]
         },
         "Chaos Mauler": { 
@@ -109,6 +139,17 @@ function loadMonsters() {
                       { name: "Distortion Blast", type: "Daily", range: "blast 5", toHit: 12, defense: "Fort", damage: "2d8+6", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
+        "Githyanki Warrior": { 
+            name: "Githyanki Warrior", image: "images/portraits/githyanki.jpg",
+            hp: { total: 118 },
+            defenses: { ac: 28, fort: 25, ref: 23, will: 22 },
+            init: 13, speed: { walk: 5, jump: 5 },
+            attacks: [
+                      { name: "Silver Greatsword", type: "At-Will", range: "melee", toHit: 17, defense: "AC", damage: { amount: "1d16+5", type: "psychic" }, keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Silver Greatsword (immoblized)", type: "At-Will", range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "3d6", type: "psychic" }, keywords: [ "melee", "psychic" ] },
+                      { name: "Telekinetic Grasp", type: "Encounter", target: { range: 5 }, toHit: 15, defense: "Fort", damage: "0", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged" ] }
+              ]
+        },
         "Grimlock Ambusher": { 
             name: "Grimlock Ambusher", image: "images/portraits/grimlock.jpg",
             hp: { total: 110 },
@@ -152,29 +193,6 @@ function loadMonsters() {
                       { name: "Fire Burst", type: "recharge", target: { area: "burst", size: 2, range: 10 }, recharge: 5, toHit: 15, defense: "Ref", damage: { amount: "3d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], miss: { halfDamage: true }, keywords: [ "ranged", "fire" ] }
               ]
         },
-        "Scion of Chaos": { 
-            name: "Scion of Chaos", image: "images/portraits/scion_of_chaos.jpg",
-            hp: { total: 117 },
-            defenses: { ac: 25, fort: 24, ref: 23, will: 24 },
-            resistances: { acid: 10, fire: 10 },
-            init: 9, speed: { walk: 6 },
-            attacks: [
-                      { name: "Slam", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: { amount: "2d8+4", type: "fire" }, keywords: [ "melee", "fire" ] },
-                      { name: "Staggering Strike", type: "At-Will", range: 20, toHit: 14, defense: "Fort", damage: "2d6+6", keywords: [ "ranged" ] },
-                      { name: "Coils of Immobility", type: "recharge", recharge: 5, target: { area: "burst", size: 2, range: 10 }, toHit: 13, defense: "Ref", damage: "2d8+4", effects: [ { name: "Restrained", saveEnds: true } ], keywords: [ "ranged" ] }
-              ]
-        },
-        "Skulking Terror": { 
-            name: "Skulking Terror", image: "images/portraits/skulking_terror.png",
-            hp: { total: 83 },
-            defenses: { ac: 25, fort: 21, ref: 23, will: 21 },
-            init: 13, speed: { walk: 6, fly: 6 },
-            attacks: [
-                      { name: "Slam", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: "2d6+6", keywords: [ "melee", "basic" ] },
-                      { name: "Slam [combat advantage]", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: "4d6+6", keywords: [ "melee", "basic" ] },
-                      { name: "Lethargic Countenance", type: "At-Will", target: { area: "blast", size: 1 }, toHit: 12, defense: "Will", damage: "0", effects: [ { name: "combat advantage", duration: 1 } ], keywords: [ "ranged" ] }
-              ]
-        },
         "Rathoraiax": { 
             name: "Rathoraiax", image: "images/portraits/zombie_dragon.jpg", // http://4.bp.blogspot.com/-rclvSPUh9iM/ToBowVvsz_I/AAAAAAAADKI/wwQ5VTfwAeU/s1600/02-The-Dragons_Zombie-Dragon.jpg
             hp: { total: 328 },
@@ -189,6 +207,41 @@ function loadMonsters() {
                       { name: "Tail Crush", type: "At-Will", range: "reach", toHit: 14, defense: "Fort", damage: "3d8+6", keywords: [ "melee", "prone" ] },
                       { name: "Breath of the Grave", type: "Encounter", range: 5, toHit: 14, defense: "Fort", damage: { amount: "4d10+6", type: [ "poison", "necrotic" ] }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "Ongoing necrotic", amount: 10 }, "Weakened" ] } ], keywords: [ "close blast", "necrotic", "poison" ] },
                       { name: "Loose stones", type: "At-Will", range: 1, toHit: 14, defense: "Ref", damage: "2d6+10", effects: [ "Prone" ], keywords: [ "burst" ] }
+              ]
+        },
+        "Scion of Chaos": { 
+            name: "Scion of Chaos", image: "images/portraits/scion_of_chaos.jpg",
+            hp: { total: 117 },
+            defenses: { ac: 25, fort: 24, ref: 23, will: 24 },
+            resistances: { acid: 10, fire: 10 },
+            init: 9, speed: { walk: 6 },
+            attacks: [
+                      { name: "Slam", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: { amount: "2d8+4", type: "fire" }, keywords: [ "melee", "fire" ] },
+                      { name: "Staggering Strike", type: "At-Will", range: 20, toHit: 14, defense: "Fort", damage: "2d6+6", keywords: [ "ranged" ] },
+                      { name: "Coils of Immobility", type: "recharge", recharge: 5, target: { area: "burst", size: 2, range: 10 }, toHit: 13, defense: "Ref", damage: "2d8+4", effects: [ { name: "Restrained", saveEnds: true } ], keywords: [ "ranged" ] }
+              ]
+        },
+        "Shadar-kai Witch": { 
+            name: "Shadar-kai Witch", image: "images/portraits/shadar_kai_witch.jpg",
+            hp: { total: 272 },
+            defenses: { ac: 30, fort: 27, ref: 29, will: 25 },
+            init: 11, speed: { walk: 6, teleport: 3 },
+            attacks: [
+                      { name: "Blackfire Touch", type: "At-Will", range: "melee", toHit: 18, defense: "Ref", damage: { amount: "2d8+6", type: "fire and necrotic" }, keywords: [ "melee", "fire", "necrotic", "fire and necrotic" ] },
+                      { name: "Beshadowed Mind", type: "Recharge", recharge: 4, range: 10, toHit: 18, defense: "Will", damage: { amount: "3d6+6", type: "necrotic" }, effects: [ { name: "blinded", saveEnds: true } ], keywords: [ "melee", "necrotic" ] },
+                      { name: "Deep Shadow", type: "At-Will", range: 2, toHit: "automatic", defense: "AC", damage: { amount: "5", type: "necrotic" }, keywords: [ "aura", "necrotic" ] },
+                      { name: "Ebon Burst", type: "Encounter", target: { area: "close burst", size: 2 }, toHit: 18, defense: "Ref", damage: "2d8+6", effects: [ { name: "Slowed", duration: 1 } ], keywords: [ "ranged" ] }
+              ]
+        },
+        "Skulking Terror": { 
+            name: "Skulking Terror", image: "images/portraits/skulking_terror.png",
+            hp: { total: 83 },
+            defenses: { ac: 25, fort: 21, ref: 23, will: 21 },
+            init: 13, speed: { walk: 6, fly: 6 },
+            attacks: [
+                      { name: "Slam", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: "2d6+6", keywords: [ "melee", "basic" ] },
+                      { name: "Slam [combat advantage]", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: "4d6+6", keywords: [ "melee", "basic" ] },
+                      { name: "Lethargic Countenance", type: "At-Will", target: { area: "blast", size: 1 }, toHit: 12, defense: "Will", damage: "0", effects: [ { name: "combat advantage", duration: 1 } ], keywords: [ "ranged" ] }
               ]
         },
         "Slaad Guard": { 
@@ -250,6 +303,15 @@ function loadMonsters() {
             attacks: [
                       { name: "Longsword", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "6", keywords: [ "melee" ] },
                       { name: "Crossbow", type: "At-Will", range: "ranged", toHit: 13, defense: "AC", damage: 6, keywords: [ "ranged" ] }
+              ]
+        },
+        "Troglodyte Warrior": { 
+            name: "Troglodyte Warrior", image: "images/portraits/troglodyte.jpg",
+            hp: { total: 1 },
+            defenses: { ac: 25, fort: 25, ref: 22, will: 21 },
+            init: 6, speed: 5,
+            attacks: [
+                      { name: "Club", type: "At-Will", toHit: 15, defense: "AC", damage: "7", keywords: [ "melee", "basic" ] }
               ]
         },
         "Troll": { 
