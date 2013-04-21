@@ -882,7 +882,7 @@ Creature.prototype._attackTarget = function(attack, item, combatAdvantage, targe
     			}
     		}
     		else {
-            	tmp = target.takeDamage(this, attack.miss.damage.getLastRoll() + targetDamage.conditional.mod, attack.miss.damage.type, attack.miss.effects);
+            	tmp = target.takeDamage(this, attack.miss.damage.getLastRoll().total + targetDamage.conditional.mod, attack.miss.damage.type, attack.miss.effects);
             	msg += tmp.msg;
             	result.damage.push({ amount: tmp.damage, type: attack.miss.damage.type });
     		}
@@ -894,8 +894,19 @@ Creature.prototype._attackTarget = function(attack, item, combatAdvantage, targe
     return result;
 };
 
+/**
+ * @param attacker Creature
+ * @param damage Number
+ * @param type String
+ * @param effects Array of Effect
+ */
 Creature.prototype.takeDamage = function(attacker, damage, type, effects) {
     var temp, msg, i, result;
+    // vvv DEBUGGING
+    if (typeof(damage) !== "number") {
+    	alert("Break for debugging, Creature.takeDamage() received NaN damage value");
+    }
+    // ^^^ DEBUGGING
     msg = "";
     if (type && this.defenses.resistances && this.defenses.resistances.hasOwnProperty(type)) {
     	temp = this.defenses.resistances[ type ];
