@@ -1,7 +1,7 @@
 function loadParty() {
     return { 
         Barases: { 
-             name: "Barases", isPC: true, level: 11, image: "images/portraits/barases.jpg", // "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg",  
+             name: "Barases", isPC: true, level: 11, image: "../images/portraits/barases.jpg", // "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg",  
              abilities: { STR: 12, CON: 19, DEX: 11, INT: 11, WIS: 21, CHA: 11 },
              skills: { acrobatics: 4, arcana: 7, athletics: 14, bluff: 10, diplomacy: 5, dungeoneering: 10, endurance: 8, heal: 10, history: 5, insight: 10, intimidate: 5, nature: 17, perception: 15, religion: 5, stealth: 6, streetwise: 5, thievery: 6 },
              hp: { total: 91 },
@@ -10,10 +10,10 @@ function loadParty() {
              init: 5, speed: 6,
              weapons: [ 
                        { name: "Vicious Quarterstaff +2", isMelee: true, enhancement: 2, proficiency: 2, damage: { amount: "1d12", crit: "2d12" } },
-                       { name: "Distance Sling +1", isMelee: false, enhancement: 1, damage: "1d6" }
+                       { name: "Distance Sling +1", isMelee: false, enhancement: 1, proficiency: 2, damage: { amount: "1d6", crit: "0" } }
                         ],
              "implements": [
-                           { name: "Staff", enhancement: 0, crit: "" }
+                           { name: "Staff", enhancement: 0, crit: "0" }
                             ],
              attacks: [
                        { name: "Melee Basic", type: "At-Will", toHit: "STR", defense: "AC", damage: "1[W]+STR", keywords: [ "weapon", "melee", "basic" ] },
@@ -22,7 +22,7 @@ function loadParty() {
                        { name: "Combined Attack", type: "Encounter", toHit: "WIS", defense: "AC", damage: "1[W]+WIS", keywords: [ "weapon", "melee", "primal" ] },
                        { name: "Combined Attack (beast)", type: "At-Will", toHit: 15, defense: "AC", damage: "1d12+9", crit: "", keywords: [ "melee", "primal", "beast" ] },
                        { name: "Redfang Prophecy", type: "Encounter", target: { range: 5 }, toHit: "WIS", defense: "Will", damage: "2d8+WIS", effects: [ { name: "vulnerable summoned creature", amount: 5, duration: 1 } ], keywords: [ "implement", "primal", "psychic" ] },
-                       { name: "Spirit's Shield", type: "Encounter", target: { range: 1, area: "spirit" }, toHit: "WIS", defense: "Reflex", damage: "WIS", keywords: [ "healing", "implement", "spirit", "primal" ] },
+                       { name: "Spirit's Shield", type: "Encounter", target: { range: 1, area: "spirit" }, toHit: "WIS", defense: "Ref", damage: "WIS", keywords: [ "healing", "implement", "spirit", "primal" ] },
                        { name: "Vexing Overgrowth", type: "Daily", target: { area: "close burst", size: 1 }, toHit: "WIS", defense: "AC", damage: "2[W]+WIS", miss: { halfDamage: true }, keywords: [ "weapon", "primal" ] },
                        { name: "Life Blood Harvest", type: "Daily", toHit: "WIS", defense: "AC", damage: "3[W]+WIS", miss: { halfDamage: true }, keywords: [ "weapon", "melee", "primal", "healing" ] },
                        { name: "Bear Beast", type: "At-Will", range: 5, toHit: 15, defense: "AC", damage: "1d12+9", crit: "", keywords: [ "implement", "primal", "summoning" ] },
@@ -31,7 +31,7 @@ function loadParty() {
                effects: []
          },
          Smack: { 
-             name: "Smack", isPC: true, level: 11, image: "images/portraits/smack.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862  
+             name: "Smack", isPC: true, level: 11, image: "../images/portraits/smack.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862  
              abilities: { STR: 20, CON: 17, DEX: 12, INT: 2, WIS: 16, CHA: 6 },
              skills: { acrobatics: 4, arcana: 7, athletics: 14, bluff: 10, diplomacy: 5, dungeoneering: 10, endurance: 8, heal: 10, history: 5, insight: 10, intimidate: 5, nature: 17, perception: 15, religion: 5, stealth: 6, streetwise: 5, thievery: 6 },
              hp: { total: 45 },
@@ -46,7 +46,7 @@ function loadParty() {
              effects: []
          },
          Oomooroo: { 
-             name: "Oomooroo", isPC: true, level: 11, image: "images/portraits/owlbear.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862  
+             name: "Oomooroo", isPC: true, level: 11, image: "../images/portraits/owlbear.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862  
              abilities: { STR: 20, CON: 17, DEX: 12, INT: 2, WIS: 16, CHA: 6 },
              skills: { acrobatics: 4, arcana: 7, athletics: 14, bluff: 10, diplomacy: 5, dungeoneering: 10, endurance: 8, heal: 10, history: 5, insight: 10, intimidate: 5, nature: 17, perception: 15, religion: 5, stealth: 6, streetwise: 5, thievery: 6 },
              hp: { total: 45 },
@@ -61,7 +61,7 @@ function loadParty() {
              effects: []
          },
          Bin: { 
-             name: "Bin", isPC: true, level: 11, image: "images/portraits/bin.jpg", // "http://wizards.com/dnd/images/386_wr_changeling.jpg", 
+             name: "Bin", isPC: true, level: 11, image: "../images/portraits/bin.jpg", // "http://wizards.com/dnd/images/386_wr_changeling.jpg", 
              abilities: { STR: 15, CON: 18, DEX: 16, INT: 22, WIS: 19, CHA: 12 },
              skills: { acrobatics: 8, arcana: 16, athletics: 7, bluff: 8, diplomacy: 6, dungeoneering: 14, endurance: 11, heal: 9, history: 16, insight: 11, intimidate: 6, nature: 9, perception: 14, religion: 11, stealth: 10, streetwise: 6, thievery: 13 },
              hp: { total: 80 },
@@ -93,15 +93,15 @@ function loadParty() {
              effects: []
          },
          Camulos: { 
-             name: "Camulos", isPC: true, level: 10, image: "images/portraits/camulos.png", 
+             name: "Camulos", isPC: true, level: 10, image: "../images/portraits/camulos.png", 
              abilities: { STR: 23, CON: 19, DEX: 12, INT: 11, WIS: 11, CHA: 9 },
              skills: { acrobatics: 6, arcana: 5, athletics: 18, bluff: 4, diplomacy: 4, dungeoneering: 5, endurance: 14, heal: 10, history: 5, insight: 7, intimidate: 4, nature: 7, perception: 7, religion: 5, stealth: 6, streetwise: 4, thievery: 6 },
              hp: { total: 94 },
-             surges: { perDay: 13 },
+             surges: { perDay: 13, current: 13 },
              defenses: { ac: 28, fort: 25, ref: 20, will: 18 },
              init: 10, speed: 6,
              weapons: [ 
-                       { name: "Defensive Warhammer +2", isMelee: true, enhancement: 2, proficiency: 2, damage: "1d10", crit: "2d6" }
+                       { name: "Defensive Warhammer +2", isMelee: true, enhancement: 2, proficiency: 2, damage: { amount: "1d10", crit: "2d6" } }
                         ],
              "implements": [
                             ],
@@ -133,8 +133,8 @@ function loadParty() {
                        ],
            effects: []
         },
-         Festivus: { 
-             name: "Festivus", isPC: true, level: 11, image: "images/portraits/festivus.jpg", // "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg",
+        Festivus: { 
+             name: "Festivus", isPC: true, level: 11, image: "../images/portraits/festivus.jpg", // "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg",
              abilities: { STR: 19, CON: 17, DEX: 11, INT: 17, WIS: 11, CHA: 21 },
              skills: { acrobatics: 9, arcana: 15, athletics: 13, bluff: 16, diplomacy: 15, dungeoneering: 9, endurance: 12, heal: 9, history: 17, insight: 9, intimidate: 16, nature: 9, perception: 10, religion: 15, stealth: 9, streetwise: 17, thievery: 10 },
              hp: { total: 79 },
@@ -175,7 +175,7 @@ function loadParty() {
              effects: []
          },
          Kallista: { 
-             name: "Kallista", isPC: true, level: 11, image: "images/portraits/kallista.jpg", // "http://www.wizards.com/dnd/images/Dragon_373/11.jpg", 
+             name: "Kallista", isPC: true, level: 11, image: "../images/portraits/kallista.jpg", // "http://www.wizards.com/dnd/images/Dragon_373/11.jpg", 
              abilities: { STR: 15, CON: 13, DEX: 21, INT: 15, WIS: 13, CHA: 23 },
              skills: { acrobatics: 21, arcana: 7, athletics: 18, bluff: 19, diplomacy: 11, dungeoneering: 6, endurance: 6, heal: 6, history: 7, insight: 6, intimidate: 13, nature: 6, perception: 13, religion: 7, stealth: 18, streetwise: 11, thievery: 15 },
              hp: { total: 75 },
@@ -204,16 +204,16 @@ function loadParty() {
                        { name: "Flailing Shove", type: "Encounter", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
                        { name: "Flailing Shove (secondary)", type: "Encounter", toHit: "automatic", defense: "AC", damage: "2+STR", keywords: [ "weapon", "martial", "melee" ] },
                        { name: "Cloud of Steel", type: "Encounter", toHit: "DEX", defense: "AC", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
-                       { name: "Hell's Ram", type: "Encounter", toHit: "DEX^STR+4", defense: "Fort", damage: "0", effects: [ { name: "dazed", duration: 1 } ], keywords: [ "martial" ] },
+                       { name: "Hell's Ram", type: "Encounter", toHit: "STR^DEX+4", defense: "Fort", damage: "0", effects: [ { name: "dazed", duration: 1 } ], keywords: [ "martial" ] },
                        { name: "Bloodbath", type: "Daily", toHit: "DEX", defense: "Fort", damage: "1[W]+DEX", effects: [ { name: "ongoing damage", amount: "2d6" } ], keywords: [ "weapon", "martial" ] },
                        { name: "Burst Fire", type: "Daily", toHit: "DEX", defense: "Ref", damage: "2[W]+DEX", keywords: [ "weapon", "martial", "ranged" ] },
-                       { name: "Duelists Prowess", type: "Immediate Interrupt", toHit: "DEX", defense: "Ref", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
+                       { name: "Duelists Prowess", type: "At-Will", action: "Immediate Interrupt", toHit: "DEX", defense: "Ref", damage: "1[W]+DEX", keywords: [ "weapon", "martial", "melee" ] },
                        { name: "Sneak Attack", type: "At-Will", toHit: "automatic", defense: "AC", damage: "2d8" }
                        ],
              effects: []
          },
          Karrion: { 
-             name: "Karrion", isPC: true, level: 11, image: "images/portraits/karrion.jpg", // "http://rogueartfx.com/images/tiefling03.jpg",  
+             name: "Karrion", isPC: true, level: 11, image: "../images/portraits/karrion.jpg", // "http://rogueartfx.com/images/tiefling03.jpg",  
              abilities: { STR: 20, CON: 17, DEX: 20, INT: 19, WIS: 17, CHA: 17 },
              skills: { acrobatics: 16, arcana: 9, athletics: 15, bluff: 10, diplomacy: 8, dungeoneering: 13, endurance: 8, heal: 8, history: 9, insight: 8, intimidate: 8, nature: 14, perception: 14, religion: 9, stealth: 17, streetwise: 8, thievery: 10 },
              hp: { total: 79 },
@@ -222,12 +222,12 @@ function loadParty() {
              resistances: { fire: 11 },
              init: 12, speed: 6,
              weapons: [ 
-                       { name: "Withering Spiked Chain +3", isMelee: true, enhancement: 3, proficiency: 3, damage: "2d4", crit: "3d6" },
-                       { name: "Sid Vicious Longbow +1", isMelee: false, enhancement: 1, proficiency: 2, damage: "1d10", crit: "1d12" },
-                       { name: "Lightning Spiked Chain +1", isMelee: true, enhancement: 1, proficiency: 3, damage: "2d4", crit: "1d6" }
+                       { name: "Withering Spiked Chain +3", isMelee: true, enhancement: 3, proficiency: 3, damage: { amount: "2d4", crit: "3d6" } },
+                       { name: "Sid Vicious Longbow +1", isMelee: false, enhancement: 1, proficiency: 2, damage: { amount: "1d10", crit: "1d12" } },
+                       { name: "Lightning Spiked Chain +1", isMelee: true, enhancement: 1, proficiency: 3, damage: { amount: "2d4", crit: "1d6" } }
                         ],
              "implements": [
-                            { name: "Totem", enhancement: 0 },
+                            { name: "Totem", enhancement: 0, crit: "0" },
                             ],
              attackBonuses: [ 
                             { name: "Bloodhunt", foeStatus: [ "bloodied" ], toHit: 1 }/*, 
@@ -253,7 +253,7 @@ function loadParty() {
              effects: []
          },
          Kitara: { 
-             name: "Kitara", isPC: true, level: 11, image: "images/portraits/kitara.jpg", // "http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg", 
+             name: "Kitara", isPC: true, level: 11, image: "../images/portraits/kitara.jpg", // "http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg", 
              abilities: { STR: 17, CON: 15, DEX: 21, INT: 23, WIS: 17, CHA: 17 },
              skills: { acrobatics: 12, arcana: 16, athletics: 8, bluff: 10, diplomacy: 13, dungeoneering: 8, endurance: 7, heal: 8, history: 11, insight: 8, intimidate: 10, nature: 8, perception: 13, religion: 11, stealth: 13, streetwise: 8, thievery: 15 },
              hp: { total: 77 },
@@ -261,7 +261,7 @@ function loadParty() {
              defenses: { ac: 26, fort: 21, ref: 22, will: 21 },
              init: 11, speed: 7,
              weapons: [ 
-                        { name: "Supremely Vicious Bastard Sword +2", isMelee: true, enhancement: 2, proficiency: 2, damage: "1d10", crit: "2d8" }
+                        { name: "Supremely Vicious Bastard Sword +2", isMelee: true, enhancement: 2, proficiency: 2, damage: { amount: "1d10", crit: "2d8" } }
                         ],
              "implements": [ 
                              { name: "Supremely Vicious Bastard Sword +2", enhancement: 2, crit: "2d8" },
@@ -309,7 +309,7 @@ function loadParty() {
              effects: []
          },
          Lechonero: { 
-             name: "Lechonero", isPC: true, level: 11, image: "images/portraits/lechonero.jpg", // "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg", 
+             name: "Lechonero", isPC: true, level: 11, image: "../images/portraits/lechonero.jpg", // "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg", 
              abilities: { STR: 17, CON: 15, DEX: 22, INT: 15, WIS: 16, CHA: 11 },
              skills: { acrobatics: 11, arcana: 7, athletics: 15, bluff: 5, diplomacy: 5, dungeoneering: 8, endurance: 12, heal: 13, history: 7, insight: 8, intimidate: 5, nature: 17, perception: 17, religion: 7, stealth: 13, streetwise: 10, thievery: 11 },
              hp: { total: 77 },
@@ -317,9 +317,9 @@ function loadParty() {
              defenses: { ac: 25, fort: 21, ref: 24, will: 20 },
              init: 13, speed: 7,
              weapons: [ 
-                       { name: "Longbow of Speed +2", isMelee: false, enhancement: 2, proficiency: 2, damage: "1d10", crit: "2d8" },
-                       { name: "Sentinel Marshall Honorblade +1", isMelee: true, enhancement: 1, proficiency: 3, damage: "1d8", crit: "1d8" },
-                       { name: "Duelist's Longbow +1", isMelee: false, enhancement: 1, proficiency: 2, damage: "1d10", crit: "1d6" }
+                       { name: "Longbow of Speed +2", isMelee: false, enhancement: 2, proficiency: 2, damage: { amount: "1d10", crit: "2d8" } },
+                       { name: "Sentinel Marshall Honorblade +1", isMelee: true, enhancement: 1, proficiency: 3, damage: { amount: "1d8", crit: "1d8" } },
+                       { name: "Duelist's Longbow +1", isMelee: false, enhancement: 1, proficiency: 2, damage: { amount: "1d10", crit: "1d6" } }
                         ],
              "implements": [
                             ],
@@ -342,9 +342,11 @@ function loadParty() {
            effects: []
         },
         Balugh: { 
-            name: "Balugh", isPC: true, image: "images/portraits/balugh.jpg", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+            name: "Balugh", isPC: true, level: 11, image: "../images/portraits/balugh.jpg", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
             hp: { total: 116 },
+            surges: { perDay: 0, current: 0 },
             abilities: { STR: 16, CON: 14, DEX: 12, INT: 6, WIS: 12, CHA: 6 },
+            skills: { acrobatics: 11, arcana: 7, athletics: 15, bluff: 5, diplomacy: 5, dungeoneering: 8, endurance: 12, heal: 13, history: 7, insight: 8, intimidate: 5, nature: 17, perception: 17, religion: 7, stealth: 13, streetwise: 10, thievery: 11 },
             defenses: { ac: 22, fort: 24, ref: 20, will: 22 },
             init: 12, speed: 5,
             attacks: [
@@ -352,38 +354,44 @@ function loadParty() {
               ]
         },
         Ringo: { 
-            name: "Ringo", isPC: true, image: "images/portraits/ringo.jpg", // http://beta.ditzie.com/gallery/main.php?g2_view=core.DownloadItem&g2_itemId=14896&g2_serialNumber=1
+            name: "Ringo", isPC: true, level: 5, image: "../images/portraits/ringo.jpg", // http://beta.ditzie.com/gallery/main.php?g2_view=core.DownloadItem&g2_itemId=14896&g2_serialNumber=1
             hp: { total: 62 },
+            surges: { perDay: 0, current: 0 },
+            abilities: { STR: 18, CON: 10, DEX: 14, INT: 1, WIS: 12, CHA: 8 },
+            skills: { acrobatics: 4, arcana: -3, athletics: 6, bluff: 1, diplomacy: 3, dungeoneering: -3, endurance: 2, heal: 3, history: -3, insight: 3, intimidate: 1, nature: 3, perception: 3, religion: 3, stealth: 4, streetwise: 1, thievery: 4 },
             defenses: { ac: 19, fort: 17, ref: 13, will: 14 },
             init: 2, speed: 6,
             attacks: [
-                      { name: "Bite", type: "At-Will", range: "reach", toHit: 10, defense: "AC", damage: "1d10+4", keywords: [ "melee" ] },
-                      { name: "Entangling Spittle", type: "recharge", target: { range: 5 }, recharge: 4, toHit: 8, defense: "Ref", damage: "0", effects: [ { name: "immobilized", aveEnds: true } ], keywords: [ "ranged" ] }
+                      { name: "Bite", type: "At-Will", range: "reach", toHit: 10, defense: "AC", damage: "1d10+4", keywords: [ "melee", "basic" ] },
+                      { name: "Entangling Spittle", type: "Recharge", target: { range: 5 }, recharge: 4, toHit: 8, defense: "Ref", damage: "0", effects: [ { name: "immobilized", aveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
         Smudge: { 
-            name: "Smudge", isPC: true, image: "images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+            name: "Smudge", isPC: true, level: 12, image: "../images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
             hp: { total: 97 },
+            surges: { perDay: 0, current: 0 },
+            abilities: { STR: 18, CON: 13, DEX: 19, INT: 2, WIS: 13, CHA: 8 },
+            skills: { acrobatics: 10, arcana: 2, athletics: 10, bluff: 5, diplomacy: 7, dungeoneering: 2, endurance: 7, heal: 7, history: 2, insight: 7, intimidate: 5, nature: 7, perception: 6, religion: 7, stealth: 10, streetwise: 5, thievery: 10 },
             defenses: { ac: 25, fort: 25, ref: 22, will: 21 },
             init: 7, speed: 4,
             attacks: [
-                      { name: "Bite", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: { amount: "1d10+4", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "melee", "fire" ] },
-                      { name: "Fire Belch", type: "At-Will", target: { range: 12 }, toHit: 15, defense: "Ref", damage: { amount: "2d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "ranged", "fire" ] },
-                      { name: "Fire Burst", type: "recharge", target: { area: "burst", size: 2, range: 10 }, recharge: 5, toHit: 15, defense: "Ref", damage: { amount: "3d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], miss: { halfDamage: true }, keywords: [ "ranged", "fire" ] }
+                      { name: "Bite", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: { amount: "1d10+4", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "melee", "fire", "basic" ] },
+                      { name: "Fire Belch", type: "At-Will", target: { range: 12 }, toHit: 15, defense: "Ref", damage: { amount: "2d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "ranged", "fire", "basic" ] },
+                      { name: "Fire Burst", type: "Recharge", target: { area: "burst", size: 2, range: 10 }, recharge: 5, toHit: 15, defense: "Ref", damage: { amount: "3d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], miss: { halfDamage: true }, keywords: [ "ranged", "fire" ] }
               ]
         },
         Melvin: { 
-            name: "Melvin", isPC: true, level: 10, image: "images/portraits/melvin.jpg", 
+            name: "Melvin", isPC: true, level: 10, image: "../images/portraits/melvin.jpg", 
             abilities: { STR: 18, CON: 18, DEX: 19, INT: 14, WIS: 19, CHA: 14 },
             skills: { acrobatics: 16, arcana: 7, athletics: 16, bluff: 7, diplomacy: 7, dungeoneering: 9, endurance: 9, heal: 9, history: 7, insight: 10, intimidate: 7, nature: 11, perception: 19, religion: 7, stealth: 14, streetwise: 7, thievery: 9 },
             hp: { total: 75 },
-            surges: { perDay: 12 },
+            surges: { perDay: 12, current: 12 },
             defenses: { ac: 24, fort: 24, ref: 23, will: 23 },
             init: 9, speed: 7,
             weapons: [ 
-                      { name: "Monk unarmed strike (Iron Body Ki Focus +2)", isMelee: true, enhancement: 2, proficiency: 0, damage: "1d8", crit: "2d10" },
-                      { name: "Monk unarmed strike (Abduction Ki Focus +1)", isMelee: true, enhancement: 1, proficiency: 0, damage: "1d8", crit: "1d6" },
-                      { name: "Rhythm Blade Dagger +1", isMelee: true, enhancement: 1, proficiency: 2, damage: "1d4", crit: "1d6" }
+                      { name: "Monk unarmed strike (Iron Body Ki Focus +2)", isMelee: true, enhancement: 2, proficiency: 0, damage: { amount: "1d8", crit: "2d10" } },
+                      { name: "Monk unarmed strike (Abduction Ki Focus +1)", isMelee: true, enhancement: 1, proficiency: 0, damage: { amount: "1d8", crit: "1d6" } },
+                      { name: "Rhythm Blade Dagger +1", isMelee: true, enhancement: 1, proficiency: 2, damage: { amount: "1d4", crit: "1d6" } }
                        ],
             "implements": [
                            { name: "Iron Body Ki Focus +2", enhancement: 2, crit: "2d10" },

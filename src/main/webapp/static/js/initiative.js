@@ -8,17 +8,17 @@ var Initiative = function(params) {
     }
 };
 
-Initiative.prototype = new EventBus();
+Initiative.prototype = new EventDispatcher();
 
 Initiative.prototype._init = function(params) {
     var p, i, j, actor, creature, count;
-    params = params || {
+    params = jQuery.extend({
     	historyEntries: {},
     	creatures: {},
     	actors: [],
     	history: { _includeSubject: true },
     	order: []
-    };
+    }, params);
     
     if (!params.historyEntries && params.history) {
     	params.history = { _includeSubject: true };
@@ -95,7 +95,7 @@ Initiative.prototype.initFromLocalStorage = function() {
 	var data;
 	if (window.localStorage.getItem("initiative")) {
 	    data = JSON.parse(window.localStorage.getItem("initiative"));
-	    Console.log("info")("Loaded from localStorage");
+	    try { window.console.info("Loaded from localStorage"); } catch(e) {}
 		this._init(data);
 		return true;
 	}
@@ -168,8 +168,17 @@ Initiative.prototype._countActorsByType = function(type, actors, adding) {
 Initiative.prototype._addActor = function(params, actors) {
 	var count, actor;
 	// in case "-------" or "        " was selected in the Creature dialog or we've encountered junk data
-	if (!params || !params.name || !params.image) {
-		return Console.log("warn")("Skipping adding invalid actor " + params.name);
+	if (!params) {
+	    try { window.console.warn("Skipping adding undefined actor"); } catch(e) {}
+	    return;
+	}
+	else if (!params.name) {
+	    try { window.console.warn("Skipping adding invalid actor (missing name)"); } catch(e) {}
+	    return;
+	}
+	else if (!params.image) {
+	    try { window.console.warn("Skipping adding invalid actor (missing image)"); } catch(e) {}
+	    return;
 	}
     if (!this.actors) {
     	this.actors = [];
@@ -278,10 +287,10 @@ Initiative.prototype._createAttackDialog = function() {
     $tr.append($td);
     image = new Image();
     image.height = 30;
-    image.src = "images/symbols/attack.png";
+    image.src = "../images/symbols/attack.png";
     this.$combatAdvantage = jQuery(image).data("combatAdvantage", false).on({ click: function() {
-        var combatAdvantage = this.src.indexOf("images/symbols/attack.png") !== -1;
-        this.src = combatAdvantage ? "images/symbols/combat_advantage.png" : "images/symbols/attack.png";
+        var combatAdvantage = this.src.indexOf("../images/symbols/attack.png") !== -1;
+        this.src = combatAdvantage ? "../images/symbols/combat_advantage.png" : "../images/symbols/attack.png";
         jQuery(this).data("combatAdvantage", combatAdvantage);
     } });
     $td.append(image);
@@ -397,7 +406,7 @@ Initiative.prototype._populateSetInitiative = function() {
     for (i = 0; i < this.order.length; i++) {
     	actor = Creature.actors[ this.order[ i ] ];
     	if (!actor) {
-    		Console.log("warn")("Skipping order #" + i + " (actor id " + this.order[ i ] + "), not found in Creature.actors");
+    	    try { window.console.warn("Skipping order #" + i + " (actor id " + this.order[ i ] + "), not found in Creature.actors"); } catch(e) {}
     		continue;
     	}
         $div = jQuery("<div/>").appendTo(this.$initiativeDialog);
@@ -457,7 +466,7 @@ Initiative.prototype._createFileMenu = function() {
 };
 
 Initiative.prototype._createCreatureDialog = function() {
-    var i, pcs, npcs, sort, $li, $div, $span, $select, $option, menu;
+    var i, creature, pcs, npcs, sort, $li, $div, $span, $select, $option, menu;
     
     if (this.$creatureDialog && this.$creatureDialog.length) {
     	try {
@@ -475,11 +484,14 @@ Initiative.prototype._createCreatureDialog = function() {
     pcs = [];
     npcs = [];
     for (i in Creature.creatures) {
-    	if (Creature.creatures[ i ].isPC) {
-    		pcs.push(Creature.creatures[ i ]);
-    	}
-    	else {
-    		npcs.push(Creature.creatures[ i ]);
+    	if (Creature.creatures.hasOwnProperty(i) && Creature.creatures[ i ] instanceof Creature) {
+    		creature = Creature.creatures[ i ];
+        	if (creature.isPC) {
+        		pcs.push(creature);
+        	}
+        	else {
+        		npcs.push(creature);
+        	}
     	}
     }
     sort = function(a, b) {
@@ -585,7 +597,7 @@ Initiative.prototype._createImageDialog = function() {
             event.stopPropagation();
             offset = jQuery(event.target).offset();
             position = { x: (event.clientX + window.pageXOffset - offset.left) / event.target.width, y: (event.clientY + window.pageYOffset - offset.top) / event.target.height };
-            this.info("highlightImage { x: " + (100 * position.x) + "%, y: " + (100 * position.y) + "% }");
+            try { window.console.info("highlightImage { x: " + (100 * position.x) + "%, y: " + (100 * position.y) + "% }") } catch(e) {};
     		this._messageDisplay({ type: "highlightImage", position: position }, false);
     	}).bind(this) 
 	}).appendTo($td);
@@ -694,6 +706,9 @@ Initiative.prototype._render = function(updateDisplay) {
 	
 	for (i = 0; i < this.order.length; i++) {
 		actor = Creature.actors[ this.order[ i ] ];
+		if (!actor) {
+			continue;
+		}
 		actor.createTr({ 
 			$table: this.$table,
 			isCurrent: i === this._current,
@@ -720,14 +735,14 @@ Initiative.prototype._render = function(updateDisplay) {
 };
 
 Initiative.prototype._displayLoadHandler = function(event) {
-	Console.log("info")("Display loaded");
+	try { window.console.info("Display loaded"); } catch(e) {}
     this._renderDisplay(); 
 };
 
 Initiative.prototype._renderDisplay = function(createDisplay, event) {
 	var data;
 	if (event) {
-		event.stopPropagation = true; // TODO, HACK: why are we getting 80+ hits for the same event?
+		event.stopPropagation(); // TODO, HACK: why are we getting 80+ hits for the same event?
 	}
 	data = {
 			order: this.order,
@@ -818,7 +833,7 @@ Initiative.prototype._import = function() {
                                   this._init(JSON.parse($textarea.val()));
                               }
                               catch (e) {
-                            	  Console.log("error")(e.toString());
+                            	  try { window.console.error(e.toString()); } catch(e) {}
                               }
                           }).bind(this) 
                       }
@@ -909,7 +924,7 @@ Initiative.prototype._addHistory = function(actor, message, method) {
 		message = actor.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
 	}
 	this.history.add(entry);
-	Console.log(method)(message);
+	try { window.console[ method ](message); } catch(e) {}
     this._autoSave();
 };
 
@@ -989,7 +1004,7 @@ Initiative.prototype._changeInitiative = function(event) {
     for (i = 0; i < this.order.length; i++) {
     	test += (i ? ", " : "") + Creature.actors[ this.order[ i ] ].name;
     }
-    Console.log("info")("New order: " + test + " ]");
+	try { window.console.info("New order: " + test + " ]"); } catch(e) {}
     this._render(true);
 };
 
@@ -1015,7 +1030,7 @@ Initiative.prototype._reorder = function(actor, delta) {
     for (i = 0; i < this.order.length; i++) {
     	test += (i ? ", " : "") + Creature.actors[ this.order[ i ] ].name;
     }
-    Console.log("info")("New order: " + test + " ]");
+	try { window.console.info("New order: " + test + " ]"); } catch(e) {}
     this._render(true);
 };
 
@@ -1054,7 +1069,7 @@ Initiative.prototype._resolveInitiative = function() {
 		}
     	test += (i ? ", " : "") + actor.name;
 	}
-    Console.log("info")("New order: " + test + " ]");
+	try { window.console.info("New order: " + test + " ]"); } catch(e) {}
     this.$initiativeDialog.dialog("close");
     this._render(true);
 };
@@ -1140,7 +1155,7 @@ Initiative.prototype._selectAttack = function() {
 };
 
 Initiative.prototype._resolveAttack = function() {
-	var attacker, attack, item, i, targets, combatAdvantage, playerRolls, hits;
+	var attacker, attack, item, i, targets, combatAdvantage, playerRolls, result;
 	if (this.$attacks.val() && this.$targets.val()) {
 		this.$attackDialog.dialog("close");
 		attacker = this.$attackDialog.data("attacker");
@@ -1158,9 +1173,9 @@ Initiative.prototype._resolveAttack = function() {
 		if (this.$playerAttackRoll.val() || this.$playerAttackCrit.val() || this.$playerDamageRoll.val()) {
 			playerRolls = { attack: { roll: parseInt(this.$playerAttackRoll.val()), isCritical: this.$playerAttackCrit.val() === "crit", isFumble: this.$playerAttackCrit.val() === "fail" }, damage: parseInt(this.$playerDamageRoll.val()) };
 		}
-		hits = attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
+		result = attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
 		this._render(false);
-		this._messageDisplay({ type: "takeDamage", hits: hits }, false);
+		this._messageDisplay({ type: "takeDamage", hits: result.hits, misses: result.misses }, false);
 	} 
 	else {
 		alert("Please select both an attack and 1 or more valid target(s)");
@@ -1274,9 +1289,4 @@ Initiative.prototype.raw = function() {
 	return raw;
 };
 
-Initiative.prototype.info = function(msg) {
-    if (console && console.info) {
-        console.info(msg);
-    }
-}
 

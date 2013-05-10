@@ -44,6 +44,10 @@ Roll.prototype._parseString = function(str) {
         this.dieSides = parseInt(hasExtra ? dRegExp.exec(str) : str);
         str = str.substr(("" + this.dieSides).length);
     }
+    else {
+    	this.dieCount = 0;
+    	this.dieSides = 0;
+    }
     if (hasExtra) {
         this.extra = parseInt(str);
     }
@@ -78,6 +82,21 @@ Roll.prototype.max = function() {
     return h.total;
 };
 
+Roll.prototype.min = function() {
+    var value, h, i, die;
+    value = 0;
+    h = { dice: [] };
+    this._history.push(h);
+    for (i = 0; i < this.dieCount; i++) {
+        die = 1;
+        h.dice.push(die);
+        value += die;
+    }
+    h.isMin = true;
+    h.total = value + this.extra;
+    return h.total;
+};
+
 Roll.prototype.add = function(total) {
     var value, remainder, h, dice, i, die;
     value = Math.floor((total - this.extra) / this.dieCount);
@@ -96,12 +115,20 @@ Roll.prototype.getLastRoll = function() {
 };
 
 Roll.prototype.isCritical = function() {
-	var h = this.getLastRoll();
+	var h;
+	if (!this.crits || this.dieCount !== 1 || this.dieSides !== 20) {
+		return false;
+	}
+	h = this.getLastRoll();
 	return h && h.dice && h.dice.length ? h.dice[0] === 20 : false;
 };
 
 Roll.prototype.isFumble = function() {
-	var h = this.getLastRoll();
+	var h;
+	if (!this.crits || this.dieCount !== 1 || this.dieSides !== 20) {
+		return false;
+	}
+	h = this.getLastRoll();
 	return h && h.dice && h.dice.length ? h.dice[0] === 1 : false;
 };
 
@@ -118,8 +145,11 @@ Roll.prototype.breakdown = function(conditional) {
             output += h.dice[ i ];
     	}
     }
-	if (this.extra && !(this.crits && (this.isCritical() || this.isFumble()))) {
-		output += (output ? " + " : "") + this.extra;
+	if ((this.extra || !output) && !(this.crits && (this.isCritical() || this.isFumble()))) {
+		if (output) {
+			output += this.extra >= 0 ? " + " : " ";
+		}
+		output += this.extra;
 	}
 	if (h.breakdown) {
 	    output += h.breakdown;
@@ -135,11 +165,10 @@ Roll.prototype._breakdownToString = function() {
 };
 
 Roll.prototype.toString = function() {
-	return "" + this.dieCount + "d" + this.dieSides + (this.extra ? (this.extra > 0 ? "+" : "-") + this.extra : "");
-};
-
-Roll.prototype.raw = function() {
-	return this.toString();
+	var d, operand;
+	d = this.dieCount * this.dieSides ? this.dieCount + "d" + this.dieSides : "";
+	operand = this.extra >= 0 ? "+" : "";
+	return d + (d && this.extra ? operand : "") + (this.extra || !d ? this.extra : "");
 };
 
 Roll.prototype._anchorHtml = function(conditional) {
@@ -152,6 +181,21 @@ Roll.prototype.anchor = function(conditional) {
 };
 
 
+var SavingThrow = function(params) {
+    params = params || {};
+    this.effect = params.effect;
+};
+
+SavingThrow.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: false });
+
+SavingThrow.prototype._anchorHtml = function(conditional) {
+    var success = (this.getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
+    return (success ? "Saves" : "Fails to save") + " against " + this.effect.toString();
+};
+
+SavingThrow.prototype.toString = function() {
+    return "Saving Throw";
+};
 
 
 var Damage = function(params, creature) {
@@ -166,15 +210,16 @@ var Damage = function(params, creature) {
     if (typeof(params) === "string") {
         this._parseDamageString(params, creature);
     }
-    else {
+    else if (params.hasOwnProperty("amount")) {
         if (typeof(params.amount) === "string") {
             this._parseDamageString(params.amount, creature);
         }
-        else if (params.amount) {
-            this._parseObject(params.amount);
+        else {
+            this._parseObject(params.amount, creature);
         }
-        this.type = params.type || "";
-        this.crit = params.crit ? new Damage(params.crit) : null;
+    }
+    else if (Object.keys(params).length) {
+    	this._parseObject(params, creature);
     }
 };
 
@@ -186,7 +231,7 @@ Damage.prototype.clone = function(clone) {
     }
     Roll.prototype.clone.call(this, clone);
     clone.type = this.type;
-    clone.crit = this.crit.clone();
+    clone.crit = this.crit ? this.crit.clone() : null;
     clone.needsWeapon = this.needsWeapon;
     clone.weaponMultiplier = this.weaponMultiplier;
     clone.meleeExtra = this.meleeExtra;
@@ -194,11 +239,23 @@ Damage.prototype.clone = function(clone) {
     return clone;
 };
 
+Damage.prototype._parseObject = function(obj, creature) {
+	Roll.prototype._parseObject.call(this, obj);
+    this.type = obj.type;
+    this.crit = obj.crit ? obj.crit.clone() : null;
+    this.needsWeapon = obj.needsWeapon;
+    this.weaponMultiplier = obj.weaponMultiplier;
+    this.meleeExtra = obj.meleeExtra;
+    this.rangedExtra = obj.rangedExtra;
+};
+
 /**
- * @param str {String} grammar: 
+ * @param str {String} grammar: E|D|W 
  * # = "(+|-)*\d", 
- * A = "(+|-)(STR|DEX|CON|INT|WIS|CHA)",
- * D = "#d#(#|A)*" 
+ * A = "(+|-|^|/)(STR|DEX|CON|INT|WIS|CHA)",
+ * E = (#|A)*
+ * D = "#d#E*" 
+ * W = "#\[W\]E*" 
  */
 Damage.prototype._parseDamageString = function(str, creature) {
 	var extra, i, value, regeExW_A, regExOr, regExMax;
@@ -215,6 +272,8 @@ Damage.prototype._parseDamageString = function(str, creature) {
 	    this.needsWeapon = true;
 	    this.weaponMultiplier = parseInt(str.split("[W]")[ 0 ]);
 	    extra = str.split("[W]")[ 1 ];
+	    this.dieCount = 0;
+	    this.dieSides = 0;
 	}
 	else {
 	    value = str.split("+")[ 0 ];
@@ -411,33 +470,6 @@ Damage.prototype.toString = function() {
         return str;
     }
     return Roll.prototype.toString.call(this);
-};
-
-
-
-
-
-var SavingThrow = function(params) {
-    params = params || {};
-    this.effect = params.effect;
-};
-
-SavingThrow.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: false });
-
-SavingThrow.prototype._anchorHtml = function(conditional) {
-    var success = (this.getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
-    return (success ? "Saves" : "Fails to save") + " against " + this.effect.toString();
-};
-
-SavingThrow.prototype.anchor = function(conditional) {
-    conditional = conditional || {};
-    conditional = jQuery.extend({ text: "" }, conditional);
-    conditional.text += (this.type ? " " + this.type : "") + " damage";
-    return Roll.prototype.anchor.call(this, conditional);
-};
-
-SavingThrow.prototype.toString = function() {
-    return "[Saving Throw]";
 };
 
 

@@ -86,15 +86,21 @@
 	    };
 	    
 	    this.takeDamage = function(data) {
-	    	var i, hit, actor, damage, msg;
+	    	var i, actor, damage, msg;
 	    	msg = "Received \"takeDamage\" message for ";
 	        for (i = 0; i < data.hits.length; i++) {
-	        	hit = data.hits[ i ];
-	            actor = this.findActor(hit.target);
+	            actor = this.findActor(data.hits[ i ].target);
 	            if (actor) {
-	            	damage = hit.damage;
-	                actor.addDamageIndicator(damage);
+	            	damage = data.hits[ i ].damage;
+	            	actor.card.damageIndicator.damage(damage);
 	                msg += "\n\t" + actor.name + " (" + damage.amount + " " + damage.type + ")";
+	            }
+	        }
+	        for (i = 0; i < data.misses.length; i++) {
+	            actor = this.findActor(data.misses[ i ].target);
+	            if (actor) {
+	            	actor.card.damageIndicator.miss();
+	                msg += "\n\t" + actor.name + " missed";
 	            }
 	        }
 	    	this.info(msg);

@@ -1,3 +1,12 @@
+/**
+ * @param params Object
+ * @param params.$parent jQueryCollection The parent element under which to create the Editor HTML
+ * @param params.tagName String The nodeName of the text display element
+ * @param params._className {String} Optional classes to apply to the text display element
+ * @param params.html {String} Optional initial value for the text display and text entry elements
+ * @param onchange Function Callback invoked when the value of the text is changed (i.e. saved), passed the new value
+ * 
+ */
 var Editor = function(params) {
 	params = params || {};
 	this.$grandparent = params.$parent;
