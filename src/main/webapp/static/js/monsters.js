@@ -17,6 +17,21 @@ function loadMonsters() {
                       { name: "Frightful Presence", type: "Encounter", target: { area: "close burst", size: 5 }, toHit: 13, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: 1 } ], keywords: [ "close", "burst" ] }
               ]
         },
+        "Arctide Spiralith": {
+            name: "Arctide Spiralith", level: 12, image: "../images/portraits/arctide_spiralith.jpg",
+            hp: { total: 97 },
+            defenses: { ac: 24, fort: 23, ref: 25, will: 23 },
+            init: 12, speed: 7,
+            abilities: { STR: 15, CON: 19, DEX: 23, INT: 7, WIS: 19, CHA: 12 },
+			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Bite", type: "At-Will", range: "melee", toHit: 17, defense: "AC", damage: "1d6+5", keywords: [ "melee", "basic" ] },
+                      { name: "Arcane Arc", type: "At-Will", range: "melee", toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "lightning" }, keywords: [ "melee", "lightning" ] },
+                      { name: "Focused Strike", type: "At-Will", target: { range: 10 }, toHit: 19, defense: "Ref", damage: { amount: "2d8+5", type: "lightning" }, keywords: [ "ranged", "lightning" ] },
+                      { name: "Bloodied Shock", type: "Encounter", target: { area: "close burst", size: 1, range: 1 }, toHit: 15, defense: "Ref", damage: { amount: "1d8+5", type: "lightning" }, effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "ranged", "lightning" ] },
+                      { name: "Charged Lightning Burst", type: "At-Will", target: { area: "burst", size: 2, range: 10 }, toHit: 15, defense: "Ref", damage: { amount: "1d8+5", type: "lightning" }, keywords: [ "ranged", "burst", "lightning" ] }
+              ]
+        },
         "Banshrae Dartswarmer": { 
             name: "Banshrae Dartswarmer", level: 11, image: "../images/portraits/banshrae_dartswarmer.jpg",
             hp: { total: 89 },
@@ -84,6 +99,22 @@ function loadMonsters() {
                       { name: "Frightful Presence", type: "Encounter", target: { area: "close burst", size: 5 }, toHit: 10, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: 1 } ], keywords: [ "close", "burst" ] }
               ]
         },
+        "Centaur Ravager": { 
+            name: "Centaur Ravager", level: 12, image: "../images/portraits/centaur_ravager.jpg",
+            hp: { total: 150 },
+            defenses: { ac: 24, fort: 26, ref: 24, will: 23 },
+            init: 10, speed: { walk: 8 },
+            abilities: { STR: 22, CON: 20, DEX: 18, INT: 9, WIS: 16, CHA: 10 },
+			skills: { acrobatics: 0, arcana: 0, athletics: 17, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 14, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Greatsword", type: "At-Will", range: "melee", toHit: 15, defense: "AC", damage: "1d10+6", keywords: [ "melee", "basic" ] },
+                      { name: "Greatsword (charge)", type: "At-Will", range: "melee", toHit: 15, defense: "AC", damage: "2d10+6", keywords: [ "melee", "basic", "charge" ] },
+                      { name: "Quick Kick", type: "Immediate Reaction", range: "melee", toHit: 14, defense: "AC", damage: "1d6+6", keywords: [ "melee" ] },
+                      { name: "Berserk Rush", type: "Encounter", range: "melee", toHit: 15, defense: "Fort", damage: "2d10+6", effects: [ { name: "Prone" } ], keywords: [ "melee" ] },
+                      { name: "Berserk Rush (charge)", type: "Encounter", range: "melee", toHit: 15, defense: "Fort", damage: "3d10+6", effects: [ { name: "Prone" } ], keywords: [ "melee", "charge" ] },
+                      { name: "Brash Retaliation", type: "Encounter", range: "melee", toHit: 15, defense: "AC", damage: "3d10+6", keywords: [ "melee", "bloodied" ] }
+              ]
+        },
         "Chaos Mauler": { 
             name: "Chaos Mauler", level: 11, image: "../images/portraits/chaos_mauler.png",
             hp: { total: 1 },
@@ -141,6 +172,21 @@ function loadMonsters() {
                       { name: "Dragon Breath (bloodied)", type: "At-Will", range: 3, toHit: 15, defense: "Ref", damage: { amount: "1d6+3", type: "fire" }, keywords: [ "close blast" ] }
               ]
         },
+        "Duergar Hellcaller": { 
+            name: "Duergar Hellcaller", level: 12, image: "../images/portraits/duergar_hellcaller.jpg",
+            hp: { total: 96 },
+            defenses: { ac: 24, fort: 23, ref: 23, will: 25 },
+            init: 10, speed: 5,
+            abilities: { STR: 14, CON: 18, DEX: 19, INT: 11, WIS: 14, CHA: 22 },
+			skills: { acrobatics: 0, arcana: 11, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 13, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 11, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Mace", type: "At-Will", range: "melee", toHit: 19, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
+                      { name: "Infernal Quills", type: "At-Will", target: { range: 10 }, toHit: 19, defense: "AC", damage: { amount: "1d8+3", type: "fire and poison" }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 5, type: "fire and poison" }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] },
+                      { name: "Quick Quill Strike", type: "Encounter", target: { range: 10 }, toHit: 19, defense: "AC", damage: { amount: "1d8+3", type: "fire and poison" }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 5, type: "fire and poison" }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] },
+                      { name: "Asmodeus' Ruby Curse", type: "Encounter", target: { area: "close blast", range: 5 }, toHit: 16, defense: "Will", damage: { amount: "3d8+5", type: "psychic" }, keywords: [ "ranged", "close burst", "fear", "psychic" ] },
+                      { name: "Quill Storm", type: "Encounter", target: { area: "burst", size: 2, range: 10 }, toHit: 17, defense: "Ref", damage: { amount: "1d8", type: "fire and poison" }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 10, type: "fire and poison" }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] }
+              ]
+        },
         "Eidolon": { 
             name: "Eidolon", level: 13, image: "../images/portraits/eidolon.png", // "http://gallery.rptools.net/d/12751-1/Rogue+Eidolon+_L_.png",
             hp: { total: 132 },
@@ -167,6 +213,20 @@ function loadMonsters() {
                       { name: "Claw", type: "At-Will", range: "melee", toHit: 14, defense: "AC", damage: "1d4+4", keywords: [ "melee", "basic" ] },
                       { name: "Poison Ray", type: "At-Will", range: 10, toHit: 15, defense: "Fort", damage: { amount: "1d8+6", type: "poison" }, effects: [ { name: "Weakened", saveEnds: true } ], keywords: [ "ranged", "poison" ] },
                       { name: "Cavern Curse", type: "Recharge", recharge: 3, range: 5, toHit: 16, defense: "Fort", damage: "0", effects: [ { name: "multiple", saveEnds: true, children: [ { name: "ongoing damage", amount: 5, type: "necrotic" }, { name: "Slowed" } ] } ], keywords: [ "ranged", "necrotic" ] }
+              ]
+        },
+        "Flame Shard": { 
+            name: "Flame Shard", level: 12, image: "../images/portraits/flame_shard.jpg",
+            hp: { total: 100 },
+            defenses: { ac: 24, fort: 25, ref: 23, will: 23 },
+            init: 10, speed: { walk: 4, fly: 4 },
+            abilities: { STR: 19, CON: 22, DEX: 19, INT: 7, WIS: 15, CHA: 18 },
+			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 8, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Burning Shard", type: "At-Will", range: "melee", toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "fire" }, keywords: [ "melee", "basic", "fire" ] },
+                      { name: "Flame Shatter", type: "Encounter", target: { range: 2, area: "close burst" }, toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true }], keywords: [ "close burst", "fire" ] },
+                      { name: "Flame Burst", type: "At-Will", target: { range: 20, size: 2, area: "burst" }, toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "fire" }, keywords: [ "close burst", "fire" ] },
+                      { name: "Heat Wave (aura)", type: "Immediate Reaction", target: { range: 2, area: "close burst" }, toHit: "automatic", defense: "AC", damage: { amount: "5", type: "fire" }, keywords: [ "close burst", "fire", "aura" ] }
               ]
         },
         "Flux Slaad": { 
@@ -229,6 +289,18 @@ function loadMonsters() {
                       { name: "Howl", type: "At-Will", range: "blast 3", toHit: 16, defense: "Fort", damage: { amount: "1d6+6", type: "thunder" }, keywords: [ "ranged" ] },
                       { name: "Shriek of Pain", type: "Encounter", range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+6", type: "thunder" }, keywords: [ "ranged", "miss half" ] },
                       { name: "Shriek of Pain (bloodied)", type: "Encounter", range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+11", type: "thunder" }, keywords: [ "ranged", "miss half" ] }
+              ]
+        },
+        "Legion Devil Hellguard": { 
+            name: "Legion Devil Hellguard", level: 11, image: "../images/portraits/legion_devil.jpg",
+            hp: { total: 1 },
+            defenses: { ac: 27, fort: 24, ref: 23, will: 21 },
+            init: 8, speed: { walk: 6, teleport: 3 },
+            abilities: { STR: 14, CON: 14, DEX: 12, INT: 10, WIS: 12, CHA: 12 },
+			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Longsword", type: "At-Will", range: "melee", toHit: 16, defense: "AC", damage: "9", keywords: [ "melee", "basic" ] },
+                      { name: "Longsword (aftereffect)", type: "Immediate Reaction", toHit: "automatic", defense: "AC", damage: { amount: "4", type: "fire" }, keywords: [ "fire" ] }
               ]
         },
         "Mezzodemon": { 
@@ -391,6 +463,20 @@ function loadMonsters() {
                       { name: "Claw", type: "At-Will", range: "melee", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6", type: "poison" } ], keywords: [ "melee", "basic" ] },
                       { name: "Javelin", type: "At-Will", range: "ranged", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6", type: "poison" } ], keywords: [ "ranged", "basic" ] },
                       { name: "Acid Spit", type: "At-Will", range: "ranged", toHit: 15, defense: "Ref", damage: { amount: "1d6", type: "acid" }, keywords: [ "ranged" ] }
+              ]
+        },
+        "Storm Abishai Sniper": {
+            name: "Storm Abishai Sniper", level: 12, image: "../images/portraits/storm_abishai.jpg",
+            hp: { total: 98 },
+            regeneration: 5,
+            defenses: { ac: 24, fort: 24, ref: 24, will: 22 },
+            init: 9, speed: { walk: 8, fly: 6 },
+            abilities: { STR: 18, CON: 20, DEX: 16, INT: 11, WIS: 13, CHA: 21 },
+			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 23, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Lightning Sting", type: "At-Will", range: "melee", toHit: 19, defense: "AC", damage: { amount: "2d6+7", type: "lightning" }, keywords: [ "melee", "basic", "lightning" ] },
+                      { name: "Lightning Discharge", type: "Encounter", target: { area: "close burst", size: 1, range: 1 }, toHit: 17, defense: "Ref", damage: { amount: "1d6+8", type: "lightning" }, effects: [ { name: "Stunned", duration: 1 } ], keywords: [ "close burst", "lightning" ] },
+                      { name: "Shockbolt", type: "At-Will", target: { area: "burst", size: 2, range: 10 }, toHit: 15, defense: "Ref", damage: { amount: "2d6+8", type: "thunder" }, keywords: [ "ranged", "burst", "lightning" ] }
               ]
         },
         "Streetwise Thug": { 
