@@ -43,6 +43,10 @@ Serializable.prototype.rawArray = function(array, nodes) {
 	return r;
 };
 
+Serializable.prototype._isSerializable = function(name, obj) {
+	return typeof(obj) !== "function" && !(obj instanceof HTMLElement) && !(obj instanceof jQuery) && name.indexOf("$") !== 0 && name.indexOf("$") !== 1;
+};
+
 Serializable.prototype.raw = function(nodes) {
 	var r, p, serializer;
 	if (!nodes) {
@@ -54,7 +58,7 @@ Serializable.prototype.raw = function(nodes) {
 	nodes.push(this); 
     r = {};
     for (p in this) {
-        if (this.hasOwnProperty(p) && typeof(this[ p ]) !== "function" && p.indexOf("$") !== 0 && p.indexOf("$") !== 1) {
+        if (this.hasOwnProperty(p) && Serializable.prototype._isSerializable(p, this[ p ])) {
         	if (this[ p ] === null) {
 	        	r[ p ] = null;
         	}
