@@ -949,6 +949,7 @@ Actor.Card.DamageIndicator = function(params) {
     this.$damage = jQuery("<div/>").addClass("damage").hide().appendTo(this.$parent);
     this.$pow = jQuery("<img/>").attr("src", "../images/symbols/pow.png").attr("height", this.card.subPanel.portrait.height).attr("width", this.card.subPanel.portrait.width).hide().appendTo(this.$damage);
     this.$miss = jQuery("<img/>").attr("src", "../images/symbols/miss.jpg").attr("height", this.card.subPanel.portrait.height).attr("width", this.card.subPanel.portrait.width).hide().appendTo(this.$damage);
+    this.$attack = jQuery("<div/>").css({ "height": this.card.subPanel.portrait.height, "width": this.card.subPanel.portrait.width }).hide().appendTo(this.$damage);
     this.$centered = jQuery("<div/>").addClass("centered").appendTo(this.$damage);
     this.$types = jQuery("<div/>").addClass("types").appendTo(this.$centered);
 };
@@ -982,6 +983,14 @@ Actor.Card.DamageIndicator.prototype.miss = function() {
     this.$types.html("");
     this.$miss.show();
     this._renderEvent(100, "../images/symbols/miss.png", "Miss", "green");
+};
+
+Actor.Card.DamageIndicator.prototype.attack = function(name) {
+    // Clear any existing damage indicator content
+    this.$types.html("");
+    this.$attack.show();
+    this.$attack.html(name);    
+//    this._renderEvent(100, "../images/symbols/miss.png", "Miss", "green");
 };
 
 Actor.Card.DamageIndicator.prototype.hide = function() {
@@ -1018,162 +1027,6 @@ Actor.Card.DamageIndicator.prototype._renderEvent = function(heightPercent, imag
 Actor.prototype.createTr = function(params) {
 	params = params || {};
 	params.actor = this;
-	this.tr = new Actor.TableRow(params);
-};
-
-/**
- * @param actor Actor The Actor
- * @param $table jQuery("<table/>") The parent table element
- * @param isCurrent {Boolean} Indicates if it is this Creature's turn in the initiative order
- * @param order {Object} The click handlers for the move initiative order actions
- * @param order.up {Function} The click handler for the move initiative order up action
- * @param order.down {Function} The click handler for the move initiative order down action
- * @param attack {Function} The click handler for the attack action
- * @param heal {Function} The click handler for the heal action
- */
-Actor.TableRow = function(params) {
-	var $td, image, $div;
-	params = params || {};
-	
-	this.actor = params.actor;
-	this.$tr = jQuery("<tr/>").attr("id", this.actor.name + "_row").data("actor", this.actor).appendTo(params.$table);
-	if (params.isCurrent) {
-		this.$tr.addClass("current");
-	}
-	if (this.actor.isBloodied()) {
-		this.$tr.addClass("bloodied");
-	}
-	
-	$td = jQuery("<td/>").addClass("bordered centered").appendTo(this.$tr);
-	this._addAction({ $parent: $td, className: "up", title: "Move up initiative order", src: "../images/symbols/up.png", click: params.order.up });
-	this._addAction({ $parent: $td, className: "order", title: "Set initiative order", text: "#", click: params.order.set });
-	this._addAction({ $parent: $td, className: "down", title: "Move down initiative order", src: "../images/symbols/down.png", click: params.order.down });
-	
-	$td = jQuery("<td/>").addClass("bordered centered").appendTo(this.$tr);
-	this.card = this.actor.createCard({ $parent: $td, isCurrent: params.isCurrent, cardSize: 120 });
-	this.card.$panel.attr("draggable", "true").addClass("grab").on({ 
-//        dragstart: (function(event) {
-//            event.dataTransfer.setData("actor", this);
-//            this.$panel.addClass("grabbing");
-//        }).bind(this),
-//        dragover: (function(event) {
-//            var actor = event.dataTransfer.getData("actor");
-//            if (actor && actor !== this) {
-//                event.preventDefault();
-//                this.$panel.addClass("droppable");
-//            }
-//        }).bind(this),
-//        drop: (function(event) {
-//            var actor = event.dataTransfer.getData("actor");
-//            if (actor && actor !== this) {
-//                event.preventDefault();
-//                this.dispatchEvent({ type: "reorder", move: actor, before: this });
-//            }
-//            this.$panel.removeClass("grabbing");
-//        }).bind(this)
-	});
-	
-	$td = jQuery("<td/>").addClass("bordered").appendTo(this.$tr);
-	this._addDefense($td, "ac", this.actor.defenses.ac, "../images/symbols/ac.png"); // "http://aux.iconpedia.net/uploads/20429361841025286885.png"
-	this._addDefense($td, "fort", this.actor.defenses.fort, "../images/symbols/fort.png"); // "http://www.gettyicons.com/free-icons/101/sigma-medical/png/256/cardiology_256.png"); // "http://icons.iconarchive.com/icons/dryicons/valentine/128/heart-icon.png");
-	this._addDefense($td, "ref", this.actor.defenses.ref, "../images/symbols/ref.png"); // "http://pictogram-free.com/highresolution/l_163.png");
-	this._addDefense($td, "will", this.actor.defenses.will, "../images/symbols/will.png"); // "http://www.iconhot.com/icon/png/medical-icons/256/brain.png");
-	
-	$td = jQuery("<td/>").addClass("hp bordered").appendTo(this.$tr);
-	if (this.actor.hp.temp) {
-		this._addHp($td, "../images/symbols/temp_hp.png", "Temp HP", "tempHp", this.actor.hp.temp);
-	}
-	this._addHp($td, "../images/symbols/hp.png", "HP", "currentHp", this.actor.hp.current, "totalHp", this.actor.hp.total);
-	if (this.actor.surges && this.actor.surges.hasOwnProperty("current")) {
-		this._addHp($td, "../images/symbols/surge.png", "Healing Surges", "surgesRemaining", this.actor.surges.current, "surgesPerDay", this.actor.surges.perDay);
-	}
-	
-	$td = jQuery("<td/>").addClass("actions bordered").appendTo(this.$tr);
-	this._addAction({ $parent: $td, className: "attack", title: "Attack", src: "../images/symbols/attack.png", click: params.attack });
-	this._addAction({ $parent: $td, className: "heal", title: "Heal", src: "../images/symbols/heal.png", click: params.heal });
-	this._addAction({ $parent: $td, className: "exit", title: "Exit", src: "../images/symbols/exit.jpg", click: params.exit });
-	this._addAction({ $parent: $td, className: "rename", title: "Rename", src: "../images/symbols/rename.png", click: params.rename });
-	
-	$td = jQuery("<td/>").addClass("history bordered").appendTo(this.$tr);
-	$div = jQuery("<div/>").appendTo($td);
-	$div.append(this.actor.history.$html);
-};
-
-Actor.TableRow.prototype._addDefense = function($parent, className, value, icon) {
-	var $div, image, editor;
-	$div = jQuery("<div/>").addClass("nowrap").appendTo($parent);
-	image = new Image();
-	image.height = 20;
-	image.className = "icon";
-	image.src = icon;
-	$div.append(image).addClass(className).attr("title", className.toUpperCase());
-	editor = new Editor({ $parent: $div, tagName: "span", html: value, onchange: (function(v) {
-		var old, entry;
-		old = this.actor.defenses[ className ];
-		this.actor.defenses[ className ] = parseInt(v);
-		entry = new History.Entry({ 
-			subject: this, 
-			message: "Manually changed " + className.toUpperCase() + " from " + old + " to " + this.actor.defenses[ className ], 
-			round: this.actor.history._round // TODO: make History.Entry inherit the round from the History instance 
-		});
-		this.actor.history.add();
-		this.actor.dispatchEvent("change");
-	}).bind(this) });
-};
-
-Actor.TableRow.prototype._addHp = function($parent, src, title, className1, value1, className2, value2) {
-	var image, editor, $span, $div;
-	$div = jQuery("<div/>").addClass("nowrap").appendTo($parent);
-	image = new Image();
-	image.height = 20;
-	image.className = "icon";
-	image.title = title;
-	image.src = src;
-	$div.append(image);
-	editor = new Editor({ $parent: $div, tagName: "span", html: value1, onchange: (function(v) {
-		switch (className1) {
-    		case "currentHp": {
-    			this.actor.hp.current = parseInt(v);
-    			break;
-    		}
-    		case "tempHp": {
-    			this.actor.hp.temp = parseInt(v);
-    			break;
-    		}
-    		case "surgesRemaining": {
-    			this.actor.surges.current = parseInt(v);
-    			break;
-    		}
-		}
-		this.actor.dispatchEvent("change");
-	}).bind(this) });
-	editor.$html.addClass(className1);
-	if (typeof(value2) !== "undefined") {
-		editor.$html.addClass("numerator");
-		jQuery("<span/>").addClass(className2).html(value2).appendTo($div);
-	}
-};
-
-/**
- * @param params {Object}
- * @param params.$parent {jQuery Selection} The parent element to add the action element to
- * @param params.title {String} The title of the img element
- * @param [params.className] {String} The optional className of the img element
- * @param params.src {String} The src of the img element
- * @param params.click {Function} The click handler of the img element
- */
-Actor.TableRow.prototype._addAction = function(params) {
-	var action;
-	if (params.src) {
-		action = new Image();
-		action.height = 30;
-		action.title = params.title;
-		action.src = params.src;
-		jQuery(action).addClass("action " + (params.className ? params.className : "")).on({ click: params.click });
-	}
-	else {
-		action = jQuery("<div/>").html(params.text).css({ height: "30px", width: "30px" }).attr("title", params.title ? params.title : "").addClass("action " + (params.className ? params.className : "")).on({ click: params.click });
-	}
-	params.$parent.append(action);
+	this.tr = new DnD.Display.ActorRow(params);
 };
 

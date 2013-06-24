@@ -34,7 +34,9 @@ Initiative.prototype._init = function(params) {
     
     if (params.creatures) {
         for (p in params.creatures) {
-            new Creature(params.creatures[ p ]);
+        	if (params.creatures.hasOwnProperty(p)) {
+                new Creature(params.creatures[ p ]);
+        	}
         }
     }
 
@@ -93,9 +95,14 @@ Initiative.prototype._init = function(params) {
 
 Initiative.prototype.initFromLocalStorage = function() {
 	var data;
-	if (window.localStorage.getItem("initiative")) {
-	    data = JSON.parse(window.localStorage.getItem("initiative"));
-	    try { window.console.info("Loaded from localStorage"); } catch(e) {}
+	if (window.localStorage || window.localStorage.getItem("initiative")) {
+		try {
+		    data = JSON.parse(window.localStorage.getItem("initiative"));
+		}
+		finally {}
+	}
+	if (data) {
+	    try { window.console.info("Loaded from localStorage"); } finally {}
 		this._init(data);
 		return true;
 	}
@@ -111,7 +118,6 @@ Initiative.prototype.initFromFile = function(event) {
     reader.onload = (function(theFile) {
         return function(e) {
             var data = JSON.parse(e.target.result);
-            _self._hideMenus();            
         };
     })(file);
     reader.readAsText(file);
@@ -223,486 +229,135 @@ Initiative.prototype._randomInitiative = function() {
 
 
 Initiative.prototype._create = function() {
-	var columns, i, $li, $table, $tr, $td, image, $div, $span, $select, $option, menu;
-	this.$parent = jQuery(this._$target.length ? this._$target : "body");
-	this.$parent.children().remove();
-	
-	this._createInitiativeDialog();
-	this._createAttackDialog();
-	this._createHealDialog();
-	
-    this.$display = jQuery("<div/>").attr("id", "display").addClass("fullWidth").appendTo(this.$parent);
-    
-    this.$menuBar = jQuery("<div/>").attr("id", "header").addClass("fullWidth");
-	this.$parent.append(this.$menuBar);
-	$span = jQuery("<span/>").attr("id", "roundLabel").html("Round");
-	this.$menuBar.append($span);
-//	this.$round = jQuery("<input/>").attr("id", "round").attr("type", "text").attr("disabled", "disabled").val(this.round);
-//	this.$menuBar.append(this.$round);
-	this.$previousButton = jQuery("<button/>").attr("id", "previous").html("Previous").on({ click: (this._previous).bind(this) });
-	this.$menuBar.append(this.$previousButton);
-	this.$nextButton = jQuery("<button/>").attr("id", "next").html("Next").on({ click: (this._next).bind(this) });
-	this.$menuBar.append(this.$nextButton);
-	
-    this.$displayButton = jQuery("<button/>").attr("id", "open").html("Open player window").on({ click: this._renderDisplay.bind(this, true) });
-    this.$menuBar.append(this.$displayButton);
-    
-    this._createFileMenu();
-    this._createCreatureDialog();
-    this._createImageDialog();
-    
-    jQuery("body").on({ click: this._hideMenus.bind(this) });
-    
-    this._createTable();
-	
-	this._render(true);
-};
-
-Initiative.prototype._createAttackDialog = function() {
-    var i, $li, $table, $tr, $td, image, $div, $span, $select, $option;
-    
-    if (this.$attackDialog && this.$attackDialog.length) {
-    	try {
-        	this.$attackDialog.dialog("destroy").remove();
-    	}
-    	catch (e) {
-    	}
-    	finally {
-        	this.$attackDialog.remove();
-    	}
-    }
-    this.$attackDialog = jQuery("<div/>").attr("id", "attacksDialog");
-    $table = jQuery("<table/>");
-    $table.attr("id", "attacks");
-    this.$attackDialog.append($table);
-    $tr = jQuery("<tr/>");
-    $table.append($tr);
-    $td = jQuery("<td/>");
-    $tr.append($td);
-    this.$weapons = jQuery("<select/>").attr("id", "weaponSelect");
-    $td.append(this.$weapons);
-    this.$attacks = jQuery("<select/>").attr("id", "attackSelect").on({ change: this._selectAttack.bind(this) });
-    $td.append(this.$attacks);
-    $td = jQuery("<td/>").addClass("attacks2targets");
-    $tr.append($td);
-    image = new Image();
-    image.height = 30;
-    image.src = "../images/symbols/attack.png";
-    this.$combatAdvantage = jQuery(image).data("combatAdvantage", false).on({ click: function() {
-        var combatAdvantage = this.src.indexOf("../images/symbols/attack.png") !== -1;
-        this.src = combatAdvantage ? "../images/symbols/combat_advantage.png" : "../images/symbols/attack.png";
-        jQuery(this).data("combatAdvantage", combatAdvantage);
-    } });
-    $td.append(image);
-    $td = jQuery("<td/>");
-    $tr.append($td);
-    this.$targets = jQuery("<select/>").attr("id", "targetSelect").attr("multiple", "true");
-    $td.append(this.$targets);
-    jQuery(this.$targets).dblclick(this._resolveAttack.bind(this));
-
-    $tr = jQuery("<tr/>");
-    $table.append($tr);
-    $td = jQuery("<td/>").addClass("playerAttack");
-    $tr.append($td);
-    this.$playerAttackRoll = jQuery("<input/>").attr("id", "playerAttackRoll").attr("type", "number").attr("placeholder", "Attack roll").appendTo($td);
-    this.$playerAttackCrit = jQuery("<select/>").attr("id", "playerAttackCrit").attr("title", "Critical").appendTo($td);
-    jQuery("<option/>").attr("value", "").html("----").appendTo(this.$playerAttackCrit);
-    jQuery("<option/>").attr("value", "crit").html("CRIT").appendTo(this.$playerAttackCrit);
-    jQuery("<option/>").attr("value", "fail").html("FAIL").appendTo(this.$playerAttackCrit);
-    $td = jQuery("<td/>").html("Player rolls");
-    $tr.append($td);
-    $td = jQuery("<td/>");
-    $tr.append($td);
-    this.$playerDamageRoll = jQuery("<input/>").attr("id", "playerDamageRoll").attr("type", "number").attr("placeholder", "Damage roll").appendTo($td);
-    
-    this.$attackDialog.dialog({ 
-        autoOpen: false, 
-        buttons: { 
-            "Attack":  this._resolveAttack.bind(this)
-        }, 
-        modal: true, 
-        title: "Attacks", 
-        width: "auto" 
-    });
-};
-
-Initiative.prototype._createHealDialog = function() {
-    var columns, i, $li, $table, $tr, $td, image, $div, $span, $select, $option, menu;
-
-    if (this.$healDialog && this.$healDialog.length) {
-    	try {
-        	this.$healDialog.dialog("destroy").remove();
-    	}
-    	catch (e) {
-    	}
-    	finally {
-        	this.$healDialog.remove();
-    	}
-    }
-    this.$healDialog = jQuery("<div/>").attr("id", "healDialog");
-    $div = jQuery("<div/>").appendTo(this.$healDialog);
-    jQuery("<span/>").html("Description:").appendTo($div);
-    this.$healingDescription = jQuery("<input/>").attr("type", "text").attr("id", "healingDescription").appendTo($div);
-    $div = jQuery("<div/>").appendTo(this.$healDialog);
-    jQuery("<span/>").html("Is temporary HP").appendTo($div);
-    this.$isTempHp = jQuery("<input/>").attr("type", "checkbox").attr("id", "isTempHp").attr("checked", false).appendTo($div);
-    $div = jQuery("<div/>").appendTo(this.$healDialog);
-    jQuery("<span/>").html("Uses healing surge").appendTo($div);
-    this.$usesHealingSurge = jQuery("<input/>").attr("type", "checkbox").attr("id", "usesHealingSurge").attr("checked", true).appendTo($div);
-    $div = jQuery("<div/>").appendTo(this.$healDialog);
-    this.$healingAmount = jQuery("<input/>").attr("type", "text").attr("id", "healingAmount").attr("disabled", "disabled").appendTo($div);
-    this.$usesHealingSurge.on({ click: (function() {
-        if (this.$usesHealingSurge[0].checked) {
-            this.$healingAmount.val(this.$usesHealingSurge.data("healingSurgeValue"));
-            this.$healingAmount.attr("disabled", "disabled");
-        }
-        else {
-            this.$healingAmount.removeAttr("disabled");
-        }
-    }).bind(this) });
-    jQuery("<span/>").html("+").appendTo($div);
-    this.$healingExtra = jQuery("<input/>").attr("type", "text").attr("id", "healingExtra").appendTo($div);
-    this.$healDialog.dialog({ 
-        autoOpen: false, 
-        buttons: { 
-            "Heal":  this._resolveHeal.bind(this)
-        }, 
-        modal: true, 
-        title: "Heal", 
-        width: "auto" 
-    });
-};
-
-
-Initiative.prototype._createInitiativeDialog = function() {
-    if (this.$initiativeDialog && this.$initiativeDialog.length) {
-    	try {
-        	this.$initiativeDialog.dialog("destroy").remove();
-    	}
-    	catch (e) {
-    	}
-    	finally {
-        	this.$initiativeDialog.remove();
-    	}
-    }
-    this.$initiativeDialog = jQuery("<div/>").attr("id", "initiativeDialog");
-    this._populateSetInitiative();
-    this.$initiativeDialog.dialog({ 
-        autoOpen: false, 
-        buttons: { 
-            "Roll":  this._rollInitiative.bind(this),
-            "Update":  this._resolveInitiative.bind(this)
-        }, 
-        modal: true, 
-        title: "Set Initiative Order", 
-        width: "auto" 
-    });
-};
-
-
-Initiative.prototype._populateSetInitiative = function() {
-    var i, actor, $div, $input, $span;
-    this.$initiativeDialog.html("");
-    for (i = 0; i < this.order.length; i++) {
-    	actor = Creature.actors[ this.order[ i ] ];
-    	if (!actor) {
-    	    try { window.console.warn("Skipping order #" + i + " (actor id " + this.order[ i ] + "), not found in Creature.actors"); } catch(e) {}
-    		continue;
-    	}
-        $div = jQuery("<div/>").appendTo(this.$initiativeDialog);
-        $input = jQuery("<input/>").attr("type", "number").attr("min", "1").attr("step", 1).addClass("order").attr("name", actor.id).val(this.order.length - i).attr("placeholder", this.order.length - i).appendTo($div);
-        $span = jQuery("<span/>").html(actor.name).appendTo($div);
-    }
-};
-
-
-Initiative.prototype._createFileMenu = function() {
-    var columns, i, j, $ul, $li, $a, menu;
-    
-    this.$fileButton = jQuery("<button/>").attr("id", "fileButton").html("File").on({ 
-        click: (function(event) {
-            event.stopPropagation();
-            this.$fileMenu.toggle(); 
-        }).bind(this) 
-    });
-    this.$menuBar.append(this.$fileButton);
-    menu = [ 
-            { id: "load", html: "Load", submenu: [
-                  { id: "file", html: "from file: <input type=\"file\" id=\"fileInput\"/>", click: function(event) { event.stopPropagation(); } },
-                  { id: "initiative", html: "Initiative", click: this.loadInitFromJs.bind(this) },
-                  { id: "monsters", html: "Monsters", click: this.loadMonstersFromJs.bind(this) },
-                  { id: "party", html: "Party", click: this.loadPartyFromJs.bind(this) }
-              ]
-            }, 
-            { id: "import", html: "Import", click: this._import.bind(this) }, 
-            { id: "export", html: "Export", click: this._export.bind(this) },
-            { id: "clear", html: "Clear", submenu: [
-                                                  { id: "clearAll", html: "all", click: this._clearAll.bind(this) },
-                                                  { id: "clearCreatures", html: "creatures", click: this._clearCreatures.bind(this) },
-                                                  { id: "clearMonsters", html: "monsters", click: this._clearMonsters.bind(this) },
-                                                  { id: "clearHistory", html: "history", click: this._clearHistory.bind(this) }
-                                              ]
-                                            }
-           ];
-    this.$fileMenu = jQuery("<ul/>").attr("id", "fileMenu").css({ position: "absolute", left: this.$fileButton.position().left }).delegate("li", "click", (function(event) { 
-        event.stopPropagation();
-        this.$fileMenu.toggle(); 
-    }).bind(this));
-    this.$menuBar.append(this.$fileMenu);
-    for (i = 0; i < menu.length; i++) {
-    	$a = jQuery("<a/>").attr("href", "javascript:void(0);").html(menu[ i ].html);
-        $li = jQuery("<li/>").attr("id", menu[ i ].id).append($a).on({ click: menu[ i ].click }).appendTo(this.$fileMenu);
-    	if (menu[ i ].submenu) {
-    		$ul = jQuery("<ul/>").appendTo($li);
-            for (j = 0; j < menu[ i ].submenu.length; j++) {
-            	$a = jQuery("<a/>").attr("href", "javascript:void(0);").html(menu[ i ].submenu[ j ].html);
-                $li = jQuery("<li/>").attr("id", menu[ i ].submenu[ j ].id).append($a).on({ click: menu[ i ].submenu[ j ].click }).appendTo($ul);
-            }
-    	}
-    }
-    jQuery("#fileInput").on({ change: this.initFromFile.bind(this) });
-
-    this.$fileMenu.menu().hide();
-};
-
-Initiative.prototype._createCreatureDialog = function() {
-    var i, creature, pcs, npcs, sort, $li, $div, $span, $select, $option, menu;
-    
-    if (this.$creatureDialog && this.$creatureDialog.length) {
-    	try {
-        	this.$creatureDialog.dialog("destroy").remove();
-    	}
-    	catch (e) {
-    	}
-    	finally {
-        	this.$creatureDialog.remove();
-    	}
-    }
-    this.$creatureDialog = jQuery("<div/>").attr("id", "creatureDialog");
-    this.$creatures = jQuery("<select/>").attr("id", "creatureSelect").attr("multiple", "true").attr("size", 10);
-    this.$creatureDialog.append(this.$creatures);
-    pcs = [];
-    npcs = [];
-    for (i in Creature.creatures) {
-    	if (Creature.creatures.hasOwnProperty(i) && Creature.creatures[ i ] instanceof Creature) {
-    		creature = Creature.creatures[ i ];
-        	if (creature.isPC) {
-        		pcs.push(creature);
-        	}
-        	else {
-        		npcs.push(creature);
-        	}
-    	}
-    }
-    sort = function(a, b) {
-    	return a.name >= b.name ? 1 : -1;
-    };
-    pcs.sort(sort);
-    npcs.sort(sort);
-    for (i = 0; i < pcs.length; i++) {
-        jQuery("<option/>").html(pcs[ i ].name).data("creature", pcs[ i ]).appendTo(this.$creatures);
-    }
-    if (pcs.length && npcs.length) {
-        jQuery("<option/>").html("------------").appendTo(this.$creatures).on({ click: function() { this.selected = false; } });
-    }
-    for (i = 0; i < npcs.length; i++) {
-        jQuery("<option/>").html(npcs[ i ].name).data("creature", npcs[ i ]).appendTo(this.$creatures);
-    }
-    this.$creatureDialog.dialog({ 
-        autoOpen: false, 
-        position: [ "center", 50 ],
-        buttons: { 
-            "Add":  (function() {
-                var i, toAdd, count, creature, actor;
-                toAdd = [];
-                for (i = 0; i < this.$creatures[0].options.length; i++) {
-                    if (this.$creatures[0].options[ i ].selected) {
-                        toAdd.push(jQuery(this.$creatures[0].options[ i ]).data("creature"));
-                    }
-                }
-                for (i = 0; i < toAdd.length; i++) {
-                    creature = toAdd[ i ];
-                    this._addActor(creature);
-                }
-                this._render(true);
-            }).bind(this)
-        }, 
-        modal: true, 
-        title: "Creatures", 
-        width: "auto" 
-    });
-    
-    this.$creatureButton = jQuery("<button/>").attr("id", "creatures").html("Creatures").on({ 
-        click: (function(event) {
-            event.stopPropagation();
-            //this.$creaturesMenu.toggle();
-            this.$creatureDialog.dialog("open");
-        }).bind(this) 
-    });
-    this.$menuBar.append(this.$creatureButton);
-};
-
-Initiative.prototype._createImageDialog = function() {
-	var handleFileSelection, $table, $tr, $td, $images, $fullSize;
-	handleFileSelection = (function(files) { // FileList object
-    	var i, f, reader;
-        // files is a FileList of File objects ({ name: String, type: String, size: Number, lastModifiedDate: Date }).
-        for (i = 0, f; f = files[i]; i++) {
-        	if (f) {
-        		reader = new FileReader();
-        		reader.onload = (function(theFile, e) {
-        				var $img, img = new Image();
-	        			img.title = theFile.name;
-	        			img.height = 40;
-	        			img.src = e.target.result;
-	        			$img = jQuery(img).on({ click: (function(image) {
-		        			$fullSize.attr("src", image.src).show();
-		        			this.$imageDialog.dialog("option", "position", [ "center", 50 ]);
-	        			}).bind(this, img) });
-	        			$images.append($img);
-        			}).bind(this, f);
-        		reader.readAsDataURL(f);
-        	}
-        }
+	var dialogsReady, $tmp;
+	dialogsReady = (function() {
+		if (this.creatureDialog && 
+				this.imageDialog &&
+				this.initiativeDialog &&
+				this.attackDialog && 
+				this.healDialog) {
+		    this._createBody();
+			this._render(true);
+			return true;
+		}
+		return false;
 	}).bind(this);
-    if (this.$imageDialog && this.$imageDialog.length) {
-    	try {
-        	this.$imageDialog.dialog("destroy").remove();
-    	}
-    	catch (e) {
-    	}
-    	finally {
-        	this.$imageDialog.remove();
-    	}
+	$tmp = {};
+	
+	this.$parent = jQuery(this._$target.length ? this._$target : "body");
+		
+    this.$display = jQuery("#display");
+    
+    this.$menuBar = jQuery("#header");
+	this.$round = jQuery("#round");
+	this.$previousButton = jQuery("#previous").on({ click: (this._previous).bind(this) });
+	this.$nextButton = jQuery("#next").on({ click: (this._next).bind(this) });
+	
+    this.$displayButton = jQuery("#open").on({ click: this._renderDisplay.bind(this, true) });
+    
+    this.$fileInput = jQuery("#fileInput").on({ change: this.initFromFile.bind(this) });
+    this.$loadInitiative = jQuery("#loadInitiative").on({ click: this.loadInitFromJs.bind(this) });
+    this.$loadMonsters = jQuery("#loadMonsters").on({ click: this.loadMonstersFromJs.bind(this) });
+    this.$loadParty = jQuery("#loadParty").on({ click: this.loadPartyFromJs.bind(this) });
+    
+    this.$import = jQuery("#import").on({ click: this._import.bind(this) });
+    this.$export = jQuery("#export").on({ click: this._export.bind(this) });
+    
+    this.$clearAll = jQuery("#clearAll").on({ click: this._clearAll.bind(this) });
+    this.$clearCreatures = jQuery("#clearCreatures").on({ click: this._clearCreatures.bind(this) });
+    this.$clearMonsters = jQuery("#clearMonsters").on({ click: this._clearMonsters.bind(this) });
+    this.$clearHistory = jQuery("#clearHistory").on({ click: this._clearHistory.bind(this) });
+    
+    if (dialogsReady()) {
+    	return;
     }
-    this.$imageDialog = jQuery("<div/>").attr("id", "imageDialog").css({ "border": "3px solid black", "padding": "30px" });
-    // Setup the drag-and-drop listeners
-    this.$imageDialog[0].addEventListener("dragover", function(event) {
-	        event.stopPropagation();
-	        event.preventDefault();
-	        event.dataTransfer.dropEffect = "copy"; // Explicitly show this is a copy.
-    	}, false);
-    this.$imageDialog[0].addEventListener("drop", function(event) {
-	        event.stopPropagation();
-	        event.preventDefault();
-	        handleFileSelection(event.dataTransfer.files); // FileList object
-    	}, false);
-    $table = jQuery("<table/>").appendTo(this.$imageDialog);
-    $tr = jQuery("<tr/>").appendTo($table);
-    $td = jQuery("<td/>").attr("id", "imageFileDropZone").css({ color: "black" }).html("Drop files here or").appendTo($tr);
-    $td = jQuery("<td/>").attr("id", "fullSizeContainer").attr("rowspan", "3").appendTo($tr);
-    $fullSize = jQuery("<img/>").attr("id", "fullSize").hide().on({ 
-    	click: (function(event) {
-    		var offset, position;
-            event.stopPropagation();
-            offset = jQuery(event.target).offset();
-            position = { x: (event.clientX + window.pageXOffset - offset.left) / event.target.width, y: (event.clientY + window.pageYOffset - offset.top) / event.target.height };
-            try { window.console.info("highlightImage { x: " + (100 * position.x) + "%, y: " + (100 * position.y) + "% }") } catch(e) {};
-    		this._messageDisplay({ type: "highlightImage", position: position }, false);
-    	}).bind(this) 
-	}).appendTo($td);
-    $tr = jQuery("<tr/>").appendTo($table);
-    $td = jQuery("<td/>").attr("id", "imageFileInputContainer").appendTo($tr);
-    this.$imageFileInput = jQuery("<input/>").attr("id", "imageFileInput").attr("type", "file").attr("multiple", "multiple").on({ 
-    	change: function(event) {
-	        event.stopPropagation();
-	        event.preventDefault();
-    		handleFileSelection(event.target.files || [ event.target.file ]); 
-    	}
-	}).appendTo($td);
-    $tr = jQuery("<tr/>").appendTo($table);
-    $images = jQuery("<td/>").attr("id", "images").appendTo($tr);
     
-    this.$imageDialog.dialog({ 
-        autoOpen: false, 
-        position: [ "center", 50 ],
-        buttons: { 
-            "Display":  (function() {
-            	if ($fullSize && $fullSize.attr("src")) {
-            		this._messageDisplay({ type: "displayImage", src: $fullSize.attr("src") }, false);
-            	}
-            }).bind(this),
-            "Hide":  (function() {
-        		this._messageDisplay({ type: "hideImage" }, false);
-            }).bind(this)
-        }, 
-        modal: true, 
-        title: "Image", 
-        width: "auto" 
-    });
-    
-    this.$imageButton = jQuery("<button/>").attr("id", "images").html("Image").on({ 
-        click: (function(event) {
-            event.stopPropagation();
-            this.$imageDialog.dialog("open");
-        }).bind(this) 
-    });
-    this.$menuBar.append(this.$imageButton);
+	if (!this.creatureDialog) {
+		$tmp.creatureDialog = jQuery("<div/>");
+		$tmp.creatureDialog.load("/html/partials/creaturesDialog.html", null, (function() {
+			$tmp.creatureDialog.children().appendTo(this.$parent);
+			this.creatureDialog = new DnD.Dialog.Creature({ callback: (function(toAdd) {
+				var i, creature;
+		        for (i = 0; i < toAdd.length; i++) {
+		            creature = toAdd[ i ];
+		            this._addActor(creature);
+		        }
+		        this._render(true);
+		        dialogsReady();
+			}).bind(this) });
+		}).bind(this));
+	}
+	
+	if (!this.imageDialog) {
+		$tmp.imageDialog = jQuery("<div/>");
+		$tmp.imageDialog.load("/html/partials/imageDialog.html", null, (function() {
+			$tmp.imageDialog.children().appendTo(this.$parent);
+			this.imageDialog = new DnD.Dialog.Image({ toDisplay: this._messageDisplay.bind(this) });
+	        dialogsReady();
+		}).bind(this));
+	}
+	
+	if (!this.initiativeDialog) {
+		$tmp.initiativeDialog = jQuery("<div/>");
+		$tmp.initiativeDialog.load("/html/partials/initiativeDialog.html", null, (function() {
+			$tmp.initiativeDialog.children().appendTo(this.$parent);
+			this.initiativeDialog = new DnD.Dialog.Initiative({ actors: this.actors, order: this.order });
+	        dialogsReady();
+		}).bind(this));
+	}
+	
+	if (!this.attackDialog) {
+		$tmp.attackDialog = jQuery("<div/>");
+		$tmp.attackDialog.load("/html/partials/attackDialog.html", null, (function() {
+			$tmp.attackDialog.children().appendTo(this.$parent);
+			this.attackDialog = new DnD.Dialog.Attack({});
+	        dialogsReady();
+		}).bind(this));
+	}
+	
+	if (!this.healDialog) {
+		$tmp.healDialog = jQuery("<div/>");
+		$tmp.healDialog.attr("id", "healDialog").appendTo("body").load("/html/partials/healDialog.html", null, (function(responseText, textStatus, jqXHR) {
+			$tmp.healDialog.children().appendTo(this.$parent);
+	    	this.healDialog = new DnD.Dialog.Heal({});
+	        dialogsReady();
+		}).bind(this));
+	}
 };
 
-Initiative.prototype._createTable = function() {
-    var columns, i, $li, $table, $tr, $td, image, $div, $span, $select, $option, menu;
-    $table = jQuery("<table/>").attr("id", "history").addClass("fullWidth").appendTo(this.$parent);
-    $tr = jQuery("<tr/>").appendTo($table);
-    $td = jQuery("<td/>").addClass("halfWidth").appendTo($tr);
-    
-    this.$table = jQuery("<table/>").attr("id", "initiative");
-    $td.append(this.$table);
-    columns = [ "<input id=\"round\" type=\"text\" disabled=\"disabled\" value=\"" + this.round + "\" />", "Character", "Def", "HP", "Actions", "History" ];
-    for (i = 0; i < columns.length; i++) {
-        this.$table.append(jQuery("<th/>").addClass("bordered f1").html(columns[ i ]));
-    }
-	this.$round = jQuery("input#round");
-//    this.$table.sortable({ containment: "parent", handle: ".creaturePanel", items: "tr", 
-//        update: (function(event, ui) {
-//            var i, move, before;
-//            move = ui.item.data("actor");
-//            for (i = 0; i < this.$table[0].rows.length; i++) {
-//                if (jQuery(this.$table[0].rows[ i ]).data("actor") === ui.item.data("actor")) {
-//                    before = this.actors[ this.order[ i ] ];
-//                    break;
-//                }
-//            }
-//            this._changeInitiative({ move: move, before: before });
-//        }).bind(this) 
-//    });
-    
-    $td = jQuery("<td/>").attr("id", "historyTd").addClass("halfWidth bordered alignTop").appendTo($tr);
-    jQuery("<div/>").addClass("bordered f1").html("History").appendTo($td);
-    $td.append(this.history.$html);
-
-    
-    // Editor for adding arbitrary history
-    $div = jQuery("<div/>").attr("id", "freeFormHistory");
-    $td.append($div);
-    this.$freeFormHistorySubject = jQuery("<select/>").appendTo($div);
-    for (i = 0; i < this.actors.length; i++) {
-        a = this.actors[ i ];
-        $option = jQuery("<option/>").attr("value", a.name).html(a.name).data("actor", a).appendTo(this.$freeFormHistorySubject);
-    }
-    this.freeFormHistory = new History.Editor({ 
-        $parent: $div, 
-        save: (function(value) {
-            $option = jQuery(this.$freeFormHistorySubject[0].options[ this.$freeFormHistorySubject[0].selectedIndex ]);
-            this._addHistory($option.data("actor"), value);
-        }).bind(this), 
-        cancel: function() {} 
-    });
-    this.freeFormHistory.$cancel.hide();
+Initiative.prototype._createBody = function() {
+    jQuery("#tableContainer").load("/html/partials/actorTable.html", null, this._createActorTable.bind(this));
+    jQuery("#history").append(this.history.$html);
+    this._createHistory();
 };
 
-Initiative.prototype._hideMenus = function() {
-    this.$fileMenu.hide(); 
-//    this.$creaturesMenu.hide(); 
-};
-
-Initiative.prototype._render = function(updateDisplay) {
+Initiative.prototype._createActorTable = function(responseText, textStatus, jqXHR) {
 	var i, actor;
 	
-    this.$round.val(this.round);
+    this.$table = jQuery("#initiative tbody");
+
+//  this.$table.sortable({ containment: "parent", handle: ".creaturePanel", items: "tr", 
+//  update: (function(event, ui) {
+//      var i, move, before;
+//      move = ui.item.data("actor");
+//      for (i = 0; i < this.$table[0].rows.length; i++) {
+//          if (jQuery(this.$table[0].rows[ i ]).data("actor") === ui.item.data("actor")) {
+//              before = this.actors[ this.order[ i ] ];
+//              break;
+//          }
+//      }
+//      this._changeInitiative({ move: move, before: before });
+//  }).bind(this) 
+//});
     
-	this.$table.find("tr").remove();
-	this.$display.children().remove();
+    this.$round = jQuery("input#round");
+	if (this.$round) {
+	    this.$round.val(this.round);
+	}
+	
+	if (this.$table) {
+		this.$table.children().remove();
+	}
 	
 	for (i = 0; i < this.order.length; i++) {
 		actor = Creature.actors[ this.order[ i ] ];
@@ -714,19 +369,71 @@ Initiative.prototype._render = function(updateDisplay) {
 			isCurrent: i === this._current,
 			order: {
 				up: this._reorder.bind(this, actor, -1),
-				set: this._setInitiative.bind(this),
+				set: this.initiativeDialog.show(),
 				down: this._reorder.bind(this, actor, 1)
 			},
-			attack: this._attack.bind(this, actor),
-			heal: this._heal.bind(this, actor),
+			attack: this.attackDialog.show.bind(this.attackDialog, { attacker: actor, actors: this.actors }),
+			heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
 			exit: this._exit.bind(this, actor),
 			rename: this._rename.bind(this, actor)
 		});
-//        actor.createCard({ 
-//            $parent: this.$display,
-//            isCurrent: i === this._current,
-//            className: "gridItem"
-//        });
+	}
+	
+};
+
+Initiative.prototype._createHistory = function() {
+    // Editor for adding arbitrary history
+    this.$freeFormHistorySubject = jQuery("select#freeFormHistorySubject");
+    this.$freeFormHistorySubject.children().remove();
+    for (i = 0; i < this.actors.length; i++) {
+        a = this.actors[ i ];
+        $option = jQuery("<option/>").attr("value", a.name).html(a.name).data("actor", a).appendTo(this.$freeFormHistorySubject);
+    }
+    if (!this.freeFormHistory) {
+        this.freeFormHistory = new History.Editor({ 
+            $parent: jQuery("#freeFormHistory"), 
+            save: (function(value) {
+                $option = jQuery(this.$freeFormHistorySubject[0].options[ this.$freeFormHistorySubject[0].selectedIndex ]);
+                this._addHistory($option.data("actor"), value);
+            }).bind(this), 
+            cancel: function() {} 
+        });
+    }
+    this.freeFormHistory.$cancel.hide();
+};
+
+Initiative.prototype._render = function(updateDisplay) {
+	var i, actor;
+	
+	if (this.$round) {
+	    this.$round.val(this.round);
+	}
+    
+	if (this.$table) {
+		this.$table.children().remove();
+	}
+	if (this.$display) {
+		this.$display.children().remove();
+	}
+	
+	for (i = 0; i < this.order.length; i++) {
+		actor = Creature.actors[ this.order[ i ] ];
+		if (!actor) {
+			continue;
+		}
+		actor.createTr({ 
+			$table: this.$table,
+			isCurrent: i === this._current,
+			order: {
+				up: this._reorder.bind(this, actor, -1),
+				set: this.initiativeDialog.show(),
+				down: this._reorder.bind(this, actor, 1)
+			},
+			attack: this.attackDialog.show.bind(this.attackDialog, { attacker: actor, actors: this.actors }),
+			heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
+			exit: this._exit.bind(this, actor),
+			rename: this._rename.bind(this, actor)
+		});
 	}
 	if (updateDisplay) {
 		this._renderDisplay(false);
@@ -1035,46 +742,6 @@ Initiative.prototype._reorder = function(actor, delta) {
 };
 
 
-Initiative.prototype._setInitiative = function(event) {
-    this._populateSetInitiative();
-	this.$initiativeDialog.dialog("option", "position", [ "center", event.screenY - 300 ]);
-    this.$initiativeDialog.dialog("open");
-};
-
-
-Initiative.prototype._rollInitiative = function() {
-	this.$initiativeDialog.find("input.order").each(function() {
-		var $input, actor;
-		$input = jQuery(this);
-		actor = Creature.actors[ parseInt($input.attr("name")) ];
-		$input.val((new Roll("1d20" + (actor.init < 0 ? "-" : "+") + actor.init)).roll());
-	});
-};
-
-
-Initiative.prototype._resolveInitiative = function() {
-	var entries, test, i, actor;
-	entries = [];
-	this.$initiativeDialog.find("input.order").each(function() {
-		var $input = jQuery(this);
-		entries.push({ id: parseInt($input.attr("name")), order: parseInt($input.val()) || parseInt($input.attr("placeholder")) });
-	});
-	entries.sort(function(a, b) { return b.order - a.order; });
-    test = "[ ";
-	for (i = 0; i < entries.length; i++) {
-		actor = Creature.actors[ entries[ i ].id ];
-		if (this.order[ i ] !== entries[ i ].id) {
-		    this._addHistory(actor, "Moved to #" + (i + 1) + " in the initiative order");
-			this.order[ i ] = entries[ i ].id;
-		}
-    	test += (i ? ", " : "") + actor.name;
-	}
-	try { window.console.info("New order: " + test + " ]"); } catch(e) {}
-    this.$initiativeDialog.dialog("close");
-    this._render(true);
-};
-
-
 Initiative.prototype._getActor = function(id) {
     var i;
     for (i = 0; i < this.actors.length; i++) {
@@ -1087,7 +754,7 @@ Initiative.prototype._getActor = function(id) {
 
 Initiative.prototype._attack = function(actor, event) {
 	var $option, i, a;
-	this.$attackDialog.data("attacker", actor);
+	this.attackDialog.attacker = actor;
 	
 	this.$weapons.html("").hide();
 	
@@ -1152,75 +819,6 @@ Initiative.prototype._selectAttack = function() {
     else {
         this.$weapons.hide();
     }
-};
-
-Initiative.prototype._resolveAttack = function() {
-	var attacker, attack, item, i, targets, combatAdvantage, playerRolls, result;
-	if (this.$attacks.val() && this.$targets.val()) {
-		this.$attackDialog.dialog("close");
-		attacker = this.$attackDialog.data("attacker");
-		attack = jQuery(this.$attacks[0].options[ this.$attacks[0].selectedIndex ]).data("attack");
-		if (attack.keywords && (attack.keywords.indexOf("weapon") !== -1 || attack.keywords.indexOf("implement") !== -1)) {
-		    item = jQuery(this.$weapons[0].options[ this.$weapons[0].selectedIndex ]).data("item");
-		}
-		targets = [];
-		for (i = 0; i < this.$targets[0].options.length; i++) {
-			if (this.$targets[0].options[ i ].selected) {
-				targets.push(jQuery(this.$targets[0].options[ i ]).data("target"));
-			}
-		}
-		combatAdvantage = this.$combatAdvantage.data("combatAdvantage");
-		if (this.$playerAttackRoll.val() || this.$playerAttackCrit.val() || this.$playerDamageRoll.val()) {
-			playerRolls = { attack: { roll: parseInt(this.$playerAttackRoll.val()), isCritical: this.$playerAttackCrit.val() === "crit", isFumble: this.$playerAttackCrit.val() === "fail" }, damage: parseInt(this.$playerDamageRoll.val()) };
-		}
-		result = attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
-		this._render(false);
-		this._messageDisplay({ type: "takeDamage", hits: result.hits, misses: result.misses }, false);
-	} 
-	else {
-		alert("Please select both an attack and 1 or more valid target(s)");
-	}
-};
-
-Initiative.prototype._heal = function(actor, event) {
-	this.$healDialog.data("patient", actor);
-	this.$usesHealingSurge.data("healingSurgeValue", Math.floor(actor.hp.total / 4));
-	this.$healingAmount.val(this.$usesHealingSurge.data("healingSurgeValue"));
-	this.$healingExtra.val(0);
-	this.$healDialog.dialog("option", "position", [ "center", event.screenY - 300 ]);
-	this.$healDialog.dialog("open");
-};
-
-Initiative.prototype._resolveHeal = function(actor) {
-	var target, amount, msg, method;
-	if (!this.$healingDescription.val()) {
-		alert("Please enter a description of the healing");
-		return;
-	}
-	this.$healDialog.dialog("close");
-	target = this.$healDialog.data("patient");
-	amount = parseInt(this.$healingAmount.val()) + parseInt(this.$healingExtra.val());
-	method = "info";
-	if (this.$isTempHp[0].checked) {
-		target.hp.temp = Math.max(amount, target.hp.temp);
-		msg = "Gained " + amount + " temporary hit points from " + this.$healingDescription.val();
-	}
-	else {
-		target.hp.current = Math.min(target.hp.current + amount, target.hp.total);
-		msg = "Healed " + amount + " damage from " + this.$healingDescription.val();
-	}
-	if (this.$usesHealingSurge[0].checked) {
-		if (target.surges.current <= 0) {
-			msg += ", should have used a healing surge but has none remaining";
-			method = "error";
-		}
-		else {
-			target.surges.current = Math.max(--target.surges.current, 0);
-			msg += ", using a healing surge";
-		}
-	}
-	this._addHistory(target, msg, method);
-	this._render(true);
 };
 
 Initiative.prototype._exit = function(actor, event) {

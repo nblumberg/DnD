@@ -28,14 +28,25 @@ th, td { border-color: white; }
 div.order { color: red; font-weight: bold; font-size: 30px; }
 input.order { margin-right: 10px; width: 30px; }
 
-div#header { background-color: black; margin-top: -20px; position: fixed; width: 100%; z-index: 5; }
-div#header * { margin-right: 10px; }
+div#header { background-color: black; position: fixed; width: 100%; z-index: 5; }
 span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
 
-#history { margin-top: 20px; }
+#pageLayout {
+}
+
+#roundLabel {
+	font-size: 9pt;
+}
+
+#initiative img.icon {
+	height: 30px;
+}
+
+#history {}
 #history > tr > td, #history > tbody > tr > td { vertical-align: top; }
 #history div { text-align: center; }
+#freeFormHistory { text-align: center; }
 .round .time { padding-left: 5px; }
 .round .edit textarea { height: 150px; }
 
@@ -56,7 +67,25 @@ input#round { width: 30px; }
 .creaturePanel div.condition span, .creaturePanel div.damage span { bottom: 0; font-size: 1.3em; font-weight: bold; left: 0; margin: auto; position: absolute; right: 0; text-shadow: 3px 3px black; top: 0; vertical-align: middle; }
 .creaturePanel .name .hp { padding-left: 1em; white-space: nowrap; }
 
-div#history { float: right; height: 100%; min-width: 30%; padding: 0 5px; }
+.layout {
+	padding-top: 40px;
+}
+
+
+.modal-header {
+	border: 1px solid #0b3e6f;
+	background: #0b3e6f url(images/ui-bg_diagonals-thick_15_0b3e6f_40x40.png) 50% 50% repeat;
+	color: #f6f6f6;
+	font-weight: bold;	
+}
+.modal-body {
+	background-color: #222222;
+}
+.modal-footer {
+	background-color: #999999;
+}
+
+div#history { min-width: 30%; padding: 0 5px; }
 div#history h3 { margin: 5px 0; }
 //  table#initiative { border-collapse: collapse; }
 table#initiative th, table#initiative td { text-align: center; } 

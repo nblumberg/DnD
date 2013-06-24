@@ -1,0 +1,39 @@
+<div id="attacksDialog" class="modal hide fade" data-backdrop="true" data-keyboard="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Attacks</h3>
+    </div>
+    <div class="modal-body">
+        <table>
+            <tr>
+                <td>
+                    <select id="weaponSelect"></select> 
+                    <select id="attackSelect"></select>
+                </td>
+                <td class="attacks2Targets">
+                    <img id="combatAdvantage" height="30" src="/images/symbols/attack.png" />
+                </td>
+                <td>
+                    <select id="targetSelect" multiple="multiple"></select>
+                </td>
+            </tr>
+            <tr>
+                <td class="playerAttack">
+                    <input id="playerAttackRoll" type="number" placeholder="Attack roll" /> 
+                    <select id="playerAttackCrit" title="Critical">
+                        <option value=""></option>
+                        <option value="crit">CRIT</option>
+                        <option value="fail">FUMBLE</option>
+                    </select>
+                </td>
+                <td>Player rolls</td>
+                <td class="playerDamage">
+                    <input id="playerDamageRoll" type="number" placeholder="Damage roll" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn attackBtn">Attack</a>
+    </div>
+</div>

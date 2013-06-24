@@ -6,6 +6,6 @@ Array.prototype.each = function(fn) {
 	var i, item;
 	for (i = 0; i < this.length; i++) {
 		item = this[ i ];
-		fn(item, i);
+		fn(item, i, this);
 	}
 };

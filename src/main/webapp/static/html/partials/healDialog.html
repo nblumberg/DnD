@@ -1,0 +1,28 @@
+<div id="healDialog" class="modal hide fade" data-backdrop="true" data-keyboard="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Healing</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            <span>Description:</span>
+            <input id="healingDescription" type="text" />    
+        </div>
+        <div>
+            <span>Is temporary HP</span>
+            <input id="isTempHp" type="checkbox" />    
+        </div>
+        <div>
+            <span>Uses healing surge</span>
+            <input id="usingHealingSurge" type="checkbox" checked="true" />    
+        </div>
+        <div>
+            <input id="healingAmount" type="number" disabled="disabled" />    
+            <span>+</span>
+            <input id="healingExtra" type="number" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn healBtn">Heal</a>
+    </div>
+</div>
