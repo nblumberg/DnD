@@ -184,13 +184,13 @@ describe("monsters.js", function() {
 							attack = monster.attacks[ j ];
 							Test.hasNonEmptyStringProperty(attack, "name", monster.name);
 							extra = monster.name + " " + attack.name;
-							Test.hasNonEmptyStringProperty(attack, "type", extra);
-							it("type: \"At-Will\" | \"Encounter\" | \"Daily\" | \"Recharge\" [" + extra + "]", (function(a) {
+							Test.hasNonEmptyObjectProperty(attack, "usage", extra);
+							it("usage: { frequency: \"At-Will\" | \"Encounter\" | \"Daily\" | \"Recharge\" } [" + extra + "]", (function(a) {
 								var valid = [ "At-Will", "Encounter", "Daily", "Recharge" ];
-								expect(valid.indexOf(a.type)).not.toEqual(-1);
+								expect(valid.indexOf(a.usage.frequency)).not.toEqual(-1);
 							}).bind(this, attack));
-							if (attack.type === "Recharge") {
-								Test.hasPositiveNumberProperty(attack, "recharge", "[" + extra + "]");
+							if (attack.usage.frequency === "Recharge") {
+								Test.hasPositiveNumberProperty(attack.usage, "recharge", "[" + extra + "]");
 							}
 							
 							it("toHit: Number | \"{valid expression}\" [" + extra + "]", (function(a) {

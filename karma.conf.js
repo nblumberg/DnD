@@ -24,7 +24,15 @@ files = [
 	'src/main/webapp/static/js/party.js',
 	
 	// test specs to run
-	'src/test/webapp/jasmine/spec/*.js'
+	'src/test/webapp/jasmine/spec/testUtilities.js',
+	'src/test/webapp/jasmine/spec/jsTest.js',
+	'src/test/webapp/jasmine/spec/actionsTest.js',
+	'src/test/webapp/jasmine/spec/dataTest.js',
+	'src/test/webapp/jasmine/spec/editorTest.js',
+	'src/test/webapp/jasmine/spec/eventTest.js',
+	'src/test/webapp/jasmine/spec/serializableTest.js',
+	'src/test/webapp/jasmine/spec/monstersTest.js',
+	'src/test/webapp/jasmine/spec/partyTest.js'
 ];
 
 
