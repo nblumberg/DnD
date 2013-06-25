@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>D&amp;D</title>
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-lightness/jquery-ui.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="jquery.gameMap.css" type="text/css" media="all" />
+
+        <script id="jquery" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script id="jquery-ui" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+        <script id="jquery-gameMap" type="text/javascript" src="jquery.gameMap.js"></script>
+        <script type="text/javascript">
+        function loadTileset() {
+            var select, tileSet, src, img, currentTile, boxes, h, w, r, rows, c, columns, box, x, y, position;
+            select = jQuery(this)[ 0 ];
+            tileSet = jQuery(select.options[ select.selectedIndex ]).data("tileSet");
+            src = "images/tiles/" + tileSet.img;
+            img = jQuery("div#tiles img");
+            img.attr("src", src);
+            currentTile = jQuery("div#currentTile");
+            currentTile.css("background-image", "url('" + src + "')");
+            boxes = jQuery("div#tiles div");
+            boxes.html("");
+            h = tileSet.height;
+            w = tileSet.width;
+            rows = Math.ceil(img.height() / h);
+            columns = Math.ceil(img.width() / w);
+            for (r = 0; r < rows; r++) {
+                for (c = 0; c < columns; c++) {
+                    box = jQuery("<div></div>");
+                    box.attr("id", "tile_" + r + "_" + c);
+                    box.attr("title", "tile_" + r + "_" + c);
+                    x = c * w + "px";
+                    y = r * h + "px";
+                    position = { top: y, left: x, "background-position": "-" + x + " -" + y };
+                    box.data(position);
+                    box.css(position);
+                    box.click(function() {
+                        jQuery("div#currentTile").css(jQuery(this).data());
+                    });
+                    box.appendTo(boxes);
+                }
+            }
+        }
+        
+        jQuery(document).ready(function() {
+//            jQuery("#overlayContent").dialog({
+//                height: window.innerHeight - Math.floor(window.innerHeight / 10) 
+//            });
+//            return;
+            var tileSets, mapData, select, i, tileSet, option;
+            tileSets = [
+                {
+                    name: "floors",
+                    img: "floors.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Floor"
+                },
+                {
+                    name: "cave_floors",
+                    img: "tileset_cave_1.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Floor"
+                },
+                {
+                    name: "marsh_floors",
+                    img: "grass_and_water.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Floor"
+                },
+                {
+                    name: "nature_floors",
+                    img: "iso-64x64-outside.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Floor"
+                },
+                {
+                    name: "canyon_floors",
+                    img: "grassland_tiles.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Floor"
+                },
+                {
+                    name: "barricade_floor_decor",
+                    img: "barricade_tiles.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Floor_Decor"
+                },
+                {
+                    name: "building_walls",
+                    img: "iso-64x64-building_2.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Walls"
+                },
+                {
+                    name: "medieval_building_walls",
+                    img: "medieval_building_tiles.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Walls"
+                },
+                {
+                    name: "Terrain",
+                    img: "terrain_0.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Floor"
+                },
+                {
+                    name: "graveyard_fence",
+                    img: "fence.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Walls"
+                },
+                {
+                    name: "dungeon_walls",
+                    img: "iso_dungeon_walls_by_pfunked.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Walls"
+                },
+                {
+                    name: "teleportation_circle",
+                    img: "teleport_512.png", 
+                    tileWidth: 64,
+                    tileHeight: 64,
+                    tileBaseline: 32,
+                    layer: "Floor_Decor"
+                }
+            ];
+            mapData = [
+                [ {"tile":"grass_3","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""} ],
+                [ {"tile":"grass_6","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""} ],
+                [ {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_3","object":""} ],
+                [ {"tile":"grass_6","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_0","object":""} ],
+                [ {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""} ],
+                [ {"tile":"grass_3","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_6","object":""} ],
+                [ {"tile":"grass_2","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_7","object":""} ],
+                [ {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_6","object":""} ],
+                [ {"tile":"grass_3","object":"npc_0"}, {"tile":"grass_0","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_3","object":"npc_3"}, {"tile":"grass_4","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""} ],
+                [ {"tile":"grass_5","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""} ],
+                [ {"tile":"grass_7","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_5","object":""} ],
+                [ {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_6","object":""} ],
+                [ {"tile":"grass_0","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_4","object":""} ],
+                [ {"tile":"grass_5","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_0","object":"npc_1"}, {"tile":"grass_1","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_4","object":""} ],
+                [ {"tile":"grass_7","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_0","object":"npc_1"}, {"tile":"grass_4","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_4","object":""} ],
+                [ {"tile":"grass_3","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_1","object":""} ],
+                [ {"tile":"grass_1","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_3","object":""} ],
+                [ {"tile":"grass_1","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""} ],
+                [ {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_0","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_5","object":""} ],
+                [ {"tile":"grass_4","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_4","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_2","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_3","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_7","object":""}, {"tile":"grass_5","object":""}, {"tile":"grass_6","object":""}, {"tile":"grass_1","object":""}, {"tile":"grass_3","object":""} ]
+            ];
+            jQuery('div#map').gameMap({ 
+                map: mapData,
+                mapsize: 20,
+                xpos: 12, 
+                ypos: 9, 
+                tilesize: 64 
+            });
+            
+            select = jQuery("select#set")[0];
+            jQuery("select#set").change(loadTileset);
+            for (i = 0; i < tileSets.length; i++) {
+                tileSet = tileSets[ i ];
+                option = jQuery("<option>" + tileSet.name + "</option>")
+                option.attr("value", tileSet.img);
+                option.data("tileSet", tileSet);
+                select.add(option[0], null);
+            }
+            loadTileset.call(jQuery("select#set"));
+            
+            jQuery("div#tiles").css("height", (jQuery("div#map").height() - jQuery("div#header").height()) + "px");
+        });
+        </script>
+    </head>
+    <body>
+        <div id="palette">
+            <div id="header">
+                <div id="currentTile"></div>
+                <select id="set">
+                </select>
+            </div>
+            <div id="tiles">
+                <img />
+                <div></div>
+            </div>
+        </div>
+        <div id="map"></div>
+        <!-- 
+        
+        <iframe style="height:100%;width:800px;" src="https://www.google.com/"></iframe>
+        <div id="overlayContent" title="Dialog">
+            <div style="height:100%;">
+                <iframe style="height:100%;width:800px;" src="https://www.google.com/"></iframe>
+            </div>
+        </div>
+         -->
+    </body>
+</html>

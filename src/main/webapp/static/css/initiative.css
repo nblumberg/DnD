@@ -1,0 +1,107 @@
+body {
+	font-family: "Trebuchet MS", "Helvetica", "Arial", "Verdana", "sans-serif";
+	font-size: 62.5%; 
+}
+
+th, td { border-color: white; }
+    
+.alignTop { vertical-align: top; }
+.bordered { border-style: solid; border-width: 3px; }
+.bloodied { background-color: red; }
+.centered { text-align: center; }
+.centered img { display: block; margin-left: auto; margin-right: auto; }
+.current { border-color: lime; border-width: 6px; }
+.f1 { font-size: 1.5em; }
+.f2 { font-size: 1.2em; }
+.floatLeft { float: left; }
+.gridItem { display: inline-block; font-size: 24px; vertical-align: top; } 
+.fullHeight { height: 100%; }
+.fullWidth { clear: both; width: 100%; }
+.halfWidth { max-width: 50%; width: 50%; }
+.fullBoth { height: 100%; width: 100%; }
+.nowrap { white-space: nowrap; }
+.numerator:after { content: '/' }
+/* .grab { cursor: url(https://mail.google.com/mail/images/2/openhand.cur) 8 8, move; }
+.grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
+.droppable { border-color: green; border-width: 6px; } */
+.action { cursor: pointer; display: block; margin-bottom: 5px; }
+div.order { color: red; font-weight: bold; font-size: 30px; }
+input.order { margin-right: 10px; width: 30px; }
+
+div#header { background-color: black; position: fixed; width: 100%; z-index: 5; }
+span#spanLabel { font-size: 1.2em; }
+input#round { width: 30px; }
+
+#pageLayout {
+}
+
+#roundLabel {
+	font-size: 9pt;
+}
+
+#initiative img.icon {
+	height: 30px;
+}
+
+#history {}
+#history > tr > td, #history > tbody > tr > td { vertical-align: top; }
+#history div { text-align: center; }
+#freeFormHistory { text-align: center; }
+.round .time { padding-left: 5px; }
+.round .edit textarea { height: 150px; }
+
+#display .creaturePanel {  }
+.creaturePanel { margin:2px; position: relative; }
+#initiative .creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
+.creaturePanel .column { float: left; margin-right: 4px; }
+.creaturePanel .images, .creaturePanel .name { position: relative; }
+.creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
+.creaturePanel div.condition, .creaturePanel div.damage { color: #FFFFFF; overflow: hidden; position: relative; text-align: center; vertical-align: middle; }
+.creaturePanel div.condition, .creaturePanel div.damage img { position: absolute; }
+.creaturePanel div.damage img { left: -15px; position: absolute; top: -50px; }
+.creaturePanel div.condition { background-color: #FFFFFF; float: left; margin-right: 2px; position: relative; }
+.creaturePanel .damage, .creaturePanel .damage .types, .creaturePanel .damage .types .type { position: relative; }
+.creaturePanel .damage { /* background-clip: border-box; background-image: url('../images/symbols/pow.png'); background-position: auto auto; background-repeat: no-repeat; background-size: contain; */ display: table; height: 100%; overflow: hidden; width: 100% }
+.creaturePanel .damage .centered { display: table-cell; vertical-align: middle; }
+.creaturePanel .damage .types { height: 75%; display: block; }
+.creaturePanel div.condition span, .creaturePanel div.damage span { bottom: 0; font-size: 1.3em; font-weight: bold; left: 0; margin: auto; position: absolute; right: 0; text-shadow: 3px 3px black; top: 0; vertical-align: middle; }
+.creaturePanel .name .hp { padding-left: 1em; white-space: nowrap; }
+
+.layout {
+	padding-top: 40px;
+}
+
+
+.modal-header {
+	border: 1px solid #0b3e6f;
+	background: #0b3e6f url(images/ui-bg_diagonals-thick_15_0b3e6f_40x40.png) 50% 50% repeat;
+	color: #f6f6f6;
+	font-weight: bold;	
+}
+.modal-body {
+	background-color: #222222;
+}
+.modal-footer {
+	background-color: #999999;
+}
+
+div#history { min-width: 30%; padding: 0 5px; }
+div#history h3 { margin: 5px 0; }
+//  table#initiative { border-collapse: collapse; }
+table#initiative th, table#initiative td { text-align: center; } 
+table#initiative td.hp { padding: 3px; text-align: left; }
+table#initiative td.actions img { display: block; margin: 5px auto; }
+table#initiative .tempHp { font-style: italic; }
+div#attacksDialog { padding: 5px; }
+div#attacksDialog table { color: black; width: 98%; }
+div#attacksDialog td { vertical-align: top; }
+div#attacksDialog td.attacks2targets { padding-top: 30%; }
+div#attacksDialog td.attacks2targets img { display: block; }
+div#attacksDialog td { height: 100%; }
+div#attacksDialog td select { display: block; width: 100%; }
+div#attacksDialog td.playerAttack input { max-width: 50%; }
+div#attacksDialog td.playerAttack select { display: inline; width: auto; }
+table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
+
+#imageDialog #images { max-width: 250px; }
+#imageDialog #images img { margin: 0 3px 3px 0; }

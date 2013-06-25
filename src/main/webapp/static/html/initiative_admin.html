@@ -1,0 +1,105 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+		<title>Initiative</title>
+		<script src="../js/lib/jquery.min.js"type="text/javascript"></script>
+		<script src="../js/lib/jquery-ui.js"type="text/javascript"></script>
+        <link rel="stylesheet" href="/css/jquery-ui/dot-luv/jquery-ui-1.10.3.custom.min.css" type="text/css" />
+        
+        <script src="../js/lib/bootstrap.min.js"type="text/javascript"></script>
+        <link rel="stylesheet" href="/css/bootstrap/css/bootstrap.min.css" type="text/css" />
+        
+        <link rel="stylesheet" href="../css/initiative.css" type="text/css" />
+        <script src="../js/data.js"type="text/javascript"></script>
+        <script src="../js/party.js"type="text/javascript"></script>
+        <script src="../js/monsters.js"type="text/javascript"></script>
+        <script src="../js/js.js"type="text/javascript"></script>
+		<script src="../js/serializable.js"type="text/javascript"></script>
+		<script src="../js/event.js"type="text/javascript"></script>
+		<script src="../js/editor.js"type="text/javascript"></script>
+		<script src="../js/actions.js"type="text/javascript"></script>
+		<script src="../js/history.js"type="text/javascript"></script>
+        <script src="../js/actorRow.js"type="text/javascript"></script>
+		<script src="../js/creature.js"type="text/javascript"></script>
+        <script src="../js/creatureDialog.js"type="text/javascript"></script>
+        <script src="../js/imageDialog.js"type="text/javascript"></script>
+        <script src="../js/initiativeDialog.js"type="text/javascript"></script>
+        <script src="../js/attackDialog.js"type="text/javascript"></script>
+        <script src="../js/healDialog.js"type="text/javascript"></script>
+		<script src="../js/initiative.js"type="text/javascript"></script>
+		<script src="../js/admin.js"type="text/javascript"></script>
+		<style>
+			body { background-color:black; color: white; }
+		</style>
+	</head>
+	<body>
+    <div id="display" class="fullWidth"></div>
+    <div id="header" class="fullWidth">
+        <span class="btn-group">
+            <button id="previous" class="btn">Previous</button>
+            <button id="next" class="btn">Next</button>
+            <button id="open" class="btn">Open player window</button>
+            <button id="creatures" class="btn" data-toggle="modal" data-target="#creaturesDialog">Creatures</button>
+            <button id="imageButton" class="btn" data-toggle="modal" data-target="#imageDialog">Image</button>
+            <span class="btn-group">
+                <a id="fileButton" class="btn dropdown-toggle" data-toggle="dropdown" href="#">File <span class="caret"></span></a>
+                <ul id="fileMenu" class="dropdown-menu">
+                    <li id="load" class="dropdown-submenu">
+                        <a href="javascript:void(0);">Load</a>
+                        <ul class="dropdown-menu">
+                            <li id="file">
+                                <a href="javascript:void(0);">from file: <input type="file" id="fileInput"></a>
+                            </li>
+                            <li id="initiative">
+                                <a id="loadInitiative" href="javascript:void(0);">Initiative</a>
+                            </li>
+                            <li id="monsters">
+                                <a id="loadMonsters" href="javascript:void(0);">Monsters</a>
+                            </li>
+                            <li id="party">
+                                <a id="loadParty" href="javascript:void(0);">Party</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="import">
+                        <a id="import" href="javascript:void(0);">Import</a>
+                    </li>
+                    <li id="export">
+                        <a id="export" href="javascript:void(0);">Export</a>
+                    </li>
+                    <li id="clear" class="dropdown-submenu">
+                        <a href="javascript:void(0);">Clear</a>
+                        <ul class="dropdown-menu">
+                            <li id="clearAll">
+                                <a href="javascript:void(0);">all</a>
+                            </li>
+                            <li id="clearCreatures">
+                                <a href="javascript:void(0);">creatures</a>
+                            </li>
+                            <li id="clearMonsters">
+                                <a href="javascript:void(0);">monsters</a>
+                            </li>
+                            <li id="clearHistory">
+                                <a href="javascript:void(0);">history</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </span>
+        </span>
+    </div>
+    <div class="layout row-fluid">
+        <div id="tableContainer" class="span6"></div>
+        <div class="span6 bordered alignTop">
+            <div class="bordered f1">History</div>
+            
+            <div id="history"></div>
+            
+            <div id="freeFormHistory">
+                <select id="freeFormHistorySubject"></select>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

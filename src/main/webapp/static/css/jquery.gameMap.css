@@ -1,0 +1,91 @@
+html, body { margin:0px; padding:0px; color:#333333; }
+
+div#palette, div#map {
+    border:4px solid #CCCCCC;
+}
+    
+div#palette {
+    float:left;
+    width:660px;
+    overflow:auto;
+}
+
+div#palette div#header {
+    border-bottom:4px solid #CCCCCC;
+    height:64px;
+}
+
+div#palette select {
+    margin:20px;
+}
+    
+div#palette div#currentTile {
+    float:right;
+    height:64px;
+    width:64px;
+    border:2px solid #CCCCCC;
+}
+
+div#palette div#tiles {
+    position:relative;
+    clear:both;
+}
+    
+div#palette div#tiles div {
+    position:absolute;
+    top:0;
+    left:0;
+    width:64px;
+    height:64px;
+}
+
+div#palette div#tiles div div:hover {
+    border:1px solid #0000FF;
+}
+
+div#map {
+    height:100%;
+    /*width:100%;*/
+	margin:0px auto;
+	background-color:#000000;
+	z-index:0;
+	overflow: auto;
+	position:relative;
+}
+
+div#map2 {
+	width: 800px;
+	height:250px;
+	border:5px solid #990000;
+	margin:10px auto;
+	overflow: hidden;
+}
+
+div.content {
+	position: relative;
+	overflow: hidden;
+}
+
+div.content div.tile {
+	width:64px;
+	position: absolute;
+	height:64px;
+	line-height:64px;
+	background-image:url("images/tiles/grass_and_water.png");
+}
+
+div.content div.active, 
+div.content div.tile:hover { opacity:0.8; -moz-opacity:0.8; -webkit-opacity:0.8; -khtml-opacity:0.8; }
+
+.grass_0 { background-position:0px 0px; }
+.grass_1 { background-position:64px 0px;  }
+.grass_2 { background-position:128px 0px; }
+.grass_3 { background-position:192px 0px;  }
+.grass_4 { background-position:0px 58px;  }
+.grass_5 { background-position:64px 58px;  }
+.grass_6 { background-position:128px 58px; }
+.grass_7 { background-position:192px 58px; }
+
+div#map div#content div.tile div.object {}
+
+.npc_0 { background:transparent url('temple.png') top left no-repeat; position:relative;width:256px; height:128px;left:-128px;bottom:96px; }
