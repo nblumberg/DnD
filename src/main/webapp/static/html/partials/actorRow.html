@@ -1,14 +1,24 @@
 <td class="centered">
-    <img height="30" title="Move up initiative order" src="../images/symbols/up.png" class="action up"/>
-    <div style="height: 30px; width: 30px;" title="Set initiative order" class="action order">#</div>
-    <img height="30" title="Move down initiative order" src="../images/symbols/down.png" class="action down"/>
+    <div class="btn-group btn-group-vertical">
+        <button type="button" class="btn btn-inverse action up" title="Move up initiative order">
+            <i class="icon-arrow-up icon-white"></i>
+            <!-- <img src="../images/symbols/up.png" height="30" style="height: 30px;"/> -->
+        </button>
+        <button type="button" class="btn btn-inverse action order" title="Set initiative order">
+            <i class="icon-list icon-white"></i>
+        </button>
+        <button type="button" class="btn btn-inverse action down" title="Move down initiative order">
+            <i class="icon-arrow-down icon-white"></i>
+            <!-- <img src="../images/symbols/down.png" height="30" style="height: 30px;"/> -->
+        </button>
+    </div>
 </td>
 <td class="centered">
     <div class="card grab" data-template-include="actorCard.html" draggable="true" />
 </td>
 <td class="defenses">
     <div class="nowrap ac" title="AC">
-        <img height="20" class="icon" src="../images/symbols/ac.png"/>
+        <img class="icon" src="../images/symbols/ac.png" height="20" style="height: 20px;"/>
         <span class="editor"></span>
     </div>
     <div class="nowrap fort" title="FORT">
@@ -26,7 +36,7 @@
 </td>
 <td class="hp">
     <div class="temp nowrap">
-        <img height="20" class="icon" title="HP" src="../images/symbols/temp_hp.png"/>
+        <img height="20" class="icon" title="Temporary HP" src="../images/symbols/temp_hp.png"/>
         <span class="editor"></span>
     </div>
     <div class="nowrap">
@@ -41,7 +51,9 @@
     <div class="nowrap">
         <img height="20" class="icon" title="Healing Surges" src="../images/symbols/surge.png"/>
         <span>
-            <span class="surgesRemaining numerator"></span>
+            <span class="surgesCurrent">
+                <span class="editor numerator"></span>
+            </span>
         </span>
         <span class="surgesPerDay">
             <span class="editor"></span>
@@ -49,10 +61,20 @@
     </div>
 </td>
 <td class="actions">
-    <img height="30" title="Attack" src="../images/symbols/attack.png" class="action attack"/>
-    <img height="30" title="Heal" src="../images/symbols/heal.png" class="action heal"/>
-    <img height="30" title="Exit" src="../images/symbols/exit.jpg" class="action exit"/>
-    <img height="30" title="Rename" src="../images/symbols/rename.png" class="action rename"/>
+    <div class="btn-group btn-group-vertical">
+        <button type="button" class="btn btn-inverse action attack" title="Attack">
+            <img src="../images/symbols/attack.png" height="30" style="height: 30px;"/>
+        </button>
+        <button type="button" class="btn btn-inverse action heal" title="Heal">
+            <img src="../images/symbols/heal.png" height="30" style="height: 30px;"/>
+        </button>
+        <button type="button" class="btn btn-inverse action exit" title="Exit">
+            <img src="../images/symbols/exit.jpg" height="30" style="height: 30px;"/>
+        </button>
+        <button type="button" class="btn btn-inverse action rename" title="Rename">
+            <img src="../images/symbols/rename.png" width="30" style="width: 30px;"/>
+        </button>
+    </div>
 </td>
 <td class="history">
     <div data-template-include="history.html"/>

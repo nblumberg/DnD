@@ -28,15 +28,17 @@ var DnD;
 	};
 
 	ActorRow.prototype._init = function(responseText, textStatus, jqXHR) {
-		var $td, image, $div;
-		
-		
 		this.$up = this.$tr.find(".action.up").on({ click: this.params.order.up });
 		this.$order = this.$tr.find(".action.order").on({ click: this.params.order.set });
 		this.$down = this.$tr.find(".action.down").on({ click: this.params.order.down });
 		
-		this.$card = this.$tr.find(".card");
-		// TODO: create card instance
+		this.card = new DnD.Display.ActorCard({
+			actor: this.actor,
+			$parent: this.$tr.find(".card"),
+			isCurrent: this.params.isCurrent,
+			cardSize: 150,
+			showPcHp: this.params.showPcHp
+		});
 		
 //		this.card = this.actor.createCard({ $parent: $td, isCurrent: params.isCurrent, cardSize: 120 });
 //		this.card.$panel.attr("draggable", "true").addClass("grab").on({ 
@@ -66,23 +68,23 @@ var DnD;
 		this.ref = this._addDefense(this.$tr.find(".ref > span"), "ref");
 		this.will = this._addDefense(this.$tr.find(".will > span"), "will");
 		
-		this.tempHp = new Editor({ $parent: this.$tr.find(".tempHp"), tagName: "span", html: this.actor.hp.temp, onchange: (function(v) {
+		this.tempHp = new Editor({ $parent: this.$tr.find(".hp .temp .editor"), tagName: "span", html: this.actor.hp.temp, onchange: (function(v) {
 			this.actor.hp.temp = parseInt(v);
 			this.actor.dispatchEvent("change");
 		}).bind(this) });
-		this.hpCurrent = new Editor({ $parent: this.$tr.find(".currentHp"), tagName: "span", html: this.actor.hp.current, onchange: (function(v) {
+		this.hpCurrent = new Editor({ $parent: this.$tr.find(".hp .current .editor"), tagName: "span", html: this.actor.hp.current, onchange: (function(v) {
 			this.actor.hp.current = parseInt(v);
 			this.actor.dispatchEvent("change");
 		}).bind(this) });
-		this.hpTotal = new Editor({ $parent: this.$tr.find(".totalHp"), tagName: "span", html: this.actor.hp.total, onchange: (function(v) {
+		this.hpTotal = new Editor({ $parent: this.$tr.find(".hp .total .editor"), tagName: "span", html: this.actor.hp.total, onchange: (function(v) {
 			this.actor.hp.current = parseInt(v);
 			this.actor.dispatchEvent("change");
 		}).bind(this) });
-		this.surgesRemaining = new Editor({ $parent: this.$tr.find(".surgesRemaining"), tagName: "span", html: this.actor.surges.remaining, onchange: (function(v) {
-			this.actor.surges.remaining = parseInt(v);
+		this.surgesCurrent = new Editor({ $parent: this.$tr.find(".hp .surgesCurrent .editor"), tagName: "span", html: this.actor.surges.current, onchange: (function(v) {
+			this.actor.surges.current = parseInt(v);
 			this.actor.dispatchEvent("change");
 		}).bind(this) });
-		this.surgesTotal = new Editor({ $parent: this.$tr.find(".surgesPerDay"), tagName: "span", html: this.actor.surges.perDay, onchange: (function(v) {
+		this.surgesPerDay = new Editor({ $parent: this.$tr.find(".hp .surgesPerDay .editor"), tagName: "span", html: this.actor.surges.perDay, onchange: (function(v) {
 			this.actor.surges.perDay = parseInt(v);
 			this.actor.dispatchEvent("change");
 		}).bind(this) });
