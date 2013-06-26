@@ -13,7 +13,7 @@ var DnD;
 		};
 		
 		jQuery(document).ready((function() {
-		    this.$dialog = jQuery("#creaturesDialog").on("show", this.show.bind(this));
+		    this.$dialog = jQuery("#creaturesDialog").on("show", this._onshow.bind(this));
 		    this.$creatures = this.$dialog.find("select#creatureSelect");
 		    this.$selection = this.$dialog.find("select#creatureSelected");
 		    this.$add = this.$dialog.find(".add").on({ click: this._add.bind(this) });
@@ -80,14 +80,18 @@ var DnD;
 	        jQuery("<option/>").html("------------").appendTo(this.$creatures).on({ click: function() { this.selected = false; } });
 	    }
 	    for (i = 0; i < npcs.length; i++) {
-	        jQuery("<option/>").html(npcs[ i ].name).data("creature", npcs[ i ]).appendTo($creatures);
+	        jQuery("<option/>").html(npcs[ i ].name).data("creature", npcs[ i ]).appendTo(this.$creatures);
 	    }
 	};	
 	
-	CreatureDialog.prototype.show = function() {
-		this._populate();
-	};
+    CreatureDialog.prototype.show = function() {
+        this.$dialog.modal("show");
+    };
 
+    CreatureDialog.prototype._onshow = function() {
+        this._populate();
+    };
+    
 	
 	if (!DnD) {
 		DnD = {};

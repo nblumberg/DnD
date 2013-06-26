@@ -14,7 +14,7 @@ var DnD;
 		};
 		
 		jQuery(document).ready((function() {
-		    this.$dialog = jQuery("#healDialog").on("show", this.show.bind(this));
+		    this.$dialog = jQuery("#healDialog").on("show", this._onshow.bind(this));
 			this.$body = this.$dialog.find(".modal-body");
 	        this.$healingDescription = this.$dialog.find("#healingDescription");
 	        this.$isTempHp = this.$dialog.find("#isTempHp");
@@ -74,11 +74,15 @@ var DnD;
 		}
 		this.patient = params.patient;
 		this.healingSurgeValue = params.healingSurgeValue || Math.floor(this.patient.hp.total / 4);
-		this.$healingAmount.val(this.healingSurgeValue);
-		this.$healingExtra.val(0);
 		// TODO: recenter dialog
 		this.$dialog.modal("show");
 	};
+	
+    HealDialog.prototype._onshow = function() {
+        this.$healingAmount.val(this.healingSurgeValue);
+        this.$healingExtra.val(0);
+    };
+    
 	
 	
 	if (!DnD) {

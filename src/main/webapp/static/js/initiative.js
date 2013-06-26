@@ -203,7 +203,6 @@ Initiative.prototype._addActor = function(params, actors) {
         this._addHistory(actor, "Joins the fight");
     }
     actor.addEventListener("change", this._render.bind(this, true));
-    actor.addEventListener("reorder", this._changeInitiative.bind(this));
     actor.addEventListener("takeDamage", this._displayDamage.bind(this));
     return actor;
 };
@@ -301,7 +300,7 @@ Initiative.prototype._create = function() {
 		$tmp.initiativeDialog = jQuery("<div/>");
 		$tmp.initiativeDialog.load("/html/partials/initiativeDialog.html", null, (function() {
 			$tmp.initiativeDialog.children().appendTo(this.$parent);
-			this.initiativeDialog = new DnD.Dialog.Initiative({ actors: this.actors, order: this.order });
+			this.initiativeDialog = new DnD.Dialog.Initiative({ actors: this.actors, order: this.order, onchange: this._changeInitiative.bind(this) });
 	        dialogsReady();
 		}).bind(this));
 	}
@@ -369,7 +368,9 @@ Initiative.prototype._createActorTable = function(responseText, textStatus, jqXH
 			isCurrent: i === this._current,
 			order: {
 				up: this._reorder.bind(this, actor, -1),
-				set: this.initiativeDialog.show(),
+				set: (function() { 
+				    this.initiativeDialog.show(this.actors, this.order);
+				}).bind(this),
 				down: this._reorder.bind(this, actor, 1)
 			},
 			attack: this.attackDialog.show.bind(this.attackDialog, { attacker: actor, actors: this.actors }),
@@ -425,10 +426,12 @@ Initiative.prototype._render = function(updateDisplay) {
 			$table: this.$table,
 			isCurrent: i === this._current,
 			order: {
-				up: this._reorder.bind(this, actor, -1),
-				set: this.initiativeDialog.show(),
-				down: this._reorder.bind(this, actor, 1)
-			},
+                up: this._reorder.bind(this, actor, -1),
+                set: (function() { 
+                    this.initiativeDialog.show(this.actors, this.order);
+                }).bind(this),
+                down: this._reorder.bind(this, actor, 1)
+            },
 			attack: this.attackDialog.show.bind(this.attackDialog, { attacker: actor, actors: this.actors }),
 			heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
 			exit: this._exit.bind(this, actor),
@@ -687,29 +690,27 @@ Initiative.prototype._next = function() {
     this._messageDisplay({ type: "changeTurn", current: this._current, actors: this.rawArray(actors) }, false);
 };
 
-Initiative.prototype._changeInitiative = function(event) {
-    var getIndex, moveIndex, moveOrder, beforeIndex, beforeOrder, test, i;
-    move = event.move;
-    before = event.before;
-    getIndex = (function(actor) {
-        var i, j;
-        for (i = 0; i < this.actors.length; i++) {
-            if (this.actors[ i ] === actor) {
-                return i;
-            }
+Initiative.prototype._getActor = function(id) {
+    var i;
+    for (i = 0; i < this.actors.length; i++) {
+        if (this.actors[ i ].id === id) {
+            return this.actors[ i ];
         }
-        return -1;
-    }).bind(this);
-    moveIndex = getIndex(event.move);
-    moveOrder = this.order.indexOf(moveIndex);
-    this.order.splice(moveOrder, 1);
-    beforeIndex = getIndex(event.before);
-    beforeOrder = this.order.indexOf(beforeIndex);
-    this.order.splice(beforeOrder, 0, moveIndex);
-    this._addHistory(move, "Moved initiative order to before " + before.name);
+    }
+    return null;
+};
+
+
+Initiative.prototype._changeInitiative = function(order) {
+    var test, i, actor;
+    
     test = "[ ";
+    this.order = order;
+    this.$table.children().remove();
     for (i = 0; i < this.order.length; i++) {
-    	test += (i ? ", " : "") + Creature.actors[ this.order[ i ] ].name;
+        actor = this._getActor(this.order[ i ]);
+        actor.tr.$tr.appendTo(this.$table);
+        test += (i ? ", " : "") + actor.name;
     }
 	try { window.console.info("New order: " + test + " ]"); } catch(e) {}
     this._render(true);
@@ -717,14 +718,15 @@ Initiative.prototype._changeInitiative = function(event) {
 
 
 Initiative.prototype._reorder = function(actor, delta) {
-	var index, other, test, i;
+	var index, length, other, test, i;
 	index = this.order.indexOf(actor.id);
+	length = this.order.length;
 	this.order.splice(index, 1);
-	if (index + delta < 0 || index + delta === this.order.length - 1) {
+	if (index + delta < 0 || index + delta === length - 1) {
 		this.order.push(actor.id);
 	    this._addHistory(actor, "Moved down to the bottom of the initiative order");
 	}
-	else if (index + delta >= this.order.length) {
+	else if (index + delta >= length) {
 		this.order.unshift(actor.id);
 	    this._addHistory(actor, "Moved up to the top of the initiative order");
 	}

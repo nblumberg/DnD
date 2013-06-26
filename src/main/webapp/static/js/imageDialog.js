@@ -12,7 +12,7 @@ var DnD;
 	    };
 		
 		jQuery(document).ready((function() {
-		    this.$dialog = jQuery("#imageDialog").on("show", this.show.bind(this));
+		    this.$dialog = jQuery("#imageDialog").on("show", this._onshow.bind(this));
 		    // Setup the drag-and-drop listeners
 		    this.$dialog[0].addEventListener("dragover", this._dragOver.bind(this), false);
 		    this.$dialog[0].addEventListener("drop", this._drop.bind(this), false);
@@ -83,7 +83,11 @@ var DnD;
 	    }
 	};
 	
-	ImageDialog.prototype.show = function() {
+    ImageDialog.prototype.show = function() {
+        this.$dialog.modal("show");
+    };
+
+	ImageDialog.prototype._onshow = function() {
 	};
 
 	
