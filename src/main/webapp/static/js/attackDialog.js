@@ -2,7 +2,6 @@ var DnD;
 
 (function() {
 	function AttackDialog(params) {
-		this.attacker = params.attacker;
 	    this.$dialog = null;
 		this.$body = null;
         this.$weapons = null;
@@ -15,43 +14,107 @@ var DnD;
 		this.buttons = {
 				$attack: null
 		};
+		this.callback = params.callback;
+		this.attacker = params.attacker;
+		this.attack = null;
+		this.targets = [];
 		
 		jQuery(document).ready((function() {
 		    this.$dialog = jQuery("#attacksDialog").on("show", this.show.bind(this));
 			this.$body = this.$dialog.find(".modal-body");
 	        this.$weapons = this.$dialog.find("#weaponSelect");
-	        this.$attacks = this.$dialog.find("#attackSelect").on({ change: this._selectAttack.bind(this) });
-	        this.$combatAdvantage = this.$dialog.find("#combatAdvantage").data("combatAdvantage", false).on({ click: this._combatAdvantage.bind(this) });
-	        this.$targets = this.$dialog.find("#targetSelect").dblclick(this._resolveAttack.bind(this));
-	        this.$playerAttackRoll = this.$dialog.find("#playerAttackRoll");
-	        this.$playerAttackCrit = this.$dialog.find("#playerAttackCrit");
+	        this.$attacks = this.$dialog.find("#attackSelect").on({ change: this._attackChange.bind(this) });
+	        this.$combatAdvantage = this.$dialog.find("#combatAdvantage").data("combatAdvantage", false).on({ click: this._combatAdvantageChange.bind(this) });
+	        this.$targets = this.$dialog.find("#targetSelect").on({ dblclick: this._resolveAttack.bind(this), change: this._targetsChange.bind(this) });
+	        this.$playerAttackRoll = this.$dialog.find("#playerAttackRoll").on({ change: this._playerAttackChange.bind(this), keyup: this._playerAttackChange.bind(this) });
+	        this.$playerAttackCrit = this.$dialog.find("#playerAttackCrit").on({ change: this._playerAttackChange.bind(this) });
 	        this.$playerDamageRoll = this.$dialog.find("#playerDamageRoll");
 			this.buttons.$attack = this.$dialog.find(".attackBtn").on({ click: this._resolveAttack.bind(this) });
 		}).bind(this));
 	}
+	
+	// Public methods
+	AttackDialog.prototype.show = function(params) {
+		var i, attack, target;
+		if (!params || !params.attacker || !params.actors) {
+			try { window.console.warn("AttackDialog.show() invoked without sufficien parameters"); } finally {}
+			return;
+		}
 
-	AttackDialog.prototype._combatAdvantage = function() {
-        var combatAdvantage = this.src.indexOf("/images/symbols/attack.png") !== -1;
-        this.src = combatAdvantage ? "/images/symbols/combat_advantage.png" : "/images/symbols/attack.png";
-        jQuery(this).data("combatAdvantage", combatAdvantage);
+		this.attacker = params.attacker;
+		this.$weapons.children().remove();
+        this.$attacks.children().remove();
+        for (i = 0; i < this.attacker.attacks.length; i++) {
+        	attack = this.attacker.attacks[ i ];
+        	jQuery("<option/>").html(attack.name).data("attack", attack).appendTo(this.$attacks);
+        }
+    	this.$attacks.attr("size", Math.min(Math.max(this.attacker.attacks.length, 2), 10));
+        this.$combatAdvantage.data("combatAdvantage", !!params.combatAdvantage);
+        this.$targets.children().remove();
+        for (i = 0; i < params.actors.length; i++) {
+        	target = params.actors[ i ];
+        	if (target.id === this.attacker.id) {
+        		continue;
+        	}
+        	jQuery("<option/>").html(target.name).data("target", target).appendTo(this.$targets);
+        }
+        this.$playerAttackRoll.val("");
+        this.$playerAttackCrit.val("");
+        this.$playerDamageRoll.val("");
+		this._attackChange();
+		
+		this.$dialog.modal("show");
+	};
+
+	
+	// Private methods
+	AttackDialog.prototype._resolveAttack = function() {
+		var item, i, targets, combatAdvantage, playerRolls, result;
+		if (!this.$dialog.data("init")) {
+			return;
+		}
+		
+		if (this.attack && this.targets.length) {
+			this.$dialog.dialog("close");
+			if (this.attack.keywords && (this.attack.keywords.indexOf("weapon") !== -1 || this.attack.keywords.indexOf("implement") !== -1)) {
+			    item = jQuery(this.$weapons[0].options[ this.$weapons[0].selectedIndex ]).data("item");
+			}
+			targets = [];
+			for (i = 0; i < this.$targets[0].options.length; i++) {
+				if (this.$targets[0].options[ i ].selected) {
+					targets.push(jQuery(this.$targets[0].options[ i ]).data("target"));
+				}
+			}
+			combatAdvantage = this.$combatAdvantage.data("combatAdvantage");
+			if (this.$playerAttackRoll.val() || this.$playerAttackCrit.val() || this.$playerDamageRoll.val()) {
+				playerRolls = { attack: { roll: parseInt(this.$playerAttackRoll.val()), isCritical: this.$playerAttackCrit.val() === "crit", isFumble: this.$playerAttackCrit.val() === "fail" }, damage: parseInt(this.$playerDamageRoll.val()) };
+			}
+			result = this.attacker.attack(this.attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
+			this.callback({ type: "takeDamage", attacker: this.attacker.id, attack: this.attack.name, hits: result.hits, misses: result.misses });
+		} 
+		else {
+			alert("Please select both an attack and 1 or more valid target(s)");
+		}
 	};
 	
-	AttackDialog.prototype._selectAttack = function() {
-	    var attack, actor, needsWeapon, needsImplement, items, isMelee, isRanged, i, $option;
+
+	// Data binding methods
+	AttackDialog.prototype._attackChange = function() {
+	    var needsWeapon, needsImplement, items, isMelee, isRanged, i, $option;
 	    if (this.$attacks[0].selectedIndex === -1) {
+	    	this.attack = null;
 	        this.$weapons.hide();
 	        return;
 	    }
-	    attack = jQuery(this.$attacks[0].options[ this.$attacks[0].selectedIndex ]).data("attack");
-	    actor = this.attacker;
-	    if (attack.keywords) {
-	        needsWeapon = attack.keywords.indexOf("weapon") !== -1;
-	        isMelee = needsWeapon && attack.keywords.indexOf("melee") !== -1;
-	        isRanged = needsWeapon && attack.keywords.indexOf("ranged") !== -1;
-	        needsImplement = attack.keywords.indexOf("implement") !== -1;
-	        items = needsWeapon ? actor.weapons: null;
+	    this.attack = jQuery(this.$attacks[0].options[ this.$attacks[0].selectedIndex ]).data("attack");
+	    if (this.attack.keywords) {
+	        needsWeapon = this.attack.keywords.indexOf("weapon") !== -1;
+	        isMelee = needsWeapon && this.attack.keywords.indexOf("melee") !== -1;
+	        isRanged = needsWeapon && this.attack.keywords.indexOf("ranged") !== -1;
+	        needsImplement = this.attack.keywords.indexOf("implement") !== -1;
+	        items = needsWeapon ? this.attacker.weapons: null;
 	        if (!items && needsImplement) {
-	            items = actor[ "implements" ];
+	            items = this.attacker[ "implements" ];
 	        }
 	    }
 	    if (needsWeapon || needsImplement) {
@@ -65,7 +128,6 @@ var DnD;
 	            $option = jQuery("<option/>").html(items[ i ].name).data("item", items[ i ]);
 	            this.$weapons.append($option);
 	        }
-//	        this.$weapons.attr("size", items.length);
 	        this.$weapons.show();
 	    }
 	    else {
@@ -73,44 +135,57 @@ var DnD;
 	    }
 	};
 	
-	AttackDialog.prototype._resolveAttack = function() {
-		var attacker, attack, item, i, targets, combatAdvantage, playerRolls, result;
-		if (!this.$dialog.data("init")) {
-			return;
-		}
-		
-		if (this.$attacks.val() && this.$targets.val()) {
-			this.$dialog.dialog("close");
-			attacker = this.attacker;
-			attack = jQuery(this.$attacks[0].options[ this.$attacks[0].selectedIndex ]).data("attack");
-			if (attack.keywords && (attack.keywords.indexOf("weapon") !== -1 || attack.keywords.indexOf("implement") !== -1)) {
-			    item = jQuery(this.$weapons[0].options[ this.$weapons[0].selectedIndex ]).data("item");
-			}
-			targets = [];
-			for (i = 0; i < this.$targets[0].options.length; i++) {
-				if (this.$targets[0].options[ i ].selected) {
-					targets.push(jQuery(this.$targets[0].options[ i ]).data("target"));
-				}
-			}
-			combatAdvantage = this.$combatAdvantage.data("combatAdvantage");
-			if (this.$playerAttackRoll.val() || this.$playerAttackCrit.val() || this.$playerDamageRoll.val()) {
-				playerRolls = { attack: { roll: parseInt(this.$playerAttackRoll.val()), isCritical: this.$playerAttackCrit.val() === "crit", isFumble: this.$playerAttackCrit.val() === "fail" }, damage: parseInt(this.$playerDamageRoll.val()) };
-			}
-			result = attacker.attack(attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
-			this._render(false);
-			this._messageDisplay({ type: "takeDamage", attacker: attacker.id, attack: attack.name, hits: result.hits, misses: result.misses }, false);
-		} 
-		else {
-			alert("Please select both an attack and 1 or more valid target(s)");
-		}
+	AttackDialog.prototype._combatAdvantageChange = function() {
+        var combatAdvantage = this.src.indexOf("/images/symbols/attack.png") !== -1;
+        this.src = combatAdvantage ? "/images/symbols/combat_advantage.png" : "/images/symbols/attack.png";
+        jQuery(this).data("combatAdvantage", combatAdvantage);
 	};
 	
-	AttackDialog.prototype.show = function(params) {
-		if (!params || !params.attacker) {
-			return;
+	AttackDialog.prototype._targetsChange = function() {
+		var i;
+		this.targets = [];
+		for (i = 0; i < this.$targets[0].options.length; i++) {
+			if (this.$targets[0].options[ i ].selected) {
+				this.targets.push(jQuery(this.$targets[0].options[ i ]).data("target"));
+			}
 		}
-		this._populate(attacker, order);
-		this.$dialog.modal("show");
+		return this.targets;
+	};
+
+	AttackDialog.prototype._playerAttackChange = function() {
+		var $controlGroup, toHit, i, hit, miss;
+		$controlGroup = this.$playerAttackRoll.parent();
+		$controlGroup.removeClass("error");
+		$controlGroup.removeClass("success");
+		$controlGroup.removeClass("warning");
+		if (this.$playerAttackCrit.val() === "crit") {
+			$controlGroup.addClass("success");
+		}
+		else if (this.$playerAttackCrit.val() === "fail") {
+			$controlGroup.addClass("error");
+		}
+		else if (this.attack && this.targets.length) {
+			toHit = parseInt(this.$playerAttackRoll.val());
+			hit = false;
+			miss = false;
+			for (i = 0; i < this.targets.length; i++) {
+				if (toHit >= this.targets[ i ].defenses[ this.attack.defense.toLowerCase() ]) {
+					hit = true;
+				}
+				else {
+					miss = true;
+				}
+			}
+			if (hit && miss) {
+				$controlGroup.addClass("warning");
+			}
+			else if (hit) {
+				$controlGroup.addClass("success");
+			}
+			else {
+				$controlGroup.addClass("error");
+			}
+		}
 	};
 	
 	

@@ -25,15 +25,6 @@ th, td { border-color: white; }
 .numerator:after { content: '/' }
 .action { cursor: pointer; display: block; }
 
-/* initiativeDialog */
-.sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-.sortable li { margin: 0 3px 3px 3px; padding: 0.4em; font-size: 1.4em; height: 2.0em; line-height: 2.0em; }
-.sortable li * { margin: 0 0.5em; line-height: 100%; }
-.sortable li input { height: 100%; max-width: 50px; }
-.grab { cursor: url(https://mail.google.com/mail/images/2/openhand.cur) 8 8, move; }
-.grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
-.droppable { border-color: green; border-width: 6px; }
-
 div#header { background-color: black; position: fixed; width: 100%; z-index: 5; }
 span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
@@ -98,16 +89,32 @@ table#initiative th, table#initiative td { text-align: center; }
 table#initiative td.hp { padding: 3px; text-align: left; }
 table#initiative td.actions img { display: block; margin: 5px auto; }
 table#initiative .tempHp { font-style: italic; }
-div#attacksDialog { padding: 5px; }
-div#attacksDialog table { color: black; width: 98%; }
-div#attacksDialog td { vertical-align: top; }
-div#attacksDialog td.attacks2targets { padding-top: 30%; }
-div#attacksDialog td.attacks2targets img { display: block; }
-div#attacksDialog td { height: 100%; }
-div#attacksDialog td select { display: block; width: 100%; }
-div#attacksDialog td.playerAttack input { max-width: 50%; }
-div#attacksDialog td.playerAttack select { display: inline; width: auto; }
 table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
 
+
+/* attacksDialog */
+#attacksDialog .column1, #attacksDialog .column2, #attacksDialog .column3 { display: table-cell; height: 100%; position: relative; }
+#attacksDialog .column1, #attacksDialog .column3 { padding-bottom: 50px; vertical-align: top; width: 40%; }
+#attacksDialog .column2 { width: 15%; }
+#attacksDialog .column2 img { margin: 0 auto; }
+#attacksDialog .column2 div { text-align: center; width: 100%; }
+#attacksDialog input.number { height: 30px; line-height: 20px; }
+#attacksDialog .attacks2targets { margin-top: 100%; }
+#attacksDialog .attacks2targets img { display: block; }
+#attacksDialog .playerAttack * { max-width: 50%; width: auto; }
+#attacksDialog .playerRolls { height: 30px; position: absolute; bottom: 0; }
+#attacksDialog .control-group input { border-width: 3px; }
+
+/* imageDialog */
 #imageDialog #images { max-width: 250px; }
 #imageDialog #images img { margin: 0 3px 3px 0; }
+
+/* initiativeDialog */
+.sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+.sortable li { margin: 0 3px 3px 3px; padding: 0.4em; font-size: 1.4em; height: 2.0em; line-height: 2.0em; }
+.sortable li * { margin: 0 0.5em; line-height: 100%; }
+.sortable li input { height: 100%; max-width: 50px; }
+.grab { cursor: url(https://mail.google.com/mail/images/2/openhand.cur) 8 8, move; }
+.grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
+.droppable { border-color: green; border-width: 6px; }
+

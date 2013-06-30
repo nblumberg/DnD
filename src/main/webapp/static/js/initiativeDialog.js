@@ -51,6 +51,7 @@ var DnD;
     };
 
     InitiativeDialog.prototype._setData = function(actors, order, rolls) {
+    	var i;
         if (actors && actors.length) {
             this.actors = actors;
         }

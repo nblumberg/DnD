@@ -309,7 +309,10 @@ Initiative.prototype._create = function() {
 		$tmp.attackDialog = jQuery("<div/>");
 		$tmp.attackDialog.load("/html/partials/attackDialog.html", null, (function() {
 			$tmp.attackDialog.children().appendTo(this.$parent);
-			this.attackDialog = new DnD.Dialog.Attack({});
+			this.attackDialog = new DnD.Dialog.Attack({ callback: (function(attack) {
+				this._render(false);
+				this._messageDisplay(attack, false);
+			}).bind(this) });
 	        dialogsReady();
 		}).bind(this));
 	}
@@ -373,7 +376,9 @@ Initiative.prototype._createActorTable = function(responseText, textStatus, jqXH
 				}).bind(this),
 				down: this._reorder.bind(this, actor, 1)
 			},
-			attack: this.attackDialog.show.bind(this.attackDialog, { attacker: actor, actors: this.actors }),
+			attack: (function(a) {
+				this.attackDialog.show({ attacker: a, actors: this.actors });
+			}).bind(this, actor),
 			heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
 			exit: this._exit.bind(this, actor),
 			rename: this._rename.bind(this, actor)
@@ -752,75 +757,6 @@ Initiative.prototype._getActor = function(id) {
         }
     }
     return null;
-};
-
-Initiative.prototype._attack = function(actor, event) {
-	var $option, i, a;
-	this.attackDialog.attacker = actor;
-	
-	this.$weapons.html("").hide();
-	
-	if (this.$combatAdvantage.data("combatAdvantage")) {
-	    this.$combatAdvantage.click();
-	}
-	this.$attacks.html("");
-	for (i = 0; i < actor.attacks.length; i++) {
-		$option = jQuery("<option/>").html(actor.attacks[ i ].name).data("attack", actor.attacks[ i ]);
-		this.$attacks.append($option);
-	}
-	this.$attacks.attr("size", Math.max(actor.attacks.length, 2));
-	
-	this._selectAttack();
-	
-	this.$targets.html("");
-	for (i = 0; i < this.order.length; i++) {
-		a = this._getActor(this.order[ i ]);
-		if (a.id === actor.id) {
-			continue;
-		}
-		$option = jQuery("<option/>").html(a.name).data("target", a);
-		this.$targets.append($option);
-	}
-	this.$targets.attr("size", Math.max(this.order.length, 2));
-	this.$attackDialog.dialog("option", "position", [ "center", event.screenY - 300 ]);
-	this.$attackDialog.dialog("open");
-};
-
-Initiative.prototype._selectAttack = function() {
-    var attack, actor, needsWeapon, needsImplement, items, isMelee, isRanged, i, item;
-    if (this.$attacks[0].selectedIndex === -1) {
-        this.$weapons.hide();
-        return;
-    }
-    attack = jQuery(this.$attacks[0].options[ this.$attacks[0].selectedIndex ]).data("attack");
-    actor = this.$attackDialog.data("attacker");
-    if (attack.keywords) {
-        needsWeapon = attack.keywords.indexOf("weapon") !== -1;
-        isMelee = needsWeapon && attack.keywords.indexOf("melee") !== -1;
-        isRanged = needsWeapon && attack.keywords.indexOf("ranged") !== -1;
-        needsImplement = attack.keywords.indexOf("implement") !== -1;
-        items = needsWeapon ? actor.weapons: null;
-        if (!items && needsImplement) {
-            items = actor[ "implements" ];
-        }
-    }
-    if (needsWeapon || needsImplement) {
-        this.$weapons.html("");
-        for (i = 0; items && i < items.length; i++) {
-        	if (needsWeapon && (isMelee || isRanged)) {
-                if (!!items[ i ].isMelee !== !!isMelee || !items[ i ].isMelee !== !!isRanged) {
-                    continue;
-                }
-        	}
-            $option = jQuery("<option/>").html(items[ i ].name).data("item", items[ i ]);
-            this.$weapons.append($option);
-        }
-//        this.$weapons.attr("size", items.length);
-        this.$weapons.show();
-    }
-    else {
-        this.$weapons.hide();
-    }
 };
 
 Initiative.prototype._exit = function(actor, event) {
