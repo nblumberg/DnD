@@ -18,13 +18,17 @@ var DnD;
 		this.attacker = params.attacker;
 		this.attack = null;
 		this.targets = [];
+		this.combatAdvantage = false;
 		
 		jQuery(document).ready((function() {
 		    this.$dialog = jQuery("#attacksDialog").on("show", this.show.bind(this));
 			this.$body = this.$dialog.find(".modal-body");
 	        this.$weapons = this.$dialog.find("#weaponSelect");
 	        this.$attacks = this.$dialog.find("#attackSelect").on({ change: this._attackChange.bind(this) });
-	        this.$combatAdvantage = this.$dialog.find("#combatAdvantage").data("combatAdvantage", false).on({ click: this._combatAdvantageChange.bind(this) });
+	        this.$combatAdvantage = this.$dialog.find("#combatAdvantage").data("combatAdvantage", false).on({ click: (function() { 
+	        	this.combatAdvantage = !this.combatAdvantage;
+	        	this._combatAdvantageChange();
+	        }).bind(this) });
 	        this.$targets = this.$dialog.find("#targetSelect").on({ dblclick: this._resolveAttack.bind(this), change: this._targetsChange.bind(this) });
 	        this.$playerAttackRoll = this.$dialog.find("#playerAttackRoll").on({ change: this._playerAttackChange.bind(this), keyup: this._playerAttackChange.bind(this) });
 	        this.$playerAttackCrit = this.$dialog.find("#playerAttackCrit").on({ change: this._playerAttackChange.bind(this) });
@@ -49,7 +53,8 @@ var DnD;
         	jQuery("<option/>").html(attack.name).data("attack", attack).appendTo(this.$attacks);
         }
     	this.$attacks.attr("size", Math.min(Math.max(this.attacker.attacks.length, 2), 10));
-        this.$combatAdvantage.data("combatAdvantage", !!params.combatAdvantage);
+    	this.combatAdvantage = !!params.combatAdvantage;
+        this._combatAdvantageChange();
         this.$targets.children().remove();
         for (i = 0; i < params.actors.length; i++) {
         	target = params.actors[ i ];
@@ -69,27 +74,16 @@ var DnD;
 	
 	// Private methods
 	AttackDialog.prototype._resolveAttack = function() {
-		var item, i, targets, combatAdvantage, playerRolls, result;
-		if (!this.$dialog.data("init")) {
-			return;
-		}
-		
+		var item, playerRolls, result;
 		if (this.attack && this.targets.length) {
-			this.$dialog.dialog("close");
+			this.$dialog.modal("hide");
 			if (this.attack.keywords && (this.attack.keywords.indexOf("weapon") !== -1 || this.attack.keywords.indexOf("implement") !== -1)) {
 			    item = jQuery(this.$weapons[0].options[ this.$weapons[0].selectedIndex ]).data("item");
 			}
-			targets = [];
-			for (i = 0; i < this.$targets[0].options.length; i++) {
-				if (this.$targets[0].options[ i ].selected) {
-					targets.push(jQuery(this.$targets[0].options[ i ]).data("target"));
-				}
-			}
-			combatAdvantage = this.$combatAdvantage.data("combatAdvantage");
 			if (this.$playerAttackRoll.val() || this.$playerAttackCrit.val() || this.$playerDamageRoll.val()) {
 				playerRolls = { attack: { roll: parseInt(this.$playerAttackRoll.val()), isCritical: this.$playerAttackCrit.val() === "crit", isFumble: this.$playerAttackCrit.val() === "fail" }, damage: parseInt(this.$playerDamageRoll.val()) };
 			}
-			result = this.attacker.attack(this.attack, item, targets, combatAdvantage, this.round, this._addHistory.bind(this), playerRolls);
+			result = this.attacker.attack(this.attack, item, this.targets, this.combatAdvantage, playerRolls);
 			this.callback({ type: "takeDamage", attacker: this.attacker.id, attack: this.attack.name, hits: result.hits, misses: result.misses });
 		} 
 		else {
@@ -136,9 +130,7 @@ var DnD;
 	};
 	
 	AttackDialog.prototype._combatAdvantageChange = function() {
-        var combatAdvantage = this.src.indexOf("/images/symbols/attack.png") !== -1;
-        this.src = combatAdvantage ? "/images/symbols/combat_advantage.png" : "/images/symbols/attack.png";
-        jQuery(this).data("combatAdvantage", combatAdvantage);
+        this.$combatAdvantage.attr("src", this.combatAdvantage ? "/images/symbols/combat_advantage.png" : "/images/symbols/attack.png").data("combatAdvantage", this.combatAdvantage);
 	};
 	
 	AttackDialog.prototype._targetsChange = function() {

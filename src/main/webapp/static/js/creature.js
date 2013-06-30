@@ -408,14 +408,14 @@ Actor.prototype.addCondition = function(effect) {
     }
 };
 
-Actor.prototype.attack = function(attack, item, targets, combatAdvantage, round, callback, manualRolls) {
+Actor.prototype.attack = function(attack, item, targets, combatAdvantage, manualRolls) {
     var toHit, damage, i, result, hits, misses;
     hits = [];
     misses = [];
     toHit = this._attackToHit(attack, item, combatAdvantage, manualRolls);
     damage = this._attackDamage(attack, item, toHit.isCrit, manualRolls);
     for (i = 0; i < targets.length; i++) {
-        result = this._attackTarget(attack, item, combatAdvantage, targets[ i ], toHit, damage, round, callback);
+        result = this._attackTarget(attack, item, combatAdvantage, targets[ i ], toHit, damage);
     	result.target = targets[ i ].raw();
         if (result.hit) {
         	hits.push(result);
@@ -547,8 +547,8 @@ Actor.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
     return damage;
 };
 
-Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage, round, callback) {
-	var attackBonuses, i, toHitTarget, targetDamage, tmp, targetDefense, msg, result;
+Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage) {
+	var attackBonuses, i, toHitTarget, targetDamage, tmp, targetDefense, msg, result, entry;
 	
 	result = { hit: false, damage: [] };
 
@@ -648,9 +648,13 @@ Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, 
     		}
         }
     }
-    if (callback) {
-        callback(target, msg);
-    }
+    
+	// Record in target and central Histories
+	entry = new History.Entry({ subject: target, message: msg });
+	target.history.add(entry);
+	History.central.add(entry);
+	try { window.console.info(target.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1)); } finally {}
+
     return result;
 };
 
