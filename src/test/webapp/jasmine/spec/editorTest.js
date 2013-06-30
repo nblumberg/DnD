@@ -204,4 +204,10 @@ describe("editor.js", function() {
 		
 	});
 
+	describe("when setValue() is invoked", function() {
+		it("it should set the inner HTML of the $html member", function() {
+			editor.setValue("testValue");
+			expect(editor.$html.html()).toEqual("testValue");
+		});
+	});
 });

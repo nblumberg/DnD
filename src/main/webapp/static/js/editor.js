@@ -18,6 +18,10 @@ var Editor = function(params) {
 	this.$html = jQuery("<" + this._tagName + "/>").addClass(this._className).appendTo(this.$parent).html(this._html).data("this", this).on({ dblclick: this._edit.bind(this), click: this._edit.bind(this) });
 };
 
+Editor.prototype.setValue = function(value) {
+	this.$html.html(value);
+};
+
 Editor.prototype._edit = function(event) {
 	var entry, $span, $input, $save, $delete, i, $ancestor;
 	event.stopPropagation();

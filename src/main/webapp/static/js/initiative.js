@@ -175,15 +175,15 @@ Initiative.prototype._addActor = function(params, actors) {
 	var count, actor;
 	// in case "-------" or "        " was selected in the Creature dialog or we've encountered junk data
 	if (!params) {
-	    try { window.console.warn("Skipping adding undefined actor"); } catch(e) {}
+	    try { window.console.warn("Skipping adding undefined actor"); } finally {}
 	    return;
 	}
 	else if (!params.name) {
-	    try { window.console.warn("Skipping adding invalid actor (missing name)"); } catch(e) {}
+	    try { window.console.warn("Skipping adding invalid actor (missing name)"); } finally {}
 	    return;
 	}
 	else if (!params.image) {
-	    try { window.console.warn("Skipping adding invalid actor (missing image)"); } catch(e) {}
+	    try { window.console.warn("Skipping adding invalid actor (missing image)"); } finally {}
 	    return;
 	}
     if (!this.actors) {
@@ -216,13 +216,13 @@ Initiative.prototype._randomInitiative = function() {
 		this.order.push({ id: actor.id, roll: (new Roll("1d20" + (actor.init < 0 ? "-" : "+") + actor.init)).roll() });
 	}
 	this.order.sort((function(a, b) {
-		return b.roll !== a.roll ? b.roll - a.roll : Creature.actors[ b.id ].init - Creature.actors[ a.id ].init;
+		return b.roll !== a.roll ? b.roll - a.roll : this._getActor(b.id).init - this._getActor(a.id).init;
 	}).bind(this));
 	for (i = 0; i < this.order.length; i++) {
 		this.order[ i ] = this.order[ i ].id;
 	}
 	if (this.order.length) {
-		Creature.actors[ this.order[ 0 ] ].startTurn();
+		this._getActor(this.order[ 0 ]).startTurn();
 	}
 };
 
@@ -362,7 +362,7 @@ Initiative.prototype._createActorTable = function(responseText, textStatus, jqXH
 	}
 	
 	for (i = 0; i < this.order.length; i++) {
-		actor = Creature.actors[ this.order[ i ] ];
+		actor = this._getActor(this.order[ i ]);
 		if (!actor) {
 			continue;
 		}
@@ -415,33 +415,35 @@ Initiative.prototype._render = function(updateDisplay) {
 	    this.$round.val(this.round);
 	}
     
-	if (this.$table) {
-		this.$table.children().remove();
-	}
 	if (this.$display) {
 		this.$display.children().remove();
 	}
 	
 	for (i = 0; i < this.order.length; i++) {
-		actor = Creature.actors[ this.order[ i ] ];
+		actor = this._getActor(this.order[ i ]);
 		if (!actor) {
 			continue;
 		}
-		actor.createTr({ 
-			$table: this.$table,
-			isCurrent: i === this._current,
-			order: {
-                up: this._reorder.bind(this, actor, -1),
-                set: (function() { 
-                    this.initiativeDialog.show(this.actors, this.order);
-                }).bind(this),
-                down: this._reorder.bind(this, actor, 1)
-            },
-			attack: this.attackDialog.show.bind(this.attackDialog, { attacker: actor, actors: this.actors }),
-			heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
-			exit: this._exit.bind(this, actor),
-			rename: this._rename.bind(this, actor)
-		});
+		if (!actor.tr) {
+			actor.createTr({ 
+				$table: this.$table,
+				isCurrent: i === this._current,
+				order: {
+	                up: this._reorder.bind(this, actor, -1),
+	                set: (function() { 
+	                    this.initiativeDialog.show(this.actors, this.order);
+	                }).bind(this),
+	                down: this._reorder.bind(this, actor, 1)
+	            },
+				attack: this.attackDialog.show.bind(this.attackDialog, { attacker: actor, actors: this.actors }),
+				heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
+				exit: this._exit.bind(this, actor),
+				rename: this._rename.bind(this, actor)
+			});
+		}
+		else {
+			actor.tr.render();
+		}
 	}
 	if (updateDisplay) {
 		this._renderDisplay(false);
@@ -450,7 +452,7 @@ Initiative.prototype._render = function(updateDisplay) {
 };
 
 Initiative.prototype._displayLoadHandler = function(event) {
-	try { window.console.info("Display loaded"); } catch(e) {}
+	try { window.console.info("Display loaded"); } finally {}
     this._renderDisplay(); 
 };
 
@@ -548,7 +550,7 @@ Initiative.prototype._import = function() {
                                   this._init(JSON.parse($textarea.val()));
                               }
                               catch (e) {
-                            	  try { window.console.error(e.toString()); } catch(e) {}
+                            	  try { window.console.error(e.toString()); } finally {}
                               }
                           }).bind(this) 
                       }
@@ -639,7 +641,7 @@ Initiative.prototype._addHistory = function(actor, message, method) {
 		message = actor.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
 	}
 	this.history.add(entry);
-	try { window.console[ method ](message); } catch(e) {}
+	try { window.console[ method ](message); } finally {}
     this._autoSave();
 };
 
@@ -654,7 +656,7 @@ Initiative.prototype._previous = function() {
         this.actors[ i ].history._round = this.round;
     }
     this.history._round = this.round;
-    actor = Creature.actors[ this.order[ this._current ] ];
+    actor = this._getActor(this.order[ this._current ]);
     msg = "Moved back in initiative order to " + actor.name + "'s turn";
     if (msg) {
         this._addHistory(null, msg);
@@ -666,7 +668,7 @@ Initiative.prototype._previous = function() {
 Initiative.prototype._next = function() {
     var msg, i, actors, actor;
     actors = [];
-    actor = Creature.actors[ this.order[ this._current ] ];
+    actor = this._getActor(this.order[ this._current ]);
     actors.push(actor);
     msg = actor.endTurn();
     if (msg) {
@@ -681,7 +683,7 @@ Initiative.prototype._next = function() {
         this.actors[ i ].history._round = this.round;
     }
     this.history._round = this.round;
-    actor = Creature.actors[ this.order[ this._current ] ];
+    actor = this._getActor(this.order[ this._current ]);
     actors.push(actor);
     msg = actor.startTurn();
     if (msg) {
@@ -717,7 +719,7 @@ Initiative.prototype._changeInitiative = function(order) {
         actor.tr.$tr.appendTo(this.$table);
         test += (i ? ", " : "") + actor.name;
     }
-	try { window.console.info("New order: " + test + " ]"); } catch(e) {}
+	try { window.console.info("New order: " + test + " ]"); } finally {}
     this._render(true);
 };
 
@@ -736,15 +738,15 @@ Initiative.prototype._reorder = function(actor, delta) {
 	    this._addHistory(actor, "Moved up to the top of the initiative order");
 	}
 	else {
-		other = Creature.actors[ this.order[ index + delta ] ];
+		other = this._getActor(this.order[ index + delta ]);
 		this.order.splice(index + delta, 0, actor.id);
 	    this._addHistory(actor, "Moved " + (delta > 0 ? "down" : "up") + " initiative order to before " + other.name);
 	}
     test = "[ ";
     for (i = 0; i < this.order.length; i++) {
-    	test += (i ? ", " : "") + Creature.actors[ this.order[ i ] ].name;
+    	test += (i ? ", " : "") + this._getActor(this.order[ i ]).name;
     }
-	try { window.console.info("New order: " + test + " ]"); } catch(e) {}
+	try { window.console.info("New order: " + test + " ]"); } finally {}
     this._render(true);
 };
 

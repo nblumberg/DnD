@@ -17,6 +17,16 @@ var DnD;
 		this.params = params || {};
 		
 		this.actor = params.actor;
+		this.ac = null;
+		this.fort = null;
+		this.ref = null;
+		this.will = null;
+		this.tempHp = null;
+		this.hpCurrent = null;
+		this.hpTotal = null;
+		this.surgesCurrent = null;
+		this.surgesPerDay = null;
+		
 		this.$tr = jQuery("<tr/>").attr("id", this.actor.name + "_row").data("actor", this.actor).appendTo(params.$table);
 		if (params.isCurrent) {
 			this.$tr.addClass("current");
@@ -27,6 +37,23 @@ var DnD;
 		this.$tr.load("/html/partials/actorRow.html", null, this._init.bind(this));
 	};
 
+	// Public methods
+	
+	ActorRow.prototype.render = function() {
+		this.ac.setValue(this.actor.defenses.ac)
+		this.fort.setValue(this.actor.defenses.fort)
+		this.ref.setValue(this.actor.defenses.ref);
+		this.will.setValue(this.actor.defenses.ac)
+		this.tempHp.setValue(this.actor.hp.temp)
+		this.hpCurrent.setValue(this.actor.hp.current);
+		this.hpTotal.setValue(this.actor.hp.total);
+		this.surgesCurrent.setValue(this.actor.surges.current);
+		this.surgesPerDay.setValue(this.actor.surges.perDay);
+		this.card.refresh();
+	};
+	
+	// Private methods
+	
 	ActorRow.prototype._init = function(responseText, textStatus, jqXHR) {
 		this.$up = this.$tr.find(".action.up").on({ click: this.params.order.up });
 		this.$order = this.$tr.find(".action.order").on({ click: this.params.order.set });

@@ -26,41 +26,8 @@ var DnD;
 		this.$panel.load("/html/partials/actorCard.html", null, this._init.bind(this));
 	};
 	
-	ActorCard.prototype._init = function(responseText, textStatus, jqXHR) {
-		this.makeCurrent(this.params.isCurrent);
-		if (this.actor.isBloodied()) {
-			this.$panel.addClass("bloodied");
-		}
-		
-		this.subPanel.$images = this.$panel.find(".images");
-		
-		this.subPanel.$portrait = this.$panel.find(".portrait");
-		this.subPanel.$portrait.height(this.cardSize * 100/120).attr("src", this.actor.image);
-		this.showPcHp = this.params.showPcHp;
-		this.subPanel.$name = this.$panel.find(".f2 .name");
-		this.subPanel.$hp = this.$panel.find(".f2 .hp");
-		this._renderName();
-		
-	    this.subPanel.$effects = this.$panel.find(".effects");
-	    this.updateConditions();
-		
-	    this.damageIndicator = new ActorCard.DamageIndicator({ actor: this.actor, card: this, $parent: this.subPanel.$effects });
-	};
-
-	ActorCard.prototype._renderName = function() {
-		this.subPanel.$name.html(this.actor.name);
-		if (this.showPcHp && this.actor.isPC) {
-			this.subPanel.$hp.html(this.actor.hp.current + (this.actor.hp.temp ? " (" + (this.actor.hp.temp + this.actor.hp.current) + ")" : "") + " / " + this.actor.hp.total);
-		}
-		else {
-			this.subPanel.$hp.html("");
-		}
-//	    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
-//	        this.name = v;
-//	        this.dispatchEvent("change");
-//	    }).bind(this) });
-	};
-
+	// Public methods
+	
 	ActorCard.CARD_SIZE = 240;
 
 	/**
@@ -112,6 +79,43 @@ var DnD;
 	    for (i = 0; this.actor.effects && i < this.actor.effects.length; i++) {
 	    	this._renderCondition(this.actor.effects[ i ], total);
 	    }
+	};
+
+	// Private methods
+	
+	ActorCard.prototype._init = function(responseText, textStatus, jqXHR) {
+		this.makeCurrent(this.params.isCurrent);
+		if (this.actor.isBloodied()) {
+			this.$panel.addClass("bloodied");
+		}
+		
+		this.subPanel.$images = this.$panel.find(".images");
+		
+		this.subPanel.$portrait = this.$panel.find(".portrait");
+		this.subPanel.$portrait.height(this.cardSize * 100/120).attr("src", this.actor.image);
+		this.showPcHp = this.params.showPcHp;
+		this.subPanel.$name = this.$panel.find(".f2 .name");
+		this.subPanel.$hp = this.$panel.find(".f2 .hp");
+		this._renderName();
+		
+	    this.subPanel.$effects = this.$panel.find(".effects");
+	    this.updateConditions();
+		
+	    this.damageIndicator = new ActorCard.DamageIndicator({ actor: this.actor, card: this, $parent: this.subPanel.$effects });
+	};
+
+	ActorCard.prototype._renderName = function() {
+		this.subPanel.$name.html(this.actor.name);
+		if (this.showPcHp && this.actor.isPC) {
+			this.subPanel.$hp.html(this.actor.hp.current + (this.actor.hp.temp ? " (" + (this.actor.hp.temp + this.actor.hp.current) + ")" : "") + " / " + this.actor.hp.total);
+		}
+		else {
+			this.subPanel.$hp.html("");
+		}
+//	    editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
+//	        this.name = v;
+//	        this.dispatchEvent("change");
+//	    }).bind(this) });
 	};
 
 	/**
