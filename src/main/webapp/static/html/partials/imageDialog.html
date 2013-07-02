@@ -4,23 +4,19 @@
         <h3>Image</h3>
     </div>
     <div class="modal-body">
-        <table>
-            <tr>
-                <td id="imageFileDropZone" style="color: white;">Drop files here or</td>
-                <td id="fullSizeContainer" rowspan="3">
-                    <img class="fullSize" style="display: none;" />
-                </td>
-            </tr>
-            <tr>
-                <td id="imageFileInputContainer">
-                    <input id="imageFileInput" type="file" multiple="multiple" />
-                </td>
-            </tr>
-            <tr>
-                <td class="images"></td>
-            </tr>
-        </table>
-
+        <div class="leftPanel">
+            <h2 id="imageFileDropZone" style="color: white;">Drop files here or</h2>
+            <div id="imageFileInputContainer">
+                <input id="imageFileInput" type="file" multiple="multiple" />
+            </div>
+            <div id="imageUrlInputContainer">
+                or enter an image URL <input id="imageUrlInput" type="url" /> <button id="imageUrlButton" class="btn">Fetch</button>
+            </div>
+            <div class="images"></div>
+        </div>
+        <div class="rightPanel">
+            <img class="fullSize" />
+        </div>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn hideBtn">Hide</a> 

@@ -64,6 +64,17 @@ input#round { width: 30px; }
 }
 
 
+div#history { min-width: 30%; padding: 0 5px; }
+div#history h3 { margin: 5px 0; }
+//  table#initiative { border-collapse: collapse; }
+table#initiative th, table#initiative td { text-align: center; } 
+table#initiative td.hp { padding: 3px; text-align: left; }
+table#initiative td.actions img { display: block; margin: 5px auto; }
+table#initiative .tempHp { font-style: italic; }
+table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
+
+
+/* Dialogs */
 .modal-header {
 	border: 1px solid #0b3e6f;
 	background: #0b3e6f url(images/ui-bg_diagonals-thick_15_0b3e6f_40x40.png) 50% 50% repeat;
@@ -76,15 +87,6 @@ input#round { width: 30px; }
 .modal-footer {
 	background-color: #999999;
 }
-
-div#history { min-width: 30%; padding: 0 5px; }
-div#history h3 { margin: 5px 0; }
-//  table#initiative { border-collapse: collapse; }
-table#initiative th, table#initiative td { text-align: center; } 
-table#initiative td.hp { padding: 3px; text-align: left; }
-table#initiative td.actions img { display: block; margin: 5px auto; }
-table#initiative .tempHp { font-style: italic; }
-table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
 
 
 /* attacksDialog */
@@ -101,8 +103,15 @@ table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow
 #attacksDialog .control-group input { border-width: 3px; }
 
 /* imageDialog */
-#imageDialog #images { max-width: 250px; }
-#imageDialog #images img { margin: 0 3px 3px 0; }
+#imageDialog { bottom: 2%; left: 2%; margin: 0; right: 2%; top: 2%; width: auto; }
+#imageDialog .modal-body { bottom: 60px; display: table-row; left: 0; max-height: 100%; position: absolute; right: 0; top: 50px; }
+#imageDialog .leftPanel, #imageDialog .rightPanel { bottom: 0; position: absolute; vertical-align: top; top: 0; }
+#imageDialog .leftPanel { left: 0; width: 329px; }
+#imageDialog .rightPanel { left: 329px; right: 0; }
+#imageDialog .fullSize { display: none; max-height: 100%; max-width: 100%; }
+#imageDialog .images {}
+#imageDialog .images .thmbnl { height: 40px; margin: 0 3px 3px 0; }
+#imageDialog .modal-footer { bottom: 0; left: 0; position: absolute; right: 0; }
 
 /* initiativeDialog */
 .sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
