@@ -221,12 +221,26 @@ function loadMonsters() {
             defenses: { ac: 24, fort: 25, ref: 23, will: 23 },
             init: 10, speed: { walk: 4, fly: 4 },
             abilities: { STR: 19, CON: 22, DEX: 19, INT: 7, WIS: 15, CHA: 18 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 8, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 8, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Burning Shard", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "fire" }, keywords: [ "melee", "basic", "fire" ] },
                       { name: "Flame Shatter", usage: { frequency: "Encounter" }, target: { range: 2, area: "close burst" }, toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true }], keywords: [ "close burst", "fire" ] },
                       { name: "Flame Burst", usage: { frequency: "At-Will" }, target: { range: 20, size: 2, area: "burst" }, toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "fire" }, keywords: [ "close burst", "fire" ] },
                       { name: "Heat Wave (aura)", usage: { frequency: "At-Will", action: "Immediate Reaction" }, target: { range: 2, area: "close burst" }, toHit: "automatic", defense: "AC", damage: { amount: "5", type: "fire" }, keywords: [ "close burst", "fire", "aura" ] }
+              ]
+        },
+        "Flesh Golem": { 
+            name: "Flesh Golem", level: 12, image: "../images/portraits/flesh_golem.jpg", // http://www.wizards.com/dnd/images/eo_fleshgolem_med.jpg
+            hp: { total: 304 },
+            defenses: { ac: 26, fort: 29, ref: 21, will: 22 },
+            init: 4, speed: { walk: 6 },
+            actionPoints: 1,
+            abilities: { STR: 20, CON: 22, DEX: 7, INT: 3, WIS: 8, CHA: 3 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 5, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Slam", usage: { frequency: "At-Will" }, range: "reach", toHit: 16, defense: "AC", damage: "2d8+5", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "melee", "basic" ] },
+                      { name: "Berserker Attack", usage: { frequency: "At-Will", action: "Immediate Reaction" }, range: "reach", toHit: 16, defense: "AC", damage: "2d8+5", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "melee" ] },
+                      { name: "Golem Rampage", usage: { frequency: "Recharge", recharge: 5 }, range: "reach", toHit: 16, defense: "AC", damage: "2d8+5", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "melee" ] }
               ]
         },
         "Flux Slaad": { 
@@ -253,13 +267,37 @@ function loadMonsters() {
                       { name: "Distortion Blast", usage: { frequency: "Daily" }, range: "blast 5", toHit: 12, defense: "Fort", damage: "2d8+6", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
+        "Githyanki Mindslicer": { 
+            name: "Githyanki Mindslicer", level: 12, image: "../images/portraits/githyanki_mindslicer.jpg", // http://cdn.obsidianportal.com/images/121677/githyanki_2_2.jpg
+            hp: { total: 98 },
+            defenses: { ac: 27, fort: 24, ref: 25, will: 24 },
+            init: 11, speed: { walk: 6, jump: 5 },
+            abilities: { STR: 14, CON: 14, DEX: 16, INT: 17, WIS: 12, CHA: 11 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 11, insight: 12, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Silver Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: { amount: "2d8+2", type: "psychic" }, keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Mindslice", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 16, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, keywords: [ "ranged", "psychic" ] },
+                      { name: "Psychic Barrage", usage: { frequency: "Recharge", recharge: 6 }, target: { area: "burst", size: 1, range: 20 }, toHit: 16, defense: "Will", damage: { amount: "1d6+3", type: "psychic" }, effects: [ { name: "ongoing damage", amount: 5, type: "psychic", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
+              ]
+        },
+        "Githyanki Thug": { 
+            name: "Githyanki Thug", level: 12, image: "../images/portraits/githyanki_thug.jpg", // http://www.worldofazolin.com/wiki/images/1/1d/Githyanki_warrior.jpg
+            hp: { total: 1 },
+            defenses: { ac: 24, fort: 26, ref: 21, will: 21 },
+            init: 6, speed: 5,
+            abilities: { STR: 21, CON: 21, DEX: 11, INT: 11, WIS: 11, CHA: 13 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Silver Greatsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 15, defense: "AC", damage: "5", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "melee", "psychic", "basic" ] }
+              ]
+        },
         "Githyanki Warrior": { 
             name: "Githyanki Warrior", level: 12, image: "../images/portraits/githyanki.jpg",
             hp: { total: 118 },
             defenses: { ac: 28, fort: 25, ref: 23, will: 22 },
             init: 13, speed: { walk: 5, jump: 5 },
             abilities: { STR: 21, CON: 14, DEX: 17, INT: 12, WIS: 12, CHA: 13 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 12, insight: 12, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 9, insight: 12, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Silver Greatsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: { amount: "1d16+5", type: "psychic" }, keywords: [ "melee", "psychic", "basic" ] },
                       { name: "Silver Greatsword (immoblized)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "3d6", type: "psychic" }, keywords: [ "melee", "psychic" ] },
@@ -297,10 +335,26 @@ function loadMonsters() {
             defenses: { ac: 27, fort: 24, ref: 23, will: 21 },
             init: 8, speed: { walk: 6, teleport: 3 },
             abilities: { STR: 14, CON: 14, DEX: 12, INT: 10, WIS: 12, CHA: 12 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "AC", damage: "9", keywords: [ "melee", "basic" ] },
                       { name: "Longsword (aftereffect)", usage: { frequency: "At-Will", action: "Immediate Reaction" }, toHit: "automatic", defense: "AC", damage: { amount: "4", type: "fire" }, keywords: [ "fire" ] }
+              ]
+        },
+        "Lingering Spectre": { 
+            name: "Lingering Spectre", level: 12, image: "../images/portraits/spectre.jpg", // http://www.wizards.com/dnd/images/dx1003tt_spectre.jpg
+            hp: { total: 66 },
+            defenses: { ac: 26, fort: 23, ref: 25, will: 23 },
+            immunities: [ "poison", "disease" ],
+            resistances: { necrotic: 15 },
+            vulnerabilities: { radiant: 5 },
+            insubstantial: true,
+            init: 16, speed: { fly: 6 }, //, flyAgility: "hover", phasing: true },
+            abilities: { STR: 19, CON: 16, DEX: 22, INT: 10, WIS: 12, CHA: 19 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 17, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Spectral Touch", usage: { frequency: "At-Will" }, range: "melee", toHit: 15, defense: "Ref", damage: { amount: "2d8+5", type: "necrotic" }, keywords: [ "melee", "basic", "necrotic" ] },
+                      { name: "Spectral Barrage", usage: { frequency: "Recharge", recharge: 5 }, toHit: 15, defense: "Will", damage: { amount: "3d6", type: "psychic" }, effects: [ { name: "Prone" } ], keywords: [ "ranged", "illusion", "psychic" ] }
               ]
         },
         "Mezzodemon": { 
@@ -359,6 +413,37 @@ function loadMonsters() {
                       { name: "Slam", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "AC", damage: { amount: "2d8+4", type: "fire" }, keywords: [ "melee", "fire", "basic" ] },
                       { name: "Staggering Strike", usage: { frequency: "At-Will" }, range: 20, toHit: 14, defense: "Fort", damage: "2d6+6", keywords: [ "ranged" ] },
                       { name: "Coils of Immobility", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "burst", size: 2, range: 10 }, toHit: 13, defense: "Ref", damage: "2d8+4", effects: [ { name: "Restrained", saveEnds: true } ], keywords: [ "ranged" ] }
+              ]
+        },
+        "Sarshan": { 
+            name: "Sarshan", level: 12, image: "../images/portraits/sarshan.png", // http://www.striemer.org/scales-of-war/images/sarshan.png
+            hp: { total: 650 },
+            defenses: { ac: 28, fort: 25, ref: 26, will: 25 },
+            resistances: { acid: 20 },
+            savingThrows: 5,
+            init: 10, speed: { walk: 5, teleport: 6 },
+            abilities: { STR: 31, CON: 26, DEX: 19, INT: 17, WIS: 18, CHA: 17 },
+            skills: { acrobatics: 0, arcana: 23, athletics: 0, bluff: 0, diplomacy: 23, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Blood Chaos aura", usage: { frequency: "At-Will" }, target: { area: "aura", size: 1 }, toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "ongoing damage", amount: 10, type: "acid", saveEnds: true } ], keywords: [ "aura" ] },
+                      { name: "Katar", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: "1d10+6", effects: [ { name: "ongoing damage", amount: 5, type: "acid", saveEnds: true } ], keywords: [ "melee", "basic" ] },
+                      { name: "Shadow Attack", usage: { frequency: "Recharge", recharge: 5 }, range: "melee", toHit: 17, defense: "AC", damage: "1d10+6", effects: [ { name: "ongoing damage", amount: 5, type: "acid", saveEnds: true } ], keywords: [ "melee" ] },
+                      { name: "Blood Chaos Flare", usage: { frequency: "At-Will" }, target: { area: "close blast", size: 5 }, toHit: 16, defense: "Fort", damage: "0", effects: [ { name: "ongoing damage", amount: 10, type: "acid", saveEnds: true } ], keywords: [ "acid" ] },
+                      { name: "Chaos Nova", usage: { frequency: "Recharge", recharge: 6 }, target: { area: "close burst", size: 1 }, toHit: 15, defense: "Fort", damage: { amount: "4d10+5", type: "acid" }, miss: { halfDamage: true }, keywords: [ "melee" ] },
+                      { name: "Chaos Scream", usage: { frequency: "Encounter" }, target: { area: "close blast", size: 5 }, toHit: 16, defense: "Fort", damage: "0", effects: [ { name: "ongoing damage", amount: 10, type: "acid", saveEnds: true } ], keywords: [ "acid" ] }
+              ]
+        },
+        "Shadar-kai Warrior": { 
+            name: "Shadar-kai Warrior", level: 8, image: "../images/portraits/shadar_kai_warrior.jpg",
+            hp: { total: 86 },
+            defenses: { ac: 24, fort: 19, ref: 20, will: 17 },
+            init: 11, speed: { walk: 5, teleport: 3 },
+            abilities: { STR: 17, CON: 14, DEX: 20, INT: 12, WIS: 14, CHA: 11 },
+            skills: { acrobatics: 15, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 15, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Katar", usage: { frequency: "At-Will" }, range: "melee", toHit: 13, defense: "AC", damage: "1d6+3", keywords: [ "melee", "basic" ] },
+                      { name: "Cage of Gloom", usage: { frequency: "Recharge", recharge: 5 }, range: "melee", toHit: 13, defense: "AC", damage: "1d6+3", keywords: [ "melee" ] },
+                      { name: "Cage of Gloom (secondary)", usage: { frequency: "At-Will" }, range: "melee", toHit: 11, defense: "Ref", damage: "0", effects: [ { name: "Restrained", saveEnds: true } ], keywords: [ "melee" ] }
               ]
         },
         "Shadar-kai Witch": { 
@@ -524,6 +609,21 @@ function loadMonsters() {
             attacks: [
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 13, defense: "AC", damage: "3d6+7", keywords: [ "melee", "basic" ] },
                       { name: "Smackdown", usage: { frequency: "At-Will" }, range: "reach", toHit: 11, defense: "Fort", damage: "0", effects: [ "Prone" ], keywords: [ "melee" ] }
+              ]
+        },
+        "Wailing Ghost": { 
+            name: "Wailing Ghost", level: 12, image: "../images/portraits/wailing_ghost.png", // http://varlaventura.files.wordpress.com/2013/03/banshee-counterparts-e1364401380806.jpg 
+            hp: { total: 91 },
+            defenses: { ac: 23, fort: 23, ref: 23, will: 24 },
+            immunities: [ "disease", "poison" ],
+            insubstantial: true, // TODO: respect insubstantial in combat
+            init: 8, speed: { fly: 6 }, //, flyAgility: "hover", phasing: true },
+            abilities: { STR: 14, CON: 13, DEX: 15, INT: 10, WIS: 14, CHA: 17 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 17, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 0, stealth: 13, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Spirit Touch", usage: { frequency: "At-Will" }, toHit: 15, defense: "Ref", damage: { amount: "1d10+2", type: "necrotic" }, keywords: [ "melee", "basic" ] },
+                      { name: "Death's Visage", usage: { frequency: "At-Will" }, range: 5, toHit: 15, defense: "Will", damage: { amount: "2d6+3", type: "psychic" }, keywords: [ "ranged", "fear", "psychic" ] },
+                      { name: "Terrifying Shriek", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close burst", size: 5 }, toHit: 15, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "close burst", "fear", "psychic" ] }
               ]
         },
         "War Troll": { 
