@@ -17,7 +17,7 @@
 	            $parent: this.$body,
 	            isCurrent: i === this.current,
 	            className: "gridItem",
-	            cardSize: Math.floor(Math.sqrt((screen.availWidth * screen.availHeight) / total) - 100),
+	            cardSize: jQuery(window).height() / total, // Math.floor(Math.sqrt((screen.availWidth * screen.availHeight) / total) - 100),
 	            showPcHp: true
 	        });
 	    };

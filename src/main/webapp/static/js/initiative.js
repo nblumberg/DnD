@@ -336,8 +336,16 @@ Initiative.prototype._createBody = function() {
 Initiative.prototype._createActorTable = function(responseText, textStatus, jqXHR) {
 	var i, actor;
 	
-    this.$table = jQuery("#initiative tbody");
-
+    if (!this.$round || !this.$round.length) {
+        this.$round = jQuery("input#round");
+    }
+    if (this.$round) {
+        this.$round.val(this.round);
+    }
+    
+	if (!this.$table || !this.$table.length) {
+	    this.$table = jQuery("#initiative tbody");
+	}
 //  this.$table.sortable({ containment: "parent", handle: ".creaturePanel", items: "tr", 
 //  update: (function(event, ui) {
 //      var i, move, before;
@@ -351,12 +359,6 @@ Initiative.prototype._createActorTable = function(responseText, textStatus, jqXH
 //      this._changeInitiative({ move: move, before: before });
 //  }).bind(this) 
 //});
-    
-    this.$round = jQuery("input#round");
-	if (this.$round) {
-	    this.$round.val(this.round);
-	}
-	
 	if (this.$table) {
 		this.$table.children().remove();
 	}
@@ -366,23 +368,28 @@ Initiative.prototype._createActorTable = function(responseText, textStatus, jqXH
 		if (!actor) {
 			continue;
 		}
-		actor.createTr({ 
-			$table: this.$table,
-			isCurrent: i === this._current,
-			order: {
-				up: this._reorder.bind(this, actor, -1),
-				set: (function() { 
-				    this.initiativeDialog.show(this.actors, this.order);
-				}).bind(this),
-				down: this._reorder.bind(this, actor, 1)
-			},
-			attack: (function(a) {
-				this.attackDialog.show({ attacker: a, actors: this.actors });
-			}).bind(this, actor),
-			heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
-			exit: this._exit.bind(this, actor),
-			rename: this._rename.bind(this, actor)
-		});
+		if (!actor.tr || !actor.tr.$tr || !actor.tr.$tr.length) {
+	        actor.createTr({ 
+	            $table: this.$table,
+	            isCurrent: i === this._current,
+	            order: {
+	                up: this._reorder.bind(this, actor, -1),
+	                set: (function() { 
+	                    this.initiativeDialog.show(this.actors, this.order);
+	                }).bind(this),
+	                down: this._reorder.bind(this, actor, 1)
+	            },
+	            attack: (function(a) {
+	                this.attackDialog.show({ attacker: a, actors: this.actors });
+	            }).bind(this, actor),
+	            heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
+	            exit: this._exit.bind(this, actor),
+	            rename: this._rename.bind(this, actor)
+	        });
+		}
+		else {
+		    actor.tr.$tr.appendTo(this.$table);
+		}
 	}
 	
 };
@@ -747,6 +754,7 @@ Initiative.prototype._reorder = function(actor, delta) {
     	test += (i ? ", " : "") + this._getActor(this.order[ i ]).name;
     }
 	try { window.console.info("New order: " + test + " ]"); } finally {}
+	this._createActorTable();
     this._render(true);
 };
 

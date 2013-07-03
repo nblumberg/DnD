@@ -377,7 +377,7 @@ Actor.prototype.toString = function() {
 Actor.prototype.createCard = function(params) {
 	params = params || {};
 	params.actor = this;
-	this.card = new Actor.Card(params);
+	this.card = new DnD.Display.ActorCard(params);
 	return this.card;
 };
 
