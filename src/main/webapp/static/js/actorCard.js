@@ -2,7 +2,7 @@ var DnD;
 
 (function() {
 	"use strict";
-	
+
 	/**
 	 * @param params Object
 	 * @param params.actor Actor
@@ -15,6 +15,8 @@ var DnD;
 	function ActorCard(params) {
 		var editor, i;
 
+		ActorCard.cards.push(this);
+		
 		this.params = params || {};
 		
 		this.actor = params.actor;
@@ -22,14 +24,30 @@ var DnD;
 		this.cardSize = params.cardSize || ActorCard.CARD_SIZE;
 		this.$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
 		
-		this.$panel = jQuery("<div/>").attr("id", this.actor.name.replace(/\s/g, "_") + "_panel").data("actor", this.actor).addClass("creaturePanel centered bordered " + params.className).appendTo(params.$parent);
+		this.$panel = jQuery("<div/>").attr("id", this.actor.name.replace(/\s/g, "_") + "_panel").data("actor", this.actor).addClass("creaturePanel centered verticallyCentered bordered " + params.className).appendTo(this.$parent);
 		this.$panel.load("/html/partials/actorCard.html", null, this._init.bind(this));
 	};
 	
-	// Public methods
+	// Static members
 	
+	ActorCard.cards = [];
 	ActorCard.CARD_SIZE = 240;
-
+	ActorCard.MAX_COLUMNS = 6;
+	ActorCard.resizeAll = function(event) {
+		var cards, rows, columns, height, width, i;
+		cards = ActorCard.cards.length;
+		rows = Math.ceil(cards / ActorCard.MAX_COLUMNS);
+		height = ((window.innerHeight - 50) / rows);
+		columns = Math.min(ActorCard.cards.length, ActorCard.MAX_COLUMNS);
+		width = ((window.innerWidth - 100) / columns);
+		for (i = 0; i < ActorCard.cards.length; i++) {
+			ActorCard.cards[ i ]._resize(height, width);
+		}
+	};
+	jQuery(window).on({ resize: ActorCard.resizeAll });
+	
+	// Public methods	
+	
 	/**
 	 * Display an ActorCard as being the current turn (or not)
 	 */
@@ -38,8 +56,8 @@ var DnD;
 			return;
 		}
 		this.$panel[ isCurrent ? "addClass" : "removeClass" ]("current");
-		if (this.damageIndicator) {
-			this.damageIndicator.hide();
+		if (this.event) {
+			this.event.hide();
 		}
 	};
 
@@ -84,6 +102,8 @@ var DnD;
 	// Private methods
 	
 	ActorCard.prototype._init = function(responseText, textStatus, jqXHR) {
+	    this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
+	    
 		this.makeCurrent(this.params.isCurrent);
 		if (this.actor.isBloodied()) {
 			this.$panel.addClass("bloodied");
@@ -92,16 +112,54 @@ var DnD;
 		this.subPanel.$images = this.$panel.find(".images");
 		
 		this.subPanel.$portrait = this.$panel.find(".portrait");
-		this.subPanel.$portrait.height(this.cardSize * 100/120).attr("src", this.actor.image);
+		this.subPanel.$portrait.attr("src", this.actor.image); //.height(this.cardSize * 100/120);
+		this.portraitHeight = 0;
+		this.portraitWidth = 0;
+		this.subPanel.$portrait.on({ load: (function() {
+			this.portraitHeight = this.subPanel.$portrait[0].naturalHeight;
+			this.portraitWidth = this.subPanel.$portrait[0].naturalWidth;
+			this.isLandscape = this.portraitWidth >= this.portraitHeight;
+			ActorCard.resizeAll();
+		}).bind(this) });
+
 		this.showPcHp = this.params.showPcHp;
-		this.subPanel.$name = this.$panel.find(".f2 .name");
-		this.subPanel.$hp = this.$panel.find(".f2 .hp");
+		this.subPanel.$name = this.$panel.find(".label .name");
+		this.subPanel.$hp = this.$panel.find(".label .hp");
 		this._renderName();
 		
 	    this.subPanel.$effects = this.$panel.find(".effects");
 	    this.updateConditions();
+	};
+
+	ActorCard.prototype._resize = function(height, width) {
+		var style, size;
+		if (this.params.staticSize) {
+			return;
+		}
+		style = { height: height + "px", width: width + "px" };
+		this.$panel.css(style);
 		
-	    this.damageIndicator = new ActorCard.DamageIndicator({ actor: this.actor, card: this, $parent: this.subPanel.$effects });
+		size = { 
+			available: {
+				height: height * 0.9,
+				width: width
+			}, 
+			calc: {
+				height: width / this.portraitWidth * this.portraitHeight,
+				width: height / this.portraitHeight * this.portraitWidth
+			} 
+		};
+		if (this.isLandscape && size.calc.height <= size.available.height) {
+			// Run out of width before run out of height
+			style.width = size.available.width + "px";
+			style.height = size.calc.height + "px";
+		}
+		else {
+			// Run out of height before run out of width
+			style.height = size.available.height + "px";
+			style.width = size.calc.width + "px";
+		}
+		this.subPanel.$portrait.css(style);
 	};
 
 	ActorCard.prototype._renderName = function() {
@@ -182,7 +240,7 @@ var DnD;
 	 * @param params.damage {Damage | Array}
 	 * @param params.isMiss {Boolean}
 	 */
-	ActorCard.DamageIndicator = function(params) {
+	ActorCard.Event = function(params) {
 	    var height, i, $type, i, dmg, $image, condition, $amount;
 	    if (!params) {
 	    	return;
@@ -190,26 +248,29 @@ var DnD;
 	    this.actor = params.actor;
 	    this.card = params.card;
 	    this.$parent = params.$parent;
-	    // Clear any existing damage indicator
-	    this.$parent.find("div.damage").remove();
 	    // Create HTML
-	    this.$damage = jQuery("<div/>").addClass("damage").hide().appendTo(this.$parent);
-	    this.$pow = jQuery("<img/>").attr("src", "../images/symbols/pow.png").attr("height", this.card.subPanel.portrait.height).attr("width", this.card.subPanel.portrait.width).hide().appendTo(this.$damage);
-	    this.$miss = jQuery("<img/>").attr("src", "../images/symbols/miss.jpg").attr("height", this.card.subPanel.portrait.height).attr("width", this.card.subPanel.portrait.width).hide().appendTo(this.$damage);
-	    this.$attack = jQuery("<div/>").css({ "height": this.card.subPanel.portrait.height, "width": this.card.subPanel.portrait.width }).hide().appendTo(this.$damage);
-	    this.$centered = jQuery("<div/>").addClass("centered").appendTo(this.$damage);
-	    this.$types = jQuery("<div/>").addClass("types").appendTo(this.$centered);
+	    this.$event = this.$parent.find(".event");
+	    this.hide();
+	    this.$description = this.$parent.find(".description");
+	    this.$types = this.$parent.find(".types");
 	};
+
+	ActorCard.Event.prototype.attack = function(name) {
+	    this.$description.html(name);
+	    this._show("attack");
+	};
+	
+	ActorCard.Event.TIMEOUT = 30000;
 
 	/**
 	 * @param params.damage {Damage | Array}
 	 */
-	ActorCard.DamageIndicator.prototype.damage = function(damage) {
+	ActorCard.Event.prototype.damage = function(damage) {
 	    var height, i, dmg, condition;
-	    // Clear any existing damage indicator content
-	    this.$types.html("");
+	    this.$description.html("");
+	    this._show("hit", ActorCard.Event.TIMEOUT);
 	    damage = Object.constructor !== Array ? [ damage ] : damage;
-		height = Math.floor(100 / damage.length);
+		height = Math.floor(this.$event.height() / 2) + "px"; // Math.floor(100 / damage.length);
 	    for (i = 0; i < damage.length; i++) {
 	    	dmg = damage[ i ];
 	        if (dmg.type) {
@@ -220,45 +281,39 @@ var DnD;
 	        if (!condition) {
 	        	condition = Effect.CONDITIONS[ "ongoing damage" ].untyped;
 	        }
-	        this.$pow.show();
-	        this._renderEvent(height, condition.image, dmg.amount, condition.color);
+	        this._renderDamage(height, condition.image, dmg.amount, condition.color);
 	    }
 	};
 
-	ActorCard.DamageIndicator.prototype.miss = function() {
-	    // Clear any existing damage indicator content
-	    this.$types.html("");
-	    this.$miss.show();
-	    this._renderEvent(100, "../images/symbols/miss.png", "Miss", "green");
-	};
-
-	ActorCard.DamageIndicator.prototype.attack = function(name) {
-	    // Clear any existing damage indicator content
-	    this.$types.html("");
-	    this.$attack.show();
-	    this.$attack.html(name);    
-//	    this._renderEvent(100, "../images/symbols/miss.png", "Miss", "green");
-	};
-
-	ActorCard.DamageIndicator.prototype.hide = function() {
-	    this.$pow.hide();
-	    this.$miss.hide();
-		this.$damage.hide();
-	};
-
-	ActorCard.DamageIndicator.prototype._renderEvent = function(heightPercent, imageSrc, text, color) {
-	    var $type, dmg, image, condition, $text;
-		$type = jQuery("<div/>").addClass("type").appendTo(this.$types).css({ height: heightPercent + "%" });
-	    image = new Image();
-	    image.height = $type.height();
-	    image.className = "icon";
-		image.src = imageSrc;
-	    $type.append(image);
-	    if (typeof(text) !== "undefined" && text !== null) {
-	    	$text = jQuery("<span/>").addClass("amount").css({ "font-size": Math.floor(image.height / 2) + "px", "line-height": image.height + "px", "color": color ? color : "red" }).html(text).appendTo($type);
+	/**
+	 * TODO: replace with static HTML partial load
+	 */
+	ActorCard.Event.prototype._renderDamage = function(height, imageSrc, amount, color) {
+	    var $type, dmg, $image, condition, $text;
+		$type = jQuery("<span/>").addClass("type").appendTo(this.$types).css({ height: height });
+	    $image = jQuery(new Image()).css({ height: height }).addClass("damage").attr("src", imageSrc).appendTo($type);
+	    if (typeof(amount) !== "undefined" && amount !== null) {
+	    	$text = jQuery("<span/>").addClass("amount").css({ "font-size": Math.floor($image.height() / 2) + "px", "line-height": $image.height() + "px", "color": color ? color : "red" }).html(amount).appendTo($type);
 	    }
-	    this.$damage.show();
-	    setTimeout(this.hide.bind(this), 30000);
+	};
+
+	ActorCard.Event.prototype.miss = function() {
+	    this.$description.html("Miss");
+	    this._show("miss", ActorCard.Event.TIMEOUT);
+	};
+
+	ActorCard.Event.prototype.hide = function() {
+		this.$event.hide();
+	};
+
+	ActorCard.Event.prototype._show = function(className, duration) {
+	    // Clear any existing damage indicator content
+	    this.$types.find(".type").remove();
+	    this.$event.removeClass("attack hit miss").addClass(className);
+		this.$event.show();
+		if (duration) {
+		    setTimeout(this.hide.bind(this), duration);
+		}
 	};
 
 	
@@ -269,5 +324,5 @@ var DnD;
 		DnD.Display = {};
 	}
 	DnD.Display.ActorCard = ActorCard;
-	DnD.Display.ActorDamageIndicator = ActorCard.DamageIndicator;
+	DnD.Display.ActorEvent = ActorCard.Event;
 })();

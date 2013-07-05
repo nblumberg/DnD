@@ -2,10 +2,8 @@ th, td { border-color: white; }
     
 .alignTop { vertical-align: top; }
 .bordered { border-style: solid; border-width: 3px; }
-.bloodied { background-color: red; }
 .centered { text-align: center; }
 .centered img { display: block; margin-left: auto; margin-right: auto; }
-.current { border-color: lime; border-width: 6px; }
 .f1 { font-size: 1.5em; }
 .f2 { font-size: 1.2em; }
 .floatLeft { float: left; }
@@ -42,22 +40,30 @@ input#round { width: 30px; }
 .round .time { padding-left: 5px; }
 .round .edit textarea { height: 150px; }
 
-#display .creaturePanel {  }
-.creaturePanel { margin:2px; position: relative; }
-#initiative .creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
-.creaturePanel .column { float: left; margin-right: 4px; }
-.creaturePanel .images, .creaturePanel .name { position: relative; }
-.creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
-.creaturePanel div.condition, .creaturePanel div.damage { color: #FFFFFF; overflow: hidden; position: relative; text-align: center; vertical-align: middle; }
-.creaturePanel div.condition, .creaturePanel div.damage img { position: absolute; }
-.creaturePanel div.damage img { left: -15px; position: absolute; top: -50px; }
-.creaturePanel div.condition { background-color: #FFFFFF; float: left; margin-right: 2px; position: relative; }
-.creaturePanel .damage, .creaturePanel .damage .types, .creaturePanel .damage .types .type { position: relative; }
-.creaturePanel .damage { /* background-clip: border-box; background-image: url('../images/symbols/pow.png'); background-position: auto auto; background-repeat: no-repeat; background-size: contain; */ display: table; height: 100%; overflow: hidden; width: 100% }
-.creaturePanel .damage .centered { display: table-cell; vertical-align: middle; }
-.creaturePanel .damage .types { height: 75%; display: block; }
-.creaturePanel div.condition span, .creaturePanel div.damage span { bottom: 0; font-size: 1.3em; font-weight: bold; left: 0; margin: auto; position: absolute; right: 0; text-shadow: 3px 3px black; top: 0; vertical-align: middle; }
-.creaturePanel .name .hp { padding-left: 1em; white-space: nowrap; }
+.verticallyCentered { display: table; position: relative; }
+.verticallyCentered > .wrapper { display: table-cell; position: static; vertical-align: middle; top: 50%; width: 100%; }
+.verticallyCentered > .wrapper > .content { position: relative; top: -50%; }
+
+.creaturePanel { border-width: 4px; float: left; margin: 2px; }
+#initiative .creaturePanel { display: inline-block; float: none; min-height: 120px; min-width: 120px; }
+.creaturePanel.current { border-color: lime; }
+.creaturePanel img.portrait { max-height: 90%; max-width: 100%; }
+.creaturePanel .label { background-color: black; bottom: 0; font-size: 1.2em; height: 2.4em; left: 0; position: absolute; right: 0; }
+.creaturePanel.bloodied, .creaturePanel.bloodied .label { background-color: red; }
+
+.creaturePanel .state, .creaturePanel .state .effects, .creaturePanel .event { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
+.creaturePanel .event, .creaturePanel .condition { color: #FFFFFF; overflow: hidden; text-align: center; vertical-align: middle; }
+.creaturePanel .event { background-position: center; background-size: cover; bottom: auto; height: 90%; width: 100%; }
+.creaturePanel .event.hit { background-image: url("/images/symbols/pow.png"); }
+.creaturePanel .event.miss { background-image: url("/images/symbols/miss.jpg"); }
+.creaturePanel .event .description { background-color: black; margin-top:10px; padding: 10px; }
+.creaturePanel .event.hit .description { display: none; }
+.creaturePanel .event.hit .content { min-height: 50%; }
+.creaturePanel .event.hit .types,
+.creaturePanel .event.hit .types .type { min-height: 100%; position: relative; }
+.creaturePanel .event.hit .types img.damage { display: inline; }
+.creaturePanel .event.hit .types .type span { left: 25%; position: absolute; }
+
 
 .layout {
 	padding-top: 40px;

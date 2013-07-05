@@ -21,7 +21,7 @@ var DnD;
 		this.combatAdvantage = false;
 		
 		jQuery(document).ready((function() {
-		    this.$dialog = jQuery("#attacksDialog").on("show", this.show.bind(this));
+		    this.$dialog = jQuery("#attacksDialog").on("show", this._onShow.bind(this));
 			this.$body = this.$dialog.find(".modal-body");
 	        this.$weapons = this.$dialog.find("#weaponSelect");
 	        this.$attacks = this.$dialog.find("#attackSelect").on({ change: this._attackChange.bind(this) });
@@ -41,7 +41,7 @@ var DnD;
 	AttackDialog.prototype.show = function(params) {
 		var i, attack, target;
 		if (!params || !params.attacker || !params.actors) {
-			try { window.console.warn("AttackDialog.show() invoked without sufficien parameters"); } finally {}
+			try { window.console.warn("AttackDialog.show() invoked without sufficient parameters"); } finally {}
 			return;
 		}
 
@@ -89,6 +89,17 @@ var DnD;
 		else {
 			alert("Please select both an attack and 1 or more valid target(s)");
 		}
+	};
+	
+	AttackDialog.prototype._notifyTargets = function() {
+		var i, targets = [];
+		if (!this.attack || !this.targets || !this.targets.length) {
+			return;
+		}
+		for (i = 0; i < this.targets.length; i++) {
+			targets.push({ id: this.targets[ i ].id, name: this.targets[ i ].name });
+		}
+		this.callback({ type: "attack", attacker: this.attacker.id, attack: this.attacker.name + "'s " + this.attack.name, targets: targets });
 	};
 	
 
@@ -141,6 +152,7 @@ var DnD;
 				this.targets.push(jQuery(this.$targets[0].options[ i ]).data("target"));
 			}
 		}
+		this._notifyTargets();
 		return this.targets;
 	};
 
@@ -178,9 +190,14 @@ var DnD;
 				$controlGroup.addClass("error");
 			}
 		}
+		this._notifyTargets();
 	};
 	
+	AttackDialog.prototype._onShow = function() {
+		
+	};
 	
+
 	if (!DnD) {
 		DnD = {};
 	}

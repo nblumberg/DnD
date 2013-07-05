@@ -61,6 +61,7 @@ var DnD;
 		
 		this.card = new DnD.Display.ActorCard({
 			actor: this.actor,
+            staticSize: true,
 			$parent: this.$tr.find(".card"),
 			isCurrent: this.params.isCurrent,
 			cardSize: 150,

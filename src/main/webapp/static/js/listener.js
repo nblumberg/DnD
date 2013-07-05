@@ -85,6 +85,22 @@
 	    	this.updateActors(data.actors);
 	    };
 	    
+	    this.attack = function(data) {
+	    	var i, actor, damage, msg;
+	    	msg = "Received \"attack\" message (\"" + data.attack + "\") for ";
+	        for (i = 0; i < this.actors.length; i++) {
+	        	this.actors[ i ].card.event.hide();
+	        }
+	        for (i = 0; i < data.targets.length; i++) {
+	            actor = this.findActor(data.targets[ i ]);
+	            if (actor) {
+	            	actor.card.event.attack(data.attack);
+	                msg += "\n\t" + actor.name;
+	            }
+	        }
+	        this.info(msg);
+	    };
+	    
 	    this.takeDamage = function(data) {
 	    	var i, actor, damage, msg;
 	    	msg = "Received \"takeDamage\" message for ";
@@ -92,14 +108,14 @@
 	            actor = this.findActor(data.hits[ i ].target);
 	            if (actor) {
 	            	damage = data.hits[ i ].damage;
-	            	actor.card.damageIndicator.damage(damage);
+	            	actor.card.event.damage(damage);
 	                msg += "\n\t" + actor.name + " (" + damage.amount + " " + damage.type + ")";
 	            }
 	        }
 	        for (i = 0; i < data.misses.length; i++) {
 	            actor = this.findActor(data.misses[ i ].target);
 	            if (actor) {
-	            	actor.card.damageIndicator.miss();
+	            	actor.card.event.miss();
 	                msg += "\n\t" + actor.name + " missed";
 	            }
 	        }

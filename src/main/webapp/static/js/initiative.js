@@ -309,9 +309,9 @@ Initiative.prototype._create = function() {
 		$tmp.attackDialog = jQuery("<div/>");
 		$tmp.attackDialog.load("/html/partials/attackDialog.html", null, (function() {
 			$tmp.attackDialog.children().appendTo(this.$parent);
-			this.attackDialog = new DnD.Dialog.Attack({ callback: (function(attack) {
+			this.attackDialog = new DnD.Dialog.Attack({ callback: (function(msg) {
 				this._render(false);
-				this._messageDisplay(attack, false);
+				this._messageDisplay(msg, false);
 			}).bind(this) });
 	        dialogsReady();
 		}).bind(this));
