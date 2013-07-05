@@ -428,6 +428,18 @@ Initiative.prototype._renderActorTable = function(responseText, textStatus, jqXH
 		}
 		else {
 		    actor.tr.$tr.appendTo(this.$table);
+		    actor.tr.$up.on({ click: this._reorder.bind(this, actor, -1) });
+		    actor.tr.$order.on({ click: (function() { 
+                this.initiativeDialog.show(this.actors, this.order);
+            }).bind(this) });
+		    actor.tr.$down.on({ click: this._reorder.bind(this, actor, 1) });
+		    actor.tr.$attack.on({ click: (function(a) {
+                this.attackDialog.show({ attacker: a, actors: this.actors });
+            }).bind(this, actor) });
+		    actor.tr.$heal.on({ click: this.healDialog.show.bind(this.healDialog, { patient: actor }) }); // TODO: pass spcial healing surge values });
+		    actor.tr.$exit.on({ click: this._exit.bind(this, actor) });
+		    actor.tr.$rename.on({ click: this._rename.bind(this, actor) });
+		    
 		    actor.card.makeCurrent(actor.id === this._current);
 		}
 	}
