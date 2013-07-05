@@ -6,6 +6,7 @@ var Initiative = function(params) {
     if (params) {
         this._init(params);
     }
+    window.name = "admin";
 };
 
 Initiative.prototype = new EventDispatcher();
@@ -83,9 +84,9 @@ Initiative.prototype._init = function(params) {
         History.central = this.history;
     }
 
-    this.round = params.round || 1;
+    this.round = Math.max(params.round, 1) || 1;
     this._roundTimer = (new Date()).getTime();
-    this._current = params._current || 0;
+    this._current = params._current || this.order[ 0 ];
     this._$target = params.target ? jQuery(params.target) : ""; 
     
     this._autoSave();
@@ -328,12 +329,50 @@ Initiative.prototype._create = function() {
 };
 
 Initiative.prototype._createBody = function() {
-    jQuery("#tableContainer").load("/html/partials/actorTable.html", null, this._createActorTable.bind(this));
+    jQuery("#tableContainer").load("/html/partials/actorTable.html", null, this._renderActorTable.bind(this));
     jQuery("#history").append(this.history.$html);
     this._createHistory();
 };
 
-Initiative.prototype._createActorTable = function(responseText, textStatus, jqXHR) {
+Initiative.prototype._createHistory = function() {
+    // Editor for adding arbitrary history
+    this.$freeFormHistorySubject = jQuery("select#freeFormHistorySubject");
+    this._renderHistoryEditor();
+    if (!this.freeFormHistory) {
+        this.freeFormHistory = new History.Editor({ 
+            $parent: jQuery("#freeFormHistory"), 
+            save: (function(value) {
+                $option = jQuery(this.$freeFormHistorySubject[0].options[ this.$freeFormHistorySubject[0].selectedIndex ]);
+                this._addHistory($option.data("actor"), value);
+            }).bind(this), 
+            cancel: function() {} 
+        });
+    }
+    this.freeFormHistory.$cancel.hide();
+};
+
+Initiative.prototype._render = function(updateDisplay) {
+	var i, actor;
+	
+	if (this.$display) {
+		this.$display.children().remove();
+	}
+	
+	this._renderActorTable();
+	this._renderHistoryEditor();
+
+	if (updateDisplay) {
+		this._renderDisplay(false);
+	}
+	this._autoSave(this.toJSON());
+};
+
+Initiative.prototype._displayLoadHandler = function(event) {
+	try { window.console.info("Display loaded"); } finally {}
+    this._renderDisplay(); 
+};
+
+Initiative.prototype._renderActorTable = function(responseText, textStatus, jqXHR) {
 	var i, actor;
 	
     if (!this.$round || !this.$round.length) {
@@ -371,7 +410,7 @@ Initiative.prototype._createActorTable = function(responseText, textStatus, jqXH
 		if (!actor.tr || !actor.tr.$tr || !actor.tr.$tr.length) {
 	        actor.createTr({ 
 	            $table: this.$table,
-	            isCurrent: i === this._current,
+	            isCurrent: actor.id === this._current,
 	            order: {
 	                up: this._reorder.bind(this, actor, -1),
 	                set: (function() { 
@@ -389,78 +428,19 @@ Initiative.prototype._createActorTable = function(responseText, textStatus, jqXH
 		}
 		else {
 		    actor.tr.$tr.appendTo(this.$table);
+		    actor.card.makeCurrent(actor.id === this._current);
 		}
 	}
 	
 };
 
-Initiative.prototype._createHistory = function() {
-    // Editor for adding arbitrary history
-    this.$freeFormHistorySubject = jQuery("select#freeFormHistorySubject");
-    this.$freeFormHistorySubject.children().remove();
-    for (i = 0; i < this.actors.length; i++) {
-        a = this.actors[ i ];
-        $option = jQuery("<option/>").attr("value", a.name).html(a.name).data("actor", a).appendTo(this.$freeFormHistorySubject);
-    }
-    if (!this.freeFormHistory) {
-        this.freeFormHistory = new History.Editor({ 
-            $parent: jQuery("#freeFormHistory"), 
-            save: (function(value) {
-                $option = jQuery(this.$freeFormHistorySubject[0].options[ this.$freeFormHistorySubject[0].selectedIndex ]);
-                this._addHistory($option.data("actor"), value);
-            }).bind(this), 
-            cancel: function() {} 
-        });
-    }
-    this.freeFormHistory.$cancel.hide();
-};
-
-Initiative.prototype._render = function(updateDisplay) {
+Initiative.prototype._renderHistoryEditor = function() {
 	var i, actor;
-	
-	if (this.$round) {
-	    this.$round.val(this.round);
+    this.$freeFormHistorySubject.children().remove();
+	for (i = 0; i < this.actors.length; i++) {
+		actor = this.actors[ i ];
+	    jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
 	}
-    
-	if (this.$display) {
-		this.$display.children().remove();
-	}
-	
-	for (i = 0; i < this.order.length; i++) {
-		actor = this._getActor(this.order[ i ]);
-		if (!actor) {
-			continue;
-		}
-		if (!actor.tr) {
-			actor.createTr({ 
-				$table: this.$table,
-				isCurrent: i === this._current,
-				order: {
-	                up: this._reorder.bind(this, actor, -1),
-	                set: (function() { 
-	                    this.initiativeDialog.show(this.actors, this.order);
-	                }).bind(this),
-	                down: this._reorder.bind(this, actor, 1)
-	            },
-				attack: this.attackDialog.show.bind(this.attackDialog, { attacker: actor, actors: this.actors }),
-				heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass spcial healing surge values
-				exit: this._exit.bind(this, actor),
-				rename: this._rename.bind(this, actor)
-			});
-		}
-		else {
-			actor.tr.render();
-		}
-	}
-	if (updateDisplay) {
-		this._renderDisplay(false);
-	}
-	this._autoSave(this.toJSON());
-};
-
-Initiative.prototype._displayLoadHandler = function(event) {
-	try { window.console.info("Display loaded"); } finally {}
-    this._renderDisplay(); 
 };
 
 Initiative.prototype._renderDisplay = function(createDisplay, event) {
@@ -654,16 +634,18 @@ Initiative.prototype._addHistory = function(actor, message, method) {
 
 Initiative.prototype._previous = function() {
     var msg, i, actor;
-    this._current--;
-    if (this._current < 0) {
-        this._current = this.order.length - 1;
+    i = this.order.indexOf(this._current);
+    i--;
+    if (i < 0) {
+    	i = this.order.length - 1;
         this.round--;
     }
+    this._current = this.order[ i ];
     for (i = 0; i < this.actors.length; i++) {
         this.actors[ i ].history._round = this.round;
     }
     this.history._round = this.round;
-    actor = this._getActor(this.order[ this._current ]);
+    actor = this._getActor(this._current);
     msg = "Moved back in initiative order to " + actor.name + "'s turn";
     if (msg) {
         this._addHistory(null, msg);
@@ -674,23 +656,25 @@ Initiative.prototype._previous = function() {
 
 Initiative.prototype._next = function() {
     var msg, i, actors, actor;
+    i = this.order.indexOf(this._current);
     actors = [];
-    actor = this._getActor(this.order[ this._current ]);
+    actor = this._getActor(this._current);
     actors.push(actor);
     msg = actor.endTurn();
     if (msg) {
         this._addHistory(actor, msg);
     }
-    this._current++;
-    if (this._current >= this.order.length) {
-        this._current = 0;
+    i++;
+    if (i >= this.order.length) {
+    	i = 0;
         this.round++;
     }
+	this._current = this.order[ i ];
     for (i = 0; i < this.actors.length; i++) {
         this.actors[ i ].history._round = this.round;
     }
     this.history._round = this.round;
-    actor = this._getActor(this.order[ this._current ]);
+    actor = this._getActor(this._current);
     actors.push(actor);
     msg = actor.startTurn();
     if (msg) {
@@ -754,7 +738,6 @@ Initiative.prototype._reorder = function(actor, delta) {
     	test += (i ? ", " : "") + this._getActor(this.order[ i ]).name;
     }
 	try { window.console.info("New order: " + test + " ]"); } finally {}
-	this._createActorTable();
     this._render(true);
 };
 
@@ -770,30 +753,16 @@ Initiative.prototype._getActor = function(id) {
 };
 
 Initiative.prototype._exit = function(actor, event) {
-	var $dialog;
-	$dialog = jQuery("<div/>").html("Remove " + actor.name + " from play?").dialog({ 
-        autoOpen: false, 
-        modal: true, 
-        title: "Remove " + actor.name, 
-        position: [ "center", event.screenY - 300 ],
-        buttons: [
-                  { 
-                      text: "Remove", click: (function() {
-                    	  var i, index;
-                    	  index = this.order.indexOf(actor.id);
-                    	  this.order.splice(index, 1);
-                    	  this._addHistory(actor, "Leaves the fight");
-                          index = this.actors.indexOf(actor);
-                    	  this.actors.splice(index, 1);
-                    	  this._render(true);
-                    	  $dialog.dialog("destroy");
-                      }).bind(this)
-                  },
-                  {
-                	  text: "Cancel", click: function() { $dialog.dialog("destroy"); }
-                  }
-        ]
-    }).dialog("open");
+	var i, index;
+	if (confirm("Remove " + actor.name + " from play?")) {
+		index = this.order.indexOf(actor.id);
+		this.order.splice(index, 1);
+		this._addHistory(actor, "Leaves the fight");
+		index = this.actors.indexOf(actor);
+		this.actors.splice(index, 1);
+		actor.tr.$tr.remove();
+		this._render();
+	}
 };
 
 Initiative.prototype._rename = function(actor, event) {

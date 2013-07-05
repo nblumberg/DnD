@@ -15,7 +15,7 @@
 		this.createCard = function(creature, i, total) {
 	        creature.createCard({ 
 	            $parent: this.$body,
-	            isCurrent: i === this.current,
+	            isCurrent: creature.id === this.current,
 	            className: "gridItem",
 	            cardSize: jQuery(window).height() / total, // Math.floor(Math.sqrt((screen.availWidth * screen.availHeight) / total) - 100),
 	            showPcHp: true
@@ -79,9 +79,11 @@
 	    this.changeTurn = function(data) {
 	    	var i, actor;
 	    	this.info("Received \"changeTurn\" message from " + this.current + " to " + data.current);
-	    	this.actors[ this.current ].makeCurrent(false);
+	    	actor = this.findActor({ id: this.current });
+	    	actor.card.makeCurrent(false);
 	    	this.current = data.current;
-	    	this.actors[ this.current ].makeCurrent(true);
+	    	actor = this.findActor({ id: this.current });
+	    	actor.card.makeCurrent(true);
 	    	this.updateActors(data.actors);
 	    };
 	    

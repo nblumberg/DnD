@@ -40,6 +40,9 @@ var DnD;
 	// Public methods
 	
 	ActorRow.prototype.render = function() {
+		if (!this.ac) {
+			return; // TODO: why is this.ac null?
+		}
 		this.ac.setValue(this.actor.defenses.ac)
 		this.fort.setValue(this.actor.defenses.fort)
 		this.ref.setValue(this.actor.defenses.ref);
@@ -59,7 +62,7 @@ var DnD;
 		this.$order = this.$tr.find(".action.order").on({ click: this.params.order.set });
 		this.$down = this.$tr.find(".action.down").on({ click: this.params.order.down });
 		
-		this.card = new DnD.Display.ActorCard({
+		this.actor.card = this.card = new DnD.Display.ActorCard({
 			actor: this.actor,
             staticSize: true,
 			$parent: this.$tr.find(".card"),

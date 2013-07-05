@@ -45,7 +45,7 @@ input#round { width: 30px; }
 .verticallyCentered > .wrapper > .content { position: relative; top: -50%; }
 
 .creaturePanel { border-width: 4px; float: left; margin: 2px; }
-#initiative .creaturePanel { display: inline-block; float: none; min-height: 120px; min-width: 120px; }
+#initiative .creaturePanel { display: inline-block; float: none; max-width: 120px; }
 .creaturePanel.current { border-color: lime; }
 .creaturePanel img.portrait { max-height: 90%; max-width: 100%; }
 .creaturePanel .label { background-color: black; bottom: 0; font-size: 1.2em; height: 2.4em; left: 0; position: absolute; right: 0; }
@@ -53,14 +53,14 @@ input#round { width: 30px; }
 
 .creaturePanel .state, .creaturePanel .state .effects, .creaturePanel .event { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
 .creaturePanel .event, .creaturePanel .condition { color: #FFFFFF; overflow: hidden; text-align: center; vertical-align: middle; }
-.creaturePanel .event { background-position: center; background-size: cover; bottom: auto; height: 90%; width: 100%; }
+.creaturePanel .event { background-position: center; background-size: cover; bottom: auto; height: 90%; overflow: hidden; width: 100%; }
 .creaturePanel .event.hit { background-image: url("/images/symbols/pow.png"); }
 .creaturePanel .event.miss { background-image: url("/images/symbols/miss.jpg"); }
 .creaturePanel .event .description { background-color: black; margin-top:10px; padding: 10px; }
 .creaturePanel .event.hit .description { display: none; }
 .creaturePanel .event.hit .content { min-height: 50%; }
 .creaturePanel .event.hit .types,
-.creaturePanel .event.hit .types .type { min-height: 100%; position: relative; }
+.creaturePanel .event.hit .types .type { min-height: 100%; overflow: hidden; position: relative; }
 .creaturePanel .event.hit .types img.damage { display: inline; }
 .creaturePanel .event.hit .types .type span { left: 25%; position: absolute; }
 
