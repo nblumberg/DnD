@@ -14,10 +14,6 @@ th, td { border-color: white; }
 .fullBoth { height: 100%; width: 100%; }
 .nowrap { white-space: nowrap; }
 
-/* actorRow */
-.numerator:after { content: '/' }
-.action { cursor: pointer; display: block; }
-
 div#header { background-color: black; position: fixed; width: 100%; z-index: 5; }
 span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
@@ -44,6 +40,17 @@ input#round { width: 30px; }
 .verticallyCentered > .wrapper { display: table-cell; position: static; vertical-align: middle; top: 50%; width: 100%; }
 .verticallyCentered > .wrapper > .content { position: relative; top: -50%; }
 
+/* actorRow */
+.numerator:after { content: '/' }
+.action { cursor: pointer; display: block; }
+
+/* editor */
+.editor .display {}
+.editor.edit .display { display: none; }
+.editor input, .editor button { display: none; }
+.editor.edit input, .editor.edit button { display: inline; }
+
+/* actorCard */
 .creaturePanel { border-width: 4px; float: left; margin: 2px; }
 #initiative .creaturePanel { display: inline-block; float: none; max-width: 120px; }
 .creaturePanel.current { border-color: lime; }

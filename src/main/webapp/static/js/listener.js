@@ -59,20 +59,30 @@
 	        return null;
 	    };
 	    
+	    this.removeActor = function(data) {
+	    	var actor = this.findActor({ id: data.actor });
+	    	if (actor) {
+	    		actor.card.$panel.remove();
+	    		this.actors.splice(this.actors.indexOf(actor), 1);
+	    	}
+	    };
+	    
+	    this.updateActor = function(data) {
+	    	var actor;
+        	actor = this.findActor(data.id);
+    		actor.hp.temp = data.hp.temp;
+    		actor.hp.current = data.hp.current;
+    		actor.effects = [];
+    	    for (j = 0; data.effects && j < data.effects.length; j++) {
+    	        actor.effects.push(new Effect(data.effects[ j ]));
+    	    }
+    	    actor.refreshCard();
+	    };
+	    
 	    this.updateActors = function(updates) {
-	    	var i, j, update, actor;
+	    	var i;
 	        for (i = 0; i < updates.length; i++) {
-	        	update = updates[ i ];
-	        	actor = this.findActor(update);
-	        	if (actor) {
-	        		actor.hp.temp = update.hp.temp;
-	        		actor.hp.current = update.hp.current;
-	        		actor.effects = [];
-	        	    for (j = 0; update.effects && j < update.effects.length; j++) {
-	        	        actor.effects.push(new Effect(update.effects[ j ]));
-	        	    }
-	        	    actor.refreshCard();
-	        	}
+	        	this.updateActor(updates[ i ]);
 	        }
 	    };
 	    

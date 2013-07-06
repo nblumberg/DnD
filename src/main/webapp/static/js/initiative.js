@@ -203,8 +203,31 @@ Initiative.prototype._addActor = function(params, actors) {
     if (History.central) {
         this._addHistory(actor, "Joins the fight");
     }
-    actor.addEventListener("change", this._render.bind(this, true));
-    actor.addEventListener("takeDamage", this._displayDamage.bind(this));
+    actor.addEventListener("change", (function(event) {
+    	var actor;
+    	// Only both to update the display with properties reflected in the display
+    	switch (event.property) {
+	    	case "hp.temp":
+	    	case "hp.current":
+	    	case "hp.total": {
+	    		actor = event.target;
+	    		this._messageDisplay({ 
+	    			type: "updateActor", 
+	    			id: actor.id, 
+	    			hp: {
+		    			temp: actor.hp.temp,
+		    			current: actor.hp.current,
+		    			total: actor.hp.total
+		    		},
+		    		effects: Serializable.prototype.rawArray(actor.effects)
+	    		}, false);
+	    	}
+	    	break;
+    	}
+    }).bind(this));
+    actor.addEventListener("takeDamage", (function(event) {
+    	this._messageDisplay({ actor: event.target.raw(), damage: event.damage }, false);
+    }).bind(this));
     return actor;
 };
 
@@ -375,12 +398,7 @@ Initiative.prototype._displayLoadHandler = function(event) {
 Initiative.prototype._renderActorTable = function(responseText, textStatus, jqXHR) {
 	var i, actor;
 	
-    if (!this.$round || !this.$round.length) {
-        this.$round = jQuery("input#round");
-    }
-    if (this.$round) {
-        this.$round.val(this.round);
-    }
+	this._renderRound();
     
 	if (!this.$table || !this.$table.length) {
 	    this.$table = jQuery("#initiative tbody");
@@ -427,20 +445,7 @@ Initiative.prototype._renderActorTable = function(responseText, textStatus, jqXH
 	        });
 		}
 		else {
-		    actor.tr.$tr.appendTo(this.$table);
-		    actor.tr.$up.on({ click: this._reorder.bind(this, actor, -1) });
-		    actor.tr.$order.on({ click: (function() { 
-                this.initiativeDialog.show(this.actors, this.order);
-            }).bind(this) });
-		    actor.tr.$down.on({ click: this._reorder.bind(this, actor, 1) });
-		    actor.tr.$attack.on({ click: (function(a) {
-                this.attackDialog.show({ attacker: a, actors: this.actors });
-            }).bind(this, actor) });
-		    actor.tr.$heal.on({ click: this.healDialog.show.bind(this.healDialog, { patient: actor }) }); // TODO: pass spcial healing surge values });
-		    actor.tr.$exit.on({ click: this._exit.bind(this, actor) });
-		    actor.tr.$rename.on({ click: this._rename.bind(this, actor) });
-		    
-		    actor.card.makeCurrent(actor.id === this._current);
+		    actor.tr.reattach(this.$table);
 		}
 	}
 	
@@ -455,6 +460,15 @@ Initiative.prototype._renderHistoryEditor = function() {
 	}
 };
 
+Initiative.prototype._renderRound = function() {
+    if (!this.$round || !this.$round.length) {
+        this.$round = jQuery("input#round");
+    }
+    if (this.$round) {
+        this.$round.val(this.round);
+    }
+};
+
 Initiative.prototype._renderDisplay = function(createDisplay, event) {
 	var data;
 	if (event) {
@@ -467,10 +481,6 @@ Initiative.prototype._renderDisplay = function(createDisplay, event) {
 			type: "refresh"
 	};
 	this._messageDisplay(data, createDisplay);
-};
-
-Initiative.prototype._displayDamage = function(event) {
-	this._messageDisplay({ actor: event.target.raw(), damage: event.damage }, false);
 };
 
 Initiative.prototype._messageDisplay = function(msg, createDisplay) {
@@ -646,6 +656,8 @@ Initiative.prototype._addHistory = function(actor, message, method) {
 
 Initiative.prototype._previous = function() {
     var msg, i, actor;
+    actor = this._getActor(this._current);
+    actor.card.makeCurrent(false);
     i = this.order.indexOf(this._current);
     i--;
     if (i < 0) {
@@ -658,11 +670,16 @@ Initiative.prototype._previous = function() {
     }
     this.history._round = this.round;
     actor = this._getActor(this._current);
+    actor.card.makeCurrent(true);
+    if (actor.hasCondition("dead")) {
+        this.previous();
+        return;
+    }
     msg = "Moved back in initiative order to " + actor.name + "'s turn";
     if (msg) {
         this._addHistory(null, msg);
     }
-    this._render(false);
+    this._renderRound();
     this._messageDisplay({ type: "changeTurn", current: this._current }, false);
 };
 
@@ -671,6 +688,7 @@ Initiative.prototype._next = function() {
     i = this.order.indexOf(this._current);
     actors = [];
     actor = this._getActor(this._current);
+    actor.card.makeCurrent(false);
     actors.push(actor);
     msg = actor.endTurn();
     if (msg) {
@@ -687,6 +705,7 @@ Initiative.prototype._next = function() {
     }
     this.history._round = this.round;
     actor = this._getActor(this._current);
+    actor.card.makeCurrent(true);
     actors.push(actor);
     msg = actor.startTurn();
     if (msg) {
@@ -696,7 +715,7 @@ Initiative.prototype._next = function() {
         this._next();
         return;
     }
-    this._render(false);
+    this._renderRound();
     this._messageDisplay({ type: "changeTurn", current: this._current, actors: this.rawArray(actors) }, false);
 };
 
@@ -773,7 +792,7 @@ Initiative.prototype._exit = function(actor, event) {
 		index = this.actors.indexOf(actor);
 		this.actors.splice(index, 1);
 		actor.tr.$tr.remove();
-		this._render();
+		this._messageDisplay({ type: "removeActor", actor: actor.id });
 	}
 };
 

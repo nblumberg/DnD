@@ -55,6 +55,37 @@ var DnD;
 		this.card.refresh();
 	};
 	
+	ActorRow.prototype.remove = function() {
+		this.$tr.remove();
+	};
+
+	ActorRow.prototype.reattach = function($parent) {
+		if ($parent) {
+			this.$parent = $parent;
+			this.$tr.appendTo(this.$parent);
+		}
+		// Removing elements from the DOM seems to break their event listeners so reattach them
+	    this.$up.on({ click: this.params.order.up });
+	    this.$order.on({ click: this.params.order.set });
+	    this.$down.on({ click: this.params.order.down });
+	    
+		this.ac.reattach();
+		this.fort.reattach();
+		this.ref.reattach();
+		this.will.reattach();
+		
+		this.tempHp.reattach();
+		this.hpCurrent.reattach();
+		this.hpTotal.reattach();
+		this.surgesCurrent.reattach();
+		this.surgesPerDay.reattach();
+	    
+		this.$attack.on({ click: this.params.attack });
+		this.$heal.on({ click: this.params.heal });
+		this.$exit.on({ click: this.params.exit });
+		this.$rename.on({ click: this.params.rename });
+	};
+
 	// Private methods
 	
 	ActorRow.prototype._init = function(responseText, textStatus, jqXHR) {
@@ -100,24 +131,29 @@ var DnD;
 		this.will = this._addDefense(this.$tr.find(".will > span"), "will");
 		
 		this.tempHp = new Editor({ $parent: this.$tr.find(".hp .temp .editor"), tagName: "span", html: this.actor.hp.temp, onchange: (function(v) {
+			var oldValue = this.actor.hp.temp;
 			this.actor.hp.temp = parseInt(v);
-			this.actor.dispatchEvent("change");
+			this.actor.dispatchEvent({ type: "change", property: "hp.temp", oldValue: oldValue, newValue: this.actor.hp.temp });
 		}).bind(this) });
 		this.hpCurrent = new Editor({ $parent: this.$tr.find(".hp .current .editor"), tagName: "span", html: this.actor.hp.current, onchange: (function(v) {
+			var oldValue = this.actor.hp.current;
 			this.actor.hp.current = parseInt(v);
-			this.actor.dispatchEvent("change");
+			this.actor.dispatchEvent({ type: "change", property: "hp.current", oldValue: oldValue, newValue: this.actor.hp.current });
 		}).bind(this) });
 		this.hpTotal = new Editor({ $parent: this.$tr.find(".hp .total .editor"), tagName: "span", html: this.actor.hp.total, onchange: (function(v) {
+			var oldValue = this.actor.hp.total;
 			this.actor.hp.current = parseInt(v);
-			this.actor.dispatchEvent("change");
+			this.actor.dispatchEvent({ type: "change", property: "hp.total", oldValue: oldValue, newValue: this.actor.hp.total });
 		}).bind(this) });
 		this.surgesCurrent = new Editor({ $parent: this.$tr.find(".hp .surgesCurrent .editor"), tagName: "span", html: this.actor.surges.current, onchange: (function(v) {
+			var oldValue = this.actor.surges.current;
 			this.actor.surges.current = parseInt(v);
-			this.actor.dispatchEvent("change");
+			this.actor.dispatchEvent({ type: "change", property: "surges.current", oldValue: oldValue, newValue: this.actor.surges.current });
 		}).bind(this) });
 		this.surgesPerDay = new Editor({ $parent: this.$tr.find(".hp .surgesPerDay .editor"), tagName: "span", html: this.actor.surges.perDay, onchange: (function(v) {
+			var oldValue = this.actor.surges.perDay;
 			this.actor.surges.perDay = parseInt(v);
-			this.actor.dispatchEvent("change");
+			this.actor.dispatchEvent({ type: "change", property: "surges.perDay", oldValue: oldValue, newValue: this.actor.surges.perDay });
 		}).bind(this) });
 					
 		this.$attack = this.$tr.find(".attack").on({ click: this.params.attack });
@@ -139,33 +175,8 @@ var DnD;
 				round: this.actor.history._round // TODO: make History.Entry inherit the round from the History instance 
 			});
 			this.actor.history.add();
-			this.actor.dispatchEvent("change");
+			this.actor.dispatchEvent({ type: "change", property: "defenses." + defense, oldValue: old, newValue: this.actor.defenses[ defense ] });
 		}).bind(this) });
-	};
-
-	ActorRow.prototype._addHp = function($field, className1, value1, className2, value2) {
-		return new Editor({ $parent: $field, tagName: "span", html: value1, onchange: (function(v) {
-			switch (className1) {
-	    		case "currentHp": {
-	    			this.actor.hp.current = parseInt(v);
-	    			break;
-	    		}
-	    		case "tempHp": {
-	    			this.actor.hp.temp = parseInt(v);
-	    			break;
-	    		}
-	    		case "surgesRemaining": {
-	    			this.actor.surges.current = parseInt(v);
-	    			break;
-	    		}
-			}
-			this.actor.dispatchEvent("change");
-		}).bind(this) });
-		editor.$html.addClass(className1);
-		if (typeof(value2) !== "undefined") {
-			editor.$html.addClass("numerator");
-			jQuery("<span/>").addClass(className2).html(value2).appendTo($div);
-		}
 	};
 
 	if (!DnD) {
