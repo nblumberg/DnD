@@ -53,9 +53,11 @@ input#round { width: 30px; }
 /* actorCard */
 .creaturePanel { border-width: 4px; float: left; margin: 2px; }
 #initiative .creaturePanel { display: inline-block; float: none; max-width: 120px; }
+#initiative .creaturePanel img.portrait { display: inline-block; float: none; max-width: 120px; }
 .creaturePanel.current { border-color: lime; }
 .creaturePanel img.portrait { max-height: 90%; max-width: 100%; }
-.creaturePanel .label { background-color: black; bottom: 0; font-size: 1.2em; height: 2.4em; left: 0; position: absolute; right: 0; white-space: normal; }
+.creaturePanel .label { background-color: black; bottom: 0; font-size: 1.2em; height: 1.2em; left: 0; position: absolute; right: 0; white-space: normal; }
+.creaturePanel.pcHp .label { height: 2.4em; }
 .creaturePanel.bloodied, .creaturePanel.bloodied .label { background-color: red; }
 
 .creaturePanel .state, .creaturePanel .state .effects, .creaturePanel .event { bottom: 0; left: 0; position: absolute; right:0; top: 0; }

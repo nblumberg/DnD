@@ -6,12 +6,6 @@
 		this.$img;
 		this.$highlight;
 	    
-		this.info = function(msg) {
-	        if (console && console.info) {
-	            console.info(msg);
-	        }
-		};
-		
 		this.createCard = function(creature, i, total) {
 	        creature.createCard({ 
 	            $parent: this.$body,
@@ -29,7 +23,7 @@
 	        	msg += (i > 0 ? ", " : "") + data.actors[ i ].name;
 	        }
 	        msg += " ]\n\torder: [ " + data.order.join(", ") + " ]\n\tcurrent: " + data.current;
-	        this.info(msg);
+	        try{ window.console.debug(msg); } finally {}
 	        this.actors = [];
 	        this.current = data.current;
 	        if (this.$body.length) {
@@ -51,6 +45,9 @@
 
 	    this.findActor = function(actor) {
 	    	var i;
+	    	if (typeof(actor) === "number") {
+	    		actor = { id: actor };
+	    	}
 	        for (i = 0; actor && i < this.actors.length; i++) {
 	            if (this.actors[ i ].id === actor.id) {
 	            	return this.actors[ i ];
@@ -60,7 +57,7 @@
 	    };
 	    
 	    this.removeActor = function(data) {
-	    	var actor = this.findActor({ id: data.actor });
+	    	var actor = this.findActor(data.actor);
 	    	if (actor) {
 	    		actor.card.$panel.remove();
 	    		this.actors.splice(this.actors.indexOf(actor), 1);
@@ -70,13 +67,14 @@
 	    this.updateActor = function(data) {
 	    	var actor;
         	actor = this.findActor(data.id);
+    		actor.name = data.name;
     		actor.hp.temp = data.hp.temp;
     		actor.hp.current = data.hp.current;
     		actor.effects = [];
     	    for (j = 0; data.effects && j < data.effects.length; j++) {
     	        actor.effects.push(new Effect(data.effects[ j ]));
     	    }
-    	    actor.refreshCard();
+    	    actor.card.refresh();
 	    };
 	    
 	    this.updateActors = function(updates) {
@@ -88,11 +86,11 @@
 	    
 	    this.changeTurn = function(data) {
 	    	var i, actor;
-	    	this.info("Received \"changeTurn\" message from " + this.current + " to " + data.current);
-	    	actor = this.findActor({ id: this.current });
+	    	try { window.console.debug("Received \"changeTurn\" message from " + this.current + " to " + data.current); } finally {}
+	    	actor = this.findActor(this.current);
 	    	actor.card.makeCurrent(false);
 	    	this.current = data.current;
-	    	actor = this.findActor({ id: this.current });
+	    	actor = this.findActor(this.current);
 	    	actor.card.makeCurrent(true);
 	    	this.updateActors(data.actors);
 	    };
@@ -110,7 +108,7 @@
 	                msg += "\n\t" + actor.name;
 	            }
 	        }
-	        this.info(msg);
+	        try { window.console.debug(msg); } finally {}
 	    };
 	    
 	    this.takeDamage = function(data) {
@@ -131,7 +129,7 @@
 	                msg += "\n\t" + actor.name + " missed";
 	            }
 	        }
-	    	this.info(msg);
+	    	try { window.console.debug(msg); } finally {}
 	    };
 	    
 	    this.displayImage = function(data) {
@@ -192,7 +190,7 @@
 	    	if (this.$highlight) {
 	    		this.$highlight.remove();
 	    	}
-	        this.info("Received \"highlightImage\" message { x: " + (100 * data.position.x) + "%, y: " + (100 * data.position.y) + "% }");
+	        try { window.console.debug("Received \"highlightImage\" message { x: " + (100 * data.position.x) + "%, y: " + (100 * data.position.y) + "% }"); } finally {}
 	    	offset = { left: this.$img[0].offsetLeft, top: this.$img[0].offsetTop };
 	    	this.$highlight = jQuery("<img/>").addClass("reticle").attr("height", "20").attr("width", "20").attr("src", "images/symbols/reticle.png").css({ left: offset.left - 10 + (data.position.x * this.$img[0].width), position: "absolute", top: offset.top - 10 + (data.position.y * this.$img[0].height) }).appendTo(this.$img.parent());
 	    };
@@ -212,7 +210,7 @@
 	    
 	    jQuery(document).ready((function() {
 	        var i;
-	        this.info("DOM ready");
+	        try { window.console.debug("DOM ready"); } finally {}
 	        window.opener.postMessage("ready", "*");
 
 	        this.$body = jQuery("body");

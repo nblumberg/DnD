@@ -165,6 +165,7 @@ var DnD;
 	ActorCard.prototype._renderName = function() {
 		this.subPanel.$name.html(this.actor.name);
 		if (this.showPcHp && this.actor.isPC) {
+			this.$panel.addClass("pcHp");
 			this.subPanel.$hp.html(this.actor.hp.current + (this.actor.hp.temp ? " (" + (this.actor.hp.temp + this.actor.hp.current) + ")" : "") + " / " + this.actor.hp.total);
 		}
 		else {

@@ -3,6 +3,16 @@ var DnD;
 (function() {
 	"use strict";
 	
+	if (!DnD) {
+		DnD = {};
+	}
+	if (!DnD.Dialog) {
+		DnD.Dialog = {};
+	}
+	
+	
+	// CONSTRUCTOR & INITIALIZATION METHODS
+	
 	function InitiativeDialog(params) {
 	    var i;
 	    
@@ -15,19 +25,38 @@ var DnD;
         this.$sortable = null;
         this._setData(params.actors, params.order, params.rolls);
         this.change = params.change;
-		
-		jQuery(document).ready((function() {
-		    this.$dialog = jQuery("#initiativeDialog").on("show", this._onshow.bind(this));
-			this.$body = this.$dialog.find(".modal-body");
-			this.$sortable = this.$body.find(".sortable");
-            this.buttons.$roll = this.$dialog.find(".roll").on({ click: this._rollInitiative.bind(this) });
-            this.buttons.$update = this.$dialog.find(".update").on({ click: this._resolveInitiative.bind(this) });
-
-			this.$sortable.sortable({ items: "li", update: this._onSortableUpdate.bind(this) });
-            this.$sortable.disableSelection();
-		}).bind(this));
+        
+		this._init(params);
 	}
+	
+	InitiativeDialog.prototype = new DnD.Dialog("initiativeDialog", "/html/partials/initiativeDialog.html");
 
+	
+	// OVERRIDDEN METHODS
+	
+    InitiativeDialog.prototype.show = function(actors, order, rolls) {
+        if (actors || order || rolls) {
+            this._setData(actors || this.actors, order || this.order, rolls || this.rolls);
+        }
+        DnD.Dialog.prototype.show.call(this);
+    };
+    
+	InitiativeDialog.prototype._onReady = function() {
+		this.$sortable = this.$body.find(".sortable");
+        this.buttons.$roll = this.$dialog.find(".roll").on({ click: this._rollInitiative.bind(this) });
+        this.buttons.$update = this.$dialog.find(".update").on({ click: this._resolveInitiative.bind(this) });
+
+		this.$sortable.sortable({ items: "li", update: this._onSortableUpdate.bind(this) });
+        this.$sortable.disableSelection();
+	};
+
+	InitiativeDialog.prototype._onShow = function() {
+        this._populate();
+	};
+	
+	
+	// PRIVATE METHODS
+	
     InitiativeDialog.prototype._cloneArray = function(array) {
         var clone, i;
         if (!array) {
@@ -186,22 +215,6 @@ var DnD;
 	    }
 	};	
 	
-    InitiativeDialog.prototype.show = function(actors, order, rolls) {
-        if (actors || order || rolls) {
-            this._setData(actors || this.actors, order || this.order, rolls || this.rolls);
-        }
-        this.$dialog.modal("show");
-    };
-    
-	InitiativeDialog.prototype._onshow = function() {
-        this._populate();
-	};
-	
-	if (!DnD) {
-		DnD = {};
-	}
-	if (!DnD.Dialog) {
-		DnD.Dialog = {};
-	}
+
 	DnD.Dialog.Initiative = InitiativeDialog;
 })();

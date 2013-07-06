@@ -1,9 +1,19 @@
 var DnD;
 
 (function() {
+	"use strict";
+	
+	if (!DnD) {
+		DnD = {};
+	}
+	if (!DnD.Dialog) {
+		DnD.Dialog = {};
+	}
+	
+	
+	// CONSTRUCTOR & INITIALIZATION METHODS
+	
 	function HealDialog(params) {
-	    this.$dialog = null;
-		this.$body = null;
         this.$healingDescription = null;
         this.$isTempHp = null;
         this.$healingAmount = null;
@@ -12,33 +22,50 @@ var DnD;
 		this.buttons = {
 				$heal: null
 		};
-		
-		jQuery(document).ready((function() {
-		    this.$dialog = jQuery("#healDialog").on("show", this._onshow.bind(this));
-			this.$body = this.$dialog.find(".modal-body");
-	        this.$healingDescription = this.$dialog.find("#healingDescription");
-	        this.$isTempHp = this.$dialog.find("#isTempHp");
-	        this.$healingAmount = this.$dialog.find("#healingAmount");
-	        this.$usesHealingSurge = this.$dialog.find("#usesHealingSurge").on({ click: (function() {
-	            if (this.$usesHealingSurge[0].checked) {
-	                this.$healingAmount.val(this.healingSurgeValue);
-	                this.$healingAmount.attr("disabled", "disabled");
-	            }
-	            else {
-	                this.$healingAmount.removeAttr("disabled");
-	            }
-	        }).bind(this) });
-	        this.$healingExtra = this.$dialog.find("#healingExtra");
-			this.buttons.$heal = this.$dialog.find(".healBtn").on({ click: this._resolveHeal.bind(this) });
-	        this.$dialog.data("init", true);
-		}).bind(this));
+		this._init(params);
 	}
 
-	HealDialog.prototype._resolveHeal = function(actor) {
-		var target, amount, msg, method;
-		if (!this.$dialog.data("init") || !this.$healingDescription) {
+	HealDialog.prototype = new DnD.Dialog("healDialog", "/html/partials/healDialog.html");
+	
+	// OVERRIDDEN METHODS
+	
+	HealDialog.prototype.show = function(params) {
+		if (!params || !params.patient) {
 			return;
 		}
+		this.patient = params.patient;
+		this.healingSurgeValue = params.healingSurgeValue || Math.floor(this.patient.hp.total / 4);
+		// TODO: recenter dialog
+		DnD.Dialog.prototype.show.call(this);
+	};
+	
+	HealDialog.prototype._onReady = function() {
+        this.$healingDescription = this.$dialog.find("#healingDescription");
+        this.$isTempHp = this.$dialog.find("#isTempHp");
+        this.$healingAmount = this.$dialog.find("#healingAmount");
+        this.$usesHealingSurge = this.$dialog.find("#usesHealingSurge").on({ click: (function() {
+            if (this.$usesHealingSurge[0].checked) {
+                this.$healingAmount.val(this.healingSurgeValue);
+                this.$healingAmount.attr("disabled", "disabled");
+            }
+            else {
+                this.$healingAmount.removeAttr("disabled");
+            }
+        }).bind(this) });
+        this.$healingExtra = this.$dialog.find("#healingExtra");
+		this.buttons.$heal = this.$dialog.find(".healBtn").on({ click: this._resolveHeal.bind(this) });
+	};
+	
+    HealDialog.prototype._onShow = function() {
+        this.$healingAmount.val(this.healingSurgeValue);
+        this.$healingExtra.val(0);
+    };
+    
+	
+	// PRIVATE METHODS
+	
+	HealDialog.prototype._resolveHeal = function(actor) {
+		var target, amount, msg, method;
 		if (!this.$healingDescription.val()) {
 			alert("Please enter a description of the healing");
 			return;
@@ -68,28 +95,7 @@ var DnD;
 		this._addHistory(target, msg, method);
 	};
 
-	HealDialog.prototype.show = function(params) {
-		if (!params || !params.patient) {
-			return;
-		}
-		this.patient = params.patient;
-		this.healingSurgeValue = params.healingSurgeValue || Math.floor(this.patient.hp.total / 4);
-		// TODO: recenter dialog
-		this.$dialog.modal("show");
-	};
-	
-    HealDialog.prototype._onshow = function() {
-        this.$healingAmount.val(this.healingSurgeValue);
-        this.$healingExtra.val(0);
-    };
-    
 	
 	
-	if (!DnD) {
-		DnD = {};
-	}
-	if (!DnD.Dialog) {
-		DnD.Dialog = {};
-	}
 	DnD.Dialog.Heal = HealDialog;
 })();

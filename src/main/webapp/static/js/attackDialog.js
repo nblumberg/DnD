@@ -1,9 +1,19 @@
 var DnD;
 
 (function() {
+	"use strict";
+	
+	if (!DnD) {
+		DnD = {};
+	}
+	if (!DnD.Dialog) {
+		DnD.Dialog = {};
+	}
+	
+	
+	// CONSTRUCTOR & INITIALIZATION METHODS
+	
 	function AttackDialog(params) {
-	    this.$dialog = null;
-		this.$body = null;
         this.$weapons = null;
         this.$attacks = null;
         this.$combatAdvantage = null;
@@ -20,24 +30,27 @@ var DnD;
 		this.targets = [];
 		this.combatAdvantage = false;
 		
-		jQuery(document).ready((function() {
-		    this.$dialog = jQuery("#attacksDialog").on("show", this._onShow.bind(this));
-			this.$body = this.$dialog.find(".modal-body");
-	        this.$weapons = this.$dialog.find("#weaponSelect");
-	        this.$attacks = this.$dialog.find("#attackSelect").on({ change: this._attackChange.bind(this) });
-	        this.$combatAdvantage = this.$dialog.find("#combatAdvantage").data("combatAdvantage", false).on({ click: (function() { 
-	        	this.combatAdvantage = !this.combatAdvantage;
-	        	this._combatAdvantageChange();
-	        }).bind(this) });
-	        this.$targets = this.$dialog.find("#targetSelect").on({ dblclick: this._resolveAttack.bind(this), change: this._targetsChange.bind(this) });
-	        this.$playerAttackRoll = this.$dialog.find("#playerAttackRoll").on({ change: this._playerAttackChange.bind(this), keyup: this._playerAttackChange.bind(this) });
-	        this.$playerAttackCrit = this.$dialog.find("#playerAttackCrit").on({ change: this._playerAttackChange.bind(this) });
-	        this.$playerDamageRoll = this.$dialog.find("#playerDamageRoll");
-			this.buttons.$attack = this.$dialog.find(".attackBtn").on({ click: this._resolveAttack.bind(this) });
-		}).bind(this));
+		this._init(params);
 	}
 	
-	// Public methods
+	AttackDialog.prototype = new DnD.Dialog("attacksDialog", "/html/partials/attackDialog.html");
+	
+	AttackDialog.prototype._onReady = function() {
+        this.$weapons = this.$dialog.find("#weaponSelect");
+        this.$attacks = this.$dialog.find("#attackSelect").on({ change: this._attackChange.bind(this) });
+        this.$combatAdvantage = this.$dialog.find("#combatAdvantage").data("combatAdvantage", false).on({ click: (function() { 
+        	this.combatAdvantage = !this.combatAdvantage;
+        	this._combatAdvantageChange();
+        }).bind(this) });
+        this.$targets = this.$dialog.find("#targetSelect").on({ dblclick: this._resolveAttack.bind(this), change: this._targetsChange.bind(this) });
+        this.$playerAttackRoll = this.$dialog.find("#playerAttackRoll").on({ change: this._playerAttackChange.bind(this), keyup: this._playerAttackChange.bind(this) });
+        this.$playerAttackCrit = this.$dialog.find("#playerAttackCrit").on({ change: this._playerAttackChange.bind(this) });
+        this.$playerDamageRoll = this.$dialog.find("#playerDamageRoll");
+		this.buttons.$attack = this.$dialog.find(".attackBtn").on({ click: this._resolveAttack.bind(this) });
+	};
+	
+	// OVERRIDDEN METHODS
+	
 	AttackDialog.prototype.show = function(params) {
 		var i, attack, target;
 		if (!params || !params.attacker || !params.actors) {
@@ -68,11 +81,12 @@ var DnD;
         this.$playerDamageRoll.val("");
 		this._attackChange();
 		
-		this.$dialog.modal("show");
+		DnD.Dialog.prototype.show.call(this)
 	};
 
 	
-	// Private methods
+	// PRIVATE METHODS
+	
 	AttackDialog.prototype._resolveAttack = function() {
 		var item, playerRolls, result;
 		if (this.attack && this.targets.length) {
@@ -193,16 +207,6 @@ var DnD;
 		this._notifyTargets();
 	};
 	
-	AttackDialog.prototype._onShow = function() {
-		
-	};
-	
 
-	if (!DnD) {
-		DnD = {};
-	}
-	if (!DnD.Dialog) {
-		DnD.Dialog = {};
-	}
 	DnD.Dialog.Attack = AttackDialog;
 })();

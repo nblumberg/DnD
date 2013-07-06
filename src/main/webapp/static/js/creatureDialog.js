@@ -1,6 +1,18 @@
 var DnD;
 
 (function() {
+	"use strict";
+	
+	if (!DnD) {
+		DnD = {};
+	}
+	if (!DnD.Dialog) {
+		DnD.Dialog = {};
+	}
+	
+	
+	// CONSTRUCTOR & INITIALIZATION METHODS
+	
 	function CreatureDialog(params) {
 		this.callback = params.callback;
 	    this.$dialog = null;
@@ -12,46 +24,23 @@ var DnD;
 				$ok: null
 		};
 		
-		jQuery(document).ready((function() {
-		    this.$dialog = jQuery("#creaturesDialog").on("show", this._onshow.bind(this));
-		    this.$creatures = this.$dialog.find("select#creatureSelect");
-		    this.$selection = this.$dialog.find("select#creatureSelected");
-		    this.$add = this.$dialog.find(".add").on({ click: this._add.bind(this) });
-		    this.$remove = this.$dialog.find(".remove").on({ click: this._remove.bind(this) });
-		    this.buttons.$ok = this.$dialog.find(".btn-primary").on({ click: this._ok.bind(this) });
-		}).bind(this));
+		this._init(params);
 	}
 
-	CreatureDialog.prototype._add = function() {
-        var i, toAdd;
-        toAdd = [];
-        this.$creatures.children("option").each(function() {
-        	if (this.selected) {
-                toAdd.push(jQuery(this).data("creature"));
-        	}
-        });
-        for (i = 0; i < toAdd.length; i++) {
-            jQuery("<option/>").html(toAdd[ i ].name).data("creature", toAdd[ i ]).appendTo(this.$selection);
-        }
-	};
+	CreatureDialog.prototype = new DnD.Dialog("creaturesDialog", "/html/partials/creaturesDialog.html");
 	
-	CreatureDialog.prototype._remove = function() {
-        this.$selection.children("option").each(function() {
-        	if (this.selected) {
-        		jQuery(this).remove();
-        	}
-        });
-	};
 	
-	CreatureDialog.prototype._ok = function() {
-        var toAdd = [];
-        this.$selection.children("option").each(function() {
-            toAdd.push(jQuery(this).data("creature"));
-        });
-        this.callback(toAdd);
-	};
+	// OVERRIDDEN METHODS
 	
-	CreatureDialog.prototype._populate = function() {
+    CreatureDialog.prototype._onReady = function() {
+	    this.$creatures = this.$dialog.find("select#creatureSelect");
+	    this.$selection = this.$dialog.find("select#creatureSelected");
+	    this.$add = this.$dialog.find(".add").on({ click: this._add.bind(this) });
+	    this.$remove = this.$dialog.find(".remove").on({ click: this._remove.bind(this) });
+	    this.buttons.$ok = this.$dialog.find(".btn-primary").on({ click: this._ok.bind(this) });
+    };
+    
+    CreatureDialog.prototype._onShow = function() {
 	    var i, creature, pcs, npcs, sort;
 	    pcs = [];
 	    npcs = [];
@@ -82,22 +71,40 @@ var DnD;
 	    for (i = 0; i < npcs.length; i++) {
 	        jQuery("<option/>").html(npcs[ i ].name).data("creature", npcs[ i ]).appendTo(this.$creatures);
 	    }
-	};	
-	
-    CreatureDialog.prototype.show = function() {
-        this.$dialog.modal("show");
-    };
-
-    CreatureDialog.prototype._onshow = function() {
-        this._populate();
     };
     
+    
+    // PRIVATE METHODS
+    
+	CreatureDialog.prototype._add = function() {
+        var i, toAdd;
+        toAdd = [];
+        this.$creatures.children("option").each(function() {
+        	if (this.selected) {
+                toAdd.push(jQuery(this).data("creature"));
+        	}
+        });
+        for (i = 0; i < toAdd.length; i++) {
+            jQuery("<option/>").html(toAdd[ i ].name).data("creature", toAdd[ i ]).appendTo(this.$selection);
+        }
+	};
 	
-	if (!DnD) {
-		DnD = {};
-	}
-	if (!DnD.Dialog) {
-		DnD.Dialog = {};
-	}
+	CreatureDialog.prototype._remove = function() {
+        this.$selection.children("option").each(function() {
+        	if (this.selected) {
+        		jQuery(this).remove();
+        	}
+        });
+	};
+	
+	CreatureDialog.prototype._ok = function() {
+        var toAdd = [];
+        this.$selection.children("option").each(function() {
+            toAdd.push(jQuery(this).data("creature"));
+        });
+        this.callback(toAdd);
+	};
+		
+	
 	DnD.Dialog.Creature = CreatureDialog;
 })();

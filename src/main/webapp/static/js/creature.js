@@ -777,12 +777,3 @@ Actor.prototype.createCard = function(params) {
 	return this.card;
 };
 
-Actor.prototype.refreshCard = function(isCurrent) {
-	if (!this.card) {
-		this.createCard({ isCurrent: isCurrent });
-	}
-	else {
-		this.card.refresh(isCurrent);
-	}
-};
-

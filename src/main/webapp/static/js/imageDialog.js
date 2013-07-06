@@ -1,12 +1,17 @@
 var DnD;
 
 (function() {
+	"use strict";
+	
 	if (!DnD) {
 		DnD = {};
 	}
 	if (!DnD.Dialog) {
-		DnD.Dialog = function() {};
+		DnD.Dialog = {};
 	}
+	
+	
+	// CONSTRUCTOR & INITIALIZATION METHODS
 	
 	function ImageDialog(params) {
 		this._toDisplay = params.toDisplay || function() {};
@@ -26,8 +31,11 @@ var DnD;
 		this._init(params);
 	}
 	
-	ImageDialog.prototype = new DnD.Dialog("imageDialog");
+	ImageDialog.prototype = new DnD.Dialog("imageDialog", "/html/partials/imageDialog.html");
+	
 
+	// OVERRIDDEN METHODS
+	
 	ImageDialog.prototype._onReady = function() {
 		var i;
 	    // Setup the drag-and-drop listeners
@@ -49,11 +57,12 @@ var DnD;
 	    }
 	};
 	
-	// Public methods
-    
-    // Private methods
 	ImageDialog.prototype._center = function() {
+		// Don't re-center, uses custom CSS
 	};
+	
+	
+    // PRIVATE METHODS
 	
 	ImageDialog.prototype._addImage = function(name, src) {
 		var $img, img = new Image();

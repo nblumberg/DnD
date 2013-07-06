@@ -207,6 +207,7 @@ Initiative.prototype._addActor = function(params, actors) {
     	var actor;
     	// Only both to update the display with properties reflected in the display
     	switch (event.property) {
+    		case "name":
 	    	case "hp.temp":
 	    	case "hp.current":
 	    	case "hp.total": {
@@ -214,6 +215,7 @@ Initiative.prototype._addActor = function(params, actors) {
 	    		this._messageDisplay({ 
 	    			type: "updateActor", 
 	    			id: actor.id, 
+	    			name: actor.name,
 	    			hp: {
 		    			temp: actor.hp.temp,
 		    			current: actor.hp.current,
@@ -252,21 +254,6 @@ Initiative.prototype._randomInitiative = function() {
 
 
 Initiative.prototype._create = function() {
-	var dialogsReady, $tmp;
-	dialogsReady = (function() {
-		if (this.creatureDialog && 
-				this.imageDialog &&
-				this.initiativeDialog &&
-				this.attackDialog && 
-				this.healDialog) {
-		    this._createBody();
-			this._render(true);
-			return true;
-		}
-		return false;
-	}).bind(this);
-	$tmp = {};
-	
 	this.$parent = jQuery(this._$target.length ? this._$target : "body");
 		
     this.$display = jQuery("#display");
@@ -291,64 +278,29 @@ Initiative.prototype._create = function() {
     this.$clearMonsters = jQuery("#clearMonsters").on({ click: this._clearMonsters.bind(this) });
     this.$clearHistory = jQuery("#clearHistory").on({ click: this._clearHistory.bind(this) });
     
-    if (dialogsReady()) {
-    	return;
-    }
-    
-	if (!this.creatureDialog) {
-		$tmp.creatureDialog = jQuery("<div/>");
-		$tmp.creatureDialog.load("/html/partials/creaturesDialog.html", null, (function() {
-			$tmp.creatureDialog.children().appendTo(this.$parent);
-			this.creatureDialog = new DnD.Dialog.Creature({ callback: (function(toAdd) {
-				var i, creature;
-		        for (i = 0; i < toAdd.length; i++) {
-		            creature = toAdd[ i ];
-		            this._addActor(creature);
-		        }
-		        this._render(true);
-		        dialogsReady();
-			}).bind(this) });
-		}).bind(this));
-	}
+	this.creatureDialog = new DnD.Dialog.Creature({ callback: (function(toAdd) {
+		var i, creature;
+        for (i = 0; i < toAdd.length; i++) {
+            creature = toAdd[ i ];
+            this._addActor(creature);
+        }
+        this._render(true);
+        dialogsReady();
+	}).bind(this) });
 	
-	if (!this.imageDialog) {
-		$tmp.imageDialog = jQuery("<div/>");
-		$tmp.imageDialog.load("/html/partials/imageDialog.html", null, (function() {
-			$tmp.imageDialog.children().appendTo(this.$parent);
-			this.imageDialog = new DnD.Dialog.Image({ toDisplay: this._messageDisplay.bind(this) });
-	        dialogsReady();
-		}).bind(this));
-	}
+	this.imageDialog = new DnD.Dialog.Image({ toDisplay: this._messageDisplay.bind(this) });
+
+	this.initiativeDialog = new DnD.Dialog.Initiative({ actors: this.actors, order: this.order, onchange: this._changeInitiative.bind(this) });
+
+	this.attackDialog = new DnD.Dialog.Attack({ callback: (function(msg) {
+		this._render(false);
+		this._messageDisplay(msg, false);
+	}).bind(this) });
+
+	this.healDialog = new DnD.Dialog.Heal({});
 	
-	if (!this.initiativeDialog) {
-		$tmp.initiativeDialog = jQuery("<div/>");
-		$tmp.initiativeDialog.load("/html/partials/initiativeDialog.html", null, (function() {
-			$tmp.initiativeDialog.children().appendTo(this.$parent);
-			this.initiativeDialog = new DnD.Dialog.Initiative({ actors: this.actors, order: this.order, onchange: this._changeInitiative.bind(this) });
-	        dialogsReady();
-		}).bind(this));
-	}
-	
-	if (!this.attackDialog) {
-		$tmp.attackDialog = jQuery("<div/>");
-		$tmp.attackDialog.load("/html/partials/attackDialog.html", null, (function() {
-			$tmp.attackDialog.children().appendTo(this.$parent);
-			this.attackDialog = new DnD.Dialog.Attack({ callback: (function(msg) {
-				this._render(false);
-				this._messageDisplay(msg, false);
-			}).bind(this) });
-	        dialogsReady();
-		}).bind(this));
-	}
-	
-	if (!this.healDialog) {
-		$tmp.healDialog = jQuery("<div/>");
-		$tmp.healDialog.attr("id", "healDialog").appendTo("body").load("/html/partials/healDialog.html", null, (function(responseText, textStatus, jqXHR) {
-			$tmp.healDialog.children().appendTo(this.$parent);
-	    	this.healDialog = new DnD.Dialog.Heal({});
-	        dialogsReady();
-		}).bind(this));
-	}
+	this._createBody();
+	this._render(false);
 };
 
 Initiative.prototype._createBody = function() {
@@ -517,7 +469,7 @@ Initiative.prototype._messageDisplay = function(msg, createDisplay) {
 	}
 	if (this.display) {
 		if (typeof(msg) !== "string") {
-			json = JSON.stringify(msg, null, "  "); // msg.toJSON();
+			json = JSON.stringify(msg, null, "  ");
 		}
 		else {
 			json = msg;
@@ -797,29 +749,16 @@ Initiative.prototype._exit = function(actor, event) {
 };
 
 Initiative.prototype._rename = function(actor, event) {
-	var $dialog, $input;
-	$input = jQuery("<input/>").attr("id", "rename").val(actor.name);
-	$dialog = jQuery("<div/>").html($input).dialog({ 
-        autoOpen: false, 
-        modal: true, 
-        title: "Rename " + actor.name, 
-        position: [ "center", event.screenY - 300 ],
-        buttons: [
-                  { 
-                      text: "Rename", click: (function() {
-                    	  if ($input.val()) {
-                        	  this._addHistory(actor, "Changed name from " + actor.name + " to " + $input.val());
-                        	  actor.name = $input.val();
-                    	  }
-                    	  this._render(true);
-                    	  $dialog.dialog("destroy");
-                      }).bind(this)
-                  },
-                  {
-                	  text: "Cancel", click: function() { $dialog.dialog("destroy"); }
-                  }
-        ]
-    }).dialog("open");
+	var oldName, newName;
+	oldName = actor.name;
+	newName = window.prompt("Rename " + oldName);
+	if (newName) {
+		this._addHistory(actor, "Changed name from " + oldName + " to " + newName);
+		actor.name = newName;
+		actor.card.refresh();
+		actor.dispatchEvent({ type: "change", property: "name", oldValue: oldName, newValue: newName });
+		this._autoSave();
+	}
 };
 
 Initiative.prototype.raw = function() {
