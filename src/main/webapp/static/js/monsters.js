@@ -434,7 +434,7 @@ function loadMonsters() {
               ]
         },
         "Shadar-kai Warrior": { 
-            name: "Shadar-kai Warrior", level: 8, image: "../images/portraits/shadar_kai_warrior.jpg",
+            name: "Shadar-kai Warrior", level: 8, image: "../images/portraits/shadar_kai_warrior.png",
             hp: { total: 86 },
             defenses: { ac: 24, fort: 19, ref: 20, will: 17 },
             init: 11, speed: { walk: 5, teleport: 3 },

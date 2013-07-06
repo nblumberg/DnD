@@ -370,30 +370,6 @@ Actor.prototype.toString = function() {
     return "[Actor \"" + this.name + "\"]";
 };
 
-/**
- * @param params Object
- * @param params.$parent {jQuery(element)} The parent element
- * @param params.isCurrent {Boolean} Indicates if it is this Creature's turn in the initiative order
- * @param params.className {String} Class(es) to apply to the top-level element 
- * @param params.cardSize {Number} The height of the card
- * @param params.showPcHp {Boolean} Display PC HP
- */
-Actor.prototype.createCard = function(params) {
-	params = params || {};
-	params.actor = this;
-	this.card = new DnD.Display.ActorCard(params);
-	return this.card;
-};
-
-Actor.prototype.refreshCard = function(isCurrent) {
-	if (!this.card) {
-		this.createCard({ isCurrent: isCurrent });
-	}
-	else {
-		this.card.refresh(isCurrent);
-	}
-};
-
 Actor.prototype.addCondition = function(effect) {
     var name, i;
     if (typeof(effect) === "string") {
@@ -784,5 +760,29 @@ Actor.prototype.createTr = function(params) {
 	params = params || {};
 	params.actor = this;
 	this.tr = new DnD.Display.ActorRow(params);
+};
+
+/**
+ * @param params Object
+ * @param params.$parent {jQuery(element)} The parent element
+ * @param params.isCurrent {Boolean} Indicates if it is this Creature's turn in the initiative order
+ * @param params.className {String} Class(es) to apply to the top-level element 
+ * @param params.cardSize {Number} The height of the card
+ * @param params.showPcHp {Boolean} Display PC HP
+ */
+Actor.prototype.createCard = function(params) {
+	params = params || {};
+	params.actor = this;
+	this.card = new DnD.Display.ActorCard(params);
+	return this.card;
+};
+
+Actor.prototype.refreshCard = function(isCurrent) {
+	if (!this.card) {
+		this.createCard({ isCurrent: isCurrent });
+	}
+	else {
+		this.card.refresh(isCurrent);
+	}
 };
 
