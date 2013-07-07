@@ -19,7 +19,14 @@ span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
 
 #pageLayout {
+	padding-top: 30px;
+	width: 100%;
 }
+
+#pageLayout .leftPanel, #pageLayout .rightPanel {
+	display: table-cell;
+}
+
 
 #roundLabel {
 	font-size: 9pt;
