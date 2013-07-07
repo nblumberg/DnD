@@ -230,7 +230,7 @@ var DnD;
 
     Initiative.prototype._createBody = function() {
         jQuery("#tableContainer").load("/html/partials/actorTable.html", null, this._renderActorTable.bind(this));
-        jQuery("#history").append(this.history.$html);
+        this.history.addToPage(jQuery("#history"));
         this._createHistory();
     };
 
@@ -636,7 +636,6 @@ var DnD;
         }
         if (actor) {
             actor.history.add(entry);
-            message = actor.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
         }
         this.history.add(entry);
         try { window.console[ method ](message); } finally {}

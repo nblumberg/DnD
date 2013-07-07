@@ -22,6 +22,7 @@ var DnD;
      * @param order.down {Function} The click handler for the move initiative order down action
      * @param attack {Function} The click handler for the attack action
      * @param heal {Function} The click handler for the heal action
+     * @param history {DnD.History} The History of the Actor
      */
     function ActorRow(params) {
         this.params = params || {};
@@ -36,6 +37,7 @@ var DnD;
         this.hpTotal = null;
         this.surgesCurrent = null;
         this.surgesPerDay = null;
+        this.history = params.history;
         
         this.$tr = jQuery("<tr/>").attr("id", this.actor.name + "_row").data("actor", this.actor).appendTo(params.$table);
         if (params.isCurrent) {
@@ -172,7 +174,7 @@ var DnD;
         this.$exit = this.$tr.find(".exit").on({ click: this.params.exit });
         this.$rename = this.$tr.find(".rename").on({ click: this.params.rename });
         
-        this.$tr.find(".history div").html(this.actor.history.$html);
+        this.history.addToPage(this.$tr.find(".history div"));
     };
     
     ActorRow.prototype._addDefense = function($field, defense) {

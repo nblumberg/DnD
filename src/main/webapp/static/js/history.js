@@ -9,12 +9,32 @@ var DnD;
     
     // HISTORY
     // CONSTRUCTOR
-    
+
+    /**
+     * @param params {Object}
+     * @param [params._entries] {Array} Array of History.Entry
+     * @param [params._includeSubject] {Boolean} Whether to print the subject of each Entry
+     * @param [params._round] {Number} The current round, defaults to 1 
+     * @param [params._roundTimes] {Object} A map of Actor.id to Array of Number (milliseconds) 
+     * @param [params.$parent] {jQuery selection} The element to add this History's HTML to
+     */
     function History(params) {
-        var i, entry;
-        
         if (!History.initialized) {
-            jQuery(document).on("click", "li.round", function(event) {
+            jQuery(document).on("click", "button.expandCollapseAll", function(event) {
+                var $button, history, $ul, expand;
+                $button = jQuery(this);
+                history = $button.closest(".history").data("history");
+                $ul = history.$html.find("ul.entries");
+                expand = $ul.css("display") === "none";
+                if (expand) {
+                    $ul.show();
+                    $button.html("Collapse all");
+                }
+                else {
+                    $ul.hide();
+                    $button.html("Expand all");
+                }
+            }).on("click", "li.round", function(event) {
                 jQuery(this).children("ul").toggle();
             }).on("click", "li.entry", function(event) {
                 var $entry, history;
@@ -28,18 +48,13 @@ var DnD;
         
         params = params || {};
         this._entries = params._entries || [];
-        this._round = 0; // the current round
+        this._round = params._round || 0; // the current round
         this._count = 0;
-        this._roundTimes = {}; // the duration of each round
+        this._roundTimes = params._roundTimes || {}; // the duration of each round
         this._includeSubject = params._includeSubject;
         
-        this.$html = this._entries.length > 0 ? jQuery("<ul/>") : jQuery("<span/>").html("No history");
-        for (i = 0; i < this._entries.length; i++) {
-            entry = History.Entry.entries[ this._entries[ i ] ];
-            if (!entry) {
-                continue;
-            }
-            entry._addToRound(this._getRound(entry, true), this._includeSubject);
+        if (params.$parent) {
+            this.addToPage(params.$parent);
         }
     }
 
@@ -50,6 +65,36 @@ var DnD;
     
     History.initialized = false;
     History.central = null;
+    History._waitingOnTemplates = [];
+    (function() {
+        var templatesReady, $history, $round, $entry;
+        
+        templatesReady = function() {
+            var i;
+            if (History.$history && History.$round && History.$entry) {
+                for (i = 0; i < History._waitingOnTemplates.length; i++) {
+                    History.prototype._create.call(History._waitingOnTemplates[ i ]);
+                }
+                History._waitingOnTemplates = [];
+            }
+        };
+        
+        $history = jQuery("<div/>");
+        $history.load("/html/partials/history.html", null, function(responseText, textStatus, jqXHR) {
+            History.$history = $history.find("div.history");
+            templatesReady();
+        });
+        $round = jQuery("<div/>");
+        $round.load("/html/partials/historyRound.html", null, function(responseText, textStatus, jqXHR) {
+            History.$round = $round.find("li.round");
+            templatesReady();
+        });
+        $entry = jQuery("<div/>");
+        $entry.load("/html/partials/historyEntry.html", null, function(responseText, textStatus, jqXHR) {
+            History.$entry = $entry.find("li.entry");
+            templatesReady();
+        });
+    })();
 
     
     // OVERRIDDEN METHODS
@@ -64,6 +109,16 @@ var DnD;
 
     
     // PUBLIC METHODS
+    
+    History.prototype.addToPage = function($parent) {
+        this.$parent = $parent;
+        if (History.$history && History.$round && History.$entry) {
+            this._create();
+        }
+        else {
+            History._waitingOnTemplates.push(this);
+        }
+    };
     
     History.prototype.add = function(entry) {
         entry.round = entry.round ? entry.round : this._round;
@@ -101,10 +156,7 @@ var DnD;
             $round.remove();
             // Reset empty histories as well
             if (!this.$html.children().length) {
-                $tmp = jQuery("<span/>").html("No history");
-                $tmp.insertBefore(this.$html);
-                this.$html.remove();
-                this.$html = $tmp;
+                this._noHistory();
             }
         }
     };
@@ -139,14 +191,51 @@ var DnD;
     
     // PRIVATE METHODS
 
+    History.prototype._create = function() {
+        var i, entry;
+        this.$html = this._entries.length > 0 ? this._createHtml() : this._noHistory();
+        for (i = 0; i < this._entries.length; i++) {
+            entry = History.Entry.entries[ this._entries[ i ] ];
+            if (!entry) {
+                continue;
+            }
+            entry._addToRound(this._getRound(entry, true), this._includeSubject);
+        }
+    };
+    
+    History.prototype._createHtml = function() {
+        var $html = History.$history.clone();
+        if (this.$html) {
+            $html.insertBefore(this.$html);
+            this.$html.remove();
+        }
+        else {
+            $html.appendTo(this.$parent);
+        }
+        this.$html = $html;
+        this.$html.data("history", this);
+        return this.$html;
+    };
+    
+    History.prototype._noHistory = function() {
+        var $html = jQuery("<span/>").html("No history");
+        if (this.$html) {
+            $html.insertBefore(this.$html);
+            this.$html.remove();
+        }
+        else {
+            $html.appendTo(this.$parent);
+        }
+        this.$html = $html;
+        this.$html.data("history", this);
+        return this.$html;
+    };
+    
     History.prototype._getRound = function(round, create) {
         var $tmp, $ul, $li;
         if (!this._count) {
             if (create) {
-                $tmp = jQuery("<ul/>").addClass("history").insertBefore(this.$html);
-                $tmp.data("history", this);
-                this.$html.remove();
-                this.$html = $tmp;
+                this._createHtml();
             }
             else {
                 return null;
@@ -158,13 +247,13 @@ var DnD;
             if (create) {
                 this._count++;
                 this._round = round;
-                $li = jQuery("<li/>").addClass("round round" + this._round).data("history", this).appendTo(this.$html);
-                $tmp = jQuery("<span/>").addClass("round").html("Round " + this._round).appendTo($li);
-                $tmp = jQuery("<span/>").addClass("time").appendTo($li);
+                $li = History.$round.clone();
+                $li.addClass("round" + this._round).data("history", this).appendTo(this.$html);
+                $li.find(".roundLabel .round").html(this._round);
                 if (this._roundTimes.hasOwnProperty(round)) {
-                    this._setRoundTime($tmp, this._roundTimes[ round ]);
+                    this._setRoundTime($li.find(".time"), this._roundTimes[ round ]);
                 }
-                $ul = jQuery("<ul/>").addClass("entries round round" + this._round).appendTo($li);
+                $ul = $li.find(".entries").addClass("round" + this._round);
             }
             else {
                 $ul = null;
@@ -306,19 +395,27 @@ var DnD;
     // PRIVATE METHODS
     
     History.Entry.prototype._addToRound = function($round, includeSubject) {
-        var message, $li, $span;
+        var message, history, $li, $span, $save, $delete;
         message = this.message;
-        if (includeSubject) {
-            if (typeof(this.subject) === "number") {
-                // Creature.actors wasn't initialized at creation time, resolve subject id now
-                this.subject = Creature.actors[ this.subject ] ? Creature.actors[ this.subject ] : this.subject;
-            }
-            if (this.subject) {
-                message = this.subject.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
-            }
+        history = $round.closest(".history").data("history");
+        if (includeSubject && typeof(this.subject) === "number") {
+            // Creature.actors wasn't initialized at creation time, resolve subject id now
+            this.subject = Creature.actors[ this.subject ] ? Creature.actors[ this.subject ] : this.subject;
         }
-        $span = jQuery("<span/>").addClass(includeSubject ? "includeSubject" : "").html(message);
-        $li = jQuery("<li/>").addClass("entry entry" + this.id).append($span).appendTo($round).data("entry", this); //.on({ click: this._edit.bind(this, $li) });
+        $li = History.$entry.clone();
+        $li.addClass("entry" + this.id).data("entry", this).appendTo($round);
+        if (includeSubject && this.subject) {
+            $li.addClass(includeSubject ? "includeSubject" : "");
+            $span = $li.find(".subject").html(this.subject.name);
+            $span = $li.find(".message").html(message.charAt(0).toLowerCase() + message.substr(1));
+        }
+        else {
+            $span = $li.find(".message").html(message);
+        }
+        $save = $li.find(".save");
+        $delete = $li.find(".delete");
+        $save.on({ click: this._save.bind(this, $li, $span, $li.find("textarea"), $save, $delete, history) });
+        $delete.on({ click: this._delete.bind(this, $li, $span, $li.find("textarea"), $save, $delete, history) });
     };
 
     History.Entry.prototype._edit = function($entry, history) {
@@ -327,13 +424,9 @@ var DnD;
             return;
         }
         $entry.addClass("edit");
-        $span = $entry.find("span");
-        $input = jQuery("<textarea/>").addClass("halfWidth").val(this.message).appendTo($entry);
-        $span.remove();
+        $input = j$entry.find("textarea").val(this.message);
         $save = jQuery("<button/>").attr("title", "Save").html("&#x2713;").appendTo($entry);
         $delete = jQuery("<button/>").attr("title", "Delete").html("X").appendTo($entry);
-        $save.on({ click: this._save.bind(this, $entry, $span, $input, $save, $delete, history) });
-        $delete.on({ click: this._delete.bind(this, $entry, $span, $input, $save, $delete, history) });
     };
 
     History.Entry.prototype._save = function($entry, $span, $input, $save, $delete, history, event) {
@@ -347,10 +440,6 @@ var DnD;
         }
         
         $span.html(message);
-        $input.remove();
-        $save.remove();
-        $delete.remove();
-        $entry.append($span);
         $entry.removeClass("edit");
         
         if (history === History.central) {
@@ -375,9 +464,7 @@ var DnD;
             $round.remove();
             // Reset empty histories as well
             if (!$history.children().length) {
-                history.$html = jQuery("<span/>").html("No history");
-                history.$html.insertBefore($history);
-                $history.remove();
+                this._noHistory();
             }
         }
         

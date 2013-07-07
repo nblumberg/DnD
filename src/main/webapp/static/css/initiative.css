@@ -14,11 +14,17 @@ th, td { border-color: white; }
 .fullBoth { height: 100%; width: 100%; }
 .nowrap { white-space: nowrap; }
 
+/* vertical centering */
+.verticallyCentered { display: table; position: relative; }
+.verticallyCentered > .wrapper { display: table-cell; position: static; vertical-align: middle; top: 50%; width: 100%; }
+.verticallyCentered > .wrapper > .content { position: relative; top: -50%; }
+
 div#header { background-color: black; position: fixed; width: 100%; z-index: 5; }
 span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
 
 #pageLayout {
+	display: table;
 	padding-top: 30px;
 	width: 100%;
 }
@@ -36,16 +42,14 @@ input#round { width: 30px; }
 	height: 30px;
 }
 
-#history {}
-#history > tr > td, #history > tbody > tr > td { vertical-align: top; }
-#history div { text-align: center; }
-#freeFormHistory { text-align: center; }
+/* history */
+.history li.entry .message { display: inline; }
+.history li.entry textarea, .history li.entry .save, .history li.entry .delete { display: none; }
+.history li.entry.edit .message { display: none; }
+.history li.entry.edit textarea, .history li.entry.edit .save, .history li.entry.edit .delete { display: inline; }
+#freeFormHistory { text-align: center; white-space: nowrap; }
 .round .time { padding-left: 5px; }
 .round .edit textarea { height: 150px; }
-
-.verticallyCentered { display: table; position: relative; }
-.verticallyCentered > .wrapper { display: table-cell; position: static; vertical-align: middle; top: 50%; width: 100%; }
-.verticallyCentered > .wrapper > .content { position: relative; top: -50%; }
 
 /* actorRow */
 .numerator:after { content: '/' }

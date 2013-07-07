@@ -1,12 +1,6 @@
-<ul class="history">
-    <button>Collapse all</button>
-    <li class="round round${index}" data-template-repeat="round in rounds">
-        <span class="round">Round ${index}</span>
-        <span class="time">${duration}</span>
-        <ul class="entries round round${index}">
-            <li class="entry entry${entry.id}" data-template-repeat="entry in round.entries">
-                <span>${entry.message}</span>
-            </li>
-        </ul>
-    </li>
-</ul>
+<div class="history">
+    <button class="expandCollapseAll">Collapse all</button>
+    <ul class="history">
+        <!-- repeat historyRound.html -->
+    </ul>
+</div>

@@ -763,6 +763,7 @@ Actor.prototype.endTurn = function() {
 Actor.prototype.createTr = function(params) {
     params = params || {};
     params.actor = this;
+    params.history = this.history;
     this.tr = new DnD.Display.ActorRow(params);
 };
 
