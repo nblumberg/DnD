@@ -1,26 +1,28 @@
+var DnD;
+
 var Defenses = function(params) {
-	params = params || {};
-	this.ac = params.ac || 10;
-	this.fort = params.fort || 10;
-	this.ref = params.ref || 10;
-	this.will = params.will || 10;
-	this.resistances = params.resistances || {};
-	this.toString = function() { "[Defenses]"; };
+    params = params || {};
+    this.ac = params.ac || 10;
+    this.fort = params.fort || 10;
+    this.ref = params.ref || 10;
+    this.will = params.will || 10;
+    this.resistances = params.resistances || {};
+    this.toString = function() { "[Defenses]"; };
 };
 
 var HP = function(params) {
-	params = params || {};
-	this.total = params.total || 1;
-	this.current = params.current || this.total;
-	this.temp = params.temp || 0;
-	this.regeneration = params.regeneration || 0;
+    params = params || {};
+    this.total = params.total || 1;
+    this.current = params.current || this.total;
+    this.temp = params.temp || 0;
+    this.regeneration = params.regeneration || 0;
     this.toString = function() { "[HP]"; };
 };
 
 var Surges = function(params) {
-	params = params || {};
-	this.perDay = params.perDay || 0;
-	this.current = params.current || this.perDay;
+    params = params || {};
+    this.perDay = params.perDay || 0;
+    this.current = params.current || this.perDay;
     this.toString = function() { "[Surges]"; };
 };
 
@@ -48,12 +50,12 @@ Effect.prototype.toString = function() {
     if (this.children && this.children.length) {
         name += " [ ";
         for (i = 0; i < this.children.length; i++) {
-        	if (i && i < this.children.length - 1) {
-        		name += ", ";
-        	}
-        	else if (i === this.children.length - 1) {
-        		name += " and ";
-        	}
+            if (i && i < this.children.length - 1) {
+                name += ", ";
+            }
+            else if (i === this.children.length - 1) {
+                name += " and ";
+            }
             name += this.children[ i ].name;
         }
         name += " ]";
@@ -98,14 +100,14 @@ Effect.CONDITIONS = {
 
 
 var Implement = function(params) {
-	this._init(params);
+    this._init(params);
 };
 
 Implement.prototype._init = function(params) {
-	params = params || {};
-	this.name = params.name;
-	this.enhancement = params.enhancement;
-	this.crit = new Damage(params.crit);
+    params = params || {};
+    this.name = params.name;
+    this.enhancement = params.enhancement;
+    this.crit = new Damage(params.crit);
 };
 
 Implement.prototype.toString = function() {
@@ -114,11 +116,11 @@ Implement.prototype.toString = function() {
 
     
 var Weapon = function(params) {
-	params = params || {};
-	this._init(params);
-	this.isMelee = params.isMelee;
-	this.proficiency = params.proficiency || 0;
-	this.damage = new Damage(params.damage);
+    params = params || {};
+    this._init(params);
+    this.isMelee = params.isMelee;
+    this.proficiency = params.proficiency || 0;
+    this.damage = new Damage(params.damage);
 };
 
 Weapon.prototype = new Implement();
@@ -130,29 +132,29 @@ Weapon.prototype.toString = function() {
 
 
 var Abilities = function(params) {
-	var i, ability, abilities = [ "STR", "DEX", "CON", "INT", "WIS", "CHA" ];
-	params = params || {};
-	for (i = 0; i < abilities.length; i++) {
-		ability = abilities[ i ];
-		this[ ability ] = params[ ability ] || 10;
-		this[ ability + "mod" ] = Math.floor((this[ ability ] - 10) / 2);
-	}
+    var i, ability, abilities = [ "STR", "DEX", "CON", "INT", "WIS", "CHA" ];
+    params = params || {};
+    for (i = 0; i < abilities.length; i++) {
+        ability = abilities[ i ];
+        this[ ability ] = params[ ability ] || 10;
+        this[ ability + "mod" ] = Math.floor((this[ ability ] - 10) / 2);
+    }
     this.toString = function() { "[Abilities]"; };
 };
 
 
 
 var Creature = function(params) {
-	params = params || {};
-	
-	// Basic properties
-	this.id = params.id || Creature.id++;
-	this.name = params.name;
+    params = params || {};
+    
+    // Basic properties
+    this.id = params.id || Creature.id++;
+    this.name = params.name;
 
-	// Store in singleton
-	if (!Creature.creatures) {
-		Creature.creatures = {};
-	}
+    // Store in singleton
+    if (!Creature.creatures) {
+        Creature.creatures = {};
+    }
     if (params && params.name) {
         if (console && console.debug && Creature.creatures.hasOwnProperty(this.name)) {
             console.debug("Replacing Creature.creatures[ " + this.name + " ]");
@@ -161,7 +163,7 @@ var Creature = function(params) {
     }
 
     // Other properties
-	this._init(params);
+    this._init(params);
 };
 
 Creature.id = (new Date()).getTime();
@@ -171,38 +173,39 @@ Creature.creatures = {};
 Creature.prototype = new EventDispatcher();
 
 Creature.prototype._init = function(params) {
-	var i;
-	params = params || {};
-	this._listeners = {};
-	this.image = params.image;
-	this.isPC = params.isPC || false;
-	this.level = params.level || false;
-	this.abilities = new Abilities(params.abilities);
-	this.hp = new HP(params.hp);
-	this.surges = new Surges(params.surges);
-	this.defenses = params.defenses || new Defenses();
-	this.immunities = params.immunities || [];
-	this.resistances = params.resistances || {};
-	this.vulnerabilities = params.vulnerabilities || {};
-	this.insubstantial = params.insubstantial || false;
-	this.attackBonuses = params.attackBonuses || [];
-	this.attacks = params.attacks || [];
-	this.init = params.init || 0;
-	this.ap = params.ap || 0;
-	this.effects = [];
-	this.move = params.move || 6;
-	this[ "implements" ] = [];
-	for (i = 0; params[ "implements" ] && i < params[ "implements" ].length; i++) {
-		this[ "implements" ].push(new Implement(params[ "implements" ][ i ]));
-	}
-	this.weapons = [];
-	for (i = 0; params.weapons && i < params.weapons.length; i++) {
-		this.weapons.push(new Weapon(params.weapons[ i ]));
-	}
-	this.attacks = [];
-	for (i = 0; params.attacks && i < params.attacks.length; i++) {
-		this.attacks.push(new Attack(params.attacks[ i ], this));
-	}
+    var i;
+    params = params || {};
+    this._listeners = {};
+    this.image = params.image;
+    this.isPC = params.isPC || false;
+    this.level = params.level || false;
+    this.abilities = new Abilities(params.abilities);
+    this.hp = new HP(params.hp);
+    this.surges = new Surges(params.surges);
+    this.defenses = params.defenses || new Defenses();
+    this.immunities = params.immunities || [];
+    this.resistances = params.resistances || {};
+    this.vulnerabilities = params.vulnerabilities || {};
+    this.insubstantial = params.insubstantial || false;
+    this.attackBonuses = params.attackBonuses || [];
+    this.attacks = params.attacks || [];
+    this.init = params.init || 0;
+    this.ap = params.ap || 0;
+    this.effects = [];
+    this.move = params.move || 6;
+    i = "implements"; // NOTE: done to satisfy JSHint and browsers that complain about implements as a javascript keyword
+    this[ i ] = [];
+    for (i = 0; params[ i ] && i < params[ i ].length; i++) {
+        this[ i ].push(new Implement(params[ i ][ i ]));
+    }
+    this.weapons = [];
+    for (i = 0; params.weapons && i < params.weapons.length; i++) {
+        this.weapons.push(new Weapon(params.weapons[ i ]));
+    }
+    this.attacks = [];
+    for (i = 0; params.attacks && i < params.attacks.length; i++) {
+        this.attacks.push(new Attack(params.attacks[ i ], this));
+    }
     this.effects = [];
     for (i = 0; params.effects && i < params.effects.length; i++) {
         this.effects.push(new Effect(params.effects[ i ]));
@@ -210,7 +213,7 @@ Creature.prototype._init = function(params) {
 };
 
 Creature.prototype.isBloodied = function() {
-	return this.hp.current <= Math.floor(this.hp.total / 2);
+    return this.hp.current <= Math.floor(this.hp.total / 2);
 };
 
 Creature.prototype.getCondition = function(condition) {
@@ -244,9 +247,11 @@ Creature.prototype.grantsCombatAdvantage = function(isMelee) {
             case "unconscious": {
                 return true;
             }
+            break;
             case "prone": {
                 return isMelee;
             }
+            break;
         }
     }
     return false;
@@ -256,76 +261,75 @@ Creature.prototype.defenseModifier = function(isMelee) {
     var i, mod = 0;
     for (i = 0; i < this.effects.length; i++) {
         switch (this.effects[ i ].name.toLowerCase()) {
-            case "unconscious":
-            {
+            case "unconscious": {
                 mod -= 5;
-                break;
             }
+            break;
             case "prone": {
                 mod += isMelee ? 0 : 2;
-                break;
             }
+            break;
         }
     }
     return mod;
 };
 
 Creature.prototype._attackBonuses = function(attack, item, target, combatAdvantage) {
-	var i, j, attackBonuses, attackBonus, isMatch;
-	
+    var i, j, attackBonuses, attackBonus, isMatch;
+    
     attackBonuses = [];
     
-	if (this.attackBonuses) {
-		for (i = 0; i < this.attackBonuses.length; i++) {
-			attackBonus = this.attackBonuses[ i ];
-			// Attack matches defense
-			isMatch = true;
-			if (attackBonus.defense && attackBonus.defense.toLowerCase() !== attack.defense.toLowerCase()) {
-				isMatch = false;
-			}
-			if (!isMatch) {
-				continue;
-			}
-			// Attack matches keywords
-			isMatch = true;
-			if (attackBonus.keywords && attack.keywords) {
-				for (j = 0; j < attackBonus.keywords; j++) {
-					if (attack.keywords.indexOf(attackBonus.keywords[ j ]) === -1) {
-						isMatch = false;
-						break;
-					}
-				}
-			}
-			if (!isMatch) {
-				continue;
-			}
-			// Attack matches attacker status
-			isMatch = true;
-			if (attackBonus.status) {
-				if (attackBonus.status.indexOf("bloodied") !== -1 && !this.isBloodied()) {
-					isMatch = false;
-				}
-			}
-			if (!isMatch) {
-				continue;
-			}
-			// Attack matches target status
-			if (attackBonus.foeStatus) {
-				if (attackBonus.foeStatus.indexOf("combat advantage") !== -1 && !combatAdvantage) {
-					isMatch = false;
-				}
-				if (attackBonus.foeStatus.indexOf("bloodied") !== -1 && (!target || !target.isBloodied())) {
-					isMatch = false;
-				}
-			}
-			if (!isMatch) {
-				continue;
-			}
-			attackBonuses.push(attackBonus);
-		}
-	}
-	
-	return attackBonuses;
+    if (this.attackBonuses) {
+        for (i = 0; i < this.attackBonuses.length; i++) {
+            attackBonus = this.attackBonuses[ i ];
+            // Attack matches defense
+            isMatch = true;
+            if (attackBonus.defense && attackBonus.defense.toLowerCase() !== attack.defense.toLowerCase()) {
+                isMatch = false;
+            }
+            if (!isMatch) {
+                continue;
+            }
+            // Attack matches keywords
+            isMatch = true;
+            if (attackBonus.keywords && attack.keywords) {
+                for (j = 0; j < attackBonus.keywords; j++) {
+                    if (attack.keywords.indexOf(attackBonus.keywords[ j ]) === -1) {
+                        isMatch = false;
+                        break;
+                    }
+                }
+            }
+            if (!isMatch) {
+                continue;
+            }
+            // Attack matches attacker status
+            isMatch = true;
+            if (attackBonus.status) {
+                if (attackBonus.status.indexOf("bloodied") !== -1 && !this.isBloodied()) {
+                    isMatch = false;
+                }
+            }
+            if (!isMatch) {
+                continue;
+            }
+            // Attack matches target status
+            if (attackBonus.foeStatus) {
+                if (attackBonus.foeStatus.indexOf("combat advantage") !== -1 && !combatAdvantage) {
+                    isMatch = false;
+                }
+                if (attackBonus.foeStatus.indexOf("bloodied") !== -1 && (!target || !target.isBloodied())) {
+                    isMatch = false;
+                }
+            }
+            if (!isMatch) {
+                continue;
+            }
+            attackBonuses.push(attackBonus);
+        }
+    }
+    
+    return attackBonuses;
 };
 
 Creature.prototype.toString = function() {
@@ -335,35 +339,35 @@ Creature.prototype.toString = function() {
 
 
 var Actor = function(params, count) {
-	if (params instanceof Creature) {
-		params = params.raw();
-		params.id = 0;
-	}
-	
-	// Basic properties
-	this.id = params.id || Creature.id++;
-	this.type = params.name;
-	this.name = params.name + (!params.isPC && count ? " #" + count : "");
+    if (params instanceof Creature) {
+        params = params.raw();
+        params.id = 0;
+    }
+    
+    // Basic properties
+    this.id = params.id || Creature.id++;
+    this.type = params.name;
+    this.name = params.name + (!params.isPC && count ? " #" + count : "");
 
-	// Store in singleton
-	if (!Creature.actors) {
-		Creature.actors = {};
-	}
-	if (console && console.debug && Creature.actors.hasOwnProperty(this.id)) {
-		console.debug("Replacing Creature.actors[ " + this.name + " ]");
-	}
+    // Store in singleton
+    if (!Creature.actors) {
+        Creature.actors = {};
+    }
+    if (console && console.debug && Creature.actors.hasOwnProperty(this.id)) {
+        console.debug("Replacing Creature.actors[ " + this.name + " ]");
+    }
     Creature.actors[ this.id ] = this;
     
-	this._init(params);
+    this._init(params);
 };
 
 Actor.prototype = new Creature();
 
 Actor.prototype._init = function(params) {
-	Creature.prototype._init.call(this, params);
-	this.history = new History(params.history || { includeSubject: false });
-	this._turnTimer = (new Date()).getTime();
-	this._turnDurations = {};
+    Creature.prototype._init.call(this, params);
+    this.history = new DnD.History(params.history || { includeSubject: false });
+    this._turnTimer = (new Date()).getTime();
+    this._turnDurations = {};
 };
 
 Actor.prototype.toString = function() {
@@ -373,10 +377,10 @@ Actor.prototype.toString = function() {
 Actor.prototype.addCondition = function(effect) {
     var name, i;
     if (typeof(effect) === "string") {
-    	effect = { name: effect };
+        effect = { name: effect };
     }
     if (effect && effect.name) {
-    	effect.name = effect.name.substring(0, 1).toUpperCase() + effect.name.substr(1);
+        effect.name = effect.name.substring(0, 1).toUpperCase() + effect.name.substr(1);
     }
     name = effect.name.toLowerCase();
     if ((name === "dying" || name === "dead") && this.hp.current >= 0) {
@@ -384,7 +388,7 @@ Actor.prototype.addCondition = function(effect) {
         return;
     }
     if (this.card) {
-    	this.card.updateConditions();
+        this.card.updateConditions();
     }
 };
 
@@ -396,12 +400,12 @@ Actor.prototype.attack = function(attack, item, targets, combatAdvantage, manual
     damage = this._attackDamage(attack, item, toHit.isCrit, manualRolls);
     for (i = 0; i < targets.length; i++) {
         result = this._attackTarget(attack, item, combatAdvantage, targets[ i ], toHit, damage);
-    	result.target = targets[ i ].raw();
+        result.target = targets[ i ].raw();
         if (result.hit) {
-        	hits.push(result);
+            hits.push(result);
         }
         else {
-        	misses.push(result);
+            misses.push(result);
         }
     }
     return { hits: hits, misses: misses };
@@ -410,10 +414,10 @@ Actor.prototype.attack = function(attack, item, targets, combatAdvantage, manual
 Actor.prototype._attackToHit = function(attack, item, combatAdvantage, manualRolls) {
     var toHit, i, attackBonus;
     toHit = {
-    	    isAutomaticHit: typeof(attack.toHit) === "string" && attack.toHit.toLowerCase() === "automatic",
-    		isCrit: false,
-    		isFumble: false,
-    		conditional: { mod: 0 }
+            isAutomaticHit: typeof(attack.toHit) === "string" && attack.toHit.toLowerCase() === "automatic",
+            isCrit: false,
+            isFumble: false,
+            conditional: { mod: 0 }
     };
     
     if (!toHit.isAutomaticHit) {
@@ -446,75 +450,75 @@ Actor.prototype._attackToHit = function(attack, item, combatAdvantage, manualRol
 };
 
 Actor.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
-	var damage, i, j, temp; 
-	damage = {
-			amount: 0,
-			missAmount: 0,
-			conditional: { mod: 0, effects: [], breakdown: "" },
-			isManual: false
-	};
+    var damage, i, j, temp; 
+    damage = {
+            amount: 0,
+            missAmount: 0,
+            conditional: { mod: 0, effects: [], breakdown: "" },
+            isManual: false
+    };
 
     if (manualRolls && manualRolls.damage) {
         damage.amount = manualRolls.damage;
         damage.isManual = true;
-		if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
-			for (i = 0; i < attack.damage.length; i++) {
-		        attack.damage[ i ].addItem(Math.round(manualRolls.damage / attack.damage.length), item, isCrit);
-			}
-		    if (attack.hasOwnProperty("miss")) {
-		    	if (attack.miss.halfDamage) {
-					for (i = 0; attack.hasOwnProperty("miss") && i < attack.miss.damage.length; i++) {
-				        attack.miss.damage[ i ].addItem(Math.round(manualRolls.damage / attack.damage.length / 2), item, isCrit);
-					}
-		    	}
-		    	else {
-	    			attack.miss.damage.addItem(manualRolls.damage, item, false);
-		    	}
-		    }
-		}
-		else {
-	        attack.damage.addItem(manualRolls.damage, item, isCrit);
-		}
-	}
-	else {
-		if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
-			for (i = 0; i < attack.damage.length; i++) {
-				temp = attack.damage[ i ];
-		        damage.amount += temp.rollItem(item, isCrit);
-			}
-		}
-		else {
-	        damage.amount = attack.damage.rollItem(item, isCrit);
-		}
-	    if (attack.hasOwnProperty("miss")) {
-	    	if (attack.miss.halfDamage) {
-	    		damage.missAmount = Math.floor(damage.amount / 2);
-	    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
-	    			attack.miss.damage[0].addItem(damage.amount, item, false);
-	    		}
-	    		else {
-	    			attack.miss.damage.addItem(damage.amount, item, false);
-	    		}
-	    	}
-	    	else if (attack.miss.hasOwnProperty("damage")) {
-	    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
-	    			for (i = 0; i < attack.damage.length; i++) {
-	    		        damage.missAmount += attack.miss.damage[ i ].rollItem(item, false);
-	    			}
-	    		}
-	    		else {
-	    			damage.missAmount = attack.miss.damage.rollItem(item, false);
-	    		}
-	    	}
-	    }
-	}
+        if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
+            for (i = 0; i < attack.damage.length; i++) {
+                attack.damage[ i ].addItem(Math.round(manualRolls.damage / attack.damage.length), item, isCrit);
+            }
+            if (attack.hasOwnProperty("miss")) {
+                if (attack.miss.halfDamage) {
+                    for (i = 0; attack.hasOwnProperty("miss") && i < attack.miss.damage.length; i++) {
+                        attack.miss.damage[ i ].addItem(Math.round(manualRolls.damage / attack.damage.length / 2), item, isCrit);
+                    }
+                }
+                else {
+                    attack.miss.damage.addItem(manualRolls.damage, item, false);
+                }
+            }
+        }
+        else {
+            attack.damage.addItem(manualRolls.damage, item, isCrit);
+        }
+    }
+    else {
+        if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
+            for (i = 0; i < attack.damage.length; i++) {
+                temp = attack.damage[ i ];
+                damage.amount += temp.rollItem(item, isCrit);
+            }
+        }
+        else {
+            damage.amount = attack.damage.rollItem(item, isCrit);
+        }
+        if (attack.hasOwnProperty("miss")) {
+            if (attack.miss.halfDamage) {
+                damage.missAmount = Math.floor(damage.amount / 2);
+                if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+                    attack.miss.damage[0].addItem(damage.amount, item, false);
+                }
+                else {
+                    attack.miss.damage.addItem(damage.amount, item, false);
+                }
+            }
+            else if (attack.miss.hasOwnProperty("damage")) {
+                if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+                    for (i = 0; i < attack.damage.length; i++) {
+                        damage.missAmount += attack.miss.damage[ i ].rollItem(item, false);
+                    }
+                }
+                else {
+                    damage.missAmount = attack.miss.damage.rollItem(item, false);
+                }
+            }
+        }
+    }
 //    if (item && item.enhancement) {
-//    	if (attack.weaponMultiplier && attack.weaponMultiplier > 1) {
+//        if (attack.weaponMultiplier && attack.weaponMultiplier > 1) {
 //            damage.conditional.breakdown += " + " + attack.weaponMultiplier + "x[+" + item.enhancement + " weapon]";
-//    	}
-//    	else {
+//        }
+//        else {
 //            damage.conditional.breakdown += " [+" + item.enhancement + " weapon]";
-//    	}
+//        }
 //    }
     if (this.hasCondition("weakened")) {
         damage.conditional.mod = -1 * Math.ceil(damage.amount / 2);
@@ -528,112 +532,112 @@ Actor.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
 };
 
 Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage) {
-	var attackBonuses, i, toHitTarget, targetDamage, tmp, targetDefense, msg, result, entry;
-	
-	result = { hit: false, damage: [] };
+    var attackBonuses, i, toHitTarget, targetDamage, tmp, targetDefense, msg, result, entry;
+    
+    result = { hit: false, damage: [] };
 
-	toHitTarget = { 
-		roll: toHit.roll + (toHit.conditional.mod ? toHit.conditional.mod : 0),
-		conditional: jQuery.extend({ mod: 0, breakdown: "" }, toHit.conditional)
-	};
-	targetDamage = { 
-		amount: damage.amount, 
-		missAmount: damage.missAmount,
-		conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
-	};
-	
-	if (!damage.isManual) {
-	    attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
-	    for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
-	    	attackBonus = attackBonuses[ i ];
-	    	if (attackBonus.toHit) {
-	    		toHitTarget.roll += attackBonus.toHit; 
-	    		toHitTarget.conditional.mod += attackBonus.toHit;
-	    		toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
-	    	}
-	    	if (attackBonus.damage) {
-	    		targetDamage.amount += attackBonus.damage;
-	    		targetDamage.conditional.mod += attackBonus.damage;
-	    		targetDamage.conditional.total += attackBonus.damage;
-	    		targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
-	    		if (attack.miss && targetDamage.missAmount) {
-	        		if (attack.miss.halfDamage) {
-	        			tmp = Math.floor(attackBonus.damage / 2);
-	            		targetDamage.missAmount += tmp;
-	            		targetDamage.conditional.mod += tmp;
-	            		targetDamage.conditional.breakdown += (tmp >= 0 ? " +" : "") + tmp + " (" + attackBonus.name + ")";
-	        		}
-	        		else {
-	        			targetDamage.missAmount += attackBonus.damage;
-	            		targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
-	        		}
-	    		}
-	    	}
-	    }
-	}
+    toHitTarget = { 
+        roll: toHit.roll + (toHit.conditional.mod ? toHit.conditional.mod : 0),
+        conditional: jQuery.extend({ mod: 0, breakdown: "" }, toHit.conditional)
+    };
+    targetDamage = { 
+        amount: damage.amount, 
+        missAmount: damage.missAmount,
+        conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
+    };
+    
+    if (!damage.isManual) {
+        attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
+        for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
+            attackBonus = attackBonuses[ i ];
+            if (attackBonus.toHit) {
+                toHitTarget.roll += attackBonus.toHit; 
+                toHitTarget.conditional.mod += attackBonus.toHit;
+                toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
+            }
+            if (attackBonus.damage) {
+                targetDamage.amount += attackBonus.damage;
+                targetDamage.conditional.mod += attackBonus.damage;
+                targetDamage.conditional.total += attackBonus.damage;
+                targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
+                if (attack.miss && targetDamage.missAmount) {
+                    if (attack.miss.halfDamage) {
+                        tmp = Math.floor(attackBonus.damage / 2);
+                        targetDamage.missAmount += tmp;
+                        targetDamage.conditional.mod += tmp;
+                        targetDamage.conditional.breakdown += (tmp >= 0 ? " +" : "") + tmp + " (" + attackBonus.name + ")";
+                    }
+                    else {
+                        targetDamage.missAmount += attackBonus.damage;
+                        targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
+                    }
+                }
+            }
+        }
+    }
 
     // Calculate hit (for this target)
     if (!toHit.isAutomaticHit && !toHit.isFumble && !toHit.isCrit) {
-    	toHitTarget.roll += (combatAdvantage || target.grantsCombatAdvantage() ? 2 : 0);
-    	targetDefense = target.defenses[ attack.defense.toLowerCase() ] + target.defenseModifier(attack.isMelee);
+        toHitTarget.roll += (combatAdvantage || target.grantsCombatAdvantage() ? 2 : 0);
+        targetDefense = target.defenses[ attack.defense.toLowerCase() ] + target.defenseModifier(attack.isMelee);
     }
     
     // Apply hit or miss damage/effects
     if (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense) {
-    	// Hit
-    	result.hit = true;
+        // Hit
+        result.hit = true;
         msg = "Hit by " + this.name + "'s " + attack.anchor(toHitTarget.conditional) + " for ";
-		if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
-			for (i = 0; i < attack.damage.length; i++) {
+        if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
+            for (i = 0; i < attack.damage.length; i++) {
                 msg += (i > 0 && i < attack.damage.length - 1 ? ", " : "") + (i > 0 && i === attack.damage.length - 1 ? " and " : "") + attack.damage[ i ].anchor(targetDamage.conditional);
                 tmp = target.takeDamage(this, attack.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.damage[ i ].type, i === 0 ? attack.effects : null);
                 msg += tmp.msg;
-            	result.damage.push({ amount: tmp.damage, type: attack.damage[ i ].type });
-			}
-		}
-		else {
+                result.damage.push({ amount: tmp.damage, type: attack.damage[ i ].type });
+            }
+        }
+        else {
             msg += attack.damage.anchor(targetDamage.conditional);
             tmp = target.takeDamage(this, targetDamage.amount, attack.damage.type, attack.effects);
             msg += tmp.msg;
-        	result.damage.push({ amount: tmp.damage, type: attack.damage.type });
-		}
+            result.damage.push({ amount: tmp.damage, type: attack.damage.type });
+        }
     }
     else {
-    	// Miss
+        // Miss
         msg = "Missed by " + this.name + "'s " + attack.anchor(toHit.conditional);
         if (targetDamage.missAmount) {
-        	msg += " but takes ";
-    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
-    			for (i = 0; i < attack.miss.damage.length; i++) {
+            msg += " but takes ";
+            if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+                for (i = 0; i < attack.miss.damage.length; i++) {
                     msg += (i > 0 && i < attack.miss.damage.length - 1 ? ", " : "") + (i > 0 && i === attack.miss.damage.length - 1 ? " and " : "") + attack.miss.damage[ j ].anchor(targetDamage.conditional);
-    			}
-    		}
-    		else {
+                }
+            }
+            else {
                 msg += attack.miss.damage.anchor(targetDamage.conditional);
-    		}
-        	msg += " on a miss";
+            }
+            msg += " on a miss";
         }
         if (targetDamage.missAmount || attack.hasOwnProperty("miss")) {
-    		if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
-    			for (i = 0; i < attack.miss.damage.length; i++) {
-                	tmp = target.takeDamage(this, attack.miss.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.miss.damage[ i ].type, i === 0 ? attack.miss.effects : null);
-                	msg += tmp.msg;
-                	result.damage.push({ amount: tmp.damage, type: attack.miss.damage[ i ].type });
-    			}
-    		}
-    		else {
-            	tmp = target.takeDamage(this, attack.miss.damage.getLastRoll().total + targetDamage.conditional.mod, attack.miss.damage.type, attack.miss.effects);
-            	msg += tmp.msg;
-            	result.damage.push({ amount: tmp.damage, type: attack.miss.damage.type });
-    		}
+            if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
+                for (i = 0; i < attack.miss.damage.length; i++) {
+                    tmp = target.takeDamage(this, attack.miss.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.miss.damage[ i ].type, i === 0 ? attack.miss.effects : null);
+                    msg += tmp.msg;
+                    result.damage.push({ amount: tmp.damage, type: attack.miss.damage[ i ].type });
+                }
+            }
+            else {
+                tmp = target.takeDamage(this, attack.miss.damage.getLastRoll().total + targetDamage.conditional.mod, attack.miss.damage.type, attack.miss.effects);
+                msg += tmp.msg;
+                result.damage.push({ amount: tmp.damage, type: attack.miss.damage.type });
+            }
         }
     }
     
-	// Record in target and central Histories
-	entry = new History.Entry({ subject: target, message: msg });
-	target.history.add(entry);
-	History.central.add(entry);
-	try { window.console.info(target.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1)); } finally {}
+    // Record in target and central Histories
+    entry = new DnD.History.Entry({ subject: target, message: msg });
+    target.history.add(entry);
+    DnD.History.central.add(entry);
+    try { window.console.info(target.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1)); } finally {}
 
     return result;
 };
@@ -648,14 +652,14 @@ Actor.prototype.takeDamage = function(attacker, damage, type, effects) {
     var temp, msg, i, result;
     // vvv DEBUGGING
     if (typeof(damage) !== "number") {
-    	alert("Break for debugging, Creature.takeDamage() received NaN damage value");
+        alert("Break for debugging, Creature.takeDamage() received NaN damage value");
     }
     // ^^^ DEBUGGING
     msg = "";
     if (type && this.defenses.resistances && this.defenses.resistances.hasOwnProperty(type)) {
-    	temp = this.defenses.resistances[ type ];
+        temp = this.defenses.resistances[ type ];
         msg += " (resisted " + Math.min(damage, temp) + ")";
-    	damage = Math.max(damage - temp, 0);
+        damage = Math.max(damage - temp, 0);
     }
     if (this.hp.temp) {
         temp = this.hp.temp;
@@ -680,9 +684,9 @@ Actor.prototype.takeDamage = function(attacker, damage, type, effects) {
 //    this.addDamageIndicator(damage, type);
 //    this.dispatchEvent({ type: "takeDamage", damage: { amount: damage, type: type } });
     result = {
-    		msg: msg,
-    		damage: damage,
-    		type: type
+            msg: msg,
+            damage: damage,
+            type: type
     };
 
     return result;
@@ -691,27 +695,27 @@ Actor.prototype.takeDamage = function(attacker, damage, type, effects) {
 Actor.prototype.startTurn = function() {
     var regen, i, j, effect, ongoingDamage;
     
-	this._turnTimer = (new Date()).getTime();
+    this._turnTimer = (new Date()).getTime();
     if (this.hp.regeneration && this.hp.current < this.hp.total) {
-    	regen = Math.min(this.hp.regeneration, this.hp.total - this.hp.current);
-    	this.hp.current += regen;
-        this.history.add(new History.Entry({ round: this.history._round, subject: this, message: "Regenerated " + regen + " HP" }));
+        regen = Math.min(this.hp.regeneration, this.hp.total - this.hp.current);
+        this.hp.current += regen;
+        this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: "Regenerated " + regen + " HP" }));
     }
     ongoingDamage = (function(amount, type) {
         this.takeDamage(null, amount, type, null);
-        this.history.add(new History.Entry({ round: this.history._round, subject: this, message: "Took " + amount + " ongoing " + (type ? type : "") + " damage" }));
+        this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: "Took " + amount + " ongoing " + (type ? type : "") + " damage" }));
     }).bind(this);
     for (i = 0; this.effects && i < this.effects.length; i++) {
-    	effect = this.effects[ i ];
+        effect = this.effects[ i ];
         if (effect.name.toLowerCase() === "ongoing damage") {
-        	ongoingDamage(effect.amount, effect.type);
+            ongoingDamage(effect.amount, effect.type);
         }
         else if (effect.children && effect.children.length) {
-        	for (j = 0; j < effect.children.length; j++) {
+            for (j = 0; j < effect.children.length; j++) {
                 if (effect.children[ j ].name.toLowerCase() === "ongoing damage") {
-                	ongoingDamage(effect.children[ j ].amount, effect.children[ j ].type);
+                    ongoingDamage(effect.children[ j ].amount, effect.children[ j ].type);
                 }
-        	}
+            }
         }
     }
 };
@@ -720,7 +724,7 @@ Actor.prototype.endTurn = function() {
     var i, effect, name, savingThrow, savingThrowRoll, msg;
 
     if (this._turnTimer) {
-    	this._turnDurations[ this.history._round ] = (new Date()).getTime() - this._turnTimer;
+        this._turnDurations[ this.history._round ] = (new Date()).getTime() - this._turnTimer;
         this._turnTimer = null;
         this.history.setRoundTime(this._turnDurations[ this.history._round ], this.history._round);
     }
@@ -728,19 +732,19 @@ Actor.prototype.endTurn = function() {
         effect = this.effects[ i ];
         if (effect !== null && effect.saveEnds) {
             savingThrow = new SavingThrow({ effect: effect });
-        	if (this.isPC) {
+            if (this.isPC) {
                 savingThrowRoll = confirm("Did " + this.name + " save against " + effect.toString() + "?") ? 20 : 1;
-    			savingThrow.add(savingThrowRoll);
-        	}
-        	else {
+                savingThrow.add(savingThrowRoll);
+            }
+            else {
                 savingThrowRoll = savingThrow.roll();
-        	}
+            }
             if (savingThrowRoll >= 10) {
                 this.effects.splice(i, 1);
                 i--;
             }
             msg = savingThrow.anchor();
-            this.history.add(new History.Entry({ round: this.history._round, subject: this, message: msg }));
+            this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: msg }));
         }
     }
     return msg;
@@ -757,9 +761,9 @@ Actor.prototype.endTurn = function() {
  * @param heal {Function} The click handler for the heal action
  */
 Actor.prototype.createTr = function(params) {
-	params = params || {};
-	params.actor = this;
-	this.tr = new DnD.Display.ActorRow(params);
+    params = params || {};
+    params.actor = this;
+    this.tr = new DnD.Display.ActorRow(params);
 };
 
 /**
@@ -771,9 +775,9 @@ Actor.prototype.createTr = function(params) {
  * @param params.showPcHp {Boolean} Display PC HP
  */
 Actor.prototype.createCard = function(params) {
-	params = params || {};
-	params.actor = this;
-	this.card = new DnD.Display.ActorCard(params);
-	return this.card;
+    params = params || {};
+    params.actor = this;
+    this.card = new DnD.Display.ActorCard(params);
+    return this.card;
 };
 

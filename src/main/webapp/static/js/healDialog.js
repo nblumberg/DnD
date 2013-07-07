@@ -14,6 +14,7 @@ var DnD;
 	// CONSTRUCTOR & INITIALIZATION METHODS
 	
 	function HealDialog(params) {
+		this.addHistory = params.addHistory;
         this.$healingDescription = null;
         this.$isTempHp = null;
         this.$healingAmount = null;
@@ -72,7 +73,7 @@ var DnD;
 		}
 		this.$dialog.modal("hide");
 		target = this.patient;
-		amount = parseInt(this.$healingAmount.val()) + parseInt(this.$healingExtra.val());
+		amount = parseInt(this.$healingAmount.val(), 10) + parseInt(this.$healingExtra.val(), 10);
 		method = "info";
 		if (this.$isTempHp[0].checked) {
 			target.hp.temp = Math.max(amount, target.hp.temp);
@@ -92,7 +93,7 @@ var DnD;
 				msg += ", using a healing surge";
 			}
 		}
-		this._addHistory(target, msg, method);
+		this.addHistory(target, msg, method);
 	};
 
 	

@@ -39,7 +39,7 @@ var DnD;
         }
         
         if (params.historyEntries) {
-            History.Entry.init(params.historyEntries); // NOTE: must come before this.actors is initialized because Creature.history references it
+            DnD.History.Entry.init(params.historyEntries); // NOTE: must come before this.actors is initialized because Creature.history references it
         }
         
         if (params.creatures) {
@@ -89,8 +89,8 @@ var DnD;
         }
 
         if (params.history) {
-            this.history = new History(params.history); // NOTE: must come after this.actors is initialized because of _includeSubject
-            History.central = this.history;
+            this.history = new DnD.History(params.history); // NOTE: must come after this.actors is initialized because of _includeSubject
+            DnD.History.central = this.history;
         }
 
         this.round = Math.max(params.round, 1) || 1;
@@ -210,14 +210,19 @@ var DnD;
         
         this.imageDialog = new DnD.Dialog.Image({ toDisplay: this._messageDisplay.bind(this) });
 
-        this.initiativeDialog = new DnD.Dialog.Initiative({ actors: this.actors, order: this.order, onchange: this._changeInitiative.bind(this) });
+        this.initiativeDialog = new DnD.Dialog.Initiative({ 
+            actors: this.actors, 
+            order: this.order, 
+            addHistory: this._addHistory.bind(this),
+            onchange: this._changeInitiative.bind(this) 
+        });
 
         this.attackDialog = new DnD.Dialog.Attack({ callback: (function(msg) {
             this._render(false);
             this._messageDisplay(msg, false);
         }).bind(this) });
 
-        this.healDialog = new DnD.Dialog.Heal({});
+        this.healDialog = new DnD.Dialog.Heal({ addHistory: this._addHistory.bind(this) });
         
         this._createBody();
         this._render(false);
@@ -234,7 +239,7 @@ var DnD;
         this.$freeFormHistorySubject = jQuery("select#freeFormHistorySubject");
         this._renderHistoryEditor();
         if (!this.freeFormHistory) {
-            this.freeFormHistory = new History.Editor({ 
+            this.freeFormHistory = new DnD.History.Editor({ 
                 $parent: jQuery("#freeFormHistory"), 
                 save: (function(value) {
                     $option = jQuery(this.$freeFormHistorySubject[0].options[ this.$freeFormHistorySubject[0].selectedIndex ]);
@@ -316,7 +321,7 @@ var DnD;
         if (this.order) {
             this.order.push(actor.id);
         }
-        if (History.central) {
+        if (DnD.History.central) {
             this._addHistory(actor, "Joins the fight");
         }
         actor.addEventListener("change", (function(event) {
@@ -582,8 +587,8 @@ var DnD;
         var $parent, $old;
         $old = this.history.$html;
         $parent = $old.parent(); 
-        History.Entry.entries = {};
-        this.history = new History({ _includeSubject: true });
+        DnD.History.Entry.entries = {};
+        this.history = new DnD.History({ _includeSubject: true });
         $old.before(this.history.$html);
         $old.remove();
         this.$freeFormHistorySubject.children().remove();
@@ -609,7 +614,7 @@ var DnD;
             }
         }
         this.history.clear();
-        History.Entry.init();
+        DnD.History.Entry.init();
         this._render(false);
     };
 
@@ -625,7 +630,7 @@ var DnD;
     };
 
     Initiative.prototype._addHistory = function(actor, message, method) {
-        var entry = new History.Entry({ round: this.round, subject: actor, message: message });
+        var entry = new DnD.History.Entry({ round: this.round, subject: actor, message: message });
         if (typeof(method) === "undefined") {
             method = "info";
         }
@@ -788,7 +793,7 @@ var DnD;
             actors: this.rawArray(this.actors),
             creatures: this.rawObj(Creature.creatures),
             history: this.history.raw(),
-            historyEntries: this.rawObj(History.Entry.entries),
+            historyEntries: this.rawObj(DnD.History.Entry.entries),
             round: this.round,
             _current: this._current
         };
