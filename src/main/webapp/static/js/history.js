@@ -48,7 +48,7 @@ var DnD;
         
         params = params || {};
         this._entries = params._entries || [];
-        this._round = params._round || 0; // the current round
+        this._round = params._round || 1; // the current round
         this._count = 0;
         this._roundTimes = params._roundTimes || {}; // the duration of each round
         this._includeSubject = params._includeSubject;
@@ -167,7 +167,7 @@ var DnD;
             this.remove(History.Entry.entries[ this._entries[ i ] ]);
         }
         this._entries = [];
-        this._round = 0;
+        this._round = 1;
         this._count = 0;
     };
 
@@ -342,6 +342,9 @@ var DnD;
         }
         if (typeof(params.subject) === "number") {
             // Creature.actors may not be initialized yet, if not, preserve subject id for resolving at need
+            if (!Creature.actors.hasOwnProperty(params.subject)) {
+                try { window.console.warn("Failed to find subject " + params.subject + " in Creature.actors for History.Entry " + this.id); } finally {}
+            }
             this.subject = Creature.actors[ params.subject ] ? Creature.actors[ params.subject ] : params.subject;
         }
         else {

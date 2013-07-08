@@ -34,32 +34,25 @@ input#round { width: 30px; }
 }
 
 
-#roundLabel {
-	font-size: 9pt;
-}
-
 #initiative img.icon {
 	height: 30px;
 }
 
-/* history */
-.history li.entry .message { display: inline; }
-.history li.entry textarea, .history li.entry .save, .history li.entry .delete { display: none; }
-.history li.entry.edit .message { display: none; }
-.history li.entry.edit textarea, .history li.entry.edit .save, .history li.entry.edit .delete { display: inline; }
-#freeFormHistory { text-align: center; white-space: nowrap; }
-.round .time { padding-left: 5px; }
-.round .edit textarea { height: 150px; }
+/* actorTable */
+#roundLabel { font-size: 9pt; }
+
+//  table#initiative { border-collapse: collapse; }
+table#initiative th, table#initiative td { text-align: center; } 
+table#initiative td.order { max-width: 50px; }
+table#initiative td.defenses { max-width: 80px; }
+table#initiative td.hp { padding: 3px; text-align: left; }
+table#initiative td.actions img { display: block; margin: 5px auto; }
+table#initiative .tempHp { font-style: italic; }
+table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
 
 /* actorRow */
 .numerator:after { content: '/' }
 .action { cursor: pointer; display: block; }
-
-/* editor */
-.editor .display {}
-.editor.edit .display { display: none; }
-.editor input, .editor button { display: none; }
-.editor.edit input, .editor.edit button { display: inline; }
 
 /* actorCard */
 .creaturePanel { border-width: 4px; float: left; margin: 2px; }
@@ -84,6 +77,21 @@ input#round { width: 30px; }
 .creaturePanel .event.hit .types img.damage { display: inline; }
 .creaturePanel .event.hit .types .type span { left: 25%; position: absolute; }
 
+/* history */
+.history li.entry .message { display: inline; }
+.history li.entry textarea, .history li.entry .save, .history li.entry .delete { display: none; }
+.history li.entry.edit .message { display: none; }
+.history li.entry.edit textarea, .history li.entry.edit .save, .history li.entry.edit .delete { display: inline; }
+#freeFormHistory { text-align: center; white-space: nowrap; }
+.round .time { padding-left: 5px; }
+.round .edit textarea { height: 150px; }
+
+/* editor */
+.editor .display {}
+.editor.edit .display { display: none; }
+.editor input, .editor button { display: none; }
+.editor.edit input, .editor.edit button { display: inline; }
+
 
 .layout {
 	padding-top: 40px;
@@ -92,13 +100,6 @@ input#round { width: 30px; }
 
 div#history { min-width: 30%; padding: 0 5px; }
 div#history h3 { margin: 5px 0; }
-//  table#initiative { border-collapse: collapse; }
-table#initiative th, table#initiative td { text-align: center; } 
-table#initiative td.hp { padding: 3px; text-align: left; }
-table#initiative td.actions img { display: block; margin: 5px auto; }
-table#initiative .tempHp { font-style: italic; }
-table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
-
 
 /* Dialogs */
 .modal-header {
