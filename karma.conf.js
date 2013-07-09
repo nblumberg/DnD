@@ -21,7 +21,8 @@ files = [
 	'src/main/webapp/static/js/creature.js',
 	'src/main/webapp/static/js/data.js',
 	'src/main/webapp/static/js/monsters.js',
-	'src/main/webapp/static/js/party.js',
+    'src/main/webapp/static/js/party.js',
+    'src/main/webapp/static/js/history.js',
 	
 	// test specs to run
 	'src/test/webapp/jasmine/spec/testUtilities.js',
@@ -32,7 +33,8 @@ files = [
 	'src/test/webapp/jasmine/spec/eventTest.js',
 	'src/test/webapp/jasmine/spec/serializableTest.js',
 	'src/test/webapp/jasmine/spec/monstersTest.js',
-	'src/test/webapp/jasmine/spec/partyTest.js'
+    'src/test/webapp/jasmine/spec/partyTest.js',
+    'src/test/webapp/jasmine/spec/historyTest.js'
 ];
 
 

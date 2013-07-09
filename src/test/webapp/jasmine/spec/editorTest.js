@@ -40,11 +40,34 @@ describe("editor.js", function() {
 			expect($find.length).toEqual(1);
 			expect($find[0]).toEqual(editor.$html[0]);
 		});
+		
+        it("it should create the text input", function() {
+            expect(editor.$input).not.toEqual(undefined);
+            expect(editor.$input.length).not.toEqual(0);
+            expect(editor.$input[0].nodeName.toLowerCase()).toEqual("input");
+            expect(editor.$input.attr("type")).toEqual("text");
+            expect(editor.$input.val()).toEqual(params.html);
+            expect(editor.$input.parent()[0]).toEqual(editor.$parent[0]);
+        });
+        it("it should create the save button", function() {
+            expect(editor.$save).not.toEqual(undefined);
+            expect(editor.$save.length).not.toEqual(0);
+            expect(editor.$save[0].nodeName.toLowerCase()).toEqual("button");
+            expect(editor.$save.attr("title")).toEqual("Save");
+            expect(editor.$save.html().charCodeAt(0)).toEqual(10003);
+            expect(editor.$save.parent()[0]).toEqual(editor.$parent[0]);
+        });
+        it("it should create the cancel button", function() {
+            expect(editor.$cancel).not.toEqual(undefined);
+            expect(editor.$cancel.length).not.toEqual(0);
+            expect(editor.$cancel[0].nodeName.toLowerCase()).toEqual("button");
+            expect(editor.$cancel.attr("title")).toEqual("Cancel");
+            expect(editor.$cancel.html()).toEqual("X");
+            expect(editor.$cancel.parent()[0]).toEqual(editor.$parent[0]);
+        });
+
 		it("it should not start in edit mode", function() {
 			expect(editor.$parent.hasClass("edit")).toEqual(false);
-			expect(editor.$input).toEqual(undefined);
-			expect(editor.$save).toEqual(undefined);
-			expect(editor.$cancel).toEqual(undefined);
 		});
 	});
 	
@@ -114,33 +137,6 @@ describe("editor.js", function() {
 		it("it should apply the \"edit\" class to the text display parent element", function() {
 			expect(editor.$parent.hasClass("edit")).toEqual(true);
 		});
-		it("it should create the text input", function() {
-			expect(editor.$input).not.toEqual(undefined);
-			expect(editor.$input.length).not.toEqual(0);
-			expect(editor.$input[0].nodeName.toLowerCase()).toEqual("input");
-			expect(editor.$input.attr("type")).toEqual("text");
-			expect(editor.$input.val()).toEqual(params.html);
-			expect(editor.$input.parent()[0]).toEqual(editor.$parent[0]);
-		});
-		it("it should remove the text display", function() {
-			expect(editor.$html.parent().length).toEqual(0);
-		});
-		it("it should create the save button", function() {
-			expect(editor.$save).not.toEqual(undefined);
-			expect(editor.$save.length).not.toEqual(0);
-			expect(editor.$save[0].nodeName.toLowerCase()).toEqual("button");
-			expect(editor.$save.attr("title")).toEqual("Save");
-			expect(editor.$save.html().charCodeAt(0)).toEqual(10003);
-			expect(editor.$save.parent()[0]).toEqual(editor.$parent[0]);
-		});
-		it("it should create the cancel button", function() {
-			expect(editor.$cancel).not.toEqual(undefined);
-			expect(editor.$cancel.length).not.toEqual(0);
-			expect(editor.$cancel[0].nodeName.toLowerCase()).toEqual("button");
-			expect(editor.$cancel.attr("title")).toEqual("Cancel");
-			expect(editor.$cancel.html()).toEqual("X");
-			expect(editor.$cancel.parent()[0]).toEqual(editor.$parent[0]);
-		});
 	});
 
 	describe("Leaving edit mode", function() {
@@ -160,15 +156,6 @@ describe("editor.js", function() {
 			it("it should remove the \"edit\" class from the text display parent element", function() {
 				expect(editor.$parent.hasClass("edit")).toEqual(false);
 			});
-			it("it should remove the text input", function() {
-				expect(editor.$input.parent().length).toEqual(0);
-			});
-			it("it should remove the save button", function() {
-				expect(editor.$save.parent().length).toEqual(0);
-			});
-			it("it should remove the cancel button", function() {
-				expect(editor.$cancel.parent().length).toEqual(0);
-			});
 			it("it should set the text display innerHTML to the new value", function() {
 				expect(editor.$html.html()).toEqual(newValue);
 			});
@@ -184,15 +171,6 @@ describe("editor.js", function() {
 			
 			it("it should remove the \"edit\" class from the text display parent element", function() {
 				expect(editor.$parent.hasClass("edit")).toEqual(false);
-			});
-			it("it should remove the text input", function() {
-				expect(editor.$input.parent().length).toEqual(0);
-			});
-			it("it should remove the save button", function() {
-				expect(editor.$save.parent().length).toEqual(0);
-			});
-			it("it should remove the cancel button", function() {
-				expect(editor.$cancel.parent().length).toEqual(0);
 			});
 			it("the text display innerHTML should not change", function() {
 				expect(editor.$html.html()).toEqual(params.html);
