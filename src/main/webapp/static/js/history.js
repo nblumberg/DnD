@@ -19,39 +19,13 @@ var DnD;
      * @param [params.$parent] {jQuery selection} The element to add this History's HTML to
      */
     function History(params) {
-        if (!History.initialized) {
-            jQuery(document).on("click", "button.expandCollapseAll", function(event) {
-                var $button, history, $ul, expand;
-                $button = jQuery(this);
-                history = $button.closest(".history").data("history");
-                $ul = history.$html.find("ul.entries");
-                expand = $ul.css("display") === "none";
-                if (expand) {
-                    $ul.show();
-                    $button.html("Collapse all");
-                }
-                else {
-                    $ul.hide();
-                    $button.html("Expand all");
-                }
-            }).on("click", "li.round", function(event) {
-                jQuery(this).children("ul").toggle();
-            }).on("click", "li.entry", function(event) {
-                var $entry, history;
-                event.stopPropagation();
-                $entry = jQuery(this);
-                history = $entry.closest(".history").data("history");
-                history._editEntry($entry, history);
-            });
-            History.initialized = true;
-        }
-        
         params = params || {};
+        this.params = params;
         this._entries = params._entries || [];
         this._round = params._round || 1; // the current round
         this._count = 0;
         this._roundTimes = params._roundTimes || {}; // the duration of each round
-        this._includeSubject = params._includeSubject;
+        this._includeSubject = !!params._includeSubject;
         
         if (params.$parent) {
             this.addToPage(params.$parent);
@@ -63,15 +37,43 @@ var DnD;
     
     // STATIC MEMBERS
     
-    History.initialized = false;
+    if (!History._eventHandlersInitialized) {
+        jQuery(document).on("click", "button.expandCollapseAll", function(event) {
+            var $button, history, $ul, expand;
+            $button = jQuery(this);
+            history = $button.closest(".history").data("history");
+            $ul = history.$html.find("ul.entries");
+            expand = $ul.css("display") === "none";
+            if (expand) {
+                $ul.show();
+                $button.html("Collapse all");
+            }
+            else {
+                $ul.hide();
+                $button.html("Expand all");
+            }
+        }).on("click", "li.round", function(event) {
+            jQuery(this).children("ul").toggle();
+        }).on("click", "li.entry", function(event) {
+            var $entry, history;
+            event.stopPropagation();
+            $entry = jQuery(this);
+            history = $entry.closest(".history").data("history");
+            history._editEntry($entry, history);
+        });
+        History._eventHandlersInitialized = true;
+    }
     History.central = null;
+    History._areTemplatesReady = function() {
+        return History.$history && History.$round && History.$entry;
+    };
     History._waitingOnTemplates = [];
     (function() {
-        var templatesReady, $history, $round, $entry;
+        var templateReady, $history, $round, $entry;
         
-        templatesReady = function() {
+        templateReady = function() {
             var i;
-            if (History.$history && History.$round && History.$entry) {
+            if (History._areTemplatesReady()) {
                 for (i = 0; i < History._waitingOnTemplates.length; i++) {
                     History.prototype._create.call(History._waitingOnTemplates[ i ]);
                 }
@@ -82,17 +84,17 @@ var DnD;
         $history = jQuery("<div/>");
         $history.load("/html/partials/history.html", null, function(responseText, textStatus, jqXHR) {
             History.$history = $history.find("div.history");
-            templatesReady();
+            templateReady();
         });
         $round = jQuery("<div/>");
         $round.load("/html/partials/historyRound.html", null, function(responseText, textStatus, jqXHR) {
             History.$round = $round.find("li.round");
-            templatesReady();
+            templateReady();
         });
         $entry = jQuery("<div/>");
         $entry.load("/html/partials/historyEntry.html", null, function(responseText, textStatus, jqXHR) {
             History.$entry = $entry.find("li.entry");
-            templatesReady();
+            templateReady();
         });
     })();
 
@@ -111,8 +113,11 @@ var DnD;
     // PUBLIC METHODS
     
     History.prototype.addToPage = function($parent) {
+        if (!$parent || !$parent.length) {
+            return;
+        }
         this.$parent = $parent;
-        if (History.$history && History.$round && History.$entry) {
+        if (History._areTemplatesReady()) {
             this._create();
         }
         else {
@@ -121,6 +126,9 @@ var DnD;
     };
     
     History.prototype.add = function(entry) {
+        if (!entry || typeof(entry) !== "object" || !(entry instanceof History.Entry)) {
+            return;
+        }
         entry.round = entry.round ? entry.round : this._round;
         if (this._entries.indexOf(entry.id) !== -1) {
             return;
@@ -133,19 +141,22 @@ var DnD;
     };
 
     History.prototype.update = function(entry) {
-        var message = entry.message;
-        if (this._includeSubject) {
-            message = entry.subject.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
-        }
-        this.$html.find("li.entry" + entry.id + " span").html(message);
-    };
-
-    History.prototype.remove = function(entry) {
-        var $entry, $ul, $round, $tmp;
-        if (!entry) {
+        if (!entry || typeof(entry) !== "object" || !(entry instanceof History.Entry)) {
             return;
         }
-        entry = typeof(entry) === "object" ? entry : { id: entry };
+        entry._render(this.$html.find("li.entry" + entry.id), this._includeSubject);
+    };
+
+    /**
+     * Removes an entry from this History instance
+     * 
+     * @param entry {History.Entry} The History.Entry to remove
+     */
+    History.prototype.remove = function(entry) {
+        var $entry, $ul, $round, $tmp;
+        if (!entry || typeof(entry) !== "object" || !(entry instanceof History.Entry)) {
+            return;
+        }
         $entry = this.$html.find("li.entry" + entry.id);
         $ul = $entry.parent();
         $round = $ul.parent();
@@ -153,9 +164,10 @@ var DnD;
         // Remove empty rounds as well
         if (!$ul.children().length) {
             $ul.remove();
+            $ul = $round.parent();
             $round.remove();
             // Reset empty histories as well
-            if (!this.$html.children().length) {
+            if (!$ul.children().length) {
                 this._noHistory();
             }
         }
@@ -173,12 +185,12 @@ var DnD;
 
     History.prototype.setRoundTime = function(milliseconds, round) {
         var $ul, $span, minutes, seconds;
+        if (!round) {
+            round = this._round;
+        }
         this._roundTimes[ round ] = milliseconds;
         if (!this._count) {
             return false;
-        }
-        if (!round) {
-            round = this._round;
         }
         $ul = this._getRound(round, true);
         $span = $ul.parent().children(".time");
@@ -186,6 +198,7 @@ var DnD;
             return false;
         }
         this._setRoundTime($span, milliseconds);
+        return true;
     };
     
     
@@ -398,8 +411,7 @@ var DnD;
     // PRIVATE METHODS
     
     History.Entry.prototype._addToRound = function($round, includeSubject) {
-        var message, history, $li, $span, $save, $delete;
-        message = this.message;
+        var history, $li, $save, $delete;
         history = $round.closest(".history").data("history");
         if (includeSubject && typeof(this.subject) === "number") {
             // Creature.actors wasn't initialized at creation time, resolve subject id now
@@ -407,6 +419,16 @@ var DnD;
         }
         $li = History.$entry.clone();
         $li.addClass("entry" + this.id).data("entry", this).appendTo($round);
+        this._render($li, includeSubject);
+        $save = $li.find(".save");
+        $delete = $li.find(".delete");
+        $save.on({ click: this._save.bind(this, $li, $span, $li.find("textarea"), $save, $delete, history) });
+        $delete.on({ click: this._delete.bind(this, $li, $span, $li.find("textarea"), $save, $delete, history) });
+    };
+
+    History.Entry.prototype._render = function($li, includeSubject) {
+        var message, $span, $save, $delete;
+        message = this.message;
         if (includeSubject && this.subject) {
             $li.addClass(includeSubject ? "includeSubject" : "");
             $span = $li.find(".subject").html(this.subject.name);
@@ -415,12 +437,8 @@ var DnD;
         else {
             $span = $li.find(".message").html(message);
         }
-        $save = $li.find(".save");
-        $delete = $li.find(".delete");
-        $save.on({ click: this._save.bind(this, $li, $span, $li.find("textarea"), $save, $delete, history) });
-        $delete.on({ click: this._delete.bind(this, $li, $span, $li.find("textarea"), $save, $delete, history) });
     };
-
+    
     History.Entry.prototype._edit = function($entry, history) {
         var $span, $input, $save, $delete, i, $ancestor;
         if ($entry.hasClass("edit")) {
