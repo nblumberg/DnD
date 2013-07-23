@@ -279,12 +279,16 @@ var DnD;
         var seconds = Math.floor(milliseconds / 1000), minutes = Math.floor(seconds / 60);
         minutes = ("" + minutes).length < 2 ? "0" + minutes : minutes;
         seconds = seconds % 60;
-        seconds = ("" + seconds.length) < 2 ? "0" + seconds : seconds;
-        $time.html(minutes + ":" + seconds);
+        seconds = ("" + seconds).length < 2 ? "0" + seconds : seconds;
+        if ($time && $time.length) {
+            $time.html(minutes + ":" + seconds);
+        }
     };
 
     History.prototype._editEntry = function($entry, history) {
-        $entry.data("entry")._edit($entry, history);
+        if ($entry && $entry.data("entry") && $entry.data("entry")._edit) {
+            $entry.data("entry")._edit($entry, history);
+        }
     };
 
     //History.prototype.raw = function() {

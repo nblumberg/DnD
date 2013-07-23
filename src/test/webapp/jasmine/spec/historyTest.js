@@ -468,16 +468,177 @@ describe("DnD.History", function() {
                 history._createHtml();
                 expect(DnD.History.$history.clone).toHaveBeenCalled();
             });
-            
-            
             describe("is called on a History instance with no existing $html", function() {
                 it("it should append the clone to this.$parent", function() {
                     expect(history.$parent.children().length).toEqual(0);
                     history._createHtml();
                     expect(history.$parent.children().length).toEqual(1);
                     expect(history.$parent.html()).toEqual("<div class=\"test\"></div>");
+                    expect(history.$html.data("history")).toEqual(history);
                 });
             });
+            describe("is called on a History instance with existing $html", function() {
+                it("it should remove the existing this.$html and append the clone to this.$parent in its stead", function() {
+                    var $html = jQuery("<div class=\"html\"/></div>").appendTo(history.$parent);
+                    history.$html = $html;
+                    expect($html.parent().length).toEqual(1);
+                    expect(history.$parent.children().length).toEqual(1);
+                    history._createHtml();
+                    expect(history.$parent.children().length).toEqual(1);
+                    expect(history.$parent.html()).toEqual("<div class=\"test\"></div>");
+                    expect(history.$html.data("history")).toEqual(history);
+                    expect($html.parent().length).toEqual(0);
+                });
+            });
+        });
+        
+        describe("_noHistory()", function() {
+            beforeEach(function() {
+                var i, entry;
+                history.$parent = jQuery("<div class=\"parent\"/></div>");
+            });
+            
+            describe("is called on a History instance with no existing $html", function() {
+                it("it should append <span>No history</span> to this.$parent", function() {
+                    expect(history.$parent.children().length).toEqual(0);
+                    history._noHistory();
+                    expect(history.$parent.children().length).toEqual(1);
+                    expect(history.$parent.html()).toEqual("<span>No history</span>");
+                    expect(history.$html.data("history")).toEqual(history);
+                });
+            });
+            describe("is called on a History instance with existing $html", function() {
+                it("it should remove the existing this.$html and append <span>No history</span> to this.$parent in its stead", function() {
+                    var $html = jQuery("<div class=\"html\"/></div>").appendTo(history.$parent);
+                    history.$html = $html;
+                    expect($html.parent().length).toEqual(1);
+                    expect(history.$parent.children().length).toEqual(1);
+                    history._noHistory();
+                    expect(history.$parent.children().length).toEqual(1);
+                    expect(history.$parent.html()).toEqual("<span>No history</span>");
+                    expect(history.$html.data("history")).toEqual(history);
+                    expect($html.parent().length).toEqual(0);
+                });
+            });
+        });
+        
+        describe("_getRound()", function() {
+            describe("is called on a History instance with no existing $html", function() {
+                it("and passed create === false, it should do nothing", function() {
+                    spyOn(history, "_createHtml").andCallThrough();
+                    history._getRound(1, false);
+                    expect(history._createHtml).not.toHaveBeenCalled();
+                });
+                it("and passed create === true, it should call _createHtml()", function() {
+                    spyOn(history, "_createHtml").andCallThrough();
+                    history._getRound(1, true);
+                    expect(history._createHtml).toHaveBeenCalled();
+                });
+            });
+            describe("is called on a History instance with existing $html", function() {
+                beforeEach(function() {
+                    history._createHtml();
+                    history._count = 1; // TODO: what does _count really mean?
+                    spyOn(history, "_createHtml").andCallThrough();
+                });
+                
+                it("it should not call _createHtml()", function() {
+                    history._getRound(1, true);
+                    expect(history._createHtml).not.toHaveBeenCalled();
+                });
+                it("it should search for existing HTML matching the requested round", function() {
+                    var children = jasmine.createSpy("children").andReturn({ length: 0 });
+                    spyOn(history.$html, "children").andReturn({ children: children });
+                    history._getRound(1, true);
+                    expect(history.$html.children).toHaveBeenCalledWith(".round1");
+                    expect(children).toHaveBeenCalledWith("ul");
+                });
+                it("if HTML matching the requested round exists, it should return that HTML", function() {
+                    var $ul, r, children;
+                    $ul = jQuery("<ul/>");
+                    children = jasmine.createSpy("children").andReturn($ul);
+                    spyOn(history.$html, "children").andReturn({ children: children });
+                    r = history._getRound(1, true);
+                    expect(r).toEqual($ul);
+                });
+                describe("if no HTML matching the requested round exists", function() {
+                    it("if passed create === false, it should do nothing and return null", function() {
+                        var r, children;
+                        spyOn(DnD.History.$round, "clone").andCallThrough();
+                        children = jasmine.createSpy("children").andReturn({ length: 0 });
+                        spyOn(history.$html, "children").andReturn({ children: children });
+                        r = history._getRound(1, false);
+                        expect(DnD.History.$round.clone).not.toHaveBeenCalled();
+                        expect(r).toEqual(null);
+                    });
+                    describe("if passed create === true,", function() {
+                        var r, $cloneLi, $cloneUl, children;
+                        beforeEach(function() {
+                            $cloneLi = jQuery("<li><span class=\"roundLabel\"><span class=\"round\"></span><span class=\"time\"></span></span></li>");
+                            $cloneUl = jQuery("<ul class=\"entries\"></ul>").appendTo($cloneLi);
+                            spyOn(DnD.History.$round, "clone").andReturn($cloneLi);
+                            spyOn(history, "_setRoundTime");
+                            children = jasmine.createSpy("children").andReturn({ length: 0 });
+                            spyOn(history.$html, "children").andReturn({ children: children });
+                            r = history._getRound(1, true);
+                        });
+                        it("it should clone History.$round and append it to $html", function() {
+                            expect(DnD.History.$round.clone).toHaveBeenCalled();
+                            expect(r[0]).toEqual($cloneUl[0]);
+                            expect($cloneLi.parent()[0]).toEqual(history.$html[0]);
+                        });
+                        it("it should set the History instance as jQuery data on the clone", function() {
+                            expect($cloneLi.data("history")).toEqual(history);
+                        });
+                        it("it should set the round label HTML to the requested round", function() {
+                            expect($cloneLi.find(".roundLabel .round").html()).toEqual("1");
+                        });
+                        it("it should add the round as a class to the entries <ul/>", function() {
+                            expect($cloneUl.hasClass("round1")).toEqual(true);
+                        });
+                        it("if the History instance has a round time for the requested round, it should call _setRoundTime() on the matching HTML", function() {
+                            expect(history._setRoundTime).not.toHaveBeenCalled();
+                            history._createHtml();
+                            history._roundTimes[ 1 ] = 30000;
+                            history._getRound(1, true);
+                            expect(history._setRoundTime).toHaveBeenCalledWith(jasmine.any(Object), 30000);
+                        });
+                    });
+                });
+            });
+        });
+        
+        describe("_setRoundTime()", function() {
+            var $time;
+            beforeEach(function() {
+                $time = jQuery("<span></span>");
+            });
+            
+            it("is called with an invalid $time, it should fail without error", function() {
+                expect(function() { history._setRoundTime(null, 30000); }).not.toThrow();
+            });
+            describe("is called with a valid $time, for example", function() {
+                it("0, it should set $time.html() to 00:00", function() {
+                    history._setRoundTime($time, 0);
+                    expect($time.html()).toEqual("00:00");
+                });
+                it("36000, it should set $time.html() to 00:36", function() {
+                    history._setRoundTime($time, 36000);
+                    expect($time.html()).toEqual("00:36");
+                });
+                it("62000, it should set $time.html() to 01:02", function() {
+                    history._setRoundTime($time, 62000);
+                    expect($time.html()).toEqual("01:02");
+                });
+                it("132000, it should set $time.html() to 02:02", function() {
+                    history._setRoundTime($time, 132000);
+                    expect($time.html()).toEqual("02:12");
+                });
+            });
+        });
+        
+        describe("_editEntry", function() {
+            it("it should ")
         });
         
     }); // History methods
