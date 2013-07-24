@@ -1,17 +1,18 @@
-var DnD;
-(function(jQuery) {
+var DnD, safeConsole;
+(function(jQuery, console) {
     "use strict";
     
     function Listener() {
-        this.$body = {};
+        this.$actorCards = {};
         this.actors = [];
         this.current = null;
+        this.$imgDisplay = null;
         this.$img = null;
         this.$highlight = null;
 
         this.createCard = function(creature, i, total) {
             creature.createCard({ 
-                $parent: this.$body,
+                $parent: this.$actorCards,
                 isCurrent: creature.id === this.current,
                 className: "gridItem",
                 cardSize: jQuery(window).height() / total, // Math.floor(Math.sqrt((screen.availWidth * screen.availHeight) / total) - 100),
@@ -26,18 +27,18 @@ var DnD;
                 msg += (i > 0 ? ", " : "") + data.actors[ i ].name;
             }
             msg += " ]\n\torder: [ " + data.order.join(", ") + " ]\n\tcurrent: " + data.current;
-            try{ window.console.debug(msg); } finally {}
+            console.debug(msg);
             this.actors = [];
             this.current = data.current;
-            if (this.$body.length) {
-                this.$body.children().remove();
+            if (this.$actorCards.length) {
+                this.$actorCards.children().remove();
             }
             for (i = 0; i < data.order.length; i++) {
                 for (j = 0; j < data.actors.length; j++) {
                     if (data.actors[ j ].id === data.order[ i ]) {
                         actor = new Actor(data.actors[ j ]);
                         this.actors.push(actor);
-                        if (this.$body.length) {
+                        if (this.$actorCards.length) {
                             this.createCard(actor, i, data.order.length);
                         }
                         break;
@@ -89,7 +90,7 @@ var DnD;
         
         this.changeTurn = function(data) {
             var i, actor;
-            try { window.console.debug("Received \"changeTurn\" message from " + this.current + " to " + data.current); } finally {}
+            console.debug("Received \"changeTurn\" message from " + this.current + " to " + data.current);
             actor = this.findActor(this.current);
             actor.card.makeCurrent(false);
             this.current = data.current;
@@ -111,7 +112,7 @@ var DnD;
                     msg += "\n\t" + actor.name;
                 }
             }
-            try { window.console.debug(msg); } finally {}
+            console.debug(msg);
         };
         
         this.takeDamage = function(data) {
@@ -132,56 +133,56 @@ var DnD;
                     msg += "\n\t" + actor.name + " missed";
                 }
             }
-            try { window.console.debug(msg); } finally {}
+            console.debug(msg);
         };
         
         this.displayImage = function(data) {
             var $div, img, ratio, multiplier, useWidth;
             this.hideImage();
-            $div = jQuery("<div/>").appendTo(this.$body);
+            if (!this.$imgDisplay || !this.$imgDisplay.length) {
+                this.$imgDisplay = jQuery("#displayImage");
+            }
+//            this.$img.css("background-image", "url(\"" + data.src + "\")");
+            
             img = new Image();
+            img.onload = (function() {
+                useWidth = true;
+                ratio = img.width / img.height;
+                if (ratio >= 1) {
+                    multiplier = (window.innerWidth - 100) / img.width;
+                    if (multiplier * img.height > window.innerHeight - 100) {
+                        multiplier = (window.innerHeight - 100) / img.height;
+                        useWidth = false;
+                    }
+                } 
+                else {
+                    multiplier = (window.innerHeight - 100) / img.height;
+                    if (multiplier * img.width <= window.innerWidth - 100) {
+                        useWidth = false;
+                    }
+                }
+                if (useWidth) {
+                    img.width = window.innerWidth - 100;
+                } 
+                else {
+                    img.height = window.innerHeight - 100;
+                }
+                this.$imgDisplay.append(img);
+                this.$imgDisplay.show();
+            }).bind(this);
             img.src = data.src;
-            this.$img = jQuery(img).appendTo($div);
-            useWidth = true;
-            ratio = img.width / img.height;
-            if (ratio >= 1) {
-                multiplier = (window.innerWidth - 100) / img.width;
-                if (multiplier * img.height > window.innerHeight - 100) {
-                    useWidth = false;
-                }
-            }
-            else {
-                multiplier = (window.innerHeight - 100) / img.height;
-                if (multiplier * img.width <= window.innerWidth - 100) {
-                    useWidth = false;
-                }
-            }
-            if (useWidth) {
-                img.width = window.innerWidth - 100;
-            }
-            else {
-                img.height = window.innerHeight - 100;
-            }
-            $div.dialog({ 
-                autoOpen: false, 
-                position: [ "center", 50 ], 
-                modal: true, 
-                title: "Image",
-                width: "auto"
-            });
-            $div.dialog("open");
+            this.$img = jQuery(img);
         };
         
         this.hideImage = function() {
             if (this.$img && this.$img.length) {
-                try {
-                    this.$img.dialog("destroy").parent().remove();
-                }
-                catch (e) {
-                }
-                finally {
-                    this.$img.parent().remove();
-                }
+                this.$img.remove();
+            }
+            if (this.$imgDisplay && this.$imgDisplay.length) {
+                this.$imgDisplay.hide();
+            }
+            if (this.$highlight && this.$highlight.length) {
+                this.$highlight.hide();                
             }
         };
         
@@ -190,12 +191,12 @@ var DnD;
             if (!this.$img || !this.$img.length || !data || !data.position) {
                 return;
             }
-            if (this.$highlight) {
-                this.$highlight.remove();
+            if (!this.$highlight) {
+                this.$highlight = this.$imgDisplay.find(".reticle");
             }
-            try { window.console.debug("Received \"highlightImage\" message { x: " + (100 * data.position.x) + "%, y: " + (100 * data.position.y) + "% }"); } finally {}
+            console.debug("Received \"highlightImage\" message { x: " + (100 * data.position.x) + "%, y: " + (100 * data.position.y) + "% }");
             offset = { left: this.$img[0].offsetLeft, top: this.$img[0].offsetTop };
-            this.$highlight = jQuery("<img/>").addClass("reticle").attr("height", "20").attr("width", "20").attr("src", "images/symbols/reticle.png").css({ left: offset.left - 10 + (data.position.x * this.$img[0].width), position: "absolute", top: offset.top - 10 + (data.position.y * this.$img[0].height) }).appendTo(this.$img.parent());
+            this.$highlight.css({ left: offset.left - 10 + (data.position.x * this.$img[0].width), top: offset.top - 10 + (data.position.y * this.$img[0].height) }).show();
         };
         
         this.receiveMessage = function(event) {
@@ -213,10 +214,10 @@ var DnD;
         
         jQuery(document).ready((function() {
             var i;
-            try { window.console.debug("DOM ready"); } finally {}
+            console.debug("DOM ready");
             window.opener.postMessage("ready", "*");
 
-            this.$body = jQuery("body");
+            this.$actorCards = jQuery("#actorCards");
             for (i = 0; i < this.actors.length; i++) {
                 createCard(this.actors[ i ], i, this.actors.length);
             }
@@ -224,4 +225,4 @@ var DnD;
     }
     
     new Listener();
-})(window.jQuery);
+})(window.jQuery, safeConsole());

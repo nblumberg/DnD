@@ -1,3 +1,4 @@
+body { background-color:black; color: white; overflow: hidden; }
 th, td { border-color: white; }
     
 .alignTop { vertical-align: top; }
@@ -38,6 +39,50 @@ input#round { width: 30px; }
 	height: 30px;
 }
 
+#displayImage {
+	background-color: black;
+	background-position: top left;
+	background-repeat: no-repeat;
+    background-size: contain;
+	bottom: 0;
+	display: none;
+	left: 0;
+	position: fixed;
+	right: 0;
+	text-align: center;
+	top: 0;
+	vertical-align: middle;
+	z-index: 1000;
+}
+
+#displayImage img {
+	z-index: 1;
+}
+
+#displayImage .reticle {
+    background-image: url("/images/symbols/reticle.png");
+	background-position: center;
+	background-repeat: no-repeat;
+    background-size: 20px 20px;
+	display: none;
+	height: 20px;
+	position: absolute;
+	width: 20px;
+	z-index: 2;
+}
+
+/* #displayImage .reticle:after {
+    content: "";
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;  
+}
+ */
+ 
 /* actorTable */
 #roundLabel { font-size: 9pt; }
 
