@@ -1,6 +1,6 @@
 var DnD;
 
-(function(jQuery) {
+(function(jQuery, console) {
     "use strict";
     
     if (!DnD) {
@@ -360,12 +360,13 @@ var DnD;
         if (typeof(params.subject) === "number") {
             // Creature.actors may not be initialized yet, if not, preserve subject id for resolving at need
             if (!Creature.actors.hasOwnProperty(params.subject)) {
-                try { window.console.warn("Failed to find subject " + params.subject + " in Creature.actors for History.Entry " + this.id); } finally {}
+                console.warn("Failed to find subject " + params.subject + " in Creature.actors for History.Entry " + this.id);
             }
             this.subject = Creature.actors[ params.subject ] ? Creature.actors[ params.subject ] : params.subject;
         }
         else {
             this.subject = params.subject;
+            this.subjectName = this.subject ? this.subject.name : "Unknown subject";
         }
         this.message = params.message;
         this.round = params.round;
@@ -415,7 +416,7 @@ var DnD;
     // PRIVATE METHODS
     
     History.Entry.prototype._addToRound = function($round, includeSubject) {
-        var history, $li, $save, $delete;
+        var history, $li, $subject, $textarea, $save, $delete;
         history = $round.closest(".history").data("history");
         if (includeSubject && typeof(this.subject) === "number") {
             // Creature.actors wasn't initialized at creation time, resolve subject id now
@@ -426,16 +427,32 @@ var DnD;
         this._render($li, includeSubject);
         $save = $li.find(".save");
         $delete = $li.find(".delete");
-        $save.on({ click: this._save.bind(this, $li, $span, $li.find("textarea"), $save, $delete, history) });
-        $delete.on({ click: this._delete.bind(this, $li, $span, $li.find("textarea"), $save, $delete, history) });
+        $subject = $li.find(".subject");
+        $textarea = $li.find("textarea");
+        $save.on({ click: this._save.bind(this, $li, $subject, $textarea, $save, $delete, history) });
+        $delete.on({ click: this._delete.bind(this, $li, $subject, $textarea, $save, $delete, history) });
     };
 
     History.Entry.prototype._render = function($li, includeSubject) {
         var message, $span, $save, $delete;
         message = this.message;
         if (includeSubject && this.subject) {
+            if (typeof(this.subject) === "number") {
+                // Resolve subject from id
+                if (!Creature.actors.hasOwnProperty(this.subject)) {
+                    console.warn("Failed to find subject " + this.subject + " in Creature.actors for History.Entry " + this.id);
+                }
+                else {
+                    this.subject = Creature.actors[ this.subject ] ? Creature.actors[ this.subject ] : this.subject;
+                }
+            }
             $li.addClass(includeSubject ? "includeSubject" : "");
-            $span = $li.find(".subject").html(this.subject.name);
+            if (typeof(this.subject) === "number") {
+                $span = $li.find(".subject").html(this.subjectName);
+            }
+            else {
+                $span = $li.find(".subject").html(this.subject.name);
+            }
             $span = $li.find(".message").html(message.charAt(0).toLowerCase() + message.substr(1));
         }
         else {
@@ -505,4 +522,4 @@ var DnD;
 
     
     DnD.History = History;
-})(window.jQuery);
+})(window.jQuery, safeConsole());

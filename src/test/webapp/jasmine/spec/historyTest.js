@@ -638,9 +638,44 @@ describe("DnD.History", function() {
         });
         
         describe("_editEntry", function() {
-            it("it should ")
+            it("it should find the History.Entry from the HTML.data() and call its _edit method", function() {
+                var entry, $entry;
+                entry = { _edit: jasmine.createSpy("_edit") };
+                $entry = jQuery("<div/>").data("entry", entry);
+                history._editEntry($entry, history);
+                expect(entry._edit).toHaveBeenCalledWith($entry, history);
+            });
         });
         
     }); // History methods
+    
+    
+    describe("History is serialized, set in storage, read from storage, deserialized and reinitialized", function() {
+        it("it should produce identical results", function() {
+            var rawIn, jsonIn, jsonOut, rawOut, history2;
+            rawIn = { 
+                    historyEntries: Serializable.prototype.rawObj(DnD.History.Entry.entries),
+                    history: history.raw()
+                    
+            };
+            jsonIn = JSON.stringify(rawIn);
+            window.sessionStorage.setItem("test", jsonIn);
+            jsonOut = window.sessionStorage.getItem("test");
+            try {
+                rawOut = JSON.parse(jsonOut); 
+            }
+            finally {}
+            
+            DnD.History.Entry.init(rawOut.historyEntries); // NOTE: must come before this.actors is initialized because Creature.history references it
+            history2 = new DnD.History(rawOut.history); // NOTE: must come after this.actors is initialized because of _includeSubject
+            
+            expect(history2._entries.length).toEqual(history._entries.length);
+            expect(history2._round).toEqual(history._round);
+            expect(history2._count).toEqual(history._count);
+            expect(history2._roundTimes).toEqual(history._roundTimes);
+            expect(history2._includeSubject).toEqual(history._includeSubject);
+            
+        });
+    });
     
 });

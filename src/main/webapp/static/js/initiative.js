@@ -205,7 +205,6 @@ var DnD;
                 this._addActor(creature);
             }
             this._render(true);
-            dialogsReady();
         }).bind(this) });
         
         this.imageDialog = new DnD.Dialog.Image({ toDisplay: this._messageDisplay.bind(this) });
