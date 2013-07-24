@@ -20,11 +20,23 @@ var DnD;
         this.params = params || {};
         
         this.actor = params.actor;
+        
+        this.portraitHeight = 0;
+        this.portraitWidth = 0;
+        this.isLandscape = false;
+        this.img = new Image();
+        this.img.onload = (function() {
+            this.portraitHeight = this.img.naturalHeight;
+            this.portraitWidth = this.img.naturalWidth;
+            this.isLandscape = this.portraitWidth >= this.portraitHeight;
+        }).bind(this);
+        this.img.src = this.actor.image;
+        
         this.subPanel = {};
         this.cardSize = params.cardSize || ActorCard.CARD_SIZE;
         this.$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
         
-        this.$panel = jQuery("<div/>").attr("id", this.actor.name.replace(/\s/g, "_") + "_panel").data("actor", this.actor).addClass("creaturePanel centered verticallyCentered bordered " + params.className).appendTo(this.$parent);
+        this.$panel = jQuery("<div/>").attr("id", this.actor.name.replace(/\s/g, "_") + "_panel").data("actor", this.actor).addClass("creaturePanel centered verticallyCentered bordered " + params.className).css("background-image", "url(" + this.actor.image + ")").appendTo(this.$parent);
         this.$panel.load("/html/partials/actorCard.html", null, this._init.bind(this));
     }
     
@@ -120,16 +132,7 @@ var DnD;
         
         this.subPanel.$images = this.$panel.find(".images");
         
-        this.subPanel.$portrait = this.$panel.find(".portrait");
-        this.subPanel.$portrait.attr("src", this.actor.image); //.height(this.cardSize * 100/120);
-        this.portraitHeight = 0;
-        this.portraitWidth = 0;
-        this.subPanel.$portrait.on({ load: (function() {
-            this.portraitHeight = this.subPanel.$portrait[0].naturalHeight;
-            this.portraitWidth = this.subPanel.$portrait[0].naturalWidth;
-            this.isLandscape = this.portraitWidth >= this.portraitHeight;
-            ActorCard.resizeAll();
-        }).bind(this) });
+        ActorCard.resizeAll();
 
         this.showPcHp = this.params.showPcHp;
         this.subPanel.$name = this.$panel.find(".label .name");
@@ -147,28 +150,6 @@ var DnD;
         }
         style = { height: height + "px", width: width + "px" };
         this.$panel.css(style);
-        
-        size = { 
-            available: {
-                height: height * 0.9,
-                width: width
-            }, 
-            calc: {
-                height: width / this.portraitWidth * this.portraitHeight,
-                width: height / this.portraitHeight * this.portraitWidth
-            } 
-        };
-        if (this.isLandscape && size.calc.height <= size.available.height) {
-            // Run out of width before run out of height
-            style.width = size.available.width + "px";
-            style.height = size.calc.height + "px";
-        }
-        else {
-            // Run out of height before run out of width
-            style.height = size.available.height + "px";
-            style.width = size.calc.width + "px";
-        }
-        this.subPanel.$portrait.css(style);
     };
 
     ActorCard.prototype._renderName = function() {
@@ -193,7 +174,7 @@ var DnD;
      * @param total Number The total number of conditions (including child effects), used for sizing
      */
     ActorCard.prototype._renderCondition = function(effect, total) {
-        var i, $div, image, clickHandler, condition;
+        var i, $div, image, clickHandler, condition, $amount;
         if (effect.children && effect.children.length) {
             for (i = 0; i < effect.children.length; i++) {
                 this._renderCondition(effect.children[ i ], total);
@@ -237,7 +218,8 @@ var DnD;
         }
         $div.append(image);
         if (effect.amount) {
-            $div.append(jQuery("<span/>").css({ "line-height": image.height + "px", "color": condition && condition.color ? condition.color : "red" }).html(effect.amount));
+            $amount = jQuery("<div/>").addClass("amount").css({ "color": condition && condition.color ? condition.color : "red" }).appendTo($div);
+            jQuery("<span/>").html(effect.amount).appendTo($amount);
         }
         this.subPanel.$effects.append($div);
     };
