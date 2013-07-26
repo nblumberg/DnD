@@ -380,6 +380,7 @@ var DnD;
                         },
                         effects: Serializable.prototype.rawArray(actor.effects)
                     }, false);
+                    actor.card.refresh();
                 }
                 break;
             }
