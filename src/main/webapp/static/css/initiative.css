@@ -110,7 +110,7 @@ td.cardHolder { padding: 0; }
 .creaturePanel .event, .creaturePanel .condition { color: #FFFFFF; overflow: hidden; text-align: center; vertical-align: middle; }
 .creaturePanel .condition { background-color: white; float: left; position: relative; }
 .creaturePanel .condition .amount { bottom: 0; left: 0; display: table-cell; position: absolute; right: 0; text-align: center; top: 0; vertical-align: middle; }
-.creaturePanel .condition .amount span { background-color: white; font-size: 1.5em; font-weight: bold; text-shadow: 2px 2px black; }
+.creaturePanel .condition .amount span { background-color: white; bottom: 3px; font-size: 1.5em; font-weight: bold; position: absolute; right: 3px; text-shadow: 2px 2px black; }
 .creaturePanel .event { background-position: center; background-size: cover; bottom: auto; height: 90%; overflow: hidden; width: 100%; }
 .creaturePanel .event.hit { background-image: url("/images/symbols/pow.png"); }
 .creaturePanel .event.miss { background-image: url("/images/symbols/miss.jpg"); }
