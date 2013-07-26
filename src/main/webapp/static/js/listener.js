@@ -33,9 +33,6 @@ var DnD, safeConsole;
             }
             this.actors = [];
             this.current = data.current;
-            if (this.$actorCards.length) {
-//                this.$actorCards.children().remove();
-            }
             for (i = 0; i < data.order.length; i++) {
                 for (j = 0; j < data.actors.length; j++) {
                     if (data.actors[ j ].id === data.order[ i ]) {
@@ -72,14 +69,14 @@ var DnD, safeConsole;
         };
         
         this.updateActor = function(data) {
-            var actor;
+            var actor, i;
             actor = this.findActor(data.id);
             actor.name = data.name;
             actor.hp.temp = data.hp.temp;
             actor.hp.current = data.hp.current;
             actor.effects = [];
-            for (j = 0; data.effects && j < data.effects.length; j++) {
-                actor.effects.push(new Effect(data.effects[ j ]));
+            for (i = 0; data.effects && i < data.effects.length; i++) {
+                actor.effects.push(new Effect(data.effects[ i ]));
             }
             actor.card.refresh();
         };
