@@ -16,6 +16,43 @@ var DnD;
             this._init(params);
         }
         window.name = "admin";
+        
+        this._current = null;
+        this.actors = [];
+        this.order = [];
+        this.history = null;
+        this.round = 1;
+        this._roundTimer = null;
+        this._current = null;
+        this._$target = null; 
+        this.$parent = null;
+        this.$display = null;
+        this.$menuBar = null;
+        this.$round = null;
+        this.$previousButton = null;
+        this.$nextButton = null;
+        this.$displayButton = null;
+        this.$fileInput = null;
+        this.$loadInitiative = null;
+        this.$loadMonsters = null;
+        this.$loadParty = null;
+        this.$import = null;
+        this.$export = null;
+        this.$clearAll = null;
+        this.$clearCreatures = null;
+        this.$clearMonsters = null;
+        this.$clearHistory = null;
+        this.creatureDialog = null;
+        this.imageDialog = null;
+        this.initiativeDialog = null; 
+        this.attackDialog = null;
+        this.healDialog = null;
+        this.$freeFormHistorySubject = null;
+        this.freeFormHistory = null;
+        this.display = null;
+        this.$table = null;
+        this.$importDialog = null;
+        this.$exportDialog = null;
     }
 
     Initiative.prototype = new EventDispatcher();
@@ -217,7 +254,7 @@ var DnD;
         });
 
         this.attackDialog = new DnD.Dialog.Attack({ callback: (function(msg) {
-            this._render(false);
+            this._render(true);
             this._messageDisplay(msg, false);
         }).bind(this) });
 
@@ -350,6 +387,10 @@ var DnD;
         actor.addEventListener("takeDamage", (function(event) {
             this._messageDisplay({ actor: event.target.raw(), damage: event.damage }, false);
         }).bind(this));
+        if (!this._current) {
+            this._current = actor.id;
+            actor.startTurn();
+        }
         return actor;
     };
     
@@ -555,7 +596,7 @@ var DnD;
             });
         }
         else {
-            $textarea = this.$exportDialog.find("textarea");
+            $textarea = this.$importDialog.find("textarea");
         }
         this.$importDialog.dialog("open");
     };
@@ -702,7 +743,7 @@ var DnD;
             this._next();
             return;
         }
-        this._renderRound();
+        this._render(true);
         this._messageDisplay({ type: "changeTurn", current: this._current, actors: this.rawArray(actors) }, false);
     };
 

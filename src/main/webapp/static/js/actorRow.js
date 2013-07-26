@@ -96,6 +96,8 @@ var DnD;
         this.$heal.on({ click: this.params.heal });
         this.$exit.on({ click: this.params.exit });
         this.$rename.on({ click: this.params.rename });
+        
+        this.render();
     };
 
     
