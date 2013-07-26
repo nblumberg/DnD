@@ -25,7 +25,8 @@ files = [
     'src/main/webapp/static/js/history.js',
 	
 	// test specs to run
-	'src/test/webapp/jasmine/spec/testUtilities.js',
+    'src/test/webapp/jasmine/spec/testUtilities.js',
+    'src/test/webapp/jasmine/spec/creatureTestUtilities.js',
 	'src/test/webapp/jasmine/spec/jsTest.js',
 	'src/test/webapp/jasmine/spec/actionsTest.js',
 	'src/test/webapp/jasmine/spec/dataTest.js',

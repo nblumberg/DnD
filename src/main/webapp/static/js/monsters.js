@@ -1,6 +1,28 @@
 function loadMonsters() {
+    /**
+        String: {
+            name: String, level: Number, image: URL,
+            hp: { total: Number },
+            defenses: { ac: Number, fort: Number, ref: Number, will: Number },
+            [resistances: { "type": Number },]
+            [immunities: [ String ],]
+            [vulnerabilities: [ String ],]
+            [savingThrows: Number,]
+            init: Number, 
+            speed: Number | { "method": Number },
+            abilities: { STR: Number, CON: Number, DEX: Number, INT: Number, WIS: Number, CHA: Number },
+            skills: { acrobatics: Number, arcana: Number, athletics: Number, bluff: Number, diplomacy: Number, dungeoneering: Number, endurance: Number, heal: Number, history: Number, insight: Number, intimidate: Number, nature: Number, perception: Number, religion: Number, stealth: Number, streetwise: Number, thievery: Number },
+            attacks: [
+                {
+                    [effects: [
+                        { name: String, [amount: Number,][ type: String,][ duration: "startTargetNext" | "endTargetNext" | "endAttackerNext" ] }
+                    ]]
+                }
+            ]
+        },
+     */
     return { 
-    	"Antharosk": {    	
+        "Antharosk": {        
             name: "Antharosk", level:10, image: "../images/portraits/antharosk.jpg",
             hp: { total: 428 },
             defenses: { ac: 26, fort: 23, ref: 24, will: 23 },
@@ -8,13 +30,13 @@ function loadMonsters() {
             savingThrows: 5,
             init: 10, speed: { walk: 8, fly: 12 },
             abilities: { STR: 16, CON: 19, DEX: 20, INT: 16, WIS: 17, CHA: 18 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 19, diplomacy: 14, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 18, intimidate: 14, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 19, diplomacy: 14, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 18, intimidate: 14, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Bite", usage: { frequency: "At-Will" }, range: "reach", toHit: 15, defense: "AC", damage: "1d10+5", effects: [ { name: "ongoing damage", amount: 5, type: "poison", saveEnds: true } ], keywords: [ "melee", "basic", "poison" ] },
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 15, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
                       { name: "Tail Sweep", usage: { frequency: "At-Will", action: "Immediate Reaction" }, toHit: 13, defense: "Ref", damage: "1d8+5", effects: [ "Prone" ], keywords: [ "melee", "prone" ] },
                       { name: "Breath Weapon", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close blast", size: 5 }, toHit: 13, defense: "Fort", damage: { amount: "1d10+4", type: "poison" }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "Ongoing damage", amount: 5 }, "Slowed" ] } ], keywords: [ "close blast", "poison" ] },
-                      { name: "Frightful Presence", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 13, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: 1 } ], keywords: [ "close", "burst" ] }
+                      { name: "Frightful Presence", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 13, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: "endAttackerNext" } ], keywords: [ "close", "burst" ] }
               ]
         },
         "Arctide Spiralith": {
@@ -23,7 +45,7 @@ function loadMonsters() {
             defenses: { ac: 24, fort: 23, ref: 25, will: 23 },
             init: 12, speed: 7,
             abilities: { STR: 15, CON: 19, DEX: 23, INT: 7, WIS: 19, CHA: 12 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Bite", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: "1d6+5", keywords: [ "melee", "basic" ] },
                       { name: "Arcane Arc", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "Ref", damage: { amount: "1d8+5", type: "lightning" }, keywords: [ "melee", "lightning" ] },
@@ -38,7 +60,7 @@ function loadMonsters() {
             defenses: { ac: 23, fort: 20, ref: 23, will: 22 },
             init: 11, speed: 8,
             abilities: { STR: 16, CON: 17, DEX: 22, INT: 14, WIS: 15, CHA: 20 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Slam", usage: { frequency: "At-Will" }, range: "melee", toHit: 13, defense: "AC", damage: "1d8+3", keywords: [ "melee", "basic" ] },
                       { name: "Blowgun Dart", usage: { frequency: "At-Will" }, range: 5, toHit: 16, defense: "AC", targeting: "blast 5", damage: "1d10+6", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "ranged" ] },
@@ -63,9 +85,9 @@ function loadMonsters() {
             abilities: { STR: 21, CON: 19, DEX: 14, INT: 12, WIS: 9, CHA: 21 },
             skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 15, nature: 0, perception: 4, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
-                      { name: "Souldraining Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: { amount: "1d8+5", type: "necrotic" }, effects: [ { name: "Immobilized", saveEnds: true }, { name: "Marked", duration: 1 } ], keywords: [ "melee", "basic", "necrotic", "weapon" ] }, // TODO: target loses 1 healing surge
+                      { name: "Souldraining Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: { amount: "1d8+5", type: "necrotic" }, effects: [ { name: "Immobilized", saveEnds: true }, { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "necrotic", "weapon" ] }, // TODO: target loses 1 healing surge
                       { name: "Soul Reaping", usage: { frequency: "At-Will" }, range: 5, toHit: 16, defense: "Fort", damage: { amount: "2d8+6", type: "necrotic" }, keywords: [ "ranged", "healing", "necrotic" ] }, // TODO: heals self 10
-                      { name: "Chosen Target", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: { amount: "1d8+5", type: "necrotic" }, effects: [ { name: "Immobilized", saveEnds: true }, { name: "Marked", duration: 1 } ], keywords: [ "melee", "basic", "necrotic", "weapon" ] } // TODO: target loses 1 healing surge
+                      { name: "Chosen Target", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: { amount: "1d8+5", type: "necrotic" }, effects: [ { name: "Immobilized", saveEnds: true }, { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "necrotic", "weapon" ] } // TODO: target loses 1 healing surge
               ]
         },
         "Berbalang": { 
@@ -75,14 +97,14 @@ function loadMonsters() {
             savingThrows: 5,
             init: 13, speed: { walk: 6, fly: 8 },
             abilities: { STR: 16, CON: 14, DEX: 22, INT: 14, WIS: 13, CHA: 15 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "1d8+6", keywords: [ "melee", "basic" ] },
                       { name: "Claw (sneak attack)", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "2d8+6", keywords: [ "melee", "requires combat advantage" ] },
                       { name: "Sacrifice", usage: { frequency: "At-Will" }, range: 1, toHit: 11, defense: "Fort", damage: "2d6+6", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "close burst", "effects on miss" ] }
               ]
         },
-    	"Calaunxin": {    	
+        "Calaunxin": {        
             name: "Calaunxin", level: 9, image: "../images/portraits/calaunxin.jpg",
             hp: { total: 408 },
             defenses: { ac: 23, fort: 26, ref: 21, will: 22 },
@@ -90,13 +112,13 @@ function loadMonsters() {
             savingThrows: 5,
             init: 5, speed: { walk: 8, fly: 12 },
             abilities: { STR: 20, CON: 22, DEX: 12, INT: 12, WIS: 14, CHA: 10 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 19, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 11, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 19, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 11, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Bite", usage: { frequency: "At-Will" }, range: "reach", toHit: 12, defense: "AC", damage: "1d8+5", effects: [ { name: "ongoing damage", amount: 5, type: "poison", saveEnds: true } ], keywords: [ "melee", "basic", "poison" ] },
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 12, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
                       { name: "Luring Glare", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 10, defense: "Will", damage: "0", keywords: [ "melee", "forced movement" ] },
                       { name: "Breath Weapon", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close blast", size: 5 }, toHit: 10, defense: "Ref", damage: { amount: "2d6+6", type: "poison" }, effects: [ { name: "multiple", saveEnds: true, children: [ "Slowed" ] } ], keywords: [ "close blast", "poison" ] },
-                      { name: "Frightful Presence", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 10, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: 1 } ], keywords: [ "close", "burst" ] }
+                      { name: "Frightful Presence", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 10, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: "endAttackerNext" } ], keywords: [ "close", "burst" ] }
               ]
         },
         "Centaur Ravager": { 
@@ -105,7 +127,7 @@ function loadMonsters() {
             defenses: { ac: 24, fort: 26, ref: 24, will: 23 },
             init: 10, speed: { walk: 8 },
             abilities: { STR: 22, CON: 20, DEX: 18, INT: 9, WIS: 16, CHA: 10 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 17, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 14, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 17, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 14, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Greatsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 15, defense: "AC", damage: "1d10+6", keywords: [ "melee", "basic" ] },
                       { name: "Greatsword (charge)", usage: { frequency: "At-Will" }, range: "melee", toHit: 15, defense: "AC", damage: "2d10+6", keywords: [ "melee", "basic", "charge" ] },
@@ -121,7 +143,7 @@ function loadMonsters() {
             defenses: { ac: 23, fort: 25, ref: 23, will: 22 },
             init: 9, speed: { walk: 6 },
             abilities: { STR: 23, CON: 16, DEX: 18, INT: 11, WIS: 14, CHA: 16 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Slam", usage: { frequency: "At-Will" }, range: 2, toHit: 14, defense: "AC", damage: { amount: "8", type: "fire" }, keywords: [ "melee", "basic" ] }
               ]
@@ -132,7 +154,7 @@ function loadMonsters() {
             defenses: { ac: 27, fort: 26, ref: 23, will: 23 },
             init: 8, speed: 6,
             abilities: { STR: 22, CON: 20, DEX: 16, INT: 11, WIS: 17, CHA: 11 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [ { name: "Battleaxe", usage: { frequency: "At-Will" }, range: "2", toHit: 17, defense: "AC", damage: "7", keywords: [ "melee", "basic" ] } ]
         },
         "Dragonborn Gladiator": { 
@@ -141,7 +163,7 @@ function loadMonsters() {
             defenses: { ac: 24, fort: 23, ref: 20, will: 21 },
             init: 9, speed: 5,
             abilities: { STR: 21, CON: 18, DEX: 15, INT: 10, WIS: 12, CHA: 16 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 15, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 7, insight: 0, intimidate: 15, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 15, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 7, insight: 0, intimidate: 15, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Bastard Sword", usage: { frequency: "At-Will" }, range: "melee", toHit: 15, defense: "AC", damage: "1d10+5", keywords: [ "melee", "basic" ] },
                       { name: "Bastard Sword (bloodied)", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "AC", damage: "1d10+5", keywords: [ "melee" ] },
@@ -162,7 +184,7 @@ function loadMonsters() {
             defenses: { ac: 27, fort: 23, ref: 24, will: 21 },
             init: 13, speed: 7,
             abilities: { STR: 18, CON: 17, DEX: 21, INT: 10, WIS: 14, CHA: 12 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 8, insight: 0, intimidate: 9, nature: 0, perception: 13, religion: 0, stealth: 16, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 8, insight: 0, intimidate: 9, nature: 0, perception: 13, religion: 0, stealth: 16, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Katar", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: "1d6+4", keywords: [ "melee", "basic" ] },
                       { name: "Katar (combat advantage)", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: "2d6+4", keywords: [ "melee", "combat advantage" ] },
@@ -178,7 +200,7 @@ function loadMonsters() {
             defenses: { ac: 24, fort: 23, ref: 23, will: 25 },
             init: 10, speed: 5,
             abilities: { STR: 14, CON: 18, DEX: 19, INT: 11, WIS: 14, CHA: 22 },
-			skills: { acrobatics: 0, arcana: 11, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 13, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 11, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 11, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 13, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 11, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Mace", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
                       { name: "Infernal Quills", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 19, defense: "AC", damage: { amount: "1d8+3", type: "fire and poison" }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 5, type: "fire and poison" }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] },
@@ -193,7 +215,7 @@ function loadMonsters() {
             defenses: { ac: 28, fort: 26, ref: 22, will: 23 },
             init: 8, speed: 5,
             abilities: { STR: 22, CON: 20, DEX: 14, INT: 7, WIS: 16, CHA: 11 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Slam", usage: { frequency: "At-Will" }, range: "reach", toHit: 19, defense: "AC", damage: "2d8+6", keywords: [ "melee", "basic" ] },
                       { name: "Divine Retribution", usage: { frequency: "At-Will" }, range: "20", toHit: 17, defense: "Ref", damage: { amount: "2d8+5", type: "radiant" }, keywords: [ "ranged", "miss half" ] },
@@ -249,7 +271,7 @@ function loadMonsters() {
             defenses: { ac: 23, fort: 23, ref: 21, will: 21 },
             init: 8, speed: { walk: 7, teleport: 2 },
             abilities: { STR: 16, CON: 18, DEX: 15, INT: 7, WIS: 13, CHA: 14 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Claw Slash", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "2d8+3", keywords: [ "melee", "basic" ] }
               ]
@@ -260,7 +282,7 @@ function loadMonsters() {
             defenses: { ac: 24, fort: 19, ref: 23, will: 21 },
             init: 7, speed: { walk: 6, teleport: 3 },
             abilities: { STR: 10, CON: 14, DEX: 14, INT: 22, WIS: 8, CHA: 18 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Twisted Staff", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "1d8+6", keywords: [ "melee", "basic" ] },
                       { name: "Warp Orb", usage: { frequency: "At-Will" }, range: "10", toHit: 16, defense: "Ref", damage: "1d8+6", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "ranged", "basic" ] },
@@ -310,7 +332,7 @@ function loadMonsters() {
             defenses: { ac: 26, fort: 25, ref: 23, will: 23 },
             init: 9, speed: { walk: 6 },
             abilities: { STR: 20, CON: 14, DEX: 14, INT: 9, WIS: 15, CHA: 9 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 15, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 15, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Greataxe", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "AC", damage: "1d12+5", keywords: [ "melee", "basic" ] }
               ]
@@ -321,7 +343,7 @@ function loadMonsters() {
             defenses: { ac: 26, fort: 25, ref: 24, will: 23 },
             init: 11, speed: 6,
             abilities: { STR: 21, CON: 22, DEX: 21, INT: 13, WIS: 18, CHA: 19 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 15, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 15, intimidate: 0, nature: 15, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 15, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 15, intimidate: 0, nature: 15, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Quarterstaff", usage: { frequency: "At-Will" }, range: "melee", toHit: 15, defense: "AC", damage: "1d10+5", keywords: [ "melee", "basic" ] },
                       { name: "Howl", usage: { frequency: "At-Will" }, range: "blast 3", toHit: 16, defense: "Fort", damage: { amount: "1d6+6", type: "thunder" }, keywords: [ "ranged" ] },
@@ -363,7 +385,7 @@ function loadMonsters() {
             defenses: { ac: 27, fort: 25, ref: 22, will: 23 },
             init: 9, speed: { walk: 6 },
             abilities: { STR: 20, CON: 17, DEX: 15, INT: 10, WIS: 16, CHA: 13 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 11, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 11, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Trident", usage: { frequency: "At-Will" }, range: 2, toHit: 18, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
                       { name: "Skewering Tines", usage: { frequency: "At-Will" }, range: 2, toHit: 18, defense: "AC", damage: "1d8+5", effects: [ { name: "multiple", saveEnds: true, children: [ { name: "Ongoing damage", amount: 5 }, "Restrained" ] } ], keywords: [ "ranged", "basic" ] },
@@ -393,7 +415,7 @@ function loadMonsters() {
             savingThrows: 2,
             init: 5, speed: { walk: 4, fly: 8 },
             abilities: { STR: 22, CON: 24, DEX: 9, INT: 1, WIS: 16, CHA: 3 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 16, defense: "AC", damage: "2d10+6", effects: [ "Prone"], keywords: [ "melee", "basic" ] },
                       { name: "Tail Crush", usage: { frequency: "At-Will" }, range: "reach", toHit: 14, defense: "Fort", damage: "3d8+6", keywords: [ "melee", "prone" ] },
@@ -408,7 +430,7 @@ function loadMonsters() {
             resistances: { acid: 10, fire: 10 },
             init: 9, speed: { walk: 6 },
             abilities: { STR: 17, CON: 21, DEX: 19, INT: 16, WIS: 19, CHA: 21 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Slam", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "AC", damage: { amount: "2d8+4", type: "fire" }, keywords: [ "melee", "fire", "basic" ] },
                       { name: "Staggering Strike", usage: { frequency: "At-Will" }, range: 20, toHit: 14, defense: "Fort", damage: "2d6+6", keywords: [ "ranged" ] },
@@ -452,12 +474,12 @@ function loadMonsters() {
             defenses: { ac: 30, fort: 27, ref: 29, will: 25 },
             init: 11, speed: { walk: 6, teleport: 3 },
             abilities: { STR: 13, CON: 13, DEX: 16, INT: 19, WIS: 12, CHA: 17 },
-			skills: { acrobatics: 8, arcana: 12, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 4, religion: 12, stealth: 13, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 8, arcana: 12, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 4, religion: 12, stealth: 13, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Blackfire Touch", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "Ref", damage: { amount: "2d8+6", type: "fire and necrotic" }, keywords: [ "melee", "fire", "necrotic", "fire and necrotic", "basic" ] },
                       { name: "Beshadowed Mind", usage: { frequency: "Recharge", recharge: 4 }, range: 10, toHit: 18, defense: "Will", damage: { amount: "3d6+6", type: "necrotic" }, effects: [ { name: "blinded", saveEnds: true } ], keywords: [ "melee", "necrotic" ] },
                       { name: "Deep Shadow", usage: { frequency: "At-Will" }, range: 2, toHit: "automatic", defense: "AC", damage: { amount: "5", type: "necrotic" }, keywords: [ "aura", "necrotic" ] },
-                      { name: "Ebon Burst", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 2 }, toHit: 18, defense: "Ref", damage: "2d8+6", effects: [ { name: "Slowed", duration: 1 } ], keywords: [ "ranged" ] }
+                      { name: "Ebon Burst", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 2 }, toHit: 18, defense: "Ref", damage: "2d8+6", effects: [ { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
               ]
         },
         "Skulking Terror": { 
@@ -466,11 +488,11 @@ function loadMonsters() {
             defenses: { ac: 25, fort: 21, ref: 23, will: 21 },
             init: 13, speed: { walk: 6, fly: 6 },
             abilities: { STR: 14, CON: 11, DEX: 19, INT: 13, WIS: 13, CHA: 12 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 11, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 11, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Slam", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "AC", damage: "2d6+6", keywords: [ "melee", "basic" ] },
                       { name: "Slam [combat advantage]", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "AC", damage: "4d6+6", keywords: [ "melee", "basic" ] },
-                      { name: "Lethargic Countenance", usage: { frequency: "At-Will" }, target: { area: "blast", size: 1 }, toHit: 12, defense: "Will", damage: "0", effects: [ { name: "combat advantage", duration: 1 } ], keywords: [ "ranged" ] }
+                      { name: "Lethargic Countenance", usage: { frequency: "At-Will" }, target: { area: "blast", size: 1 }, toHit: 12, defense: "Will", damage: "0", effects: [ { name: "Slowed", duration: "endAttackerNext" }, { name: "combat advantage", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
               ]
         },
         "Slaad Guard": { 
@@ -479,7 +501,7 @@ function loadMonsters() {
             defenses: { ac: 23, fort: 23, ref: 21, will: 21 },
             init: 8, speed: { walk: 7, teleport: 2 },
             abilities: { STR: 16, CON: 18, DEX: 15, INT: 7, WIS: 13, CHA: 14 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Claw Slash", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "2d8+3", keywords: [ "melee", "basic" ] }
               ]
@@ -490,7 +512,7 @@ function loadMonsters() {
             defenses: { ac: 20, fort: 19, ref: 17, will: 17 },
             init: 7, speed: 5,
             abilities: { STR: 16, CON: 18, DEX: 15, INT: 7, WIS: 13, CHA: 14 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "melee", toHit: 11, defense: "AC", damage: "1d6+10", keywords: [ "melee", "basic" ] },
                       { name: "Fiery Spines", usage: { frequency: "Recharge", recharge: 5 }, range: "close blast 5", toHit: 9, defense: "Ref", damage: { amount: "2d8+8", type: "fire" }, effects: [ { name: "Ongoing poison", amount: 5, type: "poison", saveEnds: true } ], keywords: [ "close blast" ] }
@@ -502,7 +524,7 @@ function loadMonsters() {
             defenses: { ac: 21, fort: 18, ref: 20, will: 18 },
             init: 7, speed: 4,
             abilities: { STR: 6, CON: 8, DEX: 12, INT: 3, WIS: 9, CHA: 7 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 8, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 8, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Bite", usage: { frequency: "At-Will" }, range: "melee", toHit: 10, defense: "AC", damage: "1d8", keywords: [ "melee", "basic" ] }
               ]
@@ -529,7 +551,7 @@ function loadMonsters() {
             defenses: { ac: 26, fort: 23, ref: 22, will: 21 },
             init: 12, speed: 6,
             abilities: { STR: 18, CON: 16, DEX: 21, INT: 11, WIS: 11, CHA: 18 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 14, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 5, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 14, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 5, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Hammer", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: "2d6+5", effects: [ "Marked" ], keywords: [ "melee", "basic" ] },
                       { name: "Hammer (charge)", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: "2d6+5", effects: [ "Marked", "Prone" ], keywords: [ "melee" ] },
@@ -543,7 +565,7 @@ function loadMonsters() {
             defenses: { ac: 26, fort: 22, ref: 22, will: 23 },
             init: 12, speed: { walk: 6, climb: 4 },
             abilities: { STR: 16, CON: 18, DEX: 21, INT: 10, WIS: 17, CHA: 13 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 13, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 14, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 8, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 13, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 14, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 8, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6", type: "poison" } ], keywords: [ "melee", "basic" ] },
                       { name: "Javelin", usage: { frequency: "At-Will" }, range: "ranged", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6", type: "poison" } ], keywords: [ "ranged", "basic" ] },
@@ -557,10 +579,10 @@ function loadMonsters() {
             defenses: { ac: 24, fort: 24, ref: 24, will: 22 },
             init: 9, speed: { walk: 8, fly: 6 },
             abilities: { STR: 18, CON: 20, DEX: 16, INT: 11, WIS: 13, CHA: 21 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 23, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 23, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Lightning Sting", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: { amount: "2d6+7", type: "lightning" }, keywords: [ "melee", "basic", "lightning" ] },
-                      { name: "Lightning Discharge", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 1, range: 1 }, toHit: 17, defense: "Ref", damage: { amount: "1d6+8", type: "lightning" }, effects: [ { name: "Stunned", duration: 1 } ], keywords: [ "close burst", "lightning" ] },
+                      { name: "Lightning Discharge", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 1, range: 1 }, toHit: 17, defense: "Ref", damage: { amount: "1d6+8", type: "lightning" }, effects: [ { name: "Stunned", duration: "endTargetNext" } ], keywords: [ "close burst", "lightning" ] },
                       { name: "Shockbolt", usage: { frequency: "At-Will" }, target: { area: "burst", size: 2, range: 10 }, toHit: 15, defense: "Ref", damage: { amount: "2d6+8", type: "thunder" }, keywords: [ "ranged", "burst", "lightning" ] }
               ]
         },
@@ -570,7 +592,7 @@ function loadMonsters() {
             defenses: { ac: 21, fort: 19, ref: 16, will: 16 },
             init: 3, speed: 6,
             abilities: { STR: 16, CON: 15, DEX: 12, INT: 9, WIS: 10, CHA: 11 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 11, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 3, religion: 0, stealth: 0, streetwise: 0, thievery: 8 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 11, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 3, religion: 0, stealth: 0, streetwise: 0, thievery: 8 },
             attacks: [
                       { name: "Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "6", keywords: [ "melee", "basic" ] },
                       { name: "Crossbow", usage: { frequency: "At-Will" }, range: "ranged", toHit: 13, defense: "AC", damage: "6", keywords: [ "ranged", "basic" ] }
@@ -582,7 +604,7 @@ function loadMonsters() {
             defenses: { ac: 25, fort: 25, ref: 22, will: 21 },
             init: 6, speed: 5,
             abilities: { STR: 18, CON: 16, DEX: 12, INT: 6, WIS: 11, CHA: 8 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 15, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 14, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 15, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 14, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Club", usage: { frequency: "At-Will" }, toHit: 15, defense: "AC", damage: "7", keywords: [ "melee", "basic" ] }
               ]
@@ -593,7 +615,7 @@ function loadMonsters() {
             defenses: { ac: 20, fort: 21, ref: 18, will: 17 },
             init: 7, speed: 8,
             abilities: { STR: 22, CON: 20, DEX: 18, INT: 5, WIS: 14, CHA: 9 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 13, defense: "AC", damage: "2d6+6", keywords: [ "melee", "basic" ] }
               ]
@@ -605,7 +627,7 @@ function loadMonsters() {
             savingThrows: 2,
             init: 5, speed: 6,
             abilities: { STR: 24, CON: 22, DEX: 10, INT: 6, WIS: 14, CHA: 10 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 13, defense: "AC", damage: "3d6+7", keywords: [ "melee", "basic" ] },
                       { name: "Smackdown", usage: { frequency: "At-Will" }, range: "reach", toHit: 11, defense: "Fort", damage: "0", effects: [ "Prone" ], keywords: [ "melee" ] }
@@ -632,9 +654,9 @@ function loadMonsters() {
             defenses: { ac: 30, fort: 29, ref: 25, will: 25 },
             init: 12, speed: 7,
             abilities: { STR: 24, CON: 20, DEX: 16, INT: 10, WIS: 16, CHA: 12 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 15, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 17, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 15, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 17, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
-                      { name: "Greatsword", usage: { frequency: "At-Will" }, range: "reach", toHit: 20, defense: "AC", damage: "1d12+7", effects: [ { name: "Marked", duration: 1 } ], keywords: [ "melee", "basic" ] },
+                      { name: "Greatsword", usage: { frequency: "At-Will" }, range: "reach", toHit: 20, defense: "AC", damage: "1d12+7", effects: [ { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic" ] },
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 20, defense: "AC", damage: "2d6+7", keywords: [ "melee" ] },
                       { name: "Longbow", usage: { frequency: "At-Will" }, range: 20, toHit: 20, defense: "AC", damage: "1d12+3", keywords: [ "ranged", "basic" ] },
                       { name: "Sweeping Strike", usage: { frequency: "At-Will" }, range: 2, toHit: 20, defense: "AC", damage: "1d12+7", effects: [ "Prone" ], keywords: [ "melee", "close blast" ] }
@@ -647,8 +669,8 @@ function loadMonsters() {
             savingThrows: { general: 2, charm: 4 },
             init: 15, speed: { walk: 6, fly: 5 },
             abilities: { STR: 6, CON: 6, DEX: 23, INT: 19, WIS: 15, CHA: 20 },
-			skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
-			attacks: [
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
                       { name: "Silver Saber", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: { amount: "2d8+6", type: "psychic" }, keywords: [ "melee", "psychic", "weapon", "basic" ] },
                       { name: "Thrown Saber", usage: { frequency: "At-Will" }, range: 5, toHit: 19, defense: "AC", damage: { amount: "2d8+6", type: "psychic" }, keywords: [ "ranged", "thrown", "psychic", "weapon" ] },
                       { name: "Silver Flurry", usage: { frequency: "Recharge", recharge: 5 }, range: "melee", toHit: 19, defense: "AC", damage: { amount: "4d8+6", type: "psychic" }, keywords: [ "melee", "psychic", "weapon" ] }
