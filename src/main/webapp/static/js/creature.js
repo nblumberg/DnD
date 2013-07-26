@@ -830,7 +830,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
     };
 
     Actor.prototype.endTurn = function() {
-        var handleEffect, handleImposedEffect, i, msg, tmp;
+        var handleEffect, handleImposedEffect, i, msg, tmp, pcSavingThrows = [], save, fail;
 
         if (this._turnTimer) {
             this._turnDurations[ this.history._round ] = (new Date()).getTime() - this._turnTimer;
@@ -847,17 +847,14 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
             if (effect.saveEnds) {
                 savingThrow = new SavingThrow({ effect: effect });
                 if (this.isPC) {
-                    savingThrowRoll = confirm("Did " + this.name + " save against " + effect.toString() + "?") ? 20 : 1;
-                    savingThrow.add(savingThrowRoll);
+                    pcSavingThrows.push(effect);
+                    return;
                 }
-                else {
-                    savingThrowRoll = savingThrow.roll();
-                }
+                savingThrowRoll = savingThrow.roll();
                 if (savingThrowRoll >= 10) {
                     effect.remove();
                 }
-                msg = savingThrow.anchor();
-                this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: msg }));
+                this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: savingThrow.anchor() }));
             }
             
             if (effect.children && effect.children.length) {
@@ -886,6 +883,31 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
         }
         for (i = 0; this.imposedEffects && i < this.imposedEffects.length; i++) {
             handleImposedEffect(this.imposedEffects[ i ]);
+        }
+
+        save = (function(effect) {
+            var savingThrow, msg;
+            savingThrow = new SavingThrow({ effect: effect });
+            savingThrow.add(20);
+            effect.remove();
+            msg = savingThrow.anchor();
+            this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: msg }));
+        }).bind(this);
+        fail = (function(effect) {
+            var savingThrow, msg;
+            savingThrow = new SavingThrow({ effect: effect });
+            savingThrow.add(1);
+            msg = savingThrow.anchor();
+            this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: msg }));
+        }).bind(this);
+        
+        for (i = 0; pcSavingThrows && i < pcSavingThrows.length; i++) {
+            if (confirm("Did " + this.name + " save against " + pcSavingThrows[ i ].toString() + "?")) {
+                save(pcSavingThrows[ i ]);
+            }
+            else {
+                fail(pcSavingThrows[ i ]);
+            }
         }
         
         return msg;

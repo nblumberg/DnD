@@ -644,7 +644,7 @@ function loadMonsters() {
             skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 17, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 0, stealth: 13, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Spirit Touch", usage: { frequency: "At-Will" }, toHit: 15, defense: "Ref", damage: { amount: "1d10+2", type: "necrotic" }, keywords: [ "melee", "basic" ] },
-                      { name: "Death's Visage", usage: { frequency: "At-Will" }, range: 5, toHit: 15, defense: "Will", damage: { amount: "2d6+3", type: "psychic" }, keywords: [ "ranged", "fear", "psychic" ] },
+                      { name: "Death's Visage", usage: { frequency: "At-Will" }, range: 5, toHit: 15, defense: "Will", damage: { amount: "2d6+3", type: "psychic" }, effects: [ { name: "penalty to all defenses", amount: -2, saveEnds: true } ], keywords: [ "ranged", "fear", "psychic" ] },
                       { name: "Terrifying Shriek", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close burst", size: 5 }, toHit: 15, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "close burst", "fear", "psychic" ] }
               ]
         },
