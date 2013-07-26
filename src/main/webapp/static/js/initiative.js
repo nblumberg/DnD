@@ -361,28 +361,34 @@ var DnD;
             this._addHistory(actor, "Joins the fight");
         }
         actor.addEventListener("change", (function(event) {
-            var actor;
-            // Only both to update the display with properties reflected in the display
+            var actor, update = false;
+            // Only bother to update the display with properties reflected in the display
             switch (event.property) {
                 case "name":
                 case "hp.temp":
                 case "hp.current":
                 case "hp.total": {
-                    actor = event.target;
-                    this._messageDisplay({ 
-                        type: "updateActor", 
-                        id: actor.id, 
-                        name: actor.name,
-                        hp: {
-                            temp: actor.hp.temp,
-                            current: actor.hp.current,
-                            total: actor.hp.total
-                        },
-                        effects: Serializable.prototype.rawArray(actor.effects)
-                    }, false);
-                    actor.card.refresh();
+                    update = true;
                 }
                 break;
+            }
+            if (event.conditionAdded || event.conditionRemoved) {
+                update = true;
+            }
+            if (update) {
+                actor = event.target;
+                this._messageDisplay({ 
+                    type: "updateActor", 
+                    id: actor.id, 
+                    name: actor.name,
+                    hp: {
+                        temp: actor.hp.temp,
+                        current: actor.hp.current,
+                        total: actor.hp.total
+                    },
+                    effects: Serializable.prototype.rawArray(actor.effects)
+                }, false);
+                actor.card.refresh();
             }
         }).bind(this));
         actor.addEventListener("takeDamage", (function(event) {

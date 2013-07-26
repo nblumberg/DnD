@@ -186,8 +186,8 @@ var DnD;
             if (event.metaKey) {
                 $condition.off({ click: clickHandler });
                 $condition.remove();
-                this.actor.effects.splice(this.actor.effects.indexOf(effect), 1);
-                this.actor.dispatchEvent({ type: "change" });
+                effect.remove();
+                this.actor.dispatchEvent({ type: "change", conditionRemoved: effect });
             }
         }).bind(this, $div, effect);
         $div.on({ click: clickHandler });

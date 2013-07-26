@@ -28,10 +28,13 @@ var DnD, safeConsole;
             }
             msg += " ]\n\torder: [ " + data.order.join(", ") + " ]\n\tcurrent: " + data.current;
             console.debug(msg);
+            for (i = 0; i < this.actors.length; i++) {
+                this.actors[ i ].card.destroy();
+            }
             this.actors = [];
             this.current = data.current;
             if (this.$actorCards.length) {
-                this.$actorCards.children().remove();
+//                this.$actorCards.children().remove();
             }
             for (i = 0; i < data.order.length; i++) {
                 for (j = 0; j < data.actors.length; j++) {
