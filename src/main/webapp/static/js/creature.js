@@ -138,7 +138,6 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
     };
 
     Effect.CONDITIONS = {
-            "attack penalty": { image: "../images/symbols/attack_penalty.jpg", color: "white" },
             blinded: { image: "../images/symbols/blinded.png" }, // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
             dazed: { image: "../images/symbols/dazed.jpg" }, // "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
             deafened: { image: "../images/symbols/deafened.gif" }, // "http://joeclark.org/ear.gif",
@@ -161,14 +160,22 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
                 psychic: { image: "../images/symbols/ongoing_psychic.jpg", color: "cyan" }, // "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
                 radiant: { image: "../images/symbols/ongoing_radiant.jpg", color: "#FFFFFF" } // "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
             },
+            penalty: {
+                unknown: { image: "../images/symbols/unknown.png", color: "#FF0000" },
+                attacks: { image: "../images/symbols/attack_penalty.jpg", color: "white" },
+                ac: { image: "../images/symbols/ac.png", color: "white" },
+                fort: { image: "../images/symbols/fort.png", color: "white" },
+                ref: { image: "../images/symbols/ref.png", color: "white" },
+                will: { image: "../images/symbols/will.png", color: "purple" },
+            },
             petrified: { image: "../images/symbols/petrified.gif" }, // "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
             prone: { image: "../images/symbols/prone.png" }, // "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
             restrained: { image: "../images/symbols/restrained.jpg" }, // "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
             slowed: { image: "../images/symbols/slowed.jpg" }, // "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
             stunned: { image: "../images/symbols/stunned.jpg" }, // "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
             unconscious: { image: "../images/symbols/unconscious.gif" }, // "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
-            weakened: { image: "../images/symbols/weakened.png" }, // "http://pictogram-free.com/material/003.png"
-            "will penalty": { image: "../images/symbols/will.png", color: "purple" }
+            unknown: { image: "../images/symbols/unknown.png", color: "#FF0000" },
+            weakened: { image: "../images/symbols/weakened.png" } // "http://pictogram-free.com/material/003.png"
     };
 
 
@@ -610,7 +617,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
     };
 
     Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage) {
-        var attackBonuses, i, toHitTarget, targetDamage, tmp, targetDefense, msg, result, entry;
+        var attackBonuses, i, attackBonus, toHitTarget, targetDamage, tmp, targetDefense, msg, result, entry;
         
         result = { hit: false, damage: [] };
 

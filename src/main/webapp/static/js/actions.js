@@ -562,6 +562,13 @@ Attack.prototype.toHitModifiers = function(effects) {
                 result.effects.push(effects[ i ].name);
             }
             break;
+            case "penalty": {
+                if (effect.type === "attacks") {
+                    result.mod -= effect.amount;
+                    result.effects.push(effects[ i ].name + " to " + effects[ i ].type);
+                }
+            }
+            break;
         }
     }
     result.text = result.effects.join(" + ");

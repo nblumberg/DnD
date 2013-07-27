@@ -207,6 +207,10 @@ var DnD;
             condition = condition[ effect.type ? effect.type.toLowerCase() : "untyped" ];
             image.title = (condition.type ? "Ongoing " + condition.type + " damage" : "Ongoing damage") + (effect.attacker ? " (" + effect.attacker + ")" : "");
         }
+        else if (effect.name.toLowerCase() === "penalty") {
+            condition = condition[ effect.type ? effect.type.toLowerCase() : "untyped" ];
+            image.title = (condition.type ? "Penalty to " + condition.type : "Unknown penalty") + (effect.attacker ? " (" + effect.attacker + ")" : "");
+        }
         else {
             image.title = effect.name + (effect.attacker ? " (" + effect.attacker + ")" : "");
         }
