@@ -23,7 +23,7 @@ var DnD;
         };
         this.$sortable = null;
         this._setData(params.actors, params.order, params.rolls);
-        this.change = params.change;
+        this.change = params.onchange;
         
         this._init(params);
     }
