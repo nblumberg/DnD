@@ -1,6 +1,6 @@
-var DnD;
+var DnD, safeConsole;
 
-(function() {
+(function(console) {
     "use strict";
     
     if (!DnD) {
@@ -190,7 +190,7 @@ var DnD;
             }
             test += (i ? ", " : "") + actor.name;
         }
-        try { window.console.info("New order: " + test + " ]"); } catch(e) {}
+        console.info("New order: " + test + " ]");
         this.$dialog.modal("hide");
         this.change(this.order);
     };
@@ -203,7 +203,7 @@ var DnD;
         for (i = 0; i < this.order.length; i++) {
             actor = this._getActor(this.order[ i ]);
             if (!actor) {
-                try { window.console.warn("Skipping order #" + i + " (actor id " + this.order[ i ] + "), not found in the list of actors"); } catch(e) {}
+                console.warn("Skipping order #" + i + " (actor id " + this.order[ i ] + "), not found in the list of actors");
                 continue;
             }
             $li = jQuery("<li/>").addClass("ui-state-default grab actor").data("actor", actor).appendTo(this.$sortable);
@@ -216,4 +216,4 @@ var DnD;
     
 
     DnD.Dialog.Initiative = InitiativeDialog;
-})();
+})(safeConsole());

@@ -338,7 +338,7 @@ describe("DnD.History", function() {
         
 
         describe("clear()", function() {
-            it("it should call remove() with each entry, then reset its members", function() {
+            it("it should then reset its members and call noHistory()", function() {
                 var entries, i, entry;
                 entries = [];
                 DnD.History.Entry.entries = {};
@@ -347,11 +347,9 @@ describe("DnD.History", function() {
                     entries.push(entry);
                     history._entries.push(entry.id);
                 }
-                spyOn(history, "remove");
+                spyOn(history, "_noHistory");
                 history.clear();
-                for (i = 0; i < entries.length; i++) {
-                    expect(history.remove).toHaveBeenCalledWith(entries[ i ]);
-                }
+                expect(history._noHistory).toHaveBeenCalled();
                 expect(history._entries).toEqual([]);
                 expect(history._round).toEqual(1);
                 expect(history._count).toEqual(0);

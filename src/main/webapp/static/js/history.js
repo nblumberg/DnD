@@ -174,13 +174,10 @@ var DnD;
     };
 
     History.prototype.clear = function() {
-        var i;
-        for (i = 0; i < this._entries.length; i++) {
-            this.remove(History.Entry.entries[ this._entries[ i ] ]);
-        }
         this._entries = [];
         this._round = 1;
         this._count = 0;
+        this._noHistory();
     };
 
     History.prototype.setRoundTime = function(milliseconds, round) {
@@ -354,22 +351,18 @@ var DnD;
         params = params || {};
         this.id = params.id || History.Entry.id++;
         History.Entry.entries[ this.id ] = this;
-        if (typeof(params.subject) === "string") {
-            params.subject = parseInt(params.subject, 10);
-        }
-        if (typeof(params.subject) === "number") {
-            // Creature.actors may not be initialized yet, if not, preserve subject id for resolving at need
-            if (!Creature.actors.hasOwnProperty(params.subject)) {
-                console.warn("Failed to find subject " + params.subject + " in Creature.actors for History.Entry " + this.id);
-            }
-            this.subject = Creature.actors[ params.subject ] ? Creature.actors[ params.subject ] : params.subject;
+        if (jQuery.isNumeric(params.subject) && typeof(params.subject) === "string") {
+            this.subject = parseInt(params.subject, 10);
         }
         else {
             this.subject = params.subject;
-            this.subjectName = this.subject ? this.subject.name : "Unknown subject";
         }
+        this._getSubjectName();
         this.message = params.message;
         this.round = params.round;
+        if (!this.subject) {
+            console.error("History.Entry " + this.message + "(" + this.id + ", round " + this.round + ") created with no subject");
+        }
     };
 
     History.Entry.prototype = new EventDispatcher();
@@ -415,88 +408,86 @@ var DnD;
     
     // PRIVATE METHODS
     
-    History.Entry.prototype._addToRound = function($round, includeSubject) {
-        var history, $li, $subject, $textarea, $save, $delete;
-        history = $round.closest(".history").data("history");
-        if (includeSubject && typeof(this.subject) === "number") {
+    History.Entry.prototype._getSubjectName = function(warn) {
+        if (typeof(this.subject) === "number") {
             // Creature.actors wasn't initialized at creation time, resolve subject id now
             this.subject = Creature.actors[ this.subject ] ? Creature.actors[ this.subject ] : this.subject;
         }
+        if (!this.subject || typeof(this.subject) === "number") {
+            if (warn) {
+                console.warn("Failed to find subject " + this.subject + " in Creature.actors for History.Entry " + this.id);
+            }
+            if (!this.subjectName) {
+                this.subjectName = "Unknown subject";
+            }
+            return this.subjectName;
+        }
+        this.subjectName = this.subject.name;
+        return this.subject.name;
+    };
+    
+    History.Entry.prototype._addToRound = function($round, includeSubject) {
+        var history, $li, instance;
+        history = $round.closest(".history").data("history");
+        this._getSubjectName(false);
         $li = History.$entry.clone();
-        $li.addClass("entry" + this.id).data("entry", this).appendTo($round);
-        this._render($li, includeSubject);
-        $save = $li.find(".save");
-        $delete = $li.find(".delete");
-        $subject = $li.find(".subject");
-        $textarea = $li.find("textarea");
-        $save.on({ click: this._save.bind(this, $li, $subject, $textarea, $save, $delete, history) });
-        $delete.on({ click: this._delete.bind(this, $li, $subject, $textarea, $save, $delete, history) });
+        instance = {
+            $li: $li,
+            $subject: $li.find(".subject"),
+            $message: $li.find(".message"),
+            $textarea: $li.find("textarea"),
+            $save: $li.find(".save"),
+            $delete: $li.find(".delete")
+        };
+        instance.$li.addClass("entry" + this.id).data("entry", this).appendTo($round);
+        this._render(instance, includeSubject);
+        instance.$save.on({ click: this._save.bind(this, instance, history) });
+        instance.$delete.on({ click: this._delete.bind(this, instance, history) });
     };
 
-    History.Entry.prototype._render = function($li, includeSubject) {
-        var message, $span, $save, $delete;
-        message = this.message;
+    History.Entry.prototype._render = function(instance, includeSubject) {
+        var message = this.message;
         if (includeSubject && this.subject) {
-            if (typeof(this.subject) === "number") {
-                // Resolve subject from id
-                if (!Creature.actors.hasOwnProperty(this.subject)) {
-                    console.warn("Failed to find subject " + this.subject + " in Creature.actors for History.Entry " + this.id);
-                }
-                else {
-                    this.subject = Creature.actors[ this.subject ] ? Creature.actors[ this.subject ] : this.subject;
-                }
-            }
-            $li.addClass(includeSubject ? "includeSubject" : "");
-            if (typeof(this.subject) === "number") {
-                $span = $li.find(".subject").html(this.subjectName);
-            }
-            else {
-                $span = $li.find(".subject").html(this.subject.name);
-            }
-            $span = $li.find(".message").html(message.charAt(0).toLowerCase() + message.substr(1));
+            instance.$li.addClass(includeSubject ? "includeSubject" : "");
+            instance.$subject.html(this._getSubjectName(true));
+            message = message.charAt(0).toLowerCase() + message.substr(1);
         }
-        else {
-            $span = $li.find(".message").html(message);
-        }
+        instance.$message.html(message);
+        instance.$textarea.val(message);
     };
     
     History.Entry.prototype._edit = function($entry, history) {
-        var $span, $input, $save, $delete, i, $ancestor;
         if ($entry.hasClass("edit")) {
             return;
         }
         $entry.addClass("edit");
-        $input = j$entry.find("textarea").val(this.message);
-        $save = jQuery("<button/>").attr("title", "Save").html("&#x2713;").appendTo($entry);
-        $delete = jQuery("<button/>").attr("title", "Delete").html("X").appendTo($entry);
     };
 
-    History.Entry.prototype._save = function($entry, $span, $input, $save, $delete, history, event) {
+    History.Entry.prototype._save = function(instance, history, event) {
         var message;
         event.stopPropagation();
 
-        this.message = $input.val();
-        message = this.message;
-        if (history._includeSubject) {
-            message = this.subject.name + " " + message.charAt(0).toLowerCase() + message.substr(1);
-        }
-        
-        $span.html(message);
-        $entry.removeClass("edit");
+        this.message = instance.$textarea.val();
+        this._render(instance, history._includeSubject);
+        instance.$li.removeClass("edit");
         
         if (history === History.central) {
-            this.subject.history.update(this);
+            this._getSubjectName(true);
+            if (this.subject) {
+                this.subject.history.update(this);
+            }
         }
         else {
             History.central.update(this);
         }
+        // TODO: save to localStorage
     };
 
-    History.Entry.prototype._delete = function($entry, $span, $input, $save, $delete, history, event) {
+    History.Entry.prototype._delete = function(instance, history, event) {
         var $ul, $round, $history;
         event.stopPropagation();
         
-        $ul = $entry.parent();
+        $ul = instance.$li.parent();
         $round = $ul.parent();
         $history = $round.parent();
         $entry.remove();

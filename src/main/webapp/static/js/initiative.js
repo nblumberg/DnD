@@ -1,6 +1,8 @@
-var DnD;
+var DnD, safeConsole;
 
-(function(jQuery) {
+(function(jQuery, console) {
+    "use strict";
+    
     if (!DnD) {
         DnD = {};
     }
@@ -149,7 +151,7 @@ var DnD;
             finally {}
         }
         if (data) {
-            try { window.console.info("Loaded from localStorage"); } finally {}
+            console.info("Loaded from localStorage");
             this._init(data);
             return true;
         }
@@ -333,15 +335,15 @@ var DnD;
         var count, actor;
         // in case "-------" or "        " was selected in the Creature dialog or we've encountered junk data
         if (!params) {
-            try { window.console.warn("Skipping adding undefined actor"); } finally {}
+            console.warn("Skipping adding undefined actor");
             return;
         }
         else if (!params.name) {
-            try { window.console.warn("Skipping adding invalid actor (missing name)"); } finally {}
+            console.warn("Skipping adding invalid actor (missing name)");
             return;
         }
         else if (!params.image) {
-            try { window.console.warn("Skipping adding invalid actor (missing image)"); } finally {}
+            console.warn("Skipping adding invalid actor (missing image)");
             return;
         }
         if (!this.actors) {
@@ -544,7 +546,7 @@ var DnD;
 
     Initiative.prototype._displayLoadHandler = function(event) {
         var intervalId;
-        try { window.console.info("Display loaded"); } finally {}
+        console.info("Display loaded");
         
         // Clean up the old window
         if (this.display !== event.source) {
@@ -595,7 +597,7 @@ var DnD;
                                       this._init(JSON.parse($textarea.val()));
                                   }
                                   catch (e) {
-                                      try { window.console.error(e.toString()); } finally {}
+                                      console.error(e.toString());
                                   }
                               }).bind(this) 
                           }
@@ -685,7 +687,7 @@ var DnD;
             actor.history.add(entry);
         }
         this.history.add(entry);
-        try { window.console[ method ](message); } finally {}
+        console[ method ](message);
         this._autoSave();
     };
 
@@ -765,7 +767,7 @@ var DnD;
             actor.tr.$tr.appendTo(this.$table);
             test += (i ? ", " : "") + actor.name;
         }
-        try { window.console.info("New order: " + test + " ]"); } finally {}
+        console.info("New order: " + test + " ]");
         this._render(true);
     };
 
@@ -792,7 +794,7 @@ var DnD;
         for (i = 0; i < this.order.length; i++) {
             test += (i ? ", " : "") + this._getActor(this.order[ i ]).name;
         }
-        try { window.console.info("New order: " + test + " ]"); } finally {}
+        console.info("New order: " + test + " ]");
         this._render(true);
     };
 
@@ -847,4 +849,4 @@ var DnD;
     };
     
     DnD.Initiative = Initiative;
-})(window.jQuery);
+})(window.jQuery, safeConsole());
