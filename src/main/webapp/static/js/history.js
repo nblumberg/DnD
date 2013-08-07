@@ -334,15 +334,7 @@ var DnD;
         return null;
     };
 
-
-    // PUBLIC METHODS
     
-    History.Editor.prototype.remove = function() {
-        this.$input.remove();
-        this.$save.off("click").remove();
-        this.$cancel.off("click").remove();
-    };
-
 
     // HISTORY.ENTRY
     // CONSTRUCTOR
@@ -381,9 +373,11 @@ var DnD;
     };
 
     History.Entry.prototype.raw = function() {
-        var raw;
+        var raw, subject;
+        subject = this.subject;
+        this.subject = subject ? subject.id : null;
         raw = Serializable.prototype.raw.call(this);
-        raw.subject = this.subject ? this.subject.id : null;
+        this.subject = subject;
         return raw;
     };
 

@@ -1,6 +1,8 @@
+var DnD;
+
 function randEffect() {
     var effects, i;
-    effects = Object.keys(Effect.CONDITIONS);
+    effects = Object.keys(DnD.Effect.CONDITIONS);
     i = Math.floor(Math.random() * effects.length);
     return { name: effects[ i ] };
 }
@@ -17,28 +19,28 @@ function randEffects() {
 }
 
 function loadInitiative() {
-	return {
-	    actors: [ 
-	              "Barases", 
-	              "Bin", 
-	              "Festivus", 
-	              "Kallista", 
-	              "Karrion", 
-	              "Kitara", 
-	              "Lechonero", 
-	              "Banshrae Dartswarmer",
-                  "Slystone Dwarf Ruffian",
-                  "Slystone Dwarf Ruffian",
-                  "Slystone Dwarf Ruffian",
-                  "Slystone Dwarf Ruffian",
-                  "Hethralga",
-                  "Cyclops Guard",
-                  "Cyclops Guard",
-                  "Cyclops Guard",
-                  "Cyclops Guard",
-                  "Dragonborn Gladiator",
-                  "Dragonborn Gladiator"
-	              ]
-		};
+    return {
+        actors: [ 
+            "Barases", 
+            "Bin", 
+            "Festivus", 
+            "Kallista", 
+            "Karrion", 
+            "Kitara", 
+            "Lechonero", 
+            "Banshrae Dartswarmer",
+            "Slystone Dwarf Ruffian",
+            "Slystone Dwarf Ruffian",
+            "Slystone Dwarf Ruffian",
+            "Slystone Dwarf Ruffian",
+            "Hethralga",
+            "Cyclops Guard",
+            "Cyclops Guard",
+            "Cyclops Guard",
+            "Cyclops Guard",
+            "Dragonborn Gladiator",
+            "Dragonborn Gladiator"
+        ]
+    };
 }
 

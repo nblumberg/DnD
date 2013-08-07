@@ -66,6 +66,12 @@ Test.minMaxNumber = function(object, min, max, description) {
     }).bind(this, object));
 };
 
+Test.hasProperty = function(object, property, extra) {
+    it(property + ": [" + extra + "]", (function(obj, prop) {
+        expect(obj.hasOwnProperty(prop)).toEqual(true);
+    }).bind(this, object, property));
+};
+
 Test.hasObjectProperty = function(object, property, extra) {
     it(property + ": Object [" + extra + "]", (function(obj, prop) {
         expect(obj.hasOwnProperty(prop)).toEqual(true);
@@ -142,6 +148,13 @@ Test.hasBooleanProperty = function(object, property, extra) {
         expect(obj.hasOwnProperty(prop)).toEqual(true);
         expect(typeof(obj[ prop ])).toEqual("boolean");
     }).bind(this, object, property));
+};
+
+Test.propertyToEqual = function(object, property, value, extra) {
+    it(property + ": " + (typeof(value) === "string" ? "\"" : "") + value + (typeof(value) === "string" ? "\"" : "") + " [" + extra + "]", (function(obj, prop, values) {
+        expect(obj.hasOwnProperty(prop)).toEqual(true);
+        expect(obj[ prop ]).toEqual(value);
+    }).bind(this, object, property, value));
 };
 
 Test.isOneOf = function(object, property, values, extra) {

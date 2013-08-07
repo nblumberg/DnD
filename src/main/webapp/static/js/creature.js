@@ -1,4 +1,4 @@
-var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities, Creature, Actor;
+var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
 (function(console) {
     "use strict";
@@ -30,154 +30,6 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
         this.current = params.current || this.perDay;
         this.toString = function() { "[Surges]"; };
     };
-
-
-
-    Effect = function(params) {
-        var i;
-        params = params || {};
-        if (!params.noId) {
-            this.id = params.id || Effect.id++;
-        }
-        this.name = typeof(params) === "string" ? params : params.name;
-        this.amount = params.amount || 0;
-        this.type = params.type || "";
-        this.duration = params.duration || null;
-        this.isNextTurn = params.isNextTurn || false;
-        this.saveEnds = params.saveEnds || false;
-        this.target = typeof(params.target) === "number" ? Creature.actors[ params.target ] : params.target;
-        this.attacker = typeof(params.attacker) === "number" ? Creature.actors[ params.attacker ] : params.attacker;
-        this.startRound = params.round;
-        if (this.target && !this.startRound) {
-            console.warn("Effect " + this.name + "[" + this.target.name + "] created without startRound");
-            this.startRound = DnD.History && DnD.History.central && DnD.History.central._round ? DnD.History.central._round : 1; // TODO: figure out why this is coming back null
-        }
-        
-        this.children = [];
-        for (i = 0; params.children && i < params.children.length; i++) {
-            this.children.push(new Effect(jQuery.extend({}, params.children[ i ], { round: params.round, target: this.target, attacker: this.attacker })));
-        }
-    };
-
-    Effect.prototype = new Serializable();
-    Effect.id = 1;
-
-    Effect.prototype.remove = function() {
-        var i;
-        for (i = 0; this.children && i < this.children.length; i++) {
-            this.children[ i ].remove();
-        }
-        if (this.target) {
-            i = this.target.effects.indexOf(this);
-            if (i !== -1) {
-                this.target.effects.splice(i, 1);
-            }
-        }
-        if (this.attacker) {
-            i = this.attacker.imposedEffects.indexOf(this);
-            if (i !== -1) {
-                this.attacker.imposedEffects.splice(i, 1);
-            }
-        }
-    };
-
-    Effect.prototype.countDown = function(round, isTargetTurn, isTurnStart) {
-        if (isTargetTurn && (this.duration === "startTargetNext" || this.duration === "endTargetNext")) {
-            if (!this.isNextTurn && round > this.startRound) {
-                this.isNextTurn = true;
-            }
-            if (this.isNextTurn && ((isTurnStart && this.duration === "startTargetNext") || (!isTurnStart && this.duration === "endTargetNext"))) {
-                this.remove();
-                return true;
-            }
-        }
-        else if (!isTargetTurn && (this.duration === "startAttackerNext" || this.duration === "endAttackerNext")) {
-            if (!this.isNextTurn && round > this.startRound) {
-                this.isNextTurn = true;
-            }
-            if (this.isNextTurn && ((isTurnStart && this.duration === "startAttackerNext") || (!isTurnStart || this.duration === "endAttackerNext"))) {
-                this.remove();
-                return true;
-            }
-        }
-        return false;
-    };
-
-    Effect.prototype.toString = function() {
-        var name, i;
-        name = this.name;
-        if (this.children && this.children.length) {
-            name += " [ ";
-            for (i = 0; i < this.children.length; i++) {
-                if (i && i < this.children.length - 1) {
-                    name += ", ";
-                }
-                else if (i === this.children.length - 1) {
-                    name += " and ";
-                }
-                name += this.children[ i ].name;
-            }
-            name += " ]";
-        }
-        return name;
-    };
-
-    Effect.prototype.raw = function() {
-        var target, attacker, r;
-        target = this.target;
-        this.target = this.target ? this.target.id : null;
-        attacker = this.attacker;
-        this.attacker = this.attacker ? this.attacker.id : null;
-        
-        r = Serializable.prototype.raw.call(this);
-        
-        this.target = target;
-        this.attacker = attacker;
-        
-        return r;
-    };
-
-    Effect.CONDITIONS = {
-            blinded: { image: "../images/symbols/blinded.png" }, // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
-            dazed: { image: "../images/symbols/dazed.jpg" }, // "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
-            deafened: { image: "../images/symbols/deafened.gif" }, // "http://joeclark.org/ear.gif",
-            diseased: { image: "../images/symbols/diseased.jpg" }, // "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnOrSXb8UHvwhgQ-loEdXZvQPTjuBylSfFNiK7Hxyq03IxgUKe",
-            dominated: { image: "../images/symbols/dominated.png" }, // "http://fs02.androidpit.info/ali/x90/4186790-1324571166012.png",
-            dying: { image: "../images/symbols/dying.png" }, // "http://iconbug.com/data/61/256/170c6197a99434339f465fa8c9fa4018.png",
-            dead: { image: "../images/symbols/dead.jpg" }, // "http://t2.gstatic.com/images?q=tbn:ANd9GcTPA7scM15IRChKnwigvYnQUDWNGHLL1cemtAeKxxZKwBDj33MFCxzfyorp",
-            grabbed: { image: "../images/symbols/grabbed.jpg" }, // "http://www.filipesabella.com/wp-content/uploads/2010/02/hand_grab.jpg",
-            helpless: { image: "../images/symbols/helpless.png" }, // "http://files.softicons.com/download/tv-movie-icons/dexter-icons-by-rich-d/png/128/Tied-Up%20Dexter.png",
-            immobilized: { image: "../images/symbols/immobilized.gif" }, // "http://www.hscripts.com/freeimages/icons/traffic/regulatory-signs/no-pedestrian/no-pedestrian1.gif",
-            marked: { image: "../images/symbols/marked.png" }, // "http://openclipart.org/image/800px/svg_to_png/30103/Target_icon.png",
-            "ongoing damage": {
-                untyped: { image: "../images/symbols/ongoing_damage.jpg", color: "#FF0000" }, // "http://www.thelegendofreginaldburks.com/wp-content/uploads/2011/02/blood-spatter.jpg",
-                acid: { image: "../images/symbols/ongoing_acid.png", color: "#00FF00" }, // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
-                cold: { image: "../images/symbols/ongoing_cold.jpg", color: "#6666FF" }, // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
-                fire: { image: "../images/symbols/ongoing_fire.jpg", color: "#FF0000" }, // "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
-                lightning: { image: "../images/symbols/ongoing_lightning.png", color: "#CCCCFF" }, // "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
-                necrotic: { image: "../images/symbols/ongoing_necrotic.jpg", color: "purple" }, // "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
-                poison: { image: "../images/symbols/ongoing_poison.jpg", color: "#00FF00" }, // "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
-                psychic: { image: "../images/symbols/ongoing_psychic.jpg", color: "cyan" }, // "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
-                radiant: { image: "../images/symbols/ongoing_radiant.jpg", color: "#FFFFFF" } // "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
-            },
-            penalty: {
-                unknown: { image: "../images/symbols/unknown.png", color: "#FF0000" },
-                attacks: { image: "../images/symbols/attack_penalty.jpg", color: "white" },
-                ac: { image: "../images/symbols/ac.png", color: "white" },
-                fort: { image: "../images/symbols/fort.png", color: "white" },
-                ref: { image: "../images/symbols/ref.png", color: "white" },
-                will: { image: "../images/symbols/will.png", color: "purple" },
-            },
-            petrified: { image: "../images/symbols/petrified.gif" }, // "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
-            prone: { image: "../images/symbols/prone.png" }, // "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
-            restrained: { image: "../images/symbols/restrained.jpg" }, // "http://p2.la-img.com/46/19428/6595678_1_l.jpg", // "http://ts3.mm.bing.net/th?id=H.4552318270046582&pid=1.9", // "http://us.123rf.com/400wm/400/400/robodread/robodread1109/robodread110901972/10664893-hands-tied.jpg",
-            slowed: { image: "../images/symbols/slowed.jpg" }, // "http://glimages.graphicleftovers.com/18234/246508/246508_125.jpg",
-            stunned: { image: "../images/symbols/stunned.jpg" }, // "http://images.all-free-download.com/images/graphicmedium/zap_74470.jpg",
-            unconscious: { image: "../images/symbols/unconscious.gif" }, // "http://1.bp.blogspot.com/_ODwXXwIH70g/S1KHvp1iCHI/AAAAAAAACPo/o3QBUfcCT2M/s400/sm_zs.gif",
-            unknown: { image: "../images/symbols/unknown.png", color: "#FF0000" },
-            weakened: { image: "../images/symbols/weakened.png" } // "http://pictogram-free.com/material/003.png"
-    };
-
 
 
     Implement = function(params) {
@@ -248,8 +100,13 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
     };
 
     Creature.id = (new Date()).getTime();
-    Creature.actors = {};
     Creature.creatures = {};
+    Creature.findCreature = function(id, returnIdIfNotFound) { // TODO: throw if not found?
+        if (Creature.creatures.hasOwnProperty(id)) {
+            return Creature.creatures[ id ];
+        }
+        return returnIdIfNotFound ? id : null;
+    };
 
     Creature.prototype = new EventDispatcher();
 
@@ -290,7 +147,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
         }
         this.effects = [];
         for (i = 0; params.effects && i < params.effects.length; i++) {
-            this.effects.push(new Effect(jQuery.extend({}, params.effects[ i ], { target: this })));
+            this.effects.push(new DnD.Effect(jQuery.extend({}, params.effects[ i ], { target: this })));
         }
     };
 
@@ -419,7 +276,6 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
     };
 
 
-
     Actor = function(params, count) {
         if (params instanceof Creature) {
             params = params.raw();
@@ -449,6 +305,14 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
 
     Actor.prototype = new Creature();
 
+    Creature.actors = {};
+    Actor.findActor = function(id, returnIdIfNotFound) { // TODO: throw if not found?
+        if (Creature.actors.hasOwnProperty(id)) {
+            return Creature.actors[ id ];
+        }
+        return returnIdIfNotFound ? id : null;
+    };
+    
     Actor.prototype._init = function(params) {
         Creature.prototype._init.call(this, params);
         this.history = new DnD.History(params.history || { includeSubject: false });
@@ -754,7 +618,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
         }
         if (effects && effects.length) {
             for (i = 0; i < effects.length; i++) {
-                effect = new Effect(jQuery.extend({}, effects[ i ].raw(), { target: this, attacker: attacker, round: this.history._round }));
+                effect = new DnD.Effect(jQuery.extend({}, effects[ i ].raw(), { target: this, attacker: attacker, round: this.history._round }));
                 attacker.imposedEffects.push(effect);
                 this.effects.push(effect);
                 if (effect.hasOwnProperty("duration") && (effect.duration === "startAttackerNext" || effect.duration === "endAttackerNext")) {
@@ -765,7 +629,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
         }
         this.hp.current -= damage;
         if (this.hp.current < 0 && !this.hasCondition("dying")) {
-            this.effects.push(new Effect({ name: "Dying", round: this.history._round, target: this }));
+            this.effects.push(new DnD.Effect({ name: "Dying", round: this.history._round, target: this }));
             msg += "; " + this.name + " falls unconscious and is dying";
         }
 //        this.addDamageIndicator(damage, type);
@@ -951,5 +815,15 @@ var DnD, safeConsole, Defenses, HP, Surges, Effect, Implement, Weapon, Abilities
         this.card = new DnD.Display.ActorCard(params);
         return this.card;
     };
+    
+    
+    DnD.Creature = Creature;
+    DnD.Creature.Defenses = Defenses;
+    DnD.Creature.HP = HP;
+    DnD.Creature.Surges = Surges;
+    DnD.Creature.Implement = Implement;
+    DnD.Creature.Weapon = Weapon;
+    DnD.Creature.Abilities = Abilities;
+    DnD.Actor = Actor;
 
 })(safeConsole());
