@@ -1,6 +1,6 @@
-var DnD;
+var DnD, safeConsole;
 
-(function() {
+(function(console) {
     "use strict";
 
     /**
@@ -120,6 +120,35 @@ var DnD;
         }
     };
 
+    // TODO: why is this.event coming up null?
+    ActorCard.prototype.clearEvent = function() {
+        if (!this.event) {
+            this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
+        }
+        this.event.hide();
+    };
+    
+    ActorCard.prototype.attack = function(name) {
+        if (!this.event) {
+            this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
+        }
+        this.event.attack(name);
+    };
+    
+    ActorCard.prototype.miss = function() {
+        if (!this.event) {
+            this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
+        }
+        this.event.miss();
+    };
+    
+    ActorCard.prototype.damage = function(damage) {
+        if (!this.event) {
+            this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
+        }
+        this.event.damage(damage);
+    };
+    
     // Private methods
     
     ActorCard.prototype._init = function(responseText, textStatus, jqXHR) {
@@ -202,7 +231,7 @@ var DnD;
             image.height = this.cardSize / 5.4;
         }
         image.className = "icon";
-        condition = Effect.CONDITIONS[ effect.name.toLowerCase() ];
+        condition = DnD.Effect.CONDITIONS[ effect.name.toLowerCase() ];
         if (effect.name.toLowerCase() === "ongoing damage") {
             condition = condition[ effect.type ? effect.type.toLowerCase() : "untyped" ];
             image.title = (condition.type ? "Ongoing " + condition.type + " damage" : "Ongoing damage") + (effect.attacker ? " (" + effect.attacker + ")" : "");
@@ -246,6 +275,9 @@ var DnD;
         this.$parent = params.$parent;
         // Create HTML
         this.$event = this.$parent.find(".event");
+        if (!this.$event || !this.$event.length) {
+            console.error("No .event element found");
+        }
         this.hide();
         this.$description = this.$parent.find(".description");
         this.$types = this.$parent.find(".types");
@@ -262,7 +294,7 @@ var DnD;
      * @param params.damage {Damage | Array}
      */
     ActorCard.Event.prototype.damage = function(damage) {
-        var height, i, dmg, condition;
+        var height, i, dmg, amount, j, condition;
         this.$description.html("");
         this._show("hit", ActorCard.Event.TIMEOUT);
         damage = Object.constructor !== Array ? [ damage ] : damage;
@@ -270,14 +302,24 @@ var DnD;
         for (i = 0; i < damage.length; i++) {
             dmg = damage[ i ];
             if (dmg.type) {
-                if (Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ] && Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ].image) {
-                    condition = Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ];
+                if (DnD.Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ] && DnD.Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ].image) {
+                    condition = DnD.Effect.CONDITIONS[ "ongoing damage" ][ dmg.type ];
                 }
             }
             if (!condition) {
-                condition = Effect.CONDITIONS[ "ongoing damage" ].untyped;
+                condition = DnD.Effect.CONDITIONS[ "ongoing damage" ].untyped;
             }
-            this._renderDamage(height, condition.image, dmg.amount, condition.color);
+            // TODO: display multiple damage types separately
+            amount = 0;
+            if (dmg.length) {
+                for (j = 0; j < dmg.length; j++) {
+                    amount += dmg[ j ].amount;
+                }
+            }
+            else {
+                amount = dmg.amount;
+            }
+            this._renderDamage(height, condition.image, amount, condition.color);
         }
     };
 
@@ -321,4 +363,4 @@ var DnD;
     }
     DnD.Display.ActorCard = ActorCard;
     DnD.Display.ActorEvent = ActorCard.Event;
-})();
+})(safeConsole());

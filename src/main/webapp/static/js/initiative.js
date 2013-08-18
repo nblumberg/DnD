@@ -237,16 +237,22 @@ var DnD, safeConsole;
         this.$clearMonsters = jQuery("#clearMonsters").on({ click: this._clearMonsters.bind(this) });
         this.$clearHistory = jQuery("#clearHistory").on({ click: this._clearHistory.bind(this) });
         
-        this.creatureDialog = new DnD.Dialog.Creature({ callback: (function(toAdd) {
-            var i, creature;
-            for (i = 0; i < toAdd.length; i++) {
-                creature = toAdd[ i ];
-                this._addActor(creature);
-            }
-            this._render(true);
-        }).bind(this) });
+        this.creatureDialog = new DnD.Dialog.Creature({
+            $trigger: jQuery("#creatures"),
+            callback: (function(toAdd) {
+                var i, creature;
+                for (i = 0; i < toAdd.length; i++) {
+                    creature = toAdd[ i ];
+                    this._addActor(creature);
+                }
+                this._render(true);
+            }).bind(this) 
+        });
         
-        this.imageDialog = new DnD.Dialog.Image({ toDisplay: this._messageDisplay.bind(this) });
+        this.imageDialog = new DnD.Dialog.Image({
+            $trigger: jQuery("#imageButton"),
+            toDisplay: this._messageDisplay.bind(this) 
+        });
 
         this.initiativeDialog = new DnD.Dialog.Initiative({ 
             actors: this.actors, 
@@ -256,7 +262,7 @@ var DnD, safeConsole;
         });
 
         this.attackDialog = new DnD.Dialog.Attack({ callback: (function(msg) {
-            this._render(true);
+            this._render(false);
             this._messageDisplay(msg, false);
         }).bind(this) });
 
@@ -273,6 +279,7 @@ var DnD, safeConsole;
     };
 
     Initiative.prototype._createHistory = function() {
+        var $option;
         // Editor for adding arbitrary history
         this.$freeFormHistorySubject = jQuery("select#freeFormHistorySubject");
         this._renderHistoryEditor();
@@ -575,8 +582,15 @@ var DnD, safeConsole;
     };
 
     Initiative.prototype._autoSave = function(data) {
+        var e;
         data = data ? data : this.toJSON();
-        window.localStorage.setItem("initiative", data);
+        try {
+            window.localStorage.setItem("initiative", data);
+        }
+        catch (e) {
+            window.localStorage.clear();
+            window.localStorage.setItem("initiative", data);
+        }
     };
 
     Initiative.prototype._import = function() {

@@ -46,11 +46,11 @@ var DnD;
             expand = $ul.css("display") === "none";
             if (expand) {
                 $ul.show();
-                $button.html("Collapse all");
+                $button.removeClass("collapsed").addClass("expanded");
             }
             else {
                 $ul.hide();
-                $button.html("Expand all");
+                $button.removeClass("expanded").addClass("collapsed");
             }
         }).on("click", "li.round", function(event) {
             jQuery(this).children("ul").toggle();
@@ -135,7 +135,7 @@ var DnD;
         }
         this._entries.push(entry.id);
         entry._addToRound(this._getRound(entry, true), this._includeSubject);
-        if (this !== History.central) {
+        if (History.central && this !== History.central) { // TODO: what to do if actor.startTurn() on addActor() tries to addHistory() before History.central exists 
             History.central.add(entry);
         }
     };

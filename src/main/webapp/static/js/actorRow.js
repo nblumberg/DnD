@@ -32,7 +32,7 @@ var DnD;
         this.fort = null;
         this.ref = null;
         this.will = null;
-        this.tempHp = null;
+        this.hpTemp = null;
         this.hpCurrent = null;
         this.hpTotal = null;
         this.surgesCurrent = null;
@@ -59,7 +59,7 @@ var DnD;
         this.fort.setValue(this.actor.defenses.fort);
         this.ref.setValue(this.actor.defenses.ref);
         this.will.setValue(this.actor.defenses.ac);
-        this.tempHp.setValue(this.actor.hp.temp);
+        this.hpTemp.setValue(this.actor.hp.temp);
         this.hpCurrent.setValue(this.actor.hp.current);
         this.hpTotal.setValue(this.actor.hp.total);
         this.surgesCurrent.setValue(this.actor.surges.current);
@@ -86,7 +86,7 @@ var DnD;
         this.ref.reattach();
         this.will.reattach();
         
-        this.tempHp.reattach();
+        this.hpTemp.reattach();
         this.hpCurrent.reattach();
         this.hpTotal.reattach();
         this.surgesCurrent.reattach();
@@ -145,7 +145,7 @@ var DnD;
         this.ref = this._addDefense(this.$tr.find(".ref > span"), "ref");
         this.will = this._addDefense(this.$tr.find(".will > span"), "will");
         
-        this.tempHp = new Editor({ $parent: this.$tr.find(".hp .temp .editor"), tagName: "span", html: this.actor.hp.temp, onchange: (function(v) {
+        this.hpTemp = new Editor({ $parent: this.$tr.find(".hp .temp .editor"), tagName: "span", html: this.actor.hp.temp, onchange: (function(v) {
             var oldValue = this.actor.hp.temp;
             this.actor.hp.temp = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "hp.temp", oldValue: oldValue, newValue: this.actor.hp.temp });

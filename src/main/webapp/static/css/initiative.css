@@ -1,4 +1,4 @@
-body { background-color:black; color: white; }
+/* body { background-color:black; color: white; } */
 th, td { border-color: white; }
     
 .alignTop { vertical-align: top; }
@@ -33,7 +33,6 @@ input#round { width: 30px; }
 #pageLayout .leftPanel, #pageLayout .rightPanel {
 	display: table-cell;
 }
-
 
 #initiative img.icon {
 	height: 30px;
@@ -82,7 +81,7 @@ table#initiative td.defenses { max-width: 80px; }
 table#initiative td.hp { padding: 3px; text-align: left; }
 table#initiative td.actions img { display: block; margin: 5px auto; }
 table#initiative .tempHp { font-style: italic; }
-table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
+table#initiative td.history div { max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
 
 /* actorRow */
 .numerator:after { content: '/' }
@@ -114,7 +113,7 @@ td.cardHolder { padding: 0; }
 .creaturePanel .event { background-position: center; background-size: cover; bottom: auto; height: 90%; overflow: hidden; width: 100%; }
 .creaturePanel .event.hit { background-image: url("/images/symbols/pow.png"); }
 .creaturePanel .event.miss { background-image: url("/images/symbols/miss.jpg"); }
-.creaturePanel .event .description { background-color: black; margin-top:10px; padding: 10px; }
+.creaturePanel .event .description { background-color: black; line-height: 35px; margin-top:10px; padding: 10px; }
 .creaturePanel .event.hit .description { display: none; }
 .creaturePanel .event.hit .content { min-height: 50%; }
 .creaturePanel .event.hit .types,
@@ -123,6 +122,10 @@ td.cardHolder { padding: 0; }
 .creaturePanel .event.hit .types .type span { left: 25%; position: absolute; }
 
 /* history */
+.history { position: relative; }
+.history .expandCollapseAll { position: absolute; right: 10px; }
+.history .expandCollapseAll.collapsed .collapsed { display: none; }
+.history .expandCollapseAll.expanded .expanded { display: none; }
 .history li.entry .message { display: inline; }
 .history li.entry textarea, .history li.entry .save, .history li.entry .delete { display: none; }
 .history li.entry.edit .message { display: none; }
@@ -145,49 +148,60 @@ div#history { min-width: 30%; padding: 0 5px; }
 div#history h3 { margin: 5px 0; }
 
 /* Dialogs */
-.modal-header {
-	border: 1px solid #0b3e6f;
-	background: #0b3e6f url(images/ui-bg_diagonals-thick_15_0b3e6f_40x40.png) 50% 50% repeat;
-	color: #f6f6f6;
-	font-weight: bold;	
-}
-.modal-body {
-	background-color: #222222;
-}
-.modal-footer {
-	background-color: #999999;
-}
+#dialogs { bottom: 0; display: none; left: 0; position: fixed; right: 0; top: 35px; /* header height */ }
+.dialog #dialogs { display: block; }
+#dialogs .dialog { display: none; position: relative; }
+.dialog .header, .dialog .footer { box-sizing: border-box; -moz-box-sizing: border-box; height: 44px; left: 0; padding: 5px 20px; position: absolute; right: 0; z-index: 2; }
+.dialog .header { background-color: #105292; border: 1px solid #0b3e6f; color: #f6f6f6; font-weight: bold; top: 0; }
+.dialog .header .text { font-size: 24px; }
+.dialog .header .close { position: absolute; right: 20px; top: 8px; }
+.dialog .body { background-color: #222222; display: table; height: 100%; padding: 64px 20px; position: relative; width: 100%; z-index: 1; }
+.dialog .footer { background-color: #999999; bottom: 0; text-align: right; }
+body.dialog { overflow: hidden; }
 
+/* creatureDialog */
+.creaturesDialog #creaturesDialog { display: block; }
+#creaturesDialog .column { display: table-cell; text-align: center; vertical-align: middle; }
+#creaturesDialog .creatures, #creaturesDialog .selected { width: 45%; }
+#creaturesDialog select { height: 100%; width: 100%; }
 
 /* attacksDialog */
+.attacksDialog #attacksDialog { display: block; }
 #attacksDialog .column1, #attacksDialog .column2, #attacksDialog .column3 { display: table-cell; height: 100%; position: relative; }
 #attacksDialog .column1, #attacksDialog .column3 { padding-bottom: 50px; vertical-align: top; width: 40%; }
 #attacksDialog .column2 { width: 15%; }
 #attacksDialog .column2 img { margin: 0 auto; }
 #attacksDialog .column2 div { text-align: center; width: 100%; }
-#attacksDialog input.number { height: 30px; line-height: 20px; }
+#attacksDialog #attackSelect, #attacksDialog .column3 .targets { height: 100%; overflow-y: scroll; }
+#attacksDialog select { height: 100%; width: 100%; }
+#attacksDialog input.number { height: 30px; line-height: 20px; width: 100%; }
 #attacksDialog .attacks2targets { margin-top: 100%; }
 #attacksDialog .attacks2targets img { display: block; }
 #attacksDialog .playerAttack * { max-width: 50%; width: auto; }
-#attacksDialog .playerRolls { height: 30px; position: absolute; bottom: 0; }
+#attacksDialog .playerRolls { height: 30px; position: absolute; bottom: 0; width: 100%; }
 #attacksDialog .control-group input { border-width: 3px; }
 
+/* healDialog */
+.healDialog #healDialog { display: block; }
+#healDialog .column { margin: 0 auto; max-width: 400px; }
+#healDialog .input-group { margin-bottom: 10px; }
+
 /* imageDialog */
-#imageDialog { bottom: 2%; left: 2%; margin: 0; right: 2%; top: 2%; width: auto; }
-#imageDialog .modal-body { bottom: 60px; display: table-row; left: 0; max-height: 100%; position: absolute; right: 0; top: 50px; }
-#imageDialog .leftPanel, #imageDialog .rightPanel { bottom: 0; position: absolute; vertical-align: top; top: 0; }
-#imageDialog .leftPanel { left: 0; width: 329px; }
-#imageDialog .rightPanel { left: 329px; right: 0; }
-#imageDialog .fullSize { display: none; max-height: 100%; max-width: 100%; }
+.imageDialog #imageDialog { display: block; }
+#imageDialog .leftPanel, #imageDialog .rightPanel { display: table-cell; vertical-align: top; }
+#imageDialog .leftPanel { width: 400px; }
+#imageDialog .leftPanel .images { padding: 10px; }
+#imageDialog .rightPanel { position: relative; }
+#imageDialog .fullSize { display: none; left: 0; max-height: 100%; max-width: 100%; position: absolute; top: 0; }
 #imageDialog .images {}
 #imageDialog .images .thmbnl { height: 40px; margin: 0 3px 3px 0; }
-#imageDialog .modal-footer { bottom: 0; left: 0; position: absolute; right: 0; }
 
 /* initiativeDialog */
+.initiativeDialog #initiativeDialog { display: block; }
 .sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-.sortable li { margin: 0 3px 3px 3px; padding: 0.4em; font-size: 1.4em; height: 2.0em; line-height: 2.0em; }
-.sortable li * { margin: 0 0.5em; line-height: 100%; }
-.sortable li input { height: 100%; max-width: 50px; }
+.sortable li { float: left; margin: 5px; text-align: center; width: 200px; }
+.sortable li .name { margin: 0 0.5em; }
+.sortable li input { width: 100%; }
 .grab { cursor: url(https://mail.google.com/mail/images/2/openhand.cur) 8 8, move; }
 .grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
 .droppable { border-color: green; border-width: 6px; }

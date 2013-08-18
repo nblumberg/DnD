@@ -191,13 +191,13 @@ var DnD, safeConsole;
             test += (i ? ", " : "") + actor.name;
         }
         console.info("New order: " + test + " ]");
-        this.$dialog.modal("hide");
+        this.hide();
         this.change(this.order);
     };
 
 
     InitiativeDialog.prototype._populate = function() {
-        var i, actor, $li, roll, $input, $span;
+        var i, actor, $li, $a, $name, roll, $input;
         
         this.$sortable.children().remove();
         for (i = 0; i < this.order.length; i++) {
@@ -206,11 +206,11 @@ var DnD, safeConsole;
                 console.warn("Skipping order #" + i + " (actor id " + this.order[ i ] + "), not found in the list of actors");
                 continue;
             }
-            $li = jQuery("<li/>").addClass("ui-state-default grab actor").data("actor", actor).appendTo(this.$sortable);
-            $span = jQuery("<i></i>").addClass("icon-resize-vertical icon-white").appendTo($li);
+            $li = jQuery("<li/>").addClass("ui-state-default grab actor active").data("actor", actor).appendTo(this.$sortable);
+            $a = jQuery("<a href=\"javascript:void(0);\"/>").appendTo($li);
+            $name = jQuery("<div/>").addClass("name").html(actor.name).appendTo($a);
             roll = this.rolls && this.rolls.length === this.order.length ? this.rolls[ i ] : this.order.length - i;
-            $input = jQuery("<input/>").attr("type", "number").attr("min", "1").attr("step", 1).addClass("order").attr("name", actor.id).val(roll).attr("placeholder", roll).appendTo($li);
-            $span = jQuery("<span/>").addClass("label label-info").html(actor.name).appendTo($li);
+            $input = jQuery("<input/>").attr("type", "number").attr("min", "1").attr("step", 1).addClass("order").attr("name", actor.id).val(roll).attr("placeholder", roll).appendTo($a);
         }
     };    
     

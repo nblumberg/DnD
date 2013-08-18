@@ -474,6 +474,9 @@ var DnD, Serializable, Roll, SavingThrow, Damage, Attack;
             }
             return str;
         }
+        else if (this.needsWeapon) {
+            return "" + this.weaponMultiplier + "[W]" + (this.extra ? " + " + this.extra : "");
+        }
         return Roll.prototype.toString.call(this);
     };
 

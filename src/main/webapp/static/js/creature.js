@@ -649,7 +649,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         ongoingDamage = (function(effect) {
             if (effect.name.toLowerCase() === "ongoing damage") {
                 this.takeDamage(effect.attacker, effect.amount, effect.type, null);
-                this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: "Took " + amount + " ongoing " + (type ? type : "") + " damage" }));
+                this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: "Took " + effect.amount + " ongoing " + (effect.type ? effect.type : "") + " damage" }));
             }
         }).bind(this);
         
