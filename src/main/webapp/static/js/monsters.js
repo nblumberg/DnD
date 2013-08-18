@@ -22,6 +22,21 @@ function loadMonsters() {
         },
      */
     return { 
+        "Adult Pact Dragon": {        
+            name: "Adult Pact Dragon", level: 13, image: "../images/portraits/pact_dragon.jpg", // http://www.dandwiki.com/wiki/File:Dragonwarrior.jpg
+            hp: { total: 134 },
+            defenses: { ac: 27, fort: 26, ref: 25, will: 25 },
+            resistances: { fire: 10, psychic: 10 },
+            init: 13, speed: { walk: 7, fly: 10 },
+            abilities: { STR: 24, CON: 22, DEX: 20, INT: 15, WIS: 18, CHA: 16 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 14, dungeoneering: 0, endurance: 17, heal: 0, history: 0, insight: 15, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Bite", usage: { frequency: "At-Will" }, range: "reach", toHit: 18, defense: "AC", damage: "2d6+7", keywords: [ "melee", "basic" ] },
+                      { name: "Aggressive Charger", usage: { frequency: "At-Will" }, range: "reach", toHit: 18, defense: "AC", damage: "2d6+7", keywords: [ "melee", "basic" ] },
+                      { name: "Skirmish", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "2d6", keywords: [ "melee", "striker", "skirmish" ] },
+                      { name: "Breath Weapon", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close blast", size: 5 }, toHit: 15, defense: "Ref", damage: { amount: "2d12+12", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "close blast", "fire" ] }
+              ]
+        },
         "Antharosk": {        
             name: "Antharosk", level:10, image: "../images/portraits/antharosk.jpg",
             hp: { total: 428 },
@@ -289,17 +304,56 @@ function loadMonsters() {
                       { name: "Distortion Blast", usage: { frequency: "Daily" }, range: "blast 5", toHit: 12, defense: "Fort", damage: "2d8+6", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
+        "Gallia": {
+            name: "Gallia", level: 11, image: "../images/portraits/gallia.jpg", // http://cdn.obsidianportal.com/images/243287/gith.JPG
+            hp: { total: 108 },
+            defenses: { ac: 27, fort: 22, ref: 23, will: 23 },
+            init: 12, speed: { walk: 7, jump: 5 },
+            abilities: { STR: 15, CON: 12, DEX: 17, INT: 10, WIS: 16, CHA: 11 },
+            skills: { acrobatics: 15, arcana: 0, athletics: 9, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 13, intimidate: 0, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Unarmed Strike", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: "2d8+3", keywords: [ "melee", "basic" ] },
+                      { name: "Stunning Strike", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "Fort", damage: "1d8+3", effects: [ { name: "Stunned", duration: "endAttackerNext"} ], keywords: [ "melee" ] },
+                      { name: "Trace Chance", usage: { frequency: "Recharge", recharge: 6 }, range: 5, toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "NextMeleeHitIsACrit", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
+              ]
+        },
+        "Githyanki Lancer": { 
+            name: "Githyanki Lancer", level: 14, image: "../images/portraits/githyanki_lancer.jpg", // http://scalesofwar4.webs.com/62githyanki.jpg
+            hp: { total: 134 },
+            defenses: { ac: 28, fort: 26, ref: 26, will: 25 },
+            init: 15, speed: { walk: 5 },
+            abilities: { STR: 19, CON: 14, DEX: 18, INT: 15, WIS: 16, CHA: 11 },
+            skills: { acrobatics: 16, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Psychic Lance", usage: { frequency: "At-Will" }, range: "reach", toHit: 19, defense: "AC", damage: { amount: "2d10+5", type: "psychic" }, keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Silver Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: [ "1d8+5", { amount: "1d8", type: "psychic" } ], keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Mindslice", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 17, defense: "Will", damage: { amount: "2d8+5", type: "psychic" }, keywords: [ "ranged", "psychic" ] }
+              ]
+        },
         "Githyanki Mindslicer": { 
-            name: "Githyanki Mindslicer", level: 12, image: "../images/portraits/githyanki_mindslicer.jpg", // http://cdn.obsidianportal.com/images/121677/githyanki_2_2.jpg
+            name: "Githyanki Mindslicer", level: 13, image: "../images/portraits/githyanki_mindslicer.jpg", // http://cdn.obsidianportal.com/images/121677/githyanki_2_2.jpg
             hp: { total: 98 },
             defenses: { ac: 27, fort: 24, ref: 25, will: 24 },
             init: 11, speed: { walk: 6, jump: 5 },
             abilities: { STR: 14, CON: 14, DEX: 16, INT: 17, WIS: 12, CHA: 11 },
             skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 11, insight: 12, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
-                      { name: "Silver Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: { amount: "2d8+2", type: "psychic" }, keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Silver Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: [ "1d8+2", { amount: "1d8", type: "psychic" } ], keywords: [ "melee", "psychic", "basic" ] },
                       { name: "Mindslice", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 16, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, keywords: [ "ranged", "psychic" ] },
                       { name: "Psychic Barrage", usage: { frequency: "Recharge", recharge: 6 }, target: { area: "burst", size: 1, range: 20 }, toHit: 16, defense: "Will", damage: { amount: "1d6+3", type: "psychic" }, effects: [ { name: "ongoing damage", amount: 5, type: "psychic", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
+              ]
+        },
+        "Githyanki Myrmidons": { 
+            name: "Githyanki Myrmidons", level: 12, image: "../images/portraits/githyanki_thug.jpg",
+            hp: { total: 1 },
+            defenses: { ac: 28, fort: 24, ref: 23, will: 24 },
+            init: 12, speed: 5,
+            abilities: { STR: 16, CON: 12, DEX: 14, INT: 12, WIS: 16, CHA: 10 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Silver Short Sword", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: "7", keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Silver Short Sword (immobilized)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "5", type: "psychic" }, keywords: [ "melee", "psychic" ] },
+                      { name: "Telekinetic Grasp", usage: { frequency: "Encounter" }, target: { range: 5 }, toHit: 15, defense: "Fort", damage: "0", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
         "Githyanki Thug": { 
@@ -321,8 +375,8 @@ function loadMonsters() {
             abilities: { STR: 21, CON: 14, DEX: 17, INT: 12, WIS: 12, CHA: 13 },
             skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 9, insight: 12, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
-                      { name: "Silver Greatsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: { amount: "1d16+5", type: "psychic" }, keywords: [ "melee", "psychic", "basic" ] },
-                      { name: "Silver Greatsword (immoblized)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "3d6", type: "psychic" }, keywords: [ "melee", "psychic" ] },
+                      { name: "Silver Greatsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: [ "1d10+5", { amount: "1d6", type: "psychic" } ], keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Silver Greatsword (immobilized)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "3d6", type: "psychic" }, keywords: [ "melee", "psychic" ] },
                       { name: "Telekinetic Grasp", usage: { frequency: "Encounter" }, target: { range: 5 }, toHit: 15, defense: "Fort", damage: "0", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
@@ -349,6 +403,21 @@ function loadMonsters() {
                       { name: "Howl", usage: { frequency: "At-Will" }, range: "blast 3", toHit: 16, defense: "Fort", damage: { amount: "1d6+6", type: "thunder" }, keywords: [ "ranged" ] },
                       { name: "Shriek of Pain", usage: { frequency: "Encounter" }, range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+6", type: "thunder" }, keywords: [ "ranged", "miss half" ] },
                       { name: "Shriek of Pain (bloodied)", usage: { frequency: "Encounter" }, range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+11", type: "thunder" }, keywords: [ "ranged", "miss half" ] }
+              ]
+        },
+        "Iquel, Githyanki Captain": { 
+            name: "Iquel, Githyanki Captain", level: 13, image: "../images/portraits/iquel.jpg",
+            hp: { total: 256 },
+            defenses: { ac: 29, fort: 26, ref: 25, will: 25 },
+            savingThrows: 2, 
+            init: 11, speed: { walk: 6, jump: 8, teleport: 6 },
+            abilities: { STR: 21, CON: 16, DEX: 12, INT: 18, WIS: 19, CHA: 16 },
+            skills: { acrobatics: 0, arcana: 15, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 17, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Silver Greatsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: [ "1d10+6", { amount: "1d10", type: "psychic" } ], keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Silver Greatsword (immobilized)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "2d10", type: "psychic" }, keywords: [ "melee", "psychic" ] },
+                      { name: "Mindhook", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 17, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, effects: [ "Marked" ], keywords: [ "ranged", "psychic", "basic" ] },
+                      { name: "Psychic Upheaval", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 3 }, toHit: 16, defense: "Fort", damage: { amount: "2d10+4", type: "psychic" }, effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
               ]
         },
         "Legion Devil Hellguard": { 
@@ -598,6 +667,20 @@ function loadMonsters() {
                       { name: "Crossbow", usage: { frequency: "At-Will" }, range: "ranged", toHit: 13, defense: "AC", damage: "6", keywords: [ "ranged", "basic" ] }
               ]
         },
+        "Thaggriel, Githyanki Dragonknight": { 
+            name: "Thaggriel, Githyanki Dragonknight", level: 14, image: "../images/portraits/thaggriel.png",
+            hp: { total: 272 },
+            defenses: { ac: 28, fort: 27, ref: 27, will: 26 },
+            init: 16, speed: { walk: 5 },
+            abilities: { STR: 21, CON: 16, DEX: 20, INT: 16, WIS: 18, CHA: 14 },
+            skills: { acrobatics: 17, arcana: 0, athletics: 17, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 11, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Psychic Lance", usage: { frequency: "At-Will" }, range: "reach", toHit: 19, defense: "AC", damage: { amount: "2d10+5", type: "psychic" }, keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Silver Bastard Sword", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: [ "1d10+5", { amount: "1d10", type: "psychic" } ], keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Mindslice", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 17, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, keywords: [ "ranged", "psychic" ] },
+                      { name: "Hatred's Juggernaught", usage: { frequency: "Recharge", recharge: 6 }, range: "reach", toHit: 19, defense: "AC", damage: { amount: "2d10+5", type: "psychic" }, keywords: [ "melee", "psychic" ] }
+              ]
+        },
         "Troglodyte Warrior": { 
             name: "Troglodyte Warrior", level: 12, image: "../images/portraits/troglodyte.jpg",
             hp: { total: 1 },
@@ -660,6 +743,24 @@ function loadMonsters() {
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 20, defense: "AC", damage: "2d6+7", keywords: [ "melee" ] },
                       { name: "Longbow", usage: { frequency: "At-Will" }, range: 20, toHit: 20, defense: "AC", damage: "1d12+3", keywords: [ "ranged", "basic" ] },
                       { name: "Sweeping Strike", usage: { frequency: "At-Will" }, range: 2, toHit: 20, defense: "AC", damage: "1d12+7", effects: [ "Prone" ], keywords: [ "melee", "close blast" ] }
+              ]
+        },
+        "Xirakis, Adult Pact Dragon": {        
+            name: "Xirakis, Adult Pact Dragon", level: 13, image: "../images/portraits/xirakis.jpg",
+            hp: { total: 268 },
+            defenses: { ac: 29, fort: 28, ref: 27, will: 25 },
+            resistances: { fire: 10, psychic: 10 },
+            init: 13, speed: { walk: 7, fly: 10 },
+            abilities: { STR: 24, CON: 22, DEX: 20, INT: 15, WIS: 18, CHA: 16 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 14, dungeoneering: 0, endurance: 17, heal: 0, history: 0, insight: 15, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Bite", usage: { frequency: "At-Will" }, range: "reach", toHit: 18, defense: "AC", damage: "2d6+7", keywords: [ "melee", "basic" ] },
+                      { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 18, defense: "AC", damage: "1d8+7", keywords: [ "melee", "basic" ] },
+                      { name: "Ripping Charger (Bite)", usage: { frequency: "At-Will" }, range: "reach", toHit: 18, defense: "AC", damage: "2d6+7", keywords: [ "melee" ] },
+                      { name: "Ripping Charger (Claw)", usage: { frequency: "At-Will" }, range: "reach", toHit: 18, defense: "AC", damage: "1d8+7", keywords: [ "melee" ] },
+                      { name: "Wing Buffet", usage: { frequency: "At-Will", action: "Immediate Reaction" }, range: "melee", toHit: 15, defense: "Fort", damage: "1d10+7", effects: [ "Prone" ], keywords: [ "melee" ] },
+                      { name: "Skirmish", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "2d6", keywords: [ "melee", "striker", "skirmish" ] },
+                      { name: "Breath Weapon", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close blast", size: 5 }, toHit: 15, defense: "Ref", damage: { amount: "3d12+12", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "close blast", "fire" ] }
               ]
         },
         "Zithiruun, the Broken General": { 

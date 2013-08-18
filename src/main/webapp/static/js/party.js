@@ -385,10 +385,10 @@ function loadParty() {
             name: "Melvin", isPC: true, level: 10, image: "../images/portraits/melvin.jpg", 
             abilities: { STR: 18, CON: 18, DEX: 19, INT: 14, WIS: 19, CHA: 14 },
             skills: { acrobatics: 16, arcana: 7, athletics: 16, bluff: 7, diplomacy: 7, dungeoneering: 9, endurance: 9, heal: 9, history: 7, insight: 10, intimidate: 7, nature: 11, perception: 19, religion: 7, stealth: 14, streetwise: 7, thievery: 9 },
-            hp: { total: 75 },
+            hp: { total: 86 },
             surges: { perDay: 12, current: 12 },
-            defenses: { ac: 24, fort: 24, ref: 23, will: 23 },
-            init: 9, speed: 7,
+            defenses: { ac: 26, fort: 27, ref: 26, will: 26 },
+            init: 11, speed: 8,
             weapons: [ 
                       { name: "Monk unarmed strike (Iron Body Ki Focus +2)", isMelee: true, enhancement: 2, proficiency: 0, damage: { amount: "1d8", crit: "2d10" } },
                       { name: "Monk unarmed strike (Abduction Ki Focus +1)", isMelee: true, enhancement: 1, proficiency: 0, damage: { amount: "1d8", crit: "1d6" } },
