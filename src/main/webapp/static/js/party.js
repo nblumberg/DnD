@@ -416,8 +416,9 @@ function loadParty() {
           effects: []
        },
        "Tokk'it": {
-           name: "Tokk'it", level: 11, image: "../images/portraits/tokk'it.png",
+           name: "Tokk'it", isPC: true, level: 11, image: "../images/portraits/tokk'it.png",
            hp: { total: 108 },
+           surges: { perDay: 12, current: 12 },
            defenses: { ac: 27, fort: 22, ref: 23, will: 23 },
            init: 12, speed: { walk: 7, jump: 5 },
            abilities: { STR: 15, CON: 12, DEX: 17, INT: 10, WIS: 16, CHA: 11 },

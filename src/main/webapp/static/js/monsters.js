@@ -474,7 +474,7 @@ function loadMonsters() {
                       { name: "Hammer Strike", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", crit: 19, damage: "2d8+5", effects: [ "Prone" ], keywords: [ "melee", "basic" ] },
                       { name: "Knock Out of Sync", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", crit: 19, damage: "3d8+5", effects: [ { name: "penalty", type: "initiative", amount: -5 } ], keywords: [ "melee" ] },
                       { name: "Jumping Sparks", usage: { frequency: "At-Will" }, target: { count: 3 }, range: 10, toHit: 19, defense: "Fort", damage: { amount: "2d8+7", type: "lightning" }, keywords: [ "ranged", "lightning", "teleportation" ] },
-                      { name: "Psychic Blows", usage: { frequency: "Bloodied" }, target: { area: "close burst", size: 5 }, toHit: 20, defense: "Will", damage: { amount: "2d8+5", type: "psychic" }, keywords: [ "ranged", "psychic" ] }
+                      { name: "Psychic Blows", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 20, defense: "Will", damage: { amount: "2d8+5", type: "psychic" }, keywords: [ "ranged", "psychic" ] }
               ]
         },
         "Redspawn Firebelcher": { 
