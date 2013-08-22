@@ -119,6 +119,19 @@ function loadMonsters() {
                       { name: "Sacrifice", usage: { frequency: "At-Will" }, range: 1, toHit: 11, defense: "Fort", damage: "2d6+6", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "close burst", "effects on miss" ] }
               ]
         },
+        "Brann'ot Githyanki Gish": { 
+            name: "Brann'ot Githyanki Gish", level: 15, image: "../images/portraits/githyanki_mindslicer.jpg", // http://cdn.obsidianportal.com/images/121677/githyanki_2_2.jpg
+            hp: { total: 226 },
+            defenses: { ac: 31, fort: 28, ref: 29, will: 29 },
+            init: 13, speed: { walk: 5, teleport: 6 },
+            abilities: { STR: 16, CON: 17, DEX: 14, INT: 19, WIS: 14, CHA: 17 },
+            skills: { acrobatics: 0, arcana: 16, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 13, insight: 14, intimidate: 0, nature: 0, perception: 14, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Silver Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 20, defense: "AC", damage: [ "1d8+3", { amount: "1d8", type: "psychic" } ], keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Force Bolt", usage: { frequency: "Recharge", recharge: 6 }, target: { range: 10 }, toHit: 18, defense: "Ref", damage: { amount: "3d6+4", type: "force" }, keywords: [ "ranged", "force" ] },
+                      { name: "Storm of Stars", usage: { frequency: "Encounter" }, target: { range: 5, targets: 4 }, toHit: 20, defense: "AC", damage: { amount: "2d8+4", type: "fire" }, keywords: [ "ranged", "fire" ] }
+              ]
+        },
         "Calaunxin": {        
             name: "Calaunxin", level: 9, image: "../images/portraits/calaunxin.jpg",
             hp: { total: 408 },
@@ -380,6 +393,19 @@ function loadMonsters() {
                       { name: "Telekinetic Grasp", usage: { frequency: "Encounter" }, target: { range: 5 }, toHit: 15, defense: "Fort", damage: "0", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
+        "Githzerai Cenobite": { 
+            name: "Githzerai Cenobite", level: 11, image: "../images/portraits/githzerai.jpg", // http://i49.tinypic.com/29w1yes.jpg
+            hp: { total: 108 },
+            defenses: { ac: 27, fort: 22, ref: 23, will: 23 },
+            init: 12, speed: 7,
+            abilities: { STR: 15, CON: 12, DEX: 17, INT: 10, WIS: 16, CHA: 11 },
+            skills: { acrobatics: 15, arcana: 0, athletics: 9, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 13, intimidate: 0, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Unarmed Strike", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: "2d8+3", keywords: [ "melee", "basic" ] },
+                      { name: "Stunning Strike", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "Fort", damage: "1d8+3", effects: [ { name: "Stunned", duration: "endAttackerNext" } ], keywords: [ "melee" ] },
+                      { name: "Trace Chance", usage: { frequency: "Recharge", recharge: 5 }, target: { range: 5 }, toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "multiple", duration: "endAttackerNext", children: [ { name: "bonus", type: "nextMeleeAttack", amount: 5 }, { name: "automaticCritical" } ] } ], keywords: [ "ranged" ] }
+              ]
+        },
         "Grimlock Ambusher": { 
             name: "Grimlock Ambusher", level: 11, image: "../images/portraits/grimlock.jpg",
             hp: { total: 110 },
@@ -418,6 +444,20 @@ function loadMonsters() {
                       { name: "Silver Greatsword (immobilized)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "2d10", type: "psychic" }, keywords: [ "melee", "psychic" ] },
                       { name: "Mindhook", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 17, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, effects: [ "Marked" ], keywords: [ "ranged", "psychic", "basic" ] },
                       { name: "Psychic Upheaval", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 3 }, toHit: 16, defense: "Fort", damage: { amount: "2d10+4", type: "psychic" }, effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
+              ]
+        },
+        "Laughing Shadow Sentry": { 
+            name: "Laughing Shadow Sentry", level: 11, image: "../images/portraits/laughing_shadow_sentry.jpg", // http://digital-art-gallery.com/oid/103/640x778_17841_The_Home_Guard_3d_fantasy_fashion_girl_woman_warrior_guard_picture_image_digital_art.jpg
+            hp: { total: 47 },
+            defenses: { ac: 27, fort: 24, ref: 22, will: 23 },
+            init: 9, speed: 5,
+            abilities: { STR: 18, CON: 16, DEX: 15, INT: 11, WIS: 16, CHA: 13 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 11, thievery: 0 },
+            attacks: [
+                      { name: "Halberd", usage: { frequency: "At-Will" }, range: "reach", toHit: 18, defense: "AC", damage: "2d10+4", effects: [ "Marked" ], keywords: [ "melee", "basic" ] },
+                      { name: "Halberd Sweep", usage: { frequency: "At-Will", action: "Immediate Interrupt" }, range: "reach", toHit: 16, defense: "Fort", damage: "1d10+4", effects: [ "Marked" ], keywords: [ "melee" ] },
+                      { name: "Halberd Trip", usage: { frequency: "At-Will" }, range: "reach", toHit: 16, defense: "Fort", damage: "2d10+4", effects: [ "Prone" ], keywords: [ "melee" ] },
+                      { name: "Crossbow", usage: { frequency: "At-Will" }, toHit: 16, defense: "AC", damage: "2d8+2", keywords: [ "ranged", "basic" ] }
               ]
         },
         "Legion Devil Hellguard": { 
