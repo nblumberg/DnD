@@ -37,8 +37,25 @@ function loadMonsters() {
                       { name: "Breath Weapon", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close blast", size: 5 }, toHit: 15, defense: "Ref", damage: { amount: "2d12+12", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "close blast", "fire" ] }
               ]
         },
+        "Amyria": {        
+            name: "Amyria", level: 13, image: "../images/portraits/amyria.jpg",
+            hp: { total: 254 },
+            defenses: { ac: 29, fort: 23, ref: 25, will: 28 },
+            resistances: { necrotic: 11, radiant: 11 },
+            savingThrows: 2,
+            actionPoints: 1,
+            init: 15, speed: 8,
+            abilities: { STR: 11, CON: 15, DEX: 13, INT: 19, WIS: 24, CHA: 17 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 19, diplomacy: 14, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 17, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 20, defense: "AC", damage: "1d8+7", effects: [ { name: "Marked", duration: "startAttackerNext" } ], keywords: [ "melee", "basic", "radiant", "weapon" ] },
+                      { name: "Marked damage", usage: { frequency: "At-Will", action: "Immediate Interrupt" }, range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "7", type: "radiant" }, keywords: [ "radiant" ] },
+                      { name: "Crusader's Assault", usage: { frequency: "At-Will" }, range: "melee", toHit: 20, defense: "AC", damage: [ "1d8+7", { amount: "1d8", type: "radiant" } ], keywords: [ "melee", "radiant", "weapon" ] },
+                      { name: "Bahamut's Accusing Eye", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 18, defense: "Ref", damage: { amount: "2d8+7", type: "cold and radiant" }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "ongoing damage", amount: 5, type: "cold and radiant" }, "Slowed" ] } ], keywords: [ "cold", "radiant" ] }
+              ]
+        },
         "Antharosk": {        
-            name: "Antharosk", level:10, image: "../images/portraits/antharosk.jpg",
+            name: "Antharosk", level: 10, image: "../images/portraits/antharosk.jpg",
             hp: { total: 428 },
             defenses: { ac: 26, fort: 23, ref: 24, will: 23 },
             resistances: { poison: 20 },

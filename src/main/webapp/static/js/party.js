@@ -416,7 +416,7 @@ function loadParty() {
           effects: []
        },
        "Tokk'it": {
-           name: "Tokk'it", isPC: true, level: 11, image: "../images/portraits/tokk'it.png",
+           name: "Tokk'it", isPC: true, level: 11, image: "../images/portraits/tokk'it.jpg", // http://images.community.wizards.com/community.wizards.com/user/sotp_seamus/character_pictures/4223f53dc5c63a22aab6cc8ac8031d16.jpg?v=115650
            hp: { total: 108 },
            surges: { perDay: 12, current: 12 },
            defenses: { ac: 27, fort: 22, ref: 23, will: 23 },
