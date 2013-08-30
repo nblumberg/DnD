@@ -477,6 +477,33 @@ function loadMonsters() {
                       { name: "Crossbow", usage: { frequency: "At-Will" }, toHit: 16, defense: "AC", damage: "2d8+2", keywords: [ "ranged", "basic" ] }
               ]
         },
+        "Laughing Shadow Streetfighters": { 
+            name: "Laughing Shadow Streetfighters", level: 13, image: "../images/portraits/laughing_shadow_streetfighter.jpg", // http://i76.photobucket.com/albums/j23/poyodiablo/Before%20and%20After/deva_katar.jpg 
+            hp: { total: 128 },
+            defenses: { ac: 29, fort: 26, ref: 25, will: 24 },
+            init: 12, speed: 6,
+            abilities: { STR: 21, CON: 16, DEX: 19, INT: 11, WIS: 17, CHA: 10 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 13, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 13, nature: 0, perception: 9, religion: 0, stealth: 15, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Katar", usage: { frequency: "At-Will" }, range: "melee", toHit: 20, defense: "AC", damage: "2d6+6", effects: [ { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "weapon" ] },
+                      { name: "Cheap Shot", usage: { frequency: "At-Will", action: "Immediate Interrupt" }, range: "melee", toHit: 20, defense: "AC", damage: "2d6+6", effects: [ "Movement Ends" ], keywords: [ "melee", "weapon" ] },
+                      { name: "Streetfighter Flourish", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close burst", size: 1 }, toHit: 19, defense: "AC", damage: "2d6+6", effects: [ { name: "Slowed", saveEnds: true } ], keywords: [ "melee", "weapon" ] },
+                      { name: "Shuriken", usage: { frequency: "At-Will" }, toHit: 19, defense: "AC", damage: "2d4+4", keywords: [ "ranged" ] }
+              ]
+        },
+        "Laughing Shadow Scrabblers": { 
+            name: "Laughing Shadow Scrabblers", level: 13, image: "../images/portraits/laughing_shadow_scrabbler.jpg", // https://www.wizards.com/dnd/images/pgte_gallery/95052.jpg 
+            hp: { total: 1 },
+            defenses: { ac: 27, fort: 25, ref: 27, will: 24 },
+            init: 12, speed: 6,
+            abilities: { STR: 19, CON: 14, DEX: 18, INT: 10, WIS: 16, CHA: 8 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 10, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 15, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Short Sword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "8", keywords: [ "melee", "basic", "weapon" ] },
+                      { name: "Short Sword (combat advantage)", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "13", keywords: [ "melee", "basic", "weapon" ] },
+                      { name: "Shuriken", usage: { frequency: "At-Will" }, toHit: 18, defense: "AC", damage: "74", keywords: [ "ranged" ] }
+              ]
+        },
         "Legion Devil Hellguard": { 
             name: "Legion Devil Hellguard", level: 11, image: "../images/portraits/legion_devil.jpg",
             hp: { total: 1 },
