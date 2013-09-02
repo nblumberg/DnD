@@ -206,14 +206,14 @@ var DnD;
     AttackDialog.prototype._playerAttackChange = function() {
         var $controlGroup, toHit, i, hit, miss;
         $controlGroup = this.$playerAttackRoll.parent();
-        $controlGroup.removeClass("error");
-        $controlGroup.removeClass("success");
-        $controlGroup.removeClass("warning");
+        $controlGroup.removeClass("has-error");
+        $controlGroup.removeClass("has-success");
+        $controlGroup.removeClass("has-warning");
         if (this.$playerAttackCrit.val() === "crit") {
-            $controlGroup.addClass("success");
+            $controlGroup.addClass("has-success");
         }
         else if (this.$playerAttackCrit.val() === "fail") {
-            $controlGroup.addClass("error");
+            $controlGroup.addClass("has-error");
         }
         else if (this.attack && this.targets.length) {
             toHit = parseInt(this.$playerAttackRoll.val(), 10);
@@ -228,13 +228,13 @@ var DnD;
                 }
             }
             if (hit && miss) {
-                $controlGroup.addClass("warning");
+                $controlGroup.addClass("has-warning");
             }
             else if (hit) {
-                $controlGroup.addClass("success");
+                $controlGroup.addClass("has-success");
             }
             else {
-                $controlGroup.addClass("error");
+                $controlGroup.addClass("has-error");
             }
         }
         this._notifyTargets();

@@ -174,12 +174,15 @@ body.dialog { overflow: hidden; }
 #attacksDialog .column2 div { text-align: center; width: 100%; }
 #attacksDialog #attackSelect, #attacksDialog .column3 .targets { height: 100%; overflow-y: scroll; }
 #attacksDialog select { height: 100%; width: 100%; }
-#attacksDialog input.number { height: 30px; line-height: 20px; width: 100%; }
+#attacksDialog input.number { width: 100%; }
 #attacksDialog .attacks2targets { margin-top: 100%; }
 #attacksDialog .attacks2targets img { display: block; }
 #attacksDialog .playerAttack * { max-width: 50%; width: auto; }
 #attacksDialog .playerRolls { height: 30px; position: absolute; bottom: 0; width: 100%; }
 #attacksDialog .control-group input { border-width: 3px; }
+#attacksDialog .control-group input { border-width: 3px; }
+#attacksDialog .error .playerAttackRoll, #attacksDialog .success .playerAttackRoll, #attacksDialog .warning .playerAttackRoll { border: 3px solid; }
+#playerAttackRoll { display: inline-block; }
 
 /* healDialog */
 .healDialog #healDialog { display: block; }
