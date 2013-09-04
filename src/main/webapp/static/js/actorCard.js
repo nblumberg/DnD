@@ -34,6 +34,7 @@ var DnD, safeConsole;
         
         this.subPanel = {};
         this.cardSize = params.cardSize || ActorCard.CARD_SIZE;
+        this.conditions = [];
         this.$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
         
         this.$panel = jQuery("<div/>").attr("id", this.actor.name.replace(/\s/g, "_") + "_panel").data("actor", this.actor).addClass("creaturePanel centered verticallyCentered bordered " + params.className).css("background-image", "url(" + this.actor.image + ")").appendTo(this.$parent);
@@ -179,6 +180,7 @@ var DnD, safeConsole;
         }
         style = { height: height + "px", width: width + "px" };
         this.$panel.css(style);
+        this._resizeConditions();
     };
 
     ActorCard.prototype._renderName = function() {
@@ -203,60 +205,93 @@ var DnD, safeConsole;
      * @param total Number The total number of conditions (including child effects), used for sizing
      */
     ActorCard.prototype._renderCondition = function(effect, total) {
-        var i, $div, image, clickHandler, condition, $amount;
+        var i;
         if (effect.children && effect.children.length) {
             for (i = 0; i < effect.children.length; i++) {
                 this._renderCondition(effect.children[ i ], total);
             }
             return;
         }
-        $div = jQuery("<div/>").addClass("condition");
-        clickHandler = (function($condition, effect, event) {
-            if (event.metaKey) {
-                $condition.off({ click: clickHandler });
-                $condition.remove();
-                effect.remove();
-                this.actor.dispatchEvent({ type: "change", conditionRemoved: effect });
-            }
-        }).bind(this, $div, effect);
-        $div.on({ click: clickHandler });
-        image = new Image();
-        if (total <= 4) {
-            image.height = this.cardSize / 3;
+        this.conditions.push(new ActorCard.Condition({
+            card: this,
+            actor: this.actor,
+            effect: effect,
+            $parent: this.subPanel.$effects
+        }));
+        this._resizeConditions();
+    };
+    
+    ActorCard.prototype._resizeConditions = function(event) {
+        var count, rows, columns, height, width, i;
+        count = this.conditions.length;
+        rows = Math.max(3, Math.ceil(count / ActorCard.Condition.MAX_COLUMNS));
+        height = ((this.$panel.height() - 5) / rows);
+        columns = Math.max(3, Math.min(count, ActorCard.Condition.MAX_COLUMNS));
+        width = ((this.$panel.width() - (4 * ActorCard.Condition.MAX_COLUMNS)) / columns);
+        for (i = 0; i < count; i++) {
+            this.conditions[ i ]._resize(height, width);
         }
-        else if (total <= 9) {
-            image.height = this.cardSize / 4;
+    };
+    
+    
+    /**
+     * Displays an Effect on an ActorCard
+     * 
+     * @param params Object
+     * @param params.card ActorCard The parent ActorCard
+     * @param params.actor Actor The Actor that owns the ActorCard
+     * @param params.effect Effect The Effect to render
+     * @param params.$parent jQuery The parent element
+     */
+    ActorCard.Condition = function(params) {
+        this.card = params.card;
+        this.actor = params.actor;
+        this.effect = params.effect;
+        this.$parent = params.$parent;
+        this._render();
+    };
+    
+    ActorCard.Condition.MAX_COLUMNS = 4;
+    
+    ActorCard.Condition.prototype._render = function() {
+        var i, condition, title;
+        this.$container = jQuery("<div/>").addClass("condition").on({ click: this._clickHandler.bind(this) });
+        condition = DnD.Effect.CONDITIONS[ this.effect.name.toLowerCase() ];
+        if (this.effect.name.toLowerCase() === "ongoing damage") {
+            condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
+            title = (condition && condition.type ? "Ongoing " + condition.type + " damage" : "Ongoing damage") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
+        }
+        else if (this.effect.name.toLowerCase() === "penalty") {
+            condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
+            title = (condition && condition.type ? "Penalty to " + condition.type : "Unknown penalty") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
         }
         else {
-            image.height = this.cardSize / 5.4;
+            title = this.effect.name + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
         }
-        image.className = "icon";
-        condition = DnD.Effect.CONDITIONS[ effect.name.toLowerCase() ];
-        if (effect.name.toLowerCase() === "ongoing damage") {
-            condition = condition[ effect.type ? effect.type.toLowerCase() : "untyped" ];
-            image.title = (condition.type ? "Ongoing " + condition.type + " damage" : "Ongoing damage") + (effect.attacker ? " (" + effect.attacker + ")" : "");
+        this.$container.attr("title", title).css({
+            "background-image": "url(\"" + (condition && condition.image ? condition.image : "../images/symbols/unknown.png") + "\")"
+        });
+        if (this.effect.amount) {
+            this.$amount = jQuery("<div/>").addClass("amount").css({ "color": condition && condition.color ? condition.color : "red" }).appendTo(this.$container);
+            jQuery("<span/>").html(this.effect.amount).appendTo(this.$amount);
         }
-        else if (effect.name.toLowerCase() === "penalty") {
-            condition = condition[ effect.type ? effect.type.toLowerCase() : "untyped" ];
-            image.title = (condition.type ? "Penalty to " + condition.type : "Unknown penalty") + (effect.attacker ? " (" + effect.attacker + ")" : "");
+        this.$parent.append(this.$container);
+    };
+    
+    ActorCard.Condition.prototype._clickHandler = function(event) {
+        if (event.metaKey) {
+            this.$condition.off({ click: this._clickHandler });
+            this.$container.remove();
+            this.effect.remove();
+            this.actor.dispatchEvent({ type: "change", conditionRemoved: this.effect });
         }
-        else {
-            image.title = effect.name + (effect.attacker ? " (" + effect.attacker + ")" : "");
-        }
-        if (condition && condition.image) {
-            image.src = condition.image;
-        }
-        else {
-            image.src = "../images/symbols/unknown.png";
-        }
-        $div.append(image);
-        if (effect.amount) {
-            $amount = jQuery("<div/>").addClass("amount").css({ "color": condition && condition.color ? condition.color : "red" }).appendTo($div);
-            jQuery("<span/>").html(effect.amount).appendTo($amount);
-        }
-        this.subPanel.$effects.append($div);
     };
 
+    ActorCard.Condition.prototype._resize = function(height, width) {
+        this.$container.css({ height: height + "px", width: width + "px" });
+    };
+
+    
     /**
      * @param params Object
      * @param params.actor Actor

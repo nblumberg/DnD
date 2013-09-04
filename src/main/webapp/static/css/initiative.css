@@ -89,16 +89,21 @@ table#initiative td.history div { max-height: 130px; overflow-y: auto; padding-r
 
 /* actorCard */
 td.cardHolder { padding: 0; }
-.creaturePanel { 
+.creaturePanel, .condition { 
 	background-size: contain; 
 	background-repeat: no-repeat; 
 	background-position: top center; 
-	border-width: 4px; 
 	box-sizing: border-box; 
 	float: left; 
+	margin: 2px; }
+.creaturePanel { 
+	border-width: 4px; 
 	height: 180px; 
-	margin: 2px; 
 	width: 100%; }
+.condition {
+	border: 1px solid black; 
+	height: 30px; 
+	width: 30px; }
 #initiative .creaturePanel { display: inline-block; float: none; }
 .creaturePanel.current { border-color: lime; }
 .creaturePanel .label { background-color: black; bottom: 0; font-size: 1.2em; height: 1.2em; left: 0; position: absolute; right: 0; white-space: normal; }
@@ -106,6 +111,7 @@ td.cardHolder { padding: 0; }
 .creaturePanel.bloodied, .creaturePanel.bloodied .label { background-color: red; }
 
 .creaturePanel .state, .creaturePanel .state .effects, .creaturePanel .event { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
+.creaturePanel .state .effects { overflow: hidden; }
 .creaturePanel .event, .creaturePanel .condition { color: #FFFFFF; overflow: hidden; text-align: center; vertical-align: middle; }
 .creaturePanel .condition { background-color: white; float: left; position: relative; }
 .creaturePanel .condition .amount { bottom: 0; left: 0; display: table-cell; position: absolute; right: 0; text-align: center; top: 0; vertical-align: middle; }

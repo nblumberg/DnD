@@ -1,4 +1,5 @@
 var DnD, safeConsole;
+
 (function(jQuery, console) {
     "use strict";
     
