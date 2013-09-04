@@ -15,6 +15,7 @@ var DnD;
     
     function HealDialog(params) {
         this.addHistory = params.addHistory;
+        this.callback = params.callback;
         this.$healingDescription = null;
         this.$isTempHp = null;
         this.$healingAmount = null;
@@ -101,7 +102,7 @@ var DnD;
                 method = "error";
             }
             else {
-                target.surges.current = Math.max(--target.surges.current, 0);
+                target.tr.surgesCurrent.setValue(Math.max(--target.surges.current, 0));
                 msg += ", using a healing surge";
             }
             newValue = target.surges.current; 

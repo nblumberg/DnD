@@ -266,7 +266,12 @@ var DnD, safeConsole;
             this._messageDisplay(msg, false);
         }).bind(this) });
 
-        this.healDialog = new DnD.Dialog.Heal({ addHistory: this._addHistory.bind(this) });
+        this.healDialog = new DnD.Dialog.Heal({ 
+            addHistory: this._addHistory.bind(this),
+            callback: (function(actor, changes) {
+                
+            }).bind(this)
+        });
         
         this._createBody();
         this._render(false);
@@ -397,7 +402,7 @@ var DnD, safeConsole;
                     },
                     effects: Serializable.prototype.rawArray(actor.effects)
                 }, false);
-                actor.card.refresh();
+                actor.tr.render();
             }
         }).bind(this));
         actor.addEventListener("takeDamage", (function(event) {

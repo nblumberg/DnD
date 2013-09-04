@@ -44,7 +44,7 @@ Serializable.prototype.rawArray = function(array, nodes) {
 };
 
 Serializable.prototype._isSerializable = function(name, obj) {
-    return typeof(obj) !== "function" && !(obj instanceof HTMLElement) && !(obj instanceof jQuery) && name.indexOf("$") !== 0 && name.indexOf("$") !== 1;
+    return typeof(obj) !== "function" && !(obj instanceof HTMLElement) && !(obj instanceof jQuery) && name.indexOf("$") !== 0 && name.indexOf("$") !== 1 && name.indexOf("__") !== 0;
 };
 
 Serializable.prototype.raw = function(nodes) {

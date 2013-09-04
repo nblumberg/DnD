@@ -113,7 +113,6 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
     Creature.prototype._init = function(params) {
         var i;
         params = params || {};
-        this._listeners = {};
         this.image = params.image;
         this.isPC = params.isPC || false;
         this.level = params.level || false;
