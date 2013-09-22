@@ -106,7 +106,7 @@ td.cardHolder { padding: 0; }
 	width: 30px; }
 #initiative .creaturePanel { display: inline-block; float: none; }
 .creaturePanel.current { border-color: lime; }
-.creaturePanel .label { background-color: black; bottom: 0; font-size: 1.2em; height: 1.2em; left: 0; position: absolute; right: 0; white-space: normal; }
+.creaturePanel .label { background-color: black; bottom: 0; font-size: 1.2em; left: 0; position: absolute; right: 0; white-space: normal; }
 .creaturePanel.pcHp .label { height: 2.4em; }
 .creaturePanel.bloodied, .creaturePanel.bloodied .label { background-color: red; }
 
