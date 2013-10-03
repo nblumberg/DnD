@@ -20,7 +20,7 @@ var DnD;
      */
     function History(params) {
         params = params || {};
-        this.params = params;
+        this.__params = params;
         this._entries = params._entries || [];
         this._round = params._round || 1; // the current round
         this._count = 0;
@@ -343,6 +343,7 @@ var DnD;
         params = params || {};
         this.id = params.id || History.Entry.id++;
         History.Entry.entries[ this.id ] = this;
+        this.subjectName = params.subjectName;
         if (jQuery.isNumeric(params.subject) && typeof(params.subject) === "string") {
             this.subject = parseInt(params.subject, 10);
         }

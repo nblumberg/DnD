@@ -275,16 +275,18 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
     };
 
 
-    Actor = function(params, count) {
-        if (params instanceof Creature) {
-            params = params.raw();
-            params.id = 0;
+    Actor = function(creature, count, currentState) {
+        var i;
+        
+        if (creature instanceof Creature) {
+            creature = creature.raw();
+            creature.id = 0;
         }
         
         // Basic properties
-        this.id = params.id || Creature.id++;
-        this.type = params.name;
-        this.name = params.name + (!params.isPC && count ? " #" + count : "");
+        this.id = (currentState ? currentState.id : null) || creature.id || Creature.id++;
+        this.type = creature.name;
+        this.name = creature.name + (!creature.isPC && count ? " #" + count : "");
 
         // Store in singleton
         if (!Creature.actors) {
@@ -299,7 +301,20 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         this._turnTimer = null;
         this._turnDurations = {};
         
-        this._init(params);
+        this._init(creature, currentState);
+        
+        if (currentState) {
+            // Update new Actor with current state from raw data
+            this.name = currentState.name;
+            this.hp.current = currentState.hp.current;
+            this.hp.temp = currentState.hp.temp;
+            this.surges.current = currentState.surges.current;
+            this.ap = currentState.ap;
+            this.effects = currentState.effects;
+            for (i = 0; currentState.effects && i < currentState.effects.length; i++) {
+                actor.effects.push(new DnD.Effect(iQuery.extend({}, currentState.effects[ i ], { target: this })));
+            }
+        }
     };
 
     Actor.prototype = new Creature();
@@ -312,9 +327,15 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         return returnIdIfNotFound ? id : null;
     };
     
-    Actor.prototype._init = function(params) {
+    Actor.prototype._init = function(params, currentState) {
+        var data;
         Creature.prototype._init.call(this, params);
-        this.history = new DnD.History(params.history || { includeSubject: false });
+        data = jQuery.extend(
+            { includeSubject: false }, 
+            (currentState ? currentState.history : null) || params.history, 
+            { _roundTimes: (currentState ? currentState._turnDurations : null ) }
+        );
+        this.history = new DnD.History(data);
         this._turnTimer = (new Date()).getTime();
     };
 
@@ -813,6 +834,23 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         params.actor = this;
         this.card = new DnD.Display.ActorCard(params);
         return this.card;
+    };
+    
+    Actor.prototype.raw = function() {
+        return {
+            id: this.id,
+            type: this.type,
+            name: this.name,
+            hp: { current: this.hp.current, temp: this.hp.temp },
+            defenses: { ac: this.defenses.ac, fort: this.defenses.fort, ref: this.defenses.ref, will: this.defenses.will },
+            surges: { current: this.surges.current },
+            ap: this.ap,
+            effects: this.rawArray(this.effects),
+            imposedEffects: this.rawArray(this.imposedEffects),
+            history: this.history.raw(),
+            _turnTimer: this._turnTimer,
+            _turnDurations: this._turnDurations
+        };
     };
     
     

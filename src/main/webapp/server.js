@@ -40,7 +40,7 @@
 		else if (matchFileType(request.url, ".png")) {
 			contentType = "image/png";
 		}
-		else if (matchFileType(request.url, ".js")) {
+		else if (matchFileType(request.url, ".js") || matchFileType(request.url, ".map")) {
 			contentType = "text/javascript";
 		}
 		else if (matchFileType(request.url, ".css")) {

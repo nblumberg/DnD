@@ -21,6 +21,7 @@ var DnD, safeConsole, Serializable, Creature;
         if (!params.noId) {
             this.id = params.id || Effect.id++;
         }
+        Effect.effects[ this.id ] = this;
         this.name = "Unknown effect";
         if (typeof(params) === "string") {
             this.name = params;
@@ -50,6 +51,7 @@ var DnD, safeConsole, Serializable, Creature;
 
     Effect.prototype = new Serializable();
     Effect.id = 1;
+    Effect.effects = {};
 
     Effect.prototype.remove = function() {
         var i;

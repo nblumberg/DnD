@@ -26,8 +26,8 @@ describe("DnD.History", function() {
             });
             
             describe("it should initialize", function() {
-                it("this.params === {}", function() {
-                    expect(history.params).toEqual({});
+                it("this.__params === {}", function() {
+                    expect(history.__params).toEqual({});
                 });
                 it("this._entries === []", function() {
                     expect(history._entries).toEqual([]);
@@ -66,8 +66,8 @@ describe("DnD.History", function() {
             });
             
             describe("it should initialize", function() {
-                it("this.params === params", function() {
-                    expect(history.params).toEqual(params);
+                it("this.__params === params", function() {
+                    expect(history.__params).toEqual(params);
                 });
                 it("this._entries === params._entries", function() {
                     expect(history._entries).toEqual(params._entries);

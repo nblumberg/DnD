@@ -14,9 +14,6 @@ var DnD, safeConsole;
      * @param {String} params.target
      */
     function Initiative(params) {
-        if (params) {
-            this._init(params);
-        }
         window.name = "admin";
         
         this._current = null;
@@ -35,9 +32,6 @@ var DnD, safeConsole;
         this.$nextButton = null;
         this.$displayButton = null;
         this.$fileInput = null;
-        this.$loadInitiative = null;
-        this.$loadMonsters = null;
-        this.$loadParty = null;
         this.$import = null;
         this.$export = null;
         this.$clearAll = null;
@@ -55,12 +49,28 @@ var DnD, safeConsole;
         this.$table = null;
         this.$importDialog = null;
         this.$exportDialog = null;
+        
+        this._init(params);
     }
 
     Initiative.prototype = new EventDispatcher();
 
     Initiative.prototype._init = function(params) {
         var p, i, j, actor, creature, count;
+
+        if (!params) {
+            params = {};
+            if (window.localStorage || window.localStorage.getItem("initiative")) {
+                try {
+                    params = JSON.parse(window.localStorage.getItem("initiative"));
+                }
+                finally {}
+            }
+            if (params) {
+                console.info("Loaded from localStorage");
+            }
+            params.creatures = jQuery.extend({}, loadParty(), loadMonsters());
+        }
         params = jQuery.extend({
             historyEntries: {},
             creatures: {},
@@ -81,6 +91,7 @@ var DnD, safeConsole;
             DnD.History.Entry.init(params.historyEntries); // NOTE: must come before this.actors is initialized because Creature.history references it
         }
         
+        // Create Creatures from raw data
         if (params.creatures) {
             for (p in params.creatures) {
                 if (params.creatures.hasOwnProperty(p)) {
@@ -89,35 +100,26 @@ var DnD, safeConsole;
             }
         }
 
+        // Create Actors from Creatures
         if (params.actors && params.actors.length) {
             for (i = 0; i < params.actors.length; i++) {
                 actor = params.actors[ i ];
-                actor = typeof(actor) === "string" ? Creature.creatures[ actor ] : actor;
-                actor = this._addActor(actor, params.actors);
-            }
-        }
-        
-        // Overwrite existing actors with their updated Creature template
-        if (this.actors && params.creatures && (!params.actors || !params.actors.length)) {
-            for (i in Creature.creatures) {
-                creature = Creature.creatures[ i ];
-                for (j = 0; j < this.actors.length; j++) {
-                    actor = this.actors[ j ];
-                    if (actor.type === creature.name) {
-                        this.actors.splice(j, 1, new Actor(creature));
-                        this.actors[ j ].id = actor.id;
-                        this.actors[ j ].name = actor.name;
-                        this.actors[ j ].hp.current = actor.hp.current;
-                        this.actors[ j ].hp.temp = actor.hp.temp;
-                        this.actors[ j ].surges.current = actor.surges.current;
-                        this.actors[ j ].effects = actor.effects;
-                    }
-                }
+                creature = typeof(actor) === "string" ? actor : actor.type;
+                creature = Creature.creatures[ creature ];
+                actor = this._addActor(creature, params.actors, actor);
             }
         }
         
         if (!this.actors) {
             this.actors = [];
+        }
+        
+        // Link up imposed effects with actual effects
+        for (i = 0; i < this.actors.length; i++) {
+            actor = this.actors[ i ];
+            for (j = 0; params.actors[ i ].imposedEffects && j < params.actors[ i ].imposedEffects.length && DnD.Effect.effects.hasOwnProperty(params.actors[ i ].imposedEffects[ j ].id); j++) {
+                actor.imposedEffects.push(DnD.Effect.effects[ params.actors[ i ].imposedEffects[ j ].id ]);
+            }
         }
         
         if (params.order) {
@@ -142,22 +144,6 @@ var DnD, safeConsole;
         jQuery(document).ready(this._create.bind(this));
     };
 
-    Initiative.prototype.initFromLocalStorage = function() {
-        var data;
-        if (window.localStorage || window.localStorage.getItem("initiative")) {
-            try {
-                data = JSON.parse(window.localStorage.getItem("initiative"));
-            }
-            finally {}
-        }
-        if (data) {
-            console.info("Loaded from localStorage");
-            this._init(data);
-            return true;
-        }
-        return false;
-    };
-
     Initiative.prototype.initFromFile = function(event) {
         var _self, reader, files, file;
         _self = this;
@@ -170,25 +156,6 @@ var DnD, safeConsole;
             };
         })(file);
         reader.readAsText(file);
-    };
-
-    Initiative.prototype.loadInitFromJs = function() {
-        var data = loadInitiative();
-        this._init(data);
-    };
-
-    Initiative.prototype.loadMonstersFromJs = function() {
-        var data = {
-            creatures: loadMonsters()
-        };
-        this._init(data);
-    };
-
-    Initiative.prototype.loadPartyFromJs = function() {
-        var data = {
-            creatures: loadParty()
-        };
-        this._init(data);
     };
 
     Initiative.prototype._randomInitiative = function() {
@@ -225,9 +192,6 @@ var DnD, safeConsole;
         this.$displayButton = jQuery("#open").on({ click: this._renderDisplay.bind(this, true) });
         
         this.$fileInput = jQuery("#fileInput").on({ change: this.initFromFile.bind(this) });
-        this.$loadInitiative = jQuery("#loadInitiative").on({ click: this.loadInitFromJs.bind(this) });
-        this.$loadMonsters = jQuery("#loadMonsters").on({ click: this.loadMonstersFromJs.bind(this) });
-        this.$loadParty = jQuery("#loadParty").on({ click: this.loadPartyFromJs.bind(this) });
         
         this.$import = jQuery("#import").on({ click: this._import.bind(this) });
         this.$export = jQuery("#export").on({ click: this._export.bind(this) });
@@ -343,18 +307,18 @@ var DnD, safeConsole;
         return 0;
     };
 
-    Initiative.prototype._addActor = function(params, actors) {
+    Initiative.prototype._addActor = function(creature, actors, currentState) {
         var count, actor;
         // in case "-------" or "        " was selected in the Creature dialog or we've encountered junk data
-        if (!params) {
+        if (!creature) {
             console.warn("Skipping adding undefined actor");
             return;
         }
-        else if (!params.name) {
+        else if (!creature.name) {
             console.warn("Skipping adding invalid actor (missing name)");
             return;
         }
-        else if (!params.image) {
+        else if (!creature.image) {
             console.warn("Skipping adding invalid actor (missing image)");
             return;
         }
@@ -364,8 +328,8 @@ var DnD, safeConsole;
         if (!actors) {
             actors = this.actors;
         }
-        count = params.isPC ? 0 : this._countActorsByType(params.name, actors, true);
-        actor = new Actor(params, count);
+        count = creature.isPC ? 0 : this._countActorsByType(creature.name, actors, true);
+        actor = new Actor(creature, count, currentState);
         this.actors.push(actor);
         jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
         if (this.order) {
@@ -375,22 +339,23 @@ var DnD, safeConsole;
             this._addHistory(actor, "Joins the fight");
         }
         actor.addEventListener("change", (function(event) {
-            var actor, update = false;
+            var actor, updateDisplay = false;
+            actor = event.target;
+            console.debug(actor.name + "'s " + event.property + " changed from " + event.oldValue + " to " + event.newValue);
             // Only bother to update the display with properties reflected in the display
             switch (event.property) {
                 case "name":
                 case "hp.temp":
                 case "hp.current":
                 case "hp.total": {
-                    update = true;
+                    updateDisplay = true;
                 }
                 break;
             }
             if (event.conditionAdded || event.conditionRemoved) {
-                update = true;
+                updateDisplay = true;
             }
-            if (update) {
-                actor = event.target;
+            if (updateDisplay) {
                 this._messageDisplay({ 
                     type: "updateActor", 
                     id: actor.id, 
@@ -402,8 +367,9 @@ var DnD, safeConsole;
                     },
                     effects: Serializable.prototype.rawArray(actor.effects)
                 }, false);
-                actor.tr.render();
             }
+            actor.tr.render();
+            this._autoSave();
         }).bind(this));
         actor.addEventListener("takeDamage", (function(event) {
             this._messageDisplay({ actor: event.target.raw(), damage: event.damage }, false);
@@ -858,7 +824,6 @@ var DnD, safeConsole;
         var raw = {
             order: this.order,
             actors: this.rawArray(this.actors),
-            creatures: this.rawObj(Creature.creatures),
             history: this.history.raw(),
             historyEntries: this.rawObj(DnD.History.Entry.entries),
             round: this.round,
