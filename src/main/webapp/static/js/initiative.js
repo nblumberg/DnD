@@ -878,7 +878,9 @@ var DnD, safeConsole;
             index = this.actors.indexOf(actor);
             this.actors.splice(index, 1);
             actor.tr.$tr.remove();
+            this._renderHistoryEditor();
             this._messageDisplay({ type: "removeActor", actor: actor.id });
+            this._autoSave();
         }
     };
 
