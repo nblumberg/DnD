@@ -179,6 +179,12 @@ body.dialog { overflow: hidden; }
 #attacksDialog .column2 img { margin: 0 auto; }
 #attacksDialog .column2 div { text-align: center; width: 100%; }
 #attacksDialog #attackSelect, #attacksDialog .column3 .targets { height: 100%; overflow-y: scroll; }
+#attacksDialog #attackSelect .list-group-item { background-color: gray; color: white; font-size: bold; }
+#attacksDialog #attackSelect .at-will { background-color: green; }
+#attacksDialog #attackSelect .encounter { background-color: maroon; }
+#attacksDialog #attackSelect .daily { background-color: #333333; }
+#attacksDialog #attackSelect .recharge { background-color: orange; }
+#attacksDialog #attackSelect .used { color: #555555; font-style: italic; }
 #attacksDialog select { height: 100%; width: 100%; }
 #attacksDialog input.number { width: 100%; }
 #attacksDialog .attacks2targets { margin-top: 100%; }

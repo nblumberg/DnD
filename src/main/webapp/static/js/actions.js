@@ -1,4 +1,4 @@
-var DnD, Serializable, Roll, SavingThrow, Damage, Attack;
+var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
 (function() {
     "use strict";
@@ -186,6 +186,32 @@ var DnD, Serializable, Roll, SavingThrow, Damage, Attack;
     };
 
 
+    Recharge = function(params) {
+        this.attack = params.attack;
+    };
+
+    Recharge.prototype = new Roll({ dieCount: 1, dieSides: 6, extra: 0, crits: false });
+
+    Recharge.prototype.isRecharged = function() {
+        var h = this.getLastRoll();
+        return h.total <= this.attack.usage.recharge;
+    };
+    
+    Recharge.prototype._anchorHtml = function(conditional) {
+        return (this.isRecharged() ? "Recharged " : "Failed to recharge ") + this.attack.name + (conditional && conditional.text ? conditional.text : "");
+    };
+
+    Recharge.prototype.anchor = function(conditional) {
+        var h = this.getLastRoll();
+        h.breakdown = " &lt;= " + this.attack.usage.recharge;
+        return Roll.prototype.anchor.call(this, conditional);
+    };
+    
+    Recharge.prototype.toString = function() {
+        return "Recharge";
+    };
+
+    
     SavingThrow = function(params) {
         params = params || {};
         this.effect = params.effect;
@@ -486,6 +512,11 @@ var DnD, Serializable, Roll, SavingThrow, Damage, Attack;
         params = params || {};
         this.name = params.name;
         this.type = params.type;
+        this.usage = {
+            frequency: params.usage ? params.usage.frequency : null,
+            recharge: params.usage ? params.usage.recharge : -1
+        };
+        this.used = params.used || false;
         this.defense = params.defense;
         this.toHit = params.toHit;
         if (typeof(this.toHit) === "string") {
@@ -524,6 +555,11 @@ var DnD, Serializable, Roll, SavingThrow, Damage, Attack;
 
     Attack.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: true });
 
+    Attack.prototype.USAGE_AT_WILL = "At-Will";
+    Attack.prototype.USAGE_ENCOUNTER = "Encounter";
+    Attack.prototype.USAGE_DAILY = "Daily";
+    Attack.prototype.USAGE_RECHARGE = "Recharge";
+    
     Attack.prototype._toHitFromString = function(str, creature) {
         var i, abilities, mods;
         
@@ -624,6 +660,7 @@ var DnD, Serializable, Roll, SavingThrow, Damage, Attack;
     }
     
     DnD.Roll = Roll;
+    DnD.Recharge = Recharge;
     DnD.SavingThrow = SavingThrow;
     DnD.Damage = Damage;
     DnD.Attack = Attack;

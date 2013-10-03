@@ -310,6 +310,11 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             this.hp.temp = currentState.hp.temp;
             this.surges.current = currentState.surges.current;
             this.ap = currentState.ap;
+            for (i = 0; i < this.attacks.length; i++) {
+                if (currentState.attacks && currentState.attacks[ this.attacks[ i ].name ] && currentState.attacks[ this.attacks[ i ].name ].used) {
+                    this.attacks[ i ].used = true;
+                }
+            }
             this.effects = currentState.effects;
             for (i = 0; currentState.effects && i < currentState.effects.length; i++) {
                 actor.effects.push(new DnD.Effect(iQuery.extend({}, currentState.effects[ i ], { target: this })));
@@ -664,7 +669,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
     };
 
     Actor.prototype.startTurn = function() {
-        var ongoingDamage, handleEffect, handleImposedEffect, i, regen, tmp, msg;
+        var ongoingDamage, handleEffect, handleImposedEffect, i, recharge, regen, tmp, msg;
         
         ongoingDamage = (function(effect) {
             if (effect.name.toLowerCase() === "ongoing damage") {
@@ -700,6 +705,16 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             return r;
         }).bind(this);
         
+        for (i = 0; this.attacks && i < this.attacks.length; i++) {
+            if (this.attacks[ i ].used && this.attacks[ i ].usage.frequency === DnD.Attack.prototype.USAGE_RECHARGE && this.attacks[ i ].usage.recharge) {
+                recharge = new DnD.Recharge({ attack: this.attacks[ i ] });
+                recharge.roll();
+                if (recharge.isRecharged()) {
+                    this.attacks[ i ].used = false;
+                    this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: recharge.anchor() }));
+                }
+            }
+        }
         for (i = 0; this.effects && i < this.effects.length; i++) {
             tmp = handleEffect(this.effects[ i ]);
             msg = msg ? msg : tmp;
@@ -837,7 +852,8 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
     };
     
     Actor.prototype.raw = function() {
-        return {
+        var data, i, attack;
+        data = {
             id: this.id,
             type: this.type,
             name: this.name,
@@ -845,12 +861,18 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             defenses: { ac: this.defenses.ac, fort: this.defenses.fort, ref: this.defenses.ref, will: this.defenses.will },
             surges: { current: this.surges.current },
             ap: this.ap,
+            attacks: {},
             effects: this.rawArray(this.effects),
             imposedEffects: this.rawArray(this.imposedEffects),
             history: this.history.raw(),
             _turnTimer: this._turnTimer,
             _turnDurations: this._turnDurations
         };
+        for (i = 0; i < this.attacks.length; i++) {
+            attack = this.attacks[ i ];
+            data.attacks[ attack.name ] = { used: attack.used };
+        }
+        return data;
     };
     
     

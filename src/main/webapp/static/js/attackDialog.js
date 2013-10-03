@@ -73,7 +73,7 @@ var DnD;
         this.$attacks.children().remove();
         for (i = 0; i < this.attacker.attacks.length; i++) {
             attack = this.attacker.attacks[ i ];
-            jQuery("<a/>").addClass("list-group-item").attr("href", NO_URL).html(attack.name).data("attack", attack).appendTo(this.$attacks);
+            jQuery("<a/>").addClass("list-group-item" + (attack.usage.frequency ? " " + attack.usage.frequency.toLowerCase() : "") + (attack.used ? " used" : "")).attr("href", NO_URL).html(attack.name).data("attack", attack).appendTo(this.$attacks);
         }
         this.combatAdvantage = !!params.combatAdvantage;
         this._combatAdvantageChange();
@@ -107,6 +107,9 @@ var DnD;
                 playerRolls = { attack: { roll: parseInt(this.$playerAttackRoll.val(), 10), isCritical: this.$playerAttackCrit.val() === "crit", isFumble: this.$playerAttackCrit.val() === "fail" }, damage: parseInt(this.$playerDamageRoll.val(), 10) };
             }
             result = this.attacker.attack(this.attack, item, this.targets, this.combatAdvantage, playerRolls);
+            if (this.attack.usage.frequency && this.attack.usage.frequency !== Attack.prototype.USAGE_AT_WILL) {
+                this.attack.used = true;
+            }
             this.callback({ type: "takeDamage", attacker: this.attacker.id, attack: this.attack.name, hits: result.hits, misses: result.misses });
         } 
         else {

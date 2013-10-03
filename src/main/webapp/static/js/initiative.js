@@ -201,6 +201,9 @@ var DnD, safeConsole;
         this.$clearMonsters = jQuery("#clearMonsters").on({ click: this._clearMonsters.bind(this) });
         this.$clearHistory = jQuery("#clearHistory").on({ click: this._clearHistory.bind(this) });
         
+        this.$shortRest = jQuery("#shortRestButton").on({ click: this._shortRest.bind(this) });
+        this.$extendedRest = jQuery("#extendedRestButton").on({ click: this._extendedRest.bind(this) });
+        
         this.creatureDialog = new DnD.Dialog.Creature({
             $trigger: jQuery("#creatures"),
             callback: (function(toAdd) {
@@ -784,6 +787,78 @@ var DnD, safeConsole;
     };
 
 
+    Initiative.prototype._rest = function(isExtendedRest) {
+        var actors, i, actor, msg, j, attack;
+        
+        actors = [];
+        actor = this._getActor(this._current);
+        actor.card.makeCurrent(false);
+        actors.push(actor);
+        msg = actor.endTurn();
+        if (msg) {
+            this._addHistory(actor, msg);
+        }
+        this._current = this.order[ 0 ];
+        
+        this.round++;
+        
+        for (i = 0; i < this.actors.length; i++) {
+            actor = this.actors[ i ];
+            actor.history._round = this.round;
+            actor.hp.temp = 0;
+            if (isExtendedRest) {
+                actor.hp.current = actor.hp.total;
+                actor.surges.current = actor.surges.perDay;
+            }
+            for (j = 0; j < actor.attacks.length; j++) {
+                attack = actor.attacks[ j ];
+                if (attack.used && (isExtendedRest || attack.usage.frequency !== DnD.Attack.prototype.USAGE_DAILY)) {
+                    attack.used = false;
+                }
+            }
+            this._addHistory(actor, isExtendedRest ? "Takes an extended rest" : "Takes a short rest");
+            actor.history._round++;
+            this._messageDisplay({ 
+                type: "updateActor", 
+                id: actor.id, 
+                name: actor.name,
+                hp: {
+                    temp: actor.hp.temp,
+                    current: actor.hp.current,
+                    total: actor.hp.total
+                },
+                effects: Serializable.prototype.rawArray(actor.effects)
+            }, false);
+        }
+        
+        this.round++;
+        
+        actor = this._getActor(this._current);
+        actor.card.makeCurrent(true);
+        actors.push(actor);
+        msg = actor.startTurn();
+        if (msg) {
+            this._addHistory(actor, msg);
+        }
+        if (actor.hasCondition("dead")) {
+            this._next();
+            return;
+        }
+        this._render(true);
+        this._messageDisplay({ type: "changeTurn", current: this._current, actors: this.rawArray(actors) }, false);
+    };
+    
+    
+    Initiative.prototype._shortRest = function() {
+        this._rest(false);
+    };
+    
+    
+    Initiative.prototype._extendedRest = function() {
+        this._rest(true);
+    };
+    
+    
     Initiative.prototype._getActor = function(id) {
         var i;
         for (i = 0; i < this.actors.length; i++) {
