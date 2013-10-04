@@ -16,6 +16,7 @@ var DnD, safeConsole;
     function Initiative(params) {
         window.name = "admin";
         
+        this._created = false;
         this._current = null;
         this.actors = [];
         this.order = [];
@@ -48,7 +49,7 @@ var DnD, safeConsole;
         this.$table = null;
         this.$importDialog = null;
         this.$exportDialog = null;
-        
+
         this._init(params);
     }
 
@@ -69,14 +70,17 @@ var DnD, safeConsole;
                 console.info("Loaded from localStorage");
             }
         }
-        params.creatures = jQuery.extend({}, loadParty(), loadMonsters());
-        params = jQuery.extend({
-            historyEntries: {},
-            creatures: {},
-            actors: [],
-            history: { _includeSubject: true },
-            order: []
-        }, params);
+        params = jQuery.extend(
+            {
+                historyEntries: {},
+                creatures: {},
+                actors: [],
+                history: { _includeSubject: true },
+                order: []
+            }, 
+            params,
+            { creatures: jQuery.extend({}, loadParty(), loadMonsters()) }
+        );
         
         if (!params.historyEntries && params.history) {
             params.history = { _includeSubject: true };
@@ -182,74 +186,76 @@ var DnD, safeConsole;
     // DOM READY METHODS
     
     Initiative.prototype._create = function() {
-        this.$parent = jQuery(this._$target.length ? this._$target : "body");
+        if (!this._created) {
+            this.$parent = jQuery(this._$target.length ? this._$target : "body");
             
-        this.$display = jQuery("#display");
-        
-        this.$menuBar = jQuery("#header");
-        this.$round = jQuery("#round");
-        this.$previousButton = jQuery("#previous").on({ click: (this._previous).bind(this) });
-        this.$nextButton = jQuery("#next").on({ click: (this._next).bind(this) });
-        
-        this.$displayButton = jQuery("#open").on({ click: this._renderDisplay.bind(this, true) });
-        
-        this.$fileInput = jQuery("#fileInput").on({ change: this.initFromFile.bind(this) });
-        
-        this.$clearAll = jQuery("#clearAll").on({ click: this._clearAll.bind(this) });
-        this.$clearCreatures = jQuery("#clearCreatures").on({ click: this._clearCreatures.bind(this) });
-        this.$clearMonsters = jQuery("#clearMonsters").on({ click: this._clearMonsters.bind(this) });
-        this.$clearHistory = jQuery("#clearHistory").on({ click: this._clearHistory.bind(this) });
-        
-        this.$shortRest = jQuery("#shortRestButton").on({ click: this._shortRest.bind(this) });
-        this.$extendedRest = jQuery("#extendedRestButton").on({ click: this._extendedRest.bind(this) });
-        
-        this.creatureDialog = new DnD.Dialog.Creature({
-            $trigger: jQuery("#creatures"),
-            callback: (function(toAdd) {
-                var i, creature;
-                for (i = 0; i < toAdd.length; i++) {
-                    creature = toAdd[ i ];
-                    this._addActor(creature);
-                }
-                this._render(true);
-            }).bind(this) 
-        });
-        
-        this.exportDialog = new DnD.Dialog.Export({});
-        this.$export = jQuery("#export").on({ click: function(){
-            this.exportDialog.show(window.localStorage.getItem("initiative"));
-        }.bind(this) });
-        
-        this.imageDialog = new DnD.Dialog.Image({
-            $trigger: jQuery("#imageButton"),
-            toDisplay: this._messageDisplay.bind(this) 
-        });
+            this.$display = jQuery("#display");
+            
+            this.$menuBar = jQuery("#header");
+            this.$round = jQuery("#round");
+            this.$previousButton = jQuery("#previous").on({ click: (this._previous).bind(this) });
+            this.$nextButton = jQuery("#next").on({ click: (this._next).bind(this) });
+            
+            this.$displayButton = jQuery("#open").on({ click: this._renderDisplay.bind(this, true) });
+            
+            this.$fileInput = jQuery("#fileInput").on({ change: this.initFromFile.bind(this) });
+            
+            this.$clearAll = jQuery("#clearAll").on({ click: this._clearAll.bind(this) });
+            this.$clearCreatures = jQuery("#clearCreatures").on({ click: this._clearCreatures.bind(this) });
+            this.$clearMonsters = jQuery("#clearMonsters").on({ click: this._clearMonsters.bind(this) });
+            this.$clearHistory = jQuery("#clearHistory").on({ click: this._clearHistory.bind(this) });
+            
+            this.$shortRest = jQuery("#shortRestButton").on({ click: this._shortRest.bind(this) });
+            this.$extendedRest = jQuery("#extendedRestButton").on({ click: this._extendedRest.bind(this) });
+            
+            this.creatureDialog = new DnD.Dialog.Creature({
+                $trigger: jQuery("#creatures"),
+                callback: (function(toAdd) {
+                    var i, creature;
+                    for (i = 0; i < toAdd.length; i++) {
+                        creature = toAdd[ i ];
+                        this._addActor(creature);
+                    }
+                    this._render(true);
+                }).bind(this) 
+            });
+            
+            this.exportDialog = new DnD.Dialog.Export({});
+            this.$export = jQuery("#export").on({ click: function(){
+                this.exportDialog.show(window.localStorage.getItem("initiative"));
+            }.bind(this) });
+            
+            this.imageDialog = new DnD.Dialog.Image({
+                $trigger: jQuery("#imageButton"),
+                toDisplay: this._messageDisplay.bind(this) 
+            });
 
-        this.importDialog = new DnD.Dialog.Import({
-            $trigger: jQuery("#import"),
-            import: this._init.bind(this) 
-        });
+            this.importDialog = new DnD.Dialog.Import({
+                $trigger: jQuery("#import"),
+                import: this._init.bind(this) 
+            });
 
-        this.initiativeDialog = new DnD.Dialog.Initiative({ 
-            actors: this.actors, 
-            order: this.order, 
-            addHistory: this._addHistory.bind(this),
-            onchange: this._changeInitiative.bind(this) 
-        });
+            this.initiativeDialog = new DnD.Dialog.Initiative({ 
+                actors: this.actors, 
+                order: this.order, 
+                addHistory: this._addHistory.bind(this),
+                onchange: this._changeInitiative.bind(this) 
+            });
 
-        this.attackDialog = new DnD.Dialog.Attack({ callback: (function(msg) {
-            this._render(false);
-            this._messageDisplay(msg, false);
-        }).bind(this) });
+            this.attackDialog = new DnD.Dialog.Attack({ callback: (function(msg) {
+                this._render(false);
+                this._messageDisplay(msg, false);
+            }).bind(this) });
 
-        this.healDialog = new DnD.Dialog.Heal({ 
-            addHistory: this._addHistory.bind(this),
-            callback: (function(actor, changes) {
-                
-            }).bind(this)
-        });
-        
-        this._createBody();
+            this.healDialog = new DnD.Dialog.Heal({ 
+                addHistory: this._addHistory.bind(this),
+                callback: (function(actor, changes) {
+                    
+                }).bind(this)
+            });
+            
+            this._createBody();
+        }
         this._render(false);
     };
 

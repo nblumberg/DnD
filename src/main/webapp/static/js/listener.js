@@ -5,6 +5,7 @@ var DnD, safeConsole;
     
     function Listener() {
         this.$actorCards = {};
+        this.creatures = jQuery.extend({}, loadParty(), loadMonsters());
         this.actors = [];
         this.current = null;
         this.$imgDisplay = null;
