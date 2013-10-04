@@ -196,6 +196,10 @@ body.dialog { overflow: hidden; }
 #attacksDialog .error .playerAttackRoll, #attacksDialog .success .playerAttackRoll, #attacksDialog .warning .playerAttackRoll { border: 3px solid; }
 #playerAttackRoll { display: inline-block; }
 
+/* exportDialog */
+.exportDialog #exportDialog { display: block; }
+#exportDialog textarea { height: 100%; width: 100%; }
+
 /* healDialog */
 .healDialog #healDialog { display: block; }
 #healDialog .column { margin: 0 auto; max-width: 400px; }
@@ -210,6 +214,10 @@ body.dialog { overflow: hidden; }
 #imageDialog .fullSize { display: none; left: 0; max-height: 100%; max-width: 100%; position: absolute; top: 0; }
 #imageDialog .images {}
 #imageDialog .images .thmbnl { height: 40px; margin: 0 3px 3px 0; }
+
+/* importDialog */
+.importDialog #importDialog { display: block; }
+#importDialog textarea { height: 100%; width: 100%; }
 
 /* initiativeDialog */
 .initiativeDialog #initiativeDialog { display: block; }

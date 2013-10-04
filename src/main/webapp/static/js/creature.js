@@ -317,7 +317,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             }
             this.effects = currentState.effects;
             for (i = 0; currentState.effects && i < currentState.effects.length; i++) {
-                actor.effects.push(new DnD.Effect(iQuery.extend({}, currentState.effects[ i ], { target: this })));
+                this.effects.push(new DnD.Effect(jQuery.extend({}, currentState.effects[ i ], { target: this })));
             }
         }
     };

@@ -69,8 +69,8 @@ var DnD, safeConsole;
             if (params) {
                 console.info("Loaded from localStorage");
             }
-            params.creatures = jQuery.extend({}, loadParty(), loadMonsters());
         }
+        params.creatures = jQuery.extend({}, loadParty(), loadMonsters());
         params = jQuery.extend({
             historyEntries: {},
             creatures: {},
@@ -193,9 +193,6 @@ var DnD, safeConsole;
         
         this.$fileInput = jQuery("#fileInput").on({ change: this.initFromFile.bind(this) });
         
-        this.$import = jQuery("#import").on({ click: this._import.bind(this) });
-        this.$export = jQuery("#export").on({ click: this._export.bind(this) });
-        
         this.$clearAll = jQuery("#clearAll").on({ click: this._clearAll.bind(this) });
         this.$clearCreatures = jQuery("#clearCreatures").on({ click: this._clearCreatures.bind(this) });
         this.$clearMonsters = jQuery("#clearMonsters").on({ click: this._clearMonsters.bind(this) });
@@ -216,9 +213,21 @@ var DnD, safeConsole;
             }).bind(this) 
         });
         
+        this.exportDialog = new DnD.Dialog.Export({
+            import: this._import.bind(this) 
+        });
+        this.$export = jQuery("#export").on({ click: function(){
+            this.exportDialog.show(window.localStorage.getItem("initiative"));
+        }.bind(this) });
+        
         this.imageDialog = new DnD.Dialog.Image({
             $trigger: jQuery("#imageButton"),
             toDisplay: this._messageDisplay.bind(this) 
+        });
+
+        this.importDialog = new DnD.Dialog.Import({
+            $trigger: jQuery("#import"),
+            import: this._import.bind(this) 
         });
 
         this.initiativeDialog = new DnD.Dialog.Initiative({ 
@@ -567,57 +576,13 @@ var DnD, safeConsole;
         }
     };
 
-    Initiative.prototype._import = function() {
-        var data, $textarea;
-        if (!this.$importDialog) {
-            $textarea = jQuery("<textarea/>").css({ height: "100%", width: "100%" });
-            this.$importDialog = jQuery("<div/>").append($textarea).dialog({ 
-                autoOpen: false, 
-                modal: true, 
-                title: "Import", 
-                height: window.innerHeight - 200, 
-                width: "85%",
-                position: [ "center", 50 ],
-                buttons: [
-                          { 
-                              text: "Load", click: (function() {
-                                  try {
-                                      this._init(JSON.parse($textarea.val()));
-                                  }
-                                  catch (e) {
-                                      console.error(e.toString());
-                                  }
-                              }).bind(this) 
-                          }
-                ]
-            });
+    Initiative.prototype._import = function(data) {
+        try {
+            this._init(data);
         }
-        else {
-            $textarea = this.$importDialog.find("textarea");
+        catch (e) {
+            console.error(e.toString());
         }
-        this.$importDialog.dialog("open");
-    };
-
-    Initiative.prototype._export = function() {
-        var data, $textarea;
-        if (!this.$exportDialog) {
-            $textarea = jQuery("<textarea/>").css({ height: "100%", width: "100%" });
-            this.$exportDialog = jQuery("<div/>").append($textarea).dialog({ 
-                autoOpen: false, 
-                modal: true, 
-                title: "Export", 
-                height: window.innerHeight - 200, 
-                width: "85%",
-                position: [ "center", 50 ]
-            });
-        }
-        else {
-            $textarea = this.$exportDialog.find("textarea");
-        }
-        data = window.localStorage.getItem("initiative");
-        $textarea.val(data);
-        this.$exportDialog.dialog("open");
-        $textarea[0].select();
     };
 
     Initiative.prototype._clearAll = function() {
