@@ -521,7 +521,7 @@ var DnD, safeConsole;
     
     Initiative.prototype._messageDisplay = function(msg, createDisplay) {
         var json;
-        if (createDisplay && !this.display) {
+        if (createDisplay && !(this.display && !this.display.closed)) {
             // Create a new window
             // TODO: what about the initial msg?
             this.display = window.open("initiative.html", "Initiative", "location=0,status=0,toolbar=0", false);

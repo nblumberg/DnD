@@ -38,7 +38,7 @@ var DnD, safeConsole;
             for (i = 0; i < data.order.length; i++) {
                 for (j = 0; j < data.actors.length; j++) {
                     if (data.actors[ j ].id === data.order[ i ]) {
-                        actor = new Actor(data.actors[ j ]);
+                        actor = new Actor(this.creatures[ data.actors[ j ].type ], 0, data.actors[ j ]);
                         this.actors.push(actor);
                         if (this.$actorCards.length) {
                             this.createCard(actor, i, data.order.length);
