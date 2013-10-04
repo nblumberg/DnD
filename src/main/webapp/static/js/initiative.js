@@ -22,7 +22,6 @@ var DnD, safeConsole;
         this.history = null;
         this.round = 1;
         this._roundTimer = null;
-        this._current = null;
         this._$target = null; 
         this.$parent = null;
         this.$display = null;
@@ -136,7 +135,10 @@ var DnD, safeConsole;
 
         this.round = Math.max(params.round, 1) || 1;
         this._roundTimer = (new Date()).getTime();
-        this._current = params._current || this.order[ 0 ];
+        this._current = this.order[ 0 ];
+        if (params._current && this._getActor(params._current)) {
+            this._current = params._current;
+        }
         this._$target = params.target ? jQuery(params.target) : ""; 
         
         this._autoSave();
@@ -213,9 +215,7 @@ var DnD, safeConsole;
             }).bind(this) 
         });
         
-        this.exportDialog = new DnD.Dialog.Export({
-            import: this._import.bind(this) 
-        });
+        this.exportDialog = new DnD.Dialog.Export({});
         this.$export = jQuery("#export").on({ click: function(){
             this.exportDialog.show(window.localStorage.getItem("initiative"));
         }.bind(this) });
@@ -227,7 +227,7 @@ var DnD, safeConsole;
 
         this.importDialog = new DnD.Dialog.Import({
             $trigger: jQuery("#import"),
-            import: this._import.bind(this) 
+            import: this._init.bind(this) 
         });
 
         this.initiativeDialog = new DnD.Dialog.Initiative({ 
@@ -573,15 +573,6 @@ var DnD, safeConsole;
         catch (e) {
             window.localStorage.clear();
             window.localStorage.setItem("initiative", data);
-        }
-    };
-
-    Initiative.prototype._import = function(data) {
-        try {
-            this._init(data);
-        }
-        catch (e) {
-            console.error(e.toString());
         }
     };
 

@@ -77,6 +77,11 @@ var DnD;
             this.$parent = $parent;
             this.$tr.appendTo(this.$parent);
         }
+        
+        if (!this.$up) {
+            return; // Don't reattach before _init()
+        }
+        
         // Removing elements from the DOM seems to break their event listeners so reattach them
         this.$up.on({ click: this.params.order.up });
         this.$order.on({ click: this.params.order.set });

@@ -52,6 +52,7 @@ var DnD;
         }
 
         this.import(data);
+        this.hide();
     };
 
     
