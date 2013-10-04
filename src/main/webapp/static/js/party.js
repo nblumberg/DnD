@@ -4,6 +4,7 @@ function loadParty() {
              name: "Barases", isPC: true, level: 11, image: "../images/portraits/barases.jpg", // "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg",  
              abilities: { STR: 12, CON: 19, DEX: 11, INT: 11, WIS: 21, CHA: 11 },
              skills: { acrobatics: 4, arcana: 7, athletics: 14, bluff: 10, diplomacy: 5, dungeoneering: 10, endurance: 8, heal: 10, history: 5, insight: 10, intimidate: 5, nature: 17, perception: 15, religion: 5, stealth: 6, streetwise: 5, thievery: 6 },
+             ap: 1,
              hp: { total: 96 },
              surges: { perDay: 11, current: 11 },
              defenses: { ac: 25, fort: 27, ref: 21, will: 26 },
@@ -34,6 +35,7 @@ function loadParty() {
              name: "Smack", isPC: true, level: 11, image: "../images/portraits/smack.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862  
              abilities: { STR: 20, CON: 17, DEX: 12, INT: 2, WIS: 16, CHA: 6 },
              skills: { acrobatics: 4, arcana: 7, athletics: 14, bluff: 10, diplomacy: 5, dungeoneering: 10, endurance: 8, heal: 10, history: 5, insight: 10, intimidate: 5, nature: 17, perception: 15, religion: 5, stealth: 6, streetwise: 5, thievery: 6 },
+             ap: 0,
              hp: { total: 48 },
              surges: { perDay: 0, current: 0 },
              defenses: { ac: 25, fort: 27, ref: 23, will: 27 },
@@ -49,6 +51,7 @@ function loadParty() {
              name: "Oomooroo", isPC: true, level: 11, image: "../images/portraits/owlbear.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862  
              abilities: { STR: 20, CON: 17, DEX: 12, INT: 2, WIS: 16, CHA: 6 },
              skills: { acrobatics: 4, arcana: 7, athletics: 14, bluff: 10, diplomacy: 5, dungeoneering: 10, endurance: 8, heal: 10, history: 5, insight: 10, intimidate: 5, nature: 17, perception: 15, religion: 5, stealth: 6, streetwise: 5, thievery: 6 },
+             ap: 0,
              hp: { total: 48 },
              surges: { perDay: 0, current: 0 },
              defenses: { ac: 25, fort: 27, ref: 23, will: 27 },
@@ -64,6 +67,7 @@ function loadParty() {
              name: "Bin", isPC: true, level: 11, image: "../images/portraits/bin.jpg", // "http://wizards.com/dnd/images/386_wr_changeling.jpg", 
              abilities: { STR: 15, CON: 18, DEX: 16, INT: 22, WIS: 19, CHA: 12 },
              skills: { acrobatics: 8, arcana: 16, athletics: 7, bluff: 8, diplomacy: 6, dungeoneering: 14, endurance: 11, heal: 9, history: 16, insight: 11, intimidate: 6, nature: 9, perception: 14, religion: 11, stealth: 10, streetwise: 6, thievery: 13 },
+             ap: 1,
              hp: { total: 85 },
              surges: { perDay: 10, current: 10 },
              defenses: { ac: 26, fort: 22, ref: 23, will: 23 },
@@ -96,6 +100,7 @@ function loadParty() {
              name: "Camulos", isPC: true, level: 10, image: "../images/portraits/camulos.png", 
              abilities: { STR: 23, CON: 19, DEX: 12, INT: 11, WIS: 11, CHA: 9 },
              skills: { acrobatics: 6, arcana: 5, athletics: 18, bluff: 4, diplomacy: 4, dungeoneering: 5, endurance: 14, heal: 10, history: 5, insight: 7, intimidate: 4, nature: 7, perception: 7, religion: 5, stealth: 6, streetwise: 4, thievery: 6 },
+             ap: 1,
              hp: { total: 94 },
              surges: { perDay: 13, current: 13 },
              defenses: { ac: 28, fort: 25, ref: 20, will: 18 },
@@ -137,6 +142,7 @@ function loadParty() {
              name: "Festivus", isPC: true, level: 11, image: "../images/portraits/festivus.jpg", // "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg",
              abilities: { STR: 19, CON: 17, DEX: 11, INT: 17, WIS: 11, CHA: 21 },
              skills: { acrobatics: 9, arcana: 15, athletics: 13, bluff: 16, diplomacy: 15, dungeoneering: 9, endurance: 12, heal: 9, history: 17, insight: 9, intimidate: 16, nature: 9, perception: 10, religion: 15, stealth: 9, streetwise: 17, thievery: 10 },
+             ap: 1,
              hp: { total: 84 },
              surges: { perDay: 9, current: 9 },
              defenses: { ac: 22, fort: 21, ref: 20, will: 24 },
@@ -178,6 +184,7 @@ function loadParty() {
              name: "Kallista", isPC: true, level: 11, image: "../images/portraits/kallista.jpg", // "http://www.wizards.com/dnd/images/Dragon_373/11.jpg", 
              abilities: { STR: 15, CON: 13, DEX: 21, INT: 15, WIS: 13, CHA: 23 },
              skills: { acrobatics: 21, arcana: 7, athletics: 18, bluff: 19, diplomacy: 11, dungeoneering: 6, endurance: 6, heal: 6, history: 7, insight: 6, intimidate: 13, nature: 6, perception: 13, religion: 7, stealth: 18, streetwise: 11, thievery: 15 },
+             ap: 1,
              hp: { total: 80 },
              surges: { perDay: 8, current: 8 },
              defenses: { ac: 24, fort: 19, ref: 24, will: 23 },
@@ -216,6 +223,7 @@ function loadParty() {
              name: "Karrion", isPC: true, level: 11, image: "../images/portraits/karrion.jpg", // "http://rogueartfx.com/images/tiefling03.jpg",  
              abilities: { STR: 20, CON: 17, DEX: 20, INT: 19, WIS: 17, CHA: 17 },
              skills: { acrobatics: 16, arcana: 9, athletics: 15, bluff: 10, diplomacy: 8, dungeoneering: 13, endurance: 8, heal: 8, history: 9, insight: 8, intimidate: 8, nature: 14, perception: 14, religion: 9, stealth: 17, streetwise: 8, thievery: 10 },
+             ap: 1,
              hp: { total: 84 },
              surges: { perDay: 9, current: 9 },
              defenses: { ac: 25, fort: 23, ref: 23, will: 20 },
@@ -256,6 +264,7 @@ function loadParty() {
              name: "Kitara", isPC: true, level: 11, image: "../images/portraits/kitara.jpg", // "http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg", 
              abilities: { STR: 17, CON: 15, DEX: 21, INT: 23, WIS: 17, CHA: 17 },
              skills: { acrobatics: 12, arcana: 16, athletics: 8, bluff: 10, diplomacy: 13, dungeoneering: 8, endurance: 7, heal: 8, history: 11, insight: 8, intimidate: 10, nature: 8, perception: 13, religion: 11, stealth: 13, streetwise: 8, thievery: 15 },
+             ap: 1,
              hp: { total: 82 },
              surges: { perDay: 9, current: 9 },
              defenses: { ac: 27, fort: 22, ref: 23, will: 22 },
@@ -317,6 +326,7 @@ function loadParty() {
              name: "Lechonero", isPC: true, level: 11, image: "../images/portraits/lechonero.jpg", // "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg", 
              abilities: { STR: 17, CON: 15, DEX: 22, INT: 15, WIS: 16, CHA: 11 },
              skills: { acrobatics: 11, arcana: 7, athletics: 15, bluff: 5, diplomacy: 5, dungeoneering: 8, endurance: 12, heal: 13, history: 7, insight: 8, intimidate: 5, nature: 17, perception: 17, religion: 7, stealth: 13, streetwise: 10, thievery: 11 },
+             ap: 1,
              hp: { total: 77 },
              surges: { perDay: 8, current: 8 },
              defenses: { ac: 25, fort: 21, ref: 24, will: 20 },
@@ -348,6 +358,7 @@ function loadParty() {
         },
         Balugh: { 
             name: "Balugh", isPC: true, level: 11, image: "../images/portraits/balugh.jpg", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+            ap: 0,
             hp: { total: 116 },
             surges: { perDay: 0, current: 0 },
             abilities: { STR: 16, CON: 14, DEX: 12, INT: 6, WIS: 12, CHA: 6 },
@@ -360,6 +371,7 @@ function loadParty() {
         },
         Ringo: { 
             name: "Ringo", isPC: true, level: 5, image: "../images/portraits/ringo.jpg", // http://beta.ditzie.com/gallery/main.php?g2_view=core.DownloadItem&g2_itemId=14896&g2_serialNumber=1
+            ap: 0,
             hp: { total: 62 },
             surges: { perDay: 0, current: 0 },
             abilities: { STR: 18, CON: 10, DEX: 14, INT: 1, WIS: 12, CHA: 8 },
@@ -373,6 +385,7 @@ function loadParty() {
         },
         Smudge: { 
             name: "Smudge", isPC: true, level: 12, image: "../images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
+            ap: 0,
             hp: { total: 97 },
             surges: { perDay: 0, current: 0 },
             abilities: { STR: 18, CON: 13, DEX: 19, INT: 2, WIS: 13, CHA: 8 },
@@ -389,6 +402,7 @@ function loadParty() {
             name: "Melvin", isPC: true, level: 10, image: "../images/portraits/melvin.jpg", 
             abilities: { STR: 18, CON: 18, DEX: 19, INT: 14, WIS: 19, CHA: 14 },
             skills: { acrobatics: 16, arcana: 7, athletics: 16, bluff: 7, diplomacy: 7, dungeoneering: 9, endurance: 9, heal: 9, history: 7, insight: 10, intimidate: 7, nature: 11, perception: 19, religion: 7, stealth: 14, streetwise: 7, thievery: 9 },
+            ap: 1,
             hp: { total: 86 },
             surges: { perDay: 12, current: 12 },
             defenses: { ac: 26, fort: 27, ref: 26, will: 26 },
@@ -421,6 +435,7 @@ function loadParty() {
        },
        "Tokk'it": {
            name: "Tokk'it", isPC: true, level: 11, image: "../images/portraits/tokk_it.jpg", // http://images.community.wizards.com/community.wizards.com/user/sotp_seamus/character_pictures/4223f53dc5c63a22aab6cc8ac8031d16.jpg?v=115650
+           ap: 0,
            hp: { total: 108 },
            surges: { perDay: 12, current: 12 },
            defenses: { ac: 27, fort: 22, ref: 23, will: 23 },

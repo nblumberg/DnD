@@ -127,7 +127,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         this.attackBonuses = params.attackBonuses || [];
         this.attacks = params.attacks || [];
         this.init = params.init || 0;
-        this.ap = params.ap || 0;
+        this.ap = params.ap || (this.isPC ? 1 : 0);
         this.effects = [];
         this.imposedEffects = [];
         this.move = params.move || 6;
@@ -306,6 +306,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         if (currentState) {
             // Update new Actor with current state from raw data
             this.name = currentState.name;
+            this.ap = typeof(currentState.ap) === "number" ? currentState.ap : this.ap;
             this.hp.current = currentState.hp.current;
             this.hp.temp = currentState.hp.temp;
             this.surges.current = currentState.surges.current;

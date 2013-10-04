@@ -37,6 +37,7 @@ var DnD;
         this.hpTotal = null;
         this.surgesCurrent = null;
         this.surgesPerDay = null;
+        this.ap = null;
         this.history = params.history;
         
         this.$tr = jQuery("<tr/>").attr("id", this.actor.name + "_row").data("actor", this.actor).appendTo(params.$table);
@@ -91,6 +92,7 @@ var DnD;
         this.hpTotal.reattach();
         this.surgesCurrent.reattach();
         this.surgesPerDay.reattach();
+        this.ap.reattach();
         
         this.$attack.on({ click: this.params.attack });
         this.$heal.on({ click: this.params.heal });
@@ -169,6 +171,11 @@ var DnD;
             var oldValue = this.actor.surges.perDay;
             this.actor.surges.perDay = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "surges.perDay", oldValue: oldValue, newValue: this.actor.surges.perDay });
+        }).bind(this) });
+        this.ap = new Editor({ $parent: this.$tr.find(".hp .ap .editor"), tagName: "span", html: this.actor.ap, onchange: (function(v) {
+            var oldValue = this.actor.ap;
+            this.actor.ap = parseInt(v, 10);
+            this.actor.dispatchEvent({ type: "change", property: "ap", oldValue: oldValue, newValue: this.actor.ap });
         }).bind(this) });
                     
         this.$attack = this.$tr.find(".attack").on({ click: this.params.attack });
