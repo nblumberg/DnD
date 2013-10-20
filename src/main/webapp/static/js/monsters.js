@@ -373,8 +373,8 @@ function loadMonsters() {
                       { name: "Psychic Barrage", usage: { frequency: "Recharge", recharge: 6 }, target: { area: "burst", size: 1, range: 20 }, toHit: 16, defense: "Will", damage: { amount: "1d6+3", type: "psychic" }, effects: [ { name: "ongoing damage", amount: 5, type: "psychic", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
               ]
         },
-        "Githyanki Myrmidons": { 
-            name: "Githyanki Myrmidons", level: 12, image: "../images/portraits/githyanki_thug.jpg",
+        "Githyanki Myrmidon": { 
+            name: "Githyanki Myrmidon", level: 12, image: "../images/portraits/githyanki_thug.jpg",
             hp: { total: 1 },
             defenses: { ac: 28, fort: 24, ref: 23, will: 24 },
             init: 12, speed: 5,
