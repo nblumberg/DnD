@@ -126,6 +126,7 @@ td.cardHolder { padding: 0; }
 .creaturePanel .event.hit .types .type { min-height: 100%; overflow: hidden; position: relative; }
 .creaturePanel .event.hit .types img.damage { display: inline; }
 .creaturePanel .event.hit .types .type span { left: 25%; position: absolute; }
+.creaturePanel .timer .content { color: lime; font-size: 24px; font-weight: bold; text-shadow: 3px 3px black; }
 
 /* history */
 .history { position: relative; }

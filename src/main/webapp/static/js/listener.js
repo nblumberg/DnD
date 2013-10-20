@@ -8,6 +8,7 @@ var DnD, safeConsole;
         this.creatures = jQuery.extend({}, loadParty(), loadMonsters());
         this.actors = [];
         this.current = null;
+        this.messages = [];
         this.$imgDisplay = null;
         this.$img = null;
         this.$highlight = null;
@@ -98,7 +99,7 @@ var DnD, safeConsole;
             this.current = data.current;
             actor = this.findActor(this.current);
             actor.card.makeCurrent(true);
-            this.updateActors(data.actors);
+            //this.updateActors(data.actors);
         };
         
         this.attack = function(data) {
@@ -202,14 +203,22 @@ var DnD, safeConsole;
         };
         
         this.receiveMessage = function(event) {
-            var data;
-            data = JSON.parse(event.data);
-            if (jQuery.isFunction(this[ data.type ])) {
+            this.messages.push(event);
+        };
+        
+        this.handleMessage = function() {
+            var message, data;
+            message = this.messages.shift();
+            if (!message) {
+                return;
+            }
+            data = JSON.parse(message.data);
+            if (typeof(this[ data.type ]) === "function") {
                 this[ data.type ]( data );
             }
-            else {
-                this.refresh(data);
-            }
+//            else {
+//                this.refresh(data);
+//            }
         };
         
         window.addEventListener("message", this.receiveMessage.bind(this), false);
@@ -223,6 +232,8 @@ var DnD, safeConsole;
             for (i = 0; i < this.actors.length; i++) {
                 createCard(this.actors[ i ], i, this.actors.length);
             }
+            
+            setInterval(this.handleMessage.bind(this), 1000);
         }).bind(this));
     }
     

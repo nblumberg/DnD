@@ -13,8 +13,6 @@ var DnD, safeConsole;
      * @param params.showPcHp {Boolean} Display PC HP
      */
     function ActorCard(params) {
-        var editor, i;
-
         ActorCard.cards.push(this);
         
         this.params = params || {};
@@ -25,11 +23,11 @@ var DnD, safeConsole;
         this.portraitWidth = 0;
         this.isLandscape = false;
         this.img = new Image();
-        this.img.onload = (function() {
+        this.img.onload = function() {
             this.portraitHeight = this.img.naturalHeight;
             this.portraitWidth = this.img.naturalWidth;
             this.isLandscape = this.portraitWidth >= this.portraitHeight;
-        }).bind(this);
+        }.bind(this);
         this.img.src = this.actor.image;
         
         this.subPanel = {};
@@ -46,7 +44,7 @@ var DnD, safeConsole;
     ActorCard.cards = [];
     ActorCard.CARD_SIZE = 240;
     ActorCard.MAX_COLUMNS = 6;
-    ActorCard.resizeAll = function(event) {
+    ActorCard.resizeAll = function() {
         var cards, rows, columns, height, width, i;
         cards = ActorCard.cards.length;
         rows = Math.ceil(cards / ActorCard.MAX_COLUMNS);
@@ -65,13 +63,20 @@ var DnD, safeConsole;
      * Display an ActorCard as being the current turn (or not)
      */
     ActorCard.prototype.makeCurrent = function(isCurrent) {
-        if (!this.$panel) {
-            return;
-        }
-        this.$panel[ isCurrent ? "addClass" : "removeClass" ]("current");
         if (this.event) {
             this.event.hide();
         }
+        if (!this.$panel) {
+            return;
+        }
+        if (isCurrent && !this.isCurrent() || !isCurrent && this.isCurrent()) {
+            this.$panel[ isCurrent ? "addClass" : "removeClass" ]("current");
+            this.timer[ isCurrent ? "start" : "stop" ]();
+        }
+    };
+
+    ActorCard.prototype.isCurrent = function() {
+        return this.$panel && this.$panel.hasClass("current");
     };
 
     /**
@@ -93,7 +98,7 @@ var DnD, safeConsole;
         ActorCard.resizeAll();
     };
 
-    ActorCard.prototype.refresh = function(isCurrent) {
+    ActorCard.prototype.refresh = function() {
         this.makeBloodied(this.actor.isBloodied());
         this._renderName();
         this.updateConditions();
@@ -103,7 +108,7 @@ var DnD, safeConsole;
      * Display all of an Actor's Effects on their ActorCard
      */
     ActorCard.prototype.updateConditions = function() {
-        var i, effect, j, name, total;
+        var i, effect, total;
         // Clear
         this.subPanel.$effects.children().remove();
         // Count conditions (including children of "multiple" effects) for sizing
@@ -152,8 +157,11 @@ var DnD, safeConsole;
     
     // Private methods
     
-    ActorCard.prototype._init = function(responseText, textStatus, jqXHR) {
+    ActorCard.prototype._init = function() { // responseText, textStatus, jqXHR
         this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
+        
+        this.subPanel.$timer = this.$panel.find(".timer .content");
+        this.timer = new ActorCard.Timer(this.subPanel.$timer);
         
         this.makeCurrent(this.params.isCurrent);
         if (this.actor.isBloodied()) {
@@ -174,7 +182,7 @@ var DnD, safeConsole;
     };
 
     ActorCard.prototype._resize = function(height, width) {
-        var style, size;
+        var style;
         if (this.params.staticSize) {
             return;
         }
@@ -221,7 +229,7 @@ var DnD, safeConsole;
         this._resizeConditions();
     };
     
-    ActorCard.prototype._resizeConditions = function(event) {
+    ActorCard.prototype._resizeConditions = function() {
         var count, rows, columns, height, width, i;
         count = this.conditions.length;
         rows = Math.max(3, Math.ceil(count / ActorCard.Condition.MAX_COLUMNS));
@@ -254,7 +262,7 @@ var DnD, safeConsole;
     ActorCard.Condition.MAX_COLUMNS = 4;
     
     ActorCard.Condition.prototype._render = function() {
-        var i, condition, title;
+        var condition, title;
         this.$container = jQuery("<div/>").addClass("condition").on({ click: this._clickHandler.bind(this) });
         condition = DnD.Effect.CONDITIONS[ this.effect.name.toLowerCase() ];
         if (this.effect.name.toLowerCase() === "ongoing damage") {
@@ -301,7 +309,6 @@ var DnD, safeConsole;
      * @param params.isMiss {Boolean}
      */
     ActorCard.Event = function(params) {
-        var height, i, $type, dmg, $image, condition, $amount;
         if (!params) {
             return;
         }
@@ -362,7 +369,7 @@ var DnD, safeConsole;
      * TODO: replace with static HTML partial load
      */
     ActorCard.Event.prototype._renderDamage = function(height, imageSrc, amount, color) {
-        var $type, dmg, $image, condition, $text;
+        var $type, $image, $text;
         $type = jQuery("<span/>").addClass("type").appendTo(this.$types).css({ height: height });
         $image = jQuery(new Image()).css({ height: height }).addClass("damage").attr("src", imageSrc).appendTo($type);
         if (typeof(amount) !== "undefined" && amount !== null) {
@@ -387,6 +394,40 @@ var DnD, safeConsole;
         if (duration) {
             setTimeout(this.hide.bind(this), duration);
         }
+    };
+
+    
+    ActorCard.Timer = function($target) {
+        this.$target = $target;
+        this.time = 0;
+        this.interval = 0;
+    };
+    
+    ActorCard.Timer.INTERVAL = 1000;
+
+    ActorCard.Timer.prototype.start = function() {
+        this.time = 0;
+        this.interval = setInterval(this._tick.bind(this), ActorCard.Timer.INTERVAL);
+    };
+
+    ActorCard.Timer.prototype._tick = function() {
+        var t, h, m, s, str;
+        this.time += ActorCard.Timer.INTERVAL;
+        t = this.time;
+        h = Math.floor(t / 3600000);
+        t -= h * 3600000;
+        m = Math.floor(t / 60000);
+        t -= m * 60000;
+        m = (m > 0 || h) && m < 10 ? "0" + m : m;
+        s = Math.floor(t / 1000);
+        s = s < 10 ? "0" + s : s;
+        str = (h ? h + ":" : "") + m + ":" + s;
+        this.$target.html(str);
+    };
+
+    ActorCard.Timer.prototype.stop = function() {
+        clearInterval(this.interval);
+        this.$target.html("");
     };
 
     

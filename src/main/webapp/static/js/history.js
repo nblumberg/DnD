@@ -353,7 +353,7 @@ var DnD;
         this._getSubjectName();
         this.message = params.message;
         this.round = params.round;
-        if (!this.subject) {
+        if (!this.subject && !this.subjectName) {
             console.error("History.Entry " + this.message + "(" + this.id + ", round " + this.round + ") created with no subject");
         }
     };
