@@ -56,6 +56,7 @@ var DnD;
         }).bind(this) });
         this.$healingExtra = this.$dialog.find("#healingExtra");
         this.buttons.$heal = this.$dialog.find(".healBtn").on({ click: this._resolveHeal.bind(this) });
+        this._onOkButtonClick = this._resolveHeal.bind(this);
     };
     
     HealDialog.prototype._onShow = function() {

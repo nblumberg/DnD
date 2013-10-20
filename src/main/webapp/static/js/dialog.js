@@ -9,6 +9,9 @@ var DnD;
             if (event.keyCode === 27) { // Esc
                 $body.removeClass("dialog");
             }
+            else if (event.keyCode === 13 && Dialog.current) { // Enter
+                Dialog.current._onOkButtonClick();
+            }
         });
     });
     
@@ -28,6 +31,7 @@ var DnD;
     }
     
     Dialog.prototype = new EventDispatcher();
+    Dialog.current = null;
     
     // INITIALIZATION METHODS
     
@@ -94,14 +98,20 @@ var DnD;
         // Overridden by subclass
     };
     
+    Dialog.prototype._onOkButtonClick = function() {
+        // Overridden by subclass
+    };
+    
     // PUBLIC METHODS
     
     Dialog.prototype.show = function() {
+        Dialog.current = this;
         $body.addClass("dialog " + this.id);
         this._onShow();
     };
     
     Dialog.prototype.hide = function() {
+        Dialog.current = null;
         $body.removeClass("dialog " + this.id);
     };
     

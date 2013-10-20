@@ -29,6 +29,7 @@ var DnD;
     
     ExportDialog.prototype._onReady = function() {
         this.$export = this.$dialog.find("#exportText");
+        this._onOkButtonClick = this.hide.bind(this);
     };
     
     ExportDialog.prototype._onShow = function() {

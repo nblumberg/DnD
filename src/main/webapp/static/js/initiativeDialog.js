@@ -44,6 +44,7 @@ var DnD, safeConsole;
         this.$sortable = this.$body.find(".sortable");
         this.buttons.$roll = this.$dialog.find(".roll").on({ click: this._rollInitiative.bind(this) });
         this.buttons.$update = this.$dialog.find(".update").on({ click: this._resolveInitiative.bind(this) });
+        this._onOkButtonClick = this._resolveInitiative.bind(this);
 
         this.$sortable.sortable({ items: "li", update: this._onSortableUpdate.bind(this) });
         this.$sortable.disableSelection();

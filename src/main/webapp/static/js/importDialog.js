@@ -33,6 +33,7 @@ var DnD;
     ImportDialog.prototype._onReady = function() {
         this.$import = this.$dialog.find("#importText");
         this.buttons.$import = this.$dialog.find(".importBtn").on({ click: this._doImport.bind(this) });
+        this._onOkButtonClick = this._doImport.bind(this);
     };
     
     ImportDialog.prototype._onShow = function() {

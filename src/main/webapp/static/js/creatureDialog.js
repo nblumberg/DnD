@@ -38,6 +38,7 @@ var DnD;
         this.$add = this.$dialog.find(".add").on({ click: this._add.bind(this) });
         this.$remove = this.$dialog.find(".remove").on({ click: this._remove.bind(this) });
         this.buttons.$ok = this.$dialog.find(".btn-primary").on({ click: this._ok.bind(this) });
+        this._onOkButtonClick = this._ok.bind(this);
     };
     
     CreatureDialog.prototype._onShow = function() {
@@ -103,6 +104,7 @@ var DnD;
             toAdd.push(jQuery(this).data("creature"));
         });
         this.callback(toAdd);
+        this.hide();
     };
         
     

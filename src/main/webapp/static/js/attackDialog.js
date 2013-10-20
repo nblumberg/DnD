@@ -57,6 +57,7 @@ var DnD;
         this.$playerAttackCrit = this.$dialog.find("#playerAttackCrit").on({ change: this._playerAttackChange.bind(this) });
         this.$playerDamageRoll = this.$dialog.find("#playerDamageRoll");
         this.buttons.$attack = this.$dialog.find(".attackBtn").on({ click: this._resolveAttack.bind(this) });
+        this._onOkButtonClick = this._resolveAttack.bind(this);
     };
     
     // OVERRIDDEN METHODS
