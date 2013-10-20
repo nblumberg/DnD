@@ -1,4 +1,6 @@
-var DnD, safeConsole;
+/* global safeConsole */
+/* exported DnD */
+var DnD;
 
 (function(jQuery, console) {
     "use strict";
@@ -6,6 +8,8 @@ var DnD, safeConsole;
     if (!DnD) {
         DnD = {};
     }
+    
+    var storage = new DnD.Storage();
     
     // CONSTRUCTOR & INITIALIZATION METHODS
     
@@ -59,16 +63,16 @@ var DnD, safeConsole;
         var p, i, j, actor, creature, count;
 
         if (!params) {
-            params = {};
-            if (window.localStorage || window.localStorage.getItem("initiative")) {
-                try {
-                    params = JSON.parse(window.localStorage.getItem("initiative"));
+            storage.read("initiative", function(data) {
+                if (data) {
+                    console.info("Loaded from storage");
                 }
-                finally {}
-            }
-            if (params) {
-                console.info("Loaded from localStorage");
-            }
+                else {
+                    data = {};
+                }
+                this._init(data);
+            }.bind(this));
+            return;
         }
         params = jQuery.extend(
             {
@@ -221,9 +225,13 @@ var DnD, safeConsole;
             });
             
             this.exportDialog = new DnD.Dialog.Export({});
-            this.$export = jQuery("#export").on({ click: function(){
-                this.exportDialog.show(window.localStorage.getItem("initiative"));
-            }.bind(this) });
+            this.$export = jQuery("#export").on({ click: storage.read.bind(
+                storage, 
+                "initiative", 
+                function(data) {
+                    this.exportDialog.show(data);
+                }.bind(this)
+            ).bind(this) });
             
             this.imageDialog = new DnD.Dialog.Image({
                 $trigger: jQuery("#imageButton"),
@@ -573,13 +581,7 @@ var DnD, safeConsole;
     Initiative.prototype._autoSave = function(data) {
         var e;
         data = data ? data : this.toJSON();
-        try {
-            window.localStorage.setItem("initiative", data);
-        }
-        catch (e) {
-            window.localStorage.clear();
-            window.localStorage.setItem("initiative", data);
-        }
+        storage.write("initiative", data);
     };
 
     Initiative.prototype._clearAll = function() {
