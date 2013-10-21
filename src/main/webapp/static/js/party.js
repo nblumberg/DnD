@@ -1833,6 +1833,10 @@ var loadParty;
                 ],
                 "implements": [
                     {
+                        name: "Orb +3",
+                        enhancement: 3,
+                        crit: "1d6"
+                    }, {
                         name: "Supremely Vicious Bastard Sword +2",
                         enhancement: 2,
                         crit: "2d8"

@@ -8,17 +8,17 @@ var DnD, safeConsole;
      * @param params.actor Actor
      * @param params.$parent {jQuery(element)} The parent element
      * @param params.isCurrent {Boolean} Indicates if it is this Creature's turn in the initiative order
-     * @param params.className {String} Class(es) to apply to the top-level element 
+     * @param params.className {String} Class(es) to apply to the top-level element
      * @param params.cardSize {Number} The height of the card
      * @param params.showPcHp {Boolean} Display PC HP
      */
     function ActorCard(params) {
         ActorCard.cards.push(this);
-        
+
         this.params = params || {};
-        
+
         this.actor = params.actor;
-        
+
         this.portraitHeight = 0;
         this.portraitWidth = 0;
         this.isLandscape = false;
@@ -29,18 +29,18 @@ var DnD, safeConsole;
             this.isLandscape = this.portraitWidth >= this.portraitHeight;
         }.bind(this);
         this.img.src = this.actor.image;
-        
+
         this.subPanel = {};
         this.cardSize = params.cardSize || ActorCard.CARD_SIZE;
         this.conditions = [];
         this.$parent = params.$parent ? jQuery(params.$parent) : jQuery("body");
-        
+
         this.$panel = jQuery("<div/>").attr("id", this.actor.name.replace(/\s/g, "_") + "_panel").data("actor", this.actor).addClass("creaturePanel centered verticallyCentered bordered " + params.className).css("background-image", "url(" + this.actor.image + ")").appendTo(this.$parent);
         this.$panel.load("/html/partials/actorCard.html", null, this._init.bind(this));
     }
-    
+
     // Static members
-    
+
     ActorCard.cards = [];
     ActorCard.CARD_SIZE = 240;
     ActorCard.MAX_COLUMNS = 6;
@@ -56,9 +56,9 @@ var DnD, safeConsole;
         }
     };
     jQuery(window).on({ resize: ActorCard.resizeAll });
-    
-    // Public methods    
-    
+
+    // Public methods
+
     /**
      * Display an ActorCard as being the current turn (or not)
      */
@@ -133,50 +133,50 @@ var DnD, safeConsole;
         }
         this.event.hide();
     };
-    
+
     ActorCard.prototype.attack = function(name) {
         if (!this.event) {
             this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
         }
         this.event.attack(name);
     };
-    
+
     ActorCard.prototype.miss = function() {
         if (!this.event) {
             this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
         }
         this.event.miss();
     };
-    
+
     ActorCard.prototype.damage = function(damage) {
         if (!this.event) {
             this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
         }
         this.event.damage(damage);
     };
-    
+
     // Private methods
-    
+
     ActorCard.prototype._init = function() { // responseText, textStatus, jqXHR
         this.event = new ActorCard.Event({ actor: this.actor, card: this, $parent: this.$panel });
-        
+
         this.subPanel.$timer = this.$panel.find(".timer .content");
         this.timer = new ActorCard.Timer(this.subPanel.$timer);
-        
+
         this.makeCurrent(this.params.isCurrent);
         if (this.actor.isBloodied()) {
             this.$panel.addClass("bloodied");
         }
-        
+
         this.subPanel.$images = this.$panel.find(".images");
-        
+
         ActorCard.resizeAll();
 
         this.showPcHp = this.params.showPcHp;
         this.subPanel.$name = this.$panel.find(".label .name");
         this.subPanel.$hp = this.$panel.find(".label .hp");
         this._renderName();
-        
+
         this.subPanel.$effects = this.$panel.find(".effects");
         this.updateConditions();
     };
@@ -208,7 +208,7 @@ var DnD, safeConsole;
 
     /**
      * Displays an Effect on an ActorCard
-     * 
+     *
      * @param effect Effect The Effect to render
      * @param total Number The total number of conditions (including child effects), used for sizing
      */
@@ -228,7 +228,7 @@ var DnD, safeConsole;
         }));
         this._resizeConditions();
     };
-    
+
     ActorCard.prototype._resizeConditions = function() {
         var count, rows, columns, height, width, i;
         count = this.conditions.length;
@@ -240,11 +240,11 @@ var DnD, safeConsole;
             this.conditions[ i ]._resize(height, width);
         }
     };
-    
-    
+
+
     /**
      * Displays an Effect on an ActorCard
-     * 
+     *
      * @param params Object
      * @param params.card ActorCard The parent ActorCard
      * @param params.actor Actor The Actor that owns the ActorCard
@@ -258,9 +258,9 @@ var DnD, safeConsole;
         this.$parent = params.$parent;
         this._render();
     };
-    
+
     ActorCard.Condition.MAX_COLUMNS = 4;
-    
+
     ActorCard.Condition.prototype._render = function() {
         var condition, title;
         this.$container = jQuery("<div/>").addClass("condition").on({ click: this._clickHandler.bind(this) });
@@ -285,7 +285,7 @@ var DnD, safeConsole;
         }
         this.$parent.append(this.$container);
     };
-    
+
     ActorCard.Condition.prototype._clickHandler = function(event) {
         if (event.metaKey) {
             this.$condition.off({ click: this._clickHandler });
@@ -299,7 +299,7 @@ var DnD, safeConsole;
         this.$container.css({ height: height + "px", width: width + "px" });
     };
 
-    
+
     /**
      * @param params Object
      * @param params.actor Actor
@@ -329,14 +329,14 @@ var DnD, safeConsole;
         this.$description.html(name);
         this._show("attack");
     };
-    
+
     ActorCard.Event.TIMEOUT = 30000;
 
     /**
      * @param params.damage {Damage | Array}
      */
     ActorCard.Event.prototype.damage = function(damage) {
-        var height, i, dmg, amount, j, condition;
+        var height, i, dmg, amount, j, condition = null;
         this.$description.html("");
         this._show("hit", ActorCard.Event.TIMEOUT);
         damage = Object.constructor !== Array ? [ damage ] : damage;
@@ -369,11 +369,11 @@ var DnD, safeConsole;
      * TODO: replace with static HTML partial load
      */
     ActorCard.Event.prototype._renderDamage = function(height, imageSrc, amount, color) {
-        var $type, $image, $text;
+        var $type, $image;
         $type = jQuery("<span/>").addClass("type").appendTo(this.$types).css({ height: height });
         $image = jQuery(new Image()).css({ height: height }).addClass("damage").attr("src", imageSrc).appendTo($type);
         if (typeof(amount) !== "undefined" && amount !== null) {
-            $text = jQuery("<span/>").addClass("amount").css({ "font-size": Math.floor($image.height() / 2) + "px", "line-height": $image.height() + "px", "color": color ? color : "red" }).html(amount).appendTo($type);
+            jQuery("<span/>").addClass("amount").css({ "font-size": Math.floor($image.height() / 2) + "px", "line-height": $image.height() + "px", "color": color ? color : "red" }).html(amount).appendTo($type);
         }
     };
 
@@ -396,13 +396,13 @@ var DnD, safeConsole;
         }
     };
 
-    
+
     ActorCard.Timer = function($target) {
         this.$target = $target;
         this.time = 0;
         this.interval = 0;
     };
-    
+
     ActorCard.Timer.INTERVAL = 1000;
 
     ActorCard.Timer.prototype.start = function() {
@@ -430,7 +430,7 @@ var DnD, safeConsole;
         this.$target.html("");
     };
 
-    
+
     if (!DnD) {
         DnD = {};
     }

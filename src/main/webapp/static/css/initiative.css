@@ -76,9 +76,10 @@ input#round { width: 30px; }
 
 //  table#initiative { border-collapse: collapse; }
 table#initiative th, table#initiative td { text-align: center; } 
-table#initiative td.order { max-width: 50px; }
-table#initiative td.defenses { max-width: 80px; }
+table#initiative td.order { width: 50px; }
+table#initiative td.defenses { width: 80px; }
 table#initiative td.hp { padding: 3px; text-align: left; }
+table#initiative td.actions { width: 50px; }
 table#initiative td.actions img { display: block; margin: 5px auto; }
 table#initiative .tempHp { font-style: italic; }
 table#initiative td.history div { max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }

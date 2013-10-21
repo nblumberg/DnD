@@ -1,8 +1,11 @@
-var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
+/* global DnD:true, safeConsole, EventDispatcher */
+
+/* exported Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor */
+var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
 (function(console) {
     "use strict";
-    
+
     Defenses = function(params) {
         params = params || {};
         this.ac = params.ac || 10;
@@ -10,9 +13,9 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         this.ref = params.ref || 10;
         this.will = params.will || 10;
         this.resistances = params.resistances || {};
-        this.toString = function() { "[Defenses]"; };
+        this.toString = function() { return "[Defenses]"; };
     };
-    
+
 
     HP = function(params) {
         params = params || {};
@@ -20,15 +23,15 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         this.current = params.current || this.total;
         this.temp = params.temp || 0;
         this.regeneration = params.regeneration || 0;
-        this.toString = function() { "[HP]"; };
+        this.toString = function() { return "[HP]"; };
     };
 
-    
+
     Surges = function(params) {
         params = params || {};
         this.perDay = params.perDay || 0;
         this.current = params.current || this.perDay;
-        this.toString = function() { "[Surges]"; };
+        this.toString = function() { return "[Surges]"; };
     };
 
 
@@ -40,20 +43,21 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         params = params || {};
         this.name = params.name;
         this.enhancement = params.enhancement;
-        this.crit = new Damage(params.crit);
+        this.crit = new DnD.Damage(params.crit);
+        this.isMelee = false;
     };
 
     Implement.prototype.toString = function() {
         return "[Implement \"" + this.name + "\"]";
     };
 
-        
+
     Weapon = function(params) {
         params = params || {};
         this._init(params);
-        this.isMelee = params.isMelee;
+        this.isMelee = params.isMelee || false;
         this.proficiency = params.proficiency || 0;
-        this.damage = new Damage(params.damage);
+        this.damage = new DnD.Damage(params.damage);
     };
 
     Weapon.prototype = new Implement();
@@ -61,7 +65,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
     Weapon.prototype.toString = function() {
         return "[Weapon \"" + this.name + "\"]";
     };
-        
+
 
 
     Abilities = function(params) {
@@ -72,14 +76,14 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             this[ ability ] = params[ ability ] || 10;
             this[ ability + "mod" ] = Math.floor((this[ ability ] - 10) / 2);
         }
-        this.toString = function() { "[Abilities]"; };
+        this.toString = function() { return "[Abilities]"; };
     };
 
 
 
     Creature = function(params) {
         params = params || {};
-        
+
         // Basic properties
         this.id = params.id || Creature.id++;
         this.name = params.name;
@@ -131,10 +135,10 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         this.effects = [];
         this.imposedEffects = [];
         this.move = params.move || 6;
-        i = "implements"; // NOTE: done to satisfy JSHint and browsers that complain about implements as a javascript keyword
-        this[ i ] = [];
-        for (i = 0; params[ i ] && i < params[ i ].length; i++) {
-            this[ i ].push(new Implement(params[ i ][ i ]));
+        /* jshint sub:false */
+        this[ "implements" ] = [];
+        for (i = 0; params[ "implements" ] && i < params[ "implements" ].length; i++) {
+            this[ "implements" ].push(new Implement(params[ "implements" ][ i ]));
         }
         this.weapons = [];
         for (i = 0; params.weapons && i < params.weapons.length; i++) {
@@ -142,7 +146,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         }
         this.attacks = [];
         for (i = 0; params.attacks && i < params.attacks.length; i++) {
-            this.attacks.push(new Attack(params.attacks[ i ], this));
+            this.attacks.push(new DnD.Attack(params.attacks[ i ], this));
         }
         this.effects = [];
         for (i = 0; params.effects && i < params.effects.length; i++) {
@@ -173,20 +177,20 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         var i;
         for (i = 0; i < this.effects.length; i++) {
             switch (this.effects[ i ].name.toLowerCase()) {
-                case "blinded":
-                case "dazed":
-                case "dominated":
-                case "dying":
-                case "helpless":
-                case "petrified":
-                case "restrained":
-                case "stunned":
-                case "surprised":
-                case "unconscious": {
+            case "blinded":
+            case "dazed":
+            case "dominated":
+            case "dying":
+            case "helpless":
+            case "petrified":
+            case "restrained":
+            case "stunned":
+            case "surprised":
+            case "unconscious": {
                     return true;
                 }
                 break;
-                case "prone": {
+            case "prone": {
                     return isMelee;
                 }
                 break;
@@ -199,11 +203,11 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         var i, mod = 0;
         for (i = 0; i < this.effects.length; i++) {
             switch (this.effects[ i ].name.toLowerCase()) {
-                case "unconscious": {
+            case "unconscious": {
                     mod -= 5;
                 }
                 break;
-                case "prone": {
+            case "prone": {
                     mod += isMelee ? 0 : 2;
                 }
                 break;
@@ -213,10 +217,11 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
     };
 
     Creature.prototype._attackBonuses = function(attack, item, target, combatAdvantage) {
+        /* jshint unused:false */
         var i, j, attackBonuses, attackBonus, isMatch;
-        
+
         attackBonuses = [];
-        
+
         if (this.attackBonuses) {
             for (i = 0; i < this.attackBonuses.length; i++) {
                 attackBonus = this.attackBonuses[ i ];
@@ -266,7 +271,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
                 attackBonuses.push(attackBonus);
             }
         }
-        
+
         return attackBonuses;
     };
 
@@ -277,12 +282,12 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
 
     Actor = function(creature, count, currentState) {
         var i;
-        
+
         if (creature instanceof Creature) {
             creature = creature.raw();
             creature.id = 0;
         }
-        
+
         // Basic properties
         this.id = (currentState ? currentState.id : null) || creature.id || Creature.id++;
         this.type = creature.name;
@@ -296,13 +301,13 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             console.debug("Replacing Creature.actors[ " + this.name + " ]");
         }
         Creature.actors[ this.id ] = this;
-        
+
         this.history = null;
         this._turnTimer = null;
         this._turnDurations = {};
-        
+
         this._init(creature, currentState);
-        
+
         if (currentState) {
             // Update new Actor with current state from raw data
             this.name = currentState.name;
@@ -332,13 +337,13 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         }
         return returnIdIfNotFound ? id : null;
     };
-    
+
     Actor.prototype._init = function(params, currentState) {
         var data;
         Creature.prototype._init.call(this, params);
         data = jQuery.extend(
-            { includeSubject: false }, 
-            (currentState ? currentState.history : null) || params.history, 
+            { includeSubject: false },
+            (currentState ? currentState.history : null) || params.history,
             { _roundTimes: (currentState ? currentState._turnDurations : null ) }
         );
         this.history = new DnD.History(data);
@@ -350,7 +355,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
     };
 
     Actor.prototype.addCondition = function(effect) {
-        var name, i;
+        var name;
         if (typeof(effect) === "string") {
             effect = { name: effect };
         }
@@ -387,14 +392,14 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
     };
 
     Actor.prototype._attackToHit = function(attack, item, combatAdvantage, manualRolls) {
-        var toHit, i, attackBonus;
+        var toHit;
         toHit = {
-                isAutomaticHit: typeof(attack.toHit) === "string" && attack.toHit.toLowerCase() === "automatic",
-                isCrit: false,
-                isFumble: false,
-                conditional: { mod: 0 }
+            isAutomaticHit: typeof(attack.toHit) === "string" && attack.toHit.toLowerCase() === "automatic",
+            isCrit: false,
+            isFumble: false,
+            conditional: { mod: 0 }
         };
-        
+
         if (!toHit.isAutomaticHit) {
             if (manualRolls && manualRolls.attack && (manualRolls.attack.roll || manualRolls.attack.isCritical || manualRolls.attack.isFumble)) {
                 toHit.roll = manualRolls.attack.roll;
@@ -416,21 +421,21 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             if (!toHit.isCrit && !toHit.isFumble) {
                 toHit.conditional = attack.toHitModifiers(this.effects);
                 if (combatAdvantage) {
-                    toHit.conditional.breakdown += " + combat advantage"; 
+                    toHit.conditional.breakdown += " + combat advantage";
                 }
             }
         }
-        
+
         return toHit;
     };
 
     Actor.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
-        var damage, i, j, temp; 
+        var damage, i, temp;
         damage = {
-                amount: 0,
-                missAmount: 0,
-                conditional: { mod: 0, effects: [], breakdown: "" },
-                isManual: false
+            amount: 0,
+            missAmount: 0,
+            conditional: { mod: 0, effects: [], breakdown: "" },
+            isManual: false
         };
 
         if (manualRolls && manualRolls.damage) {
@@ -502,31 +507,32 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             damage.amount = Math.floor(damage.amount / 2);
             damage.missAmount = Math.floor(damage.missAmount / 2);
         }
-        
+
         return damage;
     };
 
     Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage) {
         var attackBonuses, i, attackBonus, toHitTarget, targetDamage, tmp, targetDefense, msg, result, entry;
-        
+
+        targetDefense = null;
         result = { hit: false, damage: [] };
 
-        toHitTarget = { 
+        toHitTarget = {
             roll: toHit.roll + (toHit.conditional.mod ? toHit.conditional.mod : 0),
             conditional: jQuery.extend({ mod: 0, breakdown: "" }, toHit.conditional)
         };
-        targetDamage = { 
-            amount: damage.amount, 
+        targetDamage = {
+            amount: damage.amount,
             missAmount: damage.missAmount,
             conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
         };
-        
+
         if (!damage.isManual) {
             attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
             for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
                 attackBonus = attackBonuses[ i ];
                 if (attackBonus.toHit) {
-                    toHitTarget.roll += attackBonus.toHit; 
+                    toHitTarget.roll += attackBonus.toHit;
                     toHitTarget.conditional.mod += attackBonus.toHit;
                     toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
                 }
@@ -556,7 +562,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             toHitTarget.roll += (combatAdvantage || target.grantsCombatAdvantage() ? 2 : 0);
             targetDefense = target.defenses[ attack.defense.toLowerCase() ] + target.defenseModifier(attack.isMelee);
         }
-        
+
         // Apply hit or miss damage/effects
         if (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense) {
             // Hit
@@ -584,7 +590,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
                 msg += " but takes ";
                 if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
                     for (i = 0; i < attack.miss.damage.length; i++) {
-                        msg += (i > 0 && i < attack.miss.damage.length - 1 ? ", " : "") + (i > 0 && i === attack.miss.damage.length - 1 ? " and " : "") + attack.miss.damage[ j ].anchor(targetDamage.conditional);
+                        msg += (i > 0 && i < attack.miss.damage.length - 1 ? ", " : "") + (i > 0 && i === attack.miss.damage.length - 1 ? " and " : "") + attack.miss.damage[ i ].anchor(targetDamage.conditional);
                     }
                 }
                 else {
@@ -607,7 +613,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
                 }
             }
         }
-        
+
         // Record in target and central Histories
         entry = new DnD.History.Entry({ subject: target, message: msg });
         target.history.add(entry);
@@ -627,7 +633,8 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         var temp, msg, i, result, effect;
         // vvv DEBUGGING
         if (typeof(damage) !== "number") {
-            alert("Break for debugging, Creature.takeDamage() received NaN damage value");
+            console.error("Creature.takeDamage() received NaN damage value");
+            return;
         }
         // ^^^ DEBUGGING
         msg = "";
@@ -661,9 +668,9 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
 //        this.addDamageIndicator(damage, type);
 //        this.dispatchEvent({ type: "takeDamage", damage: { amount: damage, type: type } });
         result = {
-                msg: msg,
-                damage: damage,
-                type: type
+            msg: msg,
+            damage: damage,
+            type: type
         };
 
         return result;
@@ -671,30 +678,31 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
 
     Actor.prototype.startTurn = function() {
         var ongoingDamage, handleEffect, handleImposedEffect, i, recharge, regen, tmp, msg;
-        
-        ongoingDamage = (function(effect) {
+        msg = null;
+
+        ongoingDamage = function(effect) {
             if (effect.name.toLowerCase() === "ongoing damage") {
                 this.takeDamage(effect.attacker, effect.amount, effect.type, null);
                 this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: "Took " + effect.amount + " ongoing " + (effect.type ? effect.type : "") + " damage" }));
             }
-        }).bind(this);
-        
-        handleEffect = (function(effect) {
+        }.bind(this);
+
+        handleEffect = function(effect) {
             var i;
             if (effect.countDown(this.history._round, true, true)) {
                 this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: effect.name + " effect expired" }));
             }
-            
+
             ongoingDamage(effect);
             if (effect.children && effect.children.length) {
                 for (i = 0; i < effect.children.length; i++) {
                     handleEffect(effect.children[ i ]);
                 }
             }
-        }).bind(this);
-        
-        handleImposedEffect = (function(effect) {
-            var i, r;
+        }.bind(this);
+
+        handleImposedEffect = function(effect) {
+            var i;
             if (effect.countDown(this.history._round, false, true)) {
                 effect.target.history.add(new DnD.History.Entry({ round: effect.target.history._round, subject: effect.target, message: effect.name + " effect expired" }));
             }
@@ -703,9 +711,8 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
                     handleImposedEffect(effect.children[ i ]);
                 }
             }
-            return r;
-        }).bind(this);
-        
+        }.bind(this);
+
         for (i = 0; this.attacks && i < this.attacks.length; i++) {
             if (this.attacks[ i ].used && this.attacks[ i ].usage.frequency === DnD.Attack.prototype.USAGE_RECHARGE && this.attacks[ i ].usage.recharge) {
                 recharge = new DnD.Recharge({ attack: this.attacks[ i ] });
@@ -724,35 +731,36 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             tmp = handleImposedEffect(this.imposedEffects[ i ]);
             msg = msg ? msg : tmp;
         }
-        
+
         // Regenerate after taking ongoing damage
         if (this.hp.regeneration && this.hp.current < this.hp.total) {
             regen = Math.min(this.hp.regeneration, this.hp.total - this.hp.current);
             this.hp.current += regen;
             this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: "Regenerated " + regen + " HP" }));
         }
-        
+
         this._turnTimer = (new Date()).getTime();
         return msg;
     };
 
     Actor.prototype.endTurn = function() {
         var handleEffect, handleImposedEffect, i, msg, tmp, pcSavingThrows = [], save, fail;
+        msg = null;
 
         if (this._turnTimer) {
             this._turnDurations[ this.history._round ] = (new Date()).getTime() - this._turnTimer;
             this._turnTimer = null;
             this.history.setRoundTime(this._turnDurations[ this.history._round ], this.history._round);
         }
-        
-        handleEffect = (function(effect) {
-            var i, name, savingThrow, savingThrowRoll, msg;
+
+        handleEffect = function(effect) {
+            var i, savingThrow, savingThrowRoll;
             if (effect.countDown(this.history._round, true, false)) {
                 this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: effect.name + " effect expired" }));
             }
-            
+
             if (effect.saveEnds) {
-                savingThrow = new SavingThrow({ effect: effect });
+                savingThrow = new DnD.SavingThrow({ effect: effect });
                 if (this.isPC) {
                     pcSavingThrows.push(effect);
                     return;
@@ -763,16 +771,15 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
                 }
                 this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: savingThrow.anchor() }));
             }
-            
+
             if (effect.children && effect.children.length) {
                 for (i = 0; i < effect.children.length; i++) {
                     handleEffect(effect.children[ i ]);
                 }
             }
-            return msg;
-        }).bind(this);
-        
-        handleImposedEffect = (function(effect) {
+        }.bind(this);
+
+        handleImposedEffect = function(effect) {
             var i;
             if (effect.countDown(this.history._round, false, false)) {
                 effect.target.history.add(new DnD.History.Entry({ round: effect.target.history._round, subject: effect.target, message: effect.name + " effect expired" }));
@@ -782,8 +789,8 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
                     handleImposedEffect(effect.children[ i ]);
                 }
             }
-        }).bind(this);
-        
+        }.bind(this);
+
         for (i = 0; this.effects && i < this.effects.length; i++) {
             tmp = handleEffect(this.effects[ i ]);
             msg = msg ? msg : tmp;
@@ -792,31 +799,31 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
             handleImposedEffect(this.imposedEffects[ i ]);
         }
 
-        save = (function(effect) {
+        save = function(effect) {
             var savingThrow, msg;
-            savingThrow = new SavingThrow({ effect: effect });
+            savingThrow = new DnD.SavingThrow({ effect: effect });
             savingThrow.add(20);
             effect.remove();
             msg = savingThrow.anchor();
             this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: msg }));
-        }).bind(this);
-        fail = (function(effect) {
+        }.bind(this);
+        fail = function(effect) {
             var savingThrow, msg;
-            savingThrow = new SavingThrow({ effect: effect });
+            savingThrow = new DnD.SavingThrow({ effect: effect });
             savingThrow.add(1);
             msg = savingThrow.anchor();
             this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: msg }));
-        }).bind(this);
-        
+        }.bind(this);
+
         for (i = 0; pcSavingThrows && i < pcSavingThrows.length; i++) {
-            if (confirm("Did " + this.name + " save against " + pcSavingThrows[ i ].toString() + "?")) {
+            if (window.confirm("Did " + this.name + " save against " + pcSavingThrows[ i ].toString() + "?")) {
                 save(pcSavingThrows[ i ]);
             }
             else {
                 fail(pcSavingThrows[ i ]);
             }
         }
-        
+
         return msg;
     };
 
@@ -841,7 +848,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
      * @param params Object
      * @param params.$parent {jQuery(element)} The parent element
      * @param params.isCurrent {Boolean} Indicates if it is this Creature's turn in the initiative order
-     * @param params.className {String} Class(es) to apply to the top-level element 
+     * @param params.className {String} Class(es) to apply to the top-level element
      * @param params.cardSize {Number} The height of the card
      * @param params.showPcHp {Boolean} Display PC HP
      */
@@ -851,7 +858,7 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         this.card = new DnD.Display.ActorCard(params);
         return this.card;
     };
-    
+
     Actor.prototype.raw = function() {
         var data, i, attack;
         data = {
@@ -875,8 +882,8 @@ var DnD, safeConsole, Defenses, HP, Surges, Implement, Weapon, Abilities, Creatu
         }
         return data;
     };
-    
-    
+
+
     DnD.Creature = Creature;
     DnD.Creature.Defenses = Defenses;
     DnD.Creature.HP = HP;

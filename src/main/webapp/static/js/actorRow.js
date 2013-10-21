@@ -2,14 +2,14 @@
 
 (function() {
     "use strict";
-    
+
     if (!DnD) {
         DnD = {};
     }
     if (!DnD.Display) {
         DnD.Display = {};
     }
-    
+
     jQuery(document).on("click", ".actorRow .action", function() {
         var $action, actor, row;
         $action = jQuery(this);
@@ -40,9 +40,9 @@
             row.params.rename();
         }
     });
-    
+
     // CONSTRUCTOR
-    
+
     /**
      * @param actor Actor The Actor
      * @param $table jQuery("<table/>") The parent table element
@@ -56,7 +56,7 @@
      */
     function ActorRow(params) {
         this.params = params || {};
-        
+
         this.actor = params.actor;
         this.ac = null;
         this.fort = null;
@@ -69,7 +69,7 @@
         this.surgesPerDay = null;
         this.ap = null;
         this.history = params.history;
-        
+
         this.actor.__tr = this;
         this.$tr = jQuery("<tr/>").attr("id", this.actor.name + "_row").addClass("actorRow").attr("data-actor-id", this.actor.id).appendTo(params.$table);
         if (params.isCurrent) {
@@ -82,7 +82,7 @@
     }
 
     // PUBLIC METHODS
-    
+
     ActorRow.prototype.render = function() {
         if (!this.ac) {
             return; // TODO: why is this.ac null?
@@ -98,7 +98,7 @@
         this.surgesPerDay.setValue(this.actor.surges.perDay);
         this.card.refresh();
     };
-    
+
     ActorRow.prototype.remove = function() {
         this.$tr.remove();
     };
@@ -108,18 +108,18 @@
             this.$parent = $parent;
             this.$tr.appendTo(this.$parent);
         }
-        
+
         this.render();
     };
 
-    
+
     // PRIVATE METHODS
-    
+
     ActorRow.prototype._init = function() { // responseText, textStatus, jqXHR
         this.$up = this.$tr.find(".action.up");
         this.$order = this.$tr.find(".action.order");
         this.$down = this.$tr.find(".action.down");
-        
+
         this.actor.card = this.card = new DnD.Display.ActorCard({
             actor: this.actor,
             staticSize: true,
@@ -128,9 +128,9 @@
             cardSize: 150,
             showPcHp: this.params.showPcHp
         });
-        
+
 //        this.card = this.actor.createCard({ $parent: $td, isCurrent: params.isCurrent, cardSize: 120 });
-//        this.card.$panel.attr("draggable", "true").addClass("grab").on({ 
+//        this.card.$panel.attr("draggable", "true").addClass("grab").on({
 //            dragstart: (function(event) {
 //                event.dataTransfer.setData("actor", this);
 //                this.$panel.addClass("grabbing");
@@ -151,12 +151,12 @@
 //                this.$panel.removeClass("grabbing");
 //            }).bind(this)
 //        });
-        
+
         this.ac = this._addDefense(this.$tr.find(".ac ._editor"), "ac");
         this.fort = this._addDefense(this.$tr.find(".fort ._editor"), "fort");
         this.ref = this._addDefense(this.$tr.find(".ref ._editor"), "ref");
         this.will = this._addDefense(this.$tr.find(".will ._editor"), "will");
-        
+
         this.hpTemp = new DnD.Display.Editor({ $parent: this.$tr.find(".hp .temp ._editor"), _className: "hp temp", tagName: "span", html: this.actor.hp.temp, onchange: function(v) {
             var oldValue = this.actor.hp.temp;
             this.actor.hp.temp = parseInt(v, 10);
@@ -187,30 +187,29 @@
             this.actor.ap = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "ap", oldValue: oldValue, newValue: this.actor.ap });
         }.bind(this) });
-                    
+
         this.$attack = this.$tr.find(".attack");
         this.$heal = this.$tr.find(".heal");
         this.$exit = this.$tr.find(".exit");
         this.$rename = this.$tr.find(".rename");
-        
+
         this.history.addToPage(this.$tr.find(".history div"));
     };
-    
+
     ActorRow.prototype._addDefense = function($field, defense) {
         return new DnD.Display.Editor({ $parent: $field, _className: defense, tagName: "span", html: this.actor.defenses[ defense ], onchange: function(v) {
-            var old, entry;
-            old = this.actor.defenses[ defense ];
+            var old = this.actor.defenses[ defense ];
             this.actor.defenses[ defense ] = parseInt(v, 10);
-            entry = new DnD.History.Entry({
+            new DnD.History.Entry({
                 subject: this,
                 message: "Manually changed " + defense.toUpperCase() + " from " + old + " to " + this.actor.defenses[ defense ],
-                round: this.actor.history._round // TODO: make History.Entry inherit the round from the History instance 
+                round: this.actor.history._round // TODO: make History.Entry inherit the round from the History instance
             });
             this.actor.history.add();
             this.actor.dispatchEvent({ type: "change", property: "defenses." + defense, oldValue: old, newValue: this.actor.defenses[ defense ] });
         }.bind(this) });
     };
 
-    
+
     DnD.Display.ActorRow = ActorRow;
 })();
