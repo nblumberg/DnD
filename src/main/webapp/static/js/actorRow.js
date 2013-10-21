@@ -1,4 +1,4 @@
-var DnD;
+/* global DnD:true */
 
 (function() {
     "use strict";
@@ -10,6 +10,36 @@ var DnD;
         DnD.Display = {};
     }
     
+    jQuery(document).on("click", ".actorRow .action", function() {
+        var $action, actor, row;
+        $action = jQuery(this);
+        actor = DnD.Creature.actors[ $action.parents(".actorRow").attr("data-actor-id") ];
+        row = actor ? actor.__tr : null;
+        if (!row) {
+            return;
+        }
+        if ($action.hasClass("up")) {
+            row.params.order.up();
+        }
+        else if ($action.hasClass("order")) {
+            row.params.order.set();
+        }
+        else if ($action.hasClass("down")) {
+            row.params.order.down();
+        }
+        else if ($action.hasClass("attack")) {
+            row.params.attack();
+        }
+        else if ($action.hasClass("heal")) {
+            row.params.heal();
+        }
+        else if ($action.hasClass("exit")) {
+            row.params.exit();
+        }
+        else if ($action.hasClass("rename")) {
+            row.params.rename();
+        }
+    });
     
     // CONSTRUCTOR
     
@@ -40,7 +70,8 @@ var DnD;
         this.ap = null;
         this.history = params.history;
         
-        this.$tr = jQuery("<tr/>").attr("id", this.actor.name + "_row").data("actor", this.actor).appendTo(params.$table);
+        this.actor.__tr = this;
+        this.$tr = jQuery("<tr/>").attr("id", this.actor.name + "_row").addClass("actorRow").attr("data-actor-id", this.actor.id).appendTo(params.$table);
         if (params.isCurrent) {
             this.$tr.addClass("current");
         }
@@ -78,42 +109,16 @@ var DnD;
             this.$tr.appendTo(this.$parent);
         }
         
-        if (!this.$up) {
-            return; // Don't reattach before _init()
-        }
-        
-        // Removing elements from the DOM seems to break their event listeners so reattach them
-        this.$up.on({ click: this.params.order.up });
-        this.$order.on({ click: this.params.order.set });
-        this.$down.on({ click: this.params.order.down });
-        
-        this.ac.reattach();
-        this.fort.reattach();
-        this.ref.reattach();
-        this.will.reattach();
-        
-        this.hpTemp.reattach();
-        this.hpCurrent.reattach();
-        this.hpTotal.reattach();
-        this.surgesCurrent.reattach();
-        this.surgesPerDay.reattach();
-        this.ap.reattach();
-        
-        this.$attack.on({ click: this.params.attack });
-        this.$heal.on({ click: this.params.heal });
-        this.$exit.on({ click: this.params.exit });
-        this.$rename.on({ click: this.params.rename });
-        
         this.render();
     };
 
     
     // PRIVATE METHODS
     
-    ActorRow.prototype._init = function(responseText, textStatus, jqXHR) {
-        this.$up = this.$tr.find(".action.up").on({ click: this.params.order.up });
-        this.$order = this.$tr.find(".action.order").on({ click: this.params.order.set });
-        this.$down = this.$tr.find(".action.down").on({ click: this.params.order.down });
+    ActorRow.prototype._init = function() { // responseText, textStatus, jqXHR
+        this.$up = this.$tr.find(".action.up");
+        this.$order = this.$tr.find(".action.order");
+        this.$down = this.$tr.find(".action.down");
         
         this.actor.card = this.card = new DnD.Display.ActorCard({
             actor: this.actor,
@@ -147,63 +152,63 @@ var DnD;
 //            }).bind(this)
 //        });
         
-        this.ac = this._addDefense(this.$tr.find(".ac > span"), "ac");
-        this.fort = this._addDefense(this.$tr.find(".fort > span"), "fort");
-        this.ref = this._addDefense(this.$tr.find(".ref > span"), "ref");
-        this.will = this._addDefense(this.$tr.find(".will > span"), "will");
+        this.ac = this._addDefense(this.$tr.find(".ac ._editor"), "ac");
+        this.fort = this._addDefense(this.$tr.find(".fort ._editor"), "fort");
+        this.ref = this._addDefense(this.$tr.find(".ref ._editor"), "ref");
+        this.will = this._addDefense(this.$tr.find(".will ._editor"), "will");
         
-        this.hpTemp = new Editor({ $parent: this.$tr.find(".hp .temp .editor"), tagName: "span", html: this.actor.hp.temp, onchange: (function(v) {
+        this.hpTemp = new DnD.Display.Editor({ $parent: this.$tr.find(".hp .temp ._editor"), _className: "hp temp", tagName: "span", html: this.actor.hp.temp, onchange: function(v) {
             var oldValue = this.actor.hp.temp;
             this.actor.hp.temp = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "hp.temp", oldValue: oldValue, newValue: this.actor.hp.temp });
-        }).bind(this) });
-        this.hpCurrent = new Editor({ $parent: this.$tr.find(".hp .current .editor"), tagName: "span", html: this.actor.hp.current, onchange: (function(v) {
+        }.bind(this) });
+        this.hpCurrent = new DnD.Display.Editor({ $parent: this.$tr.find(".hp .current ._editor"), _className: "hp current", tagName: "span", html: this.actor.hp.current, onchange: function(v) {
             var oldValue = this.actor.hp.current;
             this.actor.hp.current = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "hp.current", oldValue: oldValue, newValue: this.actor.hp.current });
-        }).bind(this) });
-        this.hpTotal = new Editor({ $parent: this.$tr.find(".hp .total .editor"), tagName: "span", html: this.actor.hp.total, onchange: (function(v) {
+        }.bind(this) });
+        this.hpTotal = new DnD.Display.Editor({ $parent: this.$tr.find(".hp .total ._editor"), _className: "hp total", tagName: "span", html: this.actor.hp.total, onchange: function(v) {
             var oldValue = this.actor.hp.total;
             this.actor.hp.current = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "hp.total", oldValue: oldValue, newValue: this.actor.hp.total });
-        }).bind(this) });
-        this.surgesCurrent = new Editor({ $parent: this.$tr.find(".hp .surgesCurrent .editor"), tagName: "span", html: this.actor.surges.current, onchange: (function(v) {
+        }.bind(this) });
+        this.surgesCurrent = new DnD.Display.Editor({ $parent: this.$tr.find(".hp .surgesCurrent ._editor"), _className: "surge current", tagName: "span", html: this.actor.surges.current, onchange: function(v) {
             var oldValue = this.actor.surges.current;
             this.actor.surges.current = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "surges.current", oldValue: oldValue, newValue: this.actor.surges.current });
-        }).bind(this) });
-        this.surgesPerDay = new Editor({ $parent: this.$tr.find(".hp .surgesPerDay .editor"), tagName: "span", html: this.actor.surges.perDay, onchange: (function(v) {
+        }.bind(this) });
+        this.surgesPerDay = new DnD.Display.Editor({ $parent: this.$tr.find(".hp .surgesPerDay ._editor"), _className: "surge perDay", tagName: "span", html: this.actor.surges.perDay, onchange: function(v) {
             var oldValue = this.actor.surges.perDay;
             this.actor.surges.perDay = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "surges.perDay", oldValue: oldValue, newValue: this.actor.surges.perDay });
-        }).bind(this) });
-        this.ap = new Editor({ $parent: this.$tr.find(".hp .ap .editor"), tagName: "span", html: this.actor.ap, onchange: (function(v) {
+        }.bind(this) });
+        this.ap = new DnD.Display.Editor({ $parent: this.$tr.find(".hp .ap ._editor"), _className: "ap", tagName: "span", html: this.actor.ap, onchange: function(v) {
             var oldValue = this.actor.ap;
             this.actor.ap = parseInt(v, 10);
             this.actor.dispatchEvent({ type: "change", property: "ap", oldValue: oldValue, newValue: this.actor.ap });
-        }).bind(this) });
+        }.bind(this) });
                     
-        this.$attack = this.$tr.find(".attack").on({ click: this.params.attack });
-        this.$heal = this.$tr.find(".heal").on({ click: this.params.heal });
-        this.$exit = this.$tr.find(".exit").on({ click: this.params.exit });
-        this.$rename = this.$tr.find(".rename").on({ click: this.params.rename });
+        this.$attack = this.$tr.find(".attack");
+        this.$heal = this.$tr.find(".heal");
+        this.$exit = this.$tr.find(".exit");
+        this.$rename = this.$tr.find(".rename");
         
         this.history.addToPage(this.$tr.find(".history div"));
     };
     
     ActorRow.prototype._addDefense = function($field, defense) {
-        return new Editor({ $parent: $field, tagName: "span", html: this.actor.defenses[ defense ], onchange: (function(v) {
+        return new DnD.Display.Editor({ $parent: $field, _className: defense, tagName: "span", html: this.actor.defenses[ defense ], onchange: function(v) {
             var old, entry;
             old = this.actor.defenses[ defense ];
             this.actor.defenses[ defense ] = parseInt(v, 10);
-            entry = new DnD.History.Entry({ 
-                subject: this, 
-                message: "Manually changed " + className.toUpperCase() + " from " + old + " to " + this.actor.defenses[ defense ], 
+            entry = new DnD.History.Entry({
+                subject: this,
+                message: "Manually changed " + defense.toUpperCase() + " from " + old + " to " + this.actor.defenses[ defense ],
                 round: this.actor.history._round // TODO: make History.Entry inherit the round from the History instance 
             });
             this.actor.history.add();
             this.actor.dispatchEvent({ type: "change", property: "defenses." + defense, oldValue: old, newValue: this.actor.defenses[ defense ] });
-        }).bind(this) });
+        }.bind(this) });
     };
 
     
