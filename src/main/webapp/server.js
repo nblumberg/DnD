@@ -1,9 +1,10 @@
 (function() {
     "use strict";
-    
+
     function Server() {
         this.fs = require("fs");
         this.basePath = "src/main/webapp/static/";
+        this.testPath = "src/test/webapp/jasmine/";
         this.port = 7005;
 
         this.requestId = 0;
@@ -21,7 +22,7 @@
             }
         }.bind(this)).listen(this.port);
     }
-    
+
     Server.prototype.serveContent = function(request, response) {
         var contentType, filePath, responseStatus, responseBody, etag, e;
         responseStatus = 200;
@@ -35,6 +36,9 @@
         }
         else {
             filePath = this.basePath + request.url;
+            if (request.url.indexOf("/test") === 0) {
+                filePath = this.testPath + request.url.replace("/test", "");
+            }
             if (this.fs.existsSync(filePath)) {
                 etag = this.fs.statSync(filePath).mtime;
                 if (request.headers[ "If-None-Match" ] === "" + etag.getTime()) {
@@ -94,7 +98,7 @@
             });
         }.bind(this));
     };
-    
+
     Server.prototype.serializeRequest = function(request) {
         var p;
         console.log("Received request: {");
@@ -116,7 +120,7 @@
             while (null !== (chunk = request.read())) {
                 data += chunk;
             }
-            
+
             callback(data);
         }.bind(this));
     };
@@ -129,7 +133,7 @@
         r = url.indexOf(type) === url.length - type.length;
         return r;
     };
-    
+
     Server.prototype.getFileType = function(url) {
         if (this.isFileOfType(url, ".gif")) {
             return "image/gif";
@@ -154,7 +158,7 @@
         }
         return null;
     };
-    
-    
+
+
     new Server();
 })();

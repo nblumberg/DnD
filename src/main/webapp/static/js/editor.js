@@ -5,7 +5,7 @@ var Editor;
 
 (function() {
     "use strict";
-    
+
     if (!DnD) {
         DnD = {};
     }
@@ -13,7 +13,7 @@ var Editor;
         DnD.Display = {};
     }
 
-    jQuery(document).on("click", ".editor .display, .editor button", function(event) {
+    jQuery(document).on("click dblclick", ".editor .display, .editor button", function(event) {
         var $element, $editor, editor;
         $element = jQuery(this);
         $editor = $element.parents(".editor");
@@ -31,7 +31,7 @@ var Editor;
             editor._cancel(event);
         }
     });
-    
+
     /**
      * @param {Object} params
      * @param {jQueryCollection} params.$parent The parent element under which to create the Editor HTML
@@ -44,7 +44,7 @@ var Editor;
     Editor = function(params) {
         Editor.editors.push(this);
         this.id = Editor.editors.length - 1;
-        
+
         params = params || {};
         this.$grandparent = params.$parent;
         this._tagName = params.tagName;
@@ -57,7 +57,7 @@ var Editor;
         this.$save = jQuery("<button/>").addClass("save").attr("title", "Save").html("&#x2713;").appendTo(this.$parent);
         this.$cancel = jQuery("<button/>").addClass("cancel").attr("title", "Cancel").html("X").appendTo(this.$parent);
     };
-    
+
     Editor.editors = [];
 
     Editor.prototype.reattach = function($grandparent) {
@@ -97,7 +97,7 @@ var Editor;
         this.$parent.removeClass("edit");
         this.$input.val(value);
     };
-    
-    
+
+
     DnD.Display.Editor = Editor;
 })();

@@ -17,14 +17,14 @@ describe("DnD.History", function() {
                 expect(jQueryDocument.on).toHaveBeenCalledWith("click", "li.entry", jasmine.any(Function));
             });
         });
-        
+
         describe("with no parameters", function() {
             var areTemplatesReady;
             beforeEach(function() {
                 areTemplatesReady = spyOn(DnD.History, "_areTemplatesReady").andReturn(false);
                 history = new DnD.History();
             });
-            
+
             describe("it should initialize", function() {
                 it("this.__params === {}", function() {
                     expect(history.__params).toEqual({});
@@ -50,7 +50,7 @@ describe("DnD.History", function() {
                 expect(areTemplatesReady).not.toHaveBeenCalled();
             });
         });
-        
+
         describe("with parameters", function() {
             var params, areTemplatesReady;
             beforeEach(function() {
@@ -64,7 +64,7 @@ describe("DnD.History", function() {
                 };
                 history = new DnD.History(params);
             });
-            
+
             describe("it should initialize", function() {
                 it("this.__params === params", function() {
                     expect(history.__params).toEqual(params);
@@ -89,24 +89,24 @@ describe("DnD.History", function() {
             it("it should call addToPage", function() {
                 expect(areTemplatesReady).toHaveBeenCalled();
             });
-            
+
         });
     });
-    
-    
+
+
     describe("methods", function() {
         beforeEach(function() {
             history = new DnD.History();
         });
-        
-        
+
+
         describe("toString()", function() {
             it("should return \"[History\"]", function() {
                 expect(history.toString()).toEqual("[History]");
             });
         });
-        
-        
+
+
         describe("toJSON()", function() {
             it("should call JSON.stringify() on the output of raw()", function() {
                 spyOn(history, "raw").andReturn("testRaw");
@@ -116,8 +116,8 @@ describe("DnD.History", function() {
                 expect(JSON.stringify).toHaveBeenCalledWith("testRaw", null, "  ");
             });
         });
-        
-        
+
+
         describe("addToPage()", function() {
             var areTemplatesReady, validParent = { length: 1, test: true };
             describe("with an invalid $parent parameter", function() {
@@ -127,7 +127,7 @@ describe("DnD.History", function() {
                     history.addToPage();
                     expect(history.$parent).toEqual("testParent");
                     expect(areTemplatesReady).not.toHaveBeenCalled();
-                    
+
                     history.addToPage({ length: 0 });
                     expect(history.$parent).toEqual("testParent");
                     expect(areTemplatesReady).not.toHaveBeenCalled();
@@ -137,7 +137,7 @@ describe("DnD.History", function() {
                 var templatesReady = false;
                 beforeEach(function() {
                     DnD.History._waitingOnTemplates = [];
-                    areTemplatesReady = spyOn(DnD.History, "_areTemplatesReady").andCallFake(function() { return templatesReady; }); 
+                    areTemplatesReady = spyOn(DnD.History, "_areTemplatesReady").andCallFake(function() { return templatesReady; });
                     spyOn(history, "_create");
                 });
                 it("it should set this.$parent to the passed $parent", function() {
@@ -167,8 +167,8 @@ describe("DnD.History", function() {
                 });
             });
         });
-        
-        
+
+
         describe("add()", function() {
             var entry;
             describe("is called with an invalid entry parameter", function() {
@@ -196,7 +196,7 @@ describe("DnD.History", function() {
                 afterEach(function() {
                     DnD.History.central = null;
                 });
-                
+
                 it("it should set the entry.round to this._round if not already set", function() {
                     history.add(entry);
                     expect(entry.hasOwnProperty("round")).toEqual(true);
@@ -233,7 +233,7 @@ describe("DnD.History", function() {
                 });
             });
         });
-        
+
         describe("update()", function() {
             var entry;
             beforeEach(function() {
@@ -241,7 +241,7 @@ describe("DnD.History", function() {
                 spyOn(entry, "_render");
                 history.$html = { find: jasmine.createSpy("find").andReturn("testHtml") };
             });
-            
+
             describe("is called with an invalid entry parameter", function() {
                 it("it should do nothing", function() {
                     history.update(undefined);
@@ -264,14 +264,14 @@ describe("DnD.History", function() {
                 });
             });
         });
-        
+
         describe("remove()", function() {
             var entry, $entry;
             beforeEach(function() {
                 entry = new DnD.History.Entry();
                 history.$html = { find: jasmine.createSpy("find").andCallFake(function() { return $entry; }) };
             });
-            
+
             describe("is called with an invalid entry parameter", function() {
                 it("it should do nothing", function() {
                     history.remove(undefined);
@@ -298,7 +298,7 @@ describe("DnD.History", function() {
                     history.$html = $html;
                     spyOn(history, "_noHistory");
                 });
-                
+
                 describe("when this History has more than 1 round", function() {
                     it("it should find the parent HTML and remove the entry and round HTML", function() {
                         var $round;
@@ -335,7 +335,7 @@ describe("DnD.History", function() {
                 });
             });
         });
-        
+
 
         describe("clear()", function() {
             it("it should then reset its members and call noHistory()", function() {
@@ -355,7 +355,7 @@ describe("DnD.History", function() {
                 expect(history._count).toEqual(0);
             });
         });
-        
+
         describe("setRoundTime()", function() {
             var $ul, $span;
             beforeEach(function() {
@@ -401,7 +401,7 @@ describe("DnD.History", function() {
                 });
             });
         });
-        
+
         describe("_create()", function() {
             beforeEach(function() {
                 var i, entry;
@@ -414,7 +414,7 @@ describe("DnD.History", function() {
                     spyOn(entry, "_addToRound");
                 }
             });
-            
+
             describe("is called on a History instance with no _entries", function() {
                 it("it should call _noHistory()", function() {
                     history._create();
@@ -432,7 +432,7 @@ describe("DnD.History", function() {
                         }
                     }
                 });
-                
+
                 it("it should call _createHtml()", function() {
                     var i;
                     history._create();
@@ -448,20 +448,21 @@ describe("DnD.History", function() {
                 });
             });
         });
-        
+
         describe("_createHtml()", function() {
             var $history;
             beforeEach(function() {
                 var i, entry;
                 $history = DnD.History.$history;
                 history.$parent = jQuery("<div class=\"parent\"/></div>");
-                DnD.History.$history = jQuery("<div class=\"test\"/></div>");                
+                DnD.History.histories = [];
+                DnD.History.$history = jQuery("<div class=\"test\"/></div>");
                 spyOn(DnD.History.$history, "clone").andCallThrough();
             });
             afterEach(function() {
                 DnD.History.$history = $history;
             });
-            
+
             it("it should clone the History.$history template", function() {
                 history._createHtml();
                 expect(DnD.History.$history.clone).toHaveBeenCalled();
@@ -471,8 +472,7 @@ describe("DnD.History", function() {
                     expect(history.$parent.children().length).toEqual(0);
                     history._createHtml();
                     expect(history.$parent.children().length).toEqual(1);
-                    expect(history.$parent.html()).toEqual("<div class=\"test\"></div>");
-                    expect(history.$html.data("history")).toEqual(history);
+                    expect(history.$parent.html()).toEqual("<div class=\"test\" data-history-id=\"0\"></div>");
                 });
             });
             describe("is called on a History instance with existing $html", function() {
@@ -483,26 +483,25 @@ describe("DnD.History", function() {
                     expect(history.$parent.children().length).toEqual(1);
                     history._createHtml();
                     expect(history.$parent.children().length).toEqual(1);
-                    expect(history.$parent.html()).toEqual("<div class=\"test\"></div>");
-                    expect(history.$html.data("history")).toEqual(history);
+                    expect(history.$parent.html()).toEqual("<div class=\"test\" data-history-id=\"0\"></div>");
                     expect($html.parent().length).toEqual(0);
                 });
             });
         });
-        
+
         describe("_noHistory()", function() {
             beforeEach(function() {
                 var i, entry;
                 history.$parent = jQuery("<div class=\"parent\"/></div>");
+                DnD.History.histories = [];
             });
-            
+
             describe("is called on a History instance with no existing $html", function() {
                 it("it should append <span>No history</span> to this.$parent", function() {
                     expect(history.$parent.children().length).toEqual(0);
                     history._noHistory();
                     expect(history.$parent.children().length).toEqual(1);
-                    expect(history.$parent.html()).toEqual("<span>No history</span>");
-                    expect(history.$html.data("history")).toEqual(history);
+                    expect(history.$parent.html()).toEqual("<span data-history-id=\"0\">No history</span>");
                 });
             });
             describe("is called on a History instance with existing $html", function() {
@@ -513,13 +512,12 @@ describe("DnD.History", function() {
                     expect(history.$parent.children().length).toEqual(1);
                     history._noHistory();
                     expect(history.$parent.children().length).toEqual(1);
-                    expect(history.$parent.html()).toEqual("<span>No history</span>");
-                    expect(history.$html.data("history")).toEqual(history);
+                    expect(history.$parent.html()).toEqual("<span data-history-id=\"0\">No history</span>");
                     expect($html.parent().length).toEqual(0);
                 });
             });
         });
-        
+
         describe("_getRound()", function() {
             describe("is called on a History instance with no existing $html", function() {
                 it("and passed create === false, it should do nothing", function() {
@@ -539,7 +537,7 @@ describe("DnD.History", function() {
                     history._count = 1; // TODO: what does _count really mean?
                     spyOn(history, "_createHtml").andCallThrough();
                 });
-                
+
                 it("it should not call _createHtml()", function() {
                     history._getRound(1, true);
                     expect(history._createHtml).not.toHaveBeenCalled();
@@ -605,13 +603,13 @@ describe("DnD.History", function() {
                 });
             });
         });
-        
+
         describe("_setRoundTime()", function() {
             var $time;
             beforeEach(function() {
                 $time = jQuery("<span></span>");
             });
-            
+
             it("is called with an invalid $time, it should fail without error", function() {
                 expect(function() { history._setRoundTime(null, 30000); }).not.toThrow();
             });
@@ -634,7 +632,7 @@ describe("DnD.History", function() {
                 });
             });
         });
-        
+
         describe("_editEntry", function() {
             it("it should find the History.Entry from the HTML.data() and call its _edit method", function() {
                 var entry, $entry;
@@ -644,36 +642,36 @@ describe("DnD.History", function() {
                 expect(entry._edit).toHaveBeenCalledWith($entry, history);
             });
         });
-        
+
     }); // History methods
-    
-    
+
+
     describe("History is serialized, set in storage, read from storage, deserialized and reinitialized", function() {
         it("it should produce identical results", function() {
             var rawIn, jsonIn, jsonOut, rawOut, history2;
-            rawIn = { 
+            rawIn = {
                     historyEntries: Serializable.prototype.rawObj(DnD.History.Entry.entries),
                     history: history.raw()
-                    
+
             };
             jsonIn = JSON.stringify(rawIn);
             window.sessionStorage.setItem("test", jsonIn);
             jsonOut = window.sessionStorage.getItem("test");
             try {
-                rawOut = JSON.parse(jsonOut); 
+                rawOut = JSON.parse(jsonOut);
             }
             finally {}
-            
+
             DnD.History.Entry.init(rawOut.historyEntries); // NOTE: must come before this.actors is initialized because Creature.history references it
             history2 = new DnD.History(rawOut.history); // NOTE: must come after this.actors is initialized because of _includeSubject
-            
+
             expect(history2._entries.length).toEqual(history._entries.length);
             expect(history2._round).toEqual(history._round);
             expect(history2._count).toEqual(history._count);
             expect(history2._roundTimes).toEqual(history._roundTimes);
             expect(history2._includeSubject).toEqual(history._includeSubject);
-            
+
         });
     });
-    
+
 });
