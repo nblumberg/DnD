@@ -1,7 +1,6 @@
 /* global DnD:true */
 
-/* exported Editor */
-var Editor;
+/* exported DnD.Display.Editor */
 
 (function() {
     "use strict";
@@ -11,6 +10,32 @@ var Editor;
     }
     if (!DnD.Display) {
         DnD.Display = {};
+    }
+
+    /**
+     * @param {Object} params
+     * @param {jQueryCollection} params.$parent The parent element under which to create the Editor HTML
+     * @param {String} params.tagName The nodeName of the text display element
+     * @param {String} [params._className] Optional classes to apply to the text display element
+     * @param {String} params.html Optional initial value for the text display and text entry elements
+     * @param {Boolean} [params.delegated] Optional If true, prevents Editor from attaching click handlers
+     * @param onchange Function Callback invoked when the value of the text is changed (i.e. saved), passed the new value
+     */
+    function Editor(params) {
+        Editor.editors.push(this);
+        this.id = Editor.editors.length - 1;
+
+        params = params || {};
+        this.$grandparent = params.$parent;
+        this._tagName = params.tagName;
+        this._className = params._className || "";
+        this._html = params.html;
+        this._onchange = params.onchange;
+        this.$parent = jQuery("<span/>").addClass("editor").attr("data-editor-id", this.id).appendTo(this.$grandparent);
+        this.$html = jQuery("<" + this._tagName + "/>").addClass("display " + this._className).appendTo(this.$parent).html(this._html);
+        this.$input = jQuery("<input/>").attr("type", "text").val(this.$html.html()).appendTo(this.$parent);
+        this.$save = jQuery("<button/>").addClass("save").attr("title", "Save").html("&#x2713;").appendTo(this.$parent);
+        this.$cancel = jQuery("<button/>").addClass("cancel").attr("title", "Cancel").html("X").appendTo(this.$parent);
     }
 
     jQuery(document).on("click dblclick", ".editor .display, .editor button", function(event) {
@@ -31,32 +56,6 @@ var Editor;
             editor._cancel(event);
         }
     });
-
-    /**
-     * @param {Object} params
-     * @param {jQueryCollection} params.$parent The parent element under which to create the Editor HTML
-     * @param {String} params.tagName The nodeName of the text display element
-     * @param {String} [params._className] Optional classes to apply to the text display element
-     * @param {String} params.html Optional initial value for the text display and text entry elements
-     * @param {Boolean} [params.delegated] Optional If true, prevents Editor from attaching click handlers
-     * @param onchange Function Callback invoked when the value of the text is changed (i.e. saved), passed the new value
-     */
-    Editor = function(params) {
-        Editor.editors.push(this);
-        this.id = Editor.editors.length - 1;
-
-        params = params || {};
-        this.$grandparent = params.$parent;
-        this._tagName = params.tagName;
-        this._className = params._className || "";
-        this._html = params.html;
-        this._onchange = params.onchange;
-        this.$parent = jQuery("<span/>").addClass("editor").attr("data-editor-id", this.id).appendTo(this.$grandparent);
-        this.$html = jQuery("<" + this._tagName + "/>").addClass("display " + this._className).appendTo(this.$parent).html(this._html);
-        this.$input = jQuery("<input/>").attr("type", "text").val(this.$html.html()).appendTo(this.$parent);
-        this.$save = jQuery("<button/>").addClass("save").attr("title", "Save").html("&#x2713;").appendTo(this.$parent);
-        this.$cancel = jQuery("<button/>").addClass("cancel").attr("title", "Cancel").html("X").appendTo(this.$parent);
-    };
 
     Editor.editors = [];
 

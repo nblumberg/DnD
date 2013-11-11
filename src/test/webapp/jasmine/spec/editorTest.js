@@ -1,7 +1,7 @@
 (function() {
     "use strict";
 
-    /* global jasmine, describe, it, expect, spyOn, Editor */
+    /* global jasmine, describe, it, expect, spyOn, DnD.Display.Editor */
 
     describe("editor.js", function() {
         var $div = null, params = null, editor = null, event;
@@ -21,7 +21,7 @@
                 html: "testHtml",
                 onchange: jasmine.createSpy("onchange")
             };
-            editor = new Editor(params);
+            editor = new DnD.Display.Editor(params);
             spyOn(editor, "_edit").andCallThrough();
             spyOn(editor, "_save").andCallThrough();
             spyOn(editor, "_cancel").andCallThrough();

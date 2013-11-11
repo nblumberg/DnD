@@ -33,6 +33,12 @@ files = [
 
     // fixtures
     {
+        pattern: "src/main/webapp/static/html/partials/**/*.html",
+        watched: true,
+        included: false,
+        served: true
+    },
+    {
         pattern: "src/test/webapp/jasmine/spec/javascripts/fixtures/**/*.html",
         watched: true,
         included: false,

@@ -200,7 +200,7 @@ var DnD, safeConsole;
         else {
             this.subPanel.$hp.html("");
         }
-//        editor = new Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
+//        editor = new DnD.Display.Editor({ $parent: this.$panel, tagName: "div", _className: "f2", html: this.name, onchange: (function(v) {
 //            this.name = v;
 //            this.dispatchEvent("change");
 //        }).bind(this) });
