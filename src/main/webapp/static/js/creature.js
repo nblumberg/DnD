@@ -1,4 +1,4 @@
-/* global DnD:true, safeConsole, EventDispatcher */
+/* global DnD:true, safeConsole, logFn, EventDispatcher */
 
 /* exported Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor */
 var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
@@ -7,6 +7,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     "use strict";
 
     Defenses = function(params) {
+        logFn("Defenses", "constructor", arguments);
         params = params || {};
         this.ac = params.ac || 10;
         this.fort = params.fort || 10;
@@ -18,6 +19,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
 
     HP = function(params) {
+        logFn("HP", "constructor", arguments);
         params = params || {};
         this.total = params.total || 1;
         this.current = params.current || this.total;
@@ -28,6 +30,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
 
     Surges = function(params) {
+        logFn("Surges", "constructor", arguments);
         params = params || {};
         this.perDay = params.perDay || 0;
         this.current = params.current || this.perDay;
@@ -36,10 +39,13 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
 
     Implement = function(params) {
+        this.__log = logFn.bind(this, "Implement");
+        this.__log("constructor", arguments);
         this._init(params);
     };
 
     Implement.prototype._init = function(params) {
+        this.__log("_init", arguments);
         params = params || {};
         this.name = params.name;
         this.enhancement = params.enhancement;
@@ -48,11 +54,13 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     };
 
     Implement.prototype.toString = function() {
+        this.__log("toString", arguments);
         return "[Implement \"" + this.name + "\"]";
     };
 
 
     Weapon = function(params) {
+        this.__log = logFn.bind(this, "Weapon");
         params = params || {};
         this._init(params);
         this.isMelee = params.isMelee || false;
@@ -63,13 +71,16 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     Weapon.prototype = new Implement();
 
     Weapon.prototype.toString = function() {
+        this.__log("toString", arguments);
         return "[Weapon \"" + this.name + "\"]";
     };
 
 
 
     Abilities = function(params) {
-        var i, ability, abilities = [ "STR", "DEX", "CON", "INT", "WIS", "CHA" ];
+        var i, ability, abilities;
+        logFn("Abiltiies", "constructor", arguments);
+        abilities = [ "STR", "DEX", "CON", "INT", "WIS", "CHA" ];
         params = params || {};
         for (i = 0; i < abilities.length; i++) {
             ability = abilities[ i ];
@@ -82,7 +93,9 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
 
     Creature = function(params) {
+        this.__log = logFn.bind(this, "Creature");
         params = params || {};
+        this.__log("constructor", params.name);
 
         // Basic properties
         this.id = params.id || Creature.id++;
@@ -116,6 +129,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Creature.prototype._init = function(params) {
         var i;
+        this.__log("_init", arguments);
         params = params || {};
         this.image = params.image;
         this.isPC = params.isPC || false;
@@ -155,11 +169,13 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     };
 
     Creature.prototype.isBloodied = function() {
+        this.__log("isBloodied", arguments);
         return this.hp.current <= Math.floor(this.hp.total / 2);
     };
 
     Creature.prototype.getCondition = function(condition) {
         var i;
+        this.__log("getCondition", arguments);
         condition = condition ? condition.toLowerCase() : "";
         for (i = 0; condition && i < this.effects.length; i++) {
             if (this.effects[ i ].name.toLowerCase() === condition) {
@@ -170,11 +186,13 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     };
 
     Creature.prototype.hasCondition = function(condition) {
+        this.__log("hasCondition", arguments);
         return this.getCondition(condition) !== null;
     };
 
     Creature.prototype.grantsCombatAdvantage = function(isMelee) {
         var i;
+        this.__log("grantsCombatAdvantage", arguments);
         for (i = 0; i < this.effects.length; i++) {
             switch (this.effects[ i ].name.toLowerCase()) {
             case "blinded":
@@ -201,6 +219,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Creature.prototype.defenseModifier = function(isMelee) {
         var i, mod = 0;
+        this.__log("defenseModifier", arguments);
         for (i = 0; i < this.effects.length; i++) {
             switch (this.effects[ i ].name.toLowerCase()) {
             case "unconscious": {
@@ -219,6 +238,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     Creature.prototype._attackBonuses = function(attack, item, target, combatAdvantage) {
         /* jshint unused:false */
         var i, j, attackBonuses, attackBonus, isMatch;
+        this.__log("_attackBonuses", arguments);
 
         attackBonuses = [];
 
@@ -276,12 +296,15 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     };
 
     Creature.prototype.toString = function() {
+        this.__log("toString", arguments);
         return "[Creature \"" + this.name + "\"]";
     };
 
 
     Actor = function(creature, count, currentState) {
         var i;
+        this.__log = logFn.bind(this, "Actor");
+        this.__log("constructor", [ creature ? creature.name : "undefined", count, "currentState" ]);
 
         if (creature instanceof Creature) {
             creature = creature.raw();
@@ -321,7 +344,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                     this.attacks[ i ].used = true;
                 }
             }
-            this.effects = currentState.effects;
+            this.effects = [];
             for (i = 0; currentState.effects && i < currentState.effects.length; i++) {
                 this.effects.push(new DnD.Effect(jQuery.extend({}, currentState.effects[ i ], { target: this })));
             }
@@ -340,6 +363,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Actor.prototype._init = function(params, currentState) {
         var data;
+        this.__log("_init", [ params.name, "currentState" ]);
         Creature.prototype._init.call(this, params);
         data = jQuery.extend(
             { includeSubject: false },
@@ -351,11 +375,13 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     };
 
     Actor.prototype.toString = function() {
+        this.__log("toString", arguments);
         return "[Actor \"" + this.name + "\"]";
     };
 
     Actor.prototype.addCondition = function(effect) {
         var name;
+        this.__log("addCondition", arguments);
         if (typeof(effect) === "string") {
             effect = { name: effect };
         }
@@ -374,6 +400,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Actor.prototype.attack = function(attack, item, targets, combatAdvantage, manualRolls) {
         var toHit, damage, i, result, hits, misses;
+        this.__log("attack", [ attack.name, item ? item.name : "undefined", targets.length, combatAdvantage, manualRolls ]);
         hits = [];
         misses = [];
         toHit = this._attackToHit(attack, item, combatAdvantage, manualRolls);
@@ -393,6 +420,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Actor.prototype._attackToHit = function(attack, item, combatAdvantage, manualRolls) {
         var toHit;
+        this.__log("attackToHit", [ attack.name, item ? item.name : "undefined", combatAdvantage, manualRolls ]);
         toHit = {
             isAutomaticHit: typeof(attack.toHit) === "string" && attack.toHit.toLowerCase() === "automatic",
             isCrit: false,
@@ -431,6 +459,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Actor.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
         var damage, i, temp;
+        this.__log("_attackDamage", [ attack.name, item ? item.name : "undefined", isCrit, manualRolls ]);
         damage = {
             amount: 0,
             missAmount: 0,
@@ -513,6 +542,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage) {
         var attackBonuses, i, attackBonus, toHitTarget, targetDamage, tmp, targetDefense, msg, result, entry;
+        this.__log("_attackTarget", [ attack.name, item ? item.name : "undefined", combatAdvantage, target.name, toHit, damage ]);
 
         targetDefense = null;
         result = { hit: false, damage: [] };
@@ -632,6 +662,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     Actor.prototype.takeDamage = function(attacker, damage, type, effects) {
         var temp, msg, i, result, effect;
         // vvv DEBUGGING
+        this.__log("takeDamage", [ attacker.name, damage, type, effects ]);
         if (typeof(damage) !== "number") {
             console.error("Creature.takeDamage() received NaN damage value");
             return;
@@ -678,6 +709,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Actor.prototype.startTurn = function() {
         var ongoingDamage, handleEffect, handleImposedEffect, i, recharge, regen, tmp, msg;
+        this.__log("startTurn", arguments);
         msg = null;
 
         ongoingDamage = function(effect) {
@@ -745,6 +777,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Actor.prototype.endTurn = function() {
         var handleEffect, handleImposedEffect, i, msg, tmp, pcSavingThrows = [], save, fail;
+        this.__log("endTurn", arguments);
         msg = null;
 
         if (this._turnTimer) {
@@ -838,6 +871,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
      * @param heal {Function} The click handler for the heal action
      */
     Actor.prototype.createTr = function(params) {
+        this.__log("createTr", arguments);
         params = params || {};
         params.actor = this;
         params.history = this.history;
@@ -853,6 +887,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
      * @param params.showPcHp {Boolean} Display PC HP
      */
     Actor.prototype.createCard = function(params) {
+        this.__log("createCard", arguments);
         params = params || {};
         params.actor = this;
         this.card = new DnD.Display.ActorCard(params);
@@ -861,6 +896,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
     Actor.prototype.raw = function() {
         var data, i, attack;
+        this.__log("raw", arguments);
         data = {
             id: this.id,
             type: this.type,

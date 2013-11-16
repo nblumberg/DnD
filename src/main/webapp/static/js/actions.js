@@ -1,9 +1,11 @@
-var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
+var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
 
 (function() {
     "use strict";
-    
+
     Roll = function(params) {
+        this.__log = logFn.bind(this, "Roll");
+        this.__log("constructor", arguments);
         this._history = [];
         this.dieCount = 0;
         this.dieSides = 0;
@@ -20,6 +22,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     Roll.prototype = new Serializable();
 
     Roll.prototype.clone = function(clone) {
+        this.__log("clone", arguments);
         if (!clone) {
             clone = new Roll();
         }
@@ -31,22 +34,25 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Roll.prototype._parseObject = function(obj) {
+        this.__log("_parseObject", arguments);
         this.dieCount = obj.dieCount;
         this.dieSides = obj.dieSides;
         this.extra = obj.extra;
         this.crits = obj.crits;
     };
 
+    Roll.prototype.EXTRA_REG_EXP = /[+-]/;
+    Roll.prototype.DICE_REG_EXP = /^\d+/;
+
     Roll.prototype._parseString = function(str) {
-        var hasDice, extraRegExp, hasExtra, dRegExp;
-        extraRegExp = /[+-]/;
+        var hasDice, hasExtra;
+        this.__log("_parseString", arguments);
         hasDice = str.indexOf("d") !== -1;
-        hasExtra = !hasDice && str.length || extraRegExp.test(str); 
-        dRegExp = /^\d+/;
+        hasExtra = !hasDice && str.length || this.EXTRA_REG_EXP.test(str);
         if (hasDice) {
             this.dieCount = parseInt(str.split("d")[ 0 ], 10);
             str = str.split("d")[ 1 ];
-            this.dieSides = parseInt(hasExtra ? dRegExp.exec(str) : str, 10);
+            this.dieSides = parseInt(hasExtra ? this.DICE_REG_EXP.exec(str) : str, 10);
             str = str.substr(("" + this.dieSides).length);
         }
         else {
@@ -60,6 +66,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Roll.prototype.roll = function() {
         var value, h, i, die;
+        this.__log("roll", arguments);
         value = 0;
         h = { dice: [] };
         this._history.push(h);
@@ -74,6 +81,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Roll.prototype.max = function() {
         var value, h, i, die;
+        this.__log("max", arguments);
         value = 0;
         h = { dice: [] };
         this._history.push(h);
@@ -89,6 +97,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Roll.prototype.min = function() {
         var value, h, i, die;
+        this.__log("min", arguments);
         value = 0;
         h = { dice: [] };
         this._history.push(h);
@@ -104,6 +113,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Roll.prototype.add = function(total) {
         var value, remainder, h, dice, i, die;
+        this.__log("add", arguments);
         value = Math.floor((total - this.extra) / this.dieCount);
         remainder = (total - this.extra) % this.dieCount;
         dice = [];
@@ -116,11 +126,13 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Roll.prototype.getLastRoll = function() {
+        this.__log("getLastRoll", arguments);
         return this._history && this._history.length ? this._history[ this._history.length - 1 ] : { dice: [], total: 0 };
     };
 
     Roll.prototype.isCritical = function() {
         var h;
+        this.__log("isCritical", arguments);
         if (!this.crits || this.dieCount !== 1 || this.dieSides !== 20) {
             return false;
         }
@@ -130,6 +142,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Roll.prototype.isFumble = function() {
         var h;
+        this.__log("isFumble", arguments);
         if (!this.crits || this.dieCount !== 1 || this.dieSides !== 20) {
             return false;
         }
@@ -139,6 +152,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Roll.prototype.breakdown = function(conditional) {
         var h, value, output, i;
+        this.__log("breakdown", arguments);
         h = this.getLastRoll();
         output = "";
         if (this.crits && (this.isCritical() || this.isFumble())) {
@@ -166,53 +180,68 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Roll.prototype._breakdownToString = function() {
+        this.__log("_breakdownToString", arguments);
         return this.toString();
     };
 
     Roll.prototype.toString = function() {
         var d, operand;
+        this.__log("toString", arguments);
         d = this.dieCount * this.dieSides ? this.dieCount + "d" + this.dieSides : "";
         operand = this.extra >= 0 ? "+" : "";
         return d + (d && this.extra ? operand : "") + (this.extra || !d ? this.extra : "");
     };
 
     Roll.prototype._anchorHtml = function(conditional) {
-        var h = this.getLastRoll();
+        var h;
+        this.__log("_anchorHtml", arguments);
+        h = this.getLastRoll();
         return "" + ((h && h.total ? h.total : 0) + (conditional && conditional.total ? conditional.total : 0)) + (conditional && conditional.text ? conditional.text : "");
     };
 
     Roll.prototype.anchor = function(conditional) {
+        this.__log("anchor", arguments);
         return "<a href=\"javascript:void(0);\" title=\"" + this.breakdown(conditional && conditional.breakdown ? conditional.breakdown : null) + "\">" + this._anchorHtml(conditional) + "</a>";
     };
 
 
     Recharge = function(params) {
+        this.__log = logFn.bind(this, "Recharge");
+        this.__log("constructor", arguments);
         this.attack = params.attack;
     };
 
     Recharge.prototype = new Roll({ dieCount: 1, dieSides: 6, extra: 0, crits: false });
 
     Recharge.prototype.isRecharged = function() {
-        var h = this.getLastRoll();
+        var h;
+        this.__log("isRecharged", arguments);
+        h = this.getLastRoll();
         return h.total <= this.attack.usage.recharge;
     };
-    
+
     Recharge.prototype._anchorHtml = function(conditional) {
+        this.__log("_anchorHtml", arguments);
         return (this.isRecharged() ? "Recharged " : "Failed to recharge ") + this.attack.name + (conditional && conditional.text ? conditional.text : "");
     };
 
     Recharge.prototype.anchor = function(conditional) {
-        var h = this.getLastRoll();
+        var h;
+        this.__log("anchor", arguments);
+        h = this.getLastRoll();
         h.breakdown = " &lt;= " + this.attack.usage.recharge;
         return Roll.prototype.anchor.call(this, conditional);
     };
-    
+
     Recharge.prototype.toString = function() {
+        this.__log("toString", arguments);
         return "Recharge";
     };
 
-    
+
     SavingThrow = function(params) {
+        this.__log = logFn.bind("SavingThrow");
+        this.__log("constructor", arguments);
         params = params || {};
         this.effect = params.effect;
     };
@@ -220,16 +249,21 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     SavingThrow.prototype = new Roll({ dieCount: 1, dieSides: 20, extra: 0, crits: false });
 
     SavingThrow.prototype._anchorHtml = function(conditional) {
-        var success = (this.getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
+        var success;
+        this.__log("_anchorHtml", arguments);
+        success = (this.getLastRoll().total + (conditional && conditional.total ? conditional.total : 0)) >= 10;
         return (success ? "Saves" : "Fails to save") + " against " + this.effect.toString();
     };
 
     SavingThrow.prototype.toString = function() {
+        this.__log("toString", arguments);
         return "Saving Throw";
     };
 
 
     Damage = function(params, creature) {
+        this.__log = logFn.bind(this, "Damage");
+        this.__log("constructor", [ params, creature ? creature.name : "undefined" ]);
         this._history = [];
         params = params || {};
         this.type = "";
@@ -257,6 +291,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     Damage.prototype = new Roll({ dieCount: 1, dieSides: 0, extra: 0, crits: false });
 
     Damage.prototype.clone = function(clone) {
+        this.__log("clone", arguments);
         if (!clone) {
             clone = new Damage();
         }
@@ -271,6 +306,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Damage.prototype._parseObject = function(obj, creature) {
+        this.__log("_parseObject", [ obj, creature ? creature.name : "undefined" ]);
         Roll.prototype._parseObject.call(this, obj);
         this.type = obj.type;
         this.crit = obj.crit ? obj.crit.clone() : null;
@@ -280,22 +316,28 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
         this.rangedExtra = obj.rangedExtra;
     };
 
+
+    Damage.prototype.WEAPON_ATTRIBUTE_REG_EXP = /(\[W\]|STR|DEX|CON|INT|WIS|CHA)/;
+    Damage.prototype.WEAPON_ATTRIBUTE_OR_REG_EXP = /^(\w{3}\/\w{3})$/;
+    Damage.prototype.WEAPON_ATTRIBUTE_MAX_REG_EXP = /^(\w{3}\^\w{3})$/;
+
+
     /**
-     * @param str {String} grammar: E|D|W 
-     * # = "(+|-)*\d", 
+     * @param str {String} grammar: E|D|W
+     * # = "(+|-)*\d",
      * A = "(+|-|^|/)(STR|DEX|CON|INT|WIS|CHA)",
      * E = (#|A)*
-     * D = "#d#E*" 
-     * W = "#\[W\]E*" 
+     * D = "#d#E*"
+     * W = "#\[W\]E*"
      */
     Damage.prototype._parseDamageString = function(str, creature) {
-        var extra, i, value, regeExW_A, regExOr, regExMax;
+        var extra, i, value;
+        this.__log("_parseDamageString", [ str, creature ? creature.name : "undefined" ]);
         if (!str) {
             return;
         }
         this.str = str;
-        regeExW_A = /(\[W\]|STR|DEX|CON|INT|WIS|CHA)/;
-        if (!regeExW_A.test(str)) {
+        if (!this.WEAPON_ATTRIBUTE_REG_EXP.test(str)) {
             this._parseString(str);
             return;
         }
@@ -311,7 +353,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
             if (!value) {
                 return;
             }
-            if (!regeExW_A.test(value)) {
+            if (!this.WEAPON_ATTRIBUTE_REG_EXP.test(value)) {
                 this._parseString(value);
                 extra = str.substr(str.indexOf("+") + 1);
             }
@@ -325,19 +367,20 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
         extra = extra.split("+");
         for (i = 0; extra && i < extra.length; i++) {
             switch (extra[ i ]) {
-                case "": {
+            case "": {
                 }
                 break;
-                case "STR":
-                case "DEX":
-                case "CON":
-                case "INT":
-                case "WIS":
-                case "CHA": {
+            case "STR":
+            case "DEX":
+            case "CON":
+            case "INT":
+            case "WIS":
+            case "CHA": {
                     this.extra += creature.abilities[ extra[ i ] + "mod" ];
                 }
                 break;
-                default: {
+            default: {
+                    value = null;
                     try {
                         value = parseInt(extra[ i ], 10);
                     }
@@ -346,13 +389,11 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
                         this.extra += value;
                     }
                     else {
-                        regExOr = /^(\w{3}\/\w{3})$/;
-                        regExMax = /^(\w{3}\^\w{3})$/;
-                        if (regExOr.test(extra[ i ])) {
+                        if (this.WEAPON_ATTRIBUTE_OR_REG_EXP.test(extra[ i ])) {
                             this.meleeExtra = creature.abilities.STRmod;
                             this.rangedExtra = creature.abilities.DEXmod;
                         }
-                        else if (regExMax.test(extra[ i ])) {
+                        else if (this.WEAPON_ATTRIBUTE_MAX_REG_EXP.test(extra[ i ])) {
                             this.extra += Math.max(creature.abilities[ extra[ i ].split("^")[ 0 ] + "mod" ], creature.abilities[ extra[ i ].split("^")[ 1 ] + "mod" ]);
                         }
                     }
@@ -364,6 +405,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Damage.prototype.rollItem = function(item, isCrit, forcedTotal) {
         var dice, i, total, h, forcedDie, forcedRemainder;
+        this.__log("rollItem", arguments);
         dice = [];
         total = 0;
         h = { breakdown: "" };
@@ -445,15 +487,19 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Damage.prototype.rollCrit = function(item) {
+        this.__log("rollCrit", arguments);
         return this.rollItem(item, true);
     };
 
     Damage.prototype.addItem = function(total, item, isCrit) {
+        this.__log("addItem", arguments);
         return this.rollItem(item, isCrit, total);
     };
 
     Damage.prototype._breakdownToString = function() {
-        var str = Roll.prototype._breakdownToString.call(this);
+        var str;
+        this.__log("_breakdownToString", arguments);
+        str = Roll.prototype._breakdownToString.call(this);
         if (this.rollMultiplier && this.rollMultiplier != 1) {
             str += " * " + this.rollMultiplier;
         }
@@ -461,6 +507,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Damage.prototype.anchor = function(conditional) {
+        this.__log("anchor", arguments);
         conditional = conditional || {};
         conditional = jQuery.extend({ text: "" }, conditional);
         conditional.text += (this.type ? " " + this.type : "") + " damage";
@@ -469,6 +516,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Damage.prototype.raw = function() {
         var tmp, raw;
+        this.__log("raw [" + this.toString() + "]", arguments);
         tmp = this._history;
         this._history = [];
         raw = Serializable.prototype.raw.call(this);
@@ -479,6 +527,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Damage.prototype.toString = function() {
         var str, lastRoll, critStr;
+        this.__log("toString", arguments);
         str = "";
         lastRoll = this.getLastRoll();
         critStr = lastRoll && lastRoll.critStr ? lastRoll.critStr : null;
@@ -509,6 +558,8 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
 
     Attack = function(params, creature) {
         var i;
+        this.__log = logFn.bind(this, "Attack");
+        this.__log("constructor", [ params.name, creature ? creature.name : "undefined" ]);
         params = params || {};
         this.name = params.name;
         this.type = params.type;
@@ -559,15 +610,16 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     Attack.prototype.USAGE_ENCOUNTER = "Encounter";
     Attack.prototype.USAGE_DAILY = "Daily";
     Attack.prototype.USAGE_RECHARGE = "Recharge";
-    
+
     Attack.prototype._toHitFromString = function(str, creature) {
         var i, abilities, mods;
-        
+        this.__log("_toHitFromString", [ str, creature ? creature.name : "undefined" ]);
+
         if (str.toLowerCase() === "automatic") {
             this.extra = 99;
             return;
         }
-        
+
         this.extra = Math.floor(creature.level / 2);
         i = str.search(/[+\-]/);
         if (i !== -1) {
@@ -592,21 +644,23 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Attack.prototype.toHitModifiers = function(effects) {
-        var i, result = { mod: 0, effects: [], breakdown: "" };
+        var i, result;
+        this.__log("toHitModifiers", arguments);
+        result = { mod: 0, effects: [], breakdown: "" };
         for (i = 0; i < effects.length; i++) {
             switch (effects[ i ].name.toLowerCase()) {
-                case "blinded": {
+            case "blinded": {
                     result.mod -= 5;
                     result.effects.push(effects[ i ].name);
                 }
                 break;
-                case "prone": 
-                case "restrained": {
+            case "prone":
+            case "restrained": {
                     result.mod -= 2;
                     result.effects.push(effects[ i ].name);
                 }
                 break;
-                case "penalty": {
+            case "penalty": {
                     if (effect.type === "attacks") {
                         result.mod -= effect.amount;
                         result.effects.push(effects[ i ].name + " to " + effects[ i ].type);
@@ -620,7 +674,9 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Attack.prototype.rollItem = function(item) {
-        var h, total = Roll.prototype.roll.call(this);
+        var h, total;
+        this.__log("rollItem", arguments);
+        total = Roll.prototype.roll.call(this);
         if (item && item.enhancement) {
             h = this.getLastRoll();
             h.breakdown = " [+" + item.enhancement + " weapon]";
@@ -631,10 +687,12 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Attack.prototype._anchorHtml = function() {
+        this.__log("_anchorHtml", arguments);
         return this.name + " attack";
     };
 
     Attack.prototype.anchor = function(conditional) {
+        this.__log("anchor", arguments);
         conditional = conditional || {};
         conditional = jQuery.extend({ breakdown: "", text: "" }, conditional);
         conditional.breakdown += this.isCritical() || this.isFumble() ? "" : " = " + this.getLastRoll().total + " vs. " + this.defense;
@@ -642,6 +700,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Attack.prototype._breakdownToString = function() {
+        this.__log("_breakdownToString", arguments);
         if (typeof(this.toHit) === "string" && this.toHit.toLowerCase() === "automatic") {
             return "automatic hit";
         }
@@ -649,16 +708,17 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack;
     };
 
     Attack.prototype.toString = function() {
+        this.__log("toString", arguments);
         return "[Attack \"" + this.name + "\"]";
     };
 
     Attack.prototype.raw = Serializable.prototype.raw;
 
-    
+
     if (!DnD) {
         DnD = {};
     }
-    
+
     DnD.Roll = Roll;
     DnD.Recharge = Recharge;
     DnD.SavingThrow = SavingThrow;

@@ -19,6 +19,10 @@
                     return this.writeState(request, response);
                 }
                 break;
+                case "PUT": {
+                    return this.log(request, response);
+                }
+                break;
             }
         }.bind(this)).listen(this.port);
     }
@@ -96,6 +100,17 @@
                 response.writeHead(status, {});
                 response.end(body);
             });
+        }.bind(this));
+    };
+
+    Server.prototype.log = function(request, response) {
+        if (!request) {
+            return;
+        }
+        this.readRequestBody(request, function(data) {
+            console.log(data + "\n");
+            response.writeHead(200, {});
+            response.end(data);
         }.bind(this));
     };
 

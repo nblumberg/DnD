@@ -14,7 +14,7 @@ describe("actions.js", function() {
 
     describe("Roll", function() {
         var roll, params;
-        
+
         describe("new", function() {
             describe("default", function() {
                 beforeEach(function() {
@@ -32,7 +32,7 @@ describe("actions.js", function() {
                     expect(roll.crits).toEqual(false);
                 });
             });
-            
+
             describe("from String", function() {
                 var checkField, s, itExists, itInitializes;
                 checkField = function(s, p) {
@@ -58,9 +58,9 @@ describe("actions.js", function() {
                     it("should have the correct extra amount [" + s + "]", checkField.bind(this, s, "extra"));
                 }
             });
-            
+
             describe("from Object", function() {
-                var checkField, s, itExists, itInitializes; 
+                var checkField, s, itExists, itInitializes;
                 checkField = function(s, p) {
                     roll = new Roll(diceNotations[ s ]);
                     expect(roll[ p ]).toEqual(diceNotations[ s ][ p ]);
@@ -84,7 +84,7 @@ describe("actions.js", function() {
                 }
             });
         });
-        
+
         describe("clone()", function() {
             var checkField, clone, s, itExists, itInitializes;
             checkField = function(s, p) {
@@ -112,7 +112,7 @@ describe("actions.js", function() {
                 it("should properly crit [" + s + "]", checkField.bind(this, s, "crits"));
             }
         });
-        
+
         describe("roll()", function() {
             var s, itNumber, itHistory, itDice;
             itNumber = function(s) {
@@ -160,7 +160,7 @@ describe("actions.js", function() {
                 it("each history entry should have an Array containing the rolled value of each die and the total [" + s + "]", itDice.bind(this, s));
             }
         });
-        
+
         describe("max()", function() {
             var s, itNumber, itHistory, itDice;
             itNumber = function(s) {
@@ -201,7 +201,7 @@ describe("actions.js", function() {
                 it("each history entry should have an Array containing the rolled value of each die, the total, and isMax: true [" + s + "]", itDice.bind(this, s));
             }
         });
-        
+
         describe("min()", function() {
             var s, itNumber, itHistory, itDice;
             itNumber = function(s) {
@@ -242,7 +242,7 @@ describe("actions.js", function() {
                 it("each history entry should have an Array containing the rolled value of each die, the total, and isMin: true [" + s + "]", itDice.bind(this, s));
             }
         });
-        
+
         describe("add()", function() {
             var s, itHistory, itDice;
             itHistory = function(s, r) {
@@ -280,7 +280,7 @@ describe("actions.js", function() {
                 it("each history entry should have an Array containing the rolled value of each die, the total, and manual: true [" + s + "]", itDice.bind(this, s, result));
             }
         });
-        
+
         describe("getLastRoll()", function() {
             var s, itReturn, itEmpty;
             itReturn = function(s) {
@@ -297,7 +297,7 @@ describe("actions.js", function() {
                 it("if there is no history, it should return an empty history entry [" + s + "]", itEmpty.bind(this, s));
             }
         });
-        
+
         describe("isCritical()", function() {
             var s, itNotCrit, itNoRolls, itNot20, itCrit;
             itNotCrit = function(s) {
@@ -334,7 +334,7 @@ describe("actions.js", function() {
                 }
             }
         });
-        
+
         describe("isFumble()", function() {
             var s, itNotFumble, itNoRolls, itNot1, itFumble;
             itNotFumble = function(s) {
@@ -371,7 +371,7 @@ describe("actions.js", function() {
                 }
             }
         });
-        
+
         describe("toString()", function() {
             var s, itReturn;
             itReturn = function(s) {
@@ -382,7 +382,7 @@ describe("actions.js", function() {
                 it("should return " + s, itReturn.bind(this, s));
             }
         });
-        
+
         describe("breakdown()", function() {
             var s, itReturn;
             itReturn = function(s) {
@@ -395,7 +395,7 @@ describe("actions.js", function() {
                 // TODO: conditionals
             }
         });
-        
+
         describe("anchor()", function() {
             var s, itReturn;
             itReturn = function(s) {
@@ -410,7 +410,7 @@ describe("actions.js", function() {
                 // TODO: conditionals
             }
         });
-        
+
         describe("raw()", function() {
             describe("should return an Object that when passed to new Roll(Object) creates an identical Roll instance", function() {
                 var s, roll2, p, itFn;
@@ -422,14 +422,16 @@ describe("actions.js", function() {
                     result = roll.raw();
                     roll2 = new Roll(result);
                     for (p in roll) {
-                        it(p + " [" + s + "]", itFn.bind(this, roll, roll2, p));
+                        if (roll.hasOwnProperty(p) && p.substring(0,2) !== "__") {
+                            it(p + " [" + s + "]", itFn.bind(this, roll, roll2, p));
+                        }
                     }
                 }
             });
         });
-        
-    });    
-    
+
+    });
+
     describe("Recharge", function() {
         var recharge;
         beforeEach(function() {
@@ -450,8 +452,8 @@ describe("actions.js", function() {
                 expect(recharge.anchor()).toEqual("<a href=\"javascript:void(0);\" title=\"[Recharge] 6 &lt;= 3\">Failed to recharge testAttack</a>");
             });
         });
-    });    
-    
+    });
+
     describe("SavingThrow", function() {
         var st;
         beforeEach(function() {
@@ -472,8 +474,8 @@ describe("actions.js", function() {
                 expect(st.anchor()).toEqual("<a href=\"javascript:void(0);\" title=\"[Saving Throw] 1\">Fails to save against testeffect</a>");
             });
         });
-    });    
-    
+    });
+
     describe("Damage", function() {
         var damage, damageNotations, creature;
         damageNotations = jQuery.extend({
@@ -485,7 +487,7 @@ describe("actions.js", function() {
             "5[W]+STR/DEX": { dieCount: 0, dieSides: 0, extra: 0, crits: false, type: null, crit: null, needsWeapon: true, weaponMultiplier: 5, meleeExtra: 1, rangedExtra: 3,  /* testing properties */ max: 0, min: 0, breakdown: "[3[W]+6] " }
         }, diceNotations);
         creature = { abilities: { STRmod: 1, CONmod: 2, DEXmod: 3, INTmod: 4, WISmod: 5, CHAmod: 6 } };
-        
+
         describe("new", function() {
             describe("default", function() {
                 beforeEach(function() {
@@ -510,7 +512,7 @@ describe("actions.js", function() {
                     expect(damage.rangedExtra).toEqual(0);
                 });
             });
-            
+
             describe("from String", function() {
                 var s, w, checkField, itExists, itInitializes;
                 checkField = function(s, w, p) {
@@ -526,7 +528,7 @@ describe("actions.js", function() {
                     damage = new Damage(s, creature);
                     expect(damage._history).toEqual([]);
                     expect(damage.crits).toEqual(false);
-                    
+
                     expect(damage.type).toEqual("");
                     expect(damage.crit).toEqual(null);
                     expect(damage.needsWeapon).toEqual(damageNotations[ s ].needsWeapon || false);
@@ -547,7 +549,7 @@ describe("actions.js", function() {
                     it("should have the same ranged extra [" + s + "]", checkField.bind(this, s, "rangedExtra"));
                 }
             });
-            
+
             describe("from Object", function() {
                 var checkField, s, itExists, itInitializes;
                 checkField = function(s, p) {
@@ -578,7 +580,7 @@ describe("actions.js", function() {
                 }
             });
         });
-        
+
         describe("clone()", function() {
             var s, checkField, clone, itExists, itInitializes;
             checkField = function(s, p) {
@@ -611,7 +613,7 @@ describe("actions.js", function() {
                 it("should have the same ranged extra [" + s + "]", checkField.bind(this, s, "rangedExtra"));
             }
         });
-        
+
         xdescribe("rollItem()", function() {
             var s, w, itNumber, itHistory, itDice;
             itNumber = function(s, w) {
@@ -662,11 +664,11 @@ describe("actions.js", function() {
                 }
             }
         });
-        
+
         // TODO: toString()
-        
-    });    
-    
+
+    });
+
     describe("Attack", function() {
         // TODO
     });

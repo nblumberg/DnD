@@ -1,4 +1,4 @@
-/* global DnD:true, safeConsole, EventDispatcher, Serializable, loadParty, loadMonsters */
+/* global DnD:true, safeConsole, logFn, EventDispatcher, Serializable, loadParty, loadMonsters */
 
 /* exported DnD */
 var DnD;
@@ -10,8 +10,6 @@ var DnD;
         DnD = {};
     }
 
-    var storage = new DnD.Storage();
-
     // CONSTRUCTOR & INITIALIZATION METHODS
 
     /**
@@ -19,6 +17,9 @@ var DnD;
      * @param {String} params.target
      */
     function Initiative(params) {
+        this.__log = logFn.bind(this, "Initiative");
+        this.__log("constructor", arguments);
+        this.__storage = new DnD.Storage();
         window.name = "admin";
 
         this._created = false;
@@ -62,9 +63,11 @@ var DnD;
 
     Initiative.prototype._init = function(params) {
         var p, i, j, actor, creature;
+        this.__log("_init", params ? [ "params" ] : undefined);
 
         if (!params) {
-            storage.read("initiative", function(data) {
+            logFn("Storage", "read", [ "initiative" ]);
+            this.__storage.read("initiative", function(data) {
                 if (data) {
                     console.info("Loaded from storage");
                 }
@@ -158,6 +161,7 @@ var DnD;
 
     Initiative.prototype.initFromFile = function(event) {
         var reader, files, file;
+        this.__log("initFromFile", arguments);
         reader = new FileReader();
         files = event.target.files; // FileList object
         file = files[ 0 ]; // File object
@@ -171,6 +175,7 @@ var DnD;
 
     Initiative.prototype._randomInitiative = function() {
         var actor, i;
+        this.__log("_randomInitiative", arguments);
         this.order = [];
         for (i = 0; i < this.actors.length; i++) {
             actor = this.actors[ i ];
@@ -191,6 +196,7 @@ var DnD;
     // DOM READY METHODS
 
     Initiative.prototype._create = function() {
+        this.__log("_create", arguments);
         if (!this._created) {
             this.$parent = jQuery(this._$target.length ? this._$target : "body");
 
@@ -226,8 +232,8 @@ var DnD;
             });
 
             this.exportDialog = new DnD.Dialog.Export({});
-            this.$export = jQuery("#export").on({ click: storage.read.bind(
-                storage,
+            this.$export = jQuery("#export").on({ click: this.__storage.read.bind(
+                this.__storage,
                 "initiative",
                 function(data) {
                     this.exportDialog.show(data);
@@ -269,6 +275,7 @@ var DnD;
     };
 
     Initiative.prototype._createBody = function() {
+        this.__log("_createBody", arguments);
         jQuery("#tableContainer").load("/html/partials/actorTable.html", null, this._renderActorTable.bind(this));
         this.history.addToPage(jQuery("#history"));
         this._createHistory();
@@ -276,6 +283,7 @@ var DnD;
 
     Initiative.prototype._createHistory = function() {
         var $option;
+        this.__log("_createHistory", arguments);
         // Editor for adding arbitrary history
         this.$freeFormHistorySubject = jQuery("select#freeFormHistorySubject");
         this._renderHistoryEditor();
@@ -297,6 +305,7 @@ var DnD;
 
     Initiative.prototype._getActor = function(id) {
         var i;
+        this.__log("_getActor", arguments);
         for (i = 0; i < this.actors.length; i++) {
             if (this.actors[ i ].id === id) {
                 return this.actors[ i ];
@@ -307,6 +316,7 @@ var DnD;
 
     Initiative.prototype._countActorsByType = function(type, actors, adding) {
         var i, actor, potential, count;
+        this.__log("_countActorsByType", arguments);
         if (!actors) {
             actors = this.actors;
         }
@@ -336,6 +346,8 @@ var DnD;
 
     Initiative.prototype._addActor = function(creature, actors, currentState) {
         var count, actor;
+        this.__log("_addActor", [ creature.name, actors ? actors.length : 0, currentState ? "currentState" : "undefined" ]);
+        //window.alert("stop");
         // in case "-------" or "        " was selected in the Creature dialog or we've encountered junk data
         if (!creature) {
             console.warn("Skipping adding undefined actor");
@@ -412,6 +424,7 @@ var DnD;
     // RENDERING METHODS
 
     Initiative.prototype._render = function(updateDisplay) {
+        this.__log("_render", arguments);
         if (this.$display) {
             this.$display.children().remove();
         }
@@ -428,6 +441,7 @@ var DnD;
     Initiative.prototype._renderActorTable = function() { // responseText, textStatus, jqXHR
         var setInitiative, attack, i, actor;
 
+        this.__log("_renderActorTable", arguments);
         this._renderRound();
 
         if (!this.$table || !this.$table.length) {
@@ -455,7 +469,14 @@ var DnD;
         }.bind(this);
 
         attack = function(a) {
-            this.attackDialog.show({ attacker: a, actors: this.actors });
+            var active, i;
+            active = [];
+            for (i = 0; i < this.actors.length; i++) {
+                if (this._isActive(this.actors[ i ])) {
+                    active.push(this.actors[ i ]);
+                }
+            }
+            this.attackDialog.show({ attacker: a, actors: active });
         };
 
         for (i = 0; i < this.order.length; i++) {
@@ -487,14 +508,18 @@ var DnD;
 
     Initiative.prototype._renderHistoryEditor = function() {
         var i, actor;
+        this.__log("_renderHistoryEditor", arguments);
         this.$freeFormHistorySubject.children().remove();
         for (i = 0; i < this.actors.length; i++) {
             actor = this.actors[ i ];
-            jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
+            if (this._isActive(actor)) {
+                jQuery("<option/>").attr("value", actor.name).html(actor.name).data("actor", actor).appendTo(this.$freeFormHistorySubject);
+            }
         }
     };
 
     Initiative.prototype._renderRound = function() {
+        this.__log("_renderRound", arguments);
         if (!this.$round || !this.$round.length) {
             this.$round = jQuery("input#round");
         }
@@ -514,6 +539,7 @@ var DnD;
 
     Initiative.prototype._renderDisplay = function(createDisplay, event) {
         var data;
+        this.__log("_renderDisplay", arguments);
         if (event) {
             event.stopPropagation(); // TODO, HACK: why are we getting 80+ hits for the same event?
         }
@@ -528,6 +554,7 @@ var DnD;
 
     Initiative.prototype._messageDisplay = function(msg, createDisplay) {
         var json = "";
+        this.__log("_messageDisplay", arguments);
         if (createDisplay && !(this.display && !this.display.closed)) {
             // Create a new window
             // TODO: what about the initial msg?
@@ -549,6 +576,7 @@ var DnD;
 
     Initiative.prototype._displayLoadHandler = function(event) {
         var intervalId;
+        this.__log("_displayLoadHandler", arguments);
         console.info("Display loaded");
 
         // Clean up the old window
@@ -569,21 +597,26 @@ var DnD;
     };
 
     Initiative.prototype.toString = function() {
+        this.__log("toString", arguments);
         return "[Initiative]";
     };
 
     Initiative.prototype.toJSON = function() {
-        var raw = this.raw();
+        var raw;
+        this.__log("toJSON", arguments);
+        raw = this.raw();
         return JSON.stringify(raw, null, "  ");
     };
 
     Initiative.prototype._autoSave = function(data) {
+        this.__log("_autoSave", arguments);
         data = data ? data : this.toJSON();
-        storage.write("initiative", data);
+        this.__storage.write("initiative", data);
     };
 
     Initiative.prototype._clearAll = function() {
         var $old;
+        this.__log("_clearAll", arguments);
         $old = this.history.$html;
         $old.parent();
         DnD.History.Entry.entries = {};
@@ -599,12 +632,14 @@ var DnD;
     };
 
     Initiative.prototype._clearCreatures = function() {
+        this.__log("_clearCreatures", arguments);
         DnD.Creature.creatures = {};
         this._render(true);
     };
 
     Initiative.prototype._clearHistory = function() {
         var i, actor;
+        this.__log("_clearHistory", arguments);
         // WTF? it's entering the for loop even when i !< this.actors.length
         for (i = 0; i < this.actors.length; i++) {
             actor = this.actors[ i ];
@@ -619,6 +654,7 @@ var DnD;
 
     Initiative.prototype._clearMonsters = function() {
         var i;
+        this.__log("_clearMonsters", arguments);
         for (i = 0; i < this.actors.length; i++) {
             if (!this.actors[ i ].isPC) {
                 this.actors.splice(i, 1);
@@ -629,7 +665,9 @@ var DnD;
     };
 
     Initiative.prototype._addHistory = function(actor, message, method) {
-        var entry = new DnD.History.Entry({ round: this.round, subject: actor, message: message });
+        var entry;
+        this.__log("_addHistory", arguments);
+        entry = new DnD.History.Entry({ round: this.round, subject: actor, message: message });
         if (typeof(method) === "undefined") {
             method = "info";
         }
@@ -643,6 +681,7 @@ var DnD;
 
     Initiative.prototype._previous = function() {
         var msg, i, actor;
+        this.__log("_previous", arguments);
         actor = this._getActor(this._current);
         actor.card.makeCurrent(false);
         i = this.order.indexOf(this._current);
@@ -672,6 +711,7 @@ var DnD;
 
     Initiative.prototype._next = function() {
         var msg, i, actors, actor;
+        this.__log("_next", arguments);
         i = this.order.indexOf(this._current);
         actors = [];
         actor = this._getActor(this._current);
@@ -708,6 +748,7 @@ var DnD;
 
     Initiative.prototype._changeInitiative = function(order) {
         var test, i, actor;
+        this.__log("_changeInitiative", arguments);
 
         test = "[ ";
         this.order = order;
@@ -724,6 +765,7 @@ var DnD;
 
     Initiative.prototype._reorder = function(actor, delta) {
         var index, length, other, test, i;
+        this.__log("_reorder", arguments);
         index = this.order.indexOf(actor.id);
         length = this.order.length;
         this.order.splice(index, 1);
@@ -751,6 +793,7 @@ var DnD;
 
     Initiative.prototype._rest = function(isExtendedRest) {
         var actors, i, actor, msg, j, attack;
+        this.__log("_rest", arguments);
 
         actors = [];
         actor = this._getActor(this._current);
@@ -812,17 +855,20 @@ var DnD;
 
 
     Initiative.prototype._shortRest = function() {
+        this.__log("_shortRest", arguments);
         this._rest(false);
     };
 
 
     Initiative.prototype._extendedRest = function() {
+        this.__log("_extendedRest", arguments);
         this._rest(true);
     };
 
 
     Initiative.prototype._getActor = function(id) {
         var i;
+        this.__log("_getActor", arguments);
         for (i = 0; i < this.actors.length; i++) {
             if (this.actors[ i ] && this.actors[ i ].id === id) {
                 return this.actors[ i ];
@@ -831,8 +877,14 @@ var DnD;
         return null;
     };
 
+    Initiative.prototype._isActive = function(actor) {
+        this.__log("_isActive", arguments);
+        return this.order.indexOf(actor.id) !== -1;
+    };
+
     Initiative.prototype._exit = function(actor) { // actor, event
         var index;
+        this.__log("_exit", arguments);
         if (window.confirm("Remove " + actor.name + " from play?")) {
             index = this.order.indexOf(actor.id);
             this.order.splice(index, 1);
@@ -848,6 +900,7 @@ var DnD;
 
     Initiative.prototype._rename = function(actor) { // actor, event
         var oldName, newName;
+        this.__log("_rename", arguments);
         oldName = actor.name;
         newName = window.prompt("Rename " + oldName);
         if (newName) {
@@ -860,7 +913,9 @@ var DnD;
     };
 
     Initiative.prototype.raw = function() {
-        var raw = {
+        var raw;
+        this.__log("raw", arguments);
+        raw = {
             order: this.order,
             actors: this.rawArray(this.actors),
             history: this.history.raw(),
