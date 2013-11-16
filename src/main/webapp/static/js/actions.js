@@ -75,7 +75,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
             h.dice.push(die);
             value += die;
         }
-        h.total = value + this.extra;
+        h.total = value + (this.extra || 0);
         return h.total;
     };
 
@@ -91,7 +91,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
             value += die;
         }
         h.isMax = true;
-        h.total = value + this.extra;
+        h.total = value + (this.extra || 0);
         return h.total;
     };
 
@@ -107,7 +107,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
             value += die;
         }
         h.isMin = true;
-        h.total = value + this.extra;
+        h.total = value + (this.extra || 0);
         return h.total;
     };
 

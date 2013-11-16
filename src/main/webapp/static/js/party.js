@@ -1671,12 +1671,15 @@ var loadParty;
                             frequency: "Encounter"
                         },
                         target: {
-                            area: "burst",
-                            size: 5
+                            area: "close burst",
+                            size: 3
                         },
                         toHit: "STR",
                         defense: "Will",
-                        damage: "3d10+STR",
+                        damage: {
+                            amount: "3d10+STR",
+                            type: "psychic"
+                        },
                         effects: [
                             {
                                 name: "dazed",
@@ -1752,21 +1755,6 @@ var loadParty;
                         toHit: "automatic",
                         defense: "AC",
                         damage: "1d8"
-                    }, {
-                        name: "Your Doom Awaits",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            area: "close burst",
-                            size: 3
-                        },
-                        toHit: "STR^WIS",
-                        defense: "Will",
-                        damage: "3d10+STR",
-                        keywords: [
-                            "fear", "implement", "primal", "psychic"
-                        ]
                     }
                 ],
                 effects: []
@@ -2711,6 +2699,15 @@ var loadParty;
                 speed: 7,
                 weapons: [
                     {
+                        name: "Forceful Longbow +4",
+                        isMelee: false,
+                        enhancement: 4,
+                        proficiency: 2,
+                        damage: {
+                            amount: "1d10",
+                            crit: "0"
+                        }
+                    }, {
                         name: "Longbow of Speed +2",
                         isMelee: false,
                         enhancement: 2,

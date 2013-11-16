@@ -611,6 +611,9 @@ var DnD;
     Initiative.prototype._autoSave = function(data) {
         this.__log("_autoSave", arguments);
         data = data ? data : this.toJSON();
+        if (data === this.__lastData) {
+            return;
+        }
         this.__storage.write("initiative", data);
     };
 
@@ -696,6 +699,9 @@ var DnD;
         }
         this.history._round = this.round;
         actor = this._getActor(this._current);
+        jQuery("html, body").animate({
+            scrollTop: actor.tr.$tr.offset().top - 100
+        }, 1000);
         actor.card.makeCurrent(true);
         if (actor.hasCondition("dead")) {
             this.previous();
@@ -732,6 +738,9 @@ var DnD;
         }
         this.history._round = this.round;
         actor = this._getActor(this._current);
+        jQuery("html, body").animate({
+            scrollTop: actor.tr.$tr.offset().top - 100
+        }, 1000);
         actor.card.makeCurrent(true);
         actors.push(actor);
         msg = actor.startTurn();

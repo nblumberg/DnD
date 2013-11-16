@@ -85,8 +85,19 @@
         }
         fileName = url.pathname.substring(1).replace(/\//g, ".") + ".json";
         this.readRequestBody(request, function(data) {
+            var status, body;
+            try {
+                JSON.parse(data);
+            }
+            catch(e) {
+                body = "Attempted to write invalid JSON to file " + fileName + ": " + e + "\n" + data;
+                console.error(body);
+                status = 500;
+                response.writeHead(status, {});
+                response.end(body);
+                return;
+            }
             this.fs.writeFile(this.basePath + fileName, data, function(e) {
-                var status, body;
                 if (e) {
                     body = "Failed to save " + fileName + " because: " + e;
                     console.log(body);
