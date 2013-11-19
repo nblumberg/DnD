@@ -2,7 +2,7 @@ var DnD, safeConsole, Serializable, Creature;
 
 (function(console) {
     "use strict";
-    
+
     /**
      * @param params {Object | String} If a String, acts as params.name (below)
      * @param [params.name] {String} The name of the Effect, defaults to "Unknown effect"
@@ -13,7 +13,7 @@ var DnD, safeConsole, Serializable, Creature;
      * @param [params.duration] {String} How long the Effect lasts before destroying itself (Effect.DURATION_START_TARGET_NEXT | Effect.DURATION_END_TARGET_NEXT | Effect.DURATION_START_ATTACKER_NEXT | Effect.DURATION_END_ATTACKER_NEXT)
      * @param [params.isNextTurn] {Boolean} Whether the duration has passed into the target/attacker's next turn (only for Effect instances loaded from stored data)
      * @param [params.saveEnds] {Boolean} Indicates that a saving throw ends this Effect
-     * 
+     *
      */
     function Effect(params) {
         var i, childParams;
@@ -28,7 +28,7 @@ var DnD, safeConsole, Serializable, Creature;
         }
         else if (typeof(params) === "object" && params.hasOwnProperty("name") && params.name) {
             this.name = params.name;
-        } 
+        }
         this.amount = params.amount || 0;
         this.type = params.type || "";
         this.duration = params.duration || null;
@@ -41,7 +41,7 @@ var DnD, safeConsole, Serializable, Creature;
             console.warn("Effect " + this.name + "[" + this.target.name + "] created without startRound");
             this.startRound = DnD.History && DnD.History.central && DnD.History.central._round ? DnD.History.central._round : 1; // TODO: figure out why this is coming back null
         }
-        
+
         this.children = [];
         for (i = 0; params.children && i < params.children.length; i++) {
             childParams = typeof(params.children[ i ]) === "string" ? params.children[ i ] : jQuery.extend({}, params.children[ i ], { round: params.round, target: this.target, attacker: this.attacker });
@@ -64,7 +64,7 @@ var DnD, safeConsole, Serializable, Creature;
                 this.target.effects.splice(i, 1);
             }
         }
-        if (this.attacker) {
+        if (this.attacker && this.attacker.imposedEffects) {
             i = this.attacker.imposedEffects.indexOf(this);
             if (i !== -1) {
                 this.attacker.imposedEffects.splice(i, 1);
@@ -119,12 +119,12 @@ var DnD, safeConsole, Serializable, Creature;
         this.target = this.target ? this.target.id : null;
         attacker = this.attacker;
         this.attacker = this.attacker ? this.attacker.id : null;
-        
+
         r = Serializable.prototype.raw.call(this);
-        
+
         this.target = target;
         this.attacker = attacker;
-        
+
         return r;
     };
 
@@ -132,7 +132,7 @@ var DnD, safeConsole, Serializable, Creature;
     Effect.DURATION_END_TARGET_NEXT = "endTargetNext";
     Effect.DURATION_START_ATTACKER_NEXT = "startAttackerNext";
     Effect.DURATION_END_ATTACKER_NEXT = "endAttackerNext";
-    
+
     Effect.CONDITIONS = {
             blinded: { image: "../images/symbols/blinded.png" }, // "http://icons.iconarchive.com/icons/anatom5/people-disability/128/blind-icon.png",
             dazed: { image: "../images/symbols/dazed.jpg" }, // "http://1.bp.blogspot.com/_jJ7QNDTPcRI/TUs0RMuPz6I/AAAAAAAAAjo/YGnw2mI-aMo/s320/dizzy-smiley.jpg",
@@ -173,7 +173,7 @@ var DnD, safeConsole, Serializable, Creature;
             unknown: { image: "../images/symbols/unknown.png", color: "#FF0000" },
             weakened: { image: "../images/symbols/weakened.png" } // "http://pictogram-free.com/material/003.png"
     };
-    
+
     if (!DnD) {
         DnD = {};
     }

@@ -74,8 +74,10 @@
         response.end(responseBody);
     };
 
+    Server.prototype._pendingWrites = [];
+
     Server.prototype.writeState = function(request, response) {
-        var url, fileName;
+        var url;
         if (!request || !request.url) {
             return;
         }
@@ -83,36 +85,58 @@
         if (!url || !url.pathname) {
             return;
         }
-        fileName = url.pathname.substring(1).replace(/\//g, ".") + ".json";
-        this.readRequestBody(request, function(data) {
-            var status, body;
+        this.readRequestBody(request, function(write, data) {
+            var body, status;
             try {
                 JSON.parse(data);
+                write.data = data;
+                if (this._pendingWrites.length) {
+                    // Queue write so we don't have concurrent writes
+                    this._pendingWrites.push(write);
+                    return;
+                }
+                this._pendingWrites.push(write);
             }
-            catch(e) {
-                body = "Attempted to write invalid JSON to file " + fileName + ": " + e + "\n" + data;
+            catch (e) {
+                body = "Attempted to write invalid JSON to file " + write.fileName + ": " + e;// + "\n" + data;
                 console.error(body);
                 status = 500;
-                response.writeHead(status, {});
-                response.end(body);
-                return;
+                write.response.writeHead(status, {});
+                write.response.end(body);
             }
-            this.fs.writeFile(this.basePath + fileName, data, function(e) {
-                if (e) {
-                    body = "Failed to save " + fileName + " because: " + e;
-                    console.log(body);
-                    status = 500;
-                }
-                else {
-                    body = "Saved " + fileName;
-                    console.log(body);
-                    status = 200;
-                }
-                response.writeHead(status, {});
-                response.end(body);
-            });
-        }.bind(this));
+            this._writeFile();
+        }.bind(this, {
+            request: request,
+            response: response,
+            fileName: url.pathname.substring(1).replace(/\//g, ".") + ".json"
+        }));
     };
+
+
+    Server.prototype._writeFile = function() {
+        var write = this._pendingWrites.shift();
+        if (!write) {
+            return;
+        }
+
+        this.fs.writeFile(this.basePath + write.fileName, write.data, function(write, e) {
+            var body, status;
+            if (e) {
+                body = "Failed to save " + write.fileName + " because: " + e;
+                console.log(body);
+                status = 500;
+            }
+            else {
+                body = "Saved " + write.fileName;
+                console.log(body);
+                status = 200;
+            }
+            write.response.writeHead(status, {});
+            write.response.end(body);
+            this._writeFile();
+        }.bind(this, write));
+    };
+
 
     Server.prototype.log = function(request, response) {
         if (!request) {
@@ -137,16 +161,19 @@
     };
 
     Server.prototype.readRequestBody = function(request, callback) {
+        var data;
         if (!request || typeof(callback) !== "function") {
             return;
         }
-        request.on("readable", function() {
-            var data, chunk, fileName;
-            data = "";
-            while (null !== (chunk = request.read())) {
-                data += chunk;
-            }
-
+        if (request.body) {
+            callback(request.body);
+            return;
+        }
+        data = "";
+        request.on("data", function(chunk) {
+            data += chunk;
+        }.bind(this));
+        request.on("end", function() {
             callback(data);
         }.bind(this));
     };
