@@ -15,13 +15,15 @@ module.exports = function(config) {
 
 
         // list of files to exclude
-        exclude: [],
+        exclude: [
+            "**/admin.js"
+        ],
 
         // use dots reporter, as travis terminal does not support escaping sequences
         // possible values: "dots", "progress"
         // CLI --reporters progress
         reporters: [
-            "progress", "junit", "coverage"
+            "progress", "junit", "coverage"//, "html"
         ],
 
         junitReporter: {
@@ -34,6 +36,12 @@ module.exports = function(config) {
             type: "html",
             dir: "coverage/"
         },
+
+//        // the default configuration
+//        htmlReporter: {
+//            outputDir: "karma_html",
+//            templatePath: "node_modules/karma-html-reporter/jasmine_template.html"
+//        },
 
         // web server port
         // CLI --port 9876
@@ -83,52 +91,10 @@ module.exports = function(config) {
             "karma-firefox-launcher",
             "karma-junit-reporter",
             "karma-commonjs",
+            //"karma-html-reporter",
             "karma-coverage"
         ]
     };
-
-    // list of files / patterns to load in the browser
-    files: [
-        "src/main/webapp/static/js/js.js",
-        "src/main/webapp/static/js/serializable.js",
-        "src/main/webapp/static/js/event.js",
-        "src/main/webapp/static/js/effect.js",
-        "src/main/webapp/static/js/actions.js",
-        "src/main/webapp/static/js/editor.js",
-        "src/main/webapp/static/js/creature.js",
-        "src/main/webapp/static/js/data.js",
-        "src/main/webapp/static/js/monsters.js",
-        "src/main/webapp/static/js/party.js",
-        "src/main/webapp/static/js/history.js",
-
-        // fixtures
-        {
-            pattern: "src/main/webapp/static/html/partials/**/*.html",
-            watched: true,
-            included: false,
-            served: true
-        },
-        {
-            pattern: "src/test/webapp/jasmine/spec/javascripts/fixtures/**/*.html",
-            watched: true,
-            included: false,
-            served: true
-        },
-
-        // test specs to run
-        "src/test/webapp/jasmine/spec/testUtilities.js",
-        "src/test/webapp/jasmine/spec/creatureTestUtilities.js",
-        "src/test/webapp/jasmine/spec/jsTest.js",
-        "src/test/webapp/jasmine/spec/serializableTest.js",
-        "src/test/webapp/jasmine/spec/eventTest.js",
-        "src/test/webapp/jasmine/spec/effectTest.js",
-        "src/test/webapp/jasmine/spec/actionsTest.js",
-        "src/test/webapp/jasmine/spec/editorTest.js",
-        "src/test/webapp/jasmine/spec/dataTest.js",
-        "src/test/webapp/jasmine/spec/monstersTest.js",
-        "src/test/webapp/jasmine/spec/partyTest.js",
-        "src/test/webapp/jasmine/spec/historyTest.js"
-    ],
 
     // application/lib dependencies
     libFiles = [
@@ -152,6 +118,14 @@ module.exports = function(config) {
     ];
 
     coverageFiles = [
+//        "src/main/webapp/static/js/js.js",
+//        "src/main/webapp/static/js/serializable.js",
+//        "src/main/webapp/static/js/event.js",
+//        "src/main/webapp/static/js/data.js",
+//        "src/main/webapp/static/js/monsters.js",
+//        "src/main/webapp/static/js/party.js",
+//        "src/main/webapp/static/js/dialog.js",
+//        "src/main/webapp/static/js/**.js"//,
         "src/main/webapp/static/js/js.js",
         "src/main/webapp/static/js/serializable.js",
         "src/main/webapp/static/js/event.js",
