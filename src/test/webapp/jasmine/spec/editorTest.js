@@ -1,7 +1,6 @@
+/* global jasmine, describe, it, expect, spyOn, DnD.Display.Editor */
 (function() {
     "use strict";
-
-    /* global jasmine, describe, it, expect, spyOn, DnD.Display.Editor */
 
     describe("editor.js", function() {
         var $div = null, params = null, editor = null, event;

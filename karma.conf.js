@@ -16,7 +16,8 @@ module.exports = function(config) {
 
         // list of files to exclude
         exclude: [
-            "**/admin.js"
+            "**/admin.js",
+            "**/jquery.gameMap.js"
         ],
 
         // use dots reporter, as travis terminal does not support escaping sequences
@@ -118,41 +119,16 @@ module.exports = function(config) {
     ];
 
     coverageFiles = [
-//        "src/main/webapp/static/js/js.js",
-//        "src/main/webapp/static/js/serializable.js",
-//        "src/main/webapp/static/js/event.js",
-//        "src/main/webapp/static/js/data.js",
-//        "src/main/webapp/static/js/monsters.js",
-//        "src/main/webapp/static/js/party.js",
-//        "src/main/webapp/static/js/dialog.js",
-//        "src/main/webapp/static/js/**.js"//,
         "src/main/webapp/static/js/js.js",
-        "src/main/webapp/static/js/serializable.js",
-        "src/main/webapp/static/js/event.js",
-        "src/main/webapp/static/js/effect.js",
-        "src/main/webapp/static/js/actions.js",
-        "src/main/webapp/static/js/editor.js",
-        "src/main/webapp/static/js/creature.js",
-        "src/main/webapp/static/js/data.js",
-        "src/main/webapp/static/js/monsters.js",
-        "src/main/webapp/static/js/party.js",
-        "src/main/webapp/static/js/history.js"
+        "src/main/webapp/static/js/define.js",
+        "src/main/webapp/static/js/**.js"
     ];
 
     // test specs to run
     specFiles = [
         "src/test/webapp/jasmine/spec/testUtilities.js",
         "src/test/webapp/jasmine/spec/creatureTestUtilities.js",
-        "src/test/webapp/jasmine/spec/jsTest.js",
-        "src/test/webapp/jasmine/spec/serializableTest.js",
-        "src/test/webapp/jasmine/spec/eventTest.js",
-        "src/test/webapp/jasmine/spec/effectTest.js",
-        "src/test/webapp/jasmine/spec/actionsTest.js",
-        "src/test/webapp/jasmine/spec/editorTest.js",
-        "src/test/webapp/jasmine/spec/dataTest.js",
-        "src/test/webapp/jasmine/spec/monstersTest.js",
-        "src/test/webapp/jasmine/spec/partyTest.js",
-        "src/test/webapp/jasmine/spec/historyTest.js"
+        "src/test/webapp/jasmine/spec/**.js"
     ];
 
     // list of files / patterns to load in the browser

@@ -1,3 +1,4 @@
+/* global jQuery */
 /* exported safeConsole, sLog, logFn */
 var safeConsole, sLog, logFn;
 
@@ -224,26 +225,26 @@ var safeConsole, sLog, logFn;
     };
 
 
-    logFn = function(clazz, fnName, args) {
-        return;
-        var message, i, str;
-        message = clazz + (clazz ? "." : "") + fnName + "(";
-        for (i = 0; args && i < args.length; i++) {
-            if (args[ i ] && typeof(args[ i ]) === "object") {
-                str = args[ i ].toString();
-            }
-            if (!str || str === "[object Object]") {
-                try {
-                    str = JSON.stringify(args[ i ]);
-                }
-                catch(e) {
-                    str = "stringify error";
-                }
-            }
-            message += (i ? ", " : "") + str;
-        }
-        message += ")";
-        sLog(message);
+    logFn = function() { // function(clazz, fnName, args) {
+//        var message, i, str;
+//        str = null;
+//        message = clazz + (clazz ? "." : "") + fnName + "(";
+//        for (i = 0; args && i < args.length; i++) {
+//            if (args[ i ] && typeof(args[ i ]) === "object") {
+//                str = args[ i ].toString();
+//            }
+//            if (!str || str === "[object Object]") {
+//                try {
+//                    str = JSON.stringify(args[ i ]);
+//                }
+//                catch(e) {
+//                    str = "stringify error";
+//                }
+//            }
+//            message += (i ? ", " : "") + str;
+//        }
+//        message += ")";
+//        sLog(message);
     };
 
 })();

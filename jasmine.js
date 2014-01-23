@@ -41,6 +41,7 @@
             return true;
         }
         else {
+            pattern = pattern.replace("**", ".*");
             return (new RegExp(pattern)).test(target);
         }
     };
@@ -50,6 +51,7 @@
         if (!file || typeof(file) !== "string") { // handle Objects later
             return;
         }
+        console.log("Resolving file " + file);
         if (file.indexOf("*") === -1) {
             // Fully qualified path
             files.push(file);
@@ -57,16 +59,18 @@
         else {
             // Path pattern, lookup files
             path = file.split("*").shift();
-            pathFiles = this.fs.readdirSync(path);
+            console.log("Resolving files in " + path);
+            pathFiles = this.fs.readdirSync(path) || [];
+            console.log("Files in " + path + ":\n[ " + pathFiles.join(", ") + " ]");
             for (i = 0; pathFiles && i < pathFiles.length; i++) {
                 // Skip if we've already included it
-                if (files.indexOf(pathFiles[ i ]) !== -1) {
+                if (files.indexOf(pathFiles[ i ]) !== -1 || pathFiles[ i ].indexOf(".js") === -1) {
                     continue;
                 }
                 // Make sure it doesn't match anything on our exclude list before adding it
                 for (j = 0; this.config.exclude && j < this.config.exclude.length; j++) {
-                    if (!this.matchFilePattern(pathfiles[ i ], this.config.exclude[ j])) {
-                        files.push(pathfiles[ i ]);
+                    if (!this.matchFilePattern(pathFiles[ i ], this.config.exclude[ j])) {
+                        files.push(path + (path.charAt(path.length - 1) !== "/" && pathFiles[ i ].charAt(0) !== "/" ? "/" : "") + pathFiles[ i ]);
                     }
                 }
             }

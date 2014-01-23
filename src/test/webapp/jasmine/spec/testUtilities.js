@@ -164,3 +164,26 @@ Test.isOneOf = function(object, property, values, extra) {
     }).bind(this, object, property, values));
 };
 
+Test.expectedProperties = function(expected, actual) {
+    describe("it should have the expected properties", function() {
+        var p, itTest;
+        p = null;
+        itTest = function(expected, actual, p) {
+            expect(actual.hasOwnProperty(p)).toBe(true);
+            if (expected[ p ].hasOwnProperty("value")) {
+                expect(actual[ p ]).toEqual(expected[ p ].value);
+            }
+            if (expected[ p ].hasOwnProperty("type")) {
+                expect(typeof(actual[ p ])).toBe(expected[ p ].type);
+            }
+            if (expected[ p ].hasOwnProperty("instance")) {
+                expect(actual[ p ] instanceof expected[ p ].instance).toBe(true);
+            }
+        };
+        for (p in expected) {
+            if (expected.hasOwnProperty(p)) {
+                it("[" + p + "]", itTest.bind(this, expected, actual, p));
+            }
+        }
+    });
+};

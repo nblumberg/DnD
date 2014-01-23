@@ -1,6 +1,16 @@
-var DnD;
+/* global define */
+/* exported */
 (function() {
-	"use strict";
-	
-    window.initiative = new DnD.Initiative();
+    "use strict";
+
+    define({
+        name: "Admin",
+        dependencyNames: [ "Initiative" ],
+        factory: function(Initiative) {
+            new Initiative();
+            return true;
+        },
+        includeInNamespace: false,
+        namespace: "DnD"
+    });
 })();
