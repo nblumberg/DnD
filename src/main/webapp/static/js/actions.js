@@ -333,6 +333,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
     Damage.prototype._parseDamageString = function(str, creature) {
         var extra, i, value;
         this.__log("_parseDamageString", [ str, creature ? creature.name : "undefined" ]);
+        this.extra = 0;
         if (!str) {
             return;
         }
@@ -500,7 +501,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
         var str;
         this.__log("_breakdownToString", arguments);
         str = Roll.prototype._breakdownToString.call(this);
-        if (this.rollMultiplier && this.rollMultiplier != 1) {
+        if (this.rollMultiplier && this.rollMultiplier !== 1) {
             str += " * " + this.rollMultiplier;
         }
         return str;
@@ -570,6 +571,8 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
         this.used = params.used || false;
         this.defense = params.defense;
         this.toHit = params.toHit;
+        this.meleeExtra = 0;
+        this.rangedExtra = 0;
         if (typeof(this.toHit) === "string") {
             // If it's not a straight up numeric value
             this._toHitFromString(this.toHit, creature);
@@ -641,6 +644,10 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
             mods.sort();
             this.extra += mods.pop();
         }
+        else if (str.indexOf("STR/DEX") !== -1) {
+            this.meleeExtra = creature.abilities.STRmod;
+            this.rangedExtra = creature.abilities.DEXmod;
+        }
     };
 
     Attack.prototype.toHitModifiers = function(effects) {
@@ -661,8 +668,8 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
                 }
                 break;
             case "penalty": {
-                    if (effect.type === "attacks") {
-                        result.mod -= effect.amount;
+                    if (effects[ i ].type === "attacks") {
+                        result.mod -= effects[ i ].amount;
                         result.effects.push(effects[ i ].name + " to " + effects[ i ].type);
                     }
                 }
@@ -673,17 +680,65 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
         return result;
     };
 
-    Attack.prototype.rollItem = function(item) {
-        var h, total;
+    Attack.prototype.rollItem = function(item, forcedTotal, isCrit, isFumble) {
+        var total, extra, h;
         this.__log("rollItem", arguments);
-        total = Roll.prototype.roll.call(this);
-        if (item && item.enhancement) {
-            h = this.getLastRoll();
-            h.breakdown = " [+" + item.enhancement + " weapon]";
-            h.total += item.enhancement;
-            total += item.enhancement;
+        total = 0;
+        extra = 0;
+        h = { breakdown: "", dice: [] };
+
+        if (item) {
+            extra = item.enhancement ? item.enhancement : 0;
+            extra += item.proficiency ? item.proficiency : 0;
+            extra += this.meleeExtra && item.isMelee ? this.meleeExtra : 0;
+            extra += this.rangedExtra && !item.isMelee ? this.rangedExtra : 0;
         }
-        return total;
+
+        if (isCrit) {
+            total = Roll.prototype.max.call(this);
+        }
+        else if (isFumble) {
+            total = Roll.prototype.min.call(this);
+        }
+        else if (forcedTotal) {
+            total = h.total = forcedTotal - extra;
+            h.dice.push(forcedTotal - extra - this.extra);
+            this._history.push(h);
+        }
+        else {
+            total = Roll.prototype.roll.call(this);
+        }
+
+        h = this.getLastRoll();
+        if (item) {
+            if (item.proficiency) {
+                h.breakdown += " [+" + item.proficiency + " proficiency]";
+            }
+            if (item.enhancement) {
+                h.breakdown += " [+" + item.enhancement + " weapon]";
+            }
+            if (this.meleeExtra && item.isMelee) {
+                h.breakdown += " [+" + this.meleeExtra + " STR]";
+            }
+            if (this.rangedExtra && !item.isMelee) {
+                h.breakdown += " [+" + this.rangedExtra + " DEX]";
+            }
+        }
+        h.total += extra;
+        total += extra;
+
+        h.isCrit = isCrit;
+        h.isFumble = isFumble;
+        h.manual = forcedTotal > 0;
+        if (item) {
+            h.item = item;
+        }
+        return h.total;
+    };
+
+    Attack.prototype.addItem = function(item, total, isCrit, isFumble) {
+        this.__log("addItem", arguments);
+        return this.rollItem(item, total, isCrit, isFumble);
     };
 
     Attack.prototype._anchorHtml = function() {

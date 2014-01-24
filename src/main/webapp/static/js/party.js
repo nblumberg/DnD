@@ -7,7 +7,7 @@ var loadParty;
             Barases: {
                 name: "Barases",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/barases.jpg", // "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg",
                 abilities: {
                     STR: 12,
@@ -237,7 +237,7 @@ var loadParty;
             Smack: {
                 name: "Smack",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/smack.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862
                 abilities: {
                     STR: 20,
@@ -303,7 +303,7 @@ var loadParty;
             Oomooroo: {
                 name: "Oomooroo",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/owlbear.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862
                 abilities: {
                     STR: 20,
@@ -369,7 +369,7 @@ var loadParty;
             Bin: {
                 name: "Bin",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/bin.jpg", // "http://wizards.com/dnd/images/386_wr_changeling.jpg",
                 abilities: {
                     STR: 15,
@@ -901,7 +901,7 @@ var loadParty;
             Festivus: {
                 name: "Festivus",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/festivus.jpg", // "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg",
                 abilities: {
                     STR: 19,
@@ -1223,7 +1223,7 @@ var loadParty;
             Kallista: {
                 name: "Kallista",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/kallista.jpg", // "http://www.wizards.com/dnd/images/Dragon_373/11.jpg",
                 abilities: {
                     STR: 15,
@@ -1488,7 +1488,7 @@ var loadParty;
             Karrion: {
                 name: "Karrion",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/karrion.jpg", // "http://rogueartfx.com/images/tiefling03.jpg",
                 abilities: {
                     STR: 20,
@@ -1762,7 +1762,7 @@ var loadParty;
             Kitara: {
                 name: "Kitara",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/kitara.jpg", // "http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg",
                 abilities: {
                     STR: 17,
@@ -2652,7 +2652,7 @@ var loadParty;
             Lechonero: {
                 name: "Lechonero",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/lechonero.jpg", // "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg",
                 abilities: {
                     STR: 17,
@@ -2909,7 +2909,7 @@ var loadParty;
             Balugh: {
                 name: "Balugh",
                 isPC: true,
-                level: 11,
+                level: 13,
                 image: "../images/portraits/balugh.jpg", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
                 ap: 0,
                 hp: {

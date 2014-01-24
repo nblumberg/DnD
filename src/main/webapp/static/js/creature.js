@@ -431,21 +431,13 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         if (!toHit.isAutomaticHit) {
             if (manualRolls && manualRolls.attack && (manualRolls.attack.roll || manualRolls.attack.isCritical || manualRolls.attack.isFumble)) {
                 toHit.roll = manualRolls.attack.roll;
-                if (manualRolls.attack.isCritical) {
-                    attack.add(20 + attack.extra);
-                }
-                else if (manualRolls.attack.isFumble) {
-                    attack.add(1 + attack.extra);
-                }
-                else {
-                    attack.add(manualRolls.attack.roll - (item && item.enhancement ? item.enhancement : 0));
-                }
+                attack.addItem(item, manualRolls.attack.roll, manualRolls.attack.isCritical, manualRolls.attack.isFumble);
             }
             else {
-                toHit.roll = item ? attack.rollItem(item) : attack.roll();
+                toHit.roll = item ? attack.rollItem(item) : attack.roll(); // TODO: attack.meleeExtra vs. attack.rangdExtra when no item - how to determine isMelee?
             }
-            toHit.isCrit = attack.isCritical();
-            toHit.isFumble = attack.isFumble();
+            toHit.isCrit = attack.isCritical() && (!manualRolls || !manualRolls.attack || manualRolls.attack.isCritical);
+            toHit.isFumble = attack.isFumble() && (!manualRolls || !manualRolls.attack || manualRolls.attack.isFumble);
             if (!toHit.isCrit && !toHit.isFumble) {
                 toHit.conditional = attack.toHitModifiers(this.effects);
                 if (combatAdvantage) {
@@ -557,31 +549,37 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
             conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
         };
 
-        if (!damage.isManual) {
-            attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
-            for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
-                attackBonus = attackBonuses[ i ];
-                if (attackBonus.toHit) {
+        attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
+        for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
+            attackBonus = attackBonuses[ i ];
+            if (attackBonus.toHit) {
+                if (!damage.isManual) {
                     toHitTarget.roll += attackBonus.toHit;
                     toHitTarget.conditional.mod += attackBonus.toHit;
-                    toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
                 }
-                if (attackBonus.damage) {
+                toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
+            }
+            if (attackBonus.damage) {
+                if (!damage.isManual) {
                     targetDamage.amount += attackBonus.damage;
                     targetDamage.conditional.mod += attackBonus.damage;
                     targetDamage.conditional.total += attackBonus.damage;
-                    targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
-                    if (attack.miss && targetDamage.missAmount) {
-                        if (attack.miss.halfDamage) {
-                            tmp = Math.floor(attackBonus.damage / 2);
+                }
+                targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
+                if (attack.miss && targetDamage.missAmount) {
+                    if (attack.miss.halfDamage) {
+                        tmp = Math.floor(attackBonus.damage / 2);
+                        if (!damage.isManual) {
                             targetDamage.missAmount += tmp;
                             targetDamage.conditional.mod += tmp;
-                            targetDamage.conditional.breakdown += (tmp >= 0 ? " +" : "") + tmp + " (" + attackBonus.name + ")";
                         }
-                        else {
+                        targetDamage.conditional.breakdown += (tmp >= 0 ? " +" : "") + tmp + " (" + attackBonus.name + ")";
+                    }
+                    else {
+                        if (!damage.isManual) {
                             targetDamage.missAmount += attackBonus.damage;
-                            targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
                         }
+                        targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
                     }
                 }
             }
