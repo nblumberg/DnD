@@ -38,7 +38,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 96
+                    total: 101
                 },
                 surges: {
                     perDay: 11,
@@ -268,7 +268,7 @@ var loadParty;
                 },
                 ap: 0,
                 hp: {
-                    total: 48
+                    total: 50
                 },
                 surges: {
                     perDay: 0,
@@ -334,7 +334,7 @@ var loadParty;
                 },
                 ap: 0,
                 hp: {
-                    total: 48
+                    total: 50
                 },
                 surges: {
                     perDay: 0,
@@ -369,7 +369,7 @@ var loadParty;
             Bin: {
                 name: "Bin",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/bin.jpg", // "http://wizards.com/dnd/images/386_wr_changeling.jpg",
                 abilities: {
                     STR: 15,
@@ -380,39 +380,39 @@ var loadParty;
                     CHA: 12
                 },
                 skills: {
-                    acrobatics: 8,
-                    arcana: 16,
-                    athletics: 7,
-                    bluff: 8,
-                    diplomacy: 6,
-                    dungeoneering: 14,
-                    endurance: 11,
-                    heal: 9,
-                    history: 16,
-                    insight: 11,
-                    intimidate: 6,
-                    nature: 9,
-                    perception: 14,
-                    religion: 11,
-                    stealth: 10,
-                    streetwise: 6,
-                    thievery: 13
+                    acrobatics: 10,
+                    arcana: 18,
+                    athletics: 9,
+                    bluff: 10,
+                    diplomacy: 8,
+                    dungeoneering: 16,
+                    endurance: 13,
+                    heal: 11,
+                    history: 18,
+                    insight: 13,
+                    intimidate: 8,
+                    nature: 11,
+                    perception: 16,
+                    religion: 13,
+                    stealth: 12,
+                    streetwise: 8,
+                    thievery: 15
                 },
                 ap: 1,
                 hp: {
-                    total: 85
+                    total: 95
                 },
                 surges: {
                     perDay: 10,
                     current: 10
                 },
                 defenses: {
-                    ac: 26,
-                    fort: 22,
-                    ref: 23,
-                    will: 23
+                    ac: 27,
+                    fort: 23,
+                    ref: 24,
+                    will: 24
                 },
-                init: 8,
+                init: 10,
                 speed: 6,
                 weapons: [
                     {
@@ -443,6 +443,16 @@ var loadParty;
                             crit: "1d6"
                         }
                     }, {
+                        name: "Staff of the Impregnable Mind +3",
+                        isMelee: true,
+                        proficiency: 0,
+                        enhancement: 3,
+                        damage: {
+                            amount: "1d6",
+                            crit: "3d8",
+                            type: "psychic"
+                        }
+                    }, {
                         name: "Aversion Staff +2",
                         isMelee: true,
                         proficiency: 0,
@@ -455,6 +465,11 @@ var loadParty;
                 ],
                 "implements": [
                     {
+                        name: "Staff of the Impregnable Mind +3",
+                        enhancement: 3,
+                        crit: "3d8"
+                    },
+                    {
                         name: "Aversion Staff +2",
                         enhancement: 2,
                         crit: "2d8"
@@ -465,6 +480,10 @@ var loadParty;
                         name: "Melee Basic",
                         usage: {
                             frequency: "At-Will"
+                        },
+                        target: {
+                            delivery: "melee",
+                            targets: 1
                         },
                         isMelee: true,
                         toHit: "STR",
@@ -478,6 +497,10 @@ var loadParty;
                         usage: {
                             frequency: "At-Will"
                         },
+                        target: {
+                            delivery: "ranged",
+                            targets: 1
+                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
@@ -489,82 +512,172 @@ var loadParty;
                         usage: {
                             frequency: "At-Will"
                         },
+                        target: {
+                            delivery: "melee or ranged",
+                            targets: 1
+                        },
                         toHit: "INT+1",
                         defense: "AC",
-                        damage: "1d8+7",
-                        crit: "2d8"
+                        damage: "1d8+INT",
+                        keywords: [
+                            "arcane", "weapon"
+                        ]
                     }, {
                         name: "Thundering Armor",
                         usage: {
                             frequency: "At-Will"
                         },
+                        target: {
+                            delivery: "close burst",
+                            size: 10,
+                            targets: 1
+                        },
                         toHit: "INT",
                         defense: "Fort",
-                        damage: "1d8+8",
-                        crit: "2d8"
+                        damage: {
+                            amount: "1d8+INT",
+                            type: "thunder"
+                        },
+                        keywords: [
+                            "arcane", "implement", "thunder"
+                        ]
                     }, {
                         name: "Stone Panoply",
                         usage: {
                             frequency: "Encounter"
                         },
-                        toHit: "INT",
-                        defense: "AC",
-                        damage: "1d8+7",
-                        crit: "2d8"
-                    }, {
-                        name: "Shielding Cube",
-                        usage: {
-                            frequency: "Encounter"
+                        target: {
+                            delivery: "close burst",
+                            size: 1,
+                            enemiesOnly: false,
+                            targets: "any"
                         },
                         toHit: "INT",
-                        defense: "Ref",
-                        damage: "2d6+8",
-                        crit: "2d8"
+                        defense: "AC",
+                        damage: "2[W]+INT",
+                        keywords: [
+                            "elemental", "weapon"
+                        ]
                     }, {
                         name: "Lightning Sphere",
                         usage: {
                             frequency: "Encounter"
                         },
+                        target: {
+                            delivery: "burst",
+                            size: 1,
+                            range: 10,
+                            enemiesOnly: true,
+                            targets: "any"
+                        },
                         toHit: "INT",
                         defense: "Fort",
-                        damage: "1d8+8",
-                        crit: "2d8"
+                        damage: {
+                            amount: "1d8+INT",
+                            type: "lightning"
+                        },
+                        keywords: [
+                            "arcane", "implement", "lightning"
+                        ]
                     }, {
                         name: "Vampiric Weapons",
                         usage: {
                             frequency: "Encounter"
                         },
+                        target: {
+                            delivery: "melee or ranged",
+                            targets: 1
+                        },
                         toHit: "INT",
                         defense: "AC",
-                        damage: "1d8+6",
-                        crit: "2d8"
+                        damage: {
+                            amount: "1d8+INT",
+                            type: "necrotic"
+                        },
+                        keywords: [
+                            "arcane", "healing", "necrotic", "weapon"
+                        ]
+                    }, {
+                        name: "Energy Shroud",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        target: {
+                            delivery: "melee",
+                            targets: 1
+                        },
+                        toHit: "INT",
+                        defense: "Ref",
+                        damage: {
+                            amount: "2d10+INT",
+                            type: "force"
+                        },
+                        keywords: [ "arcane", "force", "implement", "ranged" ]
                     }, {
                         name: "Elemental Cascade",
                         usage: {
                             frequency: "Encounter"
                         },
-                        toHit: "INT",
+                        target: {
+                            delivery: "melee or ranged",
+                            range: 10,
+                            targets: 1
+                        },
+                        toHit: "INT+4",
                         defense: "Ref",
-                        damage: "2d10+6",
-                        crit: "2d8"
+                        damage: "2d10+INT",
+                        keywords: [
+                            "elemental"
+                        ]
                     }, {
                         name: "Caustic Rampart",
                         usage: {
                             frequency: "Daily"
                         },
+                        target: {
+                            delivery: "wall",
+                            size: 5,
+                            range: 10
+                        },
                         toHit: "automatic",
                         defense: "AC",
-                        damage: "1d6+5",
-                        crit: ""
+                        damage: {
+                            amount: "1d6+INT",
+                            type: "acid"
+                        },
+                        keywords: [
+                            "acid", "arcane", "conjuration", "implement"
+                        ]
                     }, {
                         name: "Lightning Motes",
                         usage: {
                             frequency: "Daily"
                         },
+                        target: {
+                            delivery: "close burst",
+                            size: 3,
+                            enemiesOnly: true,
+                            targets: "any"
+                        },
                         toHit: "INT",
                         defense: "Ref",
-                        damage: "2d6+8",
-                        crit: "2d8"
+                        damage: {
+                            amount: "2d6+INT",
+                            type: "lightning"
+                        },
+                        miss: {
+                            halfDamage: true,
+                            effects: [
+                                { name: "ongoing damage", amount: "5", type: "lightning", saveEnds: true }
+                            ]
+                        },
+                        effects: [
+                            { name: "dazed", saveEnds: true },
+                            { name: "ongoing damage", amount: "5", type: "lightning", saveEnds: true }
+                        ],
+                        keywords: [
+                            "arcane", "implement", "lightning"
+                        ]
                     }
                 ],
                 effects: []
@@ -572,50 +685,50 @@ var loadParty;
             Camulos: {
                 name: "Camulos",
                 isPC: true,
-                level: 10,
+                level: 14,
                 image: "../images/portraits/camulos.png",
                 abilities: {
-                    STR: 23,
-                    CON: 19,
+                    STR: 24,
+                    CON: 20,
                     DEX: 12,
                     INT: 11,
                     WIS: 11,
                     CHA: 9
                 },
                 skills: {
-                    acrobatics: 6,
-                    arcana: 5,
-                    athletics: 18,
-                    bluff: 4,
-                    diplomacy: 4,
-                    dungeoneering: 5,
-                    endurance: 14,
-                    heal: 10,
-                    history: 5,
-                    insight: 7,
-                    intimidate: 4,
-                    nature: 7,
-                    perception: 7,
-                    religion: 5,
-                    stealth: 6,
-                    streetwise: 4,
-                    thievery: 6
+                    acrobatics: 8,
+                    arcana: 7,
+                    athletics: 21,
+                    bluff: 6,
+                    diplomacy: 6,
+                    dungeoneering: 7,
+                    endurance: 17,
+                    heal: 12,
+                    history: 7,
+                    insight: 9,
+                    intimidate: 6,
+                    nature: 9,
+                    perception: 9,
+                    religion: 7,
+                    stealth: 8,
+                    streetwise: 6,
+                    thievery: 8
                 },
                 ap: 1,
                 hp: {
-                    total: 94
+                    total: 113
                 },
                 surges: {
-                    perDay: 13,
-                    current: 13
+                    perDay: 14,
+                    current: 14
                 },
                 defenses: {
-                    ac: 28,
-                    fort: 25,
-                    ref: 20,
-                    will: 18
+                    ac: 30,
+                    fort: 28,
+                    ref: 22,
+                    will: 20
                 },
-                init: 10,
+                init: 12,
                 speed: 6,
                 weapons: [
                     {
@@ -656,7 +769,10 @@ var loadParty;
                         usage: {
                             frequency: "At-Will"
                         },
-                        isMelee: true,
+                        target: {
+                            delivery: "melee",
+                            targets: 1
+                        },
                         toHit: "STR",
                         defense: "AC",
                         damage: "1[W]+STR",
@@ -671,6 +787,10 @@ var loadParty;
                         usage: {
                             frequency: "At-Will"
                         },
+                        target: {
+                            delivery: "ranged",
+                            targets: 1
+                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
@@ -682,7 +802,10 @@ var loadParty;
                         usage: {
                             frequency: "At-Will"
                         },
-                        isMelee: true,
+                        target: {
+                            delivery: "melee",
+                            targets: 1
+                        },
                         toHit: "STR",
                         defense: "AC",
                         damage: "1[W]+STR",
@@ -704,9 +827,29 @@ var loadParty;
                             "martial", "melee"
                         ]
                     }, {
+                        name: "Guardian's Counter",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        target: {
+                            delivery: "close burst",
+                            size: 2,
+                            targets: 1
+                        },
+                        toHit: "automatic",
+                        defense: "AC",
+                        damage: "1[W]",
+                        keywords: [
+                            "martial", "weapon", "melee"
+                        ]
+                    }, {
                         name: "Power Strike",
                         usage: {
                             frequency: "Encounter"
+                        },
+                        target: {
+                            delivery: "melee",
+                            targets: 1
                         },
                         toHit: "automatic",
                         defense: "AC",
@@ -721,7 +864,9 @@ var loadParty;
                         },
                         target: {
                             area: "close",
-                            size: 3
+                            size: 3,
+                            enemiesOnly: true,
+                            targets: "any"
                         },
                         toHit: "STR",
                         defense: "Will",
@@ -932,14 +1077,14 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 84
+                    total: 89
                 },
                 surges: {
                     perDay: 9,
                     current: 9
                 },
                 defenses: {
-                    ac: 22,
+                    ac: 23,
                     fort: 21,
                     ref: 20,
                     will: 24
@@ -1690,6 +1835,26 @@ var loadParty;
                             "fear", "implement", "primal", "psychic"
                         ]
                     }, {
+                        name: "Pinning Strike",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        toHit: "STR/DEX",
+                        defense: "AC",
+                        damage: {
+                            amount: "1[W]+STR/DEX",
+                            type: "psychic"
+                        },
+                        effects: [
+                            {
+                                name: "immobilized",
+                                duration: "startTargetNext"
+                            }
+                        ],
+                        keywords: [
+                            "martial", "weapon"
+                        ]
+                    }, {
                         name: "Boar Assault",
                         usage: {
                             frequency: "Daily"
@@ -1793,7 +1958,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 82
+                    total: 87
                 },
                 surges: {
                     perDay: 9,
@@ -1804,6 +1969,9 @@ var loadParty;
                     fort: 22,
                     ref: 23,
                     will: 22
+                },
+                resistances: {
+                    psychic: 5 // Mental Block (alternative reward)
                 },
                 init: 11,
                 speed: 7,
@@ -2683,7 +2851,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 77
+                    total: 87
                 },
                 surges: {
                     perDay: 8,

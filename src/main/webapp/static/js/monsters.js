@@ -8,7 +8,7 @@ function loadMonsters() {
             [immunities: [ String ],]
             [vulnerabilities: [ String ],]
             [savingThrows: Number,]
-            init: Number, 
+            init: Number,
             speed: Number | { "method": Number },
             abilities: { STR: Number, CON: Number, DEX: Number, INT: Number, WIS: Number, CHA: Number },
             skills: { acrobatics: Number, arcana: Number, athletics: Number, bluff: Number, diplomacy: Number, dungeoneering: Number, endurance: Number, heal: Number, history: Number, insight: Number, intimidate: Number, nature: Number, perception: Number, religion: Number, stealth: Number, streetwise: Number, thievery: Number },
@@ -21,8 +21,8 @@ function loadMonsters() {
             ]
         },
      */
-    return { 
-        "Adult Pact Dragon": {        
+    return {
+        "Adult Pact Dragon": {
             name: "Adult Pact Dragon", level: 13, image: "../images/portraits/pact_dragon.jpg", // http://www.dandwiki.com/wiki/File:Dragonwarrior.jpg
             hp: { total: 134 },
             defenses: { ac: 27, fort: 26, ref: 25, will: 25 },
@@ -37,7 +37,7 @@ function loadMonsters() {
                       { name: "Breath Weapon", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close blast", size: 5 }, toHit: 15, defense: "Ref", damage: { amount: "2d12+12", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "close blast", "fire" ] }
               ]
         },
-        "Amyria": {        
+        "Amyria": {
             name: "Amyria", level: 13, image: "../images/portraits/amyria.jpg",
             hp: { total: 254 },
             defenses: { ac: 29, fort: 23, ref: 25, will: 28 },
@@ -54,7 +54,7 @@ function loadMonsters() {
                       { name: "Bahamut's Accusing Eye", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 18, defense: "Ref", damage: { amount: "2d8+7", type: "cold and radiant" }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "ongoing damage", amount: 5, type: "cold and radiant" }, "Slowed" ] } ], keywords: [ "cold", "radiant" ] }
               ]
         },
-        "Antharosk": {        
+        "Antharosk": {
             name: "Antharosk", level: 10, image: "../images/portraits/antharosk.jpg",
             hp: { total: 428 },
             defenses: { ac: 26, fort: 23, ref: 24, will: 23 },
@@ -86,7 +86,7 @@ function loadMonsters() {
                       { name: "Charged Lightning Burst", usage: { frequency: "At-Will" }, target: { area: "burst", size: 2, range: 10 }, toHit: 15, defense: "Ref", damage: { amount: "1d8+5", type: "lightning" }, keywords: [ "ranged", "burst", "lightning" ] }
               ]
         },
-        "Banshrae Dartswarmer": { 
+        "Banshrae Dartswarmer": {
             name: "Banshrae Dartswarmer", level: 11, image: "../images/portraits/banshrae_dartswarmer.jpg",
             hp: { total: 89 },
             defenses: { ac: 23, fort: 20, ref: 23, will: 22 },
@@ -96,15 +96,15 @@ function loadMonsters() {
             attacks: [
                       { name: "Slam", usage: { frequency: "At-Will" }, range: "melee", toHit: 13, defense: "AC", damage: "1d8+3", keywords: [ "melee", "basic" ] },
                       { name: "Blowgun Dart", usage: { frequency: "At-Will" }, range: 5, toHit: 16, defense: "AC", targeting: "blast 5", damage: "1d10+6", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "ranged" ] },
-                      { name: "Dart Flurry", usage: { frequency: "Recharge", recharge: 4 }, range: "blast 5", toHit: 16, defense: "AC", targeting: "blast 5", damage: "1d10+6", effects: [ 
+                      { name: "Dart Flurry", usage: { frequency: "Recharge", recharge: 4 }, range: "blast 5", toHit: 16, defense: "AC", targeting: "blast 5", damage: "1d10+6", effects: [
                         { name: "multiple effects", saveEnds: true, children: [
-                                { name: "Dazed" }, 
-                                { name: "Attack penalty", amount: -2 } 
+                                { name: "Dazed" },
+                                { name: "Attack penalty", amount: -2 }
                             ] }
                         ], keywords: [ "ranged" ] }
               ]
         },
-        "Battle Wight Bodyguard": { 
+        "Battle Wight Bodyguard": {
             name: "Battle Wight Bodyguard", level: 11, image: "../images/portraits/battle_wight.png",
             hp: { total: 230 },
             defenses: { ac: 29, fort: 26, ref: 22, will: 23 },
@@ -122,7 +122,7 @@ function loadMonsters() {
                       { name: "Chosen Target", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: { amount: "1d8+5", type: "necrotic" }, effects: [ { name: "Immobilized", saveEnds: true }, { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "necrotic", "weapon" ] } // TODO: target loses 1 healing surge
               ]
         },
-        "Berbalang": { 
+        "Berbalang": {
             name: "Berbalang", level: 10, image: "../images/portraits/berbalang.jpg", // http://www.rpgblog.net/wp-content/berbalang.jpg
             hp: { total: 408 },
             defenses: { ac: 25, fort: 22, ref: 25, will: 21 },
@@ -136,7 +136,7 @@ function loadMonsters() {
                       { name: "Sacrifice", usage: { frequency: "At-Will" }, range: 1, toHit: 11, defense: "Fort", damage: "2d6+6", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "close burst", "effects on miss" ] }
               ]
         },
-        "Brann'ot Githyanki Gish": { 
+        "Brann'ot Githyanki Gish": {
             name: "Brann'ot Githyanki Gish", level: 15, image: "../images/portraits/githyanki_mindslicer.jpg", // http://cdn.obsidianportal.com/images/121677/githyanki_2_2.jpg
             hp: { total: 226 },
             defenses: { ac: 31, fort: 28, ref: 29, will: 29 },
@@ -149,7 +149,31 @@ function loadMonsters() {
                       { name: "Storm of Stars", usage: { frequency: "Encounter" }, target: { range: 5, targets: 4 }, toHit: 20, defense: "AC", damage: { amount: "2d8+4", type: "fire" }, keywords: [ "ranged", "fire" ] }
               ]
         },
-        "Calaunxin": {        
+        "Bone Scribe": {
+            name: "Bone Scribe", level: 13, image: "../images/portraits/bone_scribe.jpg", // http://www.wizards.com/dnd/images/MM35_gallery/MM35_PG255a.jpg
+            hp: { total: 1 },
+            defenses: { ac: 27, fort: 25, ref: 26, will: 24 },
+            init: 9, speed: 7,
+            abilities: { STR: 10, CON: 20, DEX: 14, INT: 23, WIS: 8, CHA: 19 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 11, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Mind Touch", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "Will", damage: { amount: "4", type: "psychic" }, effects: [ { name: "Penalty", amount: -2, type: "Will" }, { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "melee", "psychic", "basic" ] }
+              ]
+        },
+        "Bone Archivist": {
+            name: "Bone Archivist", level: 13, image: "../images/portraits/bone_archivist.jpg", // http://www.juhanartwork.com/images/project/lot/barrow_wight.jpg
+            hp: { total: 109 },
+            defenses: { ac: 26, fort: 25, ref: 27, will: 26 },
+            init: 9, speed: 6,
+            abilities: { STR: 12, CON: 19, DEX: 15, INT: 23, WIS: 10, CHA: 20 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 19, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Mind Touch", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "Will", damage: { amount: "1d10+6", type: "psychic" }, effects: [ { name: "Penalty", amount: -2, type: "Will", duration: "endAttackerNext" }, { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Siphon Memory", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 19, defense: "Will", damage: { amount: "2d4+6", type: "psychic" }, effects: [ { name: "Only basic and at-will attacks", duration: "endAttackerNext" } ], keywords: [ "ranged", "psychic", "basic" ] },
+                      { name: "Knowledge Barrage", usage: { frequency: "Encounter" }, target: { area: "burst", size: 2, range: 10, targets: "enemies" }, toHit: 17, defense: "Will", damage: "3d6+6", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "burst", "psychic" ] }
+              ]
+        },
+        "Calaunxin": {
             name: "Calaunxin", level: 9, image: "../images/portraits/calaunxin.jpg",
             hp: { total: 408 },
             defenses: { ac: 23, fort: 26, ref: 21, will: 22 },
@@ -166,7 +190,7 @@ function loadMonsters() {
                       { name: "Frightful Presence", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 10, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: "endAttackerNext" } ], keywords: [ "close", "burst" ] }
               ]
         },
-        "Centaur Ravager": { 
+        "Centaur Ravager": {
             name: "Centaur Ravager", level: 12, image: "../images/portraits/centaur_ravager.jpg",
             hp: { total: 150 },
             defenses: { ac: 24, fort: 26, ref: 24, will: 23 },
@@ -182,7 +206,7 @@ function loadMonsters() {
                       { name: "Brash Retaliation", usage: { frequency: "Encounter" }, range: "melee", toHit: 15, defense: "AC", damage: "3d10+6", keywords: [ "melee", "bloodied" ] }
               ]
         },
-        "Chaos Mauler": { 
+        "Chaos Mauler": {
             name: "Chaos Mauler", level: 11, image: "../images/portraits/chaos_mauler.png",
             hp: { total: 1 },
             defenses: { ac: 23, fort: 25, ref: 23, will: 22 },
@@ -193,7 +217,7 @@ function loadMonsters() {
                       { name: "Slam", usage: { frequency: "At-Will" }, range: 2, toHit: 14, defense: "AC", damage: { amount: "8", type: "fire" }, keywords: [ "melee", "basic" ] }
               ]
         },
-        "Cyclops Guard": { 
+        "Cyclops Guard": {
             name: "Cyclops Guard", level: 14, image: "../images/portraits/cyclops.jpg",
             hp: { total: 1 },
             defenses: { ac: 27, fort: 26, ref: 23, will: 23 },
@@ -202,7 +226,7 @@ function loadMonsters() {
             skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [ { name: "Battleaxe", usage: { frequency: "At-Will" }, range: "2", toHit: 17, defense: "AC", damage: "7", keywords: [ "melee", "basic" ] } ]
         },
-        "Dragonborn Gladiator": { 
+        "Dragonborn Gladiator": {
             name: "Dragonborn Gladiator", level: 10, image: "../images/portraits/dragonborn_gladiator.jpg", // "http://img213.imageshack.us/img213/2721/dragonborn29441748300x3.jpg",
             hp: { total: 106 },
             defenses: { ac: 24, fort: 23, ref: 20, will: 21 },
@@ -223,7 +247,7 @@ function loadMonsters() {
                       { name: "Shriek of Pain (bloodied)", usage: { frequency: "Encounter" }, range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+11", type: "thunder" }, miss: { halfDamage: true }, keywords: [ "ranged" ] }
               ]
         },
-        "Dragonborn Raider": { 
+        "Dragonborn Raider": {
             name: "Dragonborn Raider", level: 13, image: "../images/portraits/dragonborn_raider.jpg", // "http://1-media-cdn.foolz.us/ffuuka/board/tg/image/1336/87/1336876770629.jpg
             hp: { total: 129 },
             defenses: { ac: 27, fort: 23, ref: 24, will: 21 },
@@ -239,7 +263,7 @@ function loadMonsters() {
                       { name: "Dragon Breath (bloodied)", usage: { frequency: "At-Will" }, range: 3, toHit: 15, defense: "Ref", damage: { amount: "1d6+3", type: "fire" }, keywords: [ "close blast" ] }
               ]
         },
-        "Duergar Hellcaller": { 
+        "Duergar Hellcaller": {
             name: "Duergar Hellcaller", level: 12, image: "../images/portraits/duergar_hellcaller.jpg",
             hp: { total: 96 },
             defenses: { ac: 24, fort: 23, ref: 23, will: 25 },
@@ -254,7 +278,7 @@ function loadMonsters() {
                       { name: "Quill Storm", usage: { frequency: "Encounter" }, target: { area: "burst", size: 2, range: 10 }, toHit: 17, defense: "Ref", damage: { amount: "1d8", type: "fire and poison" }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 10, type: "fire and poison" }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] }
               ]
         },
-        "Eidolon": { 
+        "Eidolon": {
             name: "Eidolon", level: 13, image: "../images/portraits/eidolon.png", // "http://gallery.rptools.net/d/12751-1/Rogue+Eidolon+_L_.png",
             hp: { total: 132 },
             defenses: { ac: 28, fort: 26, ref: 22, will: 23 },
@@ -268,7 +292,7 @@ function loadMonsters() {
                       { name: "Hallowed Stance", usage: { frequency: "At-Will" }, range: "ranged", toHit: 99, defense: "AC", damage: { amount: "1d8", type: "radiant" } }
               ]
         },
-        "Elder Troglodyte Curse Chanter": { 
+        "Elder Troglodyte Curse Chanter": {
             name: "Elder Troglodyte Curse Chanter", level: 12, image: "../images/portraits/troglodyte_curse_chanter.jpg",
             hp: { total: 127 },
             defenses: { ac: 27, fort: 26, ref: 21, will: 26 },
@@ -282,7 +306,22 @@ function loadMonsters() {
                       { name: "Cavern Curse", usage: { frequency: "Recharge", recharge: 3 }, range: 5, toHit: 16, defense: "Fort", damage: "0", effects: [ { name: "multiple", saveEnds: true, children: [ { name: "ongoing damage", amount: 5, type: "necrotic" }, { name: "Slowed" } ] } ], keywords: [ "ranged", "necrotic" ] }
               ]
         },
-        "Flame Shard": { 
+        "Filth King": {
+            name: "Filth King", level: 14, image: "../images/portraits/filth_king.jpg", // http://i972.photobucket.com/albums/ae209/Mistertom_01/rogue20m-165.jpg
+            hp: { total: 278 },
+            defenses: { ac: 28, fort: 25, ref: 26, will: 27 },
+            init: 9, speed: 6,
+            actionPoints: 1,
+            abilities: { STR: 10, CON: 19, DEX: 15, INT: 20, WIS: 17, CHA: 23 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 18, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 18, nature: 0, perception: 15, religion: 0, stealth: 14, streetwise: 0, thievery: 14 },
+            attacks: [
+                      { name: "Festering Scratch", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: "1d4+2", effects: [ { name: "Ongoing damage", amount: 10, type: "poison", saveEnds: true } ], keywords: [ "melee", "basic", "poison" ] },
+                      { name: "Awaken Greed", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 18, defense: "Will", damage: { amount: "2d8+6", type: "psychic" }, effects: [ { name: "Slowed", duration: "endAttackerNext" }], keywords: [ "ranged", "implement", "psychic" ] },
+                      { name: "Driving Sickness", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "Ongoing damage", amount: 15, type: "poison", saveEnds: true } ], keywords: [ "melee", "poison" ] },
+                      { name: "Vitriolic Spray", usage: { frequency: "Encounter" }, target: { size: 3, area: "close blast" }, toHit: 16, defense: "Fort", damage: { amount: "1d10+4", type: "acid" }, effects: [ { name: "Blinded", duration: "endAttackerNext" } ], keywords: [ "close burst", "acid" ] }
+              ]
+        },
+        "Flame Shard": {
             name: "Flame Shard", level: 12, image: "../images/portraits/flame_shard.jpg",
             hp: { total: 100 },
             defenses: { ac: 24, fort: 25, ref: 23, will: 23 },
@@ -296,7 +335,7 @@ function loadMonsters() {
                       { name: "Heat Wave (aura)", usage: { frequency: "At-Will", action: "Immediate Reaction" }, target: { range: 2, area: "close burst" }, toHit: "automatic", defense: "AC", damage: { amount: "5", type: "fire" }, keywords: [ "close burst", "fire", "aura" ] }
               ]
         },
-        "Flesh Golem": { 
+        "Flesh Golem": {
             name: "Flesh Golem", level: 12, image: "../images/portraits/flesh_golem.jpg", // http://www.wizards.com/dnd/images/eo_fleshgolem_med.jpg
             hp: { total: 304 },
             defenses: { ac: 26, fort: 29, ref: 21, will: 22 },
@@ -310,7 +349,7 @@ function loadMonsters() {
                       { name: "Golem Rampage", usage: { frequency: "Recharge", recharge: 5 }, range: "reach", toHit: 16, defense: "AC", damage: "2d8+5", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "melee" ] }
               ]
         },
-        "Flux Slaad": { 
+        "Flux Slaad": {
             name: "Flux Slaad", level: 9, image: "../images/portraits/flux_slaad.jpg",
             hp: { total: 98 },
             defenses: { ac: 23, fort: 23, ref: 21, will: 21 },
@@ -321,7 +360,7 @@ function loadMonsters() {
                       { name: "Claw Slash", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "2d8+3", keywords: [ "melee", "basic" ] }
               ]
         },
-        "Foulspawn Seer": { 
+        "Foulspawn Seer": {
             name: "Foulspawn Seer", level: 11, image: "../images/portraits/foulspawn.jpg",
             hp: { total: 86 },
             defenses: { ac: 24, fort: 19, ref: 23, will: 21 },
@@ -347,7 +386,7 @@ function loadMonsters() {
                       { name: "Trace Chance", usage: { frequency: "Recharge", recharge: 6 }, range: 5, toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "NextMeleeHitIsACrit", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
               ]
         },
-        "Githyanki Lancer": { 
+        "Githyanki Lancer": {
             name: "Githyanki Lancer", level: 14, image: "../images/portraits/githyanki_lancer.jpg", // http://scalesofwar4.webs.com/62githyanki.jpg
             hp: { total: 134 },
             defenses: { ac: 28, fort: 26, ref: 26, will: 25 },
@@ -360,7 +399,7 @@ function loadMonsters() {
                       { name: "Mindslice", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 17, defense: "Will", damage: { amount: "2d8+5", type: "psychic" }, keywords: [ "ranged", "psychic" ] }
               ]
         },
-        "Githyanki Mindslicer": { 
+        "Githyanki Mindslicer": {
             name: "Githyanki Mindslicer", level: 13, image: "../images/portraits/githyanki_mindslicer.jpg", // http://cdn.obsidianportal.com/images/121677/githyanki_2_2.jpg
             hp: { total: 98 },
             defenses: { ac: 27, fort: 24, ref: 25, will: 24 },
@@ -373,7 +412,7 @@ function loadMonsters() {
                       { name: "Psychic Barrage", usage: { frequency: "Recharge", recharge: 6 }, target: { area: "burst", size: 1, range: 20 }, toHit: 16, defense: "Will", damage: { amount: "1d6+3", type: "psychic" }, effects: [ { name: "ongoing damage", amount: 5, type: "psychic", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
               ]
         },
-        "Githyanki Myrmidon": { 
+        "Githyanki Myrmidon": {
             name: "Githyanki Myrmidon", level: 12, image: "../images/portraits/githyanki_thug.jpg",
             hp: { total: 1 },
             defenses: { ac: 28, fort: 24, ref: 23, will: 24 },
@@ -386,7 +425,7 @@ function loadMonsters() {
                       { name: "Telekinetic Grasp", usage: { frequency: "Encounter" }, target: { range: 5 }, toHit: 15, defense: "Fort", damage: "0", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
-        "Githyanki Thug": { 
+        "Githyanki Thug": {
             name: "Githyanki Thug", level: 12, image: "../images/portraits/githyanki_thug.jpg", // http://www.worldofazolin.com/wiki/images/1/1d/Githyanki_warrior.jpg
             hp: { total: 1 },
             defenses: { ac: 24, fort: 26, ref: 21, will: 21 },
@@ -397,7 +436,7 @@ function loadMonsters() {
                       { name: "Silver Greatsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 15, defense: "AC", damage: "5", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "melee", "psychic", "basic" ] }
               ]
         },
-        "Githyanki Warrior": { 
+        "Githyanki Warrior": {
             name: "Githyanki Warrior", level: 12, image: "../images/portraits/githyanki.jpg",
             hp: { total: 118 },
             defenses: { ac: 28, fort: 25, ref: 23, will: 22 },
@@ -410,7 +449,7 @@ function loadMonsters() {
                       { name: "Telekinetic Grasp", usage: { frequency: "Encounter" }, target: { range: 5 }, toHit: 15, defense: "Fort", damage: "0", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
-        "Githzerai Cenobite": { 
+        "Githzerai Cenobite": {
             name: "Githzerai Cenobite", level: 11, image: "../images/portraits/githzerai.jpg", // http://i49.tinypic.com/29w1yes.jpg
             hp: { total: 108 },
             defenses: { ac: 27, fort: 22, ref: 23, will: 23 },
@@ -423,7 +462,7 @@ function loadMonsters() {
                       { name: "Trace Chance", usage: { frequency: "Recharge", recharge: 5 }, target: { range: 5 }, toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "multiple", duration: "endAttackerNext", children: [ { name: "bonus", type: "nextMeleeAttack", amount: 5 }, { name: "automaticCritical" } ] } ], keywords: [ "ranged" ] }
               ]
         },
-        "Grimlock Ambusher": { 
+        "Grimlock Ambusher": {
             name: "Grimlock Ambusher", level: 11, image: "../images/portraits/grimlock.jpg",
             hp: { total: 110 },
             defenses: { ac: 26, fort: 25, ref: 23, will: 23 },
@@ -434,7 +473,20 @@ function loadMonsters() {
                       { name: "Greataxe", usage: { frequency: "At-Will" }, range: "melee", toHit: 16, defense: "AC", damage: "1d12+5", keywords: [ "melee", "basic" ] }
               ]
         },
-        "Hethralga": { 
+        "Gluttonous Cube": {
+            name: "Gluttonous Cube", level: 13, image: "../images/portraits/gluttonous_cube.jpg",
+            hp: { total: 324 },
+            defenses: { ac: 27, fort: 26, ref: 23, will: 24 },
+            init: 9, speed: 4,
+            abilities: { STR: 18, CON: 22, DEX: 17, INT: 1, WIS: 18, CHA: 1 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 0, religion: 0, stealth: 14, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Slam", usage: { frequency: "At-Will" }, range: "melee", toHit: 15, defense: "Fort", damage: "2d6+5", effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "melee", "basic" ] },
+                      // Not actually saveEnds, it's ongoing until no longer grabbed
+                      { name: "Engulf", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "Ref", damage: "0", effects: [ { name: "Ongoing damage", amount: 15, type: "acid", saveEnds: true } ], keywords: [ "melee", "acid" ] }
+              ]
+        },
+        "Hethralga": {
             name: "Hethralga", level: 12, image: "../images/portraits/night_hag.jpg",
             hp: { total: 126 },
             defenses: { ac: 26, fort: 25, ref: 24, will: 23 },
@@ -448,11 +500,11 @@ function loadMonsters() {
                       { name: "Shriek of Pain (bloodied)", usage: { frequency: "Encounter" }, range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+11", type: "thunder" }, keywords: [ "ranged", "miss half" ] }
               ]
         },
-        "Iquel, Githyanki Captain": { 
+        "Iquel, Githyanki Captain": {
             name: "Iquel, Githyanki Captain", level: 13, image: "../images/portraits/iquel.jpg",
             hp: { total: 256 },
             defenses: { ac: 29, fort: 26, ref: 25, will: 25 },
-            savingThrows: 2, 
+            savingThrows: 2,
             init: 11, speed: { walk: 6, jump: 8, teleport: 6 },
             abilities: { STR: 21, CON: 16, DEX: 12, INT: 18, WIS: 19, CHA: 16 },
             skills: { acrobatics: 0, arcana: 15, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 17, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
@@ -463,7 +515,22 @@ function loadMonsters() {
                       { name: "Psychic Upheaval", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 3 }, toHit: 16, defense: "Fort", damage: { amount: "2d10+4", type: "psychic" }, effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
               ]
         },
-        "Laughing Shadow Sentry": { 
+        "Laughing Shadow Groveler": {
+            name: "Laughing Shadow Groveler", level: 13, image: "../images/portraits/laughing_shadow_groveler.jpg", // http://www.koboldquarterly.com/k/wp-content/uploads/2012/01/fakir.jpg
+            hp: { total: 103 },
+            defenses: { ac: 27, fort: 24, ref: 26, will: 25 },
+            init: 14, speed: 7,
+            abilities: { STR: 12, CON: 19, DEX: 22, INT: 12, WIS: 17, CHA: 20 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 16, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 15, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Katar", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "2d6+6", keywords: [ "melee", "basic", "weapon" ] },
+                      { name: "Shuriken", usage: { frequency: "At-Will" }, toHit: 18, defense: "AC", damage: "2d6+6", keywords: [ "ranged", "weapon" ] },
+                      { name: "Covert Attack (melee)", usage: { frequency: "At-Will", action: "Immediate Reaction" }, range: "melee", toHit: 18, defense: "AC", damage: "4d6+6", keywords: [ "melee", "weapon" ] },
+                      { name: "Covert Attack (ranged)", usage: { frequency: "At-Will", action: "Immediate Reaction" }, toHit: 18, defense: "AC", damage: "4d6+6", keywords: [ "ranged", "weapon" ] },
+                      { name: "Cringe", usage: { frequency: "At-Will" }, target: { area: "close burst", size: 10 }, toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "close burst" ] }
+              ]
+        },
+        "Laughing Shadow Sentry": {
             name: "Laughing Shadow Sentry", level: 11, image: "../images/portraits/laughing_shadow_sentry.jpg", // http://digital-art-gallery.com/oid/103/640x778_17841_The_Home_Guard_3d_fantasy_fashion_girl_woman_warrior_guard_picture_image_digital_art.jpg
             hp: { total: 47 },
             defenses: { ac: 27, fort: 24, ref: 22, will: 23 },
@@ -477,8 +544,8 @@ function loadMonsters() {
                       { name: "Crossbow", usage: { frequency: "At-Will" }, toHit: 16, defense: "AC", damage: "2d8+2", keywords: [ "ranged", "basic" ] }
               ]
         },
-        "Laughing Shadow Streetfighters": { 
-            name: "Laughing Shadow Streetfighters", level: 13, image: "../images/portraits/laughing_shadow_streetfighter.jpg", // http://i76.photobucket.com/albums/j23/poyodiablo/Before%20and%20After/deva_katar.jpg 
+        "Laughing Shadow Streetfighters": {
+            name: "Laughing Shadow Streetfighters", level: 13, image: "../images/portraits/laughing_shadow_streetfighter.jpg", // http://i76.photobucket.com/albums/j23/poyodiablo/Before%20and%20After/deva_katar.jpg
             hp: { total: 128 },
             defenses: { ac: 29, fort: 26, ref: 25, will: 24 },
             init: 12, speed: 6,
@@ -491,8 +558,8 @@ function loadMonsters() {
                       { name: "Shuriken", usage: { frequency: "At-Will" }, toHit: 19, defense: "AC", damage: "2d4+4", keywords: [ "ranged" ] }
               ]
         },
-        "Laughing Shadow Scrabblers": { 
-            name: "Laughing Shadow Scrabblers", level: 13, image: "../images/portraits/laughing_shadow_scrabbler.jpg", // https://www.wizards.com/dnd/images/pgte_gallery/95052.jpg 
+        "Laughing Shadow Scrabblers": {
+            name: "Laughing Shadow Scrabblers", level: 13, image: "../images/portraits/laughing_shadow_scrabbler.jpg", // https://www.wizards.com/dnd/images/pgte_gallery/95052.jpg
             hp: { total: 1 },
             defenses: { ac: 27, fort: 25, ref: 27, will: 24 },
             init: 12, speed: 6,
@@ -501,10 +568,10 @@ function loadMonsters() {
             attacks: [
                       { name: "Short Sword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "8", keywords: [ "melee", "basic", "weapon" ] },
                       { name: "Short Sword (combat advantage)", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "13", keywords: [ "melee", "basic", "weapon" ] },
-                      { name: "Shuriken", usage: { frequency: "At-Will" }, toHit: 18, defense: "AC", damage: "74", keywords: [ "ranged" ] }
+                      { name: "Shuriken", usage: { frequency: "At-Will" }, toHit: 18, defense: "AC", damage: "7", keywords: [ "ranged" ] }
               ]
         },
-        "Legion Devil Hellguard": { 
+        "Legion Devil Hellguard": {
             name: "Legion Devil Hellguard", level: 11, image: "../images/portraits/legion_devil.jpg",
             hp: { total: 1 },
             defenses: { ac: 27, fort: 24, ref: 23, will: 21 },
@@ -516,7 +583,7 @@ function loadMonsters() {
                       { name: "Longsword (aftereffect)", usage: { frequency: "At-Will", action: "Immediate Reaction" }, toHit: "automatic", defense: "AC", damage: { amount: "4", type: "fire" }, keywords: [ "fire" ] }
               ]
         },
-        "Lingering Spectre": { 
+        "Lingering Spectre": {
             name: "Lingering Spectre", level: 12, image: "../images/portraits/spectre.jpg", // http://www.wizards.com/dnd/images/dx1003tt_spectre.jpg
             hp: { total: 66 },
             defenses: { ac: 26, fort: 23, ref: 25, will: 23 },
@@ -532,7 +599,7 @@ function loadMonsters() {
                       { name: "Spectral Barrage", usage: { frequency: "Recharge", recharge: 5 }, toHit: 15, defense: "Will", damage: { amount: "3d6", type: "psychic" }, effects: [ { name: "Prone" } ], keywords: [ "ranged", "illusion", "psychic" ] }
               ]
         },
-        "Mezzodemon": { 
+        "Mezzodemon": {
             name: "Mezzodemon", level: 11, image: "../images/portraits/mezzodemon.jpg",
             hp: { total: 113 },
             defenses: { ac: 27, fort: 25, ref: 22, will: 23 },
@@ -561,7 +628,7 @@ function loadMonsters() {
                       { name: "Psychic Blows", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 20, defense: "Will", damage: { amount: "2d8+5", type: "psychic" }, keywords: [ "ranged", "psychic" ] }
               ]
         },
-        "Redspawn Firebelcher": { 
+        "Redspawn Firebelcher": {
             name: "Redspawn Firebelcher", level: 12, image: "../images/portraits/redspawn_firebelcher.png", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
             hp: { total: 97 },
             defenses: { ac: 25, fort: 25, ref: 22, will: 21 },
@@ -574,7 +641,7 @@ function loadMonsters() {
                       { name: "Fire Burst", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "burst", size: 2, range: 10 }, toHit: 15, defense: "Ref", damage: { amount: "3d6+1", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], miss: { halfDamage: true }, keywords: [ "ranged", "fire" ] }
               ]
         },
-        "Rathoraiax": { 
+        "Rathoraiax": {
             name: "Rathoraiax", level: 13, image: "../images/portraits/zombie_dragon.jpg", // http://4.bp.blogspot.com/-rclvSPUh9iM/ToBowVvsz_I/AAAAAAAADKI/wwQ5VTfwAeU/s1600/02-The-Dragons_Zombie-Dragon.jpg
             hp: { total: 328 },
             defenses: { ac: 27, fort: 29, ref: 22, will: 24 },
@@ -592,7 +659,7 @@ function loadMonsters() {
                       { name: "Loose stones", usage: { frequency: "At-Will" }, range: 1, toHit: 14, defense: "Ref", damage: "2d6+10", effects: [ "Prone" ], keywords: [ "burst" ] }
               ]
         },
-        "Scion of Chaos": { 
+        "Scion of Chaos": {
             name: "Scion of Chaos", level: 11, image: "../images/portraits/scion_of_chaos.jpg",
             hp: { total: 117 },
             defenses: { ac: 25, fort: 24, ref: 23, will: 24 },
@@ -606,7 +673,7 @@ function loadMonsters() {
                       { name: "Coils of Immobility", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "burst", size: 2, range: 10 }, toHit: 13, defense: "Ref", damage: "2d8+4", effects: [ { name: "Restrained", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
-        "Sarshan": { 
+        "Sarshan": {
             name: "Sarshan", level: 12, image: "../images/portraits/sarshan.png", // http://www.striemer.org/scales-of-war/images/sarshan.png
             hp: { total: 650 },
             defenses: { ac: 28, fort: 25, ref: 26, will: 25 },
@@ -624,7 +691,7 @@ function loadMonsters() {
                       { name: "Chaos Scream", usage: { frequency: "Encounter" }, target: { area: "close blast", size: 5 }, toHit: 16, defense: "Fort", damage: "0", effects: [ { name: "ongoing damage", amount: 10, type: "acid", saveEnds: true } ], keywords: [ "acid" ] }
               ]
         },
-        "Shadar-kai Warrior": { 
+        "Shadar-kai Warrior": {
             name: "Shadar-kai Warrior", level: 8, image: "../images/portraits/shadar_kai_warrior.png",
             hp: { total: 86 },
             defenses: { ac: 24, fort: 19, ref: 20, will: 17 },
@@ -637,7 +704,7 @@ function loadMonsters() {
                       { name: "Cage of Gloom (secondary)", usage: { frequency: "At-Will" }, range: "melee", toHit: 11, defense: "Ref", damage: "0", effects: [ { name: "Restrained", saveEnds: true } ], keywords: [ "melee" ] }
               ]
         },
-        "Shadar-kai Witch": { 
+        "Shadar-kai Witch": {
             name: "Shadar-kai Witch", level: 13, image: "../images/portraits/shadar_kai_witch.jpg",
             hp: { total: 272 },
             defenses: { ac: 30, fort: 27, ref: 29, will: 25 },
@@ -651,7 +718,7 @@ function loadMonsters() {
                       { name: "Ebon Burst", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 2 }, toHit: 18, defense: "Ref", damage: "2d8+6", effects: [ { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
               ]
         },
-        "Skulking Terror": { 
+        "Skulking Terror": {
             name: "Skulking Terror", level: 11, image: "../images/portraits/skulking_terror.png",
             hp: { total: 83 },
             defenses: { ac: 25, fort: 21, ref: 23, will: 21 },
@@ -664,7 +731,7 @@ function loadMonsters() {
                       { name: "Lethargic Countenance", usage: { frequency: "At-Will" }, target: { area: "blast", size: 1 }, toHit: 12, defense: "Will", damage: "0", effects: [ { name: "Slowed", duration: "endAttackerNext" }, { name: "combat advantage", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
               ]
         },
-        "Slaad Guard": { 
+        "Slaad Guard": {
             name: "Slaad Guard", level: 8, image: "../images/portraits/flux_slaad.jpg",
             hp: { total: 98 },
             defenses: { ac: 23, fort: 23, ref: 21, will: 21 },
@@ -675,7 +742,7 @@ function loadMonsters() {
                       { name: "Claw Slash", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "2d8+3", keywords: [ "melee", "basic" ] }
               ]
         },
-        "Slaad Midwife": { 
+        "Slaad Midwife": {
             name: "Slaad Midwife", level: 7, image: "../images/portraits/slaad_midwife.jpg",
             hp: { total: 70 },
             defenses: { ac: 20, fort: 19, ref: 17, will: 17 },
@@ -687,7 +754,7 @@ function loadMonsters() {
                       { name: "Fiery Spines", usage: { frequency: "Recharge", recharge: 5 }, range: "close blast 5", toHit: 9, defense: "Ref", damage: { amount: "2d8+8", type: "fire" }, effects: [ { name: "Ongoing poison", amount: 5, type: "poison", saveEnds: true } ], keywords: [ "close blast" ] }
               ]
         },
-        "Slaad Tadpole": { 
+        "Slaad Tadpole": {
             name: "Slaad Tadpole", level: 5, image: "../images/portraits/slaad_tadpole.jpg",
             hp: { total: 44 },
             defenses: { ac: 21, fort: 18, ref: 20, will: 18 },
@@ -698,7 +765,7 @@ function loadMonsters() {
                       { name: "Bite", usage: { frequency: "At-Will" }, range: "melee", toHit: 10, defense: "AC", damage: "1d8", keywords: [ "melee", "basic" ] }
               ]
         },
-        "Skull Lord Servitor": { 
+        "Skull Lord Servitor": {
             name: "Skull Lord Servitor", level: 14, image: "../images/portraits/skull_lord_servitor.jpg",
             hp: { total: 55 },
             defenses: { ac: 28, fort: 25, ref: 26, will: 27 },
@@ -714,7 +781,7 @@ function loadMonsters() {
                       { name: "Skull of Withering Flame", usage: { frequency: "At-Will" }, range: 10, toHit: 19, defense: "Fort", damage:  { amount: "2d6+5", type: "fire and necrotic" }, keywords: [ "ranged", "fire", "necrotic" ] }
               ]
         },
-        "Slystone Dwarf Ruffian": { 
+        "Slystone Dwarf Ruffian": {
             name: "Slystone Dwarf Ruffian", level: 10, image: "../images/portraits/slystone_dwarf.jpg",
             hp: { total: 104 },
             defenses: { ac: 26, fort: 23, ref: 22, will: 21 },
@@ -728,7 +795,7 @@ function loadMonsters() {
                       { name: "Mighty Strike (charge)", usage: { frequency: "Recharge", recharge: 5 }, range: "melee", toHit: 17, defense: "AC", damage: "3d8+5", effects: [ "Prone" ], keywords: [ "melee" ] }
               ]
         },
-        "Spitting Troll": { 
+        "Spitting Troll": {
             name: "Spitting Troll", level: 10, image: "../images/portraits/spitting_troll.jpg", // "http://www.wizards.com/dnd/images/dx20050907a_91226.jpg",
             hp: { total: 106, regeneration: 10 },
             defenses: { ac: 26, fort: 22, ref: 22, will: 23 },
@@ -755,7 +822,7 @@ function loadMonsters() {
                       { name: "Shockbolt", usage: { frequency: "At-Will" }, target: { area: "burst", size: 2, range: 10 }, toHit: 15, defense: "Ref", damage: { amount: "2d6+8", type: "thunder" }, keywords: [ "ranged", "burst", "lightning" ] }
               ]
         },
-        "Streetwise Thug": { 
+        "Streetwise Thug": {
             name: "Streetwise Thug", level: 9, image: "../images/portraits/streetwise_thug.gif", // "http://images.community.wizards.com/community.wizards.com/user/grawln/party_pics/characters/0ff3a392aa7b3d1450c59c8f0cb9552c.gif?v=196240",
             hp: { total: 1 },
             defenses: { ac: 21, fort: 19, ref: 16, will: 16 },
@@ -767,7 +834,7 @@ function loadMonsters() {
                       { name: "Crossbow", usage: { frequency: "At-Will" }, range: "ranged", toHit: 13, defense: "AC", damage: "6", keywords: [ "ranged", "basic" ] }
               ]
         },
-        "Thaggriel, Githyanki Dragonknight": { 
+        "Thaggriel, Githyanki Dragonknight": {
             name: "Thaggriel, Githyanki Dragonknight", level: 14, image: "../images/portraits/thaggriel.png",
             hp: { total: 272 },
             defenses: { ac: 28, fort: 27, ref: 27, will: 26 },
@@ -781,7 +848,23 @@ function loadMonsters() {
                       { name: "Hatred's Juggernaught", usage: { frequency: "Recharge", recharge: 6 }, range: "reach", toHit: 19, defense: "AC", damage: { amount: "2d10+5", type: "psychic" }, keywords: [ "melee", "psychic" ] }
               ]
         },
-        "Troglodyte Warrior": { 
+        "Treasure Golem": {
+            name: "Treasure Golem", level: 14, image: "../images/portraits/treasure_golem.png",
+            hp: { total: 700 },
+            defenses: { ac: 26, fort: 30, ref: 23, will: 23 },
+            immunities: [ "disease", "poison" ],
+            init: 5, speed: 6,
+            actionPoints: 2,
+            abilities: { STR: 23, CON: 25, DEX: 10, INT: 3, WIS: 8, CHA: 3 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 6, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Slam", usage: { frequency: "At-Will" }, range: "reach", toHit: 18, defense: "AC", damage: "2d10+6", keywords: [ "melee", "basic" ] },
+                      { name: "Gleamshard", usage: { frequency: "At-Will" }, target: { range: 20 }, toHit: 26, defense: "AC", damage: { amount: "3d6+7", type: "force" }, keywords: [ "ranged", "basic" ] },
+                      { name: "Hoard Blast", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close burst", size: 3 }, toHit: 22, defense: "Fort", damage: "2d10+7", keywords: [ "close burst" ] },
+                      { name: "Weight of Greed", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 3 }, toHit: 15, defense: "Ref", damage: { amount: "1d10+7", type: "psychic" }, miss: { halfDamage: true }, effects: [ { name: "Dominated", duration: "endAttackerNext" } ], keywords: [ "close burst", "psychic" ] }
+              ]
+        },
+        "Troglodyte Warrior": {
             name: "Troglodyte Warrior", level: 12, image: "../images/portraits/troglodyte.jpg",
             hp: { total: 1 },
             defenses: { ac: 25, fort: 25, ref: 22, will: 21 },
@@ -792,7 +875,7 @@ function loadMonsters() {
                       { name: "Club", usage: { frequency: "At-Will" }, toHit: 15, defense: "AC", damage: "7", keywords: [ "melee", "basic" ] }
               ]
         },
-        "Troll": { 
+        "Troll": {
             name: "Troll", level: 9, image: "../images/portraits/troll.jpg", // "http://www.wizards.com/dnd/images/MM35_gallery/MM35_PG248a.jpg",
             hp: { total: 100, regeneration: 10 },
             defenses: { ac: 20, fort: 21, ref: 18, will: 17 },
@@ -803,7 +886,7 @@ function loadMonsters() {
                       { name: "Claw", usage: { frequency: "At-Will" }, range: "reach", toHit: 13, defense: "AC", damage: "2d6+6", keywords: [ "melee", "basic" ] }
               ]
         },
-        "Two-Headed Troll": { 
+        "Two-Headed Troll": {
             name: "Two-Headed Troll", level: 10, image: "../images/portraits/two_headed_troll.jpg",
             hp: { total: 264, regeneration: 10 },
             defenses: { ac: 25, fort: 27, ref: 19, will: 20 },
@@ -816,8 +899,8 @@ function loadMonsters() {
                       { name: "Smackdown", usage: { frequency: "At-Will" }, range: "reach", toHit: 11, defense: "Fort", damage: "0", effects: [ "Prone" ], keywords: [ "melee" ] }
               ]
         },
-        "Wailing Ghost": { 
-            name: "Wailing Ghost", level: 12, image: "../images/portraits/wailing_ghost.png", // http://varlaventura.files.wordpress.com/2013/03/banshee-counterparts-e1364401380806.jpg 
+        "Wailing Ghost": {
+            name: "Wailing Ghost", level: 12, image: "../images/portraits/wailing_ghost.png", // http://varlaventura.files.wordpress.com/2013/03/banshee-counterparts-e1364401380806.jpg
             hp: { total: 91 },
             defenses: { ac: 23, fort: 23, ref: 23, will: 24 },
             immunities: [ "disease", "poison" ],
@@ -831,7 +914,7 @@ function loadMonsters() {
                       { name: "Terrifying Shriek", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close burst", size: 5 }, toHit: 15, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "close burst", "fear", "psychic" ] }
               ]
         },
-        "War Troll": { 
+        "War Troll": {
             name: "War Troll", level: 14, image: "../images/portraits/war_troll.jpg", // http://www.wizards.com/dnd/images/iw_war_troll.jpg
             hp: { total: 110, regeneration: 10 },
             defenses: { ac: 30, fort: 29, ref: 25, will: 25 },
@@ -845,7 +928,7 @@ function loadMonsters() {
                       { name: "Sweeping Strike", usage: { frequency: "At-Will" }, range: 2, toHit: 20, defense: "AC", damage: "1d12+7", effects: [ "Prone" ], keywords: [ "melee", "close blast" ] }
               ]
         },
-        "Xirakis, Adult Pact Dragon": {        
+        "Xirakis, Adult Pact Dragon": {
             name: "Xirakis, Adult Pact Dragon", level: 13, image: "../images/portraits/xirakis.jpg",
             hp: { total: 268 },
             defenses: { ac: 29, fort: 28, ref: 27, will: 25 },
@@ -863,7 +946,7 @@ function loadMonsters() {
                       { name: "Breath Weapon", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close blast", size: 5 }, toHit: 15, defense: "Ref", damage: { amount: "3d12+12", type: "fire" }, effects: [ { name: "ongoing damage", amount: 5, type: "fire", saveEnds: true } ], keywords: [ "close blast", "fire" ] }
               ]
         },
-        "Zithiruun, the Broken General": { 
+        "Zithiruun, the Broken General": {
             name: "Zithiruun, the Broken General", level: 14, image: "../images/portraits/zithiruun.jpg", // http://cdn.obsidianportal.com/images/145622/zith.jpg
             hp: { total: 280 },
             defenses: { ac: 30, fort: 26, ref: 29, will: 28 },

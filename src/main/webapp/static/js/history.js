@@ -2,15 +2,15 @@
 
 (function(jQuery, console) {
     "use strict";
-    
+
     if (!DnD) {
         DnD = {};
     }
-    
+
     function getHistory($child) {
         return History.histories[ parseInt($child.closest(".history").attr("data-history-id"), 10) ];
     }
-    
+
     // HISTORY
     // CONSTRUCTOR
 
@@ -18,14 +18,14 @@
      * @param params {Object}
      * @param [params._entries] {Array} Array of History.Entry
      * @param [params._includeSubject] {Boolean} Whether to print the subject of each Entry
-     * @param [params._round] {Number} The current round, defaults to 1 
-     * @param [params._roundTimes] {Object} A map of Actor.id to Array of Number (milliseconds) 
+     * @param [params._round] {Number} The current round, defaults to 1
+     * @param [params._roundTimes] {Object} A map of Actor.id to Array of Number (milliseconds)
      * @param [params.$parent] {jQuery selection} The element to add this History's HTML to
      */
     function History(params) {
         History.histories.push(this);
         this.id = History.histories.length - 1;
-        
+
         params = params || {};
         this.__params = params;
         this._entries = params._entries || [];
@@ -33,7 +33,7 @@
         this._count = 0;
         this._roundTimes = params._roundTimes || {}; // the duration of each round
         this._includeSubject = !!params._includeSubject;
-        
+
         if (params.$parent) {
             this.addToPage(params.$parent);
         }
@@ -41,9 +41,9 @@
 
     History.prototype = new Serializable();
 
-    
+
     // STATIC MEMBERS
-    
+
     if (!History._eventHandlersInitialized) {
         jQuery(document).on("click", "button.expandCollapseAll", function() {
             var $button, history, $ul, expand;
@@ -84,7 +84,7 @@
     History._waitingOnTemplates = [];
     (function() {
         var templateReady, $history, $round, $entry;
-        
+
         templateReady = function() {
             var i;
             if (History._areTemplatesReady()) {
@@ -94,7 +94,7 @@
                 History._waitingOnTemplates = [];
             }
         };
-        
+
         $history = jQuery("<div/>");
         $history.load("/html/partials/history.html", null, function() { // responseText, textStatus, jqXHR
             History.$history = $history.find("div.history");
@@ -112,9 +112,9 @@
         });
     })();
 
-    
+
     // OVERRIDDEN METHODS
-    
+
     History.prototype.toString = function() {
         return "[History]";
     };
@@ -123,9 +123,9 @@
         return JSON.stringify(this.raw(), null, "  ");
     };
 
-    
+
     // PUBLIC METHODS
-    
+
     History.prototype.addToPage = function($parent) {
         if (!$parent || !$parent.length) {
             return;
@@ -138,7 +138,7 @@
             History._waitingOnTemplates.push(this);
         }
     };
-    
+
     History.prototype.add = function(entry) {
         if (!entry || typeof(entry) !== "object" || !(entry instanceof History.Entry)) {
             return;
@@ -149,7 +149,7 @@
         }
         this._entries.push(entry.id);
         entry._addToRound(this._getRound(entry, true), this._includeSubject);
-        if (History.central && this !== History.central) { // TODO: what to do if actor.startTurn() on addActor() tries to addHistory() before History.central exists 
+        if (History.central && this !== History.central) { // TODO: what to do if actor.startTurn() on addActor() tries to addHistory() before History.central exists
             History.central.add(entry);
         }
     };
@@ -163,7 +163,7 @@
 
     /**
      * Removes an entry from this History instance
-     * 
+     *
      * @param entry {History.Entry} The History.Entry to remove
      */
     History.prototype.remove = function(entry) {
@@ -211,8 +211,8 @@
         this._setRoundTime($span, milliseconds);
         return true;
     };
-    
-    
+
+
     // PRIVATE METHODS
 
     History.prototype._create = function() {
@@ -226,7 +226,7 @@
             entry._addToRound(this._getRound(entry, true), this._includeSubject);
         }
     };
-    
+
     History.prototype._createHtml = function() {
         var $html = History.$history.clone();
         if (this.$html) {
@@ -240,7 +240,7 @@
         this.$html.attr("data-history-id", this.id);
         return this.$html;
     };
-    
+
     History.prototype._noHistory = function() {
         var $html = jQuery("<span/>").html("No history");
         if (this.$html) {
@@ -254,7 +254,7 @@
         this.$html.attr("data-history-id", this.id);
         return this.$html;
     };
-    
+
     History.prototype._getRound = function(round, create) {
         var $ul, $li;
         if (!this._count) {
@@ -318,8 +318,8 @@
 //        return raw;
     //};
 
-    
-    
+
+
     // HISTORY.EDITOR
     // CONSTRUCTOR
 
@@ -341,18 +341,18 @@
 
     History.Editor.prototype = new Serializable();
 
-    
+
     // OVERRIDDEN METHODS
-    
+
     History.Editor.prototype.raw = function() {
         return null;
     };
 
-    
+
 
     // HISTORY.ENTRY
     // CONSTRUCTOR
-    
+
     History.Entry = function(params) {
         params = params || {};
         this.id = params.id || History.Entry.id++;
@@ -373,16 +373,16 @@
     };
 
     History.Entry.prototype = new EventDispatcher();
-    
-    
+
+
     // STATIC MEMBERS
 
     History.Entry.id = (new Date()).getTime();
     History.Entry.entries = {};
-    
-    
+
+
     // OVERRIDDEN METHODS
-    
+
     History.Entry.prototype.toString = function() {
         return "[History Entry]";
     };
@@ -402,7 +402,7 @@
 
 
     // PUBLIC METHODS
-    
+
     History.Entry.init = function(params) {
         var p;
         params = params || {};
@@ -413,10 +413,10 @@
             }
         }
     };
-    
-    
+
+
     // PRIVATE METHODS
-    
+
     History.Entry.prototype._getSubjectName = function(warn) {
         if (typeof(this.subject) === "number") {
             // Creature.actors wasn't initialized at creation time, resolve subject id now
@@ -434,10 +434,10 @@
         this.subjectName = this.subject.name;
         return this.subject.name;
     };
-    
+
     History.Entry.prototype._addToRound = function($round, includeSubject) {
         var history, $li, instance;
-        history = $round.closest(".history").data("history");
+        history = getHistory($round);
         this._getSubjectName(false);
         $li = History.$entry.clone();
         instance = {
@@ -464,7 +464,7 @@
         instance.$message.html(message);
         instance.$textarea.val(message);
     };
-    
+
     History.Entry.prototype._edit = function($entry) { // $entry, history
         if ($entry.hasClass("edit")) {
             return;
@@ -476,9 +476,9 @@
         event.stopPropagation();
 
         this.message = instance.$textarea.val();
-        this._render(instance, history._includeSubject);
+        this._render(instance, history._includeSubject); // TODO: history is undefined?
         instance.$li.removeClass("edit");
-        
+
         if (history === History.central) {
             this._getSubjectName(true);
             if (this.subject) {
@@ -494,7 +494,7 @@
     History.Entry.prototype._delete = function(instance, history, event) {
         var $ul, $round, $history;
         event.stopPropagation();
-        
+
         $ul = instance.$li.parent();
         $round = $ul.parent();
         $history = $round.parent();
@@ -508,17 +508,17 @@
                 history._noHistory();
             }
         }
-        
+
         if (history === History.central) {
             this.subject.history.remove(this);
         }
         else {
             History.central.remove(this);
         }
-        
+
         delete History.Entry.entries[ this.id ];
     };
 
-    
+
     DnD.History = History;
 })(window.jQuery, safeConsole());
