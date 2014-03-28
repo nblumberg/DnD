@@ -288,7 +288,7 @@ var DnD, safeConsole;
 
     ActorCard.Condition.prototype._clickHandler = function(event) {
         if (event.metaKey) {
-            this.$condition.off({ click: this._clickHandler });
+            this.$container.off({ click: this._clickHandler });
             this.$container.remove();
             this.effect.remove();
             this.actor.dispatchEvent({ type: "change", conditionRemoved: this.effect });
