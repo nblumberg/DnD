@@ -279,11 +279,14 @@ describe("DnD.History", function() {
         });
 
         describe("update()", function() {
-            var entry = null;
+            var entry, testHtml;
+            entry = testHtml = null;
             beforeEach(function() {
                 entry = new DnD.History.Entry();
                 spyOn(entry, "_render");
-                history.$html = { find: jasmine.createSpy("find").andReturn("testHtml") };
+                testHtml = jasmine.createSpyObj("testHtml", [ "data" ]);
+                testHtml.data.andReturn("entryInstance");
+                history.$html = { find: jasmine.createSpy("find").andReturn(testHtml) };
             });
 
             describe("is called with an invalid entry parameter", function() {
@@ -304,7 +307,8 @@ describe("DnD.History", function() {
                 it("it should find the parent HTML and call entry._render()", function() {
                     history.update(entry);
                     expect(history.$html.find).toHaveBeenCalledWith("li.entry" + entry.id);
-                    expect(entry._render).toHaveBeenCalledWith("testHtml", history._includeSubject);
+                    expect(testHtml.data).toHaveBeenCalledWith("instance");
+                    expect(entry._render).toHaveBeenCalledWith("entryInstance", history._includeSubject);
                 });
             });
         });

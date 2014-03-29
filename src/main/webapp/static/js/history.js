@@ -158,7 +158,7 @@
         if (!entry || typeof(entry) !== "object" || !(entry instanceof History.Entry)) {
             return;
         }
-        entry._render(this.$html.find("li.entry" + entry.id), this._includeSubject);
+        entry._render(this.$html.find("li.entry" + entry.id).data("instance"), this._includeSubject);
     };
 
     /**
@@ -448,7 +448,7 @@
             $save: $li.find(".save"),
             $delete: $li.find(".delete")
         };
-        instance.$li.addClass("entry" + this.id).data("entry", this).appendTo($round);
+        instance.$li.addClass("entry" + this.id).data("entry", this).data("instance", instance).appendTo($round);
         this._render(instance, includeSubject);
         instance.$save.on({ click: this._save.bind(this, instance, history) });
         instance.$delete.on({ click: this._delete.bind(this, instance, history) });
