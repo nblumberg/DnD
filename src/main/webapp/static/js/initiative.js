@@ -36,6 +36,10 @@ var DnD;
         this.$round = null;
         this.$previousButton = null;
         this.$nextButton = null;
+        this.$pauseButton = null;
+        this.$undoButton = null;
+        this.$redoButton = null;
+        this.$attackButton = null;
         this.$displayButton = null;
         this.$fileInput = null;
         this.$import = null;
@@ -206,6 +210,10 @@ var DnD;
             this.$round = jQuery("#round");
             this.$previousButton = jQuery("#previous").on({ click: (this._previous).bind(this) });
             this.$nextButton = jQuery("#next").on({ click: (this._next).bind(this) });
+            this.$pauseButton = jQuery("#pause").on({ click: (this._pause).bind(this) });
+            this.$undoButton = jQuery("#undo").on({ click: (this._undo).bind(this) });
+            this.$redoButton = jQuery("#redo").on({ click: (this._redo).bind(this) });
+            this.$attackButton = jQuery("#attack").on({ click: (this._redo).bind(this) });
 
             this.$displayButton = jQuery("#open").on({ click: this._renderDisplay.bind(this, true) });
 
@@ -753,6 +761,29 @@ var DnD;
         }
         this._render(true);
         this._messageDisplay({ type: "changeTurn", current: this._current, actors: this.rawArray(actors) }, false);
+    };
+
+    Initiative.prototype._pause = function() {
+        var actor = this._getActor(this._current);
+        if (this.$pauseButton.html() === "Pause") {
+            actor.card.pause();
+            this._messageDisplay({ type: "pause" });
+            this.$pauseButton.html("Unpause");
+        }
+        else {
+            actor.card.restart();
+            this._messageDisplay({ type: "restart" });
+            this.$pauseButton.html("Pause");
+        }
+    };
+
+    Initiative.prototype._undo = function() {
+    };
+
+    Initiative.prototype._redo = function() {
+    };
+
+    Initiative.prototype._attack = function() {
     };
 
     Initiative.prototype._changeInitiative = function(order) {

@@ -2,7 +2,7 @@ var DnD, safeConsole;
 
 (function(jQuery, console) {
     "use strict";
-    
+
     function Listener() {
         this.$actorCards = {};
         this.creatures = jQuery.extend({}, loadParty(), loadMonsters());
@@ -14,7 +14,7 @@ var DnD, safeConsole;
         this.$highlight = null;
 
         this.createCard = function(creature, i, total) {
-            creature.createCard({ 
+            creature.createCard({
                 $parent: this.$actorCards,
                 isCurrent: creature.id === this.current,
                 className: "gridItem",
@@ -22,7 +22,7 @@ var DnD, safeConsole;
                 showPcHp: true
             });
         };
-        
+
         this.refresh = function(data) {
             var msg, i, j, actor;
             msg = "Received \"refresh\" message:\n\tactors: [ ";
@@ -62,7 +62,7 @@ var DnD, safeConsole;
             }
             return null;
         };
-        
+
         this.removeActor = function(data) {
             var actor = this.findActor(data.actor);
             if (actor) {
@@ -70,7 +70,7 @@ var DnD, safeConsole;
                 actor.card.destroy();
             }
         };
-        
+
         this.updateActor = function(data) {
             var actor, i;
             actor = this.findActor(data.id);
@@ -83,14 +83,14 @@ var DnD, safeConsole;
             }
             actor.card.refresh();
         };
-        
+
         this.updateActors = function(updates) {
             var i;
             for (i = 0; i < updates.length; i++) {
                 this.updateActor(updates[ i ]);
             }
         };
-        
+
         this.changeTurn = function(data) {
             var i, actor;
             console.debug("Received \"changeTurn\" message from " + this.current + " to " + data.current);
@@ -101,7 +101,21 @@ var DnD, safeConsole;
             actor.card.makeCurrent(true);
             //this.updateActors(data.actors);
         };
-        
+
+        this.pause = function(data) {
+            var i, actor;
+            console.debug("Received \"pause\" message");
+            actor = this.findActor(this.current);
+            actor.card.pause();
+        };
+
+        this.restart = function(data) {
+            var i, actor;
+            console.debug("Received \"restart\" message");
+            actor = this.findActor(this.current);
+            actor.card.restart();
+        };
+
         this.attack = function(data) {
             var i, actor, damage, msg;
             msg = "Received \"attack\" message (\"" + data.attack + "\") for ";
@@ -117,7 +131,7 @@ var DnD, safeConsole;
             }
             console.debug(msg);
         };
-        
+
         this.takeDamage = function(data) {
             var i, actor, damage, msg;
             msg = "Received \"takeDamage\" message for ";
@@ -138,7 +152,7 @@ var DnD, safeConsole;
             }
             console.debug(msg);
         };
-        
+
         this.displayImage = function(data) {
             var $div, img, ratio, multiplier, useWidth;
             this.hideImage();
@@ -146,7 +160,7 @@ var DnD, safeConsole;
                 this.$imgDisplay = jQuery("#displayImage");
             }
 //            this.$img.css("background-image", "url(\"" + data.src + "\")");
-            
+
             img = new Image();
             img.onload = (function() {
                 useWidth = true;
@@ -157,7 +171,7 @@ var DnD, safeConsole;
                         multiplier = (window.innerHeight - 100) / img.height;
                         useWidth = false;
                     }
-                } 
+                }
                 else {
                     multiplier = (window.innerHeight - 100) / img.height;
                     if (multiplier * img.width <= window.innerWidth - 100) {
@@ -166,7 +180,7 @@ var DnD, safeConsole;
                 }
                 if (useWidth) {
                     img.width = window.innerWidth - 100;
-                } 
+                }
                 else {
                     img.height = window.innerHeight - 100;
                 }
@@ -176,7 +190,7 @@ var DnD, safeConsole;
             img.src = data.src;
             this.$img = jQuery(img);
         };
-        
+
         this.hideImage = function() {
             if (this.$img && this.$img.length) {
                 this.$img.remove();
@@ -185,10 +199,10 @@ var DnD, safeConsole;
                 this.$imgDisplay.hide();
             }
             if (this.$highlight && this.$highlight.length) {
-                this.$highlight.hide();                
+                this.$highlight.hide();
             }
         };
-        
+
         this.highlightImage = function(data) {
             var offset;
             if (!this.$img || !this.$img.length || !data || !data.position) {
@@ -201,11 +215,11 @@ var DnD, safeConsole;
             offset = { left: this.$img[0].offsetLeft, top: this.$img[0].offsetTop };
             this.$highlight.css({ left: offset.left - 10 + (data.position.x * this.$img[0].width), top: offset.top - 10 + (data.position.y * this.$img[0].height) }).show();
         };
-        
+
         this.receiveMessage = function(event) {
             this.messages.push(event);
         };
-        
+
         this.handleMessage = function() {
             var message, data;
             message = this.messages.shift();
@@ -220,9 +234,9 @@ var DnD, safeConsole;
 //                this.refresh(data);
 //            }
         };
-        
+
         window.addEventListener("message", this.receiveMessage.bind(this), false);
-        
+
         jQuery(document).ready((function() {
             var i;
             console.debug("DOM ready");
@@ -232,10 +246,10 @@ var DnD, safeConsole;
             for (i = 0; i < this.actors.length; i++) {
                 createCard(this.actors[ i ], i, this.actors.length);
             }
-            
+
             setInterval(this.handleMessage.bind(this), 1000);
         }).bind(this));
     }
-    
+
     new Listener();
 })(window.jQuery, safeConsole());

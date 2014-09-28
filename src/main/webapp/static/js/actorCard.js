@@ -155,6 +155,14 @@ var DnD, safeConsole;
         this.event.damage(damage);
     };
 
+    ActorCard.prototype.pause = function() {
+        this.timer.pause();
+    };
+
+    ActorCard.prototype.restart = function() {
+        this.timer.restart();
+    };
+
     // Private methods
 
     ActorCard.prototype._init = function() { // responseText, textStatus, jqXHR
@@ -407,7 +415,16 @@ var DnD, safeConsole;
 
     ActorCard.Timer.prototype.start = function() {
         this.time = 0;
+        this.restart();
+    };
+
+    ActorCard.Timer.prototype.restart = function() {
         this.interval = setInterval(this._tick.bind(this), ActorCard.Timer.INTERVAL);
+    };
+
+    ActorCard.Timer.prototype.pause = function() {
+        clearInterval(this.interval);
+        this.interval = null;
     };
 
     ActorCard.Timer.prototype._tick = function() {
