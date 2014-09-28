@@ -7,50 +7,50 @@ var loadParty;
             Barases: {
                 name: "Barases",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/barases.jpg", // "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg",
                 abilities: {
                     STR: 12,
-                    CON: 19,
+                    CON: 20,
                     DEX: 11,
                     INT: 11,
-                    WIS: 21,
+                    WIS: 22,
                     CHA: 11
                 },
                 skills: {
-                    acrobatics: 4,
-                    arcana: 7,
-                    athletics: 14,
-                    bluff: 10,
-                    diplomacy: 5,
-                    dungeoneering: 10,
-                    endurance: 8,
-                    heal: 10,
-                    history: 5,
-                    insight: 10,
-                    intimidate: 5,
-                    nature: 17,
-                    perception: 15,
-                    religion: 5,
-                    stealth: 6,
-                    streetwise: 5,
-                    thievery: 6
+                    acrobatics: 6,
+                    arcana: 9,
+                    athletics: 16,
+                    bluff: 12,
+                    diplomacy: 7,
+                    dungeoneering: 13,
+                    endurance: 11,
+                    heal: 13,
+                    history: 7,
+                    insight: 13,
+                    intimidate: 7,
+                    nature: 20,
+                    perception: 18,
+                    religion: 7,
+                    stealth: 8,
+                    streetwise: 7,
+                    thievery: 8
                 },
                 ap: 1,
                 hp: {
-                    total: 101
+                    total: 107
                 },
                 surges: {
-                    perDay: 11,
-                    current: 11
+                    perDay: 12,
+                    current: 12
                 },
                 defenses: {
-                    ac: 25,
-                    fort: 27,
-                    ref: 21,
-                    will: 26
+                    ac: 27,
+                    fort: 29,
+                    ref: 22,
+                    will: 28
                 },
-                init: 5,
+                init: 7,
                 speed: 6,
                 weapons: [
                     {
@@ -232,12 +232,20 @@ var loadParty;
                         ]
                     }
                 ],
+                healing: [
+                    { name: "Tending Strike", frequency: "At-Will", isTempHP: true, usesHealingSurge: false, amount: "CON" },
+                    { name: "Life Blood Harvest", frequency: "Daily", isTempHP: false, usesHealingSurge: false, amount: "HS" },
+                    { name: "Healing Spirit", frequency: "Encounter", isTempHP: false, usesHealingSurge: true, amount: "HS" },
+                    { name: "Healing Spirit (secondary)", frequency: "Encounter", isTempHP: false, usesHealingSurge: false, amount: "3d6" },
+                    { name: "Healing Word", frequency: "2xEncounter", isTempHP: false, usesHealingSurge: true, amount: "HS+3d6" },
+                    { name: "Spirit's Shield", frequency: "Encounter", isTempHP: false, usesHealingSurge: false, amount: "WIS" }
+                ],
                 effects: []
             },
             Smack: {
                 name: "Smack",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/smack.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862
                 abilities: {
                     STR: 20,
@@ -268,19 +276,19 @@ var loadParty;
                 },
                 ap: 0,
                 hp: {
-                    total: 50
+                    total: 53
                 },
                 surges: {
                     perDay: 0,
                     current: 0
                 },
                 defenses: {
-                    ac: 25,
-                    fort: 27,
-                    ref: 23,
-                    will: 27
+                    ac: 27,
+                    fort: 29,
+                    ref: 25,
+                    will: 29
                 },
-                init: 5,
+                init: 7,
                 speed: 6,
                 weapons: [],
                 "implements": [],
@@ -290,9 +298,9 @@ var loadParty;
                         usage: {
                             frequency: "At-Will"
                         },
-                        toHit: 15,
+                        toHit: 19,
                         defense: "AC",
-                        damage: "1d12+9",
+                        damage: "1d12+14",
                         keywords: [
                             "melee", "beast", "basic"
                         ]
@@ -303,7 +311,7 @@ var loadParty;
             Oomooroo: {
                 name: "Oomooroo",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/owlbear.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862
                 abilities: {
                     STR: 20,
@@ -334,19 +342,19 @@ var loadParty;
                 },
                 ap: 0,
                 hp: {
-                    total: 50
+                    total: 53
                 },
                 surges: {
                     perDay: 0,
                     current: 0
                 },
                 defenses: {
-                    ac: 25,
-                    fort: 27,
-                    ref: 23,
-                    will: 27
+                    ac: 27,
+                    fort: 29,
+                    ref: 25,
+                    will: 29
                 },
-                init: 5,
+                init: 7,
                 speed: 6,
                 weapons: [],
                 "implements": [],
@@ -356,9 +364,9 @@ var loadParty;
                         usage: {
                             frequency: "At-Will"
                         },
-                        toHit: 16,
+                        toHit: 19,
                         defense: "AC",
-                        damage: "1d12+5",
+                        damage: "1d12+7",
                         keywords: [
                             "melee", "beast", "basic"
                         ]
@@ -375,8 +383,8 @@ var loadParty;
                     STR: 15,
                     CON: 18,
                     DEX: 16,
-                    INT: 22,
-                    WIS: 19,
+                    INT: 23,
+                    WIS: 20,
                     CHA: 12
                 },
                 skills: {
@@ -385,14 +393,14 @@ var loadParty;
                     athletics: 9,
                     bluff: 10,
                     diplomacy: 8,
-                    dungeoneering: 16,
+                    dungeoneering: 17,
                     endurance: 13,
-                    heal: 11,
+                    heal: 12,
                     history: 18,
-                    insight: 13,
+                    insight: 14,
                     intimidate: 8,
-                    nature: 11,
-                    perception: 16,
+                    nature: 12,
+                    perception: 17,
                     religion: 13,
                     stealth: 12,
                     streetwise: 8,
@@ -410,7 +418,7 @@ var loadParty;
                     ac: 27,
                     fort: 23,
                     ref: 24,
-                    will: 24
+                    will: 25
                 },
                 init: 10,
                 speed: 6,
@@ -679,6 +687,13 @@ var loadParty;
                             "arcane", "implement", "lightning"
                         ]
                     }
+                ],
+                healing: [
+                    { name: "Vampiric Weapons", frequency: "Encounter", isTempHP: false, usesHealingSurge: false, amount: "1d6+CON" },
+                    { name: "Healing Infusion: Curative Admixture", frequency: "2xEncounter", isTempHP: false, usesHealingSurge: false, amount: "HS+WIS+4" },
+                    { name: "Healing Infusion: Resistive Formula", frequency: "2xEncounter", isTempHP: true, usesHealingSurge: false, amount: "HS+CON+CON" },
+                    { name: "Recuperative Enchantment", frequency: "Encounter", isTempHP: false, usesHealingSurge: true, amount: "HS" },
+                    { name: "Shared Valor Leather Armor", frequency: "At-Will", isTempHP: true, usesHealingSurge: false, amount: "5" }
                 ],
                 effects: []
             },
@@ -1046,50 +1061,50 @@ var loadParty;
             Festivus: {
                 name: "Festivus",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/festivus.jpg", // "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg",
                 abilities: {
                     STR: 19,
                     CON: 17,
                     DEX: 11,
-                    INT: 17,
+                    INT: 18,
                     WIS: 11,
-                    CHA: 21
+                    CHA: 22
                 },
                 skills: {
-                    acrobatics: 9,
-                    arcana: 15,
-                    athletics: 13,
-                    bluff: 16,
-                    diplomacy: 15,
-                    dungeoneering: 9,
-                    endurance: 12,
-                    heal: 9,
-                    history: 17,
-                    insight: 9,
-                    intimidate: 16,
-                    nature: 9,
-                    perception: 10,
-                    religion: 15,
-                    stealth: 9,
-                    streetwise: 17,
-                    thievery: 10
+                    acrobatics: 11,
+                    arcana: 18,
+                    athletics: 15,
+                    bluff: 18,
+                    diplomacy: 17,
+                    dungeoneering: 11,
+                    endurance: 14,
+                    heal: 11,
+                    history: 20,
+                    insight: 11,
+                    intimidate: 19,
+                    nature: 11,
+                    perception: 12,
+                    religion: 18,
+                    stealth: 11,
+                    streetwise: 20,
+                    thievery: 12
                 },
                 ap: 1,
                 hp: {
-                    total: 89
+                    total: 94
                 },
                 surges: {
                     perDay: 9,
                     current: 9
                 },
                 defenses: {
-                    ac: 23,
-                    fort: 21,
-                    ref: 20,
-                    will: 24
+                    ac: 24,
+                    fort: 22,
+                    ref: 22,
+                    will: 26
                 },
-                init: 5,
+                init: 7,
                 speed: 6,
                 weapons: [
                     {
@@ -1184,8 +1199,7 @@ var loadParty;
                         defense: "Ref",
                         damage: {
                             amount: "1d4+10",
-                            type: "radiant",
-                            crit: "1d8"
+                            type: "radiant"
                         },
                         keywords: [
                             "arcane", "fire", "implement", "radiant", "zone"
@@ -1199,8 +1213,7 @@ var loadParty;
                         defense: "Will",
                         damage: {
                             amount: "1d6+9",
-                            type: "psychic",
-                            crit: "1d8"
+                            type: "psychic and acid"
                         },
                         effects: [
                             {
@@ -1214,31 +1227,29 @@ var loadParty;
                             "arcane", "charm", "implement", "psychic"
                         ]
                     }, {
-                        name: "Explosive Pyre",
+                        name: "Chains of Fire",
                         usage: {
                             frequency: "Encounter"
                         },
                         toHit: "CHA",
                         defense: "Ref",
                         damage: {
-                            amount: "2d8+10",
-                            type: "fire",
-                            crit: "1d8"
+                            amount: "2d8+13",
+                            type: "fire"
                         },
                         keywords: [
-                            "arcane", "fire", "implement"
+                            "arcane", "fire", "implement", "teleportation"
                         ]
                     }, {
-                        name: "Explosive Pyre (secondary)",
+                        name: "Chains of Fire (secondary)",
                         usage: {
                             frequency: "Encounter"
                         },
-                        toHit: "CHA",
+                        toHit: "automatic",
                         defense: "Ref",
                         damage: {
-                            amount: "2d8+10",
-                            type: "fire",
-                            crit: "1d8"
+                            amount: "1d10",
+                            type: "fire"
                         },
                         keywords: [
                             "arcane", "fire", "implement"
@@ -1252,8 +1263,7 @@ var loadParty;
                         defense: "Will",
                         damage: {
                             amount: "1d6+9",
-                            type: "psychic",
-                            crit: "1d8"
+                            type: "psychic"
                         },
                         keywords: [
                             "arcane", "charm", "implement", "psychic"
@@ -1363,58 +1373,62 @@ var loadParty;
                         ]
                     }
                 ],
+                healing: [
+                    { name: "Stirring Shout", frequency: "At-Will", isTempHP: false, usesHealingSurge: false, amount: "CHA" },
+                    { name: "Majestic Word", frequency: "2xEncounter", isTempHP: false, usesHealingSurge: true, amount: "HS" }
+                ],
                 effects: []
             },
             Kallista: {
                 name: "Kallista",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/kallista.jpg", // "http://www.wizards.com/dnd/images/Dragon_373/11.jpg",
                 abilities: {
                     STR: 15,
                     CON: 13,
-                    DEX: 21,
+                    DEX: 22,
                     INT: 15,
                     WIS: 13,
-                    CHA: 23
+                    CHA: 24
                 },
                 skills: {
-                    acrobatics: 21,
-                    arcana: 7,
-                    athletics: 18,
-                    bluff: 19,
-                    diplomacy: 11,
-                    dungeoneering: 6,
-                    endurance: 6,
-                    heal: 6,
-                    history: 7,
-                    insight: 6,
-                    intimidate: 13,
-                    nature: 6,
-                    perception: 13,
-                    religion: 7,
-                    stealth: 18,
-                    streetwise: 11,
-                    thievery: 15
+                    acrobatics: 25,
+                    arcana: 9,
+                    athletics: 21,
+                    bluff: 22,
+                    diplomacy: 14,
+                    dungeoneering: 8,
+                    endurance: 8,
+                    heal: 8,
+                    history: 9,
+                    insight: 8,
+                    intimidate: 16,
+                    nature: 8,
+                    perception: 15,
+                    religion: 9,
+                    stealth: 21,
+                    streetwise: 14,
+                    thievery: 18
                 },
                 ap: 1,
                 hp: {
-                    total: 80
+                    total: 90
                 },
                 surges: {
                     perDay: 8,
                     current: 8
                 },
                 defenses: {
-                    ac: 24,
-                    fort: 19,
-                    ref: 24,
-                    will: 23
+                    ac: 26,
+                    fort: 20,
+                    ref: 26,
+                    will: 25
                 },
                 resistances: {
                     fire: 12
                 },
-                init: 10,
+                init: 13,
                 speed: 6,
                 weapons: [
                     {
@@ -1529,24 +1543,14 @@ var loadParty;
                             "weapon", "martial", "melee"
                         ]
                     }, {
-                        name: "Flailing Shove",
+                        name: "Stunning Strike",
                         usage: {
                             frequency: "Encounter"
                         },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
-                        keywords: [
-                            "weapon", "martial", "melee"
-                        ]
-                    }, {
-                        name: "Flailing Shove (secondary)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        toHit: "automatic",
-                        defense: "AC",
-                        damage: "2+STR",
+                        effects: [ { name: "Stunned", duration: "endAttackerNext" } ],
                         keywords: [
                             "weapon", "martial", "melee"
                         ]
@@ -1607,6 +1611,16 @@ var loadParty;
                             "weapon", "martial", "ranged"
                         ]
                     }, {
+                        name: "Black Wrath of Hell",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "automatic",
+                        defense: "AC",
+                        damage: "2d10",
+                        effects: [ { name: "Penalty", amount: "INT^CHA", type: "to hit Kallista", saveEnds: true } ],
+                        keywords: [ "racial" ]
+                    }, {
                         name: "Duelists Prowess",
                         usage: {
                             frequency: "At-Will",
@@ -1633,53 +1647,53 @@ var loadParty;
             Karrion: {
                 name: "Karrion",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/karrion.jpg", // "http://rogueartfx.com/images/tiefling03.jpg",
                 abilities: {
-                    STR: 20,
+                    STR: 21,
                     CON: 17,
                     DEX: 20,
                     INT: 19,
-                    WIS: 17,
+                    WIS: 18,
                     CHA: 17
                 },
                 skills: {
-                    acrobatics: 16,
-                    arcana: 9,
-                    athletics: 15,
-                    bluff: 10,
-                    diplomacy: 8,
-                    dungeoneering: 13,
-                    endurance: 8,
-                    heal: 8,
-                    history: 9,
-                    insight: 8,
-                    intimidate: 8,
-                    nature: 14,
-                    perception: 14,
-                    religion: 9,
-                    stealth: 17,
-                    streetwise: 8,
-                    thievery: 10
+                    acrobatics: 18,
+                    arcana: 11,
+                    athletics: 17,
+                    bluff: 12,
+                    diplomacy: 10,
+                    dungeoneering: 16,
+                    endurance: 10,
+                    heal: 11,
+                    history: 11,
+                    insight: 11,
+                    intimidate: 10,
+                    nature: 17,
+                    perception: 17,
+                    religion: 11,
+                    stealth: 19,
+                    streetwise: 10,
+                    thievery: 12
                 },
                 ap: 1,
                 hp: {
-                    total: 84
+                    total: 94
                 },
                 surges: {
                     perDay: 9,
                     current: 9
                 },
                 defenses: {
-                    ac: 25,
-                    fort: 23,
-                    ref: 23,
-                    will: 20
+                    ac: 26,
+                    fort: 24,
+                    ref: 24,
+                    will: 22
                 },
                 resistances: {
                     fire: 12
                 },
-                init: 12,
+                init: 14,
                 speed: 6,
                 weapons: [
                     {
@@ -1777,15 +1791,16 @@ var loadParty;
                             "weapon", "martial"
                         ]
                     }, {
-                        name: "Dire Wolverine Strike",
+                        name: "Pinning Strike",
                         usage: {
                             frequency: "Encounter"
                         },
-                        toHit: "STR",
+                        toHit: "STR/DEX",
                         defense: "AC",
-                        damage: "1[W]+STR",
+                        damage: "1[W]+STR/DEX",
+                        effects: [ { name: "Immobilized", duration: "startAttackerNext" } ],
                         keywords: [
-                            "weapon", "martial", "melee"
+                            "weapon", "martial"
                         ]
                     }, {
                         name: "Thundertusk Boar Strike",
@@ -1835,26 +1850,6 @@ var loadParty;
                             "fear", "implement", "primal", "psychic"
                         ]
                     }, {
-                        name: "Pinning Strike",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        toHit: "STR/DEX",
-                        defense: "AC",
-                        damage: {
-                            amount: "1[W]+STR/DEX",
-                            type: "psychic"
-                        },
-                        effects: [
-                            {
-                                name: "immobilized",
-                                duration: "startTargetNext"
-                            }
-                        ],
-                        keywords: [
-                            "martial", "weapon"
-                        ]
-                    }, {
                         name: "Boar Assault",
                         usage: {
                             frequency: "Daily"
@@ -1886,7 +1881,10 @@ var loadParty;
                         },
                         toHit: "automatic",
                         defense: "AC",
-                        damage: "1d6+INT^CHA",
+                        damage: {
+                            amount: "2d6+INT^CHA",
+                            type: "fire"
+                        },
                         keywords: [
                             "fire"
                         ]
@@ -1922,59 +1920,66 @@ var loadParty;
                         damage: "1d8"
                     }
                 ],
+                healing: [
+                    { name: "Boar Assault", frequency: "At-Will", isTempHP: true, usesHealingSurge: false, amount: "WIS" },
+                    { name: "Invigorating Assault", frequency: "At-Will", isTempHP: true, usesHealingSurge: false, amount: "5+WIS" },
+                    { name: "Healing Spirit", frequency: "Encounter", isTempHP: false, usesHealingSurge: true, amount: "HS" },
+                    { name: "Healing Spirit (secondary)", frequency: "Encounter", isTempHP: false, usesHealingSurge: false, amount: "3d6" },
+                    { name: "Spirit of Sacrifice", frequency: "Encounter", isTempHP: true, usesHealingSurge: false, amount: "7+STR^WIS" }
+                ],
                 effects: []
             },
             Kitara: {
                 name: "Kitara",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/kitara.jpg", // "http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg",
                 abilities: {
                     STR: 17,
                     CON: 15,
                     DEX: 21,
-                    INT: 23,
+                    INT: 24,
                     WIS: 17,
-                    CHA: 17
+                    CHA: 18
                 },
                 skills: {
-                    acrobatics: 12,
-                    arcana: 16,
-                    athletics: 8,
-                    bluff: 10,
-                    diplomacy: 13,
-                    dungeoneering: 8,
-                    endurance: 7,
-                    heal: 8,
-                    history: 11,
-                    insight: 8,
-                    intimidate: 10,
-                    nature: 8,
-                    perception: 13,
-                    religion: 11,
-                    stealth: 13,
-                    streetwise: 8,
-                    thievery: 15
+                    acrobatics: 14,
+                    arcana: 19,
+                    athletics: 10,
+                    bluff: 13,
+                    diplomacy: 16,
+                    dungeoneering: 10,
+                    endurance: 9,
+                    heal: 10,
+                    history: 14,
+                    insight: 10,
+                    intimidate: 13,
+                    nature: 10,
+                    perception: 15,
+                    religion: 14,
+                    stealth: 15,
+                    streetwise: 11,
+                    thievery: 17
                 },
                 ap: 1,
                 hp: {
-                    total: 87
+                    total: 92
                 },
                 surges: {
                     perDay: 9,
                     current: 9
                 },
                 defenses: {
-                    ac: 27,
-                    fort: 22,
-                    ref: 23,
-                    will: 22
+                    ac: 29,
+                    fort: 25,
+                    ref: 27,
+                    will: 26
                 },
                 resistances: {
                     psychic: 5 // Mental Block (alternative reward)
                 },
-                init: 11,
-                speed: 7,
+                init: 12,
+                speed: 8,
                 weapons: [
                     {
                         name: "Supremely Vicious Bastard Sword +2",
@@ -2008,7 +2013,7 @@ var loadParty;
                         status: [
                             "implement"
                         ],
-                        damage: 1
+                        damage: 2 // Assume using the Orb +3, so this is from Supremely Vicious Bastard Sword +2
                     }
                 ],
                 attacks: [
@@ -2820,7 +2825,7 @@ var loadParty;
             Lechonero: {
                 name: "Lechonero",
                 isPC: true,
-                level: 13,
+                level: 14,
                 image: "../images/portraits/lechonero.jpg", // "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg",
                 abilities: {
                     STR: 17,
@@ -2851,17 +2856,17 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 87
+                    total: 92
                 },
                 surges: {
                     perDay: 8,
                     current: 8
                 },
                 defenses: {
-                    ac: 25,
-                    fort: 21,
-                    ref: 24,
-                    will: 20
+                    ac: 30,
+                    fort: 23,
+                    ref: 27,
+                    will: 23
                 },
                 init: 13,
                 speed: 7,

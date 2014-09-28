@@ -149,6 +149,18 @@ function loadMonsters() {
                       { name: "Storm of Stars", usage: { frequency: "Encounter" }, target: { range: 5, targets: 4 }, toHit: 20, defense: "AC", damage: { amount: "2d8+4", type: "fire" }, keywords: [ "ranged", "fire" ] }
               ]
         },
+        "Bitterglass": {
+            name: "Bitterglass", level: 14, image: "../images/portraits/bitterglass.png",
+            hp: { total: 200 },
+            defenses: { ac: 28, fort: 26, ref: 24, will: 26 },
+            vulnerabilities: { thunder: 10 },
+            init: 12, speed: 0,
+            abilities: { STR: 10, CON: 10, DEX: 10, INT: 10, WIS: 10, CHA: 10 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 0, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Hazard", usage: { frequency: "At-Will" }, target: { area: "close", size: 10 }, toHit: 18, defense: "Will", damage: { amount: "2d8+5", type: "psychic" }, effects: [ { name: "ongoing damage", amount: 5, type: "psychic", saveEnds: true }, { name: "Dazed", duration: "endAttackerNext" } ], miss: { halfDamage: true }, keywords: [ "melee", "psychic", "basic" ] }
+              ]
+        },
         "Bone Scribe": {
             name: "Bone Scribe", level: 13, image: "../images/portraits/bone_scribe.jpg", // http://www.wizards.com/dnd/images/MM35_gallery/MM35_PG255a.jpg
             hp: { total: 1 },
@@ -515,6 +527,20 @@ function loadMonsters() {
                       { name: "Psychic Upheaval", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 3 }, toHit: 16, defense: "Fort", damage: { amount: "2d10+4", type: "psychic" }, effects: [ { name: "Immobilized", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
               ]
         },
+        "Kle'th, Githyanki Mindslicer": {
+            name: "Kle'th, Githyanki Mindslicer", level: 13, image: "../images/portraits/kle_th.jpg", // http://cdn.obsidianportal.com/images/121677/githyanki_2_2.jpg
+            hp: { total: 98 },
+            defenses: { ac: 27, fort: 24, ref: 25, will: 24 },
+            init: 11, speed: { walk: 6, jump: 5 },
+            abilities: { STR: 14, CON: 14, DEX: 16, INT: 17, WIS: 12, CHA: 11 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 11, insight: 12, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Silver Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: [ "1d8+2", { amount: "1d8", type: "psychic" } ], keywords: [ "melee", "psychic", "basic" ] },
+                      { name: "Mindslice", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 16, defense: "Will", damage: { amount: "2d8+3", type: "psychic" }, keywords: [ "ranged", "psychic" ] },
+                      { name: "Unstable Balance", usage: { frequency: "Encounter" }, target: { area: "burst", size: 3, range: 20 }, toHit: 16, defense: "Will", damage: { amount: "2d6+3", type: "psychic" }, effects: [ { name: "Prone" } ], keywords: [ "ranged", "psychic" ] },
+                      { name: "Psychic Barrage", usage: { frequency: "Recharge", recharge: 6 }, target: { area: "burst", size: 1, range: 20 }, toHit: 16, defense: "Will", damage: { amount: "1d6+3", type: "psychic" }, effects: [ { name: "ongoing damage", amount: 5, type: "psychic", saveEnds: true } ], keywords: [ "ranged", "psychic" ] }
+              ]
+        },
         "Laughing Shadow Groveler": {
             name: "Laughing Shadow Groveler", level: 13, image: "../images/portraits/laughing_shadow_groveler.jpg", // http://www.koboldquarterly.com/k/wp-content/uploads/2012/01/fakir.jpg
             hp: { total: 103 },
@@ -626,6 +652,21 @@ function loadMonsters() {
                       { name: "Knock Out of Sync", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", crit: 19, damage: "3d8+5", effects: [ { name: "penalty", type: "initiative", amount: -5 } ], keywords: [ "melee" ] },
                       { name: "Jumping Sparks", usage: { frequency: "At-Will" }, target: { count: 3 }, range: 10, toHit: 19, defense: "Fort", damage: { amount: "2d8+7", type: "lightning" }, keywords: [ "ranged", "lightning", "teleportation" ] },
                       { name: "Psychic Blows", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 20, defense: "Will", damage: { amount: "2d8+5", type: "psychic" }, keywords: [ "ranged", "psychic" ] }
+              ]
+        },
+        "Pennel": {
+            name: "Pennel", level: 14, image: "../images/portraits/pennel.jpg",
+            hp: { total: 276 },
+            defenses: { ac: 30, fort: 25, ref: 27, will: 26 },
+            savingThrows: 2,
+            actionPoints: 1,
+            init: 15, speed: 6,
+            abilities: { STR: 15, CON: 18, DEX: 23, INT: 17, WIS: 20, CHA: 12 },
+            skills: { acrobatics: 18, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 17, intimidate: 0, nature: 0, perception: 17, religion: 0, stealth: 18, streetwise: 0, thievery: 18 },
+            attacks: [
+                      { name: "Crystal Dagger", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", damage: { amount: "3d4+8", type: "psychic" }, effects: [ { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "weapon" ] },
+                      { name: "Crystal Strands", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 19, defense: "Ref", damage: { amount: "3d4+7", type: "psychic" }, keywords: [ "ranged", "psychic", "weapon" ] },
+                      { name: "Crystal Shards", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 3 }, toHit: 18, defense: "Ref", damage: { amount: "2d4+7", type: "psychic" }, effects: [ { name: "Immobilized", saveEnds: true } ], miss: { halfDamage: true, effects: [ { name: "Slowed", duration: "endAttackerNext" } ] }, keywords: [ "ranged", "psychic" ] }
               ]
         },
         "Redspawn Firebelcher": {
@@ -832,6 +873,23 @@ function loadMonsters() {
             attacks: [
                       { name: "Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 14, defense: "AC", damage: "6", keywords: [ "melee", "basic" ] },
                       { name: "Crossbow", usage: { frequency: "At-Will" }, range: "ranged", toHit: 13, defense: "AC", damage: "6", keywords: [ "ranged", "basic" ] }
+              ]
+        },
+        "Telicanthus": {
+            name: "Telicanthus", level: 16, image: "../images/portraits/telicanthus.png",
+            hp: { total: 308 },
+            defenses: { ac: 30, fort: 27, ref: 28, will: 30 },
+            init: 13, speed: { walk: 6, fly: 6 },
+            actionPoints: 1,
+            savingThrows: 2,
+            abilities: { STR: 12, CON: 18, DEX: 17, INT: 21, WIS: 18, CHA: 24 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 23, diplomacy: 23, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 17, intimidate: 0, nature: 0, perception: 11, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Mindhammer", usage: { frequency: "At-Will" }, range: 10, toHit: 20, defense: "Will", damage: { amount: "2d8+7", type: "psychic" }, effects: [ { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "melee", "ranged", "psychic", "basic" ] },
+                      { name: "Force Switch", usage: { frequency: "Recharge", recharge: 5 }, target: { range: 4 }, toHit: 20, defense: "Fort", damage: { amount: "2d10+5", type: "force" }, keywords: [ "ranged", "force" ] },
+                      { name: "Suffering Ties", usage: { frequency: "Encounter" }, range: "melee", toHit: 20, defense: "Fort", damage: { amount: "1d10+7", type: "psychic" }, effects: [ { name: "Suffering Ties", duration: "startAttackerNext" } ], keywords: [ "melee", "psychic" ] },
+                      { name: "Binding Suggestions", usage: { frequency: "Recharge", recharge: 6 }, target: { area: "close", size: 2 }, toHit: 18, defense: "Will", damage: "0", effects: [ { name: "Dazed", saveEnds: true } ], keywords: [ "close burst", "psychic" ] },
+                      { name: "Binding Suggestions (secondary)", usage: { frequency: "At-Will" }, toHit: 20, defense: "Will", damage: { amount: "7", type: "psychic" }, effects: [ { name: "Dominated", saveEnds: true } ], miss: { damage: { amount: "2d6+7", type: "psychic" } }, keywords: [ "psychic" ] }
               ]
         },
         "Thaggriel, Githyanki Dragonknight": {
