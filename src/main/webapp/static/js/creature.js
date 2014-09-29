@@ -600,14 +600,14 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                 for (i = 0; i < attack.damage.length; i++) {
                     msg += (i > 0 && i < attack.damage.length - 1 ? ", " : "") + (i > 0 && i === attack.damage.length - 1 ? " and " : "") + attack.damage[ i ].anchor(targetDamage.conditional);
                     tmp = target.takeDamage(this, attack.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.damage[ i ].type, i === 0 ? attack.effects : null);
-                    msg += tmp.msg;
+                    msg += tmp.msg + " (HP " + target.hp.current + ")";
                     result.damage.push({ amount: tmp.damage, type: attack.damage[ i ].type });
                 }
             }
             else {
                 msg += attack.damage.anchor(targetDamage.conditional);
                 tmp = target.takeDamage(this, targetDamage.amount, attack.damage.type, attack.effects);
-                msg += tmp.msg;
+                msg += tmp.msg + " (HP " + target.hp.current + ")";
                 result.damage.push({ amount: tmp.damage, type: attack.damage.type });
             }
         }
@@ -624,19 +624,19 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                 else {
                     msg += attack.miss.damage.anchor(targetDamage.conditional);
                 }
-                msg += " on a miss";
+                msg += " on a miss (HP " + target.hp.current + ")";
             }
             if (targetDamage.missAmount || attack.hasOwnProperty("miss")) {
                 if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
                     for (i = 0; i < attack.miss.damage.length; i++) {
                         tmp = target.takeDamage(this, attack.miss.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.miss.damage[ i ].type, i === 0 ? attack.miss.effects : null);
-                        msg += tmp.msg;
+                        msg += tmp.msg + " (HP " + target.hp.current + ")";
                         result.damage.push({ amount: tmp.damage, type: attack.miss.damage[ i ].type });
                     }
                 }
                 else {
                     tmp = target.takeDamage(this, attack.miss.damage.getLastRoll().total + targetDamage.conditional.mod, attack.miss.damage.type, attack.miss.effects);
-                    msg += tmp.msg;
+                    msg += tmp.msg + " (HP " + target.hp.current + ")";
                     result.damage.push({ amount: tmp.damage, type: attack.miss.damage.type });
                 }
             }

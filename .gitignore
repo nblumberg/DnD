@@ -1,2 +1,7 @@
 initiative.json
-saves
+.settings/
+bin/
+coverage/
+karma_html/
+node_modules/
+saves/
