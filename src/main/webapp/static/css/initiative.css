@@ -38,6 +38,11 @@ input#round { width: 30px; }
 	height: 30px;
 }
 
+.btn-icon {
+	font-size: 3rem;
+	line-height: 2rem;
+}
+
 #displayImage {
 	background-color: black;
 	background-position: top left;

@@ -771,14 +771,12 @@ var DnD;
         if (this.$pauseButton.hasClass("pause")) {
             actor.card.pause();
             this._messageDisplay({ type: "pause" });
-            this.$pauseButton.removeClass("pause").addClass("unpause");
-            this.$pauseButton.html(unpause);
+            this.$pauseButton.attr("title", "Unpause").removeClass("pause").addClass("unpause").html(unpause);
         }
         else {
             actor.card.restart();
             this._messageDisplay({ type: "restart" });
-            this.$pauseButton.removeClass("unpause").addClass("pause");
-            this.$pauseButton.html(pause);
+            this.$pauseButton.attr("title", "Pause").removeClass("unpause").addClass("pause").html(pause);
         }
     };
 
