@@ -764,16 +764,21 @@ var DnD;
     };
 
     Initiative.prototype._pause = function() {
-        var actor = this._getActor(this._current);
-        if (this.$pauseButton.html() === "Pause") {
+        var pause, unpause, actor;
+        pause = "&NotRightTriangle;";
+        unpause = "&RightTriangle;";
+        actor = this._getActor(this._current);
+        if (this.$pauseButton.hasClass("pause")) {
             actor.card.pause();
             this._messageDisplay({ type: "pause" });
-            this.$pauseButton.html("Unpause");
+            this.$pauseButton.removeClass("pause").addClass("unpause");
+            this.$pauseButton.html(unpause);
         }
         else {
             actor.card.restart();
             this._messageDisplay({ type: "restart" });
-            this.$pauseButton.html("Pause");
+            this.$pauseButton.removeClass("unpause").addClass("pause");
+            this.$pauseButton.html(pause);
         }
     };
 
