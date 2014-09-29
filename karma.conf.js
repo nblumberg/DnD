@@ -11,7 +11,7 @@ module.exports = function(config) {
         // base path, that will be used to resolve files and exclude
         basePath: "",
 
-        frameworks: [ "jasmine", "commonjs" ],
+        frameworks: [ "jasmine" ], // "commonjs" ],
 
 
         // list of files to exclude
@@ -70,7 +70,7 @@ module.exports = function(config) {
         // - IE (only Windows)
         // CLI --browsers Chrome,Firefox,Safari
         browsers: [
-            process.env.TRAVIS ? "Firefox" : "Chrome"
+            "PhantomJS" // [ "PhantomJS", "Firefox", "Chrome" ]
         ],
 
         // If browser does not capture in given timeout [ms], kill it
@@ -89,6 +89,7 @@ module.exports = function(config) {
             "karma-jasmine",
             "karma-chrome-launcher",
             "karma-firefox-launcher",
+            "karma-phantomjs-launcher",
             "karma-junit-reporter",
             "karma-commonjs",
             //"karma-html-reporter",
