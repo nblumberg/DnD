@@ -377,7 +377,7 @@ var loadParty;
             Bin: {
                 name: "Bin",
                 isPC: true,
-                level: 14,
+                level: 15,
                 image: "../images/portraits/bin.jpg", // "http://wizards.com/dnd/images/386_wr_changeling.jpg",
                 abilities: {
                     STR: 15,
@@ -408,7 +408,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 95
+                    total: 100
                 },
                 surges: {
                     perDay: 10,
@@ -637,7 +637,7 @@ var loadParty;
                         keywords: [
                             "elemental"
                         ]
-                    }, {
+                    }, /* {
                         name: "Caustic Rampart",
                         usage: {
                             frequency: "Daily"
@@ -656,7 +656,7 @@ var loadParty;
                         keywords: [
                             "acid", "arcane", "conjuration", "implement"
                         ]
-                    }, {
+                    } */, {
                         name: "Lightning Motes",
                         usage: {
                             frequency: "Daily"
@@ -686,6 +686,29 @@ var loadParty;
                         keywords: [
                             "arcane", "implement", "lightning"
                         ]
+                    }, {
+                        name: "Clockroach Swarm",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        target: {
+                            delivery: "blast",
+                            size: 5,
+                            enemiesOnly: true,
+                            targets: "any"
+                        },
+                        toHit: "INT",
+                        defense: "Ref",
+                        damage: {
+                            amount: "2d8+INT",
+                            type: "lightning"
+                        },
+                        effects: [
+                            { name: "ongoing damage", amount: "5", saveEnds: true }
+                        ],
+                        keywords: [
+                            "arcane", "implement", "zone"
+                        ]
                     }
                 ],
                 healing: [
@@ -700,7 +723,7 @@ var loadParty;
             Camulos: {
                 name: "Camulos",
                 isPC: true,
-                level: 14,
+                level: 15,
                 image: "../images/portraits/camulos.png",
                 abilities: {
                     STR: 24,
@@ -731,7 +754,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 113
+                    total: 119
                 },
                 surges: {
                     perDay: 14,
@@ -887,10 +910,10 @@ var loadParty;
                         defense: "Will",
                         damage: "1[W]",
                         miss: {
-                            damage: "CON"
+                            damage: "1[W]"
                         },
                         keywords: [
-                            "psionic", "melee"
+                            "melee", "martial", "weapon"
                         ]
                     }, {
                         name: "Melee Basic (Battle Wrath)",
@@ -1061,7 +1084,7 @@ var loadParty;
             Festivus: {
                 name: "Festivus",
                 isPC: true,
-                level: 14,
+                level: 15,
                 image: "../images/portraits/festivus.jpg", // "http://www.worldofazolin.com/wiki/images/8/8d/Dragsorc.jpg",
                 abilities: {
                     STR: 19,
@@ -1092,7 +1115,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 94
+                    total: 99
                 },
                 surges: {
                     perDay: 9,
@@ -1328,7 +1351,7 @@ var loadParty;
                         keywords: [
                             "arcane", "healing", "implement", "psychic"
                         ]
-                    }, {
+                    }/*, {
                         name: "Reeling Torment",
                         usage: {
                             frequency: "Daily"
@@ -1343,7 +1366,7 @@ var loadParty;
                         keywords: [
                             "arcane", "charm", "implement", "psychic"
                         ]
-                    }, {
+                    } */, {
                         name: "Counterpoint",
                         usage: {
                             frequency: "Daily"
@@ -1371,18 +1394,69 @@ var loadParty;
                         keywords: [
                             "acid"
                         ]
+                    }, {
+                        name: "Prismatic Lightning (Fort)",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "CHA",
+                        defense: "Fort",
+                        damage: {
+                            amount: "3d6+CHA",
+                            type: "lightning"
+                        },
+                        effects: [
+                            { name: "ongoing damage", amount: "10", type: "acid", saveEnds: true }
+                        ],
+                        keywords: [
+                            "acid", "arcane", "implement", "lightning"
+                        ]
+                    }, {
+                        name: "Prismatic Lightning (Ref)",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "CHA",
+                        defense: "Ref",
+                        damage: {
+                            amount: "3d6+CHA",
+                            type: "cold and lightning"
+                        },
+                        effects: [
+                            { name: "immobilized", saveEnds: true }
+                        ],
+                        keywords: [
+                            "arcane", "cold", "implement", "lightning"
+                        ]
+                    }, {
+                        name: "Prismatic Lightning (Will)",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "CHA",
+                        defense: "Will",
+                        damage: {
+                            amount: "3d6+CHA",
+                            type: "lightning and acid"
+                        },
+                        effects: [
+                            { name: "blinded", duration: "endAttackerNext" }
+                        ],
+                        keywords: [
+                            "arcane", "implement", "lightning", "psychic"
+                        ]
                     }
                 ],
                 healing: [
-                    { name: "Stirring Shout", frequency: "At-Will", isTempHP: false, usesHealingSurge: false, amount: "CHA" },
-                    { name: "Majestic Word", frequency: "2xEncounter", isTempHP: false, usesHealingSurge: true, amount: "HS" }
+                    { name: "Majestic Word", frequency: "2xEncounter", isTempHP: false, usesHealingSurge: true, amount: "HS+2d6+CHA" },
+                    { name: "Stirring Shout", frequency: "At-Will", isTempHP: false, usesHealingSurge: false, amount: "CHA" }
                 ],
                 effects: []
             },
             Kallista: {
                 name: "Kallista",
                 isPC: true,
-                level: 14,
+                level: 15,
                 image: "../images/portraits/kallista.jpg", // "http://www.wizards.com/dnd/images/Dragon_373/11.jpg",
                 abilities: {
                     STR: 15,
@@ -1413,7 +1487,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 90
+                    total: 95
                 },
                 surges: {
                     perDay: 8,
@@ -1620,7 +1694,7 @@ var loadParty;
                         damage: "2d10",
                         effects: [ { name: "Penalty", amount: "INT^CHA", type: "to hit Kallista", saveEnds: true } ],
                         keywords: [ "racial" ]
-                    }, {
+                    }/*, {
                         name: "Duelists Prowess",
                         usage: {
                             frequency: "At-Will",
@@ -1632,6 +1706,30 @@ var loadParty;
                         keywords: [
                             "weapon", "martial", "melee"
                         ]
+                    }*/, {
+                        name: "Garrote Grip",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "DEX",
+                        defense: "Ref",
+                        damage: "2[W]+DEX",
+                        effects: [
+                            { name: "Grab" }
+                        ],
+                        keywords: [ "melee", "martial", "reliable", "weapon" ]
+                    }, {
+                        name: "Garrote Grip (3rd failed save)",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "automatic",
+                        defense: "Ref",
+                        damage: "0",
+                        effects: [
+                            { name: "Unconscious" }
+                        ],
+                        keywords: [ "melee", "martial", "reliable", "weapon" ]
                     }, {
                         name: "Sneak Attack",
                         usage: {
@@ -1647,7 +1745,7 @@ var loadParty;
             Karrion: {
                 name: "Karrion",
                 isPC: true,
-                level: 14,
+                level: 15,
                 image: "../images/portraits/karrion.jpg", // "http://rogueartfx.com/images/tiefling03.jpg",
                 abilities: {
                     STR: 21,
@@ -1678,7 +1776,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 94
+                    total: 99
                 },
                 surges: {
                     perDay: 9,
@@ -1849,7 +1947,7 @@ var loadParty;
                         keywords: [
                             "fear", "implement", "primal", "psychic"
                         ]
-                    }, {
+                    }/*, {
                         name: "Boar Assault",
                         usage: {
                             frequency: "Daily"
@@ -1857,6 +1955,23 @@ var loadParty;
                         toHit: "STR/DEX",
                         defense: "AC",
                         damage: "2[W]+STR/DEX",
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }*/, {
+                        name: "Steeling Fury",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        target: {
+                            area: "close burst",
+                            size: 1,
+                            enemiesOnly: true
+                        },
+                        toHit: "STR",
+                        defense: "AC",
+                        damage: "1[W]+STR",
+                        miss: { halfDamage: true },
                         keywords: [
                             "weapon", "martial"
                         ]
@@ -1921,7 +2036,7 @@ var loadParty;
                     }
                 ],
                 healing: [
-                    { name: "Boar Assault", frequency: "At-Will", isTempHP: true, usesHealingSurge: false, amount: "WIS" },
+                    /* { name: "Boar Assault", frequency: "At-Will", isTempHP: true, usesHealingSurge: false, amount: "WIS" }, */
                     { name: "Invigorating Assault", frequency: "At-Will", isTempHP: true, usesHealingSurge: false, amount: "5+WIS" },
                     { name: "Healing Spirit", frequency: "Encounter", isTempHP: false, usesHealingSurge: true, amount: "HS" },
                     { name: "Healing Spirit (secondary)", frequency: "Encounter", isTempHP: false, usesHealingSurge: false, amount: "3d6" },
@@ -1932,7 +2047,7 @@ var loadParty;
             Kitara: {
                 name: "Kitara",
                 isPC: true,
-                level: 14,
+                level: 15,
                 image: "../images/portraits/kitara.jpg", // "http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg",
                 abilities: {
                     STR: 17,
@@ -1963,7 +2078,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 92
+                    total: 97
                 },
                 surges: {
                     perDay: 9,
@@ -2825,7 +2940,7 @@ var loadParty;
             Lechonero: {
                 name: "Lechonero",
                 isPC: true,
-                level: 14,
+                level: 15,
                 image: "../images/portraits/lechonero.jpg", // "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg",
                 abilities: {
                     STR: 17,
@@ -2856,7 +2971,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 92
+                    total: 97
                 },
                 surges: {
                     perDay: 8,
@@ -3028,7 +3143,7 @@ var loadParty;
                         keywords: [
                             "weapon", "martial", "ranged"
                         ]
-                    }, {
+                    }/*, {
                         name: "Sure Shot",
                         usage: {
                             frequency: "Daily"
@@ -3039,7 +3154,7 @@ var loadParty;
                         keywords: [
                             "weapon", "martial", "ranged"
                         ]
-                    }, {
+                    }*/, {
                         name: "Flying Steel",
                         usage: {
                             frequency: "Daily"
@@ -3047,6 +3162,62 @@ var loadParty;
                         toHit: "DEX",
                         defense: "AC",
                         damage: "2[W]+DEX",
+                        keywords: [
+                            "weapon", "martial", "ranged"
+                        ]
+                    }, {
+                        name: "Trick Shot (prone)",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "2[W]+DEX",
+                        effects: [
+                            { name: "Prone" }
+                        ],
+                        keywords: [
+                            "weapon", "martial", "ranged"
+                        ]
+                    }, {
+                        name: "Trick Shot (slowed)",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "2[W]+DEX",
+                        effects: [
+                            { name: "Slowed", saveEnds: true }
+                        ],
+                        keywords: [
+                            "weapon", "martial", "ranged"
+                        ]
+                    }, {
+                        name: "Trick Shot (dazed)",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "2[W]+DEX",
+                        effects: [
+                            { name: "Dazed", saveEnds: true }
+                        ],
+                        keywords: [
+                            "weapon", "martial", "ranged"
+                        ]
+                    }, {
+                        name: "Trick Shot (immobilized)",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "2[W]+DEX",
+                        effects: [
+                            { name: "Immobilized", saveEnds: true }
+                        ],
                         keywords: [
                             "weapon", "martial", "ranged"
                         ]
@@ -3082,23 +3253,23 @@ var loadParty;
             Balugh: {
                 name: "Balugh",
                 isPC: true,
-                level: 13,
+                level: 15,
                 image: "../images/portraits/balugh.jpg", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
                 ap: 0,
                 hp: {
-                    total: 116
+                    total: 166
                 },
                 surges: {
-                    perDay: 0,
-                    current: 0
+                    perDay: 2,
+                    current: 2
                 },
                 abilities: {
-                    STR: 16,
-                    CON: 14,
-                    DEX: 12,
-                    INT: 6,
-                    WIS: 12,
-                    CHA: 6
+                    STR: 20,
+                    CON: 15,
+                    DEX: 16,
+                    INT: 7,
+                    WIS: 13,
+                    CHA: 7
                 },
                 skills: {
                     acrobatics: 11,
@@ -3120,10 +3291,10 @@ var loadParty;
                     thievery: 11
                 },
                 defenses: {
-                    ac: 22,
-                    fort: 24,
-                    ref: 20,
-                    will: 22
+                    ac: 29,
+                    fort: 29,
+                    ref: 27,
+                    will: 27
                 },
                 init: 12,
                 speed: 5,
@@ -3133,9 +3304,9 @@ var loadParty;
                         usage: {
                             frequency: "At-Will"
                         },
-                        toHit: 12,
+                        toHit: 17,
                         defense: "AC",
-                        damage: "1d12+3",
+                        damage: "1d12+STR",
                         keywords: [
                             "beast", "melee", "basic"
                         ]
