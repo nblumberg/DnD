@@ -652,10 +652,11 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     };
 
     /**
-     * @param attacker Actor
-     * @param damage Number
-     * @param type String
-     * @param effects Array of Effect
+     * @param attacker {Actor}
+     * @param damage {Number}
+     * @param type {String or Array of String}
+     * @param effects {Array of Effect}
+     * @returns {Object} Object of the form { msg: String, damage: Number, type: String or Array of String }
      */
     Actor.prototype.takeDamage = function(attacker, damage, type, effects) {
         var temp, msg, i, result, effect;
@@ -667,10 +668,24 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         }
         // ^^^ DEBUGGING
         msg = "";
-        if (type && this.defenses.resistances && this.defenses.resistances.hasOwnProperty(type)) { // TODO: handle multi-type and multiple resistances
-            temp = this.defenses.resistances[ type ];
-            msg += " (resisted " + Math.min(damage, temp) + ")";
-            damage = Math.max(damage - temp, 0);
+        if (type && this.resistances) {
+            temp = Infinity;
+            if (typeof type === "string" && this.resistances.hasOwnProperty(type)) {
+                temp = this.resistances[ type ];
+            }
+            else if (type.constructor === Array) {
+                // The creature can only resist multi-type damage if it has resistance to all the types
+                // and then only resists an amount equal to the lowest of the matching resistances
+                for (i = 0; i < type.length; i++) {
+                    if (this.resistances.hasOwnProperty(type[ i ])) {
+                        temp = Math.min(this.resistances[ type[ i ] ], temp);
+                    }
+                }
+            }
+            if (temp !== Infinity) {
+                msg += " (resisted " + Math.min(damage, temp) + ")";
+                damage = Math.max(damage - temp, 0);                    
+            }
         }
         if (this.hp.temp) {
             temp = this.hp.temp;
@@ -711,9 +726,19 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         msg = null;
 
         ongoingDamage = function(effect) {
+            var result, type;
             if (effect.name.toLowerCase() === "ongoing damage") {
-                this.takeDamage(effect.attacker, effect.amount, effect.type, null);
-                this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: "Took " + effect.amount + " ongoing " + (effect.type ? effect.type : "") + " damage" }));
+                result = this.takeDamage(effect.attacker, effect.amount, effect.type, null);
+                type = "";
+                if (result.type) {
+                    if (typeof result.type === "string") {
+                        type = result.type;
+                    }
+                    else if (result.type.constructor === Array) {
+                        type = result.type.join(" and ");
+                    }
+                }
+                this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: "Took " + result.damage + " ongoing " + type + " damage" + result.msg }));
             }
         }.bind(this);
 

@@ -51,7 +51,7 @@ function loadMonsters() {
                       { name: "Longsword", usage: { frequency: "At-Will" }, range: "melee", toHit: 20, defense: "AC", damage: "1d8+7", effects: [ { name: "Marked", duration: "startAttackerNext" } ], keywords: [ "melee", "basic", "radiant", "weapon" ] },
                       { name: "Marked damage", usage: { frequency: "At-Will", action: "Immediate Interrupt" }, range: "melee", toHit: "automatic", defense: "AC", damage: { amount: "7", type: "radiant" }, keywords: [ "radiant" ] },
                       { name: "Crusader's Assault", usage: { frequency: "At-Will" }, range: "melee", toHit: 20, defense: "AC", damage: [ "1d8+7", { amount: "1d8", type: "radiant" } ], keywords: [ "melee", "radiant", "weapon" ] },
-                      { name: "Bahamut's Accusing Eye", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 18, defense: "Ref", damage: { amount: "2d8+7", type: "cold and radiant" }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "ongoing damage", amount: 5, type: "cold and radiant" }, "Slowed" ] } ], keywords: [ "cold", "radiant" ] }
+                      { name: "Bahamut's Accusing Eye", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 18, defense: "Ref", damage: { amount: "2d8+7", type: [ "cold", "radiant" ] }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "ongoing damage", amount: 5, type: [ "cold", "radiant" ] }, "Slowed" ] } ], keywords: [ "cold", "radiant" ] }
               ]
         },
         "Antharosk": {
@@ -284,10 +284,10 @@ function loadMonsters() {
             skills: { acrobatics: 0, arcana: 11, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 13, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 11, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Mace", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: "1d8+5", keywords: [ "melee", "basic" ] },
-                      { name: "Infernal Quills", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 19, defense: "AC", damage: { amount: "1d8+3", type: "fire and poison" }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 5, type: "fire and poison" }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] },
-                      { name: "Quick Quill Strike", usage: { frequency: "Encounter" }, target: { range: 10 }, toHit: 19, defense: "AC", damage: { amount: "1d8+3", type: "fire and poison" }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 5, type: "fire and poison" }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] },
+                      { name: "Infernal Quills", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 19, defense: "AC", damage: { amount: "1d8+3", type: [ "fire", "poison" ] }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 5, type: [ "fire", "poison" ] }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] },
+                      { name: "Quick Quill Strike", usage: { frequency: "Encounter" }, target: { range: 10 }, toHit: 19, defense: "AC", damage: { amount: "1d8+3", type: [ "fire", "poison" ] }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 5, type: [ "fire", "poison" ] }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] },
                       { name: "Asmodeus' Ruby Curse", usage: { frequency: "Encounter" }, target: { area: "close blast", range: 5 }, toHit: 16, defense: "Will", damage: { amount: "3d8+5", type: "psychic" }, keywords: [ "ranged", "close burst", "fear", "psychic" ] },
-                      { name: "Quill Storm", usage: { frequency: "Encounter" }, target: { area: "burst", size: 2, range: 10 }, toHit: 17, defense: "Ref", damage: { amount: "1d8", type: "fire and poison" }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 10, type: "fire and poison" }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] }
+                      { name: "Quill Storm", usage: { frequency: "Encounter" }, target: { area: "burst", size: 2, range: 10 }, toHit: 17, defense: "Ref", damage: { amount: "1d8", type: [ "fire", "poison" ] }, effects: [ { name: "multiple", children: [ { name: "ongoing damage", amount: 10, type: [ "fire", "poison" ] }, { name: "attack penalty", amount: -2 } ], saveEnds: true } ], keywords: [ "ranged", "poison", "fire" ] }
               ]
         },
         "Eidolon": {
@@ -753,7 +753,7 @@ function loadMonsters() {
             abilities: { STR: 13, CON: 13, DEX: 16, INT: 19, WIS: 12, CHA: 17 },
             skills: { acrobatics: 8, arcana: 12, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 4, religion: 12, stealth: 13, streetwise: 0, thievery: 0 },
             attacks: [
-                      { name: "Blackfire Touch", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "Ref", damage: { amount: "2d8+6", type: "fire and necrotic" }, keywords: [ "melee", "fire", "necrotic", "fire and necrotic", "basic" ] },
+                      { name: "Blackfire Touch", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "Ref", damage: { amount: "2d8+6", type: [ "fire", "necrotic" ] }, keywords: [ "melee", "fire", "necrotic", "fire and necrotic", "basic" ] },
                       { name: "Beshadowed Mind", usage: { frequency: "Recharge", recharge: 4 }, range: 10, toHit: 18, defense: "Will", damage: { amount: "3d6+6", type: "necrotic" }, effects: [ { name: "blinded", saveEnds: true } ], keywords: [ "melee", "necrotic" ] },
                       { name: "Deep Shadow", usage: { frequency: "At-Will" }, range: 2, toHit: "automatic", defense: "AC", damage: { amount: "5", type: "necrotic" }, keywords: [ "aura", "necrotic" ] },
                       { name: "Ebon Burst", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 2 }, toHit: 18, defense: "Ref", damage: "2d8+6", effects: [ { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
@@ -819,7 +819,7 @@ function loadMonsters() {
             attacks: [
                       { name: "Bone Staff", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: [ "1d8+4", { amount: "1d6", type: "necrotic" } ], keywords: [ "melee", "basic", "necrotic" ] },
                       { name: "Skull of Bonechilling Fear", usage: { frequency: "At-Will" }, range: 10, toHit: 19, defense: "Will", damage: { amount: "1d10+3", type: "cold" }, keywords: [ "ranged", "cold", "fear" ] },
-                      { name: "Skull of Withering Flame", usage: { frequency: "At-Will" }, range: 10, toHit: 19, defense: "Fort", damage:  { amount: "2d6+5", type: "fire and necrotic" }, keywords: [ "ranged", "fire", "necrotic" ] }
+                      { name: "Skull of Withering Flame", usage: { frequency: "At-Will" }, range: 10, toHit: 19, defense: "Fort", damage:  { amount: "2d6+5", type: [ "fire", "necrotic" ] }, keywords: [ "ranged", "fire", "necrotic" ] }
               ]
         },
         "Slystone Dwarf Ruffian": {

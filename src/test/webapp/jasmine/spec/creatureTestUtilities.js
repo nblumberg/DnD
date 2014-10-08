@@ -173,6 +173,25 @@ Test.hasValidDamage = function(object, extra) {
             it("amount: \"{valid expression}\" [" + extra + "]", (function(damage) {
                 expect(Test.damageRegEx.test(damage.amount)).toEqual(true);
             }).bind(this, damage));
+            if (damage.hasOwnProperty("type")) {
+                describe("type: \"{valid expression}\" [" + extra + "]", (function(damage) {
+                    var values, i, p, tmp;
+                    values = [ "acid", "cold", "fire", "force", "lightning", "necrotic", "poison", "psychic", "radiant", "thunder" ];
+                    if (typeof damage.type === "string") {
+                        Test.isOneOf(damage, "type", values, extra);
+                    }
+                    else if (damage.type && damage.type.constructor === Array) {
+                        Test.hasNonEmptyArrayProperty(damage, "type", extra);
+                        for (i = 0; i < damage.type.length; i++) {
+                            tmp = {};
+                            p = "type[ " + i + " ]";
+                            tmp[ p ] = damage.type[ i ];
+                            Test.isOneOf(tmp, p, values, extra + "(actual: " + tmp[ p ] + ")");
+                        }
+                    }
+                }).bind(this, damage));
+
+            }
         }).bind(this, object.damage, extra));
     }
 };
