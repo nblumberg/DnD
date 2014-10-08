@@ -71,6 +71,56 @@ function loadMonsters() {
                       { name: "Frightful Presence", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 13, defense: "Will", damage: "0", effects: [ { name: "Stunned", duration: "endAttackerNext" } ], keywords: [ "close", "burst" ] }
               ]
         },
+        "Arctic Sahuagin Guard": {
+            name: "Arctic Sahuagin Guard", level: 13, image: "../images/portraits/arctic_sahuagin.png",
+            hp: { total: 1 },
+            defenses: { ac: 27, fort: 24, ref: 23, will: 22 },
+            immunities: [ "cold" ],
+            init: 11, speed: { walk: 5, swim: 6, charge: 7 },
+            abilities: { STR: 16, CON: 14, DEX: 14, INT: 10, WIS: 12, CHA: 10 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 7, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Trident", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: { amount: "7" }, effects: [ { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "cold", "weapon" ] },
+                      // TODO: refactor as attackBonuses
+                      { name: "Trident (bloodied target)", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: { amount: "10" }, effects: [ { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "cold", "weapon" ] },
+                      { name: "Javelin", usage: { frequency: "At-Will" }, range: 10, toHit: 18, defense: "AC", damage: { amount: "7" }, keywords: [ "ranged", "weapon" ] },
+                      { name: "Javelin (bloodied target)", usage: { frequency: "At-Will" }, range: 10, toHit: 19, defense: "AC", damage: { amount: "10" }, keywords: [ "ranged", "weapon" ] }
+              ]
+        },
+        "Arctic Sahuagin Priest": {
+            name: "Arctic Sahuagin Priest", level: 13, image: "../images/portraits/arctic_sahuagin.png",
+            hp: { total: 101 },
+            defenses: { ac: 25, fort: 24, ref: 25, will: 26 },
+            resistances: { cold: 10 },
+            init: 11, speed: { walk: 5, swim: 5, doubleMove: 7 },
+            abilities: { STR: 16, CON: 16, DEX: 18, INT: 12, WIS: 20, CHA: 16 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Longspear", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: 17, defense: "AC", damage: [ { amount: "1d10+4" }, { amount: "1d8", type: "cold" } ], keywords: [ "melee", "basic", "cold", "weapon" ] },
+                      // TODO: refactor as attackBonuses
+                      { name: "Longspear (bloodied target)", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: 18, defense: "AC", damage: [ { amount: "1d10+6" }, { amount: "1d8", type: "cold" } ], keywords: [ "melee", "basic", "cold", "weapon" ] },
+                      { name: "Freezing Bolt", usage: { frequency: "At-Will" }, range: 10, toHit: 18, defense: "Fort", damage: { amount: "2d6+6", type: "cold" }, effects: [ { name: "Slowed", duration: "endAttackerNext"} ], keywords: [ "ranged", "cold" ] },
+                      { name: "Freezing Bolt (bloodied target)", usage: { frequency: "At-Will" }, range: 10, toHit: 19, defense: "Fort", damage: { amount: "2d6+8", type: "cold" }, effects: [ { name: "Slowed", duration: "endAttackerNext"} ], keywords: [ "ranged", "cold" ] },
+                      { name: "Arctic Jaws", usage: { frequency: "At-Will" }, target: { range: 20 }, toHit: 18, defense: "Will", damage: { amount: "2d6+6", type: "cold" }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "Vulnerable", amount: 5, type: "cold" }, { name: "Slowed" } ] } ], keywords: [ "ranged", "cold" ] },
+                      { name: "Arctic Jaws (bloodied target)", usage: { frequency: "At-Will" }, target: { range: 20 }, toHit: 19, defense: "Will", damage: { amount: "2d6+8", type: "cold" }, effects: [ { name: "multiple", saveEnds: true, children: [ { name: "Vulnerable", amount: 5, type: "cold" }, { name: "Slowed" } ] } ], keywords: [ "ranged", "cold" ] }
+              ]
+        },
+        "Arctic Sahuagin Raider": {
+            name: "Arctic Sahuagin Raider", level: 11, image: "../images/portraits/arctic_sahuagin.png",
+            hp: { total: 112 },
+            defenses: { ac: 27, fort: 24, ref: 23, will: 22 },
+            resistances: { cold: 10 },
+            init: 11, speed: { walk: 5, swim: 5, charge: 7 },
+            abilities: { STR: 20, CON: 14, DEX: 14, INT: 10, WIS: 12, CHA: 10 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 8, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Trident", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: [ { amount: "1d8+5" }, { amount: "1d8", type: "cold" } ], effects: [ { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "cold", "weapon" ] },
+                      // TODO: refactor as attackBonuses
+                      { name: "Trident (bloodied target)", usage: { frequency: "At-Will" }, range: "melee", toHit: 19, defense: "AC", damage: [ { amount: "1d8+7" }, { amount: "1d8", type: "cold" } ], effects: [ { name: "Marked", duration: "endAttackerNext" } ], keywords: [ "melee", "basic", "cold", "weapon" ] },
+                      { name: "Javelin", usage: { frequency: "At-Will" }, range: 10, toHit: 18, defense: "AC", damage: { amount: "2d6+5" }, keywords: [ "ranged", "weapon" ] },
+                      { name: "Javelin (bloodied target)", usage: { frequency: "At-Will" }, range: 10, toHit: 19, defense: "AC", damage: { amount: "2d6+7" }, keywords: [ "ranged", "weapon" ] }
+              ]
+        },
         "Arctide Spiralith": {
             name: "Arctide Spiralith", level: 12, image: "../images/portraits/arctide_spiralith.jpg",
             hp: { total: 97 },
@@ -385,8 +435,22 @@ function loadMonsters() {
                       { name: "Distortion Blast", usage: { frequency: "Daily" }, range: "blast 5", toHit: 12, defense: "Fort", damage: "2d8+6", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
+        "Frost Giant": {
+            name: "Frost Giant", level: 17, image: "../images/portraits/frost_giant.png",
+            hp: { total: 201 },
+            defenses: { ac: 29, fort: 32, ref: 27, will: 28 },
+            resistances: { cold: 15 },
+            init: 11, speed: { walk: 8 },
+            abilities: { STR: 23, CON: 21, DEX: 16, INT: 10, WIS: 20, CHA: 12 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 19, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Icy Greataxe", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: 20, defense: "AC", damage: { amount: "4d6+7", type: "cold" }, crit: { amount: "8d6+31", type: "cold" }, keywords: [ "melee", "basic", "cold", "weapon" ] },
+                      { name: "Icy Handaxe", usage: { frequency: "At-Will" }, target: { range: 5 }, toHit: 20, defense: "AC", damage: { amount: "2d8+7", type: "cold" }, keywords: [ "ranged", "basic", "cold", "weapon" ] },
+                      { name: "Chilling Strike", usage: { frequency: "Recharge", recharge: 5 }, target: { range: 2 }, range: "melee", toHit: 20, defense: "AC", damage: { amount: "2d6+7", type: "cold" }, effects: [ { name: "Vulnerable", amount: 10, type: "cold", saveEnds: true } ], keywords: [ "melee", "cold", "weapon" ] }
+              ]
+        },
         "Frost Giant Scout": {
-            name: "Frost Giant Scout", level: 15, image: "../images/portraits/frost_giant_scout.png",
+            name: "Frost Giant Scout", level: 15, image: "../images/portraits/frost_giant_scout.jpg", // http://crpp0001.uqtr.ca/w4/campagne/images/wotc_art_galleries/Frostburn/Frost%20Giant%20Tundra%20Scout%20by%20Mitch%20Cotie.jpg
             hp: { total: 115 },
             defenses: { ac: 28, fort: 26, ref: 28, will: 27 },
             resistances: { cold: 15 },
@@ -530,6 +594,24 @@ function loadMonsters() {
                       { name: "Howl", usage: { frequency: "At-Will" }, range: "blast 3", toHit: 16, defense: "Fort", damage: { amount: "1d6+6", type: "thunder" }, keywords: [ "ranged" ] },
                       { name: "Shriek of Pain", usage: { frequency: "Encounter" }, range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+6", type: "thunder" }, keywords: [ "ranged", "miss half" ] },
                       { name: "Shriek of Pain (bloodied)", usage: { frequency: "Encounter" }, range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+11", type: "thunder" }, keywords: [ "ranged", "miss half" ] }
+              ]
+        },
+        "Icetouched Behir": {
+            name: "Icetouched Behir", level: 14, image: "../images/portraits/icetouched_behir.jpg",
+            hp: { total: 705 },
+            defenses: { ac: 32, fort: 29, ref: 28, will: 28 },
+            savingThrows: 5,
+            init: 14, speed: { walk: 7, climb: 5 },
+            abilities: { STR: 23, CON: 21, DEX: 20, INT: 7, WIS: 21, CHA: 13 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Claw", usage: { frequency: "At-Will" }, target: { range: 3 }, range: "melee", toHit: 21, defense: "AC", damage: "2d8+6", keywords: [ "melee", "basic" ] },
+                      { name: "Bite", usage: { frequency: "At-Will" }, target: { range: 3 }, range: "melee", toHit: 21, defense: "AC", damage: [ "1d8+6", { amount: "1d8", type: "lightning" } ], keywords: [ "melee", "lightning" ] },
+                      { name: "Bite (secondary)", usage: { frequency: "At-Will" }, target: { area: "burst", size: 3 }, toHit: "automatic", defense: "AC", damage: { amount: "1d8", type: "lightning" }, keywords: [ "lightning" ] },
+                      { name: "Devour", usage: { frequency: "At-Will" }, target: { range: 3 }, range: "melee", toHit: 19, defense: "Ref", damage: "2d8+6", effects: [ { name: "grabbed" }, { name: "Restrained" } ], keywords: [ "melee" ] },
+                      { name: "Devour (secondary)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "Ref", damage: "15", keywords: [ "melee" ] },
+                      { name: "Lightning Breath", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close burst", size: 1 }, toHit: 17, defense: "Ref", damage: { amount: "3d10+6", type: "lightning" }, miss: { halfDamage: true }, keywords: [ "close burst", "lightning" ] },
+                      { name: "Lightning Breath (secondary)", usage: { frequency: "At-Will" }, target: { area: "burst", size: 1, range: 10 }, toHit: 17, defense: "Ref", damage: { amount: "3d10+6", type: "lightning" }, miss: { halfDamage: true }, keywords: [ "close burst", "lightning" ] }
               ]
         },
         "Iquel, Githyanki Captain": {
