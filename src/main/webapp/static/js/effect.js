@@ -13,6 +13,8 @@ var DnD, safeConsole, Serializable, Creature;
      * @param [params.duration] {String} How long the Effect lasts before destroying itself (Effect.DURATION_START_TARGET_NEXT | Effect.DURATION_END_TARGET_NEXT | Effect.DURATION_START_ATTACKER_NEXT | Effect.DURATION_END_ATTACKER_NEXT)
      * @param [params.isNextTurn] {Boolean} Whether the duration has passed into the target/attacker's next turn (only for Effect instances loaded from stored data)
      * @param [params.saveEnds] {Boolean} Indicates that a saving throw ends this Effect
+     * @param [params.children] {Array of params} A list of child Effects
+     * @param [params.afterEffects] {Array of params} A list of Effects that take effect after this one expires
      *
      */
     function Effect(params) {
@@ -46,6 +48,12 @@ var DnD, safeConsole, Serializable, Creature;
         for (i = 0; params.children && i < params.children.length; i++) {
             childParams = typeof(params.children[ i ]) === "string" ? params.children[ i ] : jQuery.extend({}, params.children[ i ], { round: params.round, target: this.target, attacker: this.attacker });
             this.children.push(new Effect(childParams));
+        }
+
+        this.afterEffects = [];
+        for (i = 0; params.afterEffects && i < params.afterEffects.length; i++) {
+            childParams = typeof(params.afterEffects[ i ]) === "string" ? params.afterEffects[ i ] : jQuery.extend({}, params.afterEffects[ i ], { round: params.round, target: this.target, attacker: this.attacker });
+            this.afterEffects.push(new Effect(childParams));
         }
     }
 

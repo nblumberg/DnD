@@ -810,7 +810,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         }
 
         handleEffect = function(effect) {
-            var i, savingThrow, savingThrowRoll;
+            var i, savingThrow, savingThrowRoll, ae, attacker;
             if (effect.countDown(this.history._round, true, false)) {
                 this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: effect.name + " effect expired" }));
             }
@@ -826,6 +826,19 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                     effect.remove();
                 }
                 this.history.add(new DnD.History.Entry({ round: this.history._round, subject: this, message: savingThrow.anchor() }));
+                if (effect.afterEffects && effect.afterEffects.length) {
+                    for (i = 0; i < effect.afterEffects.length; i++) {
+                        attacker = effect.afterEffects[ i ].attacker;
+                        ae = new DnD.Effect(jQuery.extend({}, effect.afterEffects[ i ], { target: this, attacker: attacker, round: this.history._round }));
+                        if (attacker) {
+                            attacker.imposedEffects.push(ae);
+                        }
+                        this.effects.push(ae);
+                        if (ae.hasOwnProperty("duration") && (ae.duration === "startAttackerNext" || ae.duration === "endAttackerNext")) {
+                            ae.isNextTurn = false;
+                        }
+                    }
+                }
             }
 
             if (effect.children && effect.children.length) {

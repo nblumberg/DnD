@@ -385,6 +385,26 @@ function loadMonsters() {
                       { name: "Distortion Blast", usage: { frequency: "Daily" }, range: "blast 5", toHit: 12, defense: "Fort", damage: "2d8+6", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "ranged" ] }
               ]
         },
+        "Frost Giant Scout": {
+            name: "Frost Giant Scout", level: 15, image: "../images/portraits/frost_giant_scout.png",
+            hp: { total: 115 },
+            defenses: { ac: 28, fort: 26, ref: 28, will: 27 },
+            resistances: { cold: 15 },
+            init: 13, speed: { walk: 9 },
+            abilities: { STR: 19, CON: 19, DEX: 23, INT: 10, WIS: 20, CHA: 10 },
+            skills: { acrobatics: 0, arcana: 0, athletics: 16, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 17, religion: 0, stealth: 18, streetwise: 0, thievery: 0 },
+            attacks: [
+                      { name: "Icy Spear", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: 20, defense: "AC", damage: { amount: "1d10+6", type: "cold" }, keywords: [ "melee", "basic", "cold", "weapon" ] },
+                      { name: "Icy Arrow", usage: { frequency: "At-Will" }, target: { range: 20 }, toHit: 22, defense: "AC", damage: { amount: "1d12+8", type: "cold" }, effects: [ { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "ranged", "basic", "cold", "weapon" ] },
+                      { name: "Chillshards", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "burst", size: 1, range: 20 }, toHit: 20, defense: "Fort", damage: { amount: "1d12+8", type: "cold" }, effects: [ 
+                          { name: "Slowed", duration: "endAttackerNext", afterEffects: [ { name: "Slowed", duration: "endAttackerNext" } ] }, 
+                          { name: "No immediate or opportunity actions", duration: "endAttackerNext" } 
+                        ], keywords: [ "ranged", "cold", "weapon" ] },
+                      { name: "Tundra Hunter", usage: { frequency: "Recharge", recharge: "bloodied" }, toHit: "automatic", defense: "AC", damage: "0", effects: [ 
+                          { name: "Vulnerable", amount: 10, type: "cold", saveEnds: true, afterEffects: [ { name: "Vulnerable", amount: 5, type: "cold", saveEnds: true } ] } 
+                        ], keywords: [ "cold" ] }
+              ]
+        },
         "Gallia": {
             name: "Gallia", level: 11, image: "../images/portraits/gallia.jpg", // http://cdn.obsidianportal.com/images/243287/gith.JPG
             hp: { total: 108 },
@@ -649,7 +669,7 @@ function loadMonsters() {
             skills: { acrobatics: 20, arcana: 0, athletics: 18, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 20, intimidate: 0, nature: 0, perception: 20, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
             attacks: [
                       { name: "Hammer Strike", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", crit: 19, damage: "2d8+5", effects: [ "Prone" ], keywords: [ "melee", "basic" ] },
-                      { name: "Knock Out of Sync", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", crit: 19, damage: "3d8+5", effects: [ { name: "penalty", type: "initiative", amount: -5 } ], keywords: [ "melee" ] },
+                      { name: "Knock Out of Sync", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", crit: 19, damage: "3d8+5", effects: [ { name: "penalty", type: "initiative", amount: 5 } ], keywords: [ "melee" ] },
                       { name: "Jumping Sparks", usage: { frequency: "At-Will" }, target: { count: 3 }, range: 10, toHit: 19, defense: "Fort", damage: { amount: "2d8+7", type: "lightning" }, keywords: [ "ranged", "lightning", "teleportation" ] },
                       { name: "Psychic Blows", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 5 }, toHit: 20, defense: "Will", damage: { amount: "2d8+5", type: "psychic" }, keywords: [ "ranged", "psychic" ] }
               ]

@@ -1692,7 +1692,7 @@ var loadParty;
                         toHit: "automatic",
                         defense: "AC",
                         damage: "2d10",
-                        effects: [ { name: "Penalty", amount: "INT^CHA", type: "to hit Kallista", saveEnds: true } ],
+                        effects: [ { name: "Penalty", amount: "INT^CHA", other: "to hit Kallista", saveEnds: true } ], // TODO: implement penalty against specific creature
                         keywords: [ "racial" ]
                     }/*, {
                         name: "Duelists Prowess",

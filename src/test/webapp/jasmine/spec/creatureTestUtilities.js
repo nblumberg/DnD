@@ -114,8 +114,10 @@ Test.hasValidAttacks = function(creature) {
             Test.hasNonEmptyObjectProperty(attack, "usage", extra);
             Test.hasObjectProperty(attack, "usage", extra);
             Test.isOneOf(attack.usage, "frequency", [ "At-Will", "Encounter", "Daily", "Recharge" ], extra + " usage");
-            if (attack.usage.frequency === "Recharge") {
-                Test.hasPositiveNumberProperty(attack.usage, "recharge", "[" + extra + " usage]");
+            if (attack.usage.frequency === DnD.Attack.prototype.USAGE_RECHARGE) {
+                if (attack.usage.recharge !== DnD.Attack.prototype.USAGE_RECHARGE_BLOODIED) {
+                    Test.hasPositiveNumberProperty(attack.usage, "recharge", "[" + extra + " usage]");
+                }
             }
             
             it("toHit: Number | \"{valid expression}\" [" + extra + "]", toHitTest.bind(this, attack));
@@ -174,26 +176,31 @@ Test.hasValidDamage = function(object, extra) {
                 expect(Test.damageRegEx.test(damage.amount)).toEqual(true);
             }).bind(this, damage));
             if (damage.hasOwnProperty("type")) {
-                describe("type: \"{valid expression}\" [" + extra + "]", (function(damage) {
-                    var values, i, p, tmp;
-                    values = [ "acid", "cold", "fire", "force", "lightning", "necrotic", "poison", "psychic", "radiant", "thunder" ];
-                    if (typeof damage.type === "string") {
-                        Test.isOneOf(damage, "type", values, extra);
-                    }
-                    else if (damage.type && damage.type.constructor === Array) {
-                        Test.hasNonEmptyArrayProperty(damage, "type", extra);
-                        for (i = 0; i < damage.type.length; i++) {
-                            tmp = {};
-                            p = "type[ " + i + " ]";
-                            tmp[ p ] = damage.type[ i ];
-                            Test.isOneOf(tmp, p, values, extra + "(actual: " + tmp[ p ] + ")");
-                        }
-                    }
-                }).bind(this, damage));
-
+                Test.hasValidTypes(damage, extra);
             }
         }).bind(this, object.damage, extra));
     }
+};
+
+Test.hasValidTypes = function(object, extra) {
+    describe("type: \"{valid expression}\" [" + extra + "]", (function(object) {
+        var values, damageValues, effectValues, i, p, tmp;
+        damageValues = [ "acid", "cold", "fire", "force", "lightning", "necrotic", "poison", "psychic", "radiant", "thunder" ];
+        effectValues = damageValues.concat([ "attacks", "savingThrows", "initiative", "AC", "Fort", "Ref", "Will" ]);
+        values = object.hasOwnProperty("name") ? effectValues : damageValues;
+        if (typeof object.type === "string") {
+            Test.isOneOf(object, "type", values, extra);
+        }
+        else if (object.type && object.type.constructor === Array) {
+            Test.hasNonEmptyArrayProperty(object, "type", extra);
+            for (i = 0; i < object.type.length; i++) {
+                tmp = {};
+                p = "type[ " + i + " ]";
+                tmp[ p ] = object.type[ i ];
+                Test.isOneOf(tmp, p, values, extra + "(actual: " + tmp[ p ] + ")");
+            }
+        }
+    }).bind(this, object));
 };
 
 
@@ -227,7 +234,7 @@ Test.hasValidEffects = function(object, required, extra) {
                         Test.hasBooleanProperty(effect, "saveEnds", extra);
                     }
                     if (effect.hasOwnProperty("type")) {
-                        Test.hasNonEmptyStringProperty(effect, "type", extra);
+                        Test.hasValidTypes(effect, extra);
                     }
                 }
             }

@@ -209,6 +209,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
         this.__log = logFn.bind(this, "Recharge");
         this.__log("constructor", arguments);
         this.attack = params.attack;
+        this.isBloodied = params.bloodied;
     };
 
     Recharge.prototype = new Roll({ dieCount: 1, dieSides: 6, extra: 0, crits: false });
@@ -217,7 +218,18 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
         var h;
         this.__log("isRecharged", arguments);
         h = this.getLastRoll();
-        return h.total <= this.attack.usage.recharge;
+        if (this.attack.usage.recharge === Attack.prototype.USAGE_RECHARGE_BLOODIED) {
+            if (this.bloodied && !this.attack.alreadyRecharged) {
+                this.attack.alreadyRecharged = true;
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return h.total <= this.attack.usage.recharge;
+        }
     };
 
     Recharge.prototype._anchorHtml = function(conditional) {
@@ -613,6 +625,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
     Attack.prototype.USAGE_ENCOUNTER = "Encounter";
     Attack.prototype.USAGE_DAILY = "Daily";
     Attack.prototype.USAGE_RECHARGE = "Recharge";
+    Attack.prototype.USAGE_RECHARGE_BLOODIED = "bloodied";
 
     Attack.prototype._toHitFromString = function(str, creature) {
         var i, abilities, mods;
