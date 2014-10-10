@@ -632,20 +632,8 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         else {
             // Miss
             msg = "Missed by " + this.name + "'s " + attack.anchor(toHit.conditional);
-            if (targetDamage.missAmount) {
-                msg += " but takes ";
-                if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
-                    for (i = 0; i < attack.miss.damage.length; i++) {
-                        msg += (i > 0 && i < attack.miss.damage.length - 1 ? ", " : "") + (i > 0 && i === attack.miss.damage.length - 1 ? " and " : "") + attack.miss.damage[ i ].anchor(targetDamage.conditional);
-                    }
-                }
-                else {
-                    msg += attack.miss.damage.anchor(targetDamage.conditional);
-                }
-                msg += " on a miss";
-                // TODO: miss effects without damage
-            }
             if (targetDamage.missAmount || attack.hasOwnProperty("miss")) {
+                msg += " but takes ";
                 if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
                     for (i = 0; i < attack.miss.damage.length; i++) {
                         if (i !== 0) {
@@ -657,6 +645,8 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                 else {
                     calcDamage.call(this, target, item, attack.miss.damage, targetDamage.missEffects, targetDamage.conditional, true);
                 }
+                msg += " on a miss";
+                // TODO: miss effects without damage
             }
         }
         msg += " (HP " + target.hp.current + ")";
