@@ -331,7 +331,7 @@ Test.isValidCreature = function(creature, isPC) {
             Test.hasArrayProperty(creature, "weapons", creature.name);
             if (creature.weapons && creature.weapons.length) {
                 describe("weapons: Array of Object of the form", (function(creature) {
-                    var j, weapon;
+                    var j, weapon, tmp;
                     for (j = 0; j < creature.weapons.length; j++) {
                         weapon = creature.weapons[ j ];
                         Test.hasNonEmptyStringProperty(weapon, "name", creature.name);
@@ -340,7 +340,8 @@ Test.isValidCreature = function(creature, isPC) {
                         Test.hasNumberProperty(weapon, "enhancement", creature.name + " " + weapon.name);
                         Test.hasObjectProperty(weapon, "damage", creature.name + " " + weapon.name);
                         Test.hasNonEmptyStringProperty(weapon.damage, "amount", creature.name + " " + weapon.name);
-                        Test.hasNonEmptyStringProperty(weapon.damage, "crit", creature.name + " " + weapon.name);
+                        tmp = { damage: weapon.damage.crit };
+                        Test.hasValidDamage(tmp, creature.name + " " + weapon.name + " (crit)");
                     }
                 }).bind(this, creature));
             }

@@ -51,6 +51,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         this.enhancement = params.enhancement;
         this.crit = new DnD.Damage(params.crit);
         this.isMelee = false;
+        this.type = params.type;
     };
 
     Implement.prototype.toString = function() {
@@ -592,23 +593,27 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         }
 
         // Apply hit or miss damage/effects
+        function calcDamage(target, item, damage, effects, fromLastRoll, rollMod) { // TODO: why the branching for fromLastRoll? just copied logic when centralizing all 4 hit/miss damage cases
+            var type, amount;
+            type = damage.type || (item ? item.type : undefined); // if item imposes a damage type on untyped damage
+            targetDamage.conditional.text = (!damage.type && type ? " " + type : "");
+            msg += damage.anchor(targetDamage.conditional);
+            amount = fromLastRoll ? damage.getLastRoll().total + rollMod : targetDamage.amount;
+            tmp = target.takeDamage(this, amount, type, effects);
+            msg += tmp.msg + " (HP " + target.hp.current + ")";
+            result.damage.push({ amount: tmp.damage, type: type });
+        }
         if (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense) {
             // Hit
             result.hit = true;
             msg = "Hit by " + this.name + "'s " + attack.anchor(toHitTarget.conditional) + " for ";
             if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
                 for (i = 0; i < attack.damage.length; i++) {
-                    msg += (i > 0 && i < attack.damage.length - 1 ? ", " : "") + (i > 0 && i === attack.damage.length - 1 ? " and " : "") + attack.damage[ i ].anchor(targetDamage.conditional);
-                    tmp = target.takeDamage(this, attack.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.damage[ i ].type, i === 0 ? attack.effects : null);
-                    msg += tmp.msg + " (HP " + target.hp.current + ")";
-                    result.damage.push({ amount: tmp.damage, type: attack.damage[ i ].type });
+                    calcDamage.call(this, target, item, attack.damage[ i ], i === 0 ? attack.effects : null, false);
                 }
             }
             else {
-                msg += attack.damage.anchor(targetDamage.conditional);
-                tmp = target.takeDamage(this, targetDamage.amount, attack.damage.type, attack.effects);
-                msg += tmp.msg + " (HP " + target.hp.current + ")";
-                result.damage.push({ amount: tmp.damage, type: attack.damage.type });
+                calcDamage.call(this, target, item, attack.damage, attack.effects, false);
             }
         }
         else {
@@ -629,15 +634,11 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
             if (targetDamage.missAmount || attack.hasOwnProperty("miss")) {
                 if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
                     for (i = 0; i < attack.miss.damage.length; i++) {
-                        tmp = target.takeDamage(this, attack.miss.damage[ i ].getLastRoll().total + (i === 0 ? targetDamage.conditional.mod : 0), attack.miss.damage[ i ].type, i === 0 ? attack.miss.effects : null);
-                        msg += tmp.msg + " (HP " + target.hp.current + ")";
-                        result.damage.push({ amount: tmp.damage, type: attack.miss.damage[ i ].type });
+                        calcDamage.call(this, target, item, attack.miss.damage[ i ], i === 0 ? attack.miss.effects : null, true, i === 0 ? targetDamage.conditional.mod : 0);
                     }
                 }
                 else {
-                    tmp = target.takeDamage(this, attack.miss.damage.getLastRoll().total + targetDamage.conditional.mod, attack.miss.damage.type, attack.miss.effects);
-                    msg += tmp.msg + " (HP " + target.hp.current + ")";
-                    result.damage.push({ amount: tmp.damage, type: attack.miss.damage.type });
+                    calcDamage.call(this, target, item, attack.miss.damage, attack.miss.effects, true, targetDamage.conditional.mod);
                 }
             }
         }
@@ -770,7 +771,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
 
         for (i = 0; this.attacks && i < this.attacks.length; i++) {
             if (this.attacks[ i ].used && this.attacks[ i ].usage.frequency === DnD.Attack.prototype.USAGE_RECHARGE && this.attacks[ i ].usage.recharge) {
-                recharge = new DnD.Recharge({ attack: this.attacks[ i ] });
+                recharge = new DnD.Recharge({ attack: this.attacks[ i ], bloodied: this.isBloodied() });
                 recharge.roll();
                 if (recharge.isRecharged()) {
                     this.attacks[ i ].used = false;

@@ -7,7 +7,7 @@ var loadParty;
             Barases: {
                 name: "Barases",
                 isPC: true,
-                level: 14,
+                level: 15,
                 image: "../images/portraits/barases.jpg", // "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg",
                 abilities: {
                     STR: 12,
@@ -38,7 +38,7 @@ var loadParty;
                 },
                 ap: 1,
                 hp: {
-                    total: 107
+                    total: 112
                 },
                 surges: {
                     perDay: 12,
@@ -54,6 +54,25 @@ var loadParty;
                 speed: 6,
                 weapons: [
                     {
+                        name: "Frost Brand Quarterstaff +3",
+                        isMelee: true,
+                        enhancement: 3,
+                        proficiency: 2,
+                        type: "cold",
+                        damage: {
+                            amount: "1d12",
+                            crit: { amount: "3d8", type: "cold" }
+                        }
+                    }, {
+                        name: "Summoner's Staff +4",
+                        isMelee: true,
+                        enhancement: 4,
+                        proficiency: 2,
+                        damage: {
+                            amount: "1d12",
+                            crit: "1d6"
+                        }
+                    }, {
                         name: "Vicious Quarterstaff +2",
                         isMelee: true,
                         enhancement: 2,
