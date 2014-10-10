@@ -546,11 +546,30 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         };
         targetDamage = {
             amount: damage.amount,
+            effects: attack.effects ? attack.effects.slice(0) : [],
             missAmount: damage.missAmount,
+            missEffects: attack.miss && attack.miss.effects ? attack.miss.effects.slice(0) : [],
             conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
         };
 
         attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
+        function applyBonusDamage(name, damageExpr, isMiss, halfDamage, isManual) {
+            var damage, amount;
+            damage = new DnD.Damage(typeof damageExpr === "number" ? "" + damageExpr : damageExpr);
+            amount = halfDamage ? Math.floor(damage.roll() / 2) : damage.roll();
+            if (!isManual) {
+                if (isMiss) {
+                    targetDamage.missAmount += amount;
+                }
+                else {
+                    targetDamage.amount += amount;
+                    targetDamage.conditional.total += amount; // TODO: why is this on hit only?
+                }
+                targetDamage.conditional.mod += amount;
+            }
+            targetDamage.conditional.breakdown += (amount >= 0 ? " +" : "") + amount + " (" + name + ")";
+
+        }
         for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
             attackBonus = attackBonuses[ i ];
             if (attackBonus.toHit) {
@@ -561,28 +580,19 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                 toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
             }
             if (attackBonus.damage) {
-                if (!damage.isManual) {
-                    targetDamage.amount += attackBonus.damage;
-                    targetDamage.conditional.mod += attackBonus.damage;
-                    targetDamage.conditional.total += attackBonus.damage;
-                }
-                targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
+                applyBonusDamage(attackBonus.name, attackBonus.damage, false, false, damage.isManual);
                 if (attack.miss && targetDamage.missAmount) {
                     if (attack.miss.halfDamage) {
-                        tmp = Math.floor(attackBonus.damage / 2);
-                        if (!damage.isManual) {
-                            targetDamage.missAmount += tmp;
-                            targetDamage.conditional.mod += tmp;
-                        }
-                        targetDamage.conditional.breakdown += (tmp >= 0 ? " +" : "") + tmp + " (" + attackBonus.name + ")";
+                        applyBonusDamage(attackBonus.name, attackBonus.damage, true, true, damage.isManual);
                     }
                     else {
-                        if (!damage.isManual) {
-                            targetDamage.missAmount += attackBonus.damage;
-                        }
-                        targetDamage.conditional.breakdown += (attackBonus.damage >= 0 ? " +" : "") + attackBonus.damage + " (" + attackBonus.name + ")";
+                        applyBonusDamage(attackBonus.name, attackBonus.damage, true, false, damage.isManual);
                     }
                 }
+            }
+            if (attackBonus.effects) {
+                targetDamage.effects = targetDamage.effects.concat(attackBonus.effects);
+                targetDamage.missEffects = targetDamage.missEffects.concat(attackBonus.effects);
             }
         }
 
@@ -593,14 +603,14 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         }
 
         // Apply hit or miss damage/effects
-        function calcDamage(target, item, damage, effects, fromLastRoll, rollMod) { // TODO: why the branching for fromLastRoll? just copied logic when centralizing all 4 hit/miss damage cases
+        function calcDamage(target, item, damage, effects, conditional) {
             var type, amount;
             type = damage.type || (item ? item.type : undefined); // if item imposes a damage type on untyped damage
             targetDamage.conditional.text = (!damage.type && type ? " " + type : "");
-            msg += damage.anchor(targetDamage.conditional);
-            amount = fromLastRoll ? damage.getLastRoll().total + rollMod : targetDamage.amount;
+            msg += damage.anchor(conditional);
+            amount = damage.getLastRoll().total + (conditional ? conditional.mod : 0);
             tmp = target.takeDamage(this, amount, type, effects);
-            msg += tmp.msg + " (HP " + target.hp.current + ")";
+            msg += tmp.msg;
             result.damage.push({ amount: tmp.damage, type: type });
         }
         if (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense) {
@@ -609,11 +619,14 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
             msg = "Hit by " + this.name + "'s " + attack.anchor(toHitTarget.conditional) + " for ";
             if (Object.prototype.toString.call(attack.damage) === "[object Array]") {
                 for (i = 0; i < attack.damage.length; i++) {
-                    calcDamage.call(this, target, item, attack.damage[ i ], i === 0 ? attack.effects : null, false);
+                    if (i !== 0) {
+                        msg += " and ";
+                    }
+                    calcDamage.call(this, target, item, attack.damage[ i ], i === attack.damage.length - 1 ? targetDamage.effects : null, i === 0 ? targetDamage.conditional : null, false);
                 }
             }
             else {
-                calcDamage.call(this, target, item, attack.damage, attack.effects, false);
+                calcDamage.call(this, target, item, attack.damage, targetDamage.effects, targetDamage.conditional, false);
             }
         }
         else {
@@ -629,19 +642,24 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                 else {
                     msg += attack.miss.damage.anchor(targetDamage.conditional);
                 }
-                msg += " on a miss (HP " + target.hp.current + ")";
+                msg += " on a miss";
+                // TODO: miss effects without damage
             }
             if (targetDamage.missAmount || attack.hasOwnProperty("miss")) {
                 if (Object.prototype.toString.call(attack.miss.damage) === "[object Array]") {
                     for (i = 0; i < attack.miss.damage.length; i++) {
-                        calcDamage.call(this, target, item, attack.miss.damage[ i ], i === 0 ? attack.miss.effects : null, true, i === 0 ? targetDamage.conditional.mod : 0);
+                        if (i !== 0) {
+                            msg += " and ";
+                        }
+                        calcDamage.call(this, target, item, attack.miss.damage[ i ], i === attack.miss.damage.length - 1 ? targetDamage.missEffects : null, i === 0 ? targetDamage.conditional : null, true);
                     }
                 }
                 else {
-                    calcDamage.call(this, target, item, attack.miss.damage, attack.miss.effects, true, targetDamage.conditional.mod);
+                    calcDamage.call(this, target, item, attack.miss.damage, targetDamage.missEffects, targetDamage.conditional, true);
                 }
             }
         }
+        msg += " (HP " + target.hp.current + ")";
 
         // Record in target and central Histories
         entry = new DnD.History.Entry({ subject: target, message: msg });
@@ -660,7 +678,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
      * @returns {Object} Object of the form { msg: String, damage: Number, type: String or Array of String }
      */
     Actor.prototype.takeDamage = function(attacker, damage, type, effects) {
-        var temp, msg, i, result, effect;
+        var temp, msg, i, j, result, effect;
         // vvv DEBUGGING
         this.__log("takeDamage", [ attacker.name, damage, type, effects ]);
         if (typeof(damage) !== "number") {
@@ -696,6 +714,15 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         }
         if (effects && effects.length) {
             for (i = 0; i < effects.length; i++) {
+                // Only one Marked at a time
+                if (effects[ i ].name.toLowerCase() === "marked") {
+                    for (j = 0; j < this.effects.length; j++) {
+                        if (this.effects[ j ].name.toLowerCase() === "marked") {
+                            this.effects[ j ].remove();
+                            break;
+                        }
+                    }
+                }
                 effect = new DnD.Effect(jQuery.extend({}, effects[ i ].raw(), { target: this, attacker: attacker, round: this.history._round }));
                 attacker.imposedEffects.push(effect);
                 this.effects.push(effect);

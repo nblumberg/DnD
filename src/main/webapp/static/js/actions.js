@@ -278,7 +278,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
         this.__log("constructor", [ params, creature ? creature.name : "undefined" ]);
         this._history = [];
         params = params || {};
-        this.type = "";
+        this.type = params.type || "";
         this.crit = null;
         this.needsWeapon = false;
         this.weaponMultiplier = 0;
@@ -592,7 +592,7 @@ var DnD, Serializable, Roll, Recharge, SavingThrow, Damage, Attack, logFn;
         else {
             this.extra = this.toHit;
         }
-        if (Object.prototype.toString.call(params.damage) === "[object Array]") {
+        if (typeof params.damage === "object" && params.damage.constructor === Array) {
             this.damage = [];
             for (i = 0; i < params.damage.length; i++) {
                 this.damage.push(new Damage(params.damage[ i ], creature));
