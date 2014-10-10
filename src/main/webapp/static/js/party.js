@@ -1,56 +1,119 @@
 /* exported loadParty */
 var loadParty;
-(function() {
+(function(jQuery) {
     "use strict";
+
+    var Barases_base, Lechonero_base;
+    Barases_base = {
+        isPC: true,
+        level: 15,
+        abilities: {
+            STR: 12,
+            CON: 20,
+            DEX: 11,
+            INT: 11,
+            WIS: 22,
+            CHA: 11
+        },
+        skills: {
+            acrobatics: 6,
+            arcana: 9,
+            athletics: 16,
+            bluff: 12,
+            diplomacy: 7,
+            dungeoneering: 13,
+            endurance: 11,
+            heal: 13,
+            history: 7,
+            insight: 13,
+            intimidate: 7,
+            nature: 20,
+            perception: 18,
+            religion: 7,
+            stealth: 8,
+            streetwise: 7,
+            thievery: 8
+        },
+        defenses: {
+            ac: 27,
+            fort: 29,
+            ref: 22,
+            will: 28
+        },
+        ap: 0,
+        init: 7,
+        hp: {
+            total: 112
+        },
+        surges: {
+            perDay: 0,
+            current: 0
+        },
+        weapons: [],
+        "implements": [],
+        effects: []
+    };
+    Lechonero_base = {
+        isPC: true,
+        level: 15,
+        abilities: {
+            STR: 17,
+            CON: 15,
+            DEX: 22,
+            INT: 15,
+            WIS: 16,
+            CHA: 11
+        },
+        skills: {
+            acrobatics: 11,
+            arcana: 7,
+            athletics: 15,
+            bluff: 5,
+            diplomacy: 5,
+            dungeoneering: 8,
+            endurance: 12,
+            heal: 13,
+            history: 7,
+            insight: 8,
+            intimidate: 5,
+            nature: 17,
+            perception: 17,
+            religion: 7,
+            stealth: 13,
+            streetwise: 10,
+            thievery: 11
+        },
+        ap: 0,
+        hp: {
+            total: 97
+        },
+        surges: {
+            perDay: 0,
+            current: 0
+        },
+        defenses: {
+            ac: 30,
+            fort: 23,
+            ref: 27,
+            will: 23
+        },
+        init: 13,
+        speed: 7,
+        weapons: [],
+        "implements": [],
+        effects: []
+    };
+
     loadParty = function() {
         return {
-            Barases: {
+            Barases: jQuery.extend(true, {}, Barases_base, {
                 name: "Barases",
-                isPC: true,
-                level: 15,
                 image: "../images/portraits/barases.jpg", // "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg",
-                abilities: {
-                    STR: 12,
-                    CON: 20,
-                    DEX: 11,
-                    INT: 11,
-                    WIS: 22,
-                    CHA: 11
-                },
-                skills: {
-                    acrobatics: 6,
-                    arcana: 9,
-                    athletics: 16,
-                    bluff: 12,
-                    diplomacy: 7,
-                    dungeoneering: 13,
-                    endurance: 11,
-                    heal: 13,
-                    history: 7,
-                    insight: 13,
-                    intimidate: 7,
-                    nature: 20,
-                    perception: 18,
-                    religion: 7,
-                    stealth: 8,
-                    streetwise: 7,
-                    thievery: 8
-                },
                 ap: 1,
-                hp: {
-                    total: 112
-                },
                 surges: {
                     perDay: 12,
                     current: 12
                 },
-                defenses: {
-                    ac: 27,
-                    fort: 29,
-                    ref: 22,
-                    will: 28
-                },
-                init: 7,
                 speed: 6,
                 weapons: [
                     {
@@ -224,31 +287,6 @@ var loadParty;
                         keywords: [
                             "weapon", "melee", "primal", "healing"
                         ]
-                    }, {
-                        name: "Bear Beast",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        range: 5,
-                        toHit: 15,
-                        defense: "AC",
-                        damage: "1d12+9",
-                        crit: "",
-                        keywords: [
-                            "implement", "primal", "summoning"
-                        ]
-                    }, {
-                        name: "Crocodile Beast",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        toHit: 10,
-                        defense: "AC",
-                        damage: "1d8+WIS",
-                        crit: "",
-                        keywords: [
-                            "weapon", "melee", "beast"
-                        ]
                     }
                 ],
                 healing: [
@@ -258,141 +296,154 @@ var loadParty;
                     { name: "Healing Spirit (secondary)", frequency: "Encounter", isTempHP: false, usesHealingSurge: false, amount: "3d6" },
                     { name: "Healing Word", frequency: "2xEncounter", isTempHP: false, usesHealingSurge: true, amount: "HS+3d6" },
                     { name: "Spirit's Shield", frequency: "Encounter", isTempHP: false, usesHealingSurge: false, amount: "WIS" }
-                ],
-                effects: []
-            },
-            Smack: {
+                ]
+            }),
+            Smack: jQuery.extend(true, {}, Barases_base, {
                 name: "Smack",
-                isPC: true,
-                level: 14,
                 image: "../images/portraits/smack.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862
+                /* Use Barases' abilities for all attacks
                 abilities: {
-                    STR: 20,
-                    CON: 17,
+                    STR: 16,
+                    CON: 14,
                     DEX: 12,
-                    INT: 2,
-                    WIS: 16,
+                    INT: 6,
+                    WIS: 12,
                     CHA: 6
-                },
+                }, */
                 skills: {
-                    acrobatics: 4,
-                    arcana: 7,
-                    athletics: 14,
-                    bluff: 10,
-                    diplomacy: 5,
-                    dungeoneering: 10,
-                    endurance: 8,
-                    heal: 10,
-                    history: 5,
-                    insight: 10,
-                    intimidate: 5,
-                    nature: 17,
-                    perception: 15,
-                    religion: 5,
-                    stealth: 6,
-                    streetwise: 5,
-                    thievery: 6
+                    acrobatics: Math.floor(Barases_base.level / 2) + 1,
+                    arcana: Math.floor(Barases_base.level / 2) - 2,
+                    athletics: Math.floor(Barases_base.level / 2) + 8,
+                    bluff: Math.floor(Barases_base.level / 2) - 2,
+                    diplomacy: Math.floor(Barases_base.level / 2) + 1,
+                    dungeoneering: Math.floor(Barases_base.level / 2) - 2,
+                    endurance: Math.floor(Barases_base.level / 2) + 7,
+                    heal: Math.floor(Barases_base.level / 2) + 1,
+                    history: Math.floor(Barases_base.level / 2) - 2,
+                    insight: Math.floor(Barases_base.level / 2) + 1,
+                    intimidate: Math.floor(Barases_base.level / 2) - 2,
+                    nature: Math.floor(Barases_base.level / 2) + 1,
+                    perception: Barases_base.skills.perception + 2,
+                    religion: Math.floor(Barases_base.level / 2) - 2,
+                    stealth: Math.floor(Barases_base.level / 2) + 1,
+                    streetwise: Math.floor(Barases_base.level / 2) - 2,
+                    thievery: Math.floor(Barases_base.level / 2) + 1
                 },
-                ap: 0,
                 hp: {
-                    total: 53
-                },
-                surges: {
-                    perDay: 0,
-                    current: 0
+                    total: Math.floor(Barases_base.hp.total / 2)
                 },
                 defenses: {
-                    ac: 27,
-                    fort: 29,
-                    ref: 25,
-                    will: 29
+                    ac: 12 + Barases_base.level,
+                    fort: 14 + Barases_base.level,
+                    ref: 10 + Barases_base.level,
+                    will: 12 + Barases_base.level
                 },
-                init: 7,
-                speed: 6,
-                weapons: [],
-                "implements": [],
+                speed: 5,
                 attacks: [
                     {
                         name: "Animal Attack",
                         usage: {
                             frequency: "At-Will"
                         },
-                        toHit: 19,
+                        toHit: "WIS+5",
                         defense: "AC",
-                        damage: "1d12+14",
+                        damage: "1d12+3+WIS+CON",
                         keywords: [
                             "melee", "beast", "basic"
                         ]
                     }
-                ],
-                effects: []
-            },
-            Oomooroo: {
+                ]
+            }),
+            Oomooroo: jQuery.extend(true, {}, Barases_base, {
                 name: "Oomooroo",
-                isPC: true,
-                level: 14,
                 image: "../images/portraits/owlbear.jpg", // http://www.lpzoo.org/sites/default/files/imagesfacts/black_bear.jpg?1331759862
                 abilities: {
                     STR: 20,
                     CON: 17,
                     DEX: 12,
                     INT: 2,
-                    WIS: 16,
+                    WIS: 14,
                     CHA: 6
                 },
                 skills: {
-                    acrobatics: 4,
-                    arcana: 7,
-                    athletics: 14,
-                    bluff: 10,
-                    diplomacy: 5,
-                    dungeoneering: 10,
-                    endurance: 8,
-                    heal: 10,
-                    history: 5,
-                    insight: 10,
-                    intimidate: 5,
-                    nature: 17,
-                    perception: 15,
-                    religion: 5,
-                    stealth: 6,
-                    streetwise: 5,
-                    thievery: 6
+                    acrobatics: Math.floor(Barases_base.hp.total / 2) + 1,
+                    arcana: Math.floor(Barases_base.hp.total / 2) - 4,
+                    athletics: Math.floor(Barases_base.hp.total / 2) + 5,
+                    bluff: Math.floor(Barases_base.hp.total / 2) - 2,
+                    diplomacy: Math.floor(Barases_base.hp.total / 2) - 2,
+                    dungeoneering: Math.floor(Barases_base.hp.total / 2) - 4,
+                    endurance: Math.floor(Barases_base.hp.total / 2) + 3,
+                    heal: Math.floor(Barases_base.hp.total / 2) + 2,
+                    history: Math.floor(Barases_base.hp.total / 2) - 4,
+                    insight: Math.floor(Barases_base.hp.total / 2) + 2,
+                    intimidate: Math.floor(Barases_base.hp.total / 2) - 2,
+                    nature: Math.floor(Barases_base.hp.total / 2) + 2,
+                    perception: Barases_base.skills.perception + 2,
+                    religion: Math.floor(Barases_base.hp.total / 2) - 4,
+                    stealth: Math.floor(Barases_base.hp.total / 2) + 1,
+                    streetwise: Math.floor(Barases_base.hp.total / 2) - 2,
+                    thievery: Math.floor(Barases_base.hp.total / 2) + 1
                 },
-                ap: 0,
                 hp: {
-                    total: 53
-                },
-                surges: {
-                    perDay: 0,
-                    current: 0
+                    total: Math.floor(Barases_base.hp.total / 2)
                 },
                 defenses: {
-                    ac: 27,
-                    fort: 29,
-                    ref: 25,
-                    will: 29
+                    ac: 13 + Barases_base.level,
+                    fort: 15 + Barases_base.level,
+                    ref: 11 + Barases_base.level,
+                    will: 15 + Barases_base.level
                 },
-                init: 7,
                 speed: 6,
-                weapons: [],
-                "implements": [],
                 attacks: [
                     {
                         name: "Claw",
                         usage: {
                             frequency: "At-Will"
                         },
-                        toHit: 19,
+                        toHit: Barases_base.level + 5,
                         defense: "AC",
-                        damage: "1d12+7",
+                        damage: "1d12+" + Math.floor(Barases_base.level / 2),
                         keywords: [
                             "melee", "beast", "basic"
                         ]
                     }
-                ],
-                effects: []
-            },
+                ]
+            }),
+            "Summoned Crocodile": jQuery.extend(true, {}, Barases_base, { // copied from "Visejaw Crocodile" as it's the only large, natural, non-minion crocodile and the only stats listed in the power match
+                name: "Summoned Crocodile",
+                image: "../images/portraits/crocodile.jpg", // http://usherp.org/wp-content/uploads/2013/04/crocodile-500x324.jpg
+                hp: {
+                    total: Math.floor(Barases_base.hp.total / 2)
+                },
+                speed: { walk: 6, swim: 8 },
+                attacks: [
+                    {
+                        name: "Bite",
+                        usage: {
+                            frequency: "At-Will"
+                        },
+                        toHit: "WIS",
+                        defense: "AC",
+                        damage: "1d8+WIS",
+                        effects: [ { name: "Grabbed" } ],
+                        keywords: [
+                            "melee", "primal", "summoned", "basic"
+                        ]
+                    }, {
+                        name: "Clamping Jaws",
+                        usage: {
+                            frequency: "At-Will"
+                        },
+                        toHit: 10,
+                        defense: "AC",
+                        damage: "2d8+4",
+                        miss: { halfDamage: true },
+                        keywords: [
+                            "melee", "primal", "summoning"
+                        ]
+                    }
+                ]
+            }),
             Bin: {
                 name: "Bin",
                 isPC: true,
@@ -2956,54 +3007,14 @@ var loadParty;
                 ],
                 effects: []
             },
-            Lechonero: {
+            Lechonero: jQuery.extend(true, {}, Lechonero_base, {
                 name: "Lechonero",
-                isPC: true,
-                level: 15,
                 image: "../images/portraits/lechonero.jpg", // "http://www.critical-hits.com/wp-content/uploads/2007/12/elf.jpg",
-                abilities: {
-                    STR: 17,
-                    CON: 15,
-                    DEX: 22,
-                    INT: 15,
-                    WIS: 16,
-                    CHA: 11
-                },
-                skills: {
-                    acrobatics: 11,
-                    arcana: 7,
-                    athletics: 15,
-                    bluff: 5,
-                    diplomacy: 5,
-                    dungeoneering: 8,
-                    endurance: 12,
-                    heal: 13,
-                    history: 7,
-                    insight: 8,
-                    intimidate: 5,
-                    nature: 17,
-                    perception: 17,
-                    religion: 7,
-                    stealth: 13,
-                    streetwise: 10,
-                    thievery: 11
-                },
                 ap: 1,
-                hp: {
-                    total: 97
-                },
                 surges: {
                     perDay: 8,
                     current: 8
                 },
-                defenses: {
-                    ac: 30,
-                    fort: 23,
-                    ref: 27,
-                    will: 23
-                },
-                init: 13,
-                speed: 7,
                 weapons: [
                     {
                         name: "Forceful Longbow +4",
@@ -3043,7 +3054,6 @@ var loadParty;
                         }
                     }
                 ],
-                "implements": [],
                 attacks: [
                     {
                         name: "Melee Basic",
@@ -3266,72 +3276,68 @@ var loadParty;
                         defense: "AC",
                         damage: "1d8"
                     }
-                ],
-                effects: []
-            },
-            Balugh: {
+                ]
+            }),
+            Balugh: jQuery.extend(true, {}, Lechonero_base, {
                 name: "Balugh",
-                isPC: true,
-                level: 15,
                 image: "../images/portraits/balugh.jpg", // http://images3.wikia.nocookie.net/__cb20100421223543/dndawokenheroes/images/9/93/Redspawn_Firebelcher.png
-                ap: 0,
                 hp: {
-                    total: 166
+                    total: 16 + Lechonero_base.level * 10
                 },
                 surges: {
                     perDay: 2,
                     current: 2
                 },
+                /* Use Lechonero's abilities for all attacks
                 abilities: {
                     STR: 20,
-                    CON: 15,
-                    DEX: 16,
-                    INT: 7,
-                    WIS: 13,
-                    CHA: 7
-                },
+                    CON: 17,
+                    DEX: 12,
+                    INT: 2,
+                    WIS: 16,
+                    CHA: 6
+                },*/
                 skills: {
-                    acrobatics: 11,
-                    arcana: 7,
-                    athletics: 15,
-                    bluff: 5,
-                    diplomacy: 5,
-                    dungeoneering: 8,
-                    endurance: 12,
-                    heal: 13,
-                    history: 7,
-                    insight: 8,
-                    intimidate: 5,
-                    nature: 17,
-                    perception: 17,
-                    religion: 7,
-                    stealth: 13,
-                    streetwise: 10,
-                    thievery: 11
+                    acrobatics: Math.floor(Lechonero_base.level / 2) + 1,
+                    arcana: Math.floor(Lechonero_base.level / 2) - 4,
+                    athletics: Math.floor(Lechonero_base.level / 2) + 10,
+                    bluff: Math.floor(Lechonero_base.level / 2) - 2,
+                    diplomacy: Math.floor(Lechonero_base.level / 2) + 1,
+                    dungeoneering: Math.floor(Lechonero_base.level / 2) - 2,
+                    endurance: Math.floor(Lechonero_base.level / 2) + 7,
+                    heal: Math.floor(Lechonero_base.level / 2) + 1,
+                    history: Math.floor(Lechonero_base.level / 2) - 2,
+                    insight: Math.floor(Lechonero_base.level / 2) + 1,
+                    intimidate: Math.floor(Lechonero_base.level / 2) - 2,
+                    nature: Math.floor(Lechonero_base.level / 2) + 1,
+                    perception: Lechonero_base.skills.perception + 2,
+                    religion: Math.floor(Lechonero_base.level / 2) - 2,
+                    stealth: Math.floor(Lechonero_base.level / 2) + 1,
+                    streetwise: Math.floor(Lechonero_base.level / 2) - 2,
+                    thievery: Math.floor(Lechonero_base.level / 2) + 1
                 },
                 defenses: {
-                    ac: 29,
-                    fort: 29,
-                    ref: 27,
-                    will: 27
+                    ac: 12 + Lechonero_base.level,
+                    fort: 14 + Lechonero_base.level,
+                    ref: 10 + Lechonero_base.level,
+                    will: 12 + Lechonero_base.level
                 },
-                init: 12,
                 speed: 5,
                 attacks: [
                     {
-                        name: "Beast Melee Basic",
+                        name: "Animal Attack",
                         usage: {
                             frequency: "At-Will"
                         },
-                        toHit: 17,
+                        toHit: "WIS+5",
                         defense: "AC",
-                        damage: "1d12+STR",
+                        damage: "1d12+3+WIS+CON",
                         keywords: [
-                            "beast", "melee", "basic"
+                            "melee", "beast", "basic"
                         ]
                     }
                 ]
-            },
+            }),
             Ringo: {
                 name: "Ringo",
                 isPC: true,
@@ -4023,4 +4029,4 @@ var loadParty;
             }
         };
     };
-})();
+})(window.jQuery);
