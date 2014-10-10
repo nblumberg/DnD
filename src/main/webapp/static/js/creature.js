@@ -677,24 +677,54 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         }
         // ^^^ DEBUGGING
         msg = "";
-        if (type && this.resistances) {
-            temp = Infinity;
-            if (typeof type === "string" && this.resistances.hasOwnProperty(type)) {
-                temp = this.resistances[ type ];
+        function applyVulnerability(type) {
+            var temp, i;
+            temp = 0;
+            if (this.vulnerabilities && this.vulnerabilities[ type ]) {
+                temp = this.vulnerabilities[ type ];
             }
-            else if (type.constructor === Array) {
-                // The creature can only resist multi-type damage if it has resistance to all the types
-                // and then only resists an amount equal to the lowest of the matching resistances
-                for (i = 0; i < type.length; i++) {
-                    if (this.resistances.hasOwnProperty(type[ i ])) {
-                        temp = Math.min(this.resistances[ type[ i ] ], temp);
-                    }
+            for (i = 0; i < this.effects.length; i++) {
+                if (this.effects[ i ].name.toLowerCase() === "vulnerable" && this.effects[ i ].type.toLowerCase() === type.toLowerCase()) {
+                    temp = Math.max(temp, this.effects[ i ].amount);
                 }
             }
-            if (temp !== Infinity) {
-                msg += " (resisted " + Math.min(damage, temp) + ")";
-                damage = Math.max(damage - temp, 0);                    
+            if (temp) {
+                msg += " and " + temp + " " + type + " vulnerability";
+                damage += temp;
             }
+        }
+        function applyResistance(type) {
+            var temp, i;
+            if (this.resistances) {
+                temp = Infinity;
+                if (typeof type === "string" && this.resistances.hasOwnProperty(type)) {
+                    temp = this.resistances[ type ];
+                }
+                else if (type.constructor === Array) {
+                    // The creature can only resist multi-type damage if it has resistance to all the types
+                    // and then only resists an amount equal to the lowest of the matching resistances
+                    for (i = 0; i < type.length; i++) {
+                        if (this.resistances.hasOwnProperty(type[ i ])) {
+                            temp = Math.min(this.resistances[ type[ i ] ], temp);
+                        }
+                    }
+                }
+                if (temp !== Infinity) {
+                    msg += " (resisted " + Math.min(damage, temp) + ")";
+                    damage = Math.max(damage - temp, 0);                    
+                }
+            }
+        }
+        if (type) {
+            if (typeof type === "object" && type.constructor === Array) {
+                for (i = 0; i < type.length; i++) {
+                    applyVulnerability.call(this, type[ i ]);
+                }
+            }
+            else {
+                applyVulnerability.call(this, type);
+            }
+            applyResistance.call(this, type);
         }
         if (this.hp.temp) {
             temp = this.hp.temp;
