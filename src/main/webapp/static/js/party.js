@@ -3,7 +3,7 @@ var loadParty;
 (function(jQuery) {
     "use strict";
 
-    var Barases_base, Lechonero_base;
+    var Barases_base, lastingFrost_effect, Lechonero_base;
     Barases_base = {
         isPC: true,
         level: 15,
@@ -53,6 +53,7 @@ var loadParty;
         "implements": [],
         effects: []
     };
+    lastingFrost_effect = { name: "Vulnerable", amount: 5, type: "cold", duration: "endAttackerNext" };
     Lechonero_base = {
         isPC: true,
         level: 15,
@@ -133,7 +134,7 @@ var loadParty;
                         proficiency: 2,
                         damage: {
                             amount: "1d12",
-                            crit: "1d6"
+                            crit: "4d6"
                         }
                     }, {
                         name: "Vicious Quarterstaff +2",
@@ -157,11 +158,21 @@ var loadParty;
                 ],
                 "implements": [
                     {
-                        name: "Staff",
-                        enhancement: 0,
-                        crit: "0"
+                        name: "Summoner's Staff +4",
+                        enhancement: 4,
+                        crit: "4d6"
                     }
                 ],
+                /* TODO: key attack bonuses off effects & vulnerabilities
+                attackBonuses: [
+                    {
+                        name: "Wintertouched",
+                        effects: [
+                            { name: "Vulnerable", type: "cold" }
+                        ],
+                        damage: 2
+                    }
+                ], */
                 attacks: [
                     {
                         name: "Melee Basic",
@@ -193,6 +204,7 @@ var loadParty;
                         toHit: "WIS",
                         defense: "AC",
                         damage: "1[W]+WIS",
+                        effects: [ lastingFrost_effect ],
                         keywords: [
                             "weapon", "melee", "primal"
                         ]
@@ -204,6 +216,7 @@ var loadParty;
                         toHit: "WIS",
                         defense: "AC",
                         damage: "1[W]+WIS",
+                        effects: [ lastingFrost_effect ],
                         keywords: [
                             "weapon", "melee", "primal"
                         ]
@@ -281,6 +294,7 @@ var loadParty;
                         toHit: "WIS",
                         defense: "AC",
                         damage: "3[W]+WIS",
+                        effects: [ lastingFrost_effect ],
                         miss: {
                             halfDamage: true
                         },
