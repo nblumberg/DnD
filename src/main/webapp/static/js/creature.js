@@ -254,6 +254,25 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                 if (!isMatch) {
                     continue;
                 }
+                // Attack matches vulnerability
+                isMatch = true;
+                if (attackBonus.vulnerable) {
+                    isMatch = false;
+                    if (target.vulnerabilities.hasOwnProperty(attackBonus.vulnerable.toLowerCase())) {
+                        isMatch = true;
+                    }
+                    else {
+                        for (j = 0; j < target.effects.length; j++) {
+                            if (target.effects[ j ].name.toLowerCase() === "vulnerable" && target.effects[ j ].type.toLowerCase() === attackBonus.vulnerable.toLowerCase()) {
+                                isMatch = true;
+                                break;
+                            }
+                        }
+                    }
+                } 
+                if (!isMatch) {
+                    continue;
+                }
                 // Attack matches keywords
                 isMatch = true;
                 if (attackBonus.keywords && attack.keywords) {

@@ -163,16 +163,13 @@ var loadParty;
                         crit: "4d6"
                     }
                 ],
-                /* TODO: key attack bonuses off effects & vulnerabilities
                 attackBonuses: [
                     {
                         name: "Wintertouched",
-                        effects: [
-                            { name: "Vulnerable", type: "cold" }
-                        ],
-                        damage: 2
+                        vulnerable: "cold",
+                        toHit: 2
                     }
-                ], */
+                ],
                 attacks: [
                     {
                         name: "Melee Basic",
