@@ -331,17 +331,22 @@ Test.isValidCreature = function(creature, isPC) {
             Test.hasArrayProperty(creature, "weapons", creature.name);
             if (creature.weapons && creature.weapons.length) {
                 describe("weapons: Array of Object of the form", (function(creature) {
-                    var j, weapon, tmp;
+                    var j, weapon, tmp, extra;
                     for (j = 0; j < creature.weapons.length; j++) {
                         weapon = creature.weapons[ j ];
+                        extra = 
                         Test.hasNonEmptyStringProperty(weapon, "name", creature.name);
-                        Test.hasBooleanProperty(weapon, "isMelee", creature.name + " " + weapon.name);
-                        Test.hasNumberProperty(weapon, "proficiency", creature.name + " " + weapon.name);
-                        Test.hasNumberProperty(weapon, "enhancement", creature.name + " " + weapon.name);
-                        Test.hasObjectProperty(weapon, "damage", creature.name + " " + weapon.name);
-                        Test.hasNonEmptyStringProperty(weapon.damage, "amount", creature.name + " " + weapon.name);
+                        Test.hasBooleanProperty(weapon, "isMelee", extra);
+                        Test.hasNumberProperty(weapon, "proficiency", extra);
+                        Test.hasNumberProperty(weapon, "enhancement", extra);
+                        Test.hasObjectProperty(weapon, "damage", extra);
+                        Test.hasNonEmptyStringProperty(weapon.damage, "amount", extra);
                         tmp = { damage: weapon.damage.crit };
-                        Test.hasValidDamage(tmp, creature.name + " " + weapon.name + " (crit)");
+                        Test.hasValidDamage(tmp, extra + " (crit)");
+                        Test.hasValidEffects(weapon, false, extra);
+                        if (weapon.keywords) {
+                            Test.hasNonEmptyArrayProperty(weapon, "keywords", extra);
+                        }
                     }
                 }).bind(this, creature));
             }

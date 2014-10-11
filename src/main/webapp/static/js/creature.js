@@ -237,75 +237,89 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
     };
 
     Creature.prototype._attackBonuses = function(attack, item, target, combatAdvantage) {
-        /* jshint unused:false */
-        var i, j, attackBonuses, attackBonus, isMatch;
+        var i, attackBonuses, attackBonus;
         this.__log("_attackBonuses", arguments);
 
         attackBonuses = [];
 
-        if (this.attackBonuses) {
-            for (i = 0; i < this.attackBonuses.length; i++) {
-                attackBonus = this.attackBonuses[ i ];
-                // Attack matches defense
-                isMatch = true;
-                if (attackBonus.defense && attackBonus.defense.toLowerCase() !== attack.defense.toLowerCase()) {
-                    isMatch = false;
+        function matchesDefense(attackBonus) {
+            if (attackBonus.defense && attackBonus.defense.toLowerCase() !== attack.defense.toLowerCase()) {
+                isMatch = false;
+            }
+            return true;
+        }
+        function matchesVulnerability(attackBonus) {
+            var isMatch, i;
+            isMatch = true;
+            if (attackBonus.vulnerable) {
+                isMatch = false;
+                if (target.vulnerabilities.hasOwnProperty(attackBonus.vulnerable.toLowerCase())) {
+                    isMatch = true;
                 }
-                if (!isMatch) {
-                    continue;
-                }
-                // Attack matches vulnerability
-                isMatch = true;
-                if (attackBonus.vulnerable) {
-                    isMatch = false;
-                    if (target.vulnerabilities.hasOwnProperty(attackBonus.vulnerable.toLowerCase())) {
-                        isMatch = true;
-                    }
-                    else {
-                        for (j = 0; j < target.effects.length; j++) {
-                            if (target.effects[ j ].name.toLowerCase() === "vulnerable" && target.effects[ j ].type.toLowerCase() === attackBonus.vulnerable.toLowerCase()) {
-                                isMatch = true;
-                                break;
-                            }
-                        }
-                    }
-                } 
-                if (!isMatch) {
-                    continue;
-                }
-                // Attack matches keywords
-                isMatch = true;
-                if (attackBonus.keywords && attack.keywords) {
-                    for (j = 0; j < attackBonus.keywords; j++) {
-                        if (attack.keywords.indexOf(attackBonus.keywords[ j ]) === -1) {
-                            isMatch = false;
+                else {
+                    for (i = 0; i < target.effects.length; i++) {
+                        if (target.effects[ i ].name.toLowerCase() === "vulnerable" && target.effects[ i ].type.toLowerCase() === attackBonus.vulnerable.toLowerCase()) {
+                            isMatch = true;
                             break;
                         }
                     }
                 }
-                if (!isMatch) {
+            }
+            return isMatch;
+        }
+        function matchesKeywords(attackBonus) {
+            var keywords, i;
+            keywords = [];
+            if (attack.keywords) {
+                keywords = keywords.concat(attack.keywords);
+            }
+            if (item.keywords) {
+                keywords = keywords.concat(item.keywords);
+            }
+            if (attackBonus.keywords) {
+                for (i = 0; i < attackBonus.keywords; i++) {
+                    if (keywords.indexOf(attackBonus.keywords[ i ]) === -1) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        function matchesAttackerStatus(attackBonus) {
+            if (attackBonus.status) {
+                if (attackBonus.status.indexOf("bloodied") !== -1 && !this.isBloodied()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        function matchesFoeStatus(attackBonus) {
+            if (attackBonus.foeStatus) {
+                if (attackBonus.foeStatus.indexOf("combat advantage") !== -1 && !combatAdvantage) {
+                    return false;
+                }
+                if (attackBonus.foeStatus.indexOf("bloodied") !== -1 && (!target || !target.isBloodied())) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        if (this.attackBonuses) {
+            for (i = 0; i < this.attackBonuses.length; i++) {
+                attackBonus = this.attackBonuses[ i ];
+                if (!matchesDefense(attackBonus)) {
                     continue;
                 }
-                // Attack matches attacker status
-                isMatch = true;
-                if (attackBonus.status) {
-                    if (attackBonus.status.indexOf("bloodied") !== -1 && !this.isBloodied()) {
-                        isMatch = false;
-                    }
-                }
-                if (!isMatch) {
+                if (!matchesVulnerability(attackBonus)) {
                     continue;
                 }
-                // Attack matches target status
-                if (attackBonus.foeStatus) {
-                    if (attackBonus.foeStatus.indexOf("combat advantage") !== -1 && !combatAdvantage) {
-                        isMatch = false;
-                    }
-                    if (attackBonus.foeStatus.indexOf("bloodied") !== -1 && (!target || !target.isBloodied())) {
-                        isMatch = false;
-                    }
+                if (!matchesKeywords(attackBonus)) {
+                    continue;
                 }
-                if (!isMatch) {
+                if (!matchesAttackerStatus(attackBonus)) {
+                    continue;
+                }
+                if (!matchesFoeStatus(attackBonus)) {
                     continue;
                 }
                 attackBonuses.push(attackBonus);
@@ -611,7 +625,9 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
             }
             if (attackBonus.effects) {
                 targetDamage.effects = targetDamage.effects.concat(attackBonus.effects);
-                targetDamage.missEffects = targetDamage.missEffects.concat(attackBonus.effects);
+            }
+            if (attackBonus.miss && attackBonus.miss.effects) {
+                targetDamage.missEffects = targetDamage.missEffects.concat(attackBonus.miss.effects);
             }
         }
 
@@ -692,7 +708,11 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
         this.__log("takeDamage", [ attacker.name, damage, type, effects ]);
         if (typeof(damage) !== "number") {
             console.error("Creature.takeDamage() received NaN damage value");
-            return;
+            return {
+                msg: "Creature.takeDamage() received NaN damage value",
+                damage: 0,
+                type: undefined
+            };
         }
         // ^^^ DEBUGGING
         msg = "";
@@ -730,7 +750,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                 }
                 if (temp !== Infinity) {
                     msg += " (resisted " + Math.min(damage, temp) + ")";
-                    damage = Math.max(damage - temp, 0);                    
+                    damage = Math.max(damage - temp, 0);
                 }
             }
         }
@@ -762,7 +782,7 @@ var Defenses, HP, Surges, Implement, Weapon, Abilities, Creature, Actor;
                         }
                     }
                 }
-                effect = new DnD.Effect(jQuery.extend({}, effects[ i ].raw(), { target: this, attacker: attacker, round: this.history._round }));
+                effect = new DnD.Effect(jQuery.extend({}, effects[ i ].raw ? effects[ i ].raw() : effects[ i ], { target: this, attacker: attacker, round: this.history._round }));
                 attacker.imposedEffects.push(effect);
                 this.effects.push(effect);
                 if (effect.hasOwnProperty("duration") && (effect.duration === "startAttackerNext" || effect.duration === "endAttackerNext")) {

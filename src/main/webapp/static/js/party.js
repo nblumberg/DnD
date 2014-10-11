@@ -126,7 +126,8 @@ var loadParty;
                         damage: {
                             amount: "1d12",
                             crit: { amount: "3d8", type: "cold" }
-                        }
+                        },
+                        keywords: [ "cold" ]
                     }, {
                         name: "Summoner's Staff +4",
                         isMelee: true,
@@ -165,6 +166,10 @@ var loadParty;
                 ],
                 attackBonuses: [
                     {
+                        name: "Lasting Frost",
+                        effects: [ { name: "Vulnerable", amount: 5, type: "cold", duration: "endAttackerNext" } ],
+                        keywords: [ "cold" ]
+                    }, {
                         name: "Wintertouched",
                         vulnerable: "cold",
                         toHit: 2
@@ -201,7 +206,6 @@ var loadParty;
                         toHit: "WIS",
                         defense: "AC",
                         damage: "1[W]+WIS",
-                        effects: [ lastingFrost_effect ],
                         keywords: [
                             "weapon", "melee", "primal"
                         ]
@@ -213,7 +217,6 @@ var loadParty;
                         toHit: "WIS",
                         defense: "AC",
                         damage: "1[W]+WIS",
-                        effects: [ lastingFrost_effect ],
                         keywords: [
                             "weapon", "melee", "primal"
                         ]
@@ -291,7 +294,6 @@ var loadParty;
                         toHit: "WIS",
                         defense: "AC",
                         damage: "3[W]+WIS",
-                        effects: [ lastingFrost_effect ],
                         miss: {
                             halfDamage: true
                         },
@@ -420,8 +422,8 @@ var loadParty;
                     }
                 ]
             }),
-            "Summoned Crocodile": jQuery.extend(true, {}, Barases_base, { // copied from "Visejaw Crocodile" as it's the only large, natural, non-minion crocodile and the only stats listed in the power match
-                name: "Summoned Crocodile",
+            "Purple": jQuery.extend(true, {}, Barases_base, { // copied from "Visejaw Crocodile" as it's the only large, natural, non-minion crocodile and the only stats listed in the power match
+                name: "Purple",
                 image: "../images/portraits/crocodile.jpg", // http://usherp.org/wp-content/uploads/2013/04/crocodile-500x324.jpg
                 hp: {
                     total: Math.floor(Barases_base.hp.total / 2)
