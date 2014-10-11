@@ -1,6 +1,6 @@
 /* body { background-color:black; color: white; } */
 th, td { border-color: white; }
-    
+
 .alignTop { vertical-align: top; }
 .bordered { border-style: solid; border-width: 3px; }
 .centered { text-align: center; }
@@ -8,7 +8,7 @@ th, td { border-color: white; }
 .f1 { font-size: 1.5em; }
 .f2 { font-size: 1.2em; }
 .floatLeft { float: left; }
-.gridItem { display: inline-block; font-size: 24px; vertical-align: top; } 
+.gridItem { display: inline-block; font-size: 24px; vertical-align: top; }
 .fullHeight { height: 100%; }
 .fullWidth { clear: both; width: 100%; }
 .halfWidth { max-width: 50%; width: 50%; }
@@ -31,7 +31,11 @@ input#round { width: 30px; }
 }
 
 #pageLayout .leftPanel, #pageLayout .rightPanel {
-	display: table-cell;
+    display: table-cell;
+}
+
+#pageLayout .rightPanel {
+    max-width: 33%;
 }
 
 #initiative img.icon {
@@ -79,15 +83,19 @@ input#round { width: 30px; }
 /* actorTable */
 #roundLabel { font-size: 9pt; }
 
-//  table#initiative { border-collapse: collapse; }
-table#initiative th, table#initiative td { text-align: center; } 
+table#initiative { border-collapse: collapse; }
+table#initiative th, table#initiative td { text-align: center; }
 table#initiative td.order { width: 50px; }
 table#initiative td.defenses { width: 80px; }
 table#initiative td.hp { padding: 3px; text-align: left; }
 table#initiative td.actions { width: 50px; }
 table#initiative td.actions img { display: block; margin: 5px auto; }
 table#initiative .tempHp { font-style: italic; }
-table#initiative td.history div { max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
+table#initiative td.history { max-width: 50%; }
+table#initiative td.history div {
+    max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left;
+    /*white-space: nowrap; */
+}
 
 /* actorRow */
 .numerator:after { content: '/' }
@@ -95,20 +103,20 @@ table#initiative td.history div { max-height: 130px; overflow-y: auto; padding-r
 
 /* actorCard */
 td.cardHolder { padding: 0; }
-.creaturePanel, .condition { 
-	background-size: contain; 
-	background-repeat: no-repeat; 
-	background-position: top center; 
-	box-sizing: border-box; 
-	float: left; 
+.creaturePanel, .condition {
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: top center;
+	box-sizing: border-box;
+	float: left;
 	margin: 2px; }
-.creaturePanel { 
-	border-width: 4px; 
-	height: 180px; 
+.creaturePanel {
+	border-width: 4px;
+	height: 180px;
 	width: 100%; }
 .condition {
-	border: 1px solid black; 
-	height: 30px; 
+	border: 1px solid black;
+	height: 30px;
 	width: 30px; }
 #initiative .creaturePanel { display: inline-block; float: none; }
 .creaturePanel.current { border-color: lime; }
