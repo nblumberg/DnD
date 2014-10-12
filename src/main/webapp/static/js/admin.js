@@ -1,6 +1,12 @@
-var DnD;
 (function() {
 	"use strict";
-	
-    window.initiative = new DnD.Initiative();
+
+    DnD.define(
+        "admin",
+        [ "window", "Initiative" ],
+        function(w, Initiative) {
+            w.initiative = new Initiative();
+        },
+        false
+    );
 })();

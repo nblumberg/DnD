@@ -1,6 +1,11 @@
-describe("monsters.js", function() {
-    describe("When loadMonsters() is invoked it should return ", function() {
-        Test.isValidCreatureMap(loadMonsters(), false);
+(function(module) {
+    "use strict";
+
+    describe("monsters.js", function() {
+        describe("When the \"creatures.monsters\" module is instantiated it should return ", function() {
+            Test.isValidCreatureMap(module.create(), false);
+        });
     });
-});
+
+})(DnD.modules[ "creatures.monsters" ]);
 
