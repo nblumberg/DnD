@@ -312,19 +312,10 @@
                 console._parseDebugLevel = function() {
                     var debug, waitForIt;
                     debug = false;
-                    waitForIt = true;
-                    if (typeof(DnD.state) !== "undefined" && typeof(DnD.state.debugLevel) !== "undefined") {
-                        debug = "" + DnD.state.debugLevel;
-                    }
-                    else if (!debug && typeof(DnD.URL) !== "undefined") {
-                        debug = DnD.URL.getParam("debug");
-                    }
-                    else {
-                        debug = w.location.search.indexOf("debug=");
-                        debug = debug !== -1 ? w.location.search.substr(debug + 9) : null;
-                        if (debug && debug.indexOf("&") !== -1) {
-                            debug = debug.substring(0, debug.indexOf("&"));
-                        }
+                    debug = w.location.search.indexOf("debug=");
+                    debug = debug !== -1 ? w.location.search.substr(debug + 9) : null;
+                    if (debug && debug.indexOf("&") !== -1) {
+                        debug = debug.substring(0, debug.indexOf("&"));
                     }
                     console.debugEnabled = !!debug && debug !== "false";
                     if (!isNaN(parseInt(debug, 10))) {

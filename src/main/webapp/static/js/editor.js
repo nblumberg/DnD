@@ -29,7 +29,8 @@
                 this._html = params.html;
                 this._onchange = params.onchange;
                 this.$parent = jQuery("<span/>").addClass("editor").attr("data-editor-id", this.id).appendTo(this.$grandparent);
-                this.$html = jQuery("<" + this._tagName + "/>").addClass("display " + this._className).appendTo(this.$parent).html(this._html);
+                this.$html = jQuery("<" + this._tagName + "></" + this._tagName + ">").addClass("display " + this._className).html(this._html);
+                this.$html.appendTo(this.$parent)
                 this.$input = jQuery("<input/>").attr("type", "text").val(this.$html.html()).appendTo(this.$parent);
                 this.$save = jQuery("<button/>").addClass("save").attr("title", "Save").html("&#x2713;").appendTo(this.$parent);
                 this.$cancel = jQuery("<button/>").addClass("cancel").attr("title", "Cancel").html("X").appendTo(this.$parent);
