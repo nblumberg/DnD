@@ -1,0 +1,40 @@
+<div id="genericEffectDialog" class="dialog">
+    <div class="header">
+        <div class="text">Effect</div>
+    </div>
+    <div class="body">
+        <div class="column1">
+            <div>
+                <select id="weaponSelect"></select>
+            </div>
+            <div id="attackSelect" class="list-group"></div>
+            <div class="playerRolls playerAttack control-group">
+                <input id="playerAttackRoll" type="number" class="number form-control" placeholder="Attack roll" />
+                <select id="playerAttackCrit" title="Critical">
+                    <option value=""></option>
+                    <option value="crit">CRIT</option>
+                    <option value="fail">FUMBLE</option>
+                </select>
+            </div>
+        </div>
+        <div class="column2">
+            <div class="damage"></div>
+            <div class="keywords"></div>
+            <div class="attacks2Targets">
+                <img id="combatAdvantage" height="30" style="height: 30px;" src="/images/symbols/attack.png" />
+            </div>
+            <div class="playerRolls">Player rolls</div>
+        </div>
+        <div class="column3">
+            <div class="targets">
+                <select id="targetSelect" multiple="multiple" size="100"></select>
+            </div>
+            <div class="playerRolls playerDamage control-group">
+                <input id="playerDamageRoll" type="number" class="number form-control" placeholder="Damage roll" />
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <button class="btn btn-primary causeBtn">Cause</button>
+    </div>
+</div>

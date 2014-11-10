@@ -215,6 +215,31 @@ body.dialog { overflow: hidden; }
 .exportDialog #exportDialog { display: block; }
 #exportDialog textarea { height: 100%; width: 100%; }
 
+/* genericEffectDialog */
+.genericEffectDialog #genericEffectDialog { display: block; }
+#genericEffectDialog .column1, #genericEffectDialog .column2, #genericEffectDialog .column3 { display: table-cell; height: 100%; position: relative; }
+#genericEffectDialog .column1, #genericEffectDialog .column3 { padding-bottom: 50px; vertical-align: top; width: 40%; }
+#genericEffectDialog .column2 { width: 15%; }
+#genericEffectDialog .column2 img { margin: 0 auto; }
+#genericEffectDialog .column2 div { text-align: center; width: 100%; }
+#genericEffectDialog #attackSelect, #genericEffectDialog .column3 .targets { height: 100%; overflow-y: scroll; }
+#genericEffectDialog #attackSelect .list-group-item { background-color: gray; color: white; font-size: bold; }
+#genericEffectDialog #attackSelect .at-will { background-color: green; }
+#genericEffectDialog #attackSelect .encounter { background-color: maroon; }
+#genericEffectDialog #attackSelect .daily { background-color: #333333; }
+#genericEffectDialog #attackSelect .recharge { background-color: orange; }
+#genericEffectDialog #attackSelect .used { color: #555555; font-style: italic; }
+#genericEffectDialog select { height: 100%; width: 100%; }
+#genericEffectDialog input.number { width: 100%; }
+#genericEffectDialog .attacks2targets { margin-top: 100%; }
+#genericEffectDialog .attacks2targets img { display: block; }
+#genericEffectDialog .playerAttack * { max-width: 50%; width: auto; }
+#genericEffectDialog .playerRolls { height: 30px; position: absolute; bottom: 0; width: 100%; }
+#genericEffectDialog .control-group input { border-width: 3px; }
+#genericEffectDialog .control-group input { border-width: 3px; }
+#genericEffectDialog .error .playerAttackRoll, #genericEffectDialog .success .playerAttackRoll, #genericEffectDialog .warning .playerAttackRoll { border: 3px solid; }
+#playerAttackRoll { display: inline-block; }
+
 /* healDialog */
 .healDialog #healDialog { display: block; }
 #healDialog .column { margin: 0 auto; max-width: 400px; }
