@@ -418,6 +418,8 @@
                     name: "Chillfire Destroyer", level: 14, image: "../images/portraits/chillfire_destroyer.jpg",
                     hp: { total: 173 },
                     defenses: { ac: 26, fort: 26, ref: 25, will: 25 },
+                    immunities: [ "disease", "poison" ],
+                    resistances: { cold: 10, fire: 10 },
                     init: 12, speed: { walk: 5 },
                     abilities: { STR: 16, CON: 23, DEX: 20, INT: 5, WIS: 20, CHA: 12 },
                     skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 12, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
@@ -833,6 +835,7 @@
                     name: "Icetouched Behir", level: 14, image: "../images/portraits/behir.png",
                     hp: { total: 705 },
                     defenses: { ac: 32, fort: 29, ref: 28, will: 28 },
+                    resistances: { "cold": 10, "lightning": 10 },
                     savingThrows: 5,
                     init: 14, speed: { walk: 7, climb: 5 },
                     abilities: { STR: 23, CON: 21, DEX: 20, INT: 7, WIS: 21, CHA: 13 },
@@ -848,6 +851,21 @@
                         { name: "Devour (secondary)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "Ref", damage: "15", keywords: [ "melee" ] },
                         { name: "Lightning Breath", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close burst", size: 1 }, toHit: 17, defense: "Ref", damage: { amount: "3d10+6", type: "lightning" }, miss: { halfDamage: true }, keywords: [ "close burst", "lightning" ] },
                         { name: "Lightning Breath (secondary)", usage: { frequency: "At-Will" }, target: { area: "burst", size: 1, range: 10 }, toHit: 17, defense: "Ref", damage: { amount: "3d10+6", type: "lightning" }, miss: { halfDamage: true }, keywords: [ "close burst", "lightning" ] }
+                    ]
+                },
+                "Icetouched Umber Hulk": {
+                    name: "Icetouched Umber Hulk", level: 14, image: "../images/portraits/umberhulk.jpg",
+                    hp: { total: 248 },
+                    defenses: { ac: 30, fort: 33, ref: 28, will: 27 },
+                    resistances: { "cold": 10 },
+                    savingThrows: 2,
+                    init: 11, speed: { walk: 5, burrow: 2 },
+                    abilities: { STR: 26, CON: 20, DEX: 16, INT: 5, WIS: 14, CHA: 11 },
+                    skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 13, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Claw", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: 18, defense: "AC", damage: "2d6+8", keywords: [ "melee", "basic" ] },
+                        { name: "Grabbing Double", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "ongoing damage", amount: 10 } ], keywords: [ "melee" ] },
+                        { name: "Confusing Gaze", usage: { frequency: "At-Will" }, target: { area: "close blast", size: 5, enemiesOnly: true }, toHit: 16, defense: "Will", damage: "0", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "gaze", "psychic" ] }
                     ]
                 },
                 "Iquel, Githyanki Captain": {
@@ -995,6 +1013,23 @@
                         { name: "Poison Breath", usage: { frequency: "Recharge", recharge: 5 }, range: "blast 3", toHit: 16, defense: "Fort", damage: { amount: "2d6+3", type: "poison" }, effects: [
                             { name: "Ongoing damage", type: "poison", amount: 5, saveEnds: true }
                         ], keywords: [ "ranged", "poison" ] }
+                    ]
+                },
+                "Nara of the Wastes": {
+                    name: "Nara of the Wastes", level: 19, image: "../images/portraits/nara.jpg",
+                    hp: { total: 182 },
+                    defenses: { ac: 32, fort: 32, ref: 29, will: 33 },
+                    resistances: { cold: 15 },
+                    init: 12, speed: { walk: 8 },
+                    abilities: { STR: 21, CON: 22, DEX: 16, INT: 10, WIS: 25, CHA: 22 },
+                    skills: { acrobatics: 0, arcana: 14, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 21, history: 0, insight: 0, intimidate: 20, nature: 0, perception: 16, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Freezing Flail", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: 24, defense: "AC", damage: { amount: "2d12+4", type: "cold" }, keywords: [ "melee", "basic", "cold", "weapon" ] },
+                        { name: "Freezing Bolt", usage: { frequency: "At-Will" }, target: { range: 20 }, toHit: 22, defense: "Ref", damage: { amount: "2d12+4", type: "cold" }, effects: [ { name: "immobilized", saveEnds: true } ], keywords: [ "ranged", "cold" ] },
+                        { name: "Ice Slide", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 22, defense: "Fort", damage: "0", keywords: [ "ranged" ] },
+                        { name: "Wall of Frost", usage: { frequency: "Recharge", recharge: 6 }, target: { area: "wall", size: 12, range: 10 }, toHit: "automatic", defense: "AC", damage: "0", keywords: [ "ranged", "cold", "conjuration", "wall" ] },
+                        { name: "Wall of Frost (adjacent)", usage: { frequency: "At-Will" }, target: { range: 1 }, toHit: "automatic", defense: "AC", damage: { amount: "5", type: "cold" }, keywords: [ "ranged", "cold", "conjuration", "wall" ] },
+                        { name: "Wall of Frost (inside)", usage: { frequency: "At-Will" }, target: { range: 0 }, toHit: "automatic", defense: "AC", damage: { amount: "15", type: "cold" }, keywords: [ "ranged", "cold", "conjuration", "wall" ] }
                     ]
                 },
                 "Odos": {
@@ -1431,6 +1466,8 @@
                     name: "Windstriker", level: 9, image: "../images/portraits/windstriker.jpg",
                     hp: { total: 56 },
                     defenses: { ac: 21, fort: 22, ref: 20, will: 20 },
+                    immunities: [ "disease", "poison" ],
+                    resistances: { insubstantial: 50 },
                     init: 11, speed: { fly: 8 },
                     abilities: { STR: 14, CON: 20, DEX: 17, INT: 5, WIS: 10, CHA: 17 },
                     skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 9, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
@@ -1440,6 +1477,21 @@
                         { name: "Searching Wind", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 12, defense: "Will", damage: { amount: "2d6+5", type: [ "cold", "thunder" ] }, effects: [
                             { name: "Prone"}
                         ], keywords: [ "melee", "cold", "thunder" ] }
+                    ]
+                },
+                "Winter Wolf": {
+                    name: "Winter Wolf", level: 9, image: "../images/portraits/winter_wolf.jpg",
+                    hp: { total: 141 },
+                    defenses: { ac: 28, fort: 27, ref: 26, will: 24 },
+                    resistances: { cold: 20 },
+                    init: 14, speed: { walk: 8 },
+                    abilities: { STR: 23, CON: 21, DEX: 21, INT: 9, WIS: 17, CHA: 10 },
+                    skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Bite", usage: { frequency: "At-Will" }, target: { range: 1 }, range: "melee", toHit: 19, defense: "AC", damage: [ "1d10+6", { amount: "1d6", type: "cold" } ], keywords: [ "melee", "basic", "cold" ] },
+                        { name: "Bite (prone)", usage: { frequency: "At-Will" }, target: { range: 1 }, range: "melee", toHit: 19, defense: "AC", damage: [ "2d10+6", { amount: "1d6", type: "cold" } ], keywords: [ "melee", "basic", "cold" ] },
+                        { name: "Takedown", usage: { frequency: "At-Will" }, target: { range: 1 }, range: "melee", toHit: 19, defense: "AC", damage: [ "2d10+6", { amount: "1d6", type: "cold" } ], effects: [ { name: "prone" } ], keywords: [ "melee", "cold" ] },
+                        { name: "Freezing Breath", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "close blast", size: 5 }, toHit: 17, defense: "Ref", damage: { amount: "2d6+6", type: "cold" }, miss: { halfDamage: true }, keywords: [ "melee", "cold", "breath" ] }
                     ]
                 },
                 "Xirakis, Adult Pact Dragon": {
