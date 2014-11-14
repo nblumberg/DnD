@@ -124,7 +124,7 @@
                     if (attack.keywords) {
                         keywords = keywords.concat(attack.keywords);
                     }
-                    if (item.keywords) {
+                    if (item && item.keywords) {
                         keywords = keywords.concat(item.keywords);
                     }
                     if (attackBonus.keywords) {

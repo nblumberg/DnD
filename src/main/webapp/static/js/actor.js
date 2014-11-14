@@ -189,6 +189,17 @@
                                 }
                             }
                         }
+                        if (this.resistances.all && (temp === Infinity || this.resistances.all > temp)) {
+                            temp = this.resistances.all;
+                        }
+                        if (this.resistances.insubstantial) {
+                            if (temp !== Infinity) {
+                                temp += Math.floor(Math.max(damage - temp, 0) / 2);
+                            }
+                            else {
+                                temp = Math.floor(damage / 2);
+                            }
+                        }
                         if (temp !== Infinity) {
                             msg += " (resisted " + Math.min(damage, temp) + ")";
                             damage = Math.max(damage - temp, 0);
@@ -204,8 +215,8 @@
                     else {
                         applyVulnerability.call(this, type);
                     }
-                    applyResistance.call(this, type);
                 }
+                applyResistance.call(this, type);
                 if (this.hp.temp) {
                     temp = this.hp.temp;
                     this.hp.temp = Math.max(temp - damage, 0);
