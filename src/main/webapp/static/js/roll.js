@@ -19,10 +19,10 @@
                 this.__log = out.logFn.bind(this, "Roll");
                 this.__log("constructor", arguments);
                 this._history = [];
-                this.dieCount = 0;
-                this.dieSides = 0;
-                this.extra = 0;
-                this.crits = false;
+                this.dieCount = this.dieCount || 0;
+                this.dieSides = this.dieSides || 0;
+                this.extra = this.extra || 0;
+                this.crits = this.crits || false;
                 if (typeof(params) === "string") {
                     this._parseString(params);
                 }
@@ -45,10 +45,10 @@
 
             Roll.prototype._parseObject = function(obj) {
                 this.__log("_parseObject", arguments);
-                this.dieCount = obj.dieCount;
-                this.dieSides = obj.dieSides;
-                this.extra = obj.extra;
-                this.crits = obj.crits;
+                this.dieCount = typeof obj.dieCount === "number" ? obj.dieCount : this.dieCount;
+                this.dieSides = typeof obj.dieSides === "number" ? obj.dieSides : this.dieSides;
+                this.extra = typeof obj.extra === "number" ? obj.extra : this.extra;
+                this.crits = typeof obj.crits === "boolean" ? obj.crits : this.crits;
             };
 
             Roll.prototype.EXTRA_REG_EXP = /[+-]/;
