@@ -25,6 +25,7 @@
             "Display.Dialog.Image",
             "Display.Dialog.Import",
             "Display.Dialog.Initiative",
+            "Display.Dialog.GenericEffect"
         ],
         function(
                 w,
@@ -47,7 +48,8 @@
                 HealDialog,
                 ImageDialog,
                 ImportDialog,
-                InitiativeDialog) {
+                InitiativeDialog,
+                GenericEffectDialog) {
             // CONSTRUCTOR & INITIALIZATION METHODS
 
             /**
@@ -309,6 +311,14 @@
                     }.bind(this) });
 
                     this.healDialog = new HealDialog({
+                        addHistory: this._addHistory.bind(this),
+                        callback: function() { // actor, changes
+
+                        }.bind(this)
+                    });
+
+                    this.genericEffectDialog = new GenericEffectDialog({
+                        $trigger: jQuery("#effect"),
                         addHistory: this._addHistory.bind(this),
                         callback: function() { // actor, changes
 

@@ -1,40 +1,81 @@
 <div id="genericEffectDialog" class="dialog">
-    <div class="header">
-        <div class="text">Effect</div>
-    </div>
-    <div class="body">
-        <div class="column1">
-            <div>
-                <select id="weaponSelect"></select>
-            </div>
-            <div id="attackSelect" class="list-group"></div>
-            <div class="playerRolls playerAttack control-group">
-                <input id="playerAttackRoll" type="number" class="number form-control" placeholder="Attack roll" />
-                <select id="playerAttackCrit" title="Critical">
-                    <option value=""></option>
-                    <option value="crit">CRIT</option>
-                    <option value="fail">FUMBLE</option>
-                </select>
-            </div>
+  <div class="header">
+    <div class="text">Effect</div>
+  </div>
+  <div class="body">
+    <div class="column1">
+      <div>
+        <input id="name" type="text" placeholder="Effect name" class="fullWidth"/>
+      </div>
+      <div>
+        <input id="attackBonus" type="number" placeholder="attack bonus"/>
+        <label for="defense">vs.</label>
+        <select id="defense" style="width:auto;">
+          <option value="automatic">automatic hit</option>
+          <option value="AC">AC</option>
+          <option value="Fort">Fortitude</option>
+          <option value="Ref">Reflex</option>
+          <option value="Will">Will</option>
+        </select>
+      </div>
+      <div>
+        <input id="damageDice" type="number" min="1" placeholder="damage dice"/>
+        <span>d</span>
+        <input id="damageDie" type="number" min="2" max="20" placeholder="die"/>
+        <span>+</span>
+        <input id="damageBonus" type="number" placeholder="damage bonus"/>
+        <input id="damageType" type="text" placeholder="damage type"/>
+      </div>
+      <div>
+        <h4>Effects</h4>
+        <div id="effects">
         </div>
-        <div class="column2">
-            <div class="damage"></div>
-            <div class="keywords"></div>
-            <div class="attacks2Targets">
-                <img id="combatAdvantage" height="30" style="height: 30px;" src="/images/symbols/attack.png" />
-            </div>
-            <div class="playerRolls">Player rolls</div>
+        <div>
+          <select id="newEffect" style="width:auto;">
+          </select>
+          <input id="newEffectAmount" type="number" placeholder="amount" />
+          <select id="newEffectDuration" style="width:auto;">
+            <option value="">manual</option>
+            <option value="saveEnds">Save ends</option>
+            <option value="startTargetNext">Start target next</option>
+            <option value="endTargetNext">End target next</option>
+          </select>
+          <button id="addEffect" class="btn btn-default"><i class="icon-plus icon-white">+</i></button>
         </div>
-        <div class="column3">
-            <div class="targets">
-                <select id="targetSelect" multiple="multiple" size="100"></select>
-            </div>
-            <div class="playerRolls playerDamage control-group">
-                <input id="playerDamageRoll" type="number" class="number form-control" placeholder="Damage roll" />
-            </div>
+      </div>
+      <div>
+        <h4>Keywords</h4>
+        <div>
+          <textarea id="keywords" placeholder="keyword1, keyword2, keyword3..." class="fullWidth"></textarea>
         </div>
+      </div>
+      <div class="playerRolls playerAttack control-group">
+        <input id="playerAttackRoll" type="number" class="number form-control" placeholder="Attack roll"/>
+        <select id="playerAttackCrit" title="Critical">
+          <option value=""></option>
+          <option value="crit">CRIT</option>
+          <option value="fail">FUMBLE</option>
+        </select>
+      </div>
     </div>
-    <div class="footer">
-        <button class="btn btn-primary causeBtn">Cause</button>
+    <div class="column2">
+      <div class="damage"></div>
+      <div class="keywordsParsed"></div>
+      <div class="attacks2Targets">
+        <img id="combatAdvantage" height="30" style="height: 30px;" src="/images/symbols/attack.png"/>
+      </div>
+      <div class="playerRolls">Player rolls</div>
     </div>
+    <div class="column3">
+      <div class="targets">
+        <select id="targetSelect" multiple="multiple" size="100"></select>
+      </div>
+      <div class="playerRolls playerDamage control-group">
+        <input id="playerDamageRoll" type="number" class="number form-control" placeholder="Damage roll"/>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <button class="btn btn-primary causeBtn">Cause</button>
+  </div>
 </div>

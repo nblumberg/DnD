@@ -265,7 +265,7 @@ body.dialog { overflow: hidden; }
 .sortable li { float: left; margin: 5px; text-align: center; width: 200px; }
 .sortable li .name { margin: 0 0.5em; }
 .sortable li input { width: 100%; }
-.grab { cursor: url(https://mail.google.com/mail/images/2/openhand.cur) 8 8, move; }
-.grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
+.grab { cursor: grab; }
+.grabbing { cursor: grabbing; }
 .droppable { border-color: green; border-width: 6px; }
 

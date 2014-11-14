@@ -174,7 +174,15 @@
                     ac: { image: "../images/symbols/ac.png", color: "white" },
                     fort: { image: "../images/symbols/fort.png", color: "white" },
                     ref: { image: "../images/symbols/ref.png", color: "white" },
-                    will: { image: "../images/symbols/will.png", color: "purple" },
+                    will: { image: "../images/symbols/will.png", color: "purple" }
+                },
+                bonus: {
+                    unknown: { image: "../images/symbols/unknown.png", color: "#FF0000" },
+                    attacks: { image: "../images/symbols/attack_penalty.jpg", color: "white" },
+                    ac: { image: "../images/symbols/ac.png", color: "white" },
+                    fort: { image: "../images/symbols/fort.png", color: "white" },
+                    ref: { image: "../images/symbols/ref.png", color: "white" },
+                    will: { image: "../images/symbols/will.png", color: "purple" }
                 },
                 petrified: { image: "../images/symbols/petrified.gif" }, // "http://www.mythweb.com/encyc/images/media/medusas_head.gif",
                 prone: { image: "../images/symbols/prone.png" }, // "http://lessonpix.com/drawings/2079/100x100/Lying+Down.png",
