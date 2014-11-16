@@ -1,36 +1,61 @@
 {
-  "name": "DnD",
-  "version": "0.1.0",
-  "description": "A webapp utility for running D&D 4E",
-  "keywords": [ "D&D", "DnD" ],
-  "license": "MIT",
-  "author": {
-    "name": "Nathaniel Blumberg",
-    "email": "<nathanielblumberg@gmail.com>"
-  },
-  "files": [ "src/" ],
-  "scripts": { "start": "node src/main/webapp/server.js" },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nblumberg/DnD"
-  },
-  "dependencies": {
-    "colors": "0.x.x",
-    "express": "2.3.x",
-    "optimist": "0.2.x"
-  },
-  "devDependencies": {
-    "karma": "0.12.23",
-    "karma-chrome-launcher": "0.1.4",
-    "karma-commonjs": "0.0.12",
-    "karma-coverage": "0.2.6",
-    "karma-firefox-launcher": "0.1.3",
-    "karma-html-reporter": "0.2.4",
-    "karma-jasmine": "~0.1.0",
-    "karma-junit-reporter": "0.2.2",
-    "karma-phantomjs-launcher": "0.1.4",
-    "karma-safari-launcher": "0.1.1",
-    "phantomjs": "1.9.10"
-  },
-  "engine": "node >= 0.10.32"
+    "name": "DnD",
+    "version": "0.1.0",
+    "description": "A webapp utility for running D&D 4E",
+    "keywords": [ "D&D", "DnD", "karma", "phantomjs", "grunt" ],
+    "license": "MIT",
+    "author": {
+        "name": "Nathaniel Blumberg",
+        "email": "<nathanielblumberg@gmail.com>"
+    },
+    "files": [ "src/" ],
+    "scripts": {
+        "start": "node src/main/webapp/server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nblumberg/DnD"
+    },
+    "engines": {
+        "node": ">=0.10.32"
+    },
+    "dependencies": {
+        "colors": "0.x.x",
+        "express": "2.3.x",
+        "optimist": "0.2.x"
+    },
+    "devDependencies": {
+        "load-grunt-tasks": "0.6.0",
+        "time-grunt": "1.0.0",
+        "grunt": "0.4.5",
+        "grunt-contrib-clean": "0.6.0",
+        "grunt-contrib-concat": "0.5.0",
+        "grunt-contrib-connect": "0.8.0",
+        "grunt-contrib-csslint": "0.2.0",
+        "grunt-contrib-cssmin": "0.10.0",
+        "grunt-contrib-jshint": "0.10.0",
+        "grunt-contrib-uglify": "0.5.1",
+        "grunt-contrib-watch": "0.6.1",
+        "grunt-karma": "0.8.3",
+        "grunt-htmlhint": "0.4.1",
+        "grunt-html-validation": "0.1.18",
+        "grunt-newer": "0.7.0",
+        "matchdep": "0.3.0",
+        "karma": "0.12.23",
+        "karma-chrome-launcher": "0.1.4",
+        "karma-commonjs": "0.0.12",
+        "karma-coverage": "0.2.6",
+        "karma-firefox-launcher": "0.1.3",
+        "karma-html-reporter": "0.2.4",
+        "karma-html2js-preprocessor": "0.1.0",
+        "karma-jasmine": "0.1.5",
+        "karma-junit-reporter": "0.2.2",
+        "karma-phantomjs-launcher": "0.1.4",
+        "karma-safari-launcher": "0.1.1",
+        "karma-script-launcher": "0.1.0",
+        "grunt-hash": "0.5.0",
+        "grunt-distui-2js-str": "0.0.2",
+        "grunt-jasmine-html-from-karma-conf": "0.1.2",
+        "phantomjs": "1.9.10"
+    }
 }
