@@ -2,7 +2,7 @@
  * Created by nblumberg on 10/12/14.
  */
 
-(function() {
+(function(DnD) {
     "use strict";
 
     /* global jasmine, beforeEach, afterEach, describe, xdescribe, it, spyOn, expect, runs, waits, DistUI, DistUiUtils */
@@ -272,4 +272,4 @@
         });
 
     });
-})();
+})(window.DnD);

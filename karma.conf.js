@@ -130,7 +130,7 @@ module.exports = function(config) {
     specFiles = [
         "src/test/webapp/jasmine/spec/testUtilities.js",
         "src/test/webapp/jasmine/spec/creatureTestUtilities.js",
-        "src/test/webapp/jasmine/spec/**Test.js"
+        "src/test/webapp/jasmine/spec/**_spec.js"
     ];
 
     // list of files / patterns to load in the browser
