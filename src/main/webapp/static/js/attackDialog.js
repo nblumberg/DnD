@@ -3,8 +3,8 @@
 
     DnD.define(
         "Display.Dialog.Attack",
-        [ "window", "Display.Dialog", "jQuery", "out", "K", "Attack" ],
-        function(w, Dialog, jQuery, out, K, Attack) {
+        [ "window", "Display.Dialog", "jQuery", "out", "K", "Attack", "Implement" ],
+        function(w, Dialog, jQuery, out, K, Attack, Implement) {
             // CONSTRUCTOR & INITIALIZATION METHODS
 
             function AttackDialog(params) {
@@ -170,7 +170,7 @@
                                 continue;
                             }
                         }
-                        else if (needsImplement && !(items[ i ] instanceof DnD.Creature.Implement)) {
+                        else if (needsImplement && !(items[ i ] instanceof Implement)) {
                             continue;
                         }
                         $option = jQuery("<option/>").html(items[ i ].name).data("item", items[ i ]);

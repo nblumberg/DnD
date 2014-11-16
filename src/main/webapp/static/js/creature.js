@@ -167,7 +167,7 @@
                         if (!matchesKeywords(attackBonus)) {
                             continue;
                         }
-                        if (!matchesAttackerStatus(attackBonus)) {
+                        if (!matchesAttackerStatus.call(this, attackBonus)) {
                             continue;
                         }
                         if (!matchesFoeStatus(attackBonus)) {
