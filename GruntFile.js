@@ -240,20 +240,30 @@ module.exports = function (grunt) {
      * SERVING
      *************/
 
+    options.liveReloadPort = 35729;
     options.connect = {
         tests: {
             options: {
                 base: ".",
                 debug: false,
                 hostname: "localhost",
-                keepalive: true,
-                //livereload: true,
+                keepalive: false,
+                livereload: options.liveReloadPort,
                 // TODO: is it possible to open multiple tabs?
-                //                open: [ "https://localhost:8234/spec-runner.html", "https://localhost:8234/coverage/PhantomJS%201.9.7%20(Mac%20OS%20X)/js/index.html" ],
-                open: "https://localhost:8234/spec-runner.html",
+                //                open: [ "http://localhost:8234/spec-runner.html", "http://localhost:8234/coverage/PhantomJS%201.9.7%20(Mac%20OS%20X)/js/index.html" ],
+                //open: "http://localhost:8234/spec-runner.html",
                 port: 8234,
-                protocol: "https"
+                protocol: "http"
             }
+        }
+    };
+
+    options.open = {
+        coverage: {
+            path: "http://localhost:8234/coverage/PhantomJS%201.9.7%20(Mac%20OS%20X)/js/index.html"
+        },
+        specRunner: {
+            path: "http://localhost:8234/spec-runner.html"
         }
     };
 
@@ -278,6 +288,14 @@ module.exports = function (grunt) {
         dev: {
             files: [ "GruntFile.js", "karma.config.js", "<%= jsFiles %>", "<%= testFiles %>" ],
             tasks: [ "build", "specRunner" ]
+        },
+        specRunner: {
+            options: {
+                livereload: options.liveReloadPort,
+                spawn: false,
+                reload: true
+            },
+            files: [ "GruntFile.js", "karma.config.js", "<%= jsFiles %>", "<%= testFiles %>" ]
         }
     };
 
@@ -295,7 +313,18 @@ module.exports = function (grunt) {
 
     // debug mode
     grunt.registerTask("specRunner", [ "jasmine_html_from_karma_conf:specRunner" ]);
-    grunt.registerTask("debug", [ "jasmine_html_from_karma_conf:specRunner", "connect:tests" ]);
+    grunt.registerTask("debug", [ "jasmine_html_from_karma_conf:specRunner", "connect:tests", "open", "watch:specRunner" ]);
+//    grunt.registerTask("debug", "start web server for jasmine tests in browser", function() {
+//        grunt.task.run("specRunner");
+//
+//        grunt.event.once("connect.tests.listening", function(host, port) {
+//            var specRunnerUrl = "http://" + host + ":" + port + "/spec-runner.html";
+//            grunt.log.writeln("Jasmine specs available at: " + specRunnerUrl);
+//            require("open")(specRunnerUrl);
+//        });
+//
+//        grunt.task.run("connect:tests:keepalive");
+//    });
 
     // Generate unminified and minified, content checksum named .js files
     grunt.registerTask("build", (function() {
