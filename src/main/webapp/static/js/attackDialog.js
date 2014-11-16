@@ -3,8 +3,8 @@
 
     DnD.define(
         "Display.Dialog.Attack",
-        [ "window", "Display.Dialog", "jQuery", "out", "K", "Attack", "Implement" ],
-        function(w, Dialog, jQuery, out, K, Attack, Implement) {
+        [ "window", "Display.Dialog", "jQuery", "out", "K", "Attack", "Implement", "Weapon" ],
+        function(w, Dialog, jQuery, out, K, Attack, Implement, Weapon) {
             // CONSTRUCTOR & INITIALIZATION METHODS
 
             function AttackDialog(params) {
@@ -166,7 +166,7 @@
                     this.$weapons.html("");
                     for (i = 0; items && i < items.length; i++) {
                         if (needsWeapon && (isMelee === true || isRanged === true)) {
-                            if (!(items[ i ] instanceof DnD.Creature.Weapon) || (isMelee && !items[ i ].isMelee) || (isRanged && items[ i ].isMelee === true)) { // TODO: if ((items[ i ].isMelee && !isMelee) || (!items[ i ].isMelee && !isRanged)) {
+                            if (!(items[ i ] instanceof Weapon) || (isMelee && !items[ i ].isMelee) || (isRanged && items[ i ].isMelee === true)) { // TODO: if ((items[ i ].isMelee && !isMelee) || (!items[ i ].isMelee && !isRanged)) {
                                 continue;
                             }
                         }
