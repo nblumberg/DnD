@@ -108,6 +108,11 @@
                 }
             };
 
+            /**
+             *
+             * @param effects
+             * @returns {{mod: number, effects: Array, breakdown: string}}
+             */
             Attack.prototype.toHitModifiers = function(effects) {
                 var i, result;
                 this.__log("toHitModifiers", arguments);
@@ -197,6 +202,11 @@
             Attack.prototype.addItem = function(item, total, isCrit, isFumble) {
                 this.__log("addItem", arguments);
                 return this.rollItem(item, total, isCrit, isFumble);
+            };
+
+            Attack.prototype.hasKeyword = function(keyword) {
+                this.__log("hasKeyword", arguments);
+                return this.keywords && this.keywords.indexOf(keyword) !== -1;
             };
 
             Attack.prototype._anchorHtml = function() {

@@ -42,6 +42,24 @@
                 }
                 return returnIdIfNotFound ? id : null;
             };
+            Creature.base = {
+                name: "", level: 1, image: "../images/portraits/unknown.png",
+                hp: { total: 1 },
+                defenses: { ac: 10, fort: 10, ref: 10, will: 10 },
+                resistances: {},
+                immunities: [],
+                vulnerabilities: [],
+                savingThrows: 0,
+                init: 0,
+                speed: { walk: 6 },
+                abilities: { STR: 10, CON: 10, DEX: 10, INT: 10, WIS: 10, CHA: 10 },
+                skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 0, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                weapons: [],
+                implements: [],
+                healing: [],
+                attackBonuses: [],
+                attacks: []
+            };
 
 
             // NON-PUBLIC METHODS

@@ -164,7 +164,7 @@
                         temp = this.vulnerabilities[ type ];
                     }
                     for (i = 0; i < this.effects.length; i++) {
-                        if (this.effects[ i ].name.toLowerCase() === "vulnerable" && this.effects[ i ].type.toLowerCase() === type.toLowerCase()) {
+                        if (this.effects[ i ].name.toLowerCase() === "vulnerable" && typeof this.effects[ i ].type === "string" && this.effects[ i ].type.toLowerCase() === type.toLowerCase()) {
                             temp = Math.max(temp, this.effects[ i ].amount);
                         }
                     }
@@ -186,6 +186,10 @@
                             for (i = 0; i < type.length; i++) {
                                 if (this.resistances.hasOwnProperty(type[ i ])) {
                                     temp = Math.min(this.resistances[ type[ i ] ], temp);
+                                }
+                                else {
+                                    temp = Infinity;
+                                    break;
                                 }
                             }
                         }
@@ -463,6 +467,15 @@
 
             // NON-PUBLIC METHODS
 
+            /**
+             * Determines the final to hit value for an attack
+             * @param attack {Attack}
+             * @param item {Item}
+             * @param combatAdvantage {Boolean}
+             * @param [manualRolls {Object}]
+             * @returns {{roll: number, isAutomaticHit: boolean, isCrit: boolean, isFumble: boolean, conditional: {mod: number, effects: Array, breakdown: string}}}
+             * @private
+             */
             Actor.prototype._attackToHit = function(attack, item, combatAdvantage, manualRolls) {
                 var toHit;
                 this.__log("attackToHit", [ attack.name, item ? item.name : "undefined", combatAdvantage, manualRolls ]);
@@ -481,8 +494,8 @@
                     else {
                         toHit.roll = item ? attack.rollItem(item) : attack.roll(); // TODO: attack.meleeExtra vs. attack.rangdExtra when no item - how to determine isMelee?
                     }
-                    toHit.isCrit = attack.isCritical() && (!manualRolls || !manualRolls.attack || manualRolls.attack.isCritical);
-                    toHit.isFumble = attack.isFumble() && (!manualRolls || !manualRolls.attack || manualRolls.attack.isFumble);
+                    toHit.isCrit = attack.isCritical() || (manualRolls && manualRolls.attack ? manualRolls.attack.isCritical : false);
+                    toHit.isFumble = attack.isFumble() || (manualRolls && manualRolls.attack ? manualRolls.attack.isFumble : false);
                     if (!toHit.isCrit && !toHit.isFumble) {
                         toHit.conditional = attack.toHitModifiers(this.effects);
                         if (combatAdvantage) {
@@ -494,6 +507,15 @@
                 return toHit;
             };
 
+            /**
+             * Determines the final damage value(s) for an attack before they are applied to a particular target
+             * @param attack {Attack}
+             * @param item {Item}
+             * @param isCrit {Boolean}
+             * @param [manualRolls {Object}]
+             * @returns {{amount: number, missAmount: number, conditional: {mod: number, effects: Array, breakdown: string}, isManual: boolean}}
+             * @private
+             */
             Actor.prototype._attackDamage = function(attack, item, isCrit, manualRolls) {
                 var damage, i, temp;
                 this.__log("_attackDamage", [ attack.name, item ? item.name : "undefined", isCrit, manualRolls ]);
@@ -511,19 +533,26 @@
                         for (i = 0; i < attack.damage.length; i++) {
                             attack.damage[ i ].addItem(Math.round(manualRolls.damage / attack.damage.length), item, isCrit);
                         }
-                        if (attack.hasOwnProperty("miss")) {
-                            if (attack.miss.halfDamage) {
-                                for (i = 0; attack.hasOwnProperty("miss") && i < attack.miss.damage.length; i++) {
-                                    attack.miss.damage[ i ].addItem(Math.round(manualRolls.damage / attack.damage.length / 2), item, isCrit);
-                                }
-                            }
-                            else {
-                                attack.miss.damage.addItem(manualRolls.damage, item, false);
-                            }
-                        }
                     }
                     else {
                         attack.damage.addItem(manualRolls.damage, item, isCrit);
+                    }
+                    if (attack.hasOwnProperty("miss")) {
+                        if (attack.miss.halfDamage) {
+                            damage.missAmount = Math.round(manualRolls.damage / 2);
+                        }
+                        else if (attack.miss.hasOwnProperty("damage")) {
+                            if (isArray(attack.miss.damage)) {
+                                for (i = 0; i < attack.miss.damage.length; i++) {
+                                    damage.missAmount += Math.round(manualRolls.damage / attack.miss.damage.length);
+                                    attack.miss.damage[ i ].addItem(Math.round(manualRolls.damage / attack.miss.damage.length), item, false);
+                                }
+                            }
+                            else {
+                                damage.missAmount = manualRolls.damage;
+                                attack.miss.damage.addItem(manualRolls.damage, item, false);
+                            }
+                        }
                     }
                 }
                 else {
@@ -539,16 +568,10 @@
                     if (attack.hasOwnProperty("miss")) {
                         if (attack.miss.halfDamage) {
                             damage.missAmount = Math.floor(damage.amount / 2);
-                            if (isArray(attack.miss.damage)) {
-                                attack.miss.damage[0].addItem(damage.amount, item, false);
-                            }
-                            else {
-                                attack.miss.damage.addItem(damage.amount, item, false);
-                            }
                         }
                         else if (attack.miss.hasOwnProperty("damage")) {
                             if (isArray(attack.miss.damage)) {
-                                for (i = 0; i < attack.damage.length; i++) {
+                                for (i = 0; i < attack.miss.damage.length; i++) {
                                     damage.missAmount += attack.miss.damage[ i ].rollItem(item, false);
                                 }
                             }
@@ -577,8 +600,19 @@
                 return damage;
             };
 
+            /**
+             * Applies an attack to a particular target
+             * @param attack {Attack}
+             * @param item {Item}
+             * @param combatAdvantage {Boolean}
+             * @param target {Actor}
+             * @param toHit {Object} {{roll: number, isAutomaticHit: boolean, isCrit: boolean, isFumble: boolean, conditional: {mod: number, effects: Array, breakdown: string}}} See _attackToHit
+             * @param damage {Object} {{amount: number, missAmount: number, conditional: {mod: number, effects: Array, breakdown: string}, isManual: boolean}} See _attackDamage
+             * @returns {{hit: boolean, damage: Array}}
+             * @private
+             */
             Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage) {
-                var attackBonuses, i, attackBonus, toHitTarget, targetDamage, tmp, targetDefense, msg, result, entry;
+                var toHitTarget, targetDamage, i, targetDefense, msg, result, entry;
                 this.__log("_attackTarget", [ attack.name, item ? item.name : "undefined", combatAdvantage, target.name, toHit, damage ]);
 
                 targetDefense = null;
@@ -596,51 +630,7 @@
                     conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
                 };
 
-                attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
-                function applyBonusDamage(name, damageExpr, isMiss, halfDamage, isManual) {
-                    var damage, amount;
-                    damage = new Damage(typeof damageExpr === "number" ? "" + damageExpr : damageExpr);
-                    amount = halfDamage ? Math.floor(damage.roll() / 2) : damage.roll();
-                    if (!isManual) {
-                        if (isMiss) {
-                            targetDamage.missAmount += amount;
-                        }
-                        else {
-                            targetDamage.amount += amount;
-                            targetDamage.conditional.total += amount; // TODO: why is this on hit only?
-                        }
-                        targetDamage.conditional.mod += amount;
-                    }
-                    targetDamage.conditional.breakdown += (amount >= 0 ? " +" : "") + amount + " (" + name + ")";
-
-                }
-                for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
-                    attackBonus = attackBonuses[ i ];
-                    if (attackBonus.toHit) {
-                        if (!damage.isManual) {
-                            toHitTarget.roll += attackBonus.toHit;
-                            toHitTarget.conditional.mod += attackBonus.toHit;
-                        }
-                        toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" : "") + attackBonus.toHit + " (" + attackBonus.name + ")";
-                    }
-                    if (attackBonus.damage) {
-                        applyBonusDamage(attackBonus.name, attackBonus.damage, false, false, damage.isManual);
-                        if (attack.miss && targetDamage.missAmount) {
-                            if (attack.miss.halfDamage) {
-                                applyBonusDamage(attackBonus.name, attackBonus.damage, true, true, damage.isManual);
-                            }
-                            else {
-                                applyBonusDamage(attackBonus.name, attackBonus.damage, true, false, damage.isManual);
-                            }
-                        }
-                    }
-                    if (attackBonus.effects) {
-                        targetDamage.effects = targetDamage.effects.concat(attackBonus.effects);
-                    }
-                    if (attackBonus.miss && attackBonus.miss.effects) {
-                        targetDamage.missEffects = targetDamage.missEffects.concat(attackBonus.miss.effects);
-                    }
-                }
+                this._applyAttackBonuses(attack, damage, item, target, combatAdvantage, toHitTarget, targetDamage);
 
                 // Calculate hit (for this target)
                 if (!toHit.isAutomaticHit && !toHit.isFumble && !toHit.isCrit) {
@@ -648,18 +638,7 @@
                     targetDefense = target.defenses[ attack.defense.toLowerCase() ] + target.defenseModifier(attack.isMelee);
                 }
 
-                // Apply hit or miss damage/effects
-                function calcDamage(target, item, damage, effects, conditional) {
-                    var type, amount;
-                    type = damage.type || (item ? item.type : undefined); // if item imposes a damage type on untyped damage
-                    targetDamage.conditional.text = (!damage.type && type ? " " + type : "");
-                    msg += damage.anchor(conditional);
-                    amount = damage.getLastRoll().total + (conditional ? conditional.mod : 0);
-                    tmp = target.takeDamage(this, amount, type, effects);
-                    msg += tmp.msg;
-                    result.damage.push({ amount: tmp.damage, type: type });
-                }
-                if (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense) {
+                if (!toHit.isFumble && (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense)) {
                     // Hit
                     result.hit = true;
                     msg = "Hit by " + this.name + "'s " + attack.anchor(toHitTarget.conditional) + " for ";
@@ -668,11 +647,11 @@
                             if (i !== 0) {
                                 msg += " and ";
                             }
-                            calcDamage.call(this, target, item, attack.damage[ i ], i === attack.damage.length - 1 ? targetDamage.effects : null, i === 0 ? targetDamage.conditional : null, false);
+                            msg += this._applyDamageAndEffects(target, item, attack.damage[ i ], i === attack.damage.length - 1 ? targetDamage.effects : null, targetDamage.conditional, i === 0, msg, result);
                         }
                     }
                     else {
-                        calcDamage.call(this, target, item, attack.damage, targetDamage.effects, targetDamage.conditional, false);
+                        msg += this._applyDamageAndEffects(target, item, attack.damage, targetDamage.effects, targetDamage.conditional, true, msg, result);
                     }
                 }
                 else {
@@ -685,11 +664,11 @@
                                 if (i !== 0) {
                                     msg += " and ";
                                 }
-                                calcDamage.call(this, target, item, attack.miss.damage[ i ], i === attack.miss.damage.length - 1 ? targetDamage.missEffects : null, i === 0 ? targetDamage.conditional : null, true);
+                                msg += this._applyDamageAndEffects(target, item, attack.miss.damage[ i ], i === attack.miss.damage.length - 1 ? targetDamage.missEffects : null, targetDamage.conditional, i === 0, msg, result);
                             }
                         }
                         else {
-                            calcDamage.call(this, target, item, attack.miss.damage, targetDamage.missEffects, targetDamage.conditional, true);
+                            msg += this._applyDamageAndEffects(target, item, attack.miss.damage, targetDamage.missEffects, targetDamage.conditional, true, msg, result);
                         }
                         msg += " on a miss";
                         // TODO: miss effects without damage
@@ -704,6 +683,82 @@
                 out.console.info(target.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1));
 
                 return result;
+            };
+
+
+            /**
+             * Helper method for _attackTarget() that modifies its internal data structures according to any attack bonuses that apply to the attack
+             * @param attack {Attack} The Attack being made against target
+             * @param damage {Object} The Damage being made against target
+             * @param item {Implement} The Implement/Weapon used to make attack against target
+             * @param target {Actor} The Actor being targeted by attack
+             * @param combatAdvantage {Boolean} Whether the attacker has combat advantage against target
+             * @param toHitTarget {{roll: number, conditional: { mod: number, breakdown: string }}}
+             * @param targetDamage {{amount: number,effects: Array, missAmount: number, missEffects: Array, conditional: { mod: number, total: number, breakdown: string }}}
+             * @private
+             */
+            Actor.prototype._applyAttackBonuses = function(attack, damage, item, target, combatAdvantage, toHitTarget, targetDamage) {
+                var attackBonuses, i, attackBonus, amount;
+
+                attackBonuses = this._attackBonuses(attack, item, target, combatAdvantage);
+                for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
+                    attackBonus = attackBonuses[ i ];
+                    if (attackBonus.toHit) {
+                        if (!damage.isManual) {
+                            toHitTarget.roll += attackBonus.toHit;
+                            toHitTarget.conditional.mod += attackBonus.toHit;
+                        }
+                        toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" + attackBonus.toHit + " (" + attackBonus.name + ")" : "");
+                    }
+                    if (attackBonus.damage) {
+                        amount = (new Damage(typeof attackBonus.damage === "number" ? "" + attackBonus.damage : attackBonus.damage)).roll();
+                        if (!damage.isManual) {
+                            targetDamage.amount += amount;
+                            targetDamage.conditional.total += amount; // TODO: why is this on hit only?
+                            targetDamage.conditional.mod += amount;
+                        }
+                        targetDamage.conditional.breakdown += (amount >= 0 ? " +" + amount + " (" + attackBonus.name + ")" : "");
+                        if (!damage.isManual && attack.miss && targetDamage.missAmount) { // TODO: remove targetDamage.missAmount from this line?
+                            if (attack.miss.halfDamage) {
+                                targetDamage.missAmount += Math.floor(amount / 2);
+                            }
+                            else {
+                                targetDamage.missAmount += amount;
+                            }
+                        }
+                    }
+                    if (attackBonus.effects) {
+                        targetDamage.effects = targetDamage.effects.concat(attackBonus.effects);
+                    }
+                    if (attackBonus.miss && attackBonus.miss.effects) {
+                        targetDamage.missEffects = targetDamage.missEffects.concat(attackBonus.miss.effects);
+                    }
+                }
+            };
+
+            /**
+             * Applies hit or miss damage and effects of an attack to a target
+             * @param target {Actor} The Actor being attacked
+             * @param item {Implement} The Implement/Weapon being used for the Attack
+             * @param damage {Damage} The Damage of the Attack being applied
+             * @param effects
+             * @param conditional
+             * @param passOnConditional
+             * @param result {{damage: Array}}
+             * @returns string The modified attack message
+             * @private
+             */
+            Actor.prototype._applyDamageAndEffects = function(target, item, damage, effects, conditional, passOnConditional, result) {
+                var type, amount, msg, tmp;
+                type = damage.type || (item ? item.type : undefined); // if item imposes a damage type on untyped damage
+                conditional.text = (!damage.type && type ? " " + type : "");
+                msg = "";
+                msg += damage.anchor(passOnConditional ? conditional : undefined);
+                amount = damage.getLastRoll().total + (passOnConditional ? conditional.mod : 0);
+                tmp = target.takeDamage(this, amount, type, effects);
+                msg += tmp.msg;
+                result.damage.push({ amount: tmp.damage, type: type });
+                return msg;
             };
 
 
