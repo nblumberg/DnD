@@ -2304,7 +2304,7 @@
                             usage: {
                                 frequency: "At-Will"
                             },
-                            toHit: 12,
+                            toHit: "automatic",
                             defense: "AC",
                             damage: {
                                 amount: "5",

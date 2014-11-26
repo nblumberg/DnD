@@ -842,16 +842,15 @@
                         expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 3 ]).toEqual(jasmine.any(Array));
                         expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 4 ]).toEqual(jasmine.any(Object));
                         expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 5 ]).toEqual(true);
-                        expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual("Hit by " + actor.name + "'s ATTACK ANCHOR for ");
-                        expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 7 ]).toEqual({ hit: true, damage: [] });
+                        expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual({ hit: true, damage: [] });
                         actor._applyDamageAndEffects.reset();
 
                         actor._attackTarget(attack, item, false, target, toHit, damage);
-                        expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage, jasmine.any(Array), jasmine.any(Object), true, "Hit by " + actor.name + "'s ATTACK ANCHOR for ", { hit: true, damage: [] });
+                        expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage, jasmine.any(Array), jasmine.any(Object), true, { hit: true, damage: [] });
                         actor._applyDamageAndEffects.reset();
 
                         actor._attackTarget(attack, item, true, target, toHit, damage);
-                        expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage, jasmine.any(Array), jasmine.any(Object), true, "Hit by " + actor.name + "'s ATTACK ANCHOR for ", { hit: true, damage: [] });
+                        expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage, jasmine.any(Array), jasmine.any(Object), true, { hit: true, damage: [] });
                     });
                     describe("and the attack has multiple damages", function() {
                         beforeEach(function() {
@@ -866,19 +865,18 @@
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 3 ]).toEqual(null);
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 4 ]).toEqual(jasmine.any(Object));
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 5 ]).toEqual(true);
-                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual("Hit by " + actor.name + "'s ATTACK ANCHOR for ");
-                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 7 ]).toEqual({ hit: true, damage: [] });
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, null, attack.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Hit by " + actor.name + "'s ATTACK ANCHOR for DAMAGE ANCHOR and ", { hit: true, damage: [] });
+                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual({ hit: true, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, null, attack.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: true, damage: [] });
                             actor._applyDamageAndEffects.reset();
 
                             actor._attackTarget(attack, item, false, target, toHit, damage);
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 0 ], null, jasmine.any(Object), true, "Hit by " + actor.name + "'s ATTACK ANCHOR for ", { hit: true, damage: [] });
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Hit by " + actor.name + "'s ATTACK ANCHOR for DAMAGE ANCHOR and ", { hit: true, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 0 ], null, jasmine.any(Object), true, { hit: true, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: true, damage: [] });
                             actor._applyDamageAndEffects.reset();
 
                             actor._attackTarget(attack, item, true, target, toHit, damage);
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 0 ], null, jasmine.any(Object), true, "Hit by " + actor.name + "'s ATTACK ANCHOR for ", { hit: true, damage: [] });
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Hit by " + actor.name + "'s ATTACK ANCHOR for DAMAGE ANCHOR and ", { hit: true, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 0 ], null, jasmine.any(Object), true, { hit: true, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: true, damage: [] });
                         });
                     });
                     it("it should add the hit to the target's history", function() {
@@ -961,16 +959,15 @@
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 3 ]).toEqual(jasmine.any(Array));
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 4 ]).toEqual(jasmine.any(Object));
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 5 ]).toEqual(true);
-                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual("Missed by " + actor.name + "'s ATTACK ANCHOR but takes ");
-                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 7 ]).toEqual({ hit: false, damage: [] });
+                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual({ hit: false, damage: [] });
                             actor._applyDamageAndEffects.reset();
 
                             actor._attackTarget(attack, item, false, target, toHit, damage);
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage, jasmine.any(Array), jasmine.any(Object), true, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes ", { hit: false, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage, jasmine.any(Array), jasmine.any(Object), true, { hit: false, damage: [] });
                             actor._applyDamageAndEffects.reset();
 
                             actor._attackTarget(attack, item, true, target, toHit, damage);
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage, jasmine.any(Array), jasmine.any(Object), true, "Hit by " + actor.name + "'s ATTACK ANCHOR for ", { hit: true, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage, jasmine.any(Array), jasmine.any(Object), true, { hit: true, damage: [] });
                         });
                         describe("and the attack has multiple miss damages", function() {
                             beforeEach(function() {
@@ -985,9 +982,8 @@
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 3 ]).toEqual(null);
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 4 ]).toEqual(jasmine.any(Object));
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 5 ]).toEqual(true);
-                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual("Missed by " + actor.name + "'s ATTACK ANCHOR but takes ");
-                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 7 ]).toEqual({ hit: false, damage: [] });
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, null, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes DAMAGE ANCHOR and ", { hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual({ hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, null, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: false, damage: [] });
                                 actor._applyDamageAndEffects.reset();
 
                                 actor._attackTarget(attack, item, false, target, toHit, damage);
@@ -997,14 +993,13 @@
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 3 ]).toEqual(null);
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 4 ]).toEqual(jasmine.any(Object));
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 5 ]).toEqual(true);
-                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual("Missed by " + actor.name + "'s ATTACK ANCHOR but takes ");
-                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 7 ]).toEqual({ hit: false, damage: [] });
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes DAMAGE ANCHOR and ", { hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual({ hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: false, damage: [] });
                                 actor._applyDamageAndEffects.reset();
 
                                 actor._attackTarget(attack, item, true, target, toHit, damage);
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 0 ], null, jasmine.any(Object), true, "Hit by " + actor.name + "'s ATTACK ANCHOR for ", { hit: true, damage: [] });
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Hit by " + actor.name + "'s ATTACK ANCHOR for DAMAGE ANCHOR and ", { hit: true, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 0 ], null, jasmine.any(Object), true, { hit: true, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: true, damage: [] });
                             });
                         });
                     });
@@ -1085,16 +1080,15 @@
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 3 ]).toEqual(jasmine.any(Array));
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 4 ]).toEqual(jasmine.any(Object));
                             expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 5 ]).toEqual(true);
-                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual("Missed by " + actor.name + "'s ATTACK ANCHOR but takes ");
-                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 7 ]).toEqual({ hit: false, damage: [] });
+                            expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual({ hit: false, damage: [] });
                             actor._applyDamageAndEffects.reset();
 
                             actor._attackTarget(attack, item, false, target, toHit, damage);
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage, jasmine.any(Array), jasmine.any(Object), true, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes ", { hit: false, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage, jasmine.any(Array), jasmine.any(Object), true, { hit: false, damage: [] });
                             actor._applyDamageAndEffects.reset();
 
                             actor._attackTarget(attack, item, true, target, toHit, damage);
-                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage, jasmine.any(Array), jasmine.any(Object), true, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes ", { hit: false, damage: [] });
+                            expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage, jasmine.any(Array), jasmine.any(Object), true, { hit: false, damage: [] });
                         });
                         describe("and the attack has multiple miss damages", function() {
                             beforeEach(function() {
@@ -1109,19 +1103,18 @@
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 3 ]).toEqual(null);
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 4 ]).toEqual(jasmine.any(Object));
                                 expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 5 ]).toEqual(true);
-                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual("Missed by " + actor.name + "'s ATTACK ANCHOR but takes ");
-                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 7 ]).toEqual({ hit: false, damage: [] });
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, null, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes DAMAGE ANCHOR and ", { hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects.calls[ 0 ].args[ 6 ]).toEqual({ hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, null, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: false, damage: [] });
                                 actor._applyDamageAndEffects.reset();
 
                                 actor._attackTarget(attack, item, false, target, toHit, damage);
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 0 ], null, jasmine.any(Object), true, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes ", { hit: false, damage: [] });
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes DAMAGE ANCHOR and ", { hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 0 ], null, jasmine.any(Object), true, { hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: false, damage: [] });
                                 actor._applyDamageAndEffects.reset();
 
                                 actor._attackTarget(attack, item, true, target, toHit, damage);
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 0 ], null, jasmine.any(Object), true, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes ", { hit: false, damage: [] });
-                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, "Missed by " + actor.name + "'s ATTACK ANCHOR but takes DAMAGE ANCHOR and ", { hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 0 ], null, jasmine.any(Object), true, { hit: false, damage: [] });
+                                expect(actor._applyDamageAndEffects).toHaveBeenCalledWith(target, item, attack.miss.damage[ 1 ], jasmine.any(Array), jasmine.any(Object), false, { hit: false, damage: [] });
                             });
                         });
 

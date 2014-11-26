@@ -647,11 +647,11 @@
                             if (i !== 0) {
                                 msg += " and ";
                             }
-                            msg += this._applyDamageAndEffects(target, item, attack.damage[ i ], i === attack.damage.length - 1 ? targetDamage.effects : null, targetDamage.conditional, i === 0, msg, result);
+                            msg += this._applyDamageAndEffects(target, item, attack.damage[ i ], i === attack.damage.length - 1 ? targetDamage.effects : null, targetDamage.conditional, i === 0, result);
                         }
                     }
                     else {
-                        msg += this._applyDamageAndEffects(target, item, attack.damage, targetDamage.effects, targetDamage.conditional, true, msg, result);
+                        msg += this._applyDamageAndEffects(target, item, attack.damage, targetDamage.effects, targetDamage.conditional, true, result);
                     }
                 }
                 else {
@@ -664,11 +664,11 @@
                                 if (i !== 0) {
                                     msg += " and ";
                                 }
-                                msg += this._applyDamageAndEffects(target, item, attack.miss.damage[ i ], i === attack.miss.damage.length - 1 ? targetDamage.missEffects : null, targetDamage.conditional, i === 0, msg, result);
+                                msg += this._applyDamageAndEffects(target, item, attack.miss.damage[ i ], i === attack.miss.damage.length - 1 ? targetDamage.missEffects : null, targetDamage.conditional, i === 0, result);
                             }
                         }
                         else {
-                            msg += this._applyDamageAndEffects(target, item, attack.miss.damage, targetDamage.missEffects, targetDamage.conditional, true, msg, result);
+                            msg += this._applyDamageAndEffects(target, item, attack.miss.damage, targetDamage.missEffects, targetDamage.conditional, true, result);
                         }
                         msg += " on a miss";
                         // TODO: miss effects without damage
