@@ -114,6 +114,7 @@
             ActorCard.prototype.updateConditions = function() {
                 var i, effect, total;
                 // Clear
+                this.conditions = [];
                 this.subPanel.$effects.children().remove();
                 // Count conditions (including children of "multiple" effects) for sizing
                 total = 0;

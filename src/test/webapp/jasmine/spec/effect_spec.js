@@ -66,6 +66,11 @@
                                     "Template Effect Child 1",
                                     "Template Effect Child 2",
                                     "Template Effect Child 3"
+                                ],
+                                afterEffects: [
+                                    "Template After Effect 1",
+                                    "Template After Effect 2",
+                                    "Template After Effect 3"
                                 ]
                             };
                             effect = new Effect(params);
@@ -92,6 +97,16 @@
                                 for (i = 0; i < effect.children.length; i++) {
                                     expect(effect.children[ i ] instanceof DnD.Effect).toBe(true);
                                     expect(effect.children[ i ].name).toEqual("Template Effect Child " + (i + 1));
+                                }
+                            }).bind(this, effect));
+
+                            Test.hasNonEmptyArrayProperty(effect, "afterEffects", extra);
+                            it("afterEffects: [ \"Template After Effect 1\", \"Template After Effect 2\", \"Template After Effect 3\" ] [" + extra + "]", (function(effect) {
+                                var i;
+                                expect(effect.afterEffects.length).toEqual(3);
+                                for (i = 0; i < effect.afterEffects.length; i++) {
+                                    expect(effect.afterEffects[ i ] instanceof DnD.Effect).toBe(true);
+                                    expect(effect.afterEffects[ i ].name).toEqual("Template After Effect " + (i + 1));
                                 }
                             }).bind(this, effect));
                         });

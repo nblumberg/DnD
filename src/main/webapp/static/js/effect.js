@@ -65,8 +65,12 @@
             Effect.id = 1;
             Effect.effects = {};
 
+            /**
+             * Removes an Effect from its target and imposes any after effects
+             * @returns {string} If the Effect imposes after effects, this method returns a message of the form ", suffers after effect X, Y, Z"
+             */
             Effect.prototype.remove = function() {
-                var i;
+                var i, msg;
                 for (i = 0; this.children && i < this.children.length; i++) {
                     this.children[ i ].remove();
                 }
@@ -82,16 +86,30 @@
                         this.attacker.imposedEffects.splice(i, 1);
                     }
                 }
+                msg = "";
+                for (i = 0; i < this.afterEffects.length; i++) {
+                    msg += ", " + (msg ? "" : "suffers after effect ") + this.afterEffects[ i ].toString();
+                    this.target.addEffect(this.afterEffects[ i ], this.attacker);
+                }
+                return msg;
             };
 
+            /**
+             * Counts down a duration Effect until it expires
+             * @param round {Number}
+             * @param isTargetTurn {Boolean}
+             * @param isTurnStart {Boolean}
+             * @returns {boolean | string} Returns a truthy value if the Effect expired and was removed otherwise a falsy value, if removed and it imposed after effects it returns the message from Effect.remove()
+             */
             Effect.prototype.countDown = function(round, isTargetTurn, isTurnStart) {
+                var retVal = false;
                 if (isTargetTurn && (this.duration === Effect.DURATION_START_TARGET_NEXT || this.duration === Effect.DURATION_END_TARGET_NEXT)) {
                     if (!this.isNextTurn && round > this.startRound) {
                         this.isNextTurn = true;
                     }
                     if (this.isNextTurn && ((isTurnStart && this.duration === Effect.DURATION_START_TARGET_NEXT) || (!isTurnStart && this.duration === Effect.DURATION_END_TARGET_NEXT))) {
-                        this.remove();
-                        return true;
+                        retVal = this.remove();
+                        return retVal || true;
                     }
                 }
                 else if (!isTargetTurn && (this.duration === Effect.DURATION_START_ATTACKER_NEXT || this.duration === Effect.DURATION_END_ATTACKER_NEXT)) {
@@ -99,11 +117,11 @@
                         this.isNextTurn = true;
                     }
                     if (this.isNextTurn && ((isTurnStart && this.duration === Effect.DURATION_START_ATTACKER_NEXT) || (!isTurnStart || this.duration === Effect.DURATION_END_ATTACKER_NEXT))) {
-                        this.remove();
-                        return true;
+                        retVal = this.remove();
+                        return retVal || true;
                     }
                 }
-                return false;
+                return retVal;
             };
 
             Effect.prototype.toString = function() {

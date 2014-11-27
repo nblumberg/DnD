@@ -229,22 +229,7 @@
                 }
                 if (effects && effects.length) {
                     for (i = 0; i < effects.length; i++) {
-                        // Only one Marked at a time
-                        if (effects[ i ].name.toLowerCase() === "marked") {
-                            for (j = 0; j < this.effects.length; j++) {
-                                if (this.effects[ j ].name.toLowerCase() === "marked") {
-                                    this.effects[ j ].remove();
-                                    break;
-                                }
-                            }
-                        }
-                        effect = new Effect(jQuery.extend({}, effects[ i ].raw ? effects[ i ].raw() : effects[ i ], { target: this, attacker: attacker, round: this.history._round }));
-                        attacker.imposedEffects.push(effect);
-                        this.effects.push(effect);
-                        if (effect.hasOwnProperty("duration") && (effect.duration === "startAttackerNext" || effect.duration === "endAttackerNext")) {
-                            effect.isNextTurn = false;
-                        }
-                        msg += ", " + effect.toString();
+                        msg += ", " + this.addEffect(effects[ i ], attacker).toString();
                     }
                 }
                 this.hp.current -= damage;
@@ -261,6 +246,32 @@
                 };
 
                 return result;
+            };
+
+            /**
+             * Adds an Effect to the Actor
+             * @param effect {Effect} The Effect to add
+             * @param attacker {Actor} The Actor imposing the Effect
+             * @returns {Effect} The added Effect
+             */
+            Actor.prototype.addEffect = function(effect, attacker) {
+                var i;
+                // Only one Marked at a time
+                if (effect.name.toLowerCase() === "marked") {
+                    for (i = 0; i < this.effects.length; i++) {
+                        if (this.effects[ i ].name.toLowerCase() === "marked") {
+                            this.effects[ i ].remove();
+                            break;
+                        }
+                    }
+                }
+                effect = new Effect(jQuery.extend({}, effect.raw ? effect.raw() : effect, { target: this, attacker: attacker, round: this.history._round }));
+                attacker.imposedEffects.push(effect);
+                this.effects.push(effect);
+                if (effect.hasOwnProperty("duration") && (effect.duration === "startAttackerNext" || effect.duration === "endAttackerNext")) {
+                    effect.isNextTurn = false;
+                }
+                return effect;
             };
 
             Actor.prototype.startTurn = function() {
@@ -286,9 +297,10 @@
                 }.bind(this);
 
                 handleEffect = function(effect) {
-                    var i;
-                    if (effect.countDown(this.history._round, true, true)) {
-                        this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: effect.name + " effect expired" }));
+                    var result, i;
+                    result = effect.countDown(this.history._round, true, true);
+                    if (result) {
+                        this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: effect.name + " effect expired" + (typeof result === "string" ? result : "") }));
                     }
 
                     ongoingDamage(effect);
@@ -300,9 +312,10 @@
                 }.bind(this);
 
                 handleImposedEffect = function(effect) {
-                    var i;
-                    if (effect.countDown(this.history._round, false, true)) {
-                        effect.target.history.add(new HistoryEntry({ round: effect.target.history._round, subject: effect.target, message: effect.name + " effect expired" }));
+                    var result, i;
+                    result = effect.countDown(this.history._round, false, true);
+                    if (result) {
+                        effect.target.history.add(new HistoryEntry({ round: effect.target.history._round, subject: effect.target, message: effect.name + " effect expired" + (typeof result === "string" ? result : "") }));
                     }
                     if (effect.children && effect.children.length) {
                         for (i = 0; i < effect.children.length; i++) {
@@ -353,9 +366,10 @@
                 }
 
                 handleEffect = function(effect) {
-                    var i, savingThrow, savingThrowRoll, ae, attacker;
-                    if (effect.countDown(this.history._round, true, false)) {
-                        this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: effect.name + " effect expired" }));
+                    var result, i, savingThrow, savingThrowRoll, msg, ae, attacker;
+                    result = effect.countDown(this.history._round, true, false);
+                    if (result) {
+                        this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: effect.name + " effect expired" + (typeof result === "string" ? result : "") }));
                     }
 
                     if (effect.saveEnds) {
@@ -365,23 +379,11 @@
                             return;
                         }
                         savingThrowRoll = savingThrow.roll();
+                        msg = savingThrow.anchor();
                         if (savingThrowRoll >= 10) {
-                            effect.remove();
+                            msg += effect.remove();
                         }
-                        this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: savingThrow.anchor() }));
-                        if (effect.afterEffects && effect.afterEffects.length) {
-                            for (i = 0; i < effect.afterEffects.length; i++) {
-                                attacker = effect.afterEffects[ i ].attacker;
-                                ae = new Effect(jQuery.extend({}, effect.afterEffects[ i ], { target: this, attacker: attacker, round: this.history._round }));
-                                if (attacker) {
-                                    attacker.imposedEffects.push(ae);
-                                }
-                                this.effects.push(ae);
-                                if (ae.hasOwnProperty("duration") && (ae.duration === "startAttackerNext" || ae.duration === "endAttackerNext")) {
-                                    ae.isNextTurn = false;
-                                }
-                            }
-                        }
+                        this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: msg }));
                     }
 
                     if (effect.children && effect.children.length) {
@@ -392,9 +394,10 @@
                 }.bind(this);
 
                 handleImposedEffect = function(effect) {
-                    var i;
-                    if (effect.countDown(this.history._round, false, false)) {
-                        effect.target.history.add(new HistoryEntry({ round: effect.target.history._round, subject: effect.target, message: effect.name + " effect expired" }));
+                    var i, result;
+                    result = effect.countDown(this.history._round, false, false);
+                    if (result) {
+                        effect.target.history.add(new HistoryEntry({ round: effect.target.history._round, subject: effect.target, message: effect.name + " effect expired" + (typeof result === "string" ? result : "") }));
                     }
                     if (effect.children && effect.children.length) {
                         for (i = 0; i < effect.children.length; i++) {
@@ -415,8 +418,8 @@
                     var savingThrow, msg;
                     savingThrow = new SavingThrow({ effect: effect });
                     savingThrow.add(20);
-                    effect.remove();
                     msg = savingThrow.anchor();
+                    msg += effect.remove();
                     this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: msg }));
                 }.bind(this);
                 fail = function(effect) {

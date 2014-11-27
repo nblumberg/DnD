@@ -437,6 +437,66 @@
                         { name: "Firecore Breach", usage: { frequency: "Daily" }, target: { area: "close burst", size: 3 }, toHit: 15, defense: "Ref", damage: { amount: "4d10+6", type: "fire" }, keywords: [ "close burst", "fire" ] }
                     ]
                 },
+                "Chillreaver": {
+                    name: "Chillreaver", level: 17, image: "../images/portraits/chillreaver.png",
+                    hp: { total: 845 },
+                    defenses: { ac: 33, fort: 31, ref: 29, will: 29 },
+                    resistances: { cold: 25, poison: 10 },
+                    savingThrows: 5,
+                    actionPoints: 2,
+                    init: 13, speed: { walk: 8, fly: 8 },
+                    abilities: { STR: 16, CON: 23, DEX: 20, INT: 5, WIS: 20, CHA: 12 },
+                    skills: { acrobatics: 0, arcana: 15, athletics: 24, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 17, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Bite", usage: { frequency: "At-Will" }, target: { range: 3 }, toHit: 23, defense: "AC", damage: [ "2d6+7", { amount: "2d6", type: "cold" } ], keywords: [ "melee", "basic", "cold" ] },
+                        { name: "Claw", usage: { frequency: "At-Will" }, target: { range: 3 }, toHit: 23, defense: "AC", damage: "2d4+7", keywords: [ "melee", "basic" ] },
+                        {
+                            name: "Deep Freeze",
+                            usage: { frequency: "Recharge", recharge: 6 }, target: { range: 10 },
+                            toHit: 22, defense: "Fort",
+                            damage: { amount: "2d6+7", type: "cold" },
+                            effects: [
+                                { name: "multiple", saveEnds: true, children: [
+                                    { name: "ongoing damage", type: "cold", amount: 10 },
+                                    { name: "immobilized" },
+                                    { name: "dazed" }
+                                    ],
+                                    afterEffects: [ { name: "slowed", duration: "endAttackerNext" } ]
+                                }
+                            ],
+                            keywords: [ "ranged", "cold" ]
+                        },
+                        {
+                            name: "Breath Weapon",
+                            usage: { frequency: "Recharge", recharge: 6 }, target: { area: "close blast", size: 5 },
+                            toHit: 21, defense: "Ref",
+                            damage: { amount: "6d6+7", type: "cold" },
+                            effects: [
+                                { name: "multiple", saveEnds: true, children: [
+                                    { name: "immobilized" },
+                                    { name: "dazed" }
+                                    ],
+                                    afterEffects: [ { name: "slowed", duration: "endAttackerNext" } ]
+                                }
+                            ],
+                            keywords: [ "ranged", "cold", "breath", "close blast" ]
+                        },
+                        {
+                            name: "Frightful Presence",
+                            usage: { frequency: "Encounter" }, target: { area: "close burst", size: 10, enemiesOnly: true },
+                            toHit: 21, defense: "Will",
+                            damage: "0",
+                            effects: [
+                                {
+                                    name: "stunned",
+                                    duration: "endAttackerNext",
+                                    afterEffects: [ { name: "penalty", type: "attacks", amount: -2, saveEnds: true } ]
+                                }
+                            ],
+                            keywords: [ "ranged", "fear", "close burst" ]
+                        }
+                    ]
+                },
                 "Cyclops Guard": {
                     name: "Cyclops Guard", level: 14, image: "../images/portraits/cyclops.jpg",
                     hp: { total: 1 },
@@ -665,20 +725,38 @@
                     skills: { acrobatics: 0, arcana: 0, athletics: 16, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 17, religion: 0, stealth: 18, streetwise: 0, thievery: 0 },
                     attacks: [
                         { name: "Icy Spear", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: 20, defense: "AC", damage: { amount: "1d10+6", type: "cold" }, keywords: [ "melee", "basic", "cold", "weapon" ] },
-                        { name: "Icy Arrow", usage: { frequency: "At-Will" }, target: { range: 20 }, toHit: 22, defense: "AC", damage: { amount: "1d12+8", type: "cold" }, effects: [
-                            { name: "Slowed", duration: "endAttackerNext" }
-                        ], keywords: [ "ranged", "basic", "cold", "weapon" ] },
-                        { name: "Chillshards", usage: { frequency: "Recharge", recharge: 5 }, target: { area: "burst", size: 1, range: 20 }, toHit: 20, defense: "Fort", damage: { amount: "1d12+8", type: "cold" }, effects: [
-                            { name: "Slowed", duration: "endAttackerNext", afterEffects: [
-                                { name: "Slowed", duration: "endAttackerNext" }
-                            ] },
-                            { name: "No immediate or opportunity actions", duration: "endAttackerNext" }
-                        ], keywords: [ "ranged", "cold", "weapon" ] },
-                        { name: "Tundra Hunter", usage: { frequency: "Recharge", recharge: "bloodied" }, toHit: "automatic", defense: "AC", damage: "0", effects: [
-                            { name: "Vulnerable", amount: 10, type: "cold", saveEnds: true, afterEffects: [
-                                { name: "Vulnerable", amount: 5, type: "cold", saveEnds: true }
-                            ] }
-                        ], keywords: [ "cold" ] }
+                        { name: "Icy Arrow", usage: { frequency: "At-Will" }, target: { range: 20 }, toHit: 22, defense: "AC", damage: { amount: "1d12+8", type: "cold" }, effects: [ { name: "Slowed", duration: "endAttackerNext" } ], keywords: [ "ranged", "basic", "cold", "weapon" ] },
+                        {
+                            name: "Chillshards",
+                            usage: { frequency: "Recharge", recharge: 5 }, target: { area: "burst", size: 1, range: 20 },
+                            toHit: 20, defense: "Fort",
+                            damage: { amount: "1d12+8", type: "cold" },
+                            effects: [
+                                {
+                                    name: "Slowed",
+                                    duration: "endAttackerNext",
+                                    afterEffects: [
+                                        { name: "Slowed", duration: "endAttackerNext" }
+                                    ]
+                                },
+                                { name: "No immediate or opportunity actions", duration: "endAttackerNext" }
+                            ],
+                            keywords: [ "ranged", "cold", "weapon" ]
+                        },
+                        {
+                            name: "Tundra Hunter",
+                            usage: { frequency: "Recharge", recharge: "bloodied" },
+                            toHit: "automatic", defense: "AC",
+                            damage: "0",
+                            effects: [
+                                {
+                                    name: "Vulnerable", amount: 10, type: "cold", saveEnds: true, afterEffects: [
+                                        { name: "Vulnerable", amount: 5, type: "cold", saveEnds: true }
+                                    ]
+                                }
+                            ],
+                            keywords: [ "cold" ]
+                        }
                     ]
                 },
                 "Gallia": {
@@ -829,6 +907,82 @@
                         { name: "Howl", usage: { frequency: "At-Will" }, range: "blast 3", toHit: 16, defense: "Fort", damage: { amount: "1d6+6", type: "thunder" }, keywords: [ "ranged" ] },
                         { name: "Shriek of Pain", usage: { frequency: "Encounter" }, range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+6", type: "thunder" }, keywords: [ "ranged", "miss half" ] },
                         { name: "Shriek of Pain (bloodied)", usage: { frequency: "Encounter" }, range: "blast 5", toHit: 16, defense: "Fort", damage: { amount: "3d6+11", type: "thunder" }, keywords: [ "ranged", "miss half" ] }
+                    ]
+                },
+                "Ice Gargoyle": {
+                    name: "Ice Gargoyle", level: 12, image: "../images/portraits/ice_gargoyle.png",
+                    hp: { total: 96 },
+                    defenses: { ac: 26, fort: 25, ref: 23, will: 23 },
+                    vulnerabilities: { "fire": 0 }, // TODO: dazed until the end of the attacker's next turn
+                    resistances: { "cold": 15 },
+                    immunities: [ "slow" ],
+                    init: 14, speed: { walk: 6, fly: 8 },
+                    abilities: { STR: 24, CON: 20, DEX: 23, INT: 5, WIS: 10, CHA: 17 },
+                    skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 18, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Claw", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6+4", type: "cold" } ], keywords: [ "melee", "basic", "cold" ] },
+                        { name: "Flying Grab", usage: { frequency: "Recharge", recharge: 1 /* recharges after using Ice Prison */ }, range: "melee", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6+4", type: "cold" } ], keywords: [ "melee", "cold" ] },
+                        // TODO: each round it resist 20 all, heals 5, can only take a minor action to end Ice Prison
+                        {
+                            name: "Ice Prison",
+                            usage: { frequency: "At-Will" },
+                            toHit: "automatic", defense: "AC",
+                            damage: "0",
+                            effects: [
+                                {
+                                    name: "multiple", saveEnds: true, children: [
+                                        { name: "grabbed" },
+                                        { name: "stunned" },
+                                        { name: "restrained" },
+                                        { name: "ongoing damage", type: "cold", amount: 20 }
+                                        ],
+                                    afterEffects: [ { name: "slowed", duration: "endAttackerNext" } ]
+                                }
+                            ],
+                            keywords: [ "cold" ]
+                        }
+                    ]
+                },
+                "Ice Gargoyle Reaver": {
+                    name: "Ice Gargoyle Reaver", level: 15, image: "../images/portraits/ice_gargoyle_reaver.png",
+                    hp: { total: 116 },
+                    defenses: { ac: 29, fort: 28, ref: 27, will: 26 },
+                    vulnerabilities: { "fire": 0 }, // TODO: grants combat advantage endAttackerNext
+                    resistances: { "cold": 15 },
+                    immunities: [ "slow" ],
+                    init: 17, speed: { walk: 6, fly: 8 },
+                    abilities: { STR: 25, CON: 22, DEX: 24, INT: 5, WIS: 17, CHA: 20 },
+                    skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 17, religion: 0, stealth: 19, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Claw", usage: { frequency: "At-Will" }, target: { range: 2 }, range: "melee", toHit: 20, defense: "AC", damage: { amount: "1d8+6", type: "cold" }, effects: [ { name: "ongoing damage", type: "cold", amount: 5, saveEnds: true } ], keywords: [ "melee", "basic", "cold" ] },
+                        { name: "Flying Grab", usage: { frequency: "Recharge", recharge: 1 /* recharges after using Ice Prison */ }, target: { range: 2 }, range: "melee", toHit: 20, defense: "AC", damage: { amount: "1d8+6", type: "cold" }, effects: [ { name: "ongoing damage", type: "cold", amount: 5, saveEnds: true }, { name: "grabbed" } ], keywords: [ "melee", "basic", "cold" ] },
+                        // TODO: Bloodchill Bite heals it 5
+                        { name: "Bloodchill Bite", usage: { frequency: "Recharge", recharge: 5 }, range: "melee", toHit: 20, defense: "AC", damage: [ { amount: "2d6+5", type: "cold" } ], effects: [ { name: "vulnerable", type: "cold", amount: 5 } ], keywords: [ "melee", "cold" ] },
+                        { name: "Bloodchill Bite (weakened)", usage: { frequency: "Recharge", recharge: 5 }, range: "melee", toHit: 20, defense: "AC", damage: [ { amount: "3d6+5", type: "cold" } ], effects: [ { name: "vulnerable", type: "cold", amount: 5 } ], keywords: [ "melee", "cold" ] },
+                        // TODO: each round it resist 20 all, heals 5, can only take a minor action to end Ice Prison
+                        {
+                            name: "Ice Prison",
+                            usage: { frequency: "At-Will" },
+                            toHit: "automatic", defense: "AC",
+                            damage: "0",
+                            effects: [
+                                { name: "multiple", saveEnds: true, children: [
+                                    { name: "grabbed" },
+                                    { name: "stunned" },
+                                    { name: "restrained" },
+                                    { name: "ongoing damage", type: "cold", amount: 20 }
+                                    ],
+                                    afterEffects: [
+                                        { name: "multiple", duration: "endAttackerNext", children: [
+                                            { name: "slowed" },
+                                            { name: "weakened" }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            keywords: [ "cold" ]
+                        }
                     ]
                 },
                 "Icetouched Behir": {

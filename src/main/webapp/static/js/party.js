@@ -1798,7 +1798,7 @@
                             defense: "Ref",
                             damage: "2[W]+DEX",
                             effects: [
-                                { name: "Grab" }
+                                { name: "Grabbed" }
                             ],
                             keywords: [ "melee", "martial", "reliable", "weapon" ]
                         }, {
