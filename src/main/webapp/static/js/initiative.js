@@ -707,6 +707,7 @@
                         actor.history.clear();
                     }
                 }
+                this.round = 1;
                 this.history.clear();
                 HistoryEntry.init();
                 this._render(false);
