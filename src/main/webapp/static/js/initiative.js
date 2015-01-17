@@ -910,6 +910,7 @@
                     if (isExtendedRest) {
                         actor.hp.current = actor.hp.total;
                         actor.surges.current = actor.surges.perDay;
+                        actor.actionPoints = 1;
                     }
                     for (j = 0; j < actor.attacks.length; j++) {
                         attack = actor.attacks[ j ];

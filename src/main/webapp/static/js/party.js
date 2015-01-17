@@ -1887,6 +1887,15 @@
                                 crit: "3d6"
                             }
                         }, {
+                            name: "Learning Longbow +3",
+                            isMelee: false,
+                            enhancement: 3,
+                            proficiency: 2,
+                            damage: {
+                                amount: "1d10",
+                                crit: "3d6"
+                            }
+                        }, {
                             name: "Sid Vicious Longbow +1",
                             isMelee: false,
                             enhancement: 1,

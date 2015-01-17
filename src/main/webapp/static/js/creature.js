@@ -146,7 +146,7 @@
                         keywords = keywords.concat(item.keywords);
                     }
                     if (attackBonus.keywords) {
-                        for (i = 0; i < attackBonus.keywords; i++) {
+                        for (i = 0; i < attackBonus.keywords.length; i++) {
                             if (keywords.indexOf(attackBonus.keywords[ i ]) === -1) {
                                 return false;
                             }
