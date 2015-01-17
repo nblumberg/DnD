@@ -570,7 +570,10 @@
                     }
                     if (attack.hasOwnProperty("miss")) {
                         if (attack.miss.halfDamage) {
-                            damage.missAmount = Math.floor(damage.amount / 2);
+                            temp = jQuery.extend({}, attack.damage._history[ attack.damage._history.length - 1 ] );
+                            temp.total = Math.floor(temp.total / 2);
+                            attack.miss.damage._history.push(temp);
+                            damage.missAmount = temp.total;
                         }
                         else if (attack.miss.hasOwnProperty("damage")) {
                             if (isArray(attack.miss.damage)) {

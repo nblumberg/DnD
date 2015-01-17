@@ -170,6 +170,9 @@
                         if (attackBonus.foeStatus.indexOf("bloodied") !== -1 && (!target || !target.isBloodied())) {
                             return false;
                         }
+                        if (attackBonus.foeStatus.indexOf("prone") !== -1 && target.hasCondition("prone")) {
+                            return false;
+                        }
                     }
                     return true;
                 }
