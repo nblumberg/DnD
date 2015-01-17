@@ -275,7 +275,7 @@
             };
 
             Actor.prototype.startTurn = function() {
-                var ongoingDamage, handleEffect, handleImposedEffect, i, recharge, regen, tmp, msg;
+                var ongoingDamage, isLesserOngoingDamage, firstAmongEquals, handleEffect, handleImposedEffect, i, j, recharge, regen, tmp, msg;
                 this.__log("startTurn", arguments);
                 msg = null;
 
@@ -296,6 +296,59 @@
                     }
                 }.bind(this);
 
+                // Only take the greatest ongoing damage of multiple ongoing damages of the same type
+                firstAmongEquals = {};
+                isLesserOngoingDamage = function(effect, index, array) {
+                    var j, effect2, typeStr;
+                    function equivalentTypes(types1, types2) {
+                        if (!types1 && !types2) {
+                            return true;
+                        }
+                        else if (types1 && !types2 || !types1 && types2) {
+                            return false;
+                        }
+                        else {
+                            if (typeof types1 === "string" && typeof types2 === "string") {
+                                return types1.toLowerCase() === types2.toLowerCase();
+                            }
+                            else if (types1.constructor === Array && types2.constructor === Array) {
+                                return jQuery(types1).not(types2).length === 0 && jQuery(types2).not(types1).length === 0;
+                            }
+                        }
+                        return false;
+                    }
+                    if (effect.name.toLowerCase() !== "ongoing damage") {
+                        return false; // this isn't an ongoing damage Effect
+                    }
+                    typeStr = typeof effect.type !== "string" ? effect.type.join(",") : effect.type;
+                    for (j = 0; array && j < array.length; j++) {
+                        effect2 = array[ j ];
+                        if (j === index) {
+                            continue; // skip comparing the Effect to itself
+                        }
+                        if (effect2.name.toLowerCase() == "multiple") { // check against multiple Effects for nested ongoing damage Effects
+                            if (isLesserOngoingDamage(effect, -1, effect2.children)) {
+                                return true;
+                            }
+                        }
+                        if (effect2.name.toLowerCase() !== "ongoing damage" || !equivalentTypes(effect.type, effect2.type)) { // the other effect isn't ongoing damage or the same damage type
+                            continue;
+                        }
+                        if (effect.amount === effect2.amount) {
+                            if (!firstAmongEquals[ typeStr ]) {
+                                firstAmongEquals[ typeStr ] = effect; // only have the first ongoing damage of equal type and amount take effect
+                            }
+                            else {
+                                return true;
+                            }
+                        }
+                        else if (effect.amount < effect2.amount) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }.bind(this);
+
                 handleEffect = function(effect) {
                     var result, i;
                     result = effect.countDown(this.history._round, true, true);
@@ -303,7 +356,12 @@
                         this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: effect.name + " effect expired" + (typeof result === "string" ? result : "") }));
                     }
 
+                    // Only take the greatest ongoing damage of multiple ongoing damages of the same type
+                    if (isLesserOngoingDamage(effect, this.effects.indexOf(effect), this.effects)) {
+                        return;
+                    }
                     ongoingDamage(effect);
+
                     if (effect.children && effect.children.length) {
                         for (i = 0; i < effect.children.length; i++) {
                             handleEffect(effect.children[ i ]);
