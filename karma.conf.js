@@ -123,7 +123,8 @@ module.exports = function(config) {
     ];
 
     coverageFiles = [
-        "src/main/webapp/static/js/**.js"
+        "src/main/webapp/static/js/*.js",
+        "src/main/webapp/static/js/party/*.js"
     ];
 
     // test specs to run

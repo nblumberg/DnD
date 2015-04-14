@@ -64,6 +64,8 @@
                 for (i = 0; params.keywords && i < params.keywords.length; i++) {
                     this.keywords.push(params.keywords[ i ]);
                 }
+                this.description = params.description || "";
+                this.description = this.description.replace(/images\/bullet.gif/g, "../images/bullet.gif");
             };
 
             Attack.prototype.USAGE_AT_WILL = "At-Will";

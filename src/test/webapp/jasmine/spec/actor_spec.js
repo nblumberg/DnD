@@ -649,7 +649,10 @@
                     describe("with miss half damage", function() {
                         beforeEach(function() {
                             attack = new DnD.Attack({ name: "attackName", toHit: 10, defense: "AC", damage: "1d8", miss: { amount: "1d6", halfDamage: true }, keywords: [ "weapon", "melee", "basic" ] }, actor);
-                            spyOn(attack.damage, "rollItem").andReturn(6);
+                            spyOn(attack.damage, "rollItem").andCallFake(function() {
+                                attack.damage._history.push({ total: 6 });
+                                return 6;
+                            });
                         });
                         it("it should return the manual damage roll as miss damage", function() {
                             var result;

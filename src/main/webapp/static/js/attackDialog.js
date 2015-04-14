@@ -10,6 +10,10 @@
             function AttackDialog(params) {
                 this.$weapons = null;
                 this.$attacks = null;
+                this.$damage = null;
+                this.$keywords = null;
+                this.$description = null;
+                this.$attacks = null;
                 this.$combatAdvantage = null;
                 this.$targets = null;
                 this.$playerAttackRoll = null;
@@ -39,6 +43,7 @@
                 });
                 this.$damage = this.$dialog.find(".column2 .damage");
                 this.$keywords = this.$dialog.find(".column2 .keywords");
+                this.$description = this.$dialog.find(".column2 .description");
                 this.$combatAdvantage = this.$dialog.find("#combatAdvantage").data("combatAdvantage", false).on({ click: function() {
                     this.combatAdvantage = !this.combatAdvantage;
                     this._combatAdvantageChange();
@@ -161,6 +166,10 @@
                     if (needsImplement) {
                         items = this.attacker[ "implements" ];
                     }
+                }
+                this.$description.html("");
+                if (this.attack.description) {
+                    this.$description.html(this.attack.description);
                 }
                 if (needsWeapon || needsImplement) {
                     this.$weapons.html("");
