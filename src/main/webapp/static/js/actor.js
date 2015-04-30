@@ -136,6 +136,77 @@
                 return { hits: hits, misses: misses };
             };
 
+            Actor.prototype.buff = function(buff, targets, manualRoll) {
+                var i, j, msg, damage;
+                this.__log("buff", [ buff.name, targets.length, manualRoll ]);
+                for (i = 0; i < targets.length; i++) {
+                    msg = "Affected by " + this.name + "'s " + buff.name + " power";
+                    if (buff.effects && buff.effects.length) {
+                        msg += ", gains ";
+                        for (j = 0; j < buff.effects.length; j++) {
+                            msg += (j ? ", " : "") + targets[ i ].addEffect(buff.effects[ j ], this).toString();
+                        }
+                    }
+
+                    // TODO: healing, tmp HP, coming back from dying
+                    if (buff.healing) {
+                        damage = new Damage(buff.healing.amount.replace("HS", Math.floor(targets[ i ].hp.total / 4)), this);
+                        targets[ i ].heal(
+                            manualRoll ? manualRoll + damage.extra : damage.roll(),
+                            buff.healing.isTempHP,
+                            buff.healing.usesHealingSurge,
+                            buff.name,
+                            this
+                        );
+                    }
+
+                    targets[ i ].history.add(new HistoryEntry({ round: this.history._round, subject: targets[ i ], message: msg }));
+                }
+            };
+
+            /**
+             * @param amount {Number}
+             * @param isTempHp {Boolean}
+             * @param usesHealingSurge {Boolean}
+             * @param description {String}
+             * @param healer {Actor}
+             * @returns {Object} Object of the form { msg: String, damage: Number, type: String or Array of String }
+             */
+            Actor.prototype.heal = function(amount, isTempHp, usesHealingSurge, description, healer) {
+                var msg, property, oldValue, newValue;
+                if (isTempHp) {
+                    property = "hp.temp";
+                    oldValue = this.hp.temp;
+                    this.hp.temp = Math.max(amount, this.hp.temp);
+                    newValue = this.hp.temp;
+                    msg = "Gained " + amount + " temporary hit points";
+                }
+                else {
+                    property = "hp.current";
+                    oldValue = this.hp.current;
+                    this.hp.current = Math.min(this.hp.current + amount, this.hp.total);
+                    newValue = this.hp.current;
+                    msg = "Healed " + amount + " damage";
+                }
+                msg += " from " + (healer ? healer.name + "'s " : "") + description + (healer ? " power" : "");
+                this.dispatchEvent({ type: "change", property: property, oldValue: oldValue, newValue: newValue });
+
+                if (usesHealingSurge) {
+                    property = "surges.current";
+                    oldValue = this.surges.current;
+                    if (!this.surges.current || this.surges.current <= 0) {
+                        msg += ", should have used a healing surge but has none remaining";
+                    }
+                    else {
+                        this.surges.current = Math.max(--this.surges.current, 0);
+                        msg += ", using a healing surge";
+                    }
+                    newValue = this.surges.current;
+                    this.dispatchEvent({ type: "change", property: property, oldValue: oldValue, newValue: newValue });
+                }
+                this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: msg }));
+            };
+
             /**
              * @param attacker {Actor}
              * @param damage {Number}
@@ -146,7 +217,7 @@
             Actor.prototype.takeDamage = function(attacker, damage, type, effects) {
                 var temp, msg, i, j, result, effect;
                 // vvv DEBUGGING
-                this.__log("takeDamage", [ attacker.name, damage, type, effects ]);
+                this.__log("takeDamage", [ attacker ? attacker.name : null, damage, type, effects ]);
                 if (typeof(damage) !== "number") {
                     out.console.error("Creature.takeDamage() received NaN damage value");
                     return {
@@ -158,13 +229,14 @@
                 // ^^^ DEBUGGING
                 msg = "";
                 function applyVulnerability(type) {
-                    var temp, i;
+                    var temp, i, effect;
                     temp = 0;
                     if (this.vulnerabilities && this.vulnerabilities[ type ]) {
                         temp = this.vulnerabilities[ type ];
                     }
                     for (i = 0; i < this.effects.length; i++) {
-                        if (this.effects[ i ].name.toLowerCase() === "vulnerable" && typeof this.effects[ i ].type === "string" && this.effects[ i ].type.toLowerCase() === type.toLowerCase()) {
+                        effect = this.effects[ i ];
+                        if (effect.name.toLowerCase() === "vulnerable" && typeof effect.type === "string" && effect.type.toLowerCase() === type.toLowerCase()) {
                             temp = Math.max(temp, this.effects[ i ].amount);
                         }
                     }
@@ -174,40 +246,59 @@
                     }
                 }
                 function applyResistance(type) {
-                    var temp, i;
-                    if (this.resistances) {
-                        temp = Infinity;
-                        if (typeof type === "string" && this.resistances.hasOwnProperty(type)) {
-                            temp = this.resistances[ type ];
+                    var getResistance, temp, temp2, i;
+                    getResistance = function(type) {
+                        var temp, i, effect;
+                        temp = 0;
+                        if (typeof type !== "string") {
+                            return temp;
                         }
-                        else if (isArray(type)) {
-                            // The creature can only resist multi-type damage if it has resistance to all the types
-                            // and then only resists an amount equal to the lowest of the matching resistances
-                            for (i = 0; i < type.length; i++) {
-                                if (this.resistances.hasOwnProperty(type[ i ])) {
-                                    temp = Math.min(this.resistances[ type[ i ] ], temp);
-                                }
-                                else {
-                                    temp = Infinity;
-                                    break;
-                                }
+                        if (this.resistances && this.resistances.hasOwnProperty(type)) {
+                            temp = this.resistances[ type ] || 0;
+                        }
+                        for (i = 0; i < this.effects.length; i++) {
+                            effect = this.effects[ i ];
+                            if (effect.name.toLowerCase() === "resistance" && typeof effect.type === "string" && effect.type.toLowerCase() === type.toLowerCase() && effect.amount > temp) {
+                                temp = effect.amount;
                             }
                         }
-                        if (this.resistances.all && (temp === Infinity || this.resistances.all > temp)) {
-                            temp = this.resistances.all;
-                        }
-                        if (this.resistances.insubstantial) {
-                            if (temp !== Infinity) {
-                                temp += Math.floor(Math.max(damage - temp, 0) / 2);
+                        return temp;
+                    }.bind(this);
+
+                    temp = Infinity;
+                    if (typeof type === "string") {
+                        temp = getResistance(type) || Infinity;
+                    }
+                    else if (isArray(type)) {
+                        // The creature can only resist multi-type damage if it has resistance to all the types
+                        // and then only resists an amount equal to the lowest of the matching resistances
+                        for (i = 0; i < type.length; i++) {
+                            temp2 = getResistance(type[ i ]);
+                            if (temp2) {
+                                temp = Math.min(temp, temp2);
                             }
                             else {
-                                temp = Math.floor(damage / 2);
+                                temp = Infinity;
+                                break;
                             }
                         }
+                    }
+                    temp2 = getResistance("all");
+                    if (temp2 && (temp === Infinity || temp2 > temp)) {
+                        temp = temp2;
+                    }
+                    temp2 = getResistance("insubstantial");
+                    if (temp2) {
                         if (temp !== Infinity) {
-                            msg += " (resisted " + Math.min(damage, temp) + ")";
-                            damage = Math.max(damage - temp, 0);
+                            temp += Math.floor(Math.max(damage - temp, 0) / 2);
                         }
+                        else {
+                            temp = Math.floor(damage / 2);
+                        }
+                    }
+                    if (temp !== Infinity) {
+                        msg += " (resisted " + Math.min(damage, temp) + ")";
+                        damage = Math.max(damage - temp, 0);
                     }
                 }
                 if (type) {
@@ -279,7 +370,7 @@
                 this.__log("startTurn", arguments);
                 msg = null;
 
-                ongoingDamage = function(effect) {
+                ongoingDamage = function actor_startTurn_ongoingDamage(effect) {
                     var result, type;
                     if (effect.name.toLowerCase() === "ongoing damage") {
                         result = this.takeDamage(effect.attacker, effect.amount, effect.type, null);
@@ -298,7 +389,7 @@
 
                 // Only take the greatest ongoing damage of multiple ongoing damages of the same type
                 firstAmongEquals = {};
-                isLesserOngoingDamage = function(effect, index, array) {
+                isLesserOngoingDamage = function actor_startTurn_isLesserOngoingDamage(effect, index, array) {
                     var j, effect2, typeStr;
                     function equivalentTypes(types1, types2) {
                         if (!types1 && !types2) {

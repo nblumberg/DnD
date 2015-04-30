@@ -99,6 +99,10 @@
                 for (i = 0; params.attacks && i < params.attacks.length; i++) {
                     this.attacks.push(new Attack(params.attacks[ i ], this));
                 }
+                this.buffs = [];
+                for (i = 0; params.buffs && i < params.buffs.length; i++) {
+                    this.buffs.push(new Attack(params.buffs[ i ], this));
+                }
                 this.effects = [];
                 for (i = 0; params.effects && i < params.effects.length; i++) {
                     this.effects.push(new Effect(jQuery.extend({}, params.effects[ i ], { target: this })));

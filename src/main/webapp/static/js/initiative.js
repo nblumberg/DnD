@@ -19,13 +19,15 @@
             "History.Entry",
             "History.Editor",
             "Display.Dialog.Attack",
+            "Display.Dialog.Buff",
             "Display.Dialog.Creature",
             "Display.Dialog.Export",
             "Display.Dialog.Heal",
             "Display.Dialog.Image",
             "Display.Dialog.Import",
             "Display.Dialog.Initiative",
-            "Display.Dialog.GenericEffect"
+            "Display.Dialog.GenericEffect",
+            "Display.Dialog.History"
         ],
         function(
                 w,
@@ -43,13 +45,15 @@
                 HistoryEntry,
                 HistoryEditor,
                 AttackDialog,
+                BuffDialog,
                 CreatureDialog,
                 ExportDialog,
                 HealDialog,
                 ImageDialog,
                 ImportDialog,
                 InitiativeDialog,
-                GenericEffectDialog) {
+                GenericEffectDialog,
+                HistoryDialog) {
             // CONSTRUCTOR & INITIALIZATION METHODS
 
             /**
@@ -92,6 +96,7 @@
                 this.imageDialog = null;
                 this.initiativeDialog = null;
                 this.attackDialog = null;
+                this.buffDialog = null;
                 this.healDialog = null;
                 this.$freeFormHistorySubject = null;
                 this.freeFormHistory = null;
@@ -310,8 +315,19 @@
                         this._messageDisplay(msg, false);
                     }.bind(this) });
 
+                    this.buffDialog = new BuffDialog({ callback: function(msg) {
+                        this._render(false);
+                        this._messageDisplay(msg, false);
+                    }.bind(this) });
+
                     this.healDialog = new HealDialog({
                         addHistory: this._addHistory.bind(this),
+                        callback: function() { // actor, changes
+
+                        }.bind(this)
+                    });
+
+                    this.historyDialog = new HistoryDialog({
                         callback: function() { // actor, changes
 
                         }.bind(this)
@@ -495,7 +511,7 @@
             };
 
             Initiative.prototype._renderActorTable = function() { // responseText, textStatus, jqXHR
-                var setInitiative, attack, i, actor;
+                var setInitiative, attack, buff, i, actor;
 
                 this.__log("_renderActorTable", arguments);
                 this._renderRound();
@@ -536,6 +552,18 @@
                     this.attackDialog.show({ attacker: a, actors: active });
                 };
 
+                buff = function(a) {
+                    /*jshint validthis:true */
+                    var active, i;
+                    active = [];
+                    for (i = 0; i < this.actors.length; i++) {
+                        if (this._isActive(this.actors[ i ])) {
+                            active.push(this.actors[ i ]);
+                        }
+                    }
+                    this.buffDialog.show({ attacker: a, actors: active });
+                };
+
                 for (i = 0; i < this.order.length; i++) {
                     actor = this._getActor(this.order[ i ]);
                     if (!actor) {
@@ -551,7 +579,9 @@
                                 down: this._reorder.bind(this, actor, 1)
                             },
                             attack: attack.bind(this, actor),
+                            buff: buff.bind(this, actor),
                             heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass special healing surge values
+                            showHistory: this.historyDialog.show.bind(this.historyDialog, actor.history),
                             exit: this._exit.bind(this, actor),
                             rename: this._rename.bind(this, actor)
                         });

@@ -70,7 +70,7 @@
             };
 
 
-            Damage.prototype.WEAPON_ATTRIBUTE_REG_EXP = /(\[W\]|STR|DEX|CON|INT|WIS|CHA)/;
+            Damage.prototype.ATTRIBUTE_REG_EXP = /^(STR|DEX|CON|INT|WIS|CHA)$/;
             Damage.prototype.WEAPON_ATTRIBUTE_OR_REG_EXP = /^(\w{3}\/\w{3})$/;
             Damage.prototype.WEAPON_ATTRIBUTE_MAX_REG_EXP = /^(\w{3}\^\w{3})$/;
 
@@ -84,76 +84,31 @@
              * W = "#\[W\]E*"
              */
             Damage.prototype._parseDamageString = function(str, creature) {
-                var extra, i, value;
                 this.__log("_parseDamageString", [ str, creature ? creature.name : "undefined" ]);
-                this.extra = 0;
-                if (!str) {
-                    return;
-                }
-                this.str = str;
-                if (!this.WEAPON_ATTRIBUTE_REG_EXP.test(str)) {
-                    this._parseString(str);
-                    return;
-                }
-                if (str.indexOf("[W]") !== -1) {
+                Roll.prototype._parseString.call(this, str, creature);
+            };
+
+            Damage.prototype._parseOperand = function(operand, creature) {
+                if (operand.indexOf("[W]") !== -1) {
                     this.needsWeapon = true;
-                    this.weaponMultiplier = parseInt(str.split("[W]")[ 0 ], 10);
-                    extra = str.split("[W]")[ 1 ];
+                    this.weaponMultiplier = window.parseInt(operand.split("[W]")[ 0 ], 10);
                     this.dieCount = 0;
                     this.dieSides = 0;
+                    return 0;
+                }
+                else if (this.ATTRIBUTE_REG_EXP.test(operand)) {
+                    return creature.abilities[ operand + "mod" ];
+                }
+                else if (this.WEAPON_ATTRIBUTE_OR_REG_EXP.test(operand)) {
+                    this.meleeExtra = creature.abilities.STRmod;
+                    this.rangedExtra = creature.abilities.DEXmod;
+                    return 0;
+                }
+                else if (this.WEAPON_ATTRIBUTE_MAX_REG_EXP.test(operand)) {
+                    return window.Math.max(creature.abilities[ operand.split("^")[ 0 ] + "mod" ], creature.abilities[ operand.split("^")[ 1 ] + "mod" ]);
                 }
                 else {
-                    value = str.split("+")[ 0 ];
-                    if (!value) {
-                        return;
-                    }
-                    if (!this.WEAPON_ATTRIBUTE_REG_EXP.test(value)) {
-                        this._parseString(value);
-                        extra = str.substr(str.indexOf("+") + 1);
-                    }
-                    else {
-                        extra = value;
-                    }
-                }
-                if (!extra) {
-                    return;
-                }
-                extra = extra.split("+");
-                for (i = 0; extra && i < extra.length; i++) {
-                    switch (extra[ i ]) {
-                        case "": {
-                        }
-                            break;
-                        case "STR":
-                        case "DEX":
-                        case "CON":
-                        case "INT":
-                        case "WIS":
-                        case "CHA": {
-                            this.extra += creature.abilities[ extra[ i ] + "mod" ];
-                        }
-                            break;
-                        default: {
-                            value = null;
-                            try {
-                                value = parseInt(extra[ i ], 10);
-                            }
-                            catch (e) {}
-                            if (!isNaN(value)) {
-                                this.extra += value;
-                            }
-                            else {
-                                if (this.WEAPON_ATTRIBUTE_OR_REG_EXP.test(extra[ i ])) {
-                                    this.meleeExtra = creature.abilities.STRmod;
-                                    this.rangedExtra = creature.abilities.DEXmod;
-                                }
-                                else if (this.WEAPON_ATTRIBUTE_MAX_REG_EXP.test(extra[ i ])) {
-                                    this.extra += Math.max(creature.abilities[ extra[ i ].split("^")[ 0 ] + "mod" ], creature.abilities[ extra[ i ].split("^")[ 1 ] + "mod" ]);
-                                }
-                            }
-                            break;
-                        }
-                    }
+                    return Roll.prototype._parseOperand.call(this, operand);
                 }
             };
 

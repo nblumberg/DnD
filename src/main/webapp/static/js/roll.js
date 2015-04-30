@@ -51,26 +51,51 @@
                 this.crits = typeof obj.crits === "boolean" ? obj.crits : this.crits;
             };
 
+            Roll.prototype.ROLL_REG_EXP = /\b(\d+)d(\d+)\b/;
+            Roll.prototype.OPERANDS_REG_EXP = /\s*[+-]\s*/g;
             Roll.prototype.EXTRA_REG_EXP = /[+-]/;
             Roll.prototype.DICE_REG_EXP = /^\d+/;
 
             Roll.prototype._parseString = function(str) {
-                var hasDice, hasExtra;
+                var operands, i, index, args;
                 this.__log("_parseString", arguments);
-                hasDice = str.indexOf("d") !== -1;
-                hasExtra = !hasDice && str.length || this.EXTRA_REG_EXP.test(str);
-                if (hasDice) {
-                    this.dieCount = parseInt(str.split("d")[ 0 ], 10);
-                    str = str.split("d")[ 1 ];
-                    this.dieSides = parseInt(hasExtra ? this.DICE_REG_EXP.exec(str) : str, 10);
-                    str = str.substr(("" + this.dieSides).length);
+                if (!str) {
+                    return;
+                }
+                if (!this.str) {
+                    this.str = str;
+                }
+                operands = str.split(this.OPERANDS_REG_EXP);
+                this.extra = 0;
+                index = 0;
+                for (i = 0; i < operands.length; i++) {
+                    args = Array.prototype.slice.call(arguments);
+                    args.shift(operands[ i ]); // remove str
+                    args.unshift(operands[ i ]); // insert operand
+                    if (index === 0 || str[ index ] === "+") {
+                        this.extra += this._parseOperand.apply(this, args);
+                    }
+                    else {
+                        this.extra -= this._parseOperand.apply(this, args);
+                    }
+                    index += (index ? 1 : 0) + operands[ i ].length;
+                }
+            };
+
+            Roll.prototype._parseOperand = function(operand) {
+                var value;
+                if (operand.indexOf("d") !== -1) {
+                    this.dieCount = window.parseInt(operand.split("d")[ 0 ], 10);
+                    this.dieSides = window.parseInt(operand.split("d")[ 1 ], 10);
+                    return 0;
                 }
                 else {
-                    this.dieCount = 0;
-                    this.dieSides = 0;
-                }
-                if (hasExtra) {
-                    this.extra = parseInt(str, 10);
+                    value = 0;
+                    try {
+                        value = window.parseInt(operand, 10);
+                    }
+                    catch (e) {}
+                    return !window.isNaN(value) ? value : 0;
                 }
             };
 

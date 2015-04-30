@@ -88,7 +88,8 @@ table#initiative th, table#initiative td { text-align: center; }
 table#initiative td.order { width: 50px; }
 table#initiative td.defenses { width: 80px; }
 table#initiative td.hp { padding: 3px; text-align: left; }
-table#initiative td.actions { width: 50px; }
+table#initiative td.actions { width: 140px; }
+table#initiative td.actions button { height: 60px; }
 table#initiative td.actions img { display: block; margin: 5px auto; }
 table#initiative .tempHp { font-style: italic; }
 table#initiative td.history { max-width: 50%; }
@@ -169,14 +170,14 @@ div#history { min-width: 30%; padding: 0 5px; }
 div#history h3 { margin: 5px 0; }
 
 /* Dialogs */
-#dialogs { bottom: 0; display: none; left: 0; position: fixed; right: 0; top: 35px; /* header height */ }
+#dialogs { bottom: 0; display: none; z-index: 2; left: 0; position: fixed; right: 0; top: 35px; /* header height */ }
 .dialog #dialogs { display: block; }
-#dialogs .dialog { display: none; position: relative; }
+#dialogs .dialog { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
 .dialog .header, .dialog .footer { box-sizing: border-box; -moz-box-sizing: border-box; height: 44px; left: 0; padding: 5px 20px; position: absolute; right: 0; z-index: 2; }
 .dialog .header { background-color: #105292; border: 1px solid #0b3e6f; color: #f6f6f6; font-weight: bold; top: 0; }
 .dialog .header .text { font-size: 24px; }
 .dialog .header .close { position: absolute; right: 20px; top: 8px; }
-.dialog .body { background-color: #222222; display: table; height: 100%; padding: 64px 20px; position: relative; width: 100%; z-index: 1; }
+.dialog .body { background-color: #222222; padding: 64px 20px; z-index: 1; display: table; height: 100%; position: relative; width: 100%; } /* position: absolute; top: 0; left: 0; right: 0; bottom: 0; */
 .dialog .footer { background-color: #999999; bottom: 0; text-align: right; }
 body.dialog { overflow: hidden; }
 
@@ -188,8 +189,8 @@ body.dialog { overflow: hidden; }
 
 /* attacksDialog */
 .attacksDialog #attacksDialog { display: block; }
-#attacksDialog .column1, #attacksDialog .column2, #attacksDialog .column3 { display: table-cell; height: 100%; position: relative; }
-#attacksDialog .column1, #attacksDialog .column3 { padding-bottom: 50px; vertical-align: top; width: 40%; }
+#attacksDialog .column1, #attacksDialog .column2, #attacksDialog .column3 { display: table-cell; height: 100%; position: relative; padding-bottom: 50px; vertical-align: top; }
+#attacksDialog .column1, #attacksDialog .column3 { width: 40%; }
 #attacksDialog .column2 { width: 15%; }
 #attacksDialog .column2 img { margin: 0 auto; }
 #attacksDialog .column2 div { text-align: center; width: 100%; }
@@ -202,14 +203,40 @@ body.dialog { overflow: hidden; }
 #attacksDialog #attackSelect .used { color: #555555; font-style: italic; }
 #attacksDialog select { height: 100%; width: 100%; }
 #attacksDialog input.number { width: 100%; }
-#attacksDialog .attacks2targets { margin-top: 100%; }
+#attacksDialog .attacks2targets { margin-top: 15%; }
 #attacksDialog .attacks2targets img { display: block; }
 #attacksDialog .playerAttack * { max-width: 50%; width: auto; }
 #attacksDialog .playerRolls { height: 30px; position: absolute; bottom: 0; width: 100%; }
 #attacksDialog .control-group input { border-width: 3px; }
 #attacksDialog .control-group input { border-width: 3px; }
 #attacksDialog .error .playerAttackRoll, #attacksDialog .success .playerAttackRoll, #attacksDialog .warning .playerAttackRoll { border: 3px solid; }
-#attacksDialog .description { max-height: 400px; overflow-y: scroll; }
+#attacksDialog .description { height: 75%; overflow-y: scroll; }
+#playerAttackRoll { display: inline-block; }
+
+/* buffsDialog */
+.buffsDialog #buffsDialog { display: block; }
+#buffsDialog .column1, #buffsDialog .column2, #buffsDialog .column3 { display: table-cell; height: 100%; position: relative; }
+#buffsDialog .column1, #buffsDialog .column3 { padding-bottom: 50px; vertical-align: top; width: 40%; }
+#buffsDialog .column2 { width: 15%; }
+#buffsDialog .column2 img { margin: 0 auto; }
+#buffsDialog .column2 div { text-align: center; width: 100%; }
+#buffsDialog #buffSelect, #buffsDialog .column3 .targets { height: 100%; overflow-y: scroll; }
+#buffsDialog #buffSelect .list-group-item { background-color: gray; color: white; font-size: bold; }
+#buffsDialog #buffSelect .at-will { background-color: green; }
+#buffsDialog #buffSelect .encounter { background-color: maroon; }
+#buffsDialog #buffSelect .daily { background-color: #333333; }
+#buffsDialog #buffSelect .recharge { background-color: orange; }
+#buffsDialog #buffSelect .used { color: #555555; font-style: italic; }
+#buffsDialog select { height: 100%; width: 100%; }
+#buffsDialog input.number { width: 100%; }
+#buffsDialog .attacks2targets { margin-top: 100%; }
+#buffsDialog .attacks2targets img { display: block; }
+#buffsDialog .playerAttack * { max-width: 50%; width: auto; }
+#buffsDialog .playerRolls { height: 30px; position: absolute; bottom: 0; width: 100%; }
+#buffsDialog .control-group input { border-width: 3px; }
+#buffsDialog .control-group input { border-width: 3px; }
+#buffsDialog .error .playerAttackRoll, #buffsDialog .success .playerAttackRoll, #buffsDialog .warning .playerAttackRoll { border: 3px solid; }
+#buffsDialog .description { max-height: 400px; overflow-y: scroll; }
 #playerAttackRoll { display: inline-block; }
 
 /* exportDialog */
@@ -245,6 +272,10 @@ body.dialog { overflow: hidden; }
 .healDialog #healDialog { display: block; }
 #healDialog .column { margin: 0 auto; max-width: 400px; }
 #healDialog .input-group { margin-bottom: 10px; }
+
+/* historyDialog */
+.historyDialog #historyDialog { display: block; }
+.historyDialog #historyDialog .body { display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: scroll; }
 
 /* imageDialog */
 .imageDialog #imageDialog { display: block; }

@@ -70,6 +70,9 @@
                 this.$attacks.children().remove();
                 for (i = 0; i < this.attacker.attacks.length; i++) {
                     attack = this.attacker.attacks[ i ];
+                    if (attack.prepared === false) {
+                        continue;
+                    }
                     jQuery("<a/>").addClass("list-group-item" + (attack.usage.frequency ? " " + attack.usage.frequency.toLowerCase() : "") + (attack.used ? " used" : "")).attr("href", K.NO_URL).html(attack.name).data("attack", attack).appendTo(this.$attacks);
                 }
                 this.combatAdvantage = !!params.combatAdvantage;
@@ -82,6 +85,7 @@
                     }
                     jQuery("<option/>").html(target.name).data("target", target).appendTo(this.$targets);
                 }
+                this.targets = [];
                 this.$playerAttackRoll.val("");
                 this.$playerAttackCrit.val("");
                 this.$playerDamageRoll.val("");
@@ -141,6 +145,7 @@
                 var str, needsWeapon, needsImplement, items, isMelee, isRanged, i, $option;
                 needsWeapon = needsImplement = false;
                 isMelee = isRanged = items = null;
+                this.weapon = null;
                 if (!$a) {
                     this.attack = null;
                     this.$weapons.hide();

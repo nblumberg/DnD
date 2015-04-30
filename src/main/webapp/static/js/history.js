@@ -374,6 +374,16 @@
             // HISTORY.ENTRY
             // CONSTRUCTOR
 
+            /**
+             * A History Entry
+             * @constructor
+             * @param params {Object}
+             * @param params.message {String}
+             * @param params.round {Number}
+             * @param [params.id] {Number}
+             * @param [params.subjectName] {String}
+             * @param [params.subject] {Number | Actor}
+             */
             History.Entry = function(params) {
                 params = params || {};
                 this.id = params.id || History.Entry.id++;

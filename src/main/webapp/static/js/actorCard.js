@@ -251,7 +251,7 @@
                 columns = Math.max(3, Math.min(count, ActorCard.Condition.MAX_COLUMNS));
                 width = ((this.$panel.width() - (4 * ActorCard.Condition.MAX_COLUMNS)) / columns);
                 for (i = 0; i < count; i++) {
-                    this.conditions[ i ]._resize(height, width);
+                    this.conditions[ i ]._resize(height, width, count);
                 }
             };
 
@@ -306,16 +306,26 @@
             ActorCard.Condition.MAX_COLUMNS = 4;
 
             ActorCard.Condition.prototype._render = function () {
-                var condition, title;
+                var condition, title, amount;
                 this.$container = jQuery("<div/>").addClass("condition").on({ click: this._clickHandler.bind(this) });
                 condition = DnD.Effect.CONDITIONS[ this.effect.name.toLowerCase() ];
+                amount = this.effect.amount;
                 if (this.effect.name.toLowerCase() === "ongoing damage") {
                     condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
                     title = (condition && condition.type ? "Ongoing " + condition.type + " damage" : "Ongoing damage") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
                 }
+                else if (this.effect.name.toLowerCase() === "resistance") {
+                    condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
+                    title = (condition && condition.type ? condition.type + " damage resistance" : "Damage resistance") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
+                    amount *= -1;
+                }
                 else if (this.effect.name.toLowerCase() === "penalty") {
                     condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
                     title = (condition && condition.type ? "Penalty to " + condition.type : "Unknown penalty") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
+                }
+                else if (this.effect.name.toLowerCase() === "bonus") {
+                    condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
+                    title = (condition && condition.type ? "Bonus to " + condition.type : "Unknown bonus") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
                 }
                 else {
                     title = this.effect.name + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
@@ -325,7 +335,7 @@
                 });
                 if (this.effect.amount) {
                     this.$amount = jQuery("<div/>").addClass("amount").css({ "color": condition && condition.color ? condition.color : "red" }).appendTo(this.$container);
-                    jQuery("<span/>").html(this.effect.amount).appendTo(this.$amount);
+                    jQuery("<span/>").html(amount).appendTo(this.$amount);
                 }
                 this.$parent.append(this.$container);
             };
@@ -339,8 +349,9 @@
                 }
             };
 
-            ActorCard.Condition.prototype._resize = function (height, width) {
+            ActorCard.Condition.prototype._resize = function (height, width, count) {
                 this.$container.css({ height: height + "px", width: width + "px" });
+                this.$container.attr("data-effects-count", count);
             };
 
             return ActorCard.Condition;

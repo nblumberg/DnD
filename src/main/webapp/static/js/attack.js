@@ -66,6 +66,10 @@
                 }
                 this.description = params.description || "";
                 this.description = this.description.replace(/images\/bullet.gif/g, "../images/bullet.gif");
+                this.prepared = params.prepared;
+
+                // TODO: break out into separate Buff class
+                this.healing = params.healing;
             };
 
             Attack.prototype.USAGE_AT_WILL = "At-Will";

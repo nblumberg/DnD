@@ -15,7 +15,9 @@
              * @param order.up {Function} The click handler for the move initiative order up action
              * @param order.down {Function} The click handler for the move initiative order down action
              * @param attack {Function} The click handler for the attack action
+             * @param buff {Function} The click handler for the buff action
              * @param heal {Function} The click handler for the heal action
+             * @param showHistory {Function} The click handler for the history action
              * @param history {DnD.History} The History of the Actor
              */
             function ActorRow(params) {
@@ -121,43 +123,54 @@
                 this.ref = this._addDefense(this.$tr.find(".ref ._editor"), "ref");
                 this.will = this._addDefense(this.$tr.find(".will ._editor"), "will");
 
-                this.hpTemp = new Editor({ $parent: this.$tr.find(".hp .temp ._editor"), _className: "hp temp", tagName: "span", html: this.actor.hp.temp, onchange: function(v) {
-                    var oldValue = this.actor.hp.temp;
-                    this.actor.hp.temp = parseInt(v, 10);
-                    this.actor.dispatchEvent({ type: "change", property: "hp.temp", oldValue: oldValue, newValue: this.actor.hp.temp });
-                }.bind(this) });
-                this.hpCurrent = new Editor({ $parent: this.$tr.find(".hp .current ._editor"), _className: "hp current", tagName: "span", html: this.actor.hp.current, onchange: function(v) {
-                    var oldValue = this.actor.hp.current;
-                    this.actor.hp.current = parseInt(v, 10);
-                    this.actor.dispatchEvent({ type: "change", property: "hp.current", oldValue: oldValue, newValue: this.actor.hp.current });
-                }.bind(this) });
-                this.hpTotal = new Editor({ $parent: this.$tr.find(".hp .total ._editor"), _className: "hp total", tagName: "span", html: this.actor.hp.total, onchange: function(v) {
-                    var oldValue = this.actor.hp.total;
-                    this.actor.hp.current = parseInt(v, 10);
-                    this.actor.dispatchEvent({ type: "change", property: "hp.total", oldValue: oldValue, newValue: this.actor.hp.total });
-                }.bind(this) });
-                this.surgesCurrent = new Editor({ $parent: this.$tr.find(".hp .surgesCurrent ._editor"), _className: "surge current", tagName: "span", html: this.actor.surges.current, onchange: function(v) {
-                    var oldValue = this.actor.surges.current;
-                    this.actor.surges.current = parseInt(v, 10);
-                    this.actor.dispatchEvent({ type: "change", property: "surges.current", oldValue: oldValue, newValue: this.actor.surges.current });
-                }.bind(this) });
-                this.surgesPerDay = new Editor({ $parent: this.$tr.find(".hp .surgesPerDay ._editor"), _className: "surge perDay", tagName: "span", html: this.actor.surges.perDay, onchange: function(v) {
-                    var oldValue = this.actor.surges.perDay;
-                    this.actor.surges.perDay = parseInt(v, 10);
-                    this.actor.dispatchEvent({ type: "change", property: "surges.perDay", oldValue: oldValue, newValue: this.actor.surges.perDay });
-                }.bind(this) });
-                this.ap = new Editor({ $parent: this.$tr.find(".hp .ap ._editor"), _className: "ap", tagName: "span", html: this.actor.ap, onchange: function(v) {
-                    var oldValue = this.actor.ap;
-                    this.actor.ap = parseInt(v, 10);
-                    this.actor.dispatchEvent({ type: "change", property: "ap", oldValue: oldValue, newValue: this.actor.ap });
-                }.bind(this) });
+                this.hpTemp = new Editor({ $parent: this.$tr.find(".hp .temp ._editor"), _className: "hp temp", tagName: "span", html: this.actor.hp.temp, onchange: this._changeValue.bind(this, "hp.temp") });
+                this.hpCurrent = new Editor({ $parent: this.$tr.find(".hp .current ._editor"), _className: "hp current", tagName: "span", html: this.actor.hp.current, onchange: this._changeValue.bind(this, "hp.current") });
+                this.hpTotal = new Editor({ $parent: this.$tr.find(".hp .total ._editor"), _className: "hp total", tagName: "span", html: this.actor.hp.total, onchange: this._changeValue.bind(this, "hp.total") });
+                this.surgesCurrent = new Editor({ $parent: this.$tr.find(".hp .surgesCurrent ._editor"), _className: "surge current", tagName: "span", html: this.actor.surges.current, onchange: this._changeValue.bind(this, "surges.current") });
+                this.surgesPerDay = new Editor({ $parent: this.$tr.find(".hp .surgesPerDay ._editor"), _className: "surge perDay", tagName: "span", html: this.actor.surges.perDay, onchange: this._changeValue.bind(this, "surges.perDay") });
+                this.ap = new Editor({ $parent: this.$tr.find(".hp .ap ._editor"), _className: "ap", tagName: "span", html: this.actor.ap, onchange: this._changeValue.bind(this, "ap") });
 
                 this.$attack = this.$tr.find(".attack");
+                this.$buff = this.$tr.find(".buff");
                 this.$heal = this.$tr.find(".heal");
                 this.$exit = this.$tr.find(".exit");
                 this.$rename = this.$tr.find(".rename");
 
                 this.history.addToPage(this.$tr.find(".history div"));
+            };
+
+            ActorRow.prototype._changeValue = function(fullProperty, newValue) {
+                var parentObj, parts, property, oldValue;
+                parentObj = this.actor;
+                parts = fullProperty.split(".");
+                while (parts.length > 1) {
+                    property = parts.shift();
+                    if (property && parentObj.hasOwnProperty(property)) {
+                        parentObj = parentObj[ property ]
+                    }
+                }
+                property = parts.shift();
+                oldValue = parentObj[ property ];
+                try {
+                    newValue = parseInt(newValue, 10);
+                }
+                catch(e) {
+                    this.actor.history.add(new HistoryEntry({
+                        message: "Failed to manualy change " + fullProperty + " because " + e,
+                        round: this.actor.history._round,
+                        subject: this.actor
+                    }));
+                    return;
+                }
+                if (!window.isNaN(newValue)) {
+                    parentObj[ property ] = newValue;
+                    this.actor.history.add(new HistoryEntry({
+                        message: "Manually changed " + fullProperty + " from " + oldValue + " to " + newValue,
+                        round: this.actor.history._round,
+                        subject: this.actor
+                    }));
+                    this.actor.dispatchEvent({ type: "change", property: fullProperty, oldValue: oldValue, newValue: newValue });
+                }
             };
 
             ActorRow.prototype._addDefense = function($field, defense) {
@@ -197,8 +210,14 @@
                 else if ($action.hasClass("attack")) {
                     row.params.attack();
                 }
+                else if ($action.hasClass("buff")) {
+                    row.params.buff();
+                }
                 else if ($action.hasClass("heal")) {
                     row.params.heal();
+                }
+                else if ($action.hasClass("history")) {
+                    row.params.showHistory();
                 }
                 else if ($action.hasClass("exit")) {
                     row.params.exit();
