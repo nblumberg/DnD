@@ -23,10 +23,10 @@
                 },
                 // Druid of Summer
                 defenses: {
-                    ac: 27,
-                    fort: 29,
-                    ref: 22,
-                    will: 28
+                    ac: 28,
+                    fort: 30,
+                    ref: 23,
+                    will: 29
                 },
                 // Druid of the Wastes
                 //defenses: {
@@ -48,8 +48,8 @@
                 effects: []
             };
             Barases.hp.total = 12 +
-                helpers.mod(Barases.abilities.CON) +
-                (5 * partyLevel) +
+                Barases.abilities.CON +
+                (5 * (partyLevel - 1)) +
                 10; // Toughness @ level 11
             Barases.skills = helpers.skills(Barases, { athletics: 5, bluff: 5, nature: 5, perception: 5 });
             Barases = jQuery.extend(true, {}, Barases, {
@@ -63,17 +63,17 @@
                 speed: 6,
                 weapons: [
                     {
-                        name: "Frost Brand Quarterstaff +3",
+                        name: "Thunder Brand Quarterstaff +3",
                         isMelee: true,
                         enhancement: 3,
                         proficiency: 2,
-                        type: "cold",
+                        type: "thunder",
                         damage: {
                             // Druid of Summer
                             //amount: "1d12",
                             // Druid of the Wastes
-                            amount: "1d8",
-                            crit: { amount: "3d8", type: "cold" }
+                            amount: "1d12",
+                            crit: { amount: "3d8", type: "thunder" }
                         },
                         keywords: [ "cold" ]
                     }, {
@@ -120,13 +120,13 @@
                 ],
                 attackBonuses: [
                     {
-                        name: "Lasting Frost",
-                        effects: [ { name: "Vulnerable", amount: 5, type: "cold", duration: "endAttackerNext" } ],
+                        name: "Lasting Thunder",
+                        effects: [ { name: "Vulnerable", amount: 5, type: "thunder", duration: "endAttackerNext" } ],
                         keywords: [ "cold" ],
                         description: descriptions[ "Lasting Frost" ]
                     }, {
-                        name: "Wintertouched",
-                        vulnerable: "cold",
+                        name: "Thundertouched",
+                        vulnerable: "thunder",
                         toHit: 2,
                         description: descriptions[ "Wintertouched" ]
                     }
@@ -143,7 +143,8 @@
                         keywords: [
                             "weapon", "melee", "basic"
                         ]
-                    }, {
+                    },
+                    {
                         name: "Ranged Basic",
                         usage: {
                             frequency: "At-Will"
@@ -154,7 +155,8 @@
                         keywords: [
                             "weapon", "ranged", "basic"
                         ]
-                    }, {
+                    },
+                    {
                         name: "Tending Strike",
                         usage: {
                             frequency: "At-Will"
@@ -166,7 +168,8 @@
                             "weapon", "melee", "primal"
                         ],
                         description: descriptions[ "Tending Strike" ]
-                    }, {
+                    },
+                    {
                         name: "Combined Attack",
                         usage: {
                             frequency: "Encounter"
@@ -178,7 +181,8 @@
                             "weapon", "melee", "primal"
                         ],
                         description: descriptions[ "Combined Attack" ]
-                    }, {
+                    },
+                    {
                         name: "Combined Attack (beast)",
                         usage: {
                             frequency: "At-Will"
@@ -191,7 +195,8 @@
                             "melee", "primal", "beast"
                         ],
                         description: descriptions[ "Combined Attack" ]
-                    }, {
+                    },
+                    {
                         name: "Redfang Prophecy",
                         usage: {
                             frequency: "Encounter"
@@ -213,7 +218,8 @@
                             "implement", "primal", "psychic"
                         ],
                         description: descriptions[ "Redfang Prophecy" ]
-                    }, {
+                    },
+                    {
                         name: "Spirit's Shield",
                         usage: {
                             frequency: "Encounter"
@@ -229,7 +235,8 @@
                             "healing", "implement", "spirit", "primal"
                         ],
                         description: descriptions[ "Spirit's Shield" ]
-                    }, {
+                    },
+                    {
                         name: "Vexing Overgrowth",
                         usage: {
                             frequency: "Daily"
@@ -248,7 +255,8 @@
                             "weapon", "primal"
                         ],
                         description: descriptions[ "Vexing Overgrowth" ]
-                    }, {
+                    },
+                    {
                         name: "Life Blood Harvest",
                         usage: {
                             frequency: "Daily"
@@ -263,56 +271,107 @@
                             "weapon", "melee", "primal", "healing"
                         ],
                         description: descriptions[ "Life Blood Harvest" ]
+                    },
+                    {
+                        name: "Stonemetal",
+                        usage: {
+                            frequency: "Daily"
+                        },
+                        toHit: "automatic",
+                        defense: "AC",
+                        damage: "4",
+                        effects: [
+                            "prone"
+                        ],
+                        keywords: [
+                            "weapon", "melee", "primal", "healing"
+                        ],
+                        description: descriptions[ "Stonemetal" ]
                     }
                 ],
-                healing: [
+                buffs: [
                     {
                         name: "Tending Strike",
-                        frequency: "At-Will",
-                        isTempHP: true,
-                        usesHealingSurge: false,
-                        amount: "CON",
+                        usage: {
+                            frequency: "At-Will",
+                        },
+                        healing: {
+                            isTempHP: true,
+                            usesHealingSurge: false,
+                            amount: "CON"
+                        },
                         description: descriptions[ "Tending Strike" ]
                     },
                     {
                         name: "Life Blood Harvest",
-                        frequency: "Daily",
-                        isTempHP: false,
-                        usesHealingSurge: false,
-                        amount: "HS",
+                        usage: {
+                            frequency: "Daily",
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "HS"
+                        },
                         description: descriptions[ "Life Blood Harvest" ]
                     },
                     {
                         name: "Healing Spirit",
-                        frequency: "Encounter",
-                        isTempHP: false,
-                        usesHealingSurge: true,
-                        amount: "HS",
+                        usage: {
+                            frequency: "Encounter",
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: true,
+                            amount: "HS"
+                        },
                         description: descriptions[ "Healing Spirit" ]
                     },
                     {
                         name: "Healing Spirit (secondary)",
-                        frequency: "Encounter",
-                        isTempHP: false,
-                        usesHealingSurge: false,
-                        amount: "3d6",
+                        usage: {
+                            frequency: "Encounter",
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "3d6"
+                        },
                         description: descriptions[ "Healing Spirit" ]
                     },
                     {
                         name: "Healing Word",
-                        frequency: "2xEncounter",
-                        isTempHP: false,
-                        usesHealingSurge: true,
-                        amount: "HS+3d6",
+                        usage: {
+                            frequency: "Encounter",
+                            perEncounter: 3
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: true,
+                            amount: "4d6+HS"
+                        },
                         description: descriptions[ "Healing Word" ]
                     },
                     {
                         name: "Spirit's Shield",
-                        frequency: "Encounter",
-                        isTempHP: false,
-                        usesHealingSurge: false,
-                        amount: "WIS",
+                        usage: {
+                            frequency: "Encounter",
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "WIS"
+                        },
                         description: descriptions[ "Spirit's Shield" ]
+                    },
+                    {
+                        name: "Thunder Brand (resistance)",
+                        usage: {
+                            frequency: "At-Will",
+                        },
+                        effects: [
+                            { name: "resistance", type: "thunder", amount: 9 }
+                        ],
+                        description: descriptions[ "Frost Brand Weapon" ]
                     }
                 ]
             });

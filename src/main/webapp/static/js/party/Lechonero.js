@@ -40,7 +40,7 @@
                 "implements": [],
                 effects: []
             };
-            Lechonero.hp.total = 12 + helpers.mod(Lechonero.abilities.CON) + (5 * partyLevel);
+            Lechonero.hp.total = 12 + Lechonero.abilities.CON + (5 * (partyLevel - 1));
             Lechonero.skills = helpers.skills(Lechonero, {
                 athletics: 5,
                 nature: 5,
@@ -108,7 +108,8 @@
                         keywords: [
                             "weapon", "melee", "basic"
                         ]
-                    }, {
+                    },
+                    {
                         name: "Ranged Basic",
                         usage: {
                             frequency: "At-Will"
@@ -119,7 +120,8 @@
                         keywords: [
                             "weapon", "ranged", "basic"
                         ]
-                    }, {
+                    },
+                    {
                         name: "Rapid Shot",
                         usage: {
                             frequency: "At-Will"
@@ -131,7 +133,8 @@
                             "weapon", "martial", "ranged"
                         ],
                         description: descriptions[ "Rapid Shot" ]
-                    }, {
+                    },
+                    {
                         name: "Twin Strike",
                         usage: {
                             frequency: "At-Will"
@@ -143,25 +146,27 @@
                             "weapon", "martial"
                         ],
                         description: descriptions[ "Twin Strike" ]
-                    }, {
-                        name: "Hindering Shot",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        toHit: "DEX",
-                        defense: "AC",
-                        damage: "2[W]+DEX",
-                        effects: [
-                            {
-                                name: "slowed",
-                                duration: "endAttackerNext"
-                            }
-                        ],
-                        keywords: [
-                            "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Hindering Shot" ]
-                    }, {
+                    },
+                    //{
+                    //    name: "Hindering Shot",
+                    //    usage: {
+                    //        frequency: "Encounter"
+                    //    },
+                    //    toHit: "DEX",
+                    //    defense: "AC",
+                    //    damage: "2[W]+DEX",
+                    //    effects: [
+                    //        {
+                    //            name: "slowed",
+                    //            duration: "endAttackerNext"
+                    //        }
+                    //    ],
+                    //    keywords: [
+                    //        "weapon", "martial", "ranged"
+                    //    ],
+                    //    description: descriptions[ "Hindering Shot" ]
+                    //},
+                    {
                         name: "Covering Volley",
                         usage: {
                             frequency: "Encounter"
@@ -185,7 +190,8 @@
                             "martial", "ranged"
                         ],
                         description: descriptions[ "Covering Volley" ]
-                    }, {
+                    },
+                    {
                         name: "Spikes of the Manticore",
                         usage: {
                             frequency: "Encounter"
@@ -209,7 +215,8 @@
                             "weapon", "martial", "ranged"
                         ],
                         description: descriptions[ "Spikes of the Manticore" ]
-                    }, {
+                    },
+                    {
                         name: "Shaft Splitter",
                         usage: {
                             frequency: "Encounter"
@@ -221,7 +228,8 @@
                             "weapon", "martial", "ranged"
                         ],
                         description: descriptions[ "Shaft Splitter" ]
-                    }, {
+                    },
+                    {
                         name: "Hammering Volley",
                         usage: {
                             frequency: "Encounter"
@@ -235,19 +243,21 @@
                             "weapon", "martial", "ranged"
                         ],
                         description: descriptions[ "Hammering Volley" ]
-                    }/*, {
-                     name: "Sure Shot",
-                     usage: {
-                     frequency: "Daily"
-                     },
-                     toHit: "DEX",
-                     defense: "AC",
-                     damage: "3[W]+DEX",
-                     keywords: [
-                     "weapon", "martial", "ranged"
-                     ],
-                        description: descriptions[ "Sure Shot" ]
-                     }*/, {
+                    },
+                    //{
+                    //    name: "Sure Shot",
+                    //    usage: {
+                    //        frequency: "Daily"
+                    //    },
+                    //    toHit: "DEX",
+                    //    defense: "AC",
+                    //    damage: "3[W]+DEX",
+                    //    keywords: [
+                    //        "weapon", "martial", "ranged"
+                    //    ],
+                    //    description: descriptions[ "Sure Shot" ]
+                    //},
+                    {
                         name: "Flying Steel",
                         usage: {
                             frequency: "Daily"
@@ -259,7 +269,8 @@
                             "weapon", "martial", "ranged"
                         ],
                         description: descriptions[ "Flying Steel" ]
-                    }, {
+                    },
+                    {
                         name: "Trick Shot (prone)",
                         usage: {
                             frequency: "Daily"
@@ -319,7 +330,8 @@
                             "weapon", "martial", "ranged"
                         ],
                         description: descriptions[ "Trick Shot" ]
-                    }, {
+                    },
+                    {
                         name: "Marked for Death",
                         usage: {
                             frequency: "Daily"
@@ -337,7 +349,8 @@
                             "weapon", "martial"
                         ],
                         description: descriptions[ "Marked for Death" ]
-                    }, {
+                    },
+                    {
                         name: "Hunter's Quarry",
                         usage: {
                             frequency: "At-Will"
@@ -346,6 +359,32 @@
                         defense: "AC",
                         damage: "1d8",
                         description: descriptions[ "Hunter's Quarry" ]
+                    }
+                ],
+                buffs: [
+                    {
+                        name: "Communion (self)",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        healing: {
+                            isTempHP: true,
+                            usesHealingSurge: true,
+                            amount: "" + (3 + Math.floor(partyLevel / 2))
+                        },
+                        description: descriptions[ "Communion" ]
+                    },
+                    {
+                        name: "Communion (other)",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "HS"
+                        },
+                        description: descriptions[ "Communion" ]
                     }
                 ]
             });

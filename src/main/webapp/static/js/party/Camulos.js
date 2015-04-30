@@ -369,7 +369,7 @@
                 ],
                 effects: []
             };
-            Camulos.hp.total = 15 + helpers.mod(Camulos.abilities.CON) + (6 * partyLevel);
+            Camulos.hp.total = 15 + Camulos.abilities.CON + (6 * (partyLevel - 1));
             Camulos.skills = helpers.skills(Camulos, {
                 athletics: 5,
                 endurance: 5,

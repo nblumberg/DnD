@@ -252,7 +252,7 @@
                 ],
                 effects: []
             };
-            Melvin.hp.total = 12 + helpers.mod(Melvin.abilities.CON) + (5 * partyLevel);
+            Melvin.hp.total = 12 + Melvin.abilities.CON + (5 * (partyLevel - 1));
             Melvin.skills = helpers.skills(Melvin, {
                 acrobatics: 5,
                 athletics: 5,

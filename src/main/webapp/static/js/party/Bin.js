@@ -32,9 +32,9 @@
                 },
                 defenses: {
                     ac: 28,
-                    fort: 24,
-                    ref: 25,
-                    will: 26
+                    fort: 25,
+                    ref: 26,
+                    will: 27
                 },
                 resistances: { cold: 10 }, // technically the energy type is random after each extended rest "Chaos touched" paragon path feature
                 init: 10,
@@ -340,53 +340,75 @@
                         description: descriptions[ "Clockroach Swarm" ]
                     }
                 ],
-                healing: [
+                buffs: [
                     {
                         name: "Vampiric Weapons",
-                        frequency: "Encounter",
-                        isTempHP: false,
-                        usesHealingSurge: false,
-                        amount: "1d6+CON",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "1d6+CON"
+                        },
                         description: descriptions[ "Vampiric Weapons" ]
                     },
                     {
                         name: "Healing Infusion: Curative Admixture",
-                        frequency: "2xEncounter",
-                        isTempHP: false,
-                        usesHealingSurge: false,
-                        amount: "HS+WIS+4",
+                        usage: {
+                            frequency: "Encounter",
+                            perEncounter: 2
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "WIS+6+HS"
+                        },
                         description: descriptions[ "Healing Infusion: Curative Admixture" ]
                     },
                     {
                         name: "Healing Infusion: Resistive Formula",
-                        frequency: "2xEncounter",
-                        isTempHP: true,
-                        usesHealingSurge: false,
-                        amount: "HS+CON+CON",
+                        usage: {
+                            frequency: "Encounter",
+                            perEncounter: 2
+                        },
+                        healing: {
+                            isTempHP: true,
+                            usesHealingSurge: false,
+                            amount: "CON+CON+HS"
+                        },
                         description: descriptions[ "Healing Infusion: Resistive Formula" ]
                     },
                     {
                         name: "Recuperative Enchantment",
-                        frequency: "Encounter",
-                        isTempHP: false,
-                        usesHealingSurge: true,
-                        amount: "HS",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "HS"
+                        },
                         description: descriptions[ "Recuperative Enchantment" ]
                     },
                     {
                         name: "Shared Valor Leather Armor",
-                        frequency: "At-Will",
-                        isTempHP: true,
-                        usesHealingSurge: false,
-                        amount: "5",
+                        usage: {
+                            frequency: "At-Will"
+                        },
+                        healing: {
+                            isTempHP: true,
+                            usesHealingSurge: false,
+                            amount: "5"
+                        },
                         description: descriptions[ "Shared Valor Armor" ]
                     }
                 ],
                 effects: []
             };
             Bin.hp.total = 12 +
-                helpers.mod(Bin.abilities.CON) +
-                (5 * partyLevel);
+                Bin.abilities.CON +
+                (5 * (partyLevel - 1));
             Bin.skills = helpers.skills(Bin, { arcana: 5, dungeoneering: 5, endurance: 2, history: 5, perception: 5, thievery: 5 });
             return Bin;
         },

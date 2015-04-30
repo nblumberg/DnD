@@ -306,51 +306,71 @@
                         description: descriptions[ "Hunter's Quarry" ]
                     }
                 ],
-                healing: [
+                buffs: [
                     /* {
                         name: "Boar Assault",
-                        frequency: "At-Will",
-                        isTempHP: true,
-                        usesHealingSurge: false,
-                        amount: "WIS",
+                        usage: {
+                             frequency: "At-Will"
+                        },
+                        healing: {
+                             isTempHP: true,
+                             usesHealingSurge: false,
+                             amount: "WIS"
+                        },
                         description: descriptions[ "Boar Assault" ]
                     }, */
                     {
                         name: "Invigorating Assault",
-                        frequency: "At-Will",
-                        isTempHP: true,
-                        usesHealingSurge: false,
-                        amount: "5+WIS",
+                        usage: {
+                            frequency: "At-Will"
+                        },
+                        healing: {
+                            isTempHP: true,
+                            usesHealingSurge: false,
+                            amount: "WIS+5"
+                        },
                         description: descriptions[ "Invigorating Assault" ]
                     },
                     {
                         name: "Healing Spirit",
-                        frequency: "Encounter",
-                        isTempHP: false,
-                        usesHealingSurge: true,
-                        amount: "HS",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: true,
+                            amount: "HS"
+                        },
                         description: descriptions[ "Healing Spirit" ]
                     },
                     {
                         name: "Healing Spirit (secondary)",
-                        frequency: "Encounter",
-                        isTempHP: false,
-                        usesHealingSurge: false,
-                        amount: "3d6",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "3d6"
+                        },
                         description: descriptions[ "Healing Spirit" ]
                     },
                     {
                         name: "Spirit of Sacrifice",
-                        frequency: "Encounter",
-                        isTempHP: true,
-                        usesHealingSurge: false,
-                        amount: "7+STR^WIS",
+                        usage: {
+                            frequency: "Encounter"
+                        },
+                        healing: {
+                            isTempHP: true,
+                            usesHealingSurge: false,
+                            amount: "7+STR^WIS"
+                        },
                         description: descriptions [ "Spirit of Sacrifice" ]
                     }
                 ],
                 effects: []
             };
-            Karrion.hp.total = 12 + helpers.mod(Karrion.abilities.CON) + (5 * partyLevel);
+            Karrion.hp.total = 12 + Karrion.abilities.CON + (5 * (partyLevel - 1));
             Karrion.skills = helpers.skills(Karrion, {
                 acrobatics: 5,
                 athletics: 5,

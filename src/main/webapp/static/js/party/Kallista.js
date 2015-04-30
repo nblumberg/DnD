@@ -293,7 +293,7 @@
                 ],
                 effects: []
             };
-            Kallista.hp.total = 12 + helpers.mod(Kallista.abilities.CON) + (5 * partyLevel);
+            Kallista.hp.total = 12 + Kallista.abilities.CON + (5 * (partyLevel - 1));
             Kallista.skills = helpers.skills(Kallista, {
                 acrobatics: 5 + helpers.mod(Kallista.abilities.CHA), // Duelist's Panache feat
                 athletics: 5 + helpers.mod(Kallista.abilities.CHA), // Duelist's Panache feat

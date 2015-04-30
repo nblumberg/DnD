@@ -371,27 +371,36 @@
                         description: descriptions[ "Prismatic Lightning" ]
                     }
                 ],
-                healing: [
+                buffs: [
                     {
                         name: "Majestic Word",
-                        frequency: "2xEncounter",
-                        isTempHP: false,
-                        usesHealingSurge: true,
-                        amount: "HS+2d6+CHA",
+                        usage: {
+                            frequency: "Encounter",
+                            perEncounter: 3
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: true,
+                            amount: "2d6+CHA+HS",
+                        },
                         description: descriptions[ "Majestic Word" ]
                     },
                     {
                         name: "Stirring Shout",
-                        frequency: "At-Will",
-                        isTempHP: false,
-                        usesHealingSurge: false,
-                        amount: "CHA",
+                        usage: {
+                            frequency: "At-Will",
+                        },
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: false,
+                            amount: "CHA"
+                        },
                         description: descriptions[ "Stirring Shout" ]
                     }
                 ],
                 effects: []
             };
-            Festivus.hp.total = 12 + helpers.mod(Festivus.abilities.CON) + (5 * partyLevel);
+            Festivus.hp.total = 12 + Festivus.abilities.CON + (5 * (partyLevel - 1));
             Festivus.skills = helpers.skills(Festivus, {
                 arcana: 7, // Bardic Knowledge feat
                 dungeoneering: 2, // Bardic Knowledge feat
