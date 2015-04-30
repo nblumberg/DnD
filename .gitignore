@@ -1,7 +1,11 @@
 initiative.json
+src/main/static/*.json
 .settings/
 bin/
 coverage/
 karma_html/
 node_modules/
 saves/
+DnD.iml
+test-results.xml
+

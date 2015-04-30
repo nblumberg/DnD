@@ -497,6 +497,19 @@
                         }
                     ]
                 },
+                "Cyclops Crusher": {
+                    name: "Cyclops Crusher", level: 14, image: "../images/portraits/cyclops.jpg",
+                    hp: { total: 171 },
+                    defenses: { ac: 26, fort: 27, ref: 26, will: 25 },
+                    init: 12, speed: 6,
+                    abilities: { STR: 22, CON: 20, DEX: 16, INT: 11, WIS: 17, CHA: 11 },
+                    skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Spiked Greatclub", usage: { frequency: "At-Will" }, range: "2", toHit: 17, defense: "AC", damage: "2d10+8", keywords: [ "melee", "basic" ] },
+                        { name: "Evil Eye", usage: { frequency: "At-Will" }, range: "2", toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "penalty", amount: -2, type: "attacks" } ], keywords: [ "ranged" ] },
+                        { name: "Tremor Smash", usage: { frequency: "Recharge", recharge: 5 }, range: "2", toHit: 17, defense: "AC", damage: "2d12+8", effects: [ { name: "prone" } ], keywords: [ "melee" ] }
+                    ]
+                },
                 "Cyclops Guard": {
                     name: "Cyclops Guard", level: 14, image: "../images/portraits/cyclops.jpg",
                     hp: { total: 1 },
@@ -506,6 +519,21 @@
                     skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
                     attacks: [
                         { name: "Battleaxe", usage: { frequency: "At-Will" }, range: "2", toHit: 17, defense: "AC", damage: "7", keywords: [ "melee", "basic" ] }
+                    ]
+                },
+                "Cyclops Slaver": {
+                    name: "Cyclops Slaver", level: 15, image: "../images/portraits/cyclops.jpg",
+                    hp: { total: 149 },
+                    defenses: { ac: 29, fort: 27, ref: 29, will: 25 },
+                    init: 12, speed: 6,
+                    abilities: { STR: 22, CON: 20, DEX: 16, INT: 11, WIS: 17, CHA: 11 },
+                    skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Spear", usage: { frequency: "At-Will" }, range: "2", toHit: 20, defense: "AC", damage: "2d10+4", keywords: [ "melee", "basic" ] },
+                        { name: "Shuriken", usage: { frequency: "At-Will" }, range: "2", toHit: 20, defense: "AC", damage: "2d6+4", keywords: [ "ranged" ] },
+                        { name: "Evil Eye", usage: { frequency: "At-Will" }, range: "2", toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "penalty", amount: -2, type: "attacks" } ], keywords: [ "ranged" ] },
+                        { name: "Barbed Net", usage: { frequency: "Recharge", recharge: 4 }, range: "2", toHit: 19, defense: "Ref", damage: "1d10+6", effects: [ { name: "multiple", saveEnds: true, children: [ { name: "restrained" }, { name: "ongoing damage", amount: 10 } ] } ], keywords: [ "ranged" ] },
+                        { name: "Sleep Powder Flask", usage: { frequency: "Encounter" }, range: "2", toHit: 19, defense: "Fort", damage: "0", effects: [ { name: "slowed", saveEnds: true } ], keywords: [ "ranged" ] }
                     ]
                 },
                 "Dragonborn Gladiator": {
@@ -633,6 +661,47 @@
                         { name: "Vitriolic Spray", usage: { frequency: "Encounter" }, target: { size: 3, area: "close blast" }, toHit: 16, defense: "Fort", damage: { amount: "1d10+4", type: "acid" }, effects: [
                             { name: "Blinded", duration: "endAttackerNext" }
                         ], keywords: [ "close burst", "acid" ] }
+                    ]
+                },
+                "Firbolg Bloodbear": {
+                    name: "Firbolg Bloodbear", level: 15, image: "../images/portraits/firbolg_bloodbear.png",
+                    hp: { total: 240, regeneration: 5 },
+                    defenses: { ac: 30, fort: 28, ref: 29, will: 28 },
+                    vulnerabilities: { necrotic: 5 },
+                    actionPoints: 1,
+                    init: 18, speed: 8,
+                    abilities: { STR: 20, CON: 17, DEX: 23, INT: 13, WIS: 21, CHA: 15 },
+                    skills: { athletics: 18, nature: 18, stealth: 19 },
+                    attacks: [
+                        { name: "Slam", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "2d8+9", keywords: [ "melee", "basic" ] },
+                        { name: "Claw", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "2d12+9", keywords: [ "melee", "basic" ] },
+                        { name: "Double Attack (secondary)", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "Fort", damage: "0", effects: [ { name: "grabbed" } ], keywords: [ "melee" ] },
+                        { name: "Bloodbear Maul", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "4d10+9", keywords: [ "melee" ] },
+                        { name: "Bite", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "3d12+9", keywords: [ "melee" ] },
+                        { name: "Bite (combat advantage)", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "3d12+9", effects: [ { name: "ongoing damage", amount: 10, saveEnds: true } ], keywords: [ "melee" ] },
+                        { name: "Moonfire", usage: { frequency: "Recharge", recharge: 4, action: "minor" }, target: { range: 10 }, toHit: 15, defense: "Will", damage: "0", effects: [ { name: "No invisibility or concealment", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
+                    ],
+                    buffs: [
+                        { name: "Bloodbear Form", effects: [ { name: "regeneration", amount: 10 } ] }
+                    ]
+                },
+                "Firbolg Ghostraven": {
+                    name: "Firbolg Ghostraven", level: 16, image: "../images/portraits/firbolg_ghostraven.png",
+                    hp: { total: 236, regeneration: 5 },
+                    defenses: { ac: 30, fort: 28, ref: 29, will: 28 },
+                    vulnerabilities: { necrotic: 5 },
+                    actionPoints: 1,
+                    init: 18, speed: 8,
+                    abilities: { STR: 20, CON: 17, DEX: 23, INT: 13, WIS: 21, CHA: 15 },
+                    skills: { athletics: 18, nature: 18, stealth: 19 },
+                    attacks: [
+                        { name: "Heavy War Pick", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", damage: "1d12+7", keywords: [ "melee", "basic" ] },
+                        { name: "Double Attack (blinded)", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "0", effects: [ { name: "blinded", saveEnds: true } ], keywords: [ "melee" ] },
+                        { name: "Moonfire", usage: { frequency: "Recharge", recharge: 4, action: "minor" }, target: { range: 10 }, toHit: 19, defense: "Will", damage: "0", effects: [ { name: "No invisibility or concealment", duration: "endAttackerNext" } ], keywords: [ "ranged" ] },
+                        { name: "Ghostraven Strike", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "2d8", keywords: [ "melee" ] }
+                    ],
+                    buffs: [
+                        { name: "Ghostraven Form", effects: [ { name: "insubstantial" }, { name: "phasing" }, { name: "concealment" } ] }
                     ]
                 },
                 "Flame Shard": {
@@ -1469,6 +1538,19 @@
                         { name: "Claw", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6", type: "poison" } ], keywords: [ "melee", "basic" ] },
                         { name: "Javelin", usage: { frequency: "At-Will" }, range: "ranged", toHit: 17, defense: "AC", damage: [ "1d6+5", { amount: "1d6", type: "poison" } ], keywords: [ "ranged", "basic" ] },
                         { name: "Acid Spit", usage: { frequency: "At-Will" }, range: "ranged", toHit: 15, defense: "Ref", damage: { amount: "1d6", type: "acid" }, keywords: [ "ranged" ] }
+                    ]
+                },
+                "Stone Golem": {
+                    name: "Stone Golem", level: 17, image: "https://s-media-cache-ak0.pinimg.com/236x/15/6b/43/156b43d9ba83ed4b8c024eee0c4c04e1.jpg",
+                    hp: { total: 336 },
+                    defenses: { ac: 33, fort: 33, ref: 24, will: 24 },
+                    init: 12, speed: 6,
+                    abilities: { STR: 22, CON: 20, DEX: 16, INT: 11, WIS: 17, CHA: 11 },
+                    skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 15, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                    attacks: [
+                        { name: "Slam", usage: { frequency: "At-Will" }, range: "2", toHit: 23, defense: "AC", damage: "3d6+7", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "melee", "basic" ] },
+                        { name: "Golem Rampage", usage: { frequency: "Recharge", recharge: 5 }, range: "2", toHit: 23, defense: "AC", damage: "3d6+7", effects: [ { name: "dazed", saveEnds: true } ], keywords: [ "melee" ] },
+                        { name: "Death Burst", usage: { frequency: "Encounter" }, range: "2", toHit: 23, defense: "AC", damage: "2d6+7", keywords: [ "ranged" ] }
                     ]
                 },
                 "Storm Abishai Sniper": {
