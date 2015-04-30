@@ -31,7 +31,7 @@
                 this.$parent = jQuery("<span/>").addClass("editor").attr("data-editor-id", this.id).appendTo(this.$grandparent);
                 this.$html = jQuery("<" + this._tagName + "></" + this._tagName + ">").addClass("display " + this._className).html(this._html);
                 this.$html.appendTo(this.$parent)
-                this.$input = jQuery("<input/>").attr("type", "text").val(this.$html.html()).appendTo(this.$parent);
+                this.$input = jQuery("<input/>").attr("type", "text").addClass("input").val(this.$html.html()).appendTo(this.$parent);
                 this.$save = jQuery("<button/>").addClass("save").attr("title", "Save").html("&#x2713;").appendTo(this.$parent);
                 this.$cancel = jQuery("<button/>").addClass("cancel").attr("title", "Cancel").html("X").appendTo(this.$parent);
             }
@@ -54,6 +54,18 @@
                     editor._cancel(event);
                 }
             });
+            jQuery(w.document).on("keyup", ".editor .input", function(event) {
+                var $element, $editor, editor;
+                if (event.keyCode === 13) {
+                    $element = jQuery(this);
+                    $editor = $element.parents(".editor");
+                    editor = Editor.editors[ parseInt($editor.attr("data-editor-id"), 10) ];
+                    if (!editor) {
+                        return;
+                    }
+                    editor._save(event);
+                }
+            });
 
             Editor.editors = [];
 
@@ -63,6 +75,13 @@
                     this.$parent.appendTo(this.$grandparent);
                 }
                 this.$html.on({ dblclick: this._edit.bind(this), click: this._edit.bind(this) });
+                this.$input.on({
+                    keyup: function(event) {
+                        if (event.keyCode === 13) {
+                            this._save();
+                        }
+                    }.bind(this)
+                });
                 this.$save.on({ click: this._save.bind(this) });
                 this.$cancel.on({ click: this._cancel.bind(this) });
             };
