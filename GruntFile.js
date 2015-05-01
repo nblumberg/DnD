@@ -128,6 +128,25 @@ module.exports = function (grunt) {
      * HTML ASSETS
      *************/
 
+    options.includeSource = {
+        options: {
+            basePath: "src/main/webapp/static/",
+            baseUrl: "../",
+            templates: {
+                html: {
+                    js: "<script src=\"{filePath}\"></script>",
+                    css: "<link rel=\"stylesheet\" type=\"text/css\" href=\"{filePath}\" />"
+                }
+            }
+        },
+        html: {
+            files: {
+                "src/main/webapp/static/html/initiative_admin.html": "src/main/webapp/static/html/initiative_admin.tp.html",
+                "src/main/webapp/static/html/initiative.html": "src/main/webapp/static/html/initiative.tp.html"
+            }
+        }
+    };
+
     /**************
      * JS ASSETS
      *************/
@@ -240,6 +259,16 @@ module.exports = function (grunt) {
      * SERVING
      *************/
 
+    options.execute = {
+        server: {
+            options: {
+                // overide code cwd (defaults to "." for project main)
+                cwd: "."
+            },
+            src: [ "src/main/webapp/server.js" ]
+        }
+    };
+
     options.liveReloadPort = 35729;
     options.connect = {
         tests: {
@@ -264,6 +293,9 @@ module.exports = function (grunt) {
         },
         specRunner: {
             path: "http://localhost:8234/spec-runner.html"
+        },
+        admin: {
+            path: "http://localhost:7005/html/initiative_admin.html"
         }
     };
 
@@ -303,6 +335,8 @@ module.exports = function (grunt) {
      * TASKS
      *************/
 
+    grunt.loadNpmTasks("grunt-include-source");
+
     grunt.initConfig(options);
 
     // default mode -> does nothing currently
@@ -313,7 +347,7 @@ module.exports = function (grunt) {
 
     // debug mode
     grunt.registerTask("specRunner", [ "jasmine_html_from_karma_conf:specRunner" ]);
-    grunt.registerTask("debug", [ "jasmine_html_from_karma_conf:specRunner", "connect:tests", "open", "watch:specRunner" ]);
+    grunt.registerTask("debug", [ "includeSource", "specRunner", "connect:tests", "open", "watch:specRunner" ]);
 //    grunt.registerTask("debug", "start web server for jasmine tests in browser", function() {
 //        grunt.task.run("specRunner");
 //
@@ -329,11 +363,13 @@ module.exports = function (grunt) {
     // Generate unminified and minified, content checksum named .js files
     grunt.registerTask("build", (function() {
         var tasks;
-        tasks = [];
+        tasks = [ "includeSource" ];
         return tasks;
     })());
 
     // continuous dev mode
     grunt.registerTask("dev", [ "build", "specRunner", "watch:dev" ]);
+
+    grunt.registerTask("launch", [ "build", "open:admin", "execute:server" ]);
 
 };

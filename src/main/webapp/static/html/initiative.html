@@ -1,65 +1,118 @@
 <!DOCTYPE>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Initiative</title>
-    <script src="../js/lib/jquery.min.js"></script>
-    <script src="../js/lib/jquery-ui.js"></script>
-    <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" /> -->
-    <link rel="stylesheet" href="../css/jquery-ui-base.css"/>
-    <link rel="stylesheet" href="../css/bootstrap/css/bootstrap.min.css" type="text/css"/>
-    <link rel="stylesheet" href="../css/initiative.css"/>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Initiative</title>
+  <script src="../js/lib/jquery.min.js"></script>
+  <script src="../js/lib/jquery-ui.js"></script>
+  <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" /> -->
+  <link rel="stylesheet" href="../css/jquery-ui-base.css"/>
+  <link rel="stylesheet" href="../css/bootstrap/css/bootstrap.min.css" type="text/css"/>
+  <link rel="stylesheet" href="../css/initiative.css"/>
 
-    <script src="../js/js.js" type="text/javascript"></script>
-    <script src="../js/dnd.js" type="text/javascript"></script>
-    <script src="../js/constants.js" type="text/javascript"></script>
-    <script src="../js/console.js" type="text/javascript"></script>
-    <script src="../js/creatureHelpers.js" type="text/javascript"></script>
-    <script src="../js/descriptions.js" type="text/javascript"></script>
-    <script src="../js/party/partyLevel.js" type="text/javascript"></script>
-    <script src="../js/party/Amyria.js" type="text/javascript"></script>
-    <script src="../js/party/Apparatus_of_Kwalish.js" type="text/javascript"></script>
-    <script src="../js/party/Balugh.js" type="text/javascript"></script>
-    <script src="../js/party/Barases.js" type="text/javascript"></script>
-    <script src="../js/party/Bin.js" type="text/javascript"></script>
-    <script src="../js/party/Camulos.js" type="text/javascript"></script>
-    <script src="../js/party/Festivus.js" type="text/javascript"></script>
-    <script src="../js/party/Kallista.js" type="text/javascript"></script>
-    <script src="../js/party/Karrion.js" type="text/javascript"></script>
-    <script src="../js/party/Kitara.js" type="text/javascript"></script>
-    <script src="../js/party/Lechonero.js" type="text/javascript"></script>
-    <script src="../js/party/Melvin.js" type="text/javascript"></script>
-    <script src="../js/party/Oomooroo.js" type="text/javascript"></script>
-    <script src="../js/party/Purple.js" type="text/javascript"></script>
-    <script src="../js/party/Ringo.js" type="text/javascript"></script>
-    <script src="../js/party/Smack.js" type="text/javascript"></script>
-    <script src="../js/party/Smudge.js" type="text/javascript"></script>
-    <script src="../js/party/Tokk'it.js" type="text/javascript"></script>
-    <script src="../js/party.js" type="text/javascript"></script>
-    <script src="../js/monsters.js" type="text/javascript"></script>
-    <script src="../js/serializable.js" type="text/javascript"></script>
-    <script src="../js/event.js" type="text/javascript"></script>
-    <script src="../js/effect.js" type="text/javascript"></script>
-    <script src="../js/roll.js" type="text/javascript"></script>
-    <script src="../js/recharge.js" type="text/javascript"></script>
-    <script src="../js/savingThrow.js" type="text/javascript"></script>
-    <script src="../js/damage.js" type="text/javascript"></script>
-    <script src="../js/attack.js" type="text/javascript"></script>
-    <script src="../js/history.js" type="text/javascript"></script>
-    <script src="../js/actorCard.js" type="text/javascript"></script>
-    <script src="../js/actorRow.js" type="text/javascript"></script>
-    <script src="../js/abilities.js" type="text/javascript"></script>
-    <script src="../js/defenses.js" type="text/javascript"></script>
-    <script src="../js/hp.js" type="text/javascript"></script>
-    <script src="../js/equipment.js" type="text/javascript"></script>
-    <script src="../js/creature.js" type="text/javascript"></script>
-    <script src="../js/actor.js" type="text/javascript"></script>
-    <script src="../js/listener/listener.js" type="text/javascript"></script>
-  </head>
-  <body>
-    <div id="displayImage">
-      <div class="reticle"></div>
-    </div>
-    <div id="actorCards"></div>
-  </body>
+  <script src="../js/js.js" type="text/javascript"></script>
+  <script src="../js/dnd.js" type="text/javascript"></script>
+
+  <!-- include: "type": "js", "files": [ "js/**/*.js", "!js/dnd.js", "!js/js.js", "!js/lib/**/*.js", "!js/admin/**/*.js", "!js/gameMap/**/*.js" ] -->
+  <script src="../js/abilities.js"></script>
+  <script src="../js/actor.js"></script>
+  <script src="../js/attack.js"></script>
+  <script src="../js/console.js"></script>
+  <script src="../js/constants.js"></script>
+  <script src="../js/creature.js"></script>
+  <script src="../js/creatureHelpers.js"></script>
+  <script src="../js/creatures/Adult_Pact_Dragon.js"></script>
+  <script src="../js/creatures/Amyria.js"></script>
+  <script src="../js/creatures/Antharosk.js"></script>
+  <script src="../js/creatures/Arctic_Sahuagin_(base).js"></script>
+  <script src="../js/creatures/Arctic_Sahuagin_Guard.js"></script>
+  <script src="../js/creatures/Arctic_Sahuagin_Priest.js"></script>
+  <script src="../js/creatures/Arctic_Sahuagin_Raider.js"></script>
+  <script src="../js/creatures/Arctide_Spiralith.js"></script>
+  <script src="../js/creatures/Banshrae_Dartswarmer.js"></script>
+  <script src="../js/creatures/Battle_Wight_Bodyguard.js"></script>
+  <script src="../js/creatures/Beholder_Eye_of_Frost.js"></script>
+  <script src="../js/creatures/Berbalang.js"></script>
+  <script src="../js/creatures/Bitterglass.js"></script>
+  <script src="../js/creatures/Bone_Archivist.js"></script>
+  <script src="../js/creatures/Bone_Scribe.js"></script>
+  <script src="../js/creatures/Brann_ot_Githyanki_Gish.js"></script>
+  <script src="../js/creatures/Calaunxin.js"></script>
+  <script src="../js/creatures/Centaur_Ravager.js"></script>
+  <script src="../js/creatures/Chaos_Mauler.js"></script>
+  <script src="../js/creatures/Chillfire_Destroyer.js"></script>
+  <script src="../js/creatures/Cyclops_Guard.js"></script>
+  <script src="../js/creatures/Dragonborn_(base).js"></script>
+  <script src="../js/creatures/Dragonborn_Gladiator.js"></script>
+  <script src="../js/creatures/Dragonborn_Raider.js"></script>
+  <script src="../js/creatures/Duergar_Hellcaller.js"></script>
+  <script src="../js/creatures/Eidolon.js"></script>
+  <script src="../js/creatures/Elder_Troglodyte_Curse_Chanter.js"></script>
+  <script src="../js/creatures/Filth_King.js"></script>
+  <script src="../js/creatures/Flame_Shard.js"></script>
+  <script src="../js/creatures/Flesh_Golem.js"></script>
+  <script src="../js/creatures/Flux_Slaad.js"></script>
+  <script src="../js/creatures/Foulspawn_Seer.js"></script>
+  <script src="../js/creatures/Frost_Giant.js"></script>
+  <script src="../js/creatures/Frost_Giant_Scout.js"></script>
+  <script src="../js/creatures/Gallia.js"></script>
+  <script src="../js/damage.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/defenses.js"></script>
+  <script src="../js/descriptions.js"></script>
+  <script src="../js/display/actorCard.js"></script>
+  <script src="../js/display/actorRow.js"></script>
+  <script src="../js/display/dialog.js"></script>
+  <script src="../js/display/dialogs/attackDialog.js"></script>
+  <script src="../js/display/dialogs/buffDialog.js"></script>
+  <script src="../js/display/dialogs/creatureDialog.js"></script>
+  <script src="../js/display/dialogs/exportDialog.js"></script>
+  <script src="../js/display/dialogs/genericEffectDialog.js"></script>
+  <script src="../js/display/dialogs/healDialog.js"></script>
+  <script src="../js/display/dialogs/historyDialog.js"></script>
+  <script src="../js/display/dialogs/imageDialog.js"></script>
+  <script src="../js/display/dialogs/importDialog.js"></script>
+  <script src="../js/display/dialogs/initiativeDialog.js"></script>
+  <script src="../js/display/editor.js"></script>
+  <script src="../js/effect.js"></script>
+  <script src="../js/equipment.js"></script>
+  <script src="../js/event.js"></script>
+  <script src="../js/history.js"></script>
+  <script src="../js/hp.js"></script>
+  <script src="../js/listener/listener.js"></script>
+  <script src="../js/monsters.js"></script>
+  <script src="../js/party/Amyria.js"></script>
+  <script src="../js/party/Apparatus_of_Kwalish.js"></script>
+  <script src="../js/party/Balugh.js"></script>
+  <script src="../js/party/Barases.js"></script>
+  <script src="../js/party/Bin.js"></script>
+  <script src="../js/party/Camulos.js"></script>
+  <script src="../js/party/Festivus.js"></script>
+  <script src="../js/party/Kallista.js"></script>
+  <script src="../js/party/Karrion.js"></script>
+  <script src="../js/party/Kitara.js"></script>
+  <script src="../js/party/Lechonero.js"></script>
+  <script src="../js/party/Melvin.js"></script>
+  <script src="../js/party/Oomooroo.js"></script>
+  <script src="../js/party/Purple.js"></script>
+  <script src="../js/party/Ringo.js"></script>
+  <script src="../js/party/Smack.js"></script>
+  <script src="../js/party/Smudge.js"></script>
+  <script src="../js/party/Tokk_it.js"></script>
+  <script src="../js/party/party.js"></script>
+  <script src="../js/party/partyLevel.js"></script>
+  <script src="../js/recharge.js"></script>
+  <script src="../js/roll.js"></script>
+  <script src="../js/savingThrow.js"></script>
+  <script src="../js/serializable.js"></script>
+  <script src="../js/storage.js"></script>
+  <!-- /include -->
+
+</head>
+<body>
+<div id="displayImage">
+  <div class="reticle"></div>
+</div>
+<div id="actorCards"></div>
+</body>
 </html>

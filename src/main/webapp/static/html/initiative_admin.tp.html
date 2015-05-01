@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Initiative</title>
+    <link rel="shortcut icon" href="../images/symbols/d20.png"/>
+    <!--
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
+    -->
+    <script src="../js/lib/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/lib/jquery-ui.js" type="text/javascript"></script>
+    <!-- <link rel="stylesheet" href="/css/jquery-ui/dot-luv/jquery-ui-1.10.3.custom.min.css" type="text/css" /> -->
+
+    <script src="../js/lib/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../css/bootstrap/css/bootstrap.min.css" type="text/css"/>
+
+    <link rel="stylesheet" href="../css/initiative.css" type="text/css"/>
+    <script src="../js/js.js" type="text/javascript"></script>
+    <script src="../js/dnd.js" type="text/javascript"></script>
+
+    <!-- include: "type": "js", "files": [ "js/**/*.js", "!js/dnd.js", "!js/js.js", "!js/lib/**/*.js", "!js/listener/**/*.js", "!js/gameMap/**/*.js" ] -->
+    <!-- /include -->
+  </head>
+  <body>
+    <div id="display" class="fullWidth"></div>
+    <div id="header" class="fullWidth">
+      <div class="btn-group">
+        <button id="previous" title="Previous creature" class="btn btn-default">&DoubleLeftArrow;</button>
+        <button id="next" title="Next creature" class="btn btn-default">&DoubleRightArrow;</button>
+        <button id="pause" title="Pause" class="btn btn-default btn-icon pause">&NotRightTriangle;</button>
+        <button id="undo" title="Undo" class="btn btn-default">&curvearrowleft;</button>
+        <button id="redo" title="Redo" class="btn btn-default">&curvearrowright;</button>
+        <button id="effect" class="btn btn-default">Effect</button>
+        <button id="open" class="btn btn-default">Open player window</button>
+        <button id="creatures" class="btn btn-default">Creatures</button>
+        <button id="imageButton" class="btn btn-default">Image</button>
+          <span class="btn-group dropdown">
+              <a id="fileButton" class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">File
+                &#9663;</a>
+              <ul id="fileMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+                <li role="presentation" class="dropdown-header">Load</li>
+                <li id="file">
+                  <a href="javascript:void(0);">from file: <input type="file" id="fileInput"></a>
+                </li>
+                <li role="presentation" class="divider"></li>
+                <li id="import">
+                  <a id="import" href="javascript:void(0);">Import</a>
+                </li>
+                <li id="export">
+                  <a id="export" href="javascript:void(0);">Export</a>
+                </li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation" class="dropdown-header">Clear</li>
+                <li id="clearAll">
+                  <a href="javascript:void(0);">all</a>
+                </li>
+                <li id="clearCreatures">
+                  <a href="javascript:void(0);">creatures</a>
+                </li>
+                <li id="clearMonsters">
+                  <a href="javascript:void(0);">monsters</a>
+                </li>
+                <li id="clearHistory">
+                  <a href="javascript:void(0);">history</a>
+                </li>
+              </ul>
+          </span>
+        <button id="shortRestButton" class="btn btn-default">Short Rest</button>
+        <button id="extendedRestButton" class="btn btn-default">Extended Rest</button>
+      </div>
+    </div>
+    <div id="pageLayout">
+      <div id="tableContainer" class="leftPanel"></div>
+      <div class="rightPanel bordered alignTop">
+        <h1>History</h1>
+
+        <div id="history"></div>
+
+        <div id="freeFormHistory">
+          <select id="freeFormHistorySubject"></select>
+        </div>
+      </div>
+    </div>
+    <div id="dialogs">
+    </div>
+  </body>
+</html>

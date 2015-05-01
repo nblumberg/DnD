@@ -16,7 +16,7 @@
                 init: 11, speed: { walk: 5, swim: 5, charge: 7 },
                 abilities: { STR: 20, CON: 14, DEX: 14, INT: 10, WIS: 12, CHA: 10 },
                 skills: { perception: 8 },
-                attackBonuses: arcticSahuaginAttackBonuses,
+                attackBonuses: base.attackBonuses,
                 attacks: [
                     { name: "Trident", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: [
                         { amount: "1d8+5" },

@@ -15,6 +15,10 @@
 
     /* global DnD:true */
 
+    if (window.DnD) {
+        return;
+    }
+
     var DnD, _v, tmp, p;
     DnD = window.DnD;
     _v = {

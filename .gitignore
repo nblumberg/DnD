@@ -6,6 +6,7 @@ coverage/
 karma_html/
 node_modules/
 saves/
+src/main/webapp/static/saves
 DnD.iml
 test-results.xml
 spec-runner.html
