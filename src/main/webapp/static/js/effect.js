@@ -116,7 +116,7 @@
                     if (!this.isNextTurn && round > this.startRound) {
                         this.isNextTurn = true;
                     }
-                    if (this.isNextTurn && ((isTurnStart && this.duration === Effect.DURATION_START_ATTACKER_NEXT) || (!isTurnStart || this.duration === Effect.DURATION_END_ATTACKER_NEXT))) {
+                    if (this.isNextTurn && ((isTurnStart && this.duration === Effect.DURATION_START_ATTACKER_NEXT) || (!isTurnStart && this.duration === Effect.DURATION_END_ATTACKER_NEXT))) {
                         retVal = this.remove();
                         return retVal || true;
                     }
