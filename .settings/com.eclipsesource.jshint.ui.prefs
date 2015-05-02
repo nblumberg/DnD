@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+included=src/main/webapp/static/js//*.js
+options={\n        "browser"\: true,\n        "curly"\: true,\n        "eqeqeq"\: true,\n        "es3"\: true,\n        "forin"\: true,\n        "immed"\: true,\n        "jquery"\: true,\n        "indent"\: 4,\n        "latedef"\: "nofunc",\n        "newcap"\: true,\n        "noarg"\: true,\n        "nomen"\: false,\n        "nonstandard"\: true,\n        "onevar"\: true,\n        "plusplus"\: false,\n        "quotmark"\: "double",\n    "undef"\: true,\n    "unused"\: "strict",\n        "strict"\: true,\n        "todo"\: true,\n        "trailing"\: true,\n    "verbose"\: true\n}
+projectSpecificOptions=true

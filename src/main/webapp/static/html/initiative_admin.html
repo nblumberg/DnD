@@ -1,105 +1,241 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-		<title>Initiative</title>
-		<script src="../js/lib/jquery.min.js"type="text/javascript"></script>
-		<script src="../js/lib/jquery-ui.js"type="text/javascript"></script>
-        <link rel="stylesheet" href="/css/jquery-ui/dot-luv/jquery-ui-1.10.3.custom.min.css" type="text/css" />
-        
-        <script src="../js/lib/bootstrap.min.js"type="text/javascript"></script>
-        <link rel="stylesheet" href="/css/bootstrap/css/bootstrap.min.css" type="text/css" />
-        
-        <link rel="stylesheet" href="../css/initiative.css" type="text/css" />
-        <script src="../js/data.js"type="text/javascript"></script>
-        <script src="../js/party.js"type="text/javascript"></script>
-        <script src="../js/monsters.js"type="text/javascript"></script>
-        <script src="../js/js.js"type="text/javascript"></script>
-		<script src="../js/serializable.js"type="text/javascript"></script>
-		<script src="../js/event.js"type="text/javascript"></script>
-		<script src="../js/editor.js"type="text/javascript"></script>
-		<script src="../js/actions.js"type="text/javascript"></script>
-		<script src="../js/history.js"type="text/javascript"></script>
-        <script src="../js/actorRow.js"type="text/javascript"></script>
-		<script src="../js/creature.js"type="text/javascript"></script>
-        <script src="../js/creatureDialog.js"type="text/javascript"></script>
-        <script src="../js/imageDialog.js"type="text/javascript"></script>
-        <script src="../js/initiativeDialog.js"type="text/javascript"></script>
-        <script src="../js/attackDialog.js"type="text/javascript"></script>
-        <script src="../js/healDialog.js"type="text/javascript"></script>
-		<script src="../js/initiative.js"type="text/javascript"></script>
-		<script src="../js/admin.js"type="text/javascript"></script>
-		<style>
-			body { background-color:black; color: white; }
-		</style>
-	</head>
-	<body>
+  <head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Initiative</title>
+    <link rel="shortcut icon" href="../images/symbols/d20.png"/>
+    <!--
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
+    -->
+    <script src="../js/lib/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/lib/jquery-ui.js" type="text/javascript"></script>
+    <!-- <link rel="stylesheet" href="/css/jquery-ui/dot-luv/jquery-ui-1.10.3.custom.min.css" type="text/css" /> -->
+
+    <script src="../js/lib/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../css/bootstrap/css/bootstrap.min.css" type="text/css"/>
+
+    <link rel="stylesheet" href="../css/initiative.css" type="text/css"/>
+    <script src="../js/js.js" type="text/javascript"></script>
+    <script src="../js/dnd.js" type="text/javascript"></script>
+
+    <!-- include: "type": "js", "files": [ "js/**/*.js", "!js/dnd.js", "!js/js.js", "!js/lib/**/*.js", "!js/listener/**/*.js", "!js/gameMap/**/*.js" ] -->
+    <script src="../js/abilities.js"></script>
+    <script src="../js/actor.js"></script>
+    <script src="../js/admin/admin.js"></script>
+    <script src="../js/admin/initiative.js"></script>
+    <script src="../js/attack.js"></script>
+    <script src="../js/console.js"></script>
+    <script src="../js/constants.js"></script>
+    <script src="../js/creature.js"></script>
+    <script src="../js/creatureHelpers.js"></script>
+    <script src="../js/creatures/adult_pact_dragon.js"></script>
+    <script src="../js/creatures/amyria.js"></script>
+    <script src="../js/creatures/antharosk.js"></script>
+    <script src="../js/creatures/arctic_sahuagin_base.js"></script>
+    <script src="../js/creatures/arctic_sahuagin_guard.js"></script>
+    <script src="../js/creatures/arctic_sahuagin_priest.js"></script>
+    <script src="../js/creatures/arctic_sahuagin_raider.js"></script>
+    <script src="../js/creatures/arctide_spiralith.js"></script>
+    <script src="../js/creatures/banshrae_dartswarmer.js"></script>
+    <script src="../js/creatures/battle_wight_bodyguard.js"></script>
+    <script src="../js/creatures/beholder_eye_of_frost.js"></script>
+    <script src="../js/creatures/berbalang.js"></script>
+    <script src="../js/creatures/bitterglass.js"></script>
+    <script src="../js/creatures/bone_archivist.js"></script>
+    <script src="../js/creatures/bone_scribe.js"></script>
+    <script src="../js/creatures/brann_ot_githyanki_gish.js"></script>
+    <script src="../js/creatures/calaunxin.js"></script>
+    <script src="../js/creatures/centaur_ravager.js"></script>
+    <script src="../js/creatures/chaos_mauler.js"></script>
+    <script src="../js/creatures/chillfire_destroyer.js"></script>
+    <script src="../js/creatures/chillreaver.js"></script>
+    <script src="../js/creatures/cyclops_crusher.js"></script>
+    <script src="../js/creatures/cyclops_guard.js"></script>
+    <script src="../js/creatures/cyclops_slaver.js"></script>
+    <script src="../js/creatures/dragonborn_base.js"></script>
+    <script src="../js/creatures/dragonborn_gladiator.js"></script>
+    <script src="../js/creatures/dragonborn_raider.js"></script>
+    <script src="../js/creatures/duergar_hellcaller.js"></script>
+    <script src="../js/creatures/eidolon.js"></script>
+    <script src="../js/creatures/elder_troglodyte_curse_chanter.js"></script>
+    <script src="../js/creatures/filth_king.js"></script>
+    <script src="../js/creatures/firbolg_bloodbear.js"></script>
+    <script src="../js/creatures/firbolg_ghostraven.js"></script>
+    <script src="../js/creatures/flame_shard.js"></script>
+    <script src="../js/creatures/flesh_golem.js"></script>
+    <script src="../js/creatures/flux_slaad.js"></script>
+    <script src="../js/creatures/foulspawn_seer.js"></script>
+    <script src="../js/creatures/frost_giant.js"></script>
+    <script src="../js/creatures/frost_giant_scout.js"></script>
+    <script src="../js/creatures/gallia.js"></script>
+    <script src="../js/creatures/githyanki_lancer.js"></script>
+    <script src="../js/creatures/githyanki_mindslicer.js"></script>
+    <script src="../js/creatures/githyanki_myrmidon.js"></script>
+    <script src="../js/creatures/githyanki_thug.js"></script>
+    <script src="../js/creatures/githyanki_warrior.js"></script>
+    <script src="../js/creatures/githzerai_cenobite.js"></script>
+    <script src="../js/creatures/gluttonous_cube.js"></script>
+    <script src="../js/creatures/grimlock_ambusher.js"></script>
+    <script src="../js/creatures/hethralga.js"></script>
+    <script src="../js/creatures/ice_gargoyle.js"></script>
+    <script src="../js/creatures/ice_gargoyle_reaver.js"></script>
+    <script src="../js/creatures/icetouched_behir.js"></script>
+    <script src="../js/creatures/icetouched_umber_hulk.js"></script>
+    <script src="../js/creatures/iquel_githyanki_captain.js"></script>
+    <script src="../js/creatures/kle_th_githyanki_mindslicer.js"></script>
+    <script src="../js/creatures/laughing_shadow_groveler.js"></script>
+    <script src="../js/creatures/laughing_shadow_scrabbler.js"></script>
+    <script src="../js/creatures/laughing_shadow_sentry.js"></script>
+    <script src="../js/creatures/laughing_shadow_streetfighter.js"></script>
+    <script src="../js/creatures/legion_devil_hellguard.js"></script>
+    <script src="../js/creatures/lingering_spectre.js"></script>
+    <script src="../js/creatures/mezzodemon.js"></script>
+    <script src="../js/creatures/monsters.js"></script>
+    <script src="../js/creatures/nara_of_the_wastes.js"></script>
+    <script src="../js/creatures/odos.js"></script>
+    <script src="../js/creatures/pennel.js"></script>
+    <script src="../js/creatures/rathoraiax.js"></script>
+    <script src="../js/creatures/redspawn_firebelcher.js"></script>
+    <script src="../js/creatures/sarshan.js"></script>
+    <script src="../js/creatures/scion_of_chaos.js"></script>
+    <script src="../js/creatures/seed_of_winter.js"></script>
+    <script src="../js/creatures/shadar_kai_warrior.js"></script>
+    <script src="../js/creatures/shadar_kai_witch.js"></script>
+    <script src="../js/creatures/skulking_terror.js"></script>
+    <script src="../js/creatures/skull_lord_servitor.js"></script>
+    <script src="../js/creatures/slaad_guard.js"></script>
+    <script src="../js/creatures/slaad_midwife.js"></script>
+    <script src="../js/creatures/slaad_tadpole.js"></script>
+    <script src="../js/creatures/slystone_dwarf_ruffian.js"></script>
+    <script src="../js/creatures/spitting_troll.js"></script>
+    <script src="../js/creatures/stone_golem.js"></script>
+    <script src="../js/creatures/storm_abishai_sniper.js"></script>
+    <script src="../js/creatures/streetwise_thug.js"></script>
+    <script src="../js/creatures/telicanthus.js"></script>
+    <script src="../js/creatures/thaggriel_githyanki_dragonknight.js"></script>
+    <script src="../js/creatures/treasure_golem.js"></script>
+    <script src="../js/creatures/troglodyte_warrior.js"></script>
+    <script src="../js/creatures/troll.js"></script>
+    <script src="../js/creatures/two_headed_troll.js"></script>
+    <script src="../js/creatures/uarion.js"></script>
+    <script src="../js/creatures/wailing_ghost.js"></script>
+    <script src="../js/creatures/war_troll.js"></script>
+    <script src="../js/creatures/windstriker.js"></script>
+    <script src="../js/creatures/winter_wolf.js"></script>
+    <script src="../js/creatures/xirakis_adult_pact_dragon.js"></script>
+    <script src="../js/creatures/xurgelmek.js"></script>
+    <script src="../js/creatures/zithiruun_the_broken_general.js"></script>
+    <script src="../js/damage.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/defenses.js"></script>
+    <script src="../js/descriptions.js"></script>
+    <script src="../js/display/actorCard.js"></script>
+    <script src="../js/display/actorRow.js"></script>
+    <script src="../js/display/dialog.js"></script>
+    <script src="../js/display/dialogs/attackDialog.js"></script>
+    <script src="../js/display/dialogs/buffDialog.js"></script>
+    <script src="../js/display/dialogs/creatureDialog.js"></script>
+    <script src="../js/display/dialogs/exportDialog.js"></script>
+    <script src="../js/display/dialogs/genericEffectDialog.js"></script>
+    <script src="../js/display/dialogs/healDialog.js"></script>
+    <script src="../js/display/dialogs/historyDialog.js"></script>
+    <script src="../js/display/dialogs/imageDialog.js"></script>
+    <script src="../js/display/dialogs/importDialog.js"></script>
+    <script src="../js/display/dialogs/initiativeDialog.js"></script>
+    <script src="../js/display/editor.js"></script>
+    <script src="../js/effect.js"></script>
+    <script src="../js/equipment.js"></script>
+    <script src="../js/event.js"></script>
+    <script src="../js/history.js"></script>
+    <script src="../js/hp.js"></script>
+    <script src="../js/party/Amyria.js"></script>
+    <script src="../js/party/Apparatus_of_Kwalish.js"></script>
+    <script src="../js/party/Balugh.js"></script>
+    <script src="../js/party/Barases.js"></script>
+    <script src="../js/party/Bin.js"></script>
+    <script src="../js/party/Camulos.js"></script>
+    <script src="../js/party/Festivus.js"></script>
+    <script src="../js/party/Kallista.js"></script>
+    <script src="../js/party/Karrion.js"></script>
+    <script src="../js/party/Kitara.js"></script>
+    <script src="../js/party/Lechonero.js"></script>
+    <script src="../js/party/Melvin.js"></script>
+    <script src="../js/party/Oomooroo.js"></script>
+    <script src="../js/party/Purple.js"></script>
+    <script src="../js/party/Ringo.js"></script>
+    <script src="../js/party/Smack.js"></script>
+    <script src="../js/party/Smudge.js"></script>
+    <script src="../js/party/Tokk_it.js"></script>
+    <script src="../js/party/party.js"></script>
+    <script src="../js/recharge.js"></script>
+    <script src="../js/roll.js"></script>
+    <script src="../js/savingThrow.js"></script>
+    <script src="../js/serializable.js"></script>
+    <script src="../js/storage.js"></script>
+    <!-- /include -->
+  </head>
+  <body>
     <div id="display" class="fullWidth"></div>
     <div id="header" class="fullWidth">
-        <span class="btn-group">
-            <button id="previous" class="btn">Previous</button>
-            <button id="next" class="btn">Next</button>
-            <button id="open" class="btn">Open player window</button>
-            <button id="creatures" class="btn" data-toggle="modal" data-target="#creaturesDialog">Creatures</button>
-            <button id="imageButton" class="btn" data-toggle="modal" data-target="#imageDialog">Image</button>
-            <span class="btn-group">
-                <a id="fileButton" class="btn dropdown-toggle" data-toggle="dropdown" href="#">File <span class="caret"></span></a>
-                <ul id="fileMenu" class="dropdown-menu">
-                    <li id="load" class="dropdown-submenu">
-                        <a href="javascript:void(0);">Load</a>
-                        <ul class="dropdown-menu">
-                            <li id="file">
-                                <a href="javascript:void(0);">from file: <input type="file" id="fileInput"></a>
-                            </li>
-                            <li id="initiative">
-                                <a id="loadInitiative" href="javascript:void(0);">Initiative</a>
-                            </li>
-                            <li id="monsters">
-                                <a id="loadMonsters" href="javascript:void(0);">Monsters</a>
-                            </li>
-                            <li id="party">
-                                <a id="loadParty" href="javascript:void(0);">Party</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li id="import">
-                        <a id="import" href="javascript:void(0);">Import</a>
-                    </li>
-                    <li id="export">
-                        <a id="export" href="javascript:void(0);">Export</a>
-                    </li>
-                    <li id="clear" class="dropdown-submenu">
-                        <a href="javascript:void(0);">Clear</a>
-                        <ul class="dropdown-menu">
-                            <li id="clearAll">
-                                <a href="javascript:void(0);">all</a>
-                            </li>
-                            <li id="clearCreatures">
-                                <a href="javascript:void(0);">creatures</a>
-                            </li>
-                            <li id="clearMonsters">
-                                <a href="javascript:void(0);">monsters</a>
-                            </li>
-                            <li id="clearHistory">
-                                <a href="javascript:void(0);">history</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </span>
-        </span>
+      <div class="btn-group">
+        <button id="previous" title="Previous creature" class="btn btn-default">&DoubleLeftArrow;</button>
+        <button id="next" title="Next creature" class="btn btn-default">&DoubleRightArrow;</button>
+        <button id="pause" title="Pause" class="btn btn-default btn-icon pause">&NotRightTriangle;</button>
+        <button id="undo" title="Undo" class="btn btn-default">&curvearrowleft;</button>
+        <button id="redo" title="Redo" class="btn btn-default">&curvearrowright;</button>
+        <button id="effect" class="btn btn-default">Effect</button>
+        <button id="open" class="btn btn-default">Open player window</button>
+        <button id="creatures" class="btn btn-default">Creatures</button>
+        <button id="imageButton" class="btn btn-default">Image</button>
+          <span class="btn-group dropdown">
+              <a id="fileButton" class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">File
+                &#9663;</a>
+              <ul id="fileMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+                <li role="presentation" class="dropdown-header">Load</li>
+                <li id="file">
+                  <a href="javascript:void(0);">from file: <input type="file" id="fileInput"></a>
+                </li>
+                <li role="presentation" class="divider"></li>
+                <li id="import">
+                  <a id="import" href="javascript:void(0);">Import</a>
+                </li>
+                <li id="export">
+                  <a id="export" href="javascript:void(0);">Export</a>
+                </li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation" class="dropdown-header">Clear</li>
+                <li id="clearAll">
+                  <a href="javascript:void(0);">all</a>
+                </li>
+                <li id="clearCreatures">
+                  <a href="javascript:void(0);">creatures</a>
+                </li>
+                <li id="clearMonsters">
+                  <a href="javascript:void(0);">monsters</a>
+                </li>
+                <li id="clearHistory">
+                  <a href="javascript:void(0);">history</a>
+                </li>
+              </ul>
+          </span>
+        <button id="shortRestButton" class="btn btn-default">Short Rest</button>
+        <button id="extendedRestButton" class="btn btn-default">Extended Rest</button>
+      </div>
     </div>
-    <div class="layout row-fluid">
-        <div id="tableContainer" class="span6"></div>
-        <div class="span6 bordered alignTop">
-            <div class="bordered f1">History</div>
-            
-            <div id="history"></div>
-            
-            <div id="freeFormHistory">
-                <select id="freeFormHistorySubject"></select>
-            </div>
+    <div id="pageLayout">
+      <div id="tableContainer" class="leftPanel"></div>
+      <div class="rightPanel bordered alignTop">
+        <h1>History</h1>
+
+        <div id="history"></div>
+
+        <div id="freeFormHistory">
+          <select id="freeFormHistorySubject"></select>
         </div>
+      </div>
     </div>
-</body>
+    <div id="dialogs">
+    </div>
+  </body>
 </html>

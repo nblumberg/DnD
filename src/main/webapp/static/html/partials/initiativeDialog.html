@@ -1,12 +1,18 @@
-<div id="initiativeDialog" class="modal hide fade" data-backdrop="true" data-keyboard="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Set Initiative Order</h3>
-  </div>
-  <div class="modal-body">
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn roll">Roll</a>
-    <a href="#" class="btn btn-primary update">Update</a>
-  </div>
+<div id="initiativeDialog" class="dialog" data-backdrop="true" data-keyboard="true">
+    <div class="header">
+        <span class="text">Set Initiative Order</span>
+    </div>
+    <div class="body">
+        <ul class="sortable nav nav-pills">
+            <li class="ui-state-default grab actor active">
+                <a href="javascript:void(0);">
+                    <div>Actor Name</div>
+                    <input type="number" min="1" step="1" class="order" name="1376799296373" placeholder="14" />
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="footer">
+        <a href="#" class="btn roll">Roll</a> <a href="#" class="btn btn-primary update">Update</a>
+    </div>
 </div>

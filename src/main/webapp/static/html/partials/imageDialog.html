@@ -1,29 +1,27 @@
-<div id="imageDialog" class="modal hide fade" data-backdrop="true" data-keyboard="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Image</h3>
+<div id="imageDialog" class="dialog">
+    <div class="header">
+        <span class="text">Image</span>
     </div>
-    <div class="modal-body">
-        <table>
-            <tr>
-                <td id="imageFileDropZone" style="color: white;">Drop files here or</td>
-                <td id="fullSizeContainer" rowspan="3">
-                    <img class="fullSize" style="display: none;" />
-                </td>
-            </tr>
-            <tr>
-                <td id="imageFileInputContainer">
-                    <input id="imageFileInput" type="file" multiple="multiple" />
-                </td>
-            </tr>
-            <tr>
-                <td class="images"></td>
-            </tr>
-        </table>
-
+    <div class="body">
+        <div class="leftPanel">
+            <h2 id="imageFileDropZone" style="color: white;">Drop files here or</h2>
+            <div id="imageFileInputContainer">
+                <input id="imageFileInput" type="file" multiple="multiple" />
+            </div>
+            <div id="imageUrlInputContainer">
+                <span>or enter an image URL</span> 
+                <input id="imageUrlInput" type="url" /> 
+                <button id="imageUrlButton" class="btn btn-default">Fetch</button>
+            </div>
+            <div class="images"></div>
+        </div>
+        <div class="rightPanel">
+            &nbsp; <!-- keeps the right panel from collapsing with no image selected -->
+            <img class="fullSize" />
+        </div>
     </div>
-    <div class="modal-footer">
-        <a href="#" class="btn hideBtn">Hide</a> 
-        <a href="#" class="btn btn-primary displayBtn">Display</a>
+    <div class="footer">
+        <a href="javascript:void(0);" class="btn hideBtn">Hide</a> 
+        <a href="javascript:void(0);" class="btn btn-primary displayBtn">Display</a>
     </div>
 </div>

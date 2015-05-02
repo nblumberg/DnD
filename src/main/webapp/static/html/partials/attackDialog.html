@@ -1,39 +1,41 @@
-<div id="attacksDialog" class="modal hide fade" data-backdrop="true" data-keyboard="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Attacks</h3>
+<div id="attacksDialog" class="dialog">
+    <div class="header">
+        <div class="text">Attacks</div>
     </div>
-    <div class="modal-body">
-        <table>
-            <tr>
-                <td>
-                    <select id="weaponSelect"></select> 
-                    <select id="attackSelect"></select>
-                </td>
-                <td class="attacks2Targets">
-                    <img id="combatAdvantage" height="30" src="/images/symbols/attack.png" />
-                </td>
-                <td>
-                    <select id="targetSelect" multiple="multiple"></select>
-                </td>
-            </tr>
-            <tr>
-                <td class="playerAttack">
-                    <input id="playerAttackRoll" type="number" placeholder="Attack roll" /> 
-                    <select id="playerAttackCrit" title="Critical">
-                        <option value=""></option>
-                        <option value="crit">CRIT</option>
-                        <option value="fail">FUMBLE</option>
-                    </select>
-                </td>
-                <td>Player rolls</td>
-                <td class="playerDamage">
-                    <input id="playerDamageRoll" type="number" placeholder="Damage roll" />
-                </td>
-            </tr>
-        </table>
+    <div class="body">
+        <div class="column1">
+            <div>
+                <select id="weaponSelect"></select>
+            </div>
+            <div id="attackSelect" class="list-group"></div>
+            <div class="playerRolls playerAttack control-group">
+                <input id="playerAttackRoll" type="number" class="number form-control" placeholder="Attack roll" />
+                <select id="playerAttackCrit" title="Critical">
+                    <option value=""></option>
+                    <option value="crit">CRIT</option>
+                    <option value="fail">FUMBLE</option>
+                </select>
+            </div>
+        </div>
+        <div class="column2">
+            <div class="damage"></div>
+            <div class="keywords"></div>
+            <div class="description"></div>
+            <div class="attacks2Targets">
+                <img id="combatAdvantage" height="30" style="height: 30px;" src="/images/symbols/attack.png" />
+            </div>
+            <div class="playerRolls">Player rolls</div>
+        </div>
+        <div class="column3">
+            <div class="targets">
+                <select id="targetSelect" multiple="multiple" size="100"></select>
+            </div>
+            <div class="playerRolls playerDamage control-group">
+                <input id="playerDamageRoll" type="number" class="number form-control" placeholder="Damage roll" />
+            </div>
+        </div>
     </div>
-    <div class="modal-footer">
-        <a href="#" class="btn attackBtn">Attack</a>
+    <div class="footer">
+        <button class="btn btn-primary attackBtn">Attack</button>
     </div>
 </div>

@@ -1,107 +1,936 @@
-body {
-	font-family: "Trebuchet MS", "Helvetica", "Arial", "Verdana", "sans-serif";
-	font-size: 62.5%; 
-}
-
+/* body { background-color:black; color: white; } */
 th, td { border-color: white; }
-    
+
 .alignTop { vertical-align: top; }
 .bordered { border-style: solid; border-width: 3px; }
-.bloodied { background-color: red; }
 .centered { text-align: center; }
 .centered img { display: block; margin-left: auto; margin-right: auto; }
-.current { border-color: lime; border-width: 6px; }
 .f1 { font-size: 1.5em; }
 .f2 { font-size: 1.2em; }
 .floatLeft { float: left; }
-.gridItem { display: inline-block; font-size: 24px; vertical-align: top; } 
+.gridItem { display: inline-block; font-size: 24px; vertical-align: top; }
 .fullHeight { height: 100%; }
 .fullWidth { clear: both; width: 100%; }
 .halfWidth { max-width: 50%; width: 50%; }
 .fullBoth { height: 100%; width: 100%; }
 .nowrap { white-space: nowrap; }
-.numerator:after { content: '/' }
-/* .grab { cursor: url(https://mail.google.com/mail/images/2/openhand.cur) 8 8, move; }
-.grabbing { cursor: url(https://mail.google.com/mail/images/2/closedhand.cur) 8 8, move; }
-.droppable { border-color: green; border-width: 6px; } */
-.action { cursor: pointer; display: block; margin-bottom: 5px; }
-div.order { color: red; font-weight: bold; font-size: 30px; }
-input.order { margin-right: 10px; width: 30px; }
+
+/* vertical centering */
+.verticallyCentered { display: table; position: relative; }
+.verticallyCentered > .wrapper { display: table-cell; position: static; vertical-align: middle; top: 50%; width: 100%; }
+.verticallyCentered > .wrapper > .content { position: relative; top: -50%; }
 
 div#header { background-color: black; position: fixed; width: 100%; z-index: 5; }
 span#spanLabel { font-size: 1.2em; }
 input#round { width: 30px; }
 
 #pageLayout {
+	display: table;
+	padding-top: 30px;
+	width: 100%;
 }
 
-#roundLabel {
-	font-size: 9pt;
+#pageLayout .leftPanel, #pageLayout .rightPanel {
+    display: table-cell;
+}
+
+#pageLayout .rightPanel {
+    max-width: 33%;
 }
 
 #initiative img.icon {
 	height: 30px;
 }
 
-#history {}
-#history > tr > td, #history > tbody > tr > td { vertical-align: top; }
-#history div { text-align: center; }
-#freeFormHistory { text-align: center; }
+.btn-icon {
+	font-size: 3rem;
+	line-height: 2rem;
+}
+
+#displayImage {
+	background-color: black;
+	background-position: top left;
+	background-repeat: no-repeat;
+    background-size: contain;
+	bottom: 0;
+	display: none;
+	left: 0;
+	position: fixed;
+	right: 0;
+	text-align: center;
+	top: 0;
+	vertical-align: middle;
+	z-index: 1000;
+}
+
+#displayImage img {
+	z-index: 1;
+}
+
+#displayImage .reticle {
+    background-image: url("/images/symbols/reticle.png");
+	background-position: center;
+	background-repeat: no-repeat;
+    background-size: 20px 20px;
+	display: none;
+	height: 20px;
+	position: absolute;
+	width: 20px;
+	z-index: 2;
+}
+
+
+/* actorTable */
+#roundLabel { font-size: 9pt; }
+
+table#initiative { border-collapse: collapse; }
+table#initiative th, table#initiative td { text-align: center; }
+table#initiative td.order { width: 50px; }
+table#initiative td.defenses { width: 80px; }
+table#initiative td.hp { padding: 3px; text-align: left; }
+table#initiative td.actions { width: 140px; }
+table#initiative td.actions button { height: 60px; }
+table#initiative td.actions img { display: block; margin: 5px auto; }
+table#initiative .tempHp { font-style: italic; }
+table#initiative td.history { max-width: 50%; }
+table#initiative td.history div {
+    max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left;
+    /*white-space: nowrap; */
+}
+
+/* actorRow */
+.numerator:after { content: '/' }
+.action { cursor: pointer; display: block; }
+
+/* actorCard */
+td.cardHolder { padding: 0; }
+.creaturePanel, .condition {
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: top center;
+	box-sizing: border-box;
+	float: left;
+	margin: 2px; }
+.creaturePanel {
+	border-width: 4px;
+	height: 180px;
+	width: 100%; }
+.condition {
+	border: 1px solid black;
+	height: 30px;
+	width: 30px; }
+#initiative .creaturePanel { display: inline-block; float: none; }
+.creaturePanel.current { border-color: lime; }
+.creaturePanel .label { background-color: black; bottom: 0; font-size: 1.2em; left: 0; position: absolute; right: 0; white-space: normal; }
+.creaturePanel.pcHp .label { height: 2.4em; }
+.creaturePanel.bloodied, .creaturePanel.bloodied .label { background-color: red; }
+
+.creaturePanel .state, .creaturePanel .state .effects, .creaturePanel .event { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
+.creaturePanel .state .effects { overflow: hidden; }
+.creaturePanel .event, .creaturePanel .condition { color: #FFFFFF; overflow: hidden; text-align: center; vertical-align: middle; }
+.creaturePanel .condition { background-color: white; float: left; position: relative; }
+.creaturePanel .condition .amount { bottom: 0; left: 0; display: table-cell; position: absolute; right: 0; text-align: center; top: 0; vertical-align: middle; }
+.creaturePanel .condition .amount span { background-color: white; bottom: 3px; font-size: 1.5em; font-weight: bold; position: absolute; right: 3px; text-shadow: 2px 2px black; }
+.creaturePanel .event { background-position: center; background-size: cover; bottom: auto; height: 90%; overflow: hidden; width: 100%; }
+.creaturePanel .event.hit { background-image: url("/images/symbols/pow.png"); }
+.creaturePanel .event.miss { background-image: url("/images/symbols/miss.jpg"); }
+.creaturePanel .event .description { background-color: black; line-height: 35px; margin-top:10px; padding: 10px; }
+.creaturePanel .event.hit .description { display: none; }
+.creaturePanel .event.hit .content { min-height: 50%; }
+.creaturePanel .event.hit .types,
+.creaturePanel .event.hit .types .type { min-height: 100%; overflow: hidden; position: relative; }
+.creaturePanel .event.hit .types img.damage { display: inline; }
+.creaturePanel .event.hit .types .type span { left: 25%; position: absolute; }
+.creaturePanel .timer .content { color: lime; font-size: 24px; font-weight: bold; text-shadow: 3px 3px black; }
+
+/* history */
+.history { position: relative; }
+.history .expandCollapseAll { position: absolute; right: 10px; }
+.history .expandCollapseAll.collapsed .collapsed { display: none; }
+.history .expandCollapseAll.expanded .expanded { display: none; }
+.history li.entry .message { display: inline; }
+.history li.entry textarea, .history li.entry .save, .history li.entry .delete { display: none; }
+.history li.entry.edit .message { display: none; }
+.history li.entry.edit textarea, .history li.entry.edit .save, .history li.entry.edit .delete { display: inline; }
+#freeFormHistory { text-align: center; white-space: nowrap; }
 .round .time { padding-left: 5px; }
 .round .edit textarea { height: 150px; }
 
-#display .creaturePanel {  }
-.creaturePanel { margin:2px; position: relative; }
-#initiative .creaturePanel { min-height: 120px; margin:2px; position: relative; width: 120px; }
-.creaturePanel .column { float: left; margin-right: 4px; }
-.creaturePanel .images, .creaturePanel .name { position: relative; }
-.creaturePanel .effects { bottom: 0; left: 0; position: absolute; right:0; top: 0; }
-.creaturePanel div.condition, .creaturePanel div.damage { color: #FFFFFF; overflow: hidden; position: relative; text-align: center; vertical-align: middle; }
-.creaturePanel div.condition, .creaturePanel div.damage img { position: absolute; }
-.creaturePanel div.damage img { left: -15px; position: absolute; top: -50px; }
-.creaturePanel div.condition { background-color: #FFFFFF; float: left; margin-right: 2px; position: relative; }
-.creaturePanel .damage, .creaturePanel .damage .types, .creaturePanel .damage .types .type { position: relative; }
-.creaturePanel .damage { /* background-clip: border-box; background-image: url('../images/symbols/pow.png'); background-position: auto auto; background-repeat: no-repeat; background-size: contain; */ display: table; height: 100%; overflow: hidden; width: 100% }
-.creaturePanel .damage .centered { display: table-cell; vertical-align: middle; }
-.creaturePanel .damage .types { height: 75%; display: block; }
-.creaturePanel div.condition span, .creaturePanel div.damage span { bottom: 0; font-size: 1.3em; font-weight: bold; left: 0; margin: auto; position: absolute; right: 0; text-shadow: 3px 3px black; top: 0; vertical-align: middle; }
-.creaturePanel .name .hp { padding-left: 1em; white-space: nowrap; }
-
-.layout {
-	padding-top: 40px;
-}
+/* editor */
+.editor .display {}
+.editor.edit .display { display: none; }
+.editor input, .editor button { display: none; }
+.editor.edit input, .editor.edit button { display: inline; }
 
 
-.modal-header {
-	border: 1px solid #0b3e6f;
-	background: #0b3e6f url(images/ui-bg_diagonals-thick_15_0b3e6f_40x40.png) 50% 50% repeat;
-	color: #f6f6f6;
-	font-weight: bold;	
-}
-.modal-body {
-	background-color: #222222;
-}
-.modal-footer {
-	background-color: #999999;
-}
+.layout { padding-top: 40px; }
+
 
 div#history { min-width: 30%; padding: 0 5px; }
 div#history h3 { margin: 5px 0; }
-//  table#initiative { border-collapse: collapse; }
-table#initiative th, table#initiative td { text-align: center; } 
-table#initiative td.hp { padding: 3px; text-align: left; }
-table#initiative td.actions img { display: block; margin: 5px auto; }
-table#initiative .tempHp { font-style: italic; }
-div#attacksDialog { padding: 5px; }
-div#attacksDialog table { color: black; width: 98%; }
-div#attacksDialog td { vertical-align: top; }
-div#attacksDialog td.attacks2targets { padding-top: 30%; }
-div#attacksDialog td.attacks2targets img { display: block; }
-div#attacksDialog td { height: 100%; }
-div#attacksDialog td select { display: block; width: 100%; }
-div#attacksDialog td.playerAttack input { max-width: 50%; }
-div#attacksDialog td.playerAttack select { display: inline; width: auto; }
-table#initiative td.history div { font-size: 0.75em; max-height: 130px; overflow-y: auto; padding-right: 20px; text-align: left; white-space: nowrap; }
 
-#imageDialog #images { max-width: 250px; }
-#imageDialog #images img { margin: 0 3px 3px 0; }
+/* Dialogs */
+#dialogs { bottom: 0; display: none; z-index: 2; left: 0; position: fixed; right: 0; top: 35px; /* header height */ }
+.dialog #dialogs { display: block; }
+#dialogs .dialog { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+.dialog .header, .dialog .footer { box-sizing: border-box; -moz-box-sizing: border-box; height: 44px; left: 0; padding: 5px 20px; position: absolute; right: 0; z-index: 2; }
+.dialog .header { background-color: #105292; border: 1px solid #0b3e6f; color: #f6f6f6; font-weight: bold; top: 0; }
+.dialog .header .text { font-size: 24px; }
+.dialog .header .close { position: absolute; right: 20px; top: 8px; }
+.dialog .body { background-color: #222222; padding: 64px 20px; z-index: 1; display: table; height: 100%; position: relative; width: 100%; } /* position: absolute; top: 0; left: 0; right: 0; bottom: 0; */
+.dialog .footer { background-color: #999999; bottom: 0; text-align: right; }
+body.dialog { overflow: hidden; }
+
+/* creatureDialog */
+.creaturesDialog #creaturesDialog { display: block; }
+#creaturesDialog .column { display: table-cell; text-align: center; vertical-align: middle; }
+#creaturesDialog .creatures, #creaturesDialog .selected { width: 45%; }
+#creaturesDialog select { height: 100%; width: 100%; }
+
+/* attacksDialog */
+.attacksDialog #attacksDialog { display: block; }
+#attacksDialog .column1, #attacksDialog .column2, #attacksDialog .column3 { display: table-cell; height: 100%; position: relative; padding-bottom: 50px; vertical-align: top; }
+#attacksDialog .column1, #attacksDialog .column3 { width: 40%; }
+#attacksDialog .column2 { width: 15%; }
+#attacksDialog .column2 img { margin: 0 auto; }
+#attacksDialog .column2 div { text-align: center; width: 100%; }
+#attacksDialog #attackSelect, #attacksDialog .column3 .targets { height: 100%; overflow-y: scroll; }
+#attacksDialog #attackSelect .list-group-item { background-color: gray; color: white; font-size: bold; }
+#attacksDialog #attackSelect .at-will { background-color: green; }
+#attacksDialog #attackSelect .encounter { background-color: maroon; }
+#attacksDialog #attackSelect .daily { background-color: #333333; }
+#attacksDialog #attackSelect .recharge { background-color: orange; }
+#attacksDialog #attackSelect .used { color: #555555; font-style: italic; }
+#attacksDialog select { height: 100%; width: 100%; }
+#attacksDialog input.number { width: 100%; }
+#attacksDialog .attacks2targets { margin-top: 15%; }
+#attacksDialog .attacks2targets img { display: block; }
+#attacksDialog .playerAttack * { max-width: 50%; width: auto; }
+#attacksDialog .playerRolls { height: 30px; position: absolute; bottom: 0; width: 100%; }
+#attacksDialog .control-group input { border-width: 3px; }
+#attacksDialog .control-group input { border-width: 3px; }
+#attacksDialog .error .playerAttackRoll, #attacksDialog .success .playerAttackRoll, #attacksDialog .warning .playerAttackRoll { border: 3px solid; }
+#attacksDialog .description { height: 75%; overflow-y: scroll; }
+#playerAttackRoll { display: inline-block; }
+
+/* buffsDialog */
+.buffsDialog #buffsDialog { display: block; }
+#buffsDialog .column1, #buffsDialog .column2, #buffsDialog .column3 { display: table-cell; height: 100%; position: relative; }
+#buffsDialog .column1, #buffsDialog .column3 { padding-bottom: 50px; vertical-align: top; width: 40%; }
+#buffsDialog .column2 { width: 15%; }
+#buffsDialog .column2 img { margin: 0 auto; }
+#buffsDialog .column2 div { text-align: center; width: 100%; }
+#buffsDialog #buffSelect, #buffsDialog .column3 .targets { height: 100%; overflow-y: scroll; }
+#buffsDialog #buffSelect .list-group-item { background-color: gray; color: white; font-size: bold; }
+#buffsDialog #buffSelect .at-will { background-color: green; }
+#buffsDialog #buffSelect .encounter { background-color: maroon; }
+#buffsDialog #buffSelect .daily { background-color: #333333; }
+#buffsDialog #buffSelect .recharge { background-color: orange; }
+#buffsDialog #buffSelect .used { color: #555555; font-style: italic; }
+#buffsDialog select { height: 100%; width: 100%; }
+#buffsDialog input.number { width: 100%; }
+#buffsDialog .attacks2targets { margin-top: 100%; }
+#buffsDialog .attacks2targets img { display: block; }
+#buffsDialog .playerAttack * { max-width: 50%; width: auto; }
+#buffsDialog .playerRolls { height: 30px; position: absolute; bottom: 0; width: 100%; }
+#buffsDialog .control-group input { border-width: 3px; }
+#buffsDialog .control-group input { border-width: 3px; }
+#buffsDialog .error .playerAttackRoll, #buffsDialog .success .playerAttackRoll, #buffsDialog .warning .playerAttackRoll { border: 3px solid; }
+#buffsDialog .description { max-height: 400px; overflow-y: scroll; }
+#playerAttackRoll { display: inline-block; }
+
+/* exportDialog */
+.exportDialog #exportDialog { display: block; }
+#exportDialog textarea { height: 100%; width: 100%; }
+
+/* genericEffectDialog */
+.genericEffectDialog #genericEffectDialog { display: block; }
+#genericEffectDialog .column1, #genericEffectDialog .column2, #genericEffectDialog .column3 { display: table-cell; height: 100%; position: relative; }
+#genericEffectDialog .column1, #genericEffectDialog .column3 { padding-bottom: 50px; vertical-align: top; width: 40%; }
+#genericEffectDialog .column2 { width: 15%; }
+#genericEffectDialog .column2 img { margin: 0 auto; }
+#genericEffectDialog .column2 div { text-align: center; width: 100%; }
+#genericEffectDialog #attackSelect, #genericEffectDialog .column3 .targets { height: 100%; overflow-y: scroll; }
+#genericEffectDialog #attackSelect .list-group-item { background-color: gray; color: white; font-size: bold; }
+#genericEffectDialog #attackSelect .at-will { background-color: green; }
+#genericEffectDialog #attackSelect .encounter { background-color: maroon; }
+#genericEffectDialog #attackSelect .daily { background-color: #333333; }
+#genericEffectDialog #attackSelect .recharge { background-color: orange; }
+#genericEffectDialog #attackSelect .used { color: #555555; font-style: italic; }
+#genericEffectDialog select { height: 100%; width: 100%; }
+#genericEffectDialog input.number { width: 100%; }
+#genericEffectDialog .attacks2targets { margin-top: 100%; }
+#genericEffectDialog .attacks2targets img { display: block; }
+#genericEffectDialog .playerAttack * { max-width: 50%; width: auto; }
+#genericEffectDialog .playerRolls { height: 30px; position: absolute; bottom: 0; width: 100%; }
+#genericEffectDialog .control-group input { border-width: 3px; }
+#genericEffectDialog .control-group input { border-width: 3px; }
+#genericEffectDialog .error .playerAttackRoll, #genericEffectDialog .success .playerAttackRoll, #genericEffectDialog .warning .playerAttackRoll { border: 3px solid; }
+#playerAttackRoll { display: inline-block; }
+
+/* healDialog */
+.healDialog #healDialog { display: block; }
+#healDialog .column { margin: 0 auto; max-width: 400px; }
+#healDialog .input-group { margin-bottom: 10px; }
+
+/* historyDialog */
+.historyDialog #historyDialog { display: block; }
+.historyDialog #historyDialog .body { display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: scroll; }
+
+/* imageDialog */
+.imageDialog #imageDialog { display: block; }
+#imageDialog .leftPanel, #imageDialog .rightPanel { display: table-cell; vertical-align: top; }
+#imageDialog .leftPanel { width: 400px; }
+#imageDialog .leftPanel .images { padding: 10px; }
+#imageDialog .rightPanel { position: relative; }
+#imageDialog .fullSize { display: none; left: 0; max-height: 100%; max-width: 100%; position: absolute; top: 0; }
+#imageDialog .images {}
+#imageDialog .images .thmbnl { height: 40px; margin: 0 3px 3px 0; }
+
+/* importDialog */
+.importDialog #importDialog { display: block; }
+#importDialog textarea { height: 100%; width: 100%; }
+
+/* initiativeDialog */
+.initiativeDialog #initiativeDialog { display: block; }
+.sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+.sortable li { float: left; margin: 5px; text-align: center; width: 200px; }
+.sortable li .name { margin: 0 0.5em; }
+.sortable li input { width: 100%; }
+.grab { cursor: grab; }
+.grabbing { cursor: grabbing; }
+.droppable { border-color: green; border-width: 6px; }
+
+
+
+
+
+
+
+
+#detail {
+	background: #fff;
+	float: left;
+	padding: 15px;
+	width: 560px;
+	color: #000000;
+}
+#detail {
+	font-size: 8.75pt;
+}
+#detail p {
+	padding-left: 15px;
+	color: #000000;
+	font-size: 8.75pt;
+}
+#detail table {
+	width: 100%;
+}
+#detail table td {
+	vertical-align: top;
+	padding: 0 10px 0;
+	background: #d6d6c2;
+	border-bottom: 1px solid #fff;
+}
+#detail p.flavor,
+#detail span.flavor,
+#detail ul.flavor {
+	display: block;
+	padding: 2px 15px;
+	margin: 0;
+	background: #d6d6c2;
+	font-size:8.75pt;
+}
+#detail p.powerstat {
+	padding: 0px 0px 0px 15px;
+	margin: 0;
+	background: #FFFFFF;
+	font-size:8.75pt;
+}
+#detail span.ritualstats {
+	float:right;
+	padding: 0 30px 0 0;
+}
+#detail p.flavorIndent {
+	display: block;
+	padding: 2px 15px 2px 30px;
+	margin: 0;
+	background: #d6d6c2;
+}
+#detail span.clearIndent {
+	display: block;
+	padding: 2px 15px 2px 30px;
+	margin: 0;
+	background: #FFFFFF;
+}
+#detail p.alt,
+#detail span.alt,
+#detail td.alt {
+	background: #c3c6ad;
+}
+#detail th {
+	background: #1d3d5e;
+	color: #fff;
+	text-align: left;
+	padding: 0 0 0 5px;
+}
+#detail i,
+#detail em {
+	font-style: italic;
+}
+#detail ul {
+	list-style: disc;
+	margin: 1em 0 1em 30px;
+}
+#detail table,
+#detail ul.flavor {
+	margin-bottom: 1em;
+}
+#detail ul li {
+	color: #3e141e;
+}
+#detail ul.flavor li {
+	list-style-image: url("http://www.wizards.com/dnd/images/symbol/x.gif");
+	margin-left: 15px;
+}
+#detail a {
+	color: #3e141e;
+}
+#detail blockquote
+{
+	padding: 0 0 0 22px;
+	background: #d6d6c2;
+}
+#detail span.block
+{
+	display: block;
+	padding: 0 0 0 22px;
+	background: #d6d6c2;
+}
+#detail h1 {
+	font-size: 1.09em;
+	line-height: 2;
+	padding-left: 15px;
+	margin: 0;
+	color: #fff;
+	background: #000;
+}
+
+#detail h1.player {
+	background: #1d3d5e;
+	font-size: 1.35em;
+}
+#detail h1.dm {
+	background: #5c1f34;
+}
+#detail h1.trap {
+	background: #5c1f34;
+	height:38px;
+}
+#detail h1.atwillpower {
+	background: #619869;
+}
+#detail h1.encounterpower {
+	background: #961334;
+}
+#detail h1.dailypower {
+	background: #4d4d4f;
+}
+#detail span.milevel {
+	font-size:9pt;
+}
+#detail h1.poison {
+	background: #000000;
+}
+#detail h1.poison .level {
+	padding-right: 15px;
+	margin-top: 0;
+	text-align: right;
+	float: right;
+	position:relative;
+	top:-24px;
+}
+#detail h1.utilitypower {
+	background: #1c3d5f;
+}
+#detail h1.familiar
+{
+	background: #4e5c2e;
+}
+#detail h1 .level {
+	padding-right: 15px;
+	margin-top: 0;
+	text-align: right;
+	float: right;
+}
+#detail .rightalign {
+	text-align: right;
+}
+/* Traps */
+#detail h1.trap .level {
+	margin-top: 0;
+	text-align: right;
+	position:relative;
+	top:-60px;
+}
+#detail h1.trap .type,
+#detail h1.trap .xp {
+	display: block;
+	position: relative;
+	z-index: 99;
+	top: -0.75em;
+	height: 1em;
+	font-weight: normal;
+	font-size: 0.917em;
+}
+#detail .traplead {
+	display: block;
+	padding: 1px 15px;
+	margin: 0;
+	background: #ffffff;
+}
+#detail .trapblocktitle {
+	display: block;
+	padding: 1px 15px;
+	margin: 0;
+	background: #d6d6c2;
+	font-weight: bold;
+}
+#detail .trapblockbody {
+	display: block;
+	padding: 1px 15px 1px 30px;
+	margin: 0;
+	background: #ffffff;
+}
+
+/* Detail page related link section */
+/* -------------------------------------------- */
+
+#detail #RelatedArticles h5 {
+	width: 100px;
+	float: left;
+	padding-top: 10px;
+	padding-left: 20px;
+	color: #3e141e;
+	font-weight: bold;
+}
+#detail #RelatedArticles ul.RelatedArticles {
+	padding: 10px 0 0 0;
+	float: right;
+	width: 430px;
+	margin: 0;
+	list-style: none;
+}
+
+#detail .bodytable {
+	border: 0;
+	margin: 0;
+	width: 560px;
+	background: #D1D1BC;
+}
+#detail .bodytable td {
+	border-bottom: none;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+#detail h2 {
+	font-size: 1.25em;
+	padding-left: 15px;
+	margin: 0;
+	color: #fff;
+	background: #4e5c2e;
+	height:20px;
+	font-variant: small-caps;
+	padding-top: 5px;
+}
+
+/* Monster */
+#detail h1.monster {
+	background: #4e5c2e;
+	height:38px;
+}
+#detail h1.monster .level {
+	margin-top: 0;
+	text-align: right;
+	position:relative;
+	top:-60px;
+}
+#detail h1.monster .type,
+#detail h1.monster .xp {
+	display: block;
+	position: relative;
+	z-index: 99;
+	top: -0.75em;
+	height: 1em;
+	font-weight: normal;
+	font-size: 0.917em;
+}
+#detail h2.monster {
+	font-size: 9pt;
+	padding-left: 15px;
+	margin: 0;
+	color: #fff;
+	background: #4e5c2e;
+	height:20px;
+	font-variant: small-caps;
+	padding-top: 3px;
+}
+#detail h3.monster {
+	font-size: 8;
+	font-weight: bold;
+	color: #000000;
+	background: #c3c6ad;
+	padding: 0px 5px 0px 10px;
+	margin: 0;
+	display: block;
+}
+#detail p.monster {
+	display: block;
+	padding: 2px 15px;
+	margin: 0;
+	background: #CADBB7;
+	font-size:8.75pt;
+	display: block;
+}
+#detail p.monstat {
+	background: #CADBB7;
+}
+
+/* Magic Items */
+#detail h1.magicitem {
+	background: #DA9722;
+	font-size:12pt;
+	font-weight:bold;
+	height: 17pt;
+	margin-top: 2;
+	line-height: 1.5em;
+}
+#detail h1.magicitem .milevel {
+	padding-right: 15px;
+	margin-top: 0px;
+	text-align: right;
+	float: right;
+	position:relative;
+}
+#detail h1.mihead {
+	background: #DA9722;
+	font-size:12pt;
+	font-weight:bold;
+	height: 17pt;
+	margin-top: 2;
+	line-height: 1.5em;
+}
+#detail h1.mihead .milevel {
+	padding-right: 15px;
+	margin-top: 0px;
+	text-align: right;
+	float: right;
+	position:relative;
+}
+#detail p.miflavor {
+	display: block;
+	padding: 2px 15px;
+	margin: 0;
+	background: #EFD09F;
+	font-size:8.75pt;
+	font-style: italic;
+	color: #000000;
+}
+#detail table.magicitem {
+	width: 560px;
+	margin-bottom: 0;
+}
+#detail table.magicitem td {
+	border: none;
+	font-size: 8.75pt;
+	background: #F8E9D5;
+}
+#detail td.mic1 {
+	padding-left: 20px;
+	padding-right: 0px;
+	width: 50px;
+}
+#detail td.mic2 {
+	width: 40px;
+	padding: 0px;
+}
+#detail td.mic3 {
+	width: 100px;
+	text-align:right;
+	padding: 0px;
+}
+#detail td.mic4 {
+	width: 100px;
+	padding: 0px;
+}
+#detail h2.magicitem {
+	background: #EFD09F;
+	color: #000000;
+	font-variant: normal;
+	font-size: 8.75pt;
+	line-height: 18px;
+	padding-top: 0px;
+	vertical-align: bottom;
+	height: 18px;
+}
+#detail h2.mihead {
+	display: block;
+	background: #EFD09F;
+	color: #000000;
+	font-variant: normal;
+	font-size: 8.75pt;
+	line-height: 18px;
+	padding-top: 0px;
+	vertical-align: bottom;
+	height: 18px;
+}
+#detail p.publishedIn {
+	font-size: 8pt;
+	margin-top: 10px;
+}
+#detail h2.artifactHeading1 {
+	font-size: 14pt;
+	padding-left: 5px;
+	padding-top: 5px;
+	margin: 0px;
+	background: #FFFFFF;
+	color: #254950;
+	font-variant: normal;
+}
+#detail h2.artifactHeading2 {
+	font-size: 14pt;
+	padding-left: 5px;
+	padding-top: 5px;
+	margin: 0px;
+	background: #FFFFFF;
+	color: #556C75;
+	font-variant: normal;
+}
+#detail h2.ah1 {
+	font-size: 14pt;
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	margin: 0px;
+	background: #FFFFFF;
+	color: #254950;
+	font-variant: normal;
+}
+#detail h2.ah2 {
+	font-size: 14pt;
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	margin: 0px;
+	background: #FFFFFF;
+	color: #556C75;
+	font-variant: normal;
+}
+#detail h2.ah3 {
+	font-size: 12pt;
+	padding-left: 5px;
+	padding-top: 5px;
+	margin: 0px;
+	background: #FFFFFF;
+	color: #556C75;
+	font-variant: normal;
+}
+#detail p.mistat {
+	padding: 0px 0px 0px 15px;
+	display: block;
+	margin: 0;
+	background: #F8E9D5;
+	font-size:8.75pt;
+	color: #000000;
+}
+#detail p.mistatAI {
+	padding: 0px 0px 0px 15px;
+	margin: 0;
+	background: #F8E9D5;
+	font-size:8.75pt;
+	color: #000000;
+	height: 36px;
+}
+#detail span.miright {
+	padding: 0px 5px 0px 0px;
+	margin-top: 0px;
+	text-align: right;
+	float: right;
+	position:relative;
+}
+#detail p.indent {
+	padding: 0px 0px 0px 30px;
+	text-indent: -15px;
+}
+#detail p.indent1 {
+	padding: 0px 0px 0px 45px;
+	text-indent: -15px;
+}
+#detail p.indent2 {
+	padding: 0px 0px 0px 60px;
+	text-indent: -15px;
+}
+#detail p.mitext {
+	padding: 0px 0px 0px 5px;
+	margin: 0;
+	background: #FFFFFF;
+	font-size:8.75pt;
+	color: #000000;
+}
+#detail ul.mitext {
+	margin-bottom: 1em;
+	display: block;
+	padding: 2px 5px;
+	margin-top: 0;
+	margin-right: 0;
+	background: #FFFFFF;
+	font-size:8.75pt;
+	color: #000000;
+}
+#detail ul.mitext li {
+	list-style-image: url("http://www.wizards.com/dnd/images/symbol/x.gif");
+	color: #000000;
+}
+#detail ul.mistat {
+	margin-bottom: 0;
+	padding: 2px 5px 2px 30px;
+	margin: 0;
+	background: #F8E9D5;
+	font-size:8.75pt;
+	color: #000000;
+}
+#detail ul.mistat li {
+	list-style-image: url("http://www.wizards.com/dnd/images/symbol/x.gif");
+	color: #000000;
+}
+#detail h1.miset {
+	background: #22444B;
+	font-size:12pt;
+	font-weight:bold;
+	height: 17pt;
+	margin-top: 2;
+	line-height: 1.5em;
+}
+#detail h1.miset .milevel {
+	padding-right: 15px;
+	margin-top: 0px;
+	text-align: right;
+	float: right;
+	position:relative;
+}
+.ignore { }
+#detail th.miset {
+	background: #22444B;
+	color: #FFFFFF;
+	text-align: left;
+	padding: 0 0 0 5px;
+}
+/*
+#detail h1.thHead {
+    background: #45133C;
+    font-size:12pt;
+    font-weight:bold;
+	height: 17pt;
+	margin-top: 2;
+	line-height: 1.5em;
+}
+#detail h1.thHead .thLevel {
+    padding-right: 15px;
+	margin-top: 0px;
+	text-align: right;
+	float: right;
+	position:relative;
+	top: -1.5em;
+}
+
+#detail p.thSubHead  {
+    background: #45133C;
+	color: white;
+	font-weight: normal;
+	font-size: 8.75pt;
+	line-height: 1.2em;
+}
+#detail p.thSubHead .thXP {
+    padding-right: 15px;
+	margin-top: 0px;
+	text-align: right;
+	float: right;
+	position:relative;
+	top: -1.2em;
+}
+*/
+#detail h1.thHead {
+	background: #45133C;
+	height:38px;
+}
+#detail h1.thHead .thLevel {
+	margin-top: 0;
+	text-align: right;
+	position:relative;
+	top:-60px;
+	padding-right: 15px;
+	float: right;
+}
+#detail h1.thHead .thSubHead,
+#detail h1.thHead .thXP {
+	display: block;
+	position: relative;
+	z-index: 99;
+	top: -0.75em;
+	height: 1em;
+	font-weight: normal;
+	font-size: 0.917em;
+}
+#detail h2.thHead {
+	display: block;
+	background: #65345D;
+	color: #FFFFFF;
+	font-variant: small-caps;
+	font-size: 8.75pt;
+	line-height: 18px;
+	padding-top: 0px;
+	vertical-align: bottom;
+	height: 18px;
+}
+#detail p.thBody {
+	padding: 0px 0px 0px 30px;
+	text-indent: -15px;
+	display: block;
+	margin: 0;
+	background: #E8F2D6;
+	font-size:8.75pt;
+	color: #000000;
+}
+#detail p.tbod {
+	padding: 0px 0px 0px 45px;
+	text-indent: -15px;
+	display: block;
+	margin: 0;
+	background: #E8F2D6;
+	font-size:8.75pt;
+	color: #000000;
+}
+#detail p.thStat {
+	padding: 0px 0px 0px 15px;
+	display: block;
+	margin: 0;
+	background: #E8F2D6;
+	font-size:8.75pt;
+	color: #000000;
+}
+#detail span.thInit {
+	background: #E8F2D6;
+	font-size:8.75pt;
+	color: #000000;
+	position: absolute;
+	left: 400px;
+	top: 53px;
+}
+#detail p.th2 {
+	padding: 0px 0px 0px 15px;
+	display: block;
+	margin: 0;
+	background: #CADBB7;
+	font-size:8.75pt;
+	color: #000000;
+}

@@ -1,13 +1,35 @@
-<div id="${name}_panel" class="creaturePanel centered bordered current grab" draggable="true">
-    <div class="images">
-        <img height="${cardHeight}" class="handle" src="${image}"/>
-        <div class="effects">
-            <div class="damage">
-                <div class="centered">
-                    <div class="types"></div>
+<div class="images wrapper">
+    <div class="state">
+        <div class="event verticallyCentered">
+            <div class="wrapper">
+                <div class="content">
+                    <div class="types">
+                        <span class="type">
+                            <span class="amount"></span>
+                        </span>
+                    </div>
+                    <div>
+                        <span class="description content"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="timer fullBoth centered verticallyCentered">
+            <div class="wrapper">
+                <span class="content"></span>
+            </div>
+        </div>
+        <div class="effects centered">
+            <div class="condition vertically-centered">
+                <img class="icon"/>
+                <div class="amount wrapper">
+                    <span class="content"></span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="name f2">${name}</div>
+</div>
+<div class="label">
+    <div class="name"></div>
+    <div class="hp"></div>
 </div>
