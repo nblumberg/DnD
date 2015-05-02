@@ -6,7 +6,7 @@
     "use strict";
 
     DnD.define(
-        "Apparatus of Kwalish",
+        "Apparatus_of_Kwalish",
         [ "creature.helpers", "party.level", "jQuery" ],
         function(helpers, partyLevel, jQuery) {
             var Apparatus_of_Kwalish;

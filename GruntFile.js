@@ -77,7 +77,8 @@ module.exports = function (grunt) {
 
     // Clean up generated files
     options.clean = {
-        all: [ options.genPath + "*", options.mappingPath + "*" ], // everything (other than groups.js) for a clean start
+        all: [ options.genPath + "*", options.mappingPath + "*", "monsters_forIncludeSource.scss" ], // everything (other than groups.js) for a clean start
+        build: [ "monsters_forIncludeSource.scss" ]
     };
 
     // Make the .js file name unique to the content so it can be permanently cached by the browser
@@ -130,19 +131,33 @@ module.exports = function (grunt) {
 
     options.includeSource = {
         options: {
-            basePath: "src/main/webapp/static/",
-            baseUrl: "../",
             templates: {
                 html: {
                     js: "<script src=\"{filePath}\"></script>",
                     css: "<link rel=\"stylesheet\" type=\"text/css\" href=\"{filePath}\" />"
+                },
+                scss: {
+                    js: "\"creatures.monsters.{filePath}\","
                 }
             }
         },
         html: {
+            options: {
+                basePath: "src/main/webapp/static/",
+                baseUrl: "../",
+            },
             files: {
                 "src/main/webapp/static/html/initiative_admin.html": "src/main/webapp/static/html/initiative_admin.tp.html",
                 "src/main/webapp/static/html/initiative.html": "src/main/webapp/static/html/initiative.tp.html"
+            }
+        },
+        js: {
+            options: {
+                basePath: "src/main/webapp/static/js/creatures/",
+                baseUrl: "",
+            },
+            files: {
+                "src/main/webapp/static/js/creatures/monsters_fromIncludeSource.scss": "monsters_forIncludeSource.scss"
             }
         }
     };
@@ -150,6 +165,15 @@ module.exports = function (grunt) {
     /**************
      * JS ASSETS
      *************/
+
+    options.rename = {
+        setUpIncludeSource: {
+            src: "src/main/webapp/static/js/creatures/monsters.js", dest: "monsters_forIncludeSource.scss"
+        },
+        tearDownIncludeSource: {
+            src: "src/main/webapp/static/js/creatures/monsters_fromIncludeSource.scss", dest: "src/main/webapp/static/js/creatures/monsters.js"
+        }
+    };
 
     // Concat .js for combined, unminified files
 //    (function() {
@@ -361,11 +385,30 @@ module.exports = function (grunt) {
 //    });
 
     // Generate unminified and minified, content checksum named .js files
-    grunt.registerTask("build", (function() {
-        var tasks;
-        tasks = [ "includeSource" ];
-        return tasks;
-    })());
+    function makeGroup(path, file, dependencyPrefix) {
+        var filePath, files, dependencies, i, fileContent, openTag, closeTag;
+        filePath = path + file;
+        // Find all the individual files and form a string of all filenames minus ".js" quoted one-per-line with a trailing comma
+        files = grunt.file.expand([ path + "*.js", "!" + filePath ]);
+        dependencies = "";
+        for (i = 0; i < files.length; i++) {
+            dependencies += "\n            \"" + dependencyPrefix + files[ i ].replace(path, "").replace(".js", "") + "\",";
+        }
+        // Read in the target .js file and replace everything between the replacement tags
+        fileContent = grunt.file.read(filePath);
+        openTag = "// start dependencies";
+        closeTag = "            // end dependencies";
+        i = fileContent.indexOf(openTag) + openTag.length;
+        fileContent = fileContent.substring(0, i) + dependencies + "\n" + fileContent.substring(fileContent.indexOf(closeTag));
+        grunt.file.write(filePath, fileContent);
+        //console.log(filePath + ":\n", fileContent);
+    }
+
+    grunt.registerTask("makeParty", makeGroup.bind(this, "src/main/webapp/static/js/party/", "party.js", ""));
+    grunt.registerTask("makeMonsters", makeGroup.bind(this, "src/main/webapp/static/js/creatures/", "monsters.js", "creatures.monsters."));
+
+    //grunt.registerTask("build", [ "rename:setUpIncludeSource", "includeSource:js", "rename:tearDownIncludeSource", "includeSource:html", "clean:build" ]);
+    grunt.registerTask("build", [ "makeParty", "makeMonsters", "includeSource:html" ]);
 
     // continuous dev mode
     grunt.registerTask("dev", [ "build", "specRunner", "watch:dev" ]);

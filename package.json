@@ -43,6 +43,7 @@
         "grunt-include-source": "0.5.1",
         "grunt-newer": "0.7.0",
         "grunt-open": "0.2.3",
+        "grunt-rename": "0.1.4",
         "matchdep": "0.3.0",
         "karma": "0.12.23",
         "karma-chrome-launcher": "0.1.4",

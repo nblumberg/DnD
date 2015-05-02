@@ -6,7 +6,7 @@
     "use strict";
 
     DnD.define(
-        "Tokk'it",
+        "Tokk_it",
         [ "creature.helpers", "party.level", "jQuery" ],
         function(helpers, partyLevel, jQuery) {
             var Tokk_it;
