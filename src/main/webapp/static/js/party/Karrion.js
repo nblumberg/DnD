@@ -7,8 +7,8 @@
 
     DnD.define(
         "Karrion",
-        [ "creature.helpers", "party.level", "jQuery", "descriptions" ],
-        function(helpers, partyLevel, jQuery, descriptions) {
+        [ "creature.helpers", "party.level", "jQuery", "descriptions", "Effect" ],
+        function(helpers, partyLevel, jQuery, descriptions, Effect) {
             var Karrion;
             Karrion = {
                 name: "Karrion",
@@ -51,7 +51,33 @@
                         damage: {
                             amount: "2d4",
                             crit: "3d6"
-                        }
+                        },
+                        effects: [
+                            function(target, attacker, round) {
+                                var otherId, effect, i, amount;
+                                otherId = "Karrion's Withering Spiked Chain +3 effect";
+                                amount = 0;
+                                for (i = 0; i < target.effects.length; i++) {
+                                    effect = target.effects[ i ];
+                                    if (effect.otherId === otherId) {
+                                        amount = effect.amount;
+                                        effect.remove();
+                                        break;
+                                    }
+                                }
+                                amount++;
+                                return new Effect({
+                                    name: "penalty",
+                                    otherId: otherId,
+                                    type: "ac",
+                                    amount: amount || 1,
+                                    saveEnds: true,
+                                    target: target,
+                                    attacker: attacker,
+                                    round: round
+                                });
+                            }
+                        ]
                     }, {
                         name: "Learning Longbow +3",
                         isMelee: false,

@@ -7,13 +7,14 @@
 
     DnD.define(
         "Implement",
-        [ "out", "Damage" ],
-        function(out, Damage) {
+        [ "out", "Damage", "Effect" ],
+        function(out, Damage, Effect) {
             function Implement(params) {
                 this._init(params);
             }
 
             Implement.prototype._init = function(params) {
+                var i;
                 this.__log = out.logFn.bind(this, "Implement");
                 this.__log("constructor", arguments);
                 this.__log("_init", arguments);
@@ -23,6 +24,10 @@
                 this.crit = new Damage(params.crit);
                 this.isMelee = false;
                 this.type = params.type;
+                this.effects = [];
+                for (i = 0; params.effects && i < params.effects.length; i++) {
+                    this.effects.push(new Effect(params.effects[ i ]));
+                }
             };
 
             Implement.prototype.toString = function() {

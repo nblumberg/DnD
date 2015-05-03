@@ -322,6 +322,7 @@
                 else if (this.effect.name.toLowerCase() === "penalty") {
                     condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
                     title = (condition && condition.type ? "Penalty to " + condition.type : "Unknown penalty") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
+                    amount *= -1;
                 }
                 else if (this.effect.name.toLowerCase() === "bonus") {
                     condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];

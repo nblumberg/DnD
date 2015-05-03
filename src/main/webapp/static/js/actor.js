@@ -19,7 +19,7 @@
                 this.__log("constructor", [ creature ? creature.name : "undefined", count, "currentState" ]);
 
                 if (creature instanceof Creature) {
-                    creature = creature.raw();
+                    creature = jQuery.extend({}, creature); // creature.raw();
                     creature.id = 0;
                 }
 
@@ -325,7 +325,7 @@
                 }
                 this.hp.current -= damage;
                 if (this.hp.current < 0 && !this.hasCondition("dying")) {
-                    this.effects.push(new Effect({ name: "Dying", round: this.history._round, target: this }));
+                    this.addEffect(new Effect({ name: "Dying", round: this.history._round, target: this }));
                     msg += "; " + this.name + " falls unconscious and is dying";
                 }
                 //        this.addDamageIndicator(damage, type);
@@ -342,7 +342,7 @@
             /**
              * Adds an Effect to the Actor
              * @param effect {Effect} The Effect to add
-             * @param attacker {Actor} The Actor imposing the Effect
+             * @param [attacker] {Actor} The Actor imposing the Effect
              * @returns {Effect} The added Effect
              */
             Actor.prototype.addEffect = function(effect, attacker) {
@@ -356,7 +356,15 @@
                         }
                     }
                 }
-                effect = new Effect(jQuery.extend({}, effect.raw ? effect.raw() : effect, { target: this, attacker: attacker, round: this.history._round }));
+                if (typeof effect.call === "function") {
+                    effect = effect.call(this, attacker, this.history._round);
+                    if (!effect) {
+                        return null;
+                    }
+                }
+                else {
+                    effect = new Effect(jQuery.extend({}, effect.raw ? effect.raw() : effect, { target: this, attacker: attacker, round: this.history._round }));
+                }
                 attacker.imposedEffects.push(effect);
                 this.effects.push(effect);
                 if (effect.hasOwnProperty("duration") && (effect.duration === "startAttackerNext" || effect.duration === "endAttackerNext")) {
@@ -779,7 +787,16 @@
                 };
                 targetDamage = {
                     amount: damage.amount,
-                    effects: attack.effects ? attack.effects.slice(0) : [],
+                    effects: (function actor_attackTarget_targetDamage_effects() {
+                        var effects = [];
+                        if (attack.effects) {
+                            effects = attack.effects.slice(0);
+                        }
+                        if (item && item.effects) {
+                            effects = effects.concat(item.effects);
+                        }
+                        return effects;
+                    })(),
                     missAmount: damage.missAmount,
                     missEffects: attack.miss && attack.miss.effects ? attack.miss.effects.slice(0) : [],
                     conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
@@ -791,6 +808,21 @@
                 if (!toHit.isAutomaticHit && !toHit.isFumble && !toHit.isCrit) {
                     toHitTarget.roll += (combatAdvantage || target.grantsCombatAdvantage() ? 2 : 0);
                     targetDefense = target.defenses[ attack.defense.toLowerCase() ] + target.defenseModifier(attack.isMelee);
+                    targetDefense += (function actor_attackTarget_targetDefense() {
+                        var bonus, penalty, i
+                        bonus = penalty = 0;
+                        for (i = 0; i < target.effects.length; i++) {
+                            if (target.effects[ i ].type === attack.defense.toLowerCase()) {
+                                if (target.effects[ i ].name.toLowerCase() === "bonus") {
+                                    bonus = window.Math.max(target.effects[ i ].amount, bonus);
+                                }
+                                else if (target.effects[ i ].name.toLowerCase() === "penalty") {
+                                    penalty = window.Math.max(target.effects[ i ].amount, penalty);
+                                }
+                            }
+                        }
+                        return bonus - penalty;
+                    })();
                 }
 
                 if (!toHit.isFumble && (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense)) {
