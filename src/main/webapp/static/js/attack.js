@@ -183,6 +183,7 @@
 
                 h = this.getLastRoll();
                 if (item) {
+                    h.breakdown = h.breakdown || "";
                     if (item.proficiency) {
                         h.breakdown += " [+" + item.proficiency + " proficiency]";
                     }
