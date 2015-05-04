@@ -807,22 +807,7 @@
                 // Calculate hit (for this target)
                 if (!toHit.isAutomaticHit && !toHit.isFumble && !toHit.isCrit) {
                     toHitTarget.roll += (combatAdvantage || target.grantsCombatAdvantage() ? 2 : 0);
-                    targetDefense = target.defenses[ attack.defense.toLowerCase() ] + target.defenseModifier(attack.isMelee);
-                    targetDefense += (function actor_attackTarget_targetDefense() {
-                        var bonus, penalty, i
-                        bonus = penalty = 0;
-                        for (i = 0; i < target.effects.length; i++) {
-                            if (target.effects[ i ].type === attack.defense.toLowerCase()) {
-                                if (target.effects[ i ].name.toLowerCase() === "bonus") {
-                                    bonus = window.Math.max(target.effects[ i ].amount, bonus);
-                                }
-                                else if (target.effects[ i ].name.toLowerCase() === "penalty") {
-                                    penalty = window.Math.max(target.effects[ i ].amount, penalty);
-                                }
-                            }
-                        }
-                        return bonus - penalty;
-                    })();
+                    targetDefense = target.getDefense(attack.defense.toLowerCase(), attack.isMelee);
                 }
 
                 if (!toHit.isFumble && (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense)) {
