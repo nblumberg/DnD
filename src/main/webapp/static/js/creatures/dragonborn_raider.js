@@ -6,7 +6,7 @@
     "use strict";
     DnD.define(
         "creatures.monsters.dragonborn_raider",
-        [ "jQuery", "Creature", "creatures.monsters.dragonborn_base" ],
+        [ "jQuery", "Creature", "creatures.monsters.base.dragonborn" ],
         function(jQuery, Creature, base) {
             var o = {
                 name: "Dragonborn Raider", level: 13, image: "../images/portraits/dragonborn_raider.jpg", // "http://1-media-cdn.foolz.us/ffuuka/board/tg/image/1336/87/1336876770629.jpg

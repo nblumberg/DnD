@@ -124,7 +124,8 @@ module.exports = function(config) {
 
     coverageFiles = [
         "src/main/webapp/static/js/*.js",
-        "src/main/webapp/static/js/party/*.js"
+        "src/main/webapp/static/js/party/*.js",
+        "src/main/webapp/static/js/creatures/*.js"
     ];
 
     // test specs to run
@@ -136,6 +137,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     options.files = libFiles.concat(fixtures).concat(coverageFiles).concat(specFiles);
+    options.exclude = [ "src/main/webapp/static/js/genericDamageDialog.js" ];
 
     /**
      * Coverage Report instructions from:

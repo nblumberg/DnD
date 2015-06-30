@@ -804,7 +804,7 @@
                     }, {
                         name: "Fountain of Flame (zone)",
                         usage: {
-                            frequency: "At-WIll"
+                            frequency: "At-Will"
                         },
                         target: {
                             area: "burst",

@@ -6,7 +6,7 @@
     "use strict";
     DnD.define(
         "creatures.monsters.arctic_sahuagin_priest",
-        [ "jQuery", "Creature", "creatures.monsters.arctic_sahuagin_base" ],
+        [ "jQuery", "Creature", "creatures.monsters.base.arctic_sahuagin" ],
         function(jQuery, Creature, base) {
             var o = {
                 name: "Arctic Sahuagin Priest", level: 13, image: "../images/portraits/arctic_sahuagin.png",

@@ -67,6 +67,12 @@
         }).bind(this, object));
     };
 
+    Test.isFunction = function(object, description) {
+        it(description ? description + " is a Function" : "a Function", (function(obj) {
+            expect(typeof(obj)).toEqual("function");
+        }).bind(this, object));
+    };
+
     Test.hasProperty = function(object, property, extra) {
         it(property + ": [" + extra + "]", (function(obj, prop) {
             expect(obj.hasOwnProperty(prop)).toEqual(true);
