@@ -21,8 +21,8 @@
                 attacks: [
                     { name: "Spear", usage: { frequency: "At-Will" }, range: "reach", toHit: 22, defense: "AC", damage: "2d10+5", keywords: [ "melee", "basic", "weapon" ] },
                     { name: "Javelin", usage: { frequency: "At-Will" }, target: { range: 10 }, toHit: 22, defense: "AC", damage: "2d8+5", keywords: [ "ranged", "basic", "weapon" ] },
-                    { name: "Forest of Spears (slowed)", usage: { frequency: "Recharge", recharge: "Bloodied" }, target: { area: "close burst", size: 2, enemiesOnly: true }, toHit: 22, defense: "AC", damage: "2d10+5", effects: [ { name: "Slowed", saveEnds: true } ], keywords: [ "melee", "weapon" ] },
-                    { name: "Forest of Spears (ongoing damage)", usage: { frequency: "Recharge", recharge: "Bloodied" }, target: { area: "close burst", size: 2, enemiesOnly: true }, toHit: 22, defense: "AC", damage: "2d10+5", effects: [ { name: "ongoing damage", amount: 10, saveEnds: true } ], keywords: [ "melee", "weapon" ] },
+                    { name: "Forest of Spears (slowed)", usage: { frequency: "Recharge", recharge: "bloodied" }, target: { area: "close burst", size: 2, enemiesOnly: true }, toHit: 22, defense: "AC", damage: "2d10+5", effects: [ { name: "Slowed", saveEnds: true } ], keywords: [ "melee", "weapon" ] },
+                    { name: "Forest of Spears (ongoing damage)", usage: { frequency: "Recharge", recharge: "bloodied" }, target: { area: "close burst", size: 2, enemiesOnly: true }, toHit: 22, defense: "AC", damage: "2d10+5", effects: [ { name: "ongoing damage", amount: 10, saveEnds: true } ], keywords: [ "melee", "weapon" ] },
                     { name: "Deadly Flanker", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "1d8", keywords: [ "melee" ] },
                     { name: "Moonfire", usage: { frequency: "Recharge", recharge: 4, action: "minor" }, target: { range: 10 }, toHit: 20, defense: "Will", damage: "0", effects: [ { name: "multiple", children: [ "No invisibility or concealment", "combat advantage" ], duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
                 ]

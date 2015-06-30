@@ -368,6 +368,7 @@ module.exports = function (grunt) {
 
     // single test mode
     grunt.registerTask("test", [ "karma:single" ]);
+    grunt.registerTask("devTest", [ "karma:single" ]);
 
     // debug mode
     grunt.registerTask("specRunner", [ "jasmine_html_from_karma_conf:specRunner" ]);

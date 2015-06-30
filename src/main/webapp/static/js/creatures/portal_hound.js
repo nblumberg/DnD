@@ -18,7 +18,7 @@
                 attacks: [
                     { name: "Bite", usage: { frequency: "At-Will" }, range: "melee", toHit: 21, defense: "AC", damage: "2d8+7", keywords: [ "melee", "basic" ] },
                     { name: "Dimensional Jaws", usage: { frequency: "At-Will" }, range: "melee", toHit: 22, defense: "Will", damage: "0", keywords: [ "melee", "teleportation" ] },
-                    { name: "Portal Walk", usage: { frequency: "Enounter" }, target: { area: "close burst", size: 1 }, toHit: 21, defense: "Will", damage: "0", keywords: [ "close burst", "teleportation" ] }
+                    { name: "Portal Walk", usage: { frequency: "Encounter" }, target: { area: "close burst", size: 1 }, toHit: 21, defense: "Will", damage: "0", keywords: [ "close burst", "teleportation" ] }
                 ]
             };
             return jQuery.extend(true, {}, Creature.base, o);

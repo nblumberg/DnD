@@ -74,6 +74,7 @@
             "creatures.monsters.odos",
             "creatures.monsters.pennel",
             "creatures.monsters.portal_hound",
+            "creatures.monsters.pyradan",
             "creatures.monsters.pyradan_firbolg_dusk_harrier",
             "creatures.monsters.rakshasa_archer",
             "creatures.monsters.rathoraiax",
