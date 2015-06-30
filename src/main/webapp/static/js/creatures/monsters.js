@@ -77,6 +77,7 @@
             "creatures.monsters.seed_of_winter",
             "creatures.monsters.shadar_kai_warrior",
             "creatures.monsters.shadar_kai_witch",
+            "creatures.monsters.shadow_snake",
             "creatures.monsters.skulking_terror",
             "creatures.monsters.skull_lord_servitor",
             "creatures.monsters.slaad_guard",

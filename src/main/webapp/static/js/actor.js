@@ -60,6 +60,7 @@
                     for (i = 0; currentState.effects && i < currentState.effects.length; i++) {
                         this.effects.push(new Effect(jQuery.extend({}, currentState.effects[ i ], { target: this })));
                     }
+                    this.imposedEffects = [];
                 }
             }
 
@@ -365,7 +366,9 @@
                 else {
                     effect = new Effect(jQuery.extend({}, effect.raw ? effect.raw() : effect, { target: this, attacker: attacker, round: this.history._round }));
                 }
-                attacker.imposedEffects.push(effect);
+                if (attacker && attacker.imposedEffects) {
+                    attacker.imposedEffects.push(effect);
+                }
                 this.effects.push(effect);
                 if (effect.hasOwnProperty("duration") && (effect.duration === "startAttackerNext" || effect.duration === "endAttackerNext")) {
                     effect.isNextTurn = false;

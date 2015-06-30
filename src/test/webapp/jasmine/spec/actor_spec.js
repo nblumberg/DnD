@@ -1724,6 +1724,11 @@
                 });
             });
             describe("and the final damage exceeds the target's current HP", function() {
+                beforeEach(function() {
+                    if (!actor.imposedEffects) {
+                        actor.imposedEffects = [];
+                    }
+                });
                 it("it should add the \"Dying\" Effect to the target", function() {
                     target.takeDamage(actor, 101, type, []);
                     expect(target.effects.length).toEqual(1);

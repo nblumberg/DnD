@@ -5,7 +5,7 @@
 (function (DnD) {
     "use strict";
     DnD.define(
-        "creatures.monsters.arctic_sahuagin_base",
+        "creatures.monsters.base.arctic_sahuagin",
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {

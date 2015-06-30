@@ -207,7 +207,7 @@ Test.hasValidTypes = function(object, extra) {
 Test.hasValidEffects = function(object, required, extra) {
     if (required || object.hasOwnProperty("effects")) {
         Test.hasNonEmptyArrayProperty(object, "effects", extra);
-        describe("effects: Array of String or Object of the form", function() {
+        describe("effects: Array of String or Function or Object of the form", function() {
             var i, effect, fn;
             fn = function(e) {
                 expect(Test.damageRegEx.test(e.amount)).toEqual(true);
@@ -215,7 +215,10 @@ Test.hasValidEffects = function(object, required, extra) {
             for (i = 0; i < object.effects.length; i++) {
                 effect = object.effects[ i ];
                 if (typeof(effect) === "string") {
-                    Test.nonEmptyString(effect);
+                    Test.nonEmptyString(effect, extra + " effect[" + i + "]");
+                }
+                else if (typeof(effect) === "function") {
+                    Test.isFunction(effect, extra + " effect[" + i + "]");
                 }
                 else {
                     Test.hasNonEmptyStringProperty(effect, "name", extra);
@@ -334,7 +337,7 @@ Test.isValidCreature = function(creature, isPC) {
                     var j, weapon, tmp, extra;
                     for (j = 0; j < creature.weapons.length; j++) {
                         weapon = creature.weapons[ j ];
-                        extra = 
+                        //extra = 
                         Test.hasNonEmptyStringProperty(weapon, "name", creature.name);
                         Test.hasBooleanProperty(weapon, "isMelee", extra);
                         Test.hasNumberProperty(weapon, "proficiency", extra);
@@ -343,7 +346,7 @@ Test.isValidCreature = function(creature, isPC) {
                         Test.hasNonEmptyStringProperty(weapon.damage, "amount", extra);
                         tmp = { damage: weapon.damage.crit };
                         Test.hasValidDamage(tmp, extra + " (crit)");
-                        Test.hasValidEffects(weapon, false, extra);
+                        Test.hasValidEffects(weapon, false, extra + " [weapon \"" + weapon.name + "\"]");
                         if (weapon.keywords) {
                             Test.hasNonEmptyArrayProperty(weapon, "keywords", extra);
                         }
