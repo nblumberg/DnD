@@ -9,7 +9,7 @@
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {
-                name: "Arzoa, Githyanki Assassin", level: 18, image: "../images/portraits/thaggriel.png",
+                name: "Arzoa, Githyanki Assassin", level: 18, image: "../images/portraits/arzoa.jpg",
                 hp: { total: 344 },
                 defenses: { ac: 32, fort: 29, ref: 31, will: 30 },
                 savingThrows: 2,
