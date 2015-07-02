@@ -9,7 +9,7 @@
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {
-                name: "Pyradan, Firbolg Dusk Harrier", level: 17, image: "../images/portraits/pyradan.jpg",
+                name: "Pyradan, Firbolg Dusk Harrier", level: 17, image: "../images/portraits/pyradan.png",
                 hp: { total: 322, regeneration: 5 },
                 defenses: { ac: 31, fort: 29, ref: 30, will: 27 },
                 vulnerabilities: { necrotic: 5 },

@@ -393,6 +393,9 @@ module.exports = function (grunt) {
         files = grunt.file.expand([ path + "*.js", "!" + filePath ]);
         dependencies = "";
         for (i = 0; i < files.length; i++) {
+            if (files[ i ].indexOf("_base") !== -1) {
+                files[ i ] = "base." + files[ i ].replace("_base", "");
+            }
             dependencies += "\n            \"" + dependencyPrefix + files[ i ].replace(path, "").replace(".js", "") + "\",";
         }
         // Read in the target .js file and replace everything between the replacement tags
@@ -404,6 +407,34 @@ module.exports = function (grunt) {
         grunt.file.write(filePath, fileContent);
         //console.log(filePath + ":\n", fileContent);
     }
+
+    grunt.registerTask("html", function html() {
+        var content, path, files, i;
+
+        function IIFE(DnD) {
+            "use strict";
+            DnD.define("html", [], function() {
+                var o = {};
+                // REPLACE
+
+                return o;
+            }, false);
+        }
+
+        content = "";
+        path = "src/main/webapp/static/html/partials/";
+        files = grunt.file.expand(path + "*.html");
+        for (i = 0; i < files.length; i++) {
+            content += "\n                o[ \"" + files[ i ].replace(path, "").replace(".html", "") + "\" ] = \"" + grunt.file.read(files[ i ]).replace(/\n/g, "\\n").replace(/"/g, "\\\"") + "\";";
+        }
+        path = "src/main/webapp/static/html/descriptions/";
+        files = grunt.file.expand(path + "*.html");
+        for (i = 0; i < files.length; i++) {
+            content += "\n                o[ \"" + files[ i ].replace(path, "").replace(".html", "") + "\" ] = \"" + grunt.file.read(files[ i ]).replace(/\n/g, "\\n").replace(/"/g, "\\\"") + "\";";
+        }
+        content = "(" + IIFE.toString().replace("// REPLACE", content) + ")(window.DnD);";
+        grunt.file.write("src/main/webapp/static/js/html.js", content);
+    });
 
     grunt.registerTask("makeParty", makeGroup.bind(this, "src/main/webapp/static/js/party/", "party.js", ""));
     grunt.registerTask("makeMonsters", makeGroup.bind(this, "src/main/webapp/static/js/creatures/", "monsters.js", "creatures.monsters."));

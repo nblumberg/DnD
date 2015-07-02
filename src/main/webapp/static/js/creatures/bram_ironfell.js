@@ -2,7 +2,7 @@
  * Created by nblumberg on 6/30/15.
  */
 
-(function () {
+(function (DnD) {
     "use strict";
 
     DnD.define(
@@ -10,7 +10,7 @@
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {
-                name: "Bram Ironfell", level: 12, image: "../images/portraits/bram_ironfell.png",
+                name: "Bram Ironfell", level: 12, image: "../images/portraits/bram_ironfell2.png",
                 hp: { total: 123 },
                 defenses: { ac: 26, fort: 24, ref: 23, will: 26 },
                 init: 9, speed: 5,
@@ -26,4 +26,4 @@
         false
     );
 
-})();
+})(window.DnD);

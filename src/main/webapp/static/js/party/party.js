@@ -32,6 +32,7 @@
             "Smack",
             "Smudge",
             "Tokk_it",
+            "Vader",
             // end dependencies
             "jQuery"
         ],

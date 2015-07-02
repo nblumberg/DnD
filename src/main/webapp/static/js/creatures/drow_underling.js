@@ -5,11 +5,11 @@
 (function () {
     "use strict";
     DnD.define(
-        "creatures.monsters.drow_underlings",
+        "creatures.monsters.drow_underling",
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {
-                name: "Drow Underlings", level: 15, image: "../images/portraits/drow.jpg",
+                name: "Drow Underling", level: 15, image: "../images/portraits/drow.jpg",
                 hp: { total: 1 },
                 defenses: { ac: 28, fort: 24, ref: 27, will: 26 },
                 init: 15, speed: 6,
