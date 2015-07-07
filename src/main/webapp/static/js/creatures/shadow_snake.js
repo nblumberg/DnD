@@ -29,7 +29,7 @@
                         },
                         toHit: "automatic",
                         effects: [
-                            { name: "insubstantial", duration: Effect.DURATION_END_TARGET_NEXT }
+                            { name: "resistance", amount: 50, type: "insubstantial", duration: Effect.DURATION_END_TARGET_NEXT }
                         ]
                     }
                 ]

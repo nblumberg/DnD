@@ -28,6 +28,10 @@
                 for (i = 0; params.effects && i < params.effects.length; i++) {
                     this.effects.push(new Effect(params.effects[ i ]));
                 }
+                this.keywords = [];
+                for (i = 0; params.keywords && i < params.keywords.length; i++) {
+                    this.keywords.push(params.keywords[ i ]);
+                }
             };
 
             Implement.prototype.toString = function() {

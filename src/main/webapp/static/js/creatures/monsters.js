@@ -47,6 +47,7 @@
             "creatures.monsters.elder_troglodyte_curse_chanter",
             "creatures.monsters.filth_king",
             "creatures.monsters.firbolg_bloodbear",
+            "creatures.monsters.firbolg_bloodbear_bear_form",
             "creatures.monsters.firbolg_ghostraven",
             "creatures.monsters.flame_shard",
             "creatures.monsters.flesh_golem",

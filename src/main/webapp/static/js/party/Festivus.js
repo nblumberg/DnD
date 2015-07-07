@@ -7,8 +7,8 @@
 
     DnD.define(
         "Festivus",
-        [ "creature.helpers", "party.level", "jQuery", "descriptions" ],
-        function(helpers, partyLevel, jQuery, descriptions) {
+        [ "creature.helpers", "party.level", "jQuery", "html" ],
+        function(CH, partyLevel, jQuery, descriptions) {
             var Festivus;
             Festivus = {
                 name: "Festivus",
@@ -99,34 +99,10 @@
                     }
                 ],
                 attacks: [
-                    {
-                        name: "Melee Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        isMelee: true,
-                        toHit: "STR",
-                        defense: "AC",
-                        damage: "1[W]+5",
-                        keywords: [
-                            "weapon", "melee", "basic"
-                        ]
-                    }, {
-                        name: "Ranged Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        toHit: "DEX",
-                        defense: "AC",
-                        damage: "1[W]",
-                        keywords: [
-                            "weapon", "ranged", "basic"
-                        ]
-                    }, {
+                    CH.meleeBasic,
+                    CH.rangedBasic,
+                    new CH.Power({
                         name: "Blazing Starfall",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "CHA",
                         defense: "Ref",
                         damage: {
@@ -135,13 +111,10 @@
                         },
                         keywords: [
                             "arcane", "fire", "implement", "radiant", "zone"
-                        ],
-                        description: descriptions[ "Blazing Starfall" ]
-                    }, {
+                        ]
+                    }).atWill().burst(1, 10),
+                    new CH.Power({
                         name: "Vicious Mockery",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "CHA",
                         defense: "Will",
                         damage: {
@@ -158,12 +131,12 @@
                         ],
                         keywords: [
                             "arcane", "charm", "implement", "psychic"
-                        ],
-                        description: descriptions[ "Vicious Mockery" ]
-                    }, {
+                        ]
+                    }).atWill().ranged(10),
+                    new CH.Power({
                         name: "Chains of Fire",
-                        usage: {
-                            frequency: "Encounter"
+                        target: {
+                            targets: 2
                         },
                         toHit: "CHA",
                         defense: "Ref",
@@ -173,13 +146,10 @@
                         },
                         keywords: [
                             "arcane", "fire", "implement", "teleportation"
-                        ],
-                        description: descriptions[ "Chains of Fire" ]
-                    }, {
+                        ]
+                    }).encounter().ranged(10),
+                    new CH.Power({
                         name: "Chains of Fire (secondary)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "automatic",
                         defense: "Ref",
                         damage: {
@@ -190,11 +160,9 @@
                             "arcane", "fire", "implement"
                         ],
                         description: descriptions[ "Chains of Fire" ]
-                    }, {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Eyebite",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "CHA",
                         defense: "Will",
                         damage: {
@@ -203,13 +171,10 @@
                         },
                         keywords: [
                             "arcane", "charm", "implement", "psychic"
-                        ],
-                        description: descriptions[ "Eyebite" ]
-                    }, {
+                        ]
+                    }).encounter(),
+                    new CH.Power({
                         name: "Dissonant Strain",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "CHA",
                         defense: "Will",
                         damage: {
@@ -219,13 +184,10 @@
                         },
                         keywords: [
                             "arcane", "implement", "psychic"
-                        ],
-                        description: descriptions[ "Dissonant Strain" ]
-                    }, {
+                        ]
+                    }).encounter(),
+                    new CH.Power({
                         name: "Chaos Ray",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "CHA",
                         defense: "Will",
                         damage: {
@@ -235,29 +197,23 @@
                         },
                         keywords: [
                             "arcane", "implement", "psychic", "teleportation"
-                        ],
-                        description: descriptions[ "Chaos Ray" ]
-                    }, {
+                        ]
+                    }).encounter(),
+                    new CH.Power({
                         name: "Dragon's Wrath",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "STR^CON^DEX+4",
                         defense: "Ref",
                         damage: {
                             amount: "3d6+CON",
-                            type: "psychic",
+                            type: "acid",
                             crit: "1d8"
                         },
                         keywords: [
                             "acid"
-                        ],
-                        description: descriptions[ "Dragon's Wrath" ]
-                    }, {
+                        ]
+                    }).encounter().burst(2, 10, true),
+                    new CH.Power({
                         name: "Stirring Shout",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "CHA",
                         defense: "Will",
                         damage: {
@@ -267,9 +223,8 @@
                         },
                         keywords: [
                             "arcane", "healing", "implement", "psychic"
-                        ],
-                        description: descriptions[ "Stirring Shout" ]
-                    }/*, {
+                        ]
+                    }).daily()/*, {
                      name: "Reeling Torment",
                      usage: {
                      frequency: "Daily"
@@ -285,11 +240,9 @@
                      "arcane", "charm", "implement", "psychic"
                      ],
                      description: descriptions[ "Reeling Torment" ]
-                     } */, {
+                     } */,
+                    new CH.Power({
                         name: "Counterpoint",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "CHA",
                         defense: "Will",
                         damage: {
@@ -298,13 +251,10 @@
                         },
                         keywords: [
                             "arcane", "implement"
-                        ],
-                        description: descriptions[ "Counterpoint" ]
-                    }, {
+                        ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Dragon Breath",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "STR^CON^DEX+2",
                         defense: "Ref",
                         damage: {
@@ -313,13 +263,10 @@
                         },
                         keywords: [
                             "acid"
-                        ],
-                        description: descriptions[ "Dragon Breath" ]
-                    }, {
+                        ]
+                    }).encounter(),
+                    new CH.Power({
                         name: "Prismatic Lightning (Fort)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "CHA",
                         defense: "Fort",
                         damage: {
@@ -327,17 +274,15 @@
                             type: "lightning"
                         },
                         effects: [
-                            { name: "ongoing damage", amount: "10", type: "acid", saveEnds: true }
+                            { name: "ongoing damage", amount: 10, type: "acid", saveEnds: true }
                         ],
                         keywords: [
                             "acid", "arcane", "implement", "lightning"
                         ],
                         description: descriptions[ "Prismatic Lightning" ]
-                    }, {
+                    }).daily(),
+                    new CH.Power({
                         name: "Prismatic Lightning (Ref)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "CHA",
                         defense: "Ref",
                         damage: {
@@ -351,11 +296,9 @@
                             "arcane", "cold", "implement", "lightning"
                         ],
                         description: descriptions[ "Prismatic Lightning" ]
-                    }, {
+                    }).daily(),
+                    new CH.Power({
                         name: "Prismatic Lightning (Will)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "CHA",
                         defense: "Will",
                         damage: {
@@ -369,39 +312,30 @@
                             "arcane", "implement", "lightning", "psychic"
                         ],
                         description: descriptions[ "Prismatic Lightning" ]
-                    }
+                    }).daily()
                 ],
                 buffs: [
-                    {
+                    new CH.Power({
                         name: "Majestic Word",
-                        usage: {
-                            frequency: "Encounter",
-                            perEncounter: 3
-                        },
                         healing: {
                             isTempHP: false,
                             usesHealingSurge: true,
                             amount: "2d6+CHA+HS",
-                        },
-                        description: descriptions[ "Majestic Word" ]
-                    },
-                    {
+                        }
+                    }).encounter(3),
+                    new CH.Power({
                         name: "Stirring Shout",
-                        usage: {
-                            frequency: "At-Will",
-                        },
                         healing: {
                             isTempHP: false,
                             usesHealingSurge: false,
                             amount: "CHA"
-                        },
-                        description: descriptions[ "Stirring Shout" ]
-                    }
+                        }
+                    }).atWill()
                 ],
                 effects: []
             };
             Festivus.hp.total = 12 + Festivus.abilities.CON + (5 * (partyLevel - 1));
-            Festivus.skills = helpers.skills(Festivus, {
+            Festivus.skills = CH.skills(Festivus, {
                 arcana: 7, // Bardic Knowledge feat
                 dungeoneering: 2, // Bardic Knowledge feat
                 history: 7, // Bardic Knowledge feat

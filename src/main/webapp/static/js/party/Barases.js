@@ -7,8 +7,8 @@
 
     DnD.define(
         "Barases",
-        [ "creature.helpers", "party.level", "jQuery", "descriptions" ],
-        function(helpers, partyLevel, jQuery, descriptions) {
+        [ "creature.helpers", "party.level", "jQuery", "html" ],
+        function(CH, partyLevel, jQuery, descriptions) {
             var Barases;
             Barases = {
                 isPC: true,
@@ -51,7 +51,7 @@
                 Barases.abilities.CON +
                 (5 * (partyLevel - 1)) +
                 10; // Toughness @ level 11
-            Barases.skills = helpers.skills(Barases, { athletics: 5, bluff: 5, nature: 5, perception: 5 });
+            Barases.skills = CH.skills(Barases, { athletics: 5, bluff: 5, nature: 5, perception: 5 });
             Barases = jQuery.extend(true, {}, Barases, {
                 name: "Barases",
                 image: "../images/portraits/barases.jpg", // "http://images5.fanpop.com/image/photos/31000000/Satyr-fantasy-31060204-283-400.jpg",
@@ -70,12 +70,10 @@
                         type: "thunder",
                         damage: {
                             // Druid of Summer
-                            //amount: "1d12",
-                            // Druid of the Wastes
                             amount: "1d12",
                             crit: { amount: "3d8", type: "thunder" }
                         },
-                        keywords: [ "cold" ]
+                        keywords: [ "thunder" ]
                     }, {
                         name: "Summoner's Staff +4",
                         isMelee: true,
@@ -122,7 +120,7 @@
                     {
                         name: "Lasting Thunder",
                         effects: [ { name: "Vulnerable", amount: 5, type: "thunder", duration: "endAttackerNext" } ],
-                        keywords: [ "cold" ],
+                        keywords: [ "thunder" ],
                         description: descriptions[ "Lasting Frost" ]
                     }, {
                         name: "Thundertouched",
@@ -132,78 +130,39 @@
                     }
                 ],
                 attacks: [
-                    {
-                        name: "Melee Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        toHit: "STR",
-                        defense: "AC",
-                        damage: "1[W]+STR",
-                        keywords: [
-                            "weapon", "melee", "basic"
-                        ]
-                    },
-                    {
-                        name: "Ranged Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        toHit: "DEX",
-                        defense: "AC",
-                        damage: "1[W]+DEX",
-                        keywords: [
-                            "weapon", "ranged", "basic"
-                        ]
-                    },
-                    {
+                    CH.meleeBasic,
+                    CH.rangedBasic,
+                    new CH.Power({
                         name: "Tending Strike",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "WIS",
                         defense: "AC",
                         damage: "1[W]+WIS",
                         keywords: [
-                            "weapon", "melee", "primal"
-                        ],
-                        description: descriptions[ "Tending Strike" ]
-                    },
-                    {
+                            "weapon", "primal"
+                        ]
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Combined Attack",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "WIS",
                         defense: "AC",
                         damage: "1[W]+WIS",
                         keywords: [
-                            "weapon", "melee", "primal"
-                        ],
-                        description: descriptions[ "Combined Attack" ]
-                    },
-                    {
+                            "weapon", "primal"
+                        ]
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Combined Attack (beast)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: 15,
                         defense: "AC",
                         damage: "1d12+9",
                         crit: "",
                         keywords: [
-                            "melee", "primal", "beast"
+                            "primal", "beast"
                         ],
                         description: descriptions[ "Combined Attack" ]
-                    },
-                    {
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Redfang Prophecy",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            range: 5
-                        },
                         toHit: "WIS",
                         defense: "Will",
                         damage: "2d8+WIS",
@@ -216,14 +175,10 @@
                         ],
                         keywords: [
                             "implement", "primal", "psychic"
-                        ],
-                        description: descriptions[ "Redfang Prophecy" ]
-                    },
-                    {
+                        ]
+                    }).encounter().ranged(5),
+                    new CH.Power({
                         name: "Spirit's Shield",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         target: {
                             range: 1,
                             area: "spirit"
@@ -233,18 +188,10 @@
                         damage: "WIS",
                         keywords: [
                             "healing", "implement", "spirit", "primal"
-                        ],
-                        description: descriptions[ "Spirit's Shield" ]
-                    },
-                    {
+                        ]
+                    }).encounter(),
+                    new CH.Power({
                         name: "Vexing Overgrowth",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "close burst",
-                            size: 1
-                        },
                         toHit: "WIS",
                         defense: "AC",
                         damage: "2[W]+WIS",
@@ -253,14 +200,10 @@
                         },
                         keywords: [
                             "weapon", "primal"
-                        ],
-                        description: descriptions[ "Vexing Overgrowth" ]
-                    },
-                    {
+                        ]
+                    }).daily().closeBurst(1),
+                    new CH.Power({
                         name: "Life Blood Harvest",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "WIS",
                         defense: "AC",
                         damage: "3[W]+WIS",
@@ -268,111 +211,77 @@
                             halfDamage: true
                         },
                         keywords: [
-                            "weapon", "melee", "primal", "healing"
-                        ],
-                        description: descriptions[ "Life Blood Harvest" ]
-                    },
-                    {
-                        name: "Stonemetal",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        toHit: "automatic",
-                        defense: "AC",
-                        damage: "4",
-                        effects: [
-                            "prone"
-                        ],
-                        keywords: [
-                            "weapon", "melee", "primal", "healing"
-                        ],
-                        description: descriptions[ "Stonemetal" ]
-                    }
+                            "weapon", "primal", "healing"
+                        ]
+                    }).daily().melee()
                 ],
                 buffs: [
-                    {
+                    new CH.Power({
                         name: "Tending Strike",
-                        usage: {
-                            frequency: "At-Will",
-                        },
                         healing: {
                             isTempHP: true,
                             usesHealingSurge: false,
                             amount: "CON"
-                        },
-                        description: descriptions[ "Tending Strike" ]
-                    },
-                    {
+                        }
+                    }).atWill(),
+                    new CH.Power({
                         name: "Life Blood Harvest",
-                        usage: {
-                            frequency: "Daily",
-                        },
                         healing: {
                             isTempHP: false,
                             usesHealingSurge: false,
                             amount: "HS"
-                        },
-                        description: descriptions[ "Life Blood Harvest" ]
-                    },
-                    {
+                        }
+                    }).daily(),
+                    new CH.Power({
                         name: "Healing Spirit",
-                        usage: {
-                            frequency: "Encounter",
-                        },
                         healing: {
                             isTempHP: false,
                             usesHealingSurge: true,
                             amount: "HS"
-                        },
-                        description: descriptions[ "Healing Spirit" ]
-                    },
-                    {
+                        }
+                    }).encounter(),
+                    new CH.Power({
                         name: "Healing Spirit (secondary)",
-                        usage: {
-                            frequency: "Encounter",
-                        },
                         healing: {
                             isTempHP: false,
                             usesHealingSurge: false,
                             amount: "3d6"
                         },
                         description: descriptions[ "Healing Spirit" ]
-                    },
-                    {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Healing Word",
-                        usage: {
-                            frequency: "Encounter",
-                            perEncounter: 3
-                        },
                         healing: {
                             isTempHP: false,
                             usesHealingSurge: true,
                             amount: "4d6+HS"
                         },
                         description: descriptions[ "Healing Word" ]
-                    },
-                    {
+                    }).encounter(3),
+                    new CH.Power({
                         name: "Spirit's Shield",
-                        usage: {
-                            frequency: "Encounter",
-                        },
                         healing: {
                             isTempHP: false,
                             usesHealingSurge: false,
                             amount: "WIS"
-                        },
-                        description: descriptions[ "Spirit's Shield" ]
-                    },
-                    {
+                        }
+                    }).encounter(),
+                    new CH.Power({
+                        name: "Summon Crocodile",
+                        keywords: [ "implement", "primal", "summoning" ]
+                    }).daily().ranged(5),
+                    new CH.Power({
+                        name: "Summon Venomous Scorpion",
+                        keywords: [ "primal", "summoning" ],
+                        description: descriptions[ "Summon Natural Ally" ]
+                    }).daily().ranged(5),
+                    new CH.Power({
                         name: "Thunder Brand (resistance)",
-                        usage: {
-                            frequency: "At-Will",
-                        },
                         effects: [
                             { name: "resistance", type: "thunder", amount: 9 }
                         ],
                         description: descriptions[ "Frost Brand Weapon" ]
-                    }
+                    }).atWill()
                 ]
             });
             return Barases;

@@ -440,7 +440,7 @@ module.exports = function (grunt) {
     grunt.registerTask("makeMonsters", makeGroup.bind(this, "src/main/webapp/static/js/creatures/", "monsters.js", "creatures.monsters."));
 
     //grunt.registerTask("build", [ "rename:setUpIncludeSource", "includeSource:js", "rename:tearDownIncludeSource", "includeSource:html", "clean:build" ]);
-    grunt.registerTask("build", [ "makeParty", "makeMonsters", "includeSource:html" ]);
+    grunt.registerTask("build", [ "html", "makeParty", "makeMonsters", "includeSource:html" ]);
 
     // continuous dev mode
     grunt.registerTask("dev", [ "build", "specRunner", "watch:dev" ]);

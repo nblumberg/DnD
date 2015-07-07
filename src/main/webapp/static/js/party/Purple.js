@@ -7,8 +7,8 @@
 
     DnD.define(
         "Purple",
-        [ "jQuery", "Barases" ],
-        function(jQuery, Barases) {
+        [ "creature.helpers", "jQuery", "Barases" ],
+        function(CH, jQuery, Barases) {
             var Purple;
             Purple = jQuery.extend(true, {}, Barases, { // copied from "Visejaw Crocodile" as it's the only large, natural, non-minion crocodile and the only stats listed in the power match
                 name: "Purple",
@@ -18,19 +18,16 @@
                 },
                 speed: { walk: 6, swim: 8 },
                 attacks: [
-                    {
+                    new CH.Power({
                         name: "Bite",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "WIS",
                         defense: "Ref",
                         damage: "1d8+WIS",
                         effects: [ { name: "Grabbed" } ],
                         keywords: [
-                            "melee", "primal", "summoned", "basic"
+                            "primal", "summoned", "basic"
                         ]
-                    }
+                    }).atWill().melee()
                 ]
             });
             return Purple;

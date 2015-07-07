@@ -33,6 +33,7 @@
             "Smudge",
             "Tokk_it",
             "Vader",
+            "Venomous_Scorpion",
             // end dependencies
             "jQuery"
         ],

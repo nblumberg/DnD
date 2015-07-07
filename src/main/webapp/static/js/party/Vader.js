@@ -7,7 +7,7 @@
 
     DnD.define(
         "Vader",
-        [ "creature.helpers", "party.level", "jQuery", "descriptions", "Effect" ],
+        [ "creature.helpers", "party.level", "jQuery", "html", "Effect" ],
         function(h, partyLevel, jQuery, descriptions, Effect) {
             var Vader;
             Vader = {

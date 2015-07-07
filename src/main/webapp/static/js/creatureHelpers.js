@@ -7,7 +7,7 @@
 
     DnD.define(
         "creature.helpers",
-        [ "descriptions" ],
+        [ "html" ],
         function(descriptions) {
             var helpers, proto;
 
@@ -41,16 +41,22 @@
                 atWill: function atWill() {
                     return this.frequency("At-Will");
                 },
-                encounter: function encounter() {
-                    return this.frequency("Encounter");
+                encounter: function encounter(perEncounter) {
+                    this.frequency("Encounter");
+                    if (perEncounter) {
+                        this.usage.perEncounter = perEncounter;
+                    }
+                    return this;
                 },
                 daily: function daily() {
                     return this.frequency("Daily");
                 },
-                melee: function melee() {
-                    this.isMelee = true;
-                    this.range = "melee";
-                    return this.addKeyword("melee");
+                recharge: function recharge(recharge) {
+                    this.frequency("Recharge");
+                    if (recharge) {
+                        this.usage.recharge = recharge;
+                    }
+                    return this;
                 },
 
                 free: function free() {
@@ -72,6 +78,11 @@
                     return this.action("No Action");
                 },
 
+                melee: function melee() {
+                    this.isMelee = true;
+                    this.range = "melee";
+                    return this.addKeyword("melee");
+                },
                 ranged: function ranged(shortRange, longRange) {
                     this.isMelee = false;
                     if (shortRange || longRange) {

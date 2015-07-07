@@ -7,7 +7,7 @@
 
     DnD.define(
         "Lechonero",
-        [ "creature.helpers", "party.level", "jQuery", "descriptions" ],
+        [ "creature.helpers", "party.level", "jQuery", "html" ],
         function(helpers, partyLevel, jQuery, descriptions) {
             var Lechonero;
             Lechonero = {
