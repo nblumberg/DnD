@@ -35,11 +35,8 @@
                                 ],
                                 saveEnds: true
                             }
-                        ],
-                        keywords: [
-                            "primal", "summoned"
                         ]
-                    }).atWill().melee()
+                    }).atWill().melee().addKeywords("primal", "summoned", "basic")
                 ]
             });
             return Venmonous_Scorpion;

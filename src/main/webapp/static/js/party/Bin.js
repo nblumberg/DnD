@@ -141,18 +141,6 @@
                         ]
                     }).encounter().closeBurst(1, false),
                     new CH.Power({
-                        name: "Lightning Sphere",
-                        toHit: "INT",
-                        defense: "Fort",
-                        damage: {
-                            amount: "1d8+INT",
-                            type: "lightning"
-                        },
-                        keywords: [
-                            "arcane", "implement", "lightning"
-                        ]
-                    }).encounter().burst(1, 10, true),
-                    new CH.Power({
                         name: "Vampiric Weapons",
                         target: {
                             delivery: "melee or ranged",
@@ -191,28 +179,53 @@
                         keywords: [
                             "elemental"
                         ]
-                    }).encounter()
-                    /*, {
-                     name: "Caustic Rampart",
-                     usage: {
-                     frequency: "Daily"
-                     },
-                     target: {
-                     delivery: "wall",
-                     size: 5,
-                     range: 10
-                     },
-                     toHit: "automatic",
-                     defense: "AC",
-                     damage: {
-                     amount: "1d6+INT",
-                     type: "acid"
-                     },
-                     keywords: [
-                     "acid", "arcane", "conjuration", "implement"
-                     ],
-                     description: descriptions[ "Caustic Rampart" ]
-                     } */,
+                    }).encounter(),
+                    new CH.Power({
+                        name: "Earth's Embrace",
+                        toHit: "INT",
+                        defense: "Fort",
+                        damage: {
+                            amount: "2d10+INT",
+                            type: "force"
+                        },
+                        effects: [
+                            { name: "immobilized", duration: "endAttackerNext" }
+                        ],
+                        keywords: [
+                            "elemental"
+                        ]
+                    }).encounter().closeBurst(1, true),
+                    /*
+                    new CH.Power({
+                        name: "Lightning Sphere",
+                        toHit: "INT",
+                        defense: "Fort",
+                        damage: {
+                            amount: "1d8+INT",
+                            type: "lightning"
+                        },
+                        keywords: [
+                            "arcane", "implement", "lightning"
+                        ]
+                    }).encounter().burst(1, 10, true),
+                    new CH.Power({
+                        name: "Caustic Rampart",
+                        target: {
+                            delivery: "wall",
+                            size: 5,
+                            range: 10
+                        },
+                        toHit: "automatic",
+                        defense: "AC",
+                        damage: {
+                            amount: "1d6+INT",
+                            type: "acid"
+                        },
+                        keywords: [
+                            "acid", "arcane", "conjuration", "implement"
+                        ]
+                    }).daily(),
+                    */
                     new CH.Power({
                         name: "Lightning Motes",
                         toHit: "INT",

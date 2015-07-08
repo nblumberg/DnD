@@ -8,7 +8,7 @@
     DnD.define(
         "Vader",
         [ "creature.helpers", "party.level", "jQuery", "html", "Effect" ],
-        function(h, partyLevel, jQuery, descriptions, Effect) {
+        function(CH, partyLevel, jQuery, descriptions, Effect) {
             var Vader;
             Vader = {
                 name: "Vader",
@@ -61,9 +61,9 @@
                 attackBonuses: [
                 ],
                 attacks: [
-                    h.meleeBasic,
-                    h.rangedBasic,
-                    new h.Power({
+                    CH.meleeBasic,
+                    CH.rangedBasic,
+                    new CH.Power({
                         name: "Eldritch Strike",
                         toHit: "CON",
                         defense: "AC",
@@ -72,7 +72,7 @@
                             "arcane", "weapon"
                         ]
                     }).atWill().melee(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Hellish Rebuke",
                         toHit: "CON",
                         defense: "Ref",
@@ -81,7 +81,7 @@
                             "arcane", "fire", "implement"
                         ]
                     }).atWill().ranged(10),
-                    new h.Power({
+                    new CH.Power({
                         name: "Hellish Rebuke (redux)",
                         toHit: "automatic",
                         defense: "Ref",
@@ -91,7 +91,7 @@
                         ],
                         description: descriptions[ "Hellish Rebuke" ]
                     }).atWill().ranged(10),
-                    new h.Power({
+                    new CH.Power({
                         name: "Sword Burst",
                         toHit: "INT",
                         defense: "Ref",
@@ -100,13 +100,13 @@
                             "arcane", "force", "implement"
                         ]
                     }).atWill().closeBurst(1, true),
-                    new h.Power({
+                    new CH.Power({
                         name: "Warlock's Curse",
                         toHit: "automatic",
                         defense: "AC",
                         damage: "2d8"
                     }).atWill().ranged().minor(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Dimensional Vortex",
                         toHit: "INT",
                         defense: "Will",
@@ -115,7 +115,8 @@
                             "arcane", "implement", "teleportation"
                         ]
                     }).encounter().ranged(10).immediateInterrupt(),
-                    new h.Power({
+                    /*
+                    new CH.Power({
                         name: "Transposing Lunge",
                         toHit: "INT",
                         defense: "AC",
@@ -124,7 +125,17 @@
                             "weapon", "arcane", "teleportation"
                         ]
                     }).encounter().melee(),
-                    new h.Power({
+                    */
+                    new CH.Power({
+                        name: "Necromantic Disruption",
+                        toHit: "INT",
+                        defense: "AC",
+                        damage: "3[W]+INT",
+                        keywords: [
+                            "weapon", "arcane"
+                        ]
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Thunderclap Strike",
                         toHit: "INT",
                         defense: "Fort",
@@ -139,7 +150,7 @@
                             "arcane", "implement", "thunder"
                         ]
                     }).encounter().closeBurst(1),
-                    new h.Power({
+                    new CH.Power({
                         name: "Soul Flaying",
                         toHit: "CON",
                         defense: "Will",
@@ -154,7 +165,7 @@
                             "arcane", "implement", "necrotic"
                         ]
                     }).encounter().ranged(10),
-                    new h.Power({
+                    new CH.Power({
                         name: "Aegis of Shielding",
                         target: {
                             targets: 1
@@ -172,7 +183,7 @@
                             "arcane", "implement", "necrotic"
                         ]
                     }).encounter().minor().closeBurst(2),
-                    new h.Power({
+                    new CH.Power({
                         name: "Swordmage Shielding Fire",
                         target: {
                             targets: 1
@@ -193,7 +204,7 @@
                             "arcane", "fire", "implement"
                         ]
                     }).daily().closeBurst(10),
-                    new h.Power({
+                    new CH.Power({
                         name: "Swordmage Shielding Fire (redux)",
                         toHit: "automatic",
                         defense: "Fort",
@@ -212,7 +223,7 @@
                         ],
                         description: descriptions[ "Swordmage Shielding Fire" ]
                     }).atWill().closeBurst(10),
-                    new h.Power({
+                    new CH.Power({
                         name: "Armor of Agathys",
                         toHit: "automatic",
                         defense: "AC",
@@ -224,7 +235,7 @@
                             "arcane", "cold", "aura"
                         ]
                     }).atWill(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Menacing Shadow",
                         toHit: "CHA",
                         defense: "Ref",
@@ -241,7 +252,7 @@
                     }).atWill().minor().melee()
                 ],
                 buffs: [
-                    new h.Power({
+                    new CH.Power({
                         name: "Armor of Agathys",
                         healing: {
                             isTempHP: true,
@@ -249,7 +260,7 @@
                             amount: "10+INT"
                         }
                     }).daily(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Dark One's Blessing",
                         healing: {
                             isTempHP: true,
@@ -257,31 +268,31 @@
                             amount: "" + partyLevel
                         }
                     }).atWill(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Heroic Effort"
                     }).encounter(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Arcane Mutterings"
                     }).encounter(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Channeling Shield"
                     }).encounter().immediateInterrupt(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Painful Transference"
                     }).encounter().noAction(),
-                    new h.Power({
+                    new CH.Power({
                         name: "Menacing Shadow",
                         keywords: [
                             "arcane", "conjuration", "shadow"
                         ]
                     }).daily().minor().ranged(5),
-                    new h.Power({
+                    new CH.Power({
                         name: "Dimensional Dodge",
                         keywords: [
                             "arcane", "teleportation"
                         ]
                     }).daily().immediateInterrupt().ranged(20),
-                    new h.Power({
+                    new CH.Power({
                         name: "Amulet of Life",
                         healing: {
                             isTempHP: false,
@@ -293,7 +304,7 @@
                 effects: []
             };
             Vader.hp.total = 12 + Vader.abilities.CON + (5 * (partyLevel - 1));
-            Vader.skills = h.skills(Vader, {
+            Vader.skills = CH.skills(Vader, {
                 arcana: 5,
                 athletics: 5,
                 endurance: 5,

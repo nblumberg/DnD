@@ -7,8 +7,8 @@
 
     DnD.define(
         "Smack",
-        [ "jQuery", "Barases" ],
-        function(jQuery, Barases) {
+        [ "creature.helpers", "jQuery", "Barases" ],
+        function(CH, jQuery, Barases) {
             var Smack;
             Smack = jQuery.extend(true, {}, Barases, {
                 name: "Smack",
@@ -44,18 +44,24 @@
                 },
                 speed: 5,
                 attacks: [
-                    {
+                    new CH.Power({
                         name: "Animal Attack",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "WIS+5",
                         defense: "AC",
                         damage: "1d12+3+WIS+CON",
                         keywords: [
-                            "melee", "beast", "basic"
+                            "beast", "basic"
                         ]
-                    }
+                    }).atWill().melee()
+                ],
+                buffs: [
+                    new CH.Power({
+                        name: "Dire Bear Stamina",
+                        effects: [
+                            { name: "resistance", amount: 10, type: "all", duration: "endAttackerNext" }
+                        ],
+                        keywords: [ "primal" ]
+                    }).encounter().closeBurst(5)
                 ]
             });
             return Smack;

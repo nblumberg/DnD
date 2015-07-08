@@ -9,140 +9,10 @@
         "creature.helpers",
         [ "html" ],
         function(descriptions) {
-            var helpers, proto;
-
-            proto = {
-                frequency: function frequency(f) {
-                    if (f) {
-                        if (!this.usage) {
-                            this.usage = {};
-                        }
-                        this.usage.frequency = f;
-                    }
-                    return this;
-                },
-                addKeyword: function(keyword) {
-                    if (!this.keywords) {
-                        this.keywords = [];
-                    }
-                    if (this.keywords.indexOf(keyword) === -1) {
-                        this.keywords.push(keyword);
-                    }
-                    return this;
-                },
-                action: function(a) {
-                    if (!this.usage) {
-                        this.usage = {};
-                    }
-                    this.usage.action = a;
-                    return this;
-                },
-
-                atWill: function atWill() {
-                    return this.frequency("At-Will");
-                },
-                encounter: function encounter(perEncounter) {
-                    this.frequency("Encounter");
-                    if (perEncounter) {
-                        this.usage.perEncounter = perEncounter;
-                    }
-                    return this;
-                },
-                daily: function daily() {
-                    return this.frequency("Daily");
-                },
-                recharge: function recharge(recharge) {
-                    this.frequency("Recharge");
-                    if (recharge) {
-                        this.usage.recharge = recharge;
-                    }
-                    return this;
-                },
-
-                free: function free() {
-                    return this.action("Free");
-                },
-                immediateInterrupt: function immediateInterrupt() {
-                    return this.action("Immediate Interrupt");
-                },
-                immediateReaction: function immediateReaction() {
-                    return this.action("Immediate Reaction");
-                },
-                minor: function minor() {
-                    return this.action("Minor");
-                },
-                move: function move() {
-                    return this.action("Move");
-                },
-                noAction: function noAction() {
-                    return this.action("No Action");
-                },
-
-                melee: function melee() {
-                    this.isMelee = true;
-                    this.range = "melee";
-                    return this.addKeyword("melee");
-                },
-                ranged: function ranged(shortRange, longRange) {
-                    this.isMelee = false;
-                    if (shortRange || longRange) {
-                        if (!this.target) {
-                            this.target = {};
-                        }
-                        this.target.range = shortRange;
-                        this.target.longRange = longRange;
-                    }
-                    return this.addKeyword("ranged");
-                },
-                closeBurst: function closeBurst(size, enemiesOnly) {
-                    this.isMelee = false;
-                    if (!this.target) {
-                        this.target = {};
-                    }
-                    this.target.area = "close burst";
-                    if (size) {
-                        this.target.size = size;
-                    }
-                    if (enemiesOnly) {
-                        this.target.enemiesOnly = true;
-                    }
-                    return this.addKeyword("close burst");
-                },
-                blast: function blast(size, enemiesOnly) {
-                    this.isMelee = false;
-                    if (!this.target) {
-                        this.target = {};
-                    }
-                    this.target.area = "blast";
-                    if (size) {
-                        this.target.size = size;
-                    }
-                    if (enemiesOnly) {
-                        this.target.enemiesOnly = true;
-                    }
-                    return this.addKeyword("blast");
-                },
-                burst: function burst(size, range, enemiesOnly) {
-                    this.isMelee = false;
-                    if (!this.target) {
-                        this.target = {};
-                    }
-                    this.target.area = "burst";
-                    if (size) {
-                        this.target.size = size;
-                    }
-                    if (range) {
-                        this.target.range = range;
-                    }
-                    if (enemiesOnly) {
-                        this.target.enemiesOnly = true;
-                    }
-                    return this.addKeyword("burst");
-                }
-            };
+            var helpers;
 
             function Power(params) {
-                var p = null;
+                var p;
                 params = params || {};
                 if (!params.description && params.name) {
                     params.description = descriptions[ params.name ];
@@ -153,8 +23,124 @@
                     }
                 }
             }
-            Power.prototype = proto;
 
+            Power.prototype = {
+                frequency: function(f) {
+                    if (f) {
+                        if (!this.usage) {
+                            this.usage = {};
+                        }
+                        this.usage.frequency = f;
+                    }
+                    return this;
+                },
+                action: function(a) {
+                    if (!this.usage) {
+                        this.usage = {};
+                    }
+                    this.usage.action = a;
+                    return this;
+                },
+                addKeywords: function() { // takes an arbitrary number of arguments
+                    var i, keyword;
+                    if (!this.keywords) {
+                        this.keywords = [];
+                    }
+                    for (i = 0; i < arguments.length; i++) {
+                        keyword = arguments[ i ];
+                        if (this.keywords.indexOf(keyword) === -1) {
+                            this.keywords.push(keyword);
+                        }
+                    }
+                    return this;
+                },
+                area: function(area, size, range, enemiesOnly) {
+                    this.isMelee = false;
+                    if (!this.target) {
+                        this.target = {};
+                    }
+                    this.target.area = area;
+                    if (size) {
+                        this.target.size = size;
+                    }
+                    if (range) {
+                        this.target.range = range;
+                    }
+                    if (enemiesOnly) {
+                        this.target.enemiesOnly = true;
+                    }
+                    return this.addKeywords(area);
+                },
+
+                atWill: function() {
+                    return this.frequency("At-Will");
+                },
+                encounter: function(perEncounter) {
+                    this.frequency("Encounter");
+                    if (perEncounter) {
+                        this.usage.perEncounter = perEncounter;
+                    }
+                    return this;
+                },
+                daily: function() {
+                    return this.frequency("Daily");
+                },
+                recharge: function(recharge) {
+                    this.frequency("Recharge");
+                    if (recharge) {
+                        this.usage.recharge = recharge;
+                    }
+                    return this;
+                },
+
+                free: function() {
+                    return this.action("Free");
+                },
+                immediateInterrupt: function() {
+                    return this.action("Immediate Interrupt");
+                },
+                immediateReaction: function() {
+                    return this.action("Immediate Reaction");
+                },
+                minor: function() {
+                    return this.action("Minor");
+                },
+                move: function() {
+                    return this.action("Move");
+                },
+                noAction: function() {
+                    return this.action("No Action");
+                },
+
+                melee: function() {
+                    this.isMelee = true;
+                    this.range = "melee";
+                    return this.addKeywords("melee");
+                },
+                ranged: function(shortRange, longRange) {
+                    this.isMelee = false;
+                    if (shortRange || longRange) {
+                        if (!this.target) {
+                            this.target = {};
+                        }
+                        this.target.range = shortRange;
+                        this.target.longRange = longRange;
+                    }
+                    return this.addKeywords("ranged");
+                },
+                closeBurst: function(size, enemiesOnly) {
+                    return this.area("close burst", size, 0, enemiesOnly);
+                },
+                blast: function(size, enemiesOnly) {
+                    return this.area("blast", size, 0, enemiesOnly);
+                },
+                burst: function(size, range, enemiesOnly) {
+                    return this.area("burst", size, range, enemiesOnly);
+                },
+                wall: function(size, range, enemiesOnly) {
+                    return this.area("wall", size, range, enemiesOnly);
+                }
+            };
 
             helpers = {
                 mod: function(ability) {

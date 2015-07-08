@@ -116,15 +116,6 @@
                         ]
                     }).encounter(),
                     new CH.Power({
-                        name: "Acrobat's Blade Trick",
-                        toHit: "DEX",
-                        defense: "AC",
-                        damage: "1[W]+DEX",
-                        keywords: [
-                            "weapon", "martial"
-                        ]
-                    }).encounter().melee(),
-                    new CH.Power({
                         name: "Stunning Strike",
                         toHit: "DEX",
                         defense: "AC",
@@ -159,6 +150,13 @@
                         ]
                     }).encounter(),
                     new CH.Power({
+                        name: "Tumbling Strike",
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "3[W]+DEX",
+                        keywords: [ "martial", "weapon" ]
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Bloodbath",
                         toHit: "DEX",
                         defense: "Fort",
@@ -189,20 +187,27 @@
                         damage: "2d10",
                         effects: [ { name: "Penalty", amount: "INT^CHA", other: "to hit Kallista", saveEnds: true } ], // TODO: implement penalty against specific creature
                         keywords: [ "racial" ]
-                    }).daily()/*, {
-                     name: "Duelist's Prowess",
-                     usage: {
-                     frequency: "At-Will",
-                     action: "Immediate Interrupt"
-                     },
-                     toHit: "DEX",
-                     defense: "Ref",
-                     damage: "1[W]+DEX",
-                     keywords: [
-                     "weapon", "martial", "melee"
-                     ],
-                     description: descriptions[ "Duelist's Prowess" ]
-                     }*/,
+                    }).daily(),
+                    /*
+                    new CH.Power({
+                        name: "Acrobat's Blade Trick",
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "1[W]+DEX",
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).encounter().melee(),
+                    new CH.Power({
+                        name: "Duelist's Prowess",
+                        toHit: "DEX",
+                        defense: "Ref",
+                        damage: "1[W]+DEX",
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).atWill().immediateInterrupt().melee(),
+                    */
                     new CH.Power({
                         name: "Garrote Grip",
                         toHit: "DEX",

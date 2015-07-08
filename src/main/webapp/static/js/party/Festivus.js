@@ -213,6 +213,27 @@
                         ]
                     }).encounter().burst(2, 10, true),
                     new CH.Power({
+                        name: "Resounding War Cry",
+                        toHit: "CHA",
+                        defense: "Fort",
+                        damage: {
+                            amount: "2d6+CHA",
+                            type: "thunder"
+                        },
+                        keywords: [ "arcane", "implement", "thunder" ]
+                    }).encounter().blast(5, true),
+                    new CH.Power({
+                        name: "Resounding War Cry (secondary)",
+                        toHit: "automatic",
+                        defense: "Fort",
+                        damage: "0",
+                        effects: [
+                            { name: "Dazed", duration: "endAttackerNext" }
+                        ],
+                        description: descriptions[ "Resounding War Cry" ],
+                        keywords: [ "arcane", "implement", "thunder" ]
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Stirring Shout",
                         toHit: "CHA",
                         defense: "Will",
@@ -224,23 +245,22 @@
                         keywords: [
                             "arcane", "healing", "implement", "psychic"
                         ]
-                    }).daily()/*, {
-                     name: "Reeling Torment",
-                     usage: {
-                     frequency: "Daily"
-                     },
-                     toHit: "CHA",
-                     defense: "Will",
-                     damage: {
-                     amount: "3d8+13",
-                     type: "psychic",
-                     crit: "1d8"
-                     },
-                     keywords: [
-                     "arcane", "charm", "implement", "psychic"
-                     ],
-                     description: descriptions[ "Reeling Torment" ]
-                     } */,
+                    }).daily(),
+                    /*
+                    new CH.Power({
+                        name: "Reeling Torment",
+                        toHit: "CHA",
+                        defense: "Will",
+                        damage: {
+                            amount: "3d8+13",
+                            type: "psychic",
+                            crit: "1d8"
+                        },
+                        keywords: [
+                            "arcane", "charm", "implement", "psychic"
+                        ]
+                    }).daily(),
+                    */
                     new CH.Power({
                         name: "Counterpoint",
                         toHit: "CHA",

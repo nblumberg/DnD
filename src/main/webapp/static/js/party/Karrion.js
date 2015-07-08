@@ -161,15 +161,6 @@
                         ]
                     }).encounter(),
                     new CH.Power({
-                        name: "Thundertusk Boar Strike",
-                        toHit: "STR/DEX",
-                        defense: "AC",
-                        damage: "1[W]+STR/DEX",
-                        keywords: [
-                            "weapon", "martial"
-                        ]
-                    }).encounter(),
-                    new CH.Power({
                         name: "Sweeping Whirlwind",
                         toHit: "STR",
                         defense: "AC",
@@ -195,19 +186,46 @@
                         keywords: [
                             "fear", "implement", "primal", "psychic"
                         ]
-                    }).encounter().closeBurst(3, true)/*, {
-                     name: "Boar Assault",
-                     usage: {
-                     frequency: "Daily"
-                     },
-                     toHit: "STR/DEX",
-                     defense: "AC",
-                     damage: "2[W]+STR/DEX",
-                     keywords: [
-                     "weapon", "martial"
-                     ],
-                     description: descriptions[ "Boar Assault" ]
-                     }*/,
+                    }).encounter().closeBurst(3, true),
+                    new CH.Power({
+                        name: "Blow-Through Assault",
+                        toHit: "STR/DEX",
+                        defense: "AC",
+                        damage: "3[W]+STR/DEX",
+                        keywords: [
+                            "martial", "weapon"
+                        ]
+                    }).encounter(),
+                    new CH.Power({
+                        name: "Blow-Through Assault (secondary)",
+                        toHit: "automatic",
+                        defense: "AC",
+                        damage: "WIS",
+                        keywords: [
+                            "martial", "weapon"
+                        ],
+                        description: descriptions[ "Blow-Through Assault" ]
+                    }).encounter().burst(1, null, true),
+                    /*
+                    new CH.Power({
+                        name: "Thundertusk Boar Strike",
+                        toHit: "STR/DEX",
+                        defense: "AC",
+                        damage: "1[W]+STR/DEX",
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).encounter(),
+                    new CH.Power({
+                        name: "Boar Assault",
+                        toHit: "STR/DEX",
+                        defense: "AC",
+                        damage: "2[W]+STR/DEX",
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).daily(),
+                    */
                     new CH.Power({
                         name: "Steeling Flurry",
                         toHit: "STR",

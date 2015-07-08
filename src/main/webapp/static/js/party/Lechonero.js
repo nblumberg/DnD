@@ -8,7 +8,7 @@
     DnD.define(
         "Lechonero",
         [ "creature.helpers", "party.level", "jQuery", "html" ],
-        function(helpers, partyLevel, jQuery, descriptions) {
+        function(CH, partyLevel, jQuery, descriptions) {
             var Lechonero;
             Lechonero = {
                 isPC: true,
@@ -41,7 +41,7 @@
                 effects: []
             };
             Lechonero.hp.total = 12 + Lechonero.abilities.CON + (5 * (partyLevel - 1));
-            Lechonero.skills = helpers.skills(Lechonero, {
+            Lechonero.skills = CH.skills(Lechonero, {
                 athletics: 5,
                 nature: 5,
                 perception: 7, // Sylvan Senses
@@ -96,93 +96,53 @@
                     }
                 ],
                 attacks: [
-                    {
-                        name: "Melee Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        isMelee: true,
-                        toHit: "STR",
-                        defense: "AC",
-                        damage: "1[W]+STR",
-                        keywords: [
-                            "weapon", "melee", "basic"
-                        ]
-                    },
-                    {
-                        name: "Ranged Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        toHit: "DEX",
-                        defense: "AC",
-                        damage: "1[W]+DEX",
-                        keywords: [
-                            "weapon", "ranged", "basic"
-                        ]
-                    },
-                    {
+                    CH.meleeBasic,
+                    CH.rangedBasic,
+                    new CH.Power({
                         name: "Rapid Shot",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
                         keywords: [
-                            "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Rapid Shot" ]
-                    },
-                    {
+                            "weapon", "martial"
+                        ]
+                    }).atWill().ranged(),
+                    new CH.Power({
                         name: "Twin Strike",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "STR/DEX",
                         defense: "AC",
                         damage: "1[W]",
                         keywords: [
                             "weapon", "martial"
+                        ]
+                    }).atWill(),
+                    /*
+                    new CH.Power({
+                        name: "Hindering Shot",
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "2[W]+DEX",
+                        effects: [
+                            {
+                                name: "slowed",
+                                duration: "endAttackerNext"
+                            }
                         ],
-                        description: descriptions[ "Twin Strike" ]
-                    },
-                    //{
-                    //    name: "Hindering Shot",
-                    //    usage: {
-                    //        frequency: "Encounter"
-                    //    },
-                    //    toHit: "DEX",
-                    //    defense: "AC",
-                    //    damage: "2[W]+DEX",
-                    //    effects: [
-                    //        {
-                    //            name: "slowed",
-                    //            duration: "endAttackerNext"
-                    //        }
-                    //    ],
-                    //    keywords: [
-                    //        "weapon", "martial", "ranged"
-                    //    ],
-                    //    description: descriptions[ "Hindering Shot" ]
-                    //},
-                    {
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).encoutner().ranged(),
+                    new CH.Power({
                         name: "Covering Volley",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
                         keywords: [
-                            "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Covering Volley" ]
-                    }, {
+                            "weapon", "martial"
+                        ]
+                    }).encounter().burst(1, null, true),
+                    new CH.Power({
                         name: "Covering Volley (secondary)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "5",
@@ -190,91 +150,79 @@
                             "martial", "ranged"
                         ],
                         description: descriptions[ "Covering Volley" ]
-                    },
-                    {
+                    }).encounter().ranged(),
+                    new CH.Power({
+                        name: "Sure Shot",
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "3[W]+DEX",
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).daily().ranged(),
+                    */
+                    new CH.Power({
+                        name: "Suppressing Shots",
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "2[W]+DEX",
+                        effects: [
+                            { name: "immobilized", duration: "endAttackerNext" }
+                        ],
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).encounter().burst(1, 20, true),
+                    new CH.Power({
                         name: "Spikes of the Manticore",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "2[W]+DEX",
                         keywords: [
-                            "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Spikes of the Manticore" ]
-                    }, {
+                            "weapon", "martial"
+                        ]
+                    }).encounter().ranged(),
+                    new CH.Power({
                         name: "Spikes of the Manticore (secondary)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
                         keywords: [
-                            "weapon", "martial", "ranged"
+                            "weapon", "martial"
                         ],
                         description: descriptions[ "Spikes of the Manticore" ]
-                    },
-                    {
+                    }).encounter().ranged(),
+                    new CH.Power({
                         name: "Shaft Splitter",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "DEX",
                         defense: "Ref",
                         damage: "2[W]+DEX",
                         keywords: [
-                            "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Shaft Splitter" ]
-                    },
-                    {
+                            "weapon", "martial"
+                        ]
+                    }).encounter().immediateInterrupt().ranged(),
+                    new CH.Power({
                         name: "Hammering Volley",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         target: { target: 2 },
                         toHit: "DEX",
                         defense: "Fort",
                         damage: "2[W]+DEX",
                         effects: [ { name: "Prone" } ],
                         keywords: [
-                            "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Hammering Volley" ]
-                    },
-                    //{
-                    //    name: "Sure Shot",
-                    //    usage: {
-                    //        frequency: "Daily"
-                    //    },
-                    //    toHit: "DEX",
-                    //    defense: "AC",
-                    //    damage: "3[W]+DEX",
-                    //    keywords: [
-                    //        "weapon", "martial", "ranged"
-                    //    ],
-                    //    description: descriptions[ "Sure Shot" ]
-                    //},
-                    {
+                            "weapon", "martial"
+                        ]
+                    }).encounter().ranged(),
+                    new CH.Power({
                         name: "Flying Steel",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "2[W]+DEX",
                         keywords: [
-                            "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Flying Steel" ]
-                    },
-                    {
+                            "weapon", "martial"
+                        ]
+                    }).daily().ranged(),
+                    new CH.Power({
                         name: "Trick Shot (prone)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "2[W]+DEX",
@@ -282,14 +230,12 @@
                             { name: "Prone" }
                         ],
                         keywords: [
-                            "weapon", "martial", "ranged"
+                            "weapon", "martial"
                         ],
                         description: descriptions[ "Trick Shot" ]
-                    }, {
+                    }).daily().ranged(),
+                    new CH.Power({
                         name: "Trick Shot (slowed)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "2[W]+DEX",
@@ -297,14 +243,12 @@
                             { name: "Slowed", saveEnds: true }
                         ],
                         keywords: [
-                            "weapon", "martial", "ranged"
+                            "weapon", "martial"
                         ],
                         description: descriptions[ "Trick Shot" ]
-                    }, {
+                    }).daily().ranged(),
+                    new CH.Power({
                         name: "Trick Shot (dazed)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "2[W]+DEX",
@@ -312,14 +256,12 @@
                             { name: "Dazed", saveEnds: true }
                         ],
                         keywords: [
-                            "weapon", "martial", "ranged"
+                            "weapon", "martial"
                         ],
                         description: descriptions[ "Trick Shot" ]
-                    }, {
+                    }).daily().ranged(),
+                    new CH.Power({
                         name: "Trick Shot (immobilized)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "2[W]+DEX",
@@ -327,15 +269,12 @@
                             { name: "Immobilized", saveEnds: true }
                         ],
                         keywords: [
-                            "weapon", "martial", "ranged"
+                            "weapon", "martial"
                         ],
                         description: descriptions[ "Trick Shot" ]
-                    },
-                    {
+                    }).daily().ranged(),
+                    new CH.Power({
                         name: "Marked for Death",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "3[W]+STR/DEX",
@@ -347,45 +286,34 @@
                         ],
                         keywords: [
                             "weapon", "martial"
-                        ],
-                        description: descriptions[ "Marked for Death" ]
-                    },
-                    {
+                        ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Hunter's Quarry",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
-                        damage: "1d8",
-                        description: descriptions[ "Hunter's Quarry" ]
-                    }
+                        damage: "2d8"
+                    }).atWill()
                 ],
                 buffs: [
-                    {
+                    new CH.Power({
                         name: "Communion (self)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         healing: {
                             isTempHP: true,
                             usesHealingSurge: true,
                             amount: "" + (3 + Math.floor(partyLevel / 2))
                         },
                         description: descriptions[ "Communion" ]
-                    },
-                    {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Communion (other)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         healing: {
                             isTempHP: false,
                             usesHealingSurge: false,
                             amount: "HS"
                         },
                         description: descriptions[ "Communion" ]
-                    }
+                    }).encounter()
                 ]
             });
             return Lechonero;
