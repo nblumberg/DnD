@@ -12,7 +12,7 @@
             var Kitara, prepared;
             prepared = {
                 // Encounter 1
-                "Burning Hands": true,
+                //"Burning Hands": true,
                 //"Skewering Spikes": true,
                 "Glorious Presence": true,
                 //"Orbmaster's Incendiary Detonation": true,
@@ -32,6 +32,10 @@
 
                 // Encounter 11
                 "Shadowy Tendrils": true,
+
+                // Encounter 17
+                // "Dancing Flames": true,
+                "Force Volley": true,
 
                 // Daily 1
                 //"Slimy Transmutation": true,
@@ -614,6 +618,39 @@
                         ],
                         prepared: prepared[ "Shadowy Tendrils" ] === true
                     }).encounter(),
+
+                    // Encounter 17
+                    new CH.Power({
+                        name: "Dancing Flames",
+                        toHit: "INT",
+                        defense: "Ref",
+                        damage: {
+                            amount: "5d6",
+                            type: "fire"
+                        },
+                        miss: { halfDamage: true },
+                        keywords: [
+                            "arcane", "evocation", "fire", "implement"
+                        ],
+                        prepared: prepared[ "Dancing Flames" ] === true
+                    }).encounter().blast(5, true),
+                    new CH.Power({
+                        name: "Force Volley",
+                        target: {
+                            targets: 3
+                        },
+                        toHit: "INT",
+                        defense: "Ref",
+                        damage: {
+                            amount: "3d6",
+                            type: "force"
+                        },
+                        effects: [ { name: "dazed", duration: "endAttackerNext" } ],
+                        keywords: [
+                            "arcane", "evocation", "force", "implement"
+                        ],
+                        prepared: prepared[ "Force Volley" ] === true
+                    }).encounter().ranged(),
 
                     // Daily 1
                     new CH.Power({
