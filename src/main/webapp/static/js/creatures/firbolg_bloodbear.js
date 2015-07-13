@@ -19,11 +19,8 @@
                 skills: { athletics: 18, nature: 18, stealth: 19 },
                 attacks: [
                     { name: "Slam", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "2d8+9", keywords: [ "melee", "basic" ] },
-                    { name: "Claw", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "2d12+9", keywords: [ "melee", "basic" ] },
                     { name: "Double Attack (secondary)", usage: { frequency: "At-Will" }, range: "melee", toHit: 17, defense: "Fort", damage: "0", effects: [ { name: "grabbed" } ], keywords: [ "melee" ] },
-                    { name: "Bloodbear Maul", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "4d10+9", keywords: [ "melee" ] },
-                    { name: "Bite", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "3d12+9", keywords: [ "melee" ] },
-                    { name: "Bite (combat advantage)", usage: { frequency: "At-Will" }, range: "melee", toHit: 18, defense: "AC", damage: "3d12+9", effects: [ { name: "ongoing damage", amount: 10, saveEnds: true } ], keywords: [ "melee" ] },
+                    { name: "Bloodbear Maul", usage: { frequency: "Encounter" }, range: "melee", toHit: "automatic", defense: "AC", damage: "4d10+9", keywords: [ "melee" ] },
                     { name: "Moonfire", usage: { frequency: "Recharge", recharge: 4, action: "minor" }, target: { range: 10 }, toHit: 15, defense: "Will", damage: "0", effects: [ { name: "No invisibility or concealment", duration: "endAttackerNext" } ], keywords: [ "ranged" ] }
                 ],
                 buffs: [

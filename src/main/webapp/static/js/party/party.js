@@ -5,7 +5,7 @@
         "party.level",
         [],
         function() {
-            return 16;
+            return 17;
         },
         false
     );
@@ -32,6 +32,8 @@
             "Smack",
             "Smudge",
             "Tokk_it",
+            "Vader",
+            "Venomous_Scorpion",
             // end dependencies
             "jQuery"
         ],

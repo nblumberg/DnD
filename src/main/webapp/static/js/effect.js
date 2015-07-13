@@ -10,6 +10,7 @@
              * @param [params.name] {String} The name of the Effect, defaults to "Unknown effect"
              * @param [params.noId] {Boolean} Whether the Effect is a template and doesn't require an id or is an instance and should be assigned one
              * @param [params.id] {Number} The id of the Effect, used when loaded from stored data (otherwise the id is automatically assigned)
+             * @param [params.otherId] {String} An id used by call-generated Effects to recognize their generated effects
              * @param [params.amount] {Number} The amount by which this Effect increases, penalizes, or damages something; defaults to 0
              * @param [params.type] {String} The type of damage inflicted by this effect; should be one or more properties of Effect.CONDITIONS[ "ongoing damage" ]
              * @param [params.duration] {String} How long the Effect lasts before destroying itself (Effect.DURATION_START_TARGET_NEXT | Effect.DURATION_END_TARGET_NEXT | Effect.DURATION_START_ATTACKER_NEXT | Effect.DURATION_END_ATTACKER_NEXT)
@@ -17,16 +18,28 @@
              * @param [params.saveEnds] {Boolean} Indicates that a saving throw ends this Effect
              * @param [params.children] {Array of params} A list of child Effects
              * @param [params.afterEffects] {Array of params} A list of Effects that take effect after this one expires
-             *
+             * @param [params.call] {Function} A Function of the form function(target, attacker, round) {...} to call to get the final Effect to apply rather than take this Effect at face value
              */
             function Effect(params) {
                 var i, childParams;
                 params = params || {};
+
+                this.name = "Unknown effect";
+                if (typeof params === "function") {
+                    this.call = params;
+                    this.name = "Factory effect";
+                }
+                else if (params instanceof Effect && typeof params.call === "function") {
+                    this.call = params.call;
+                }
+
                 if (!params.noId) {
                     this.id = params.id || Effect.id++;
                 }
                 Effect.effects[ this.id ] = this;
-                this.name = "Unknown effect";
+                if (params.otherId) {
+                    this.otherId = params.otherId;
+                }
                 if (typeof(params) === "string") {
                     this.name = params;
                 }
@@ -190,7 +203,7 @@
                 penalty: {
                     unknown: { image: "../images/symbols/unknown.png", color: "#FF0000" },
                     attacks: { image: "../images/symbols/attack_penalty.jpg", color: "white" },
-                    ac: { image: "../images/symbols/ac.png", color: "white" },
+                    ac: { image: "../images/symbols/ac.png", color: "red" },
                     fort: { image: "../images/symbols/fort.png", color: "white" },
                     ref: { image: "../images/symbols/ref.png", color: "white" },
                     will: { image: "../images/symbols/will.png", color: "purple" }
@@ -204,6 +217,18 @@
                     will: { image: "../images/symbols/will.png", color: "purple" }
                 },
                 "resistance": {
+                    untyped: { image: "../images/symbols/ac.png", color: "#FF0000" },
+                    acid: { image: "../images/symbols/ongoing_acid.png", color: "#00FF00" }, // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
+                    cold: { image: "../images/symbols/ongoing_cold.jpg", color: "#6666FF" }, // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",
+                    fire: { image: "../images/symbols/ongoing_fire.jpg", color: "#FF0000" }, // "http://bestclipartblog.com/clipart-pics/-fire-clipart-2.jpg",
+                    lightning: { image: "../images/symbols/ongoing_lightning.png", color: "#CCCCFF" }, // "http://www.mricons.com/store/png/2499_3568_128_lightning_power_icon.png",
+                    necrotic: { image: "../images/symbols/ongoing_necrotic.jpg", color: "purple" }, // "http://shell.lava.net/ohol_yaohushua/pentagram.jpg", // "http://www.soulwinners.com.au/images/Goat.jpg?942",
+                    poison: { image: "../images/symbols/ongoing_poison.jpg", color: "#00FF00" }, // "http://ts3.mm.bing.net/th?id=H.4671950275020154&pid=1.7&w=138&h=142&c=7&rs=1",
+                    psychic: { image: "../images/symbols/ongoing_psychic.jpg", color: "cyan" }, // "http://uniteunderfreedom.com/wp-content/uploads/2011/09/Brain-waves.jpg",
+                    radiant: { image: "../images/symbols/ongoing_radiant.jpg", color: "#FFFFFF" }, // "http://us.123rf.com/400wm/400/400/booblgum/booblgum1001/booblgum100100021/6174537-magic-radial-rainbow-light-with-white-stars.jpg",
+                    thunder: { image: "../images/symbols/ongoing_thunder.png", color: "#CCCCFF" } // https://cdn2.iconfinder.com/data/icons/mosaicon-11/512/interference-512.png
+                },
+                "vulnerable": {
                     untyped: { image: "../images/symbols/ac.png", color: "#FF0000" },
                     acid: { image: "../images/symbols/ongoing_acid.png", color: "#00FF00" }, // "http://en.xn--icne-wqa.com/images/icones/8/0/pictograms-aem-0002-hand-burn-from-chemical.png",
                     cold: { image: "../images/symbols/ongoing_cold.jpg", color: "#6666FF" }, // "http://www.psdgraphics.com/file/blue-snowflake-icon.jpg",

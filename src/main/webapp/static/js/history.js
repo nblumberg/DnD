@@ -154,7 +154,7 @@
                 }
                 this._entries.push(entry.id);
                 entry._addToRound(this._getRound(entry, true), this._includeSubject);
-                if (History.central && this !== History.central) { // TODO: what to do if actor.startTurn() on addActor() tries to addHistory() before History.central exists
+                if (History.central && this !== History.central && !entry.localOnly) { // TODO: what to do if actor.startTurn() on addActor() tries to addHistory() before History.central exists
                     History.central.add(entry);
                 }
             };
@@ -383,6 +383,7 @@
              * @param [params.id] {Number}
              * @param [params.subjectName] {String}
              * @param [params.subject] {Number | Actor}
+             * @param [params.localOnly] {Boolean} if true, don't add to History.central
              */
             History.Entry = function(params) {
                 params = params || {};
@@ -398,6 +399,7 @@
                 this._getSubjectName();
                 this.message = params.message;
                 this.round = params.round;
+                this.localOnly = params.localOnly;
                 if (!this.subject && !this.subjectName) {
                     out.console.error("History.Entry " + this.message + "(" + this.id + ", round " + this.round + ") created with no subject");
                 }

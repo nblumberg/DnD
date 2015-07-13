@@ -7,8 +7,8 @@
 
     DnD.define(
         "Camulos",
-        [ "creature.helpers", "party.level", "jQuery", "descriptions" ],
-        function(helpers, partyLevel, jQuery, descriptions) {
+        [ "creature.helpers", "party.level", "jQuery", "html" ],
+        function(CH, partyLevel, jQuery, descriptions) {
             var Camulos;
             Camulos = {
                 name: "Camulos",
@@ -73,15 +73,8 @@
                     }
                 ],
                 attacks: [
-                    {
+                    new CH.Power({
                         name: "Melee Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        target: {
-                            delivery: "melee",
-                            targets: 1
-                        },
                         toHit: "STR",
                         defense: "AC",
                         damage: "1[W]+STR",
@@ -89,32 +82,12 @@
                             damage: "CON"
                         },
                         keywords: [
-                            "weapon", "melee", "basic"
+                            "weapon", "basic"
                         ]
-                    }, {
-                        name: "Ranged Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        target: {
-                            delivery: "ranged",
-                            targets: 1
-                        },
-                        toHit: "DEX",
-                        defense: "AC",
-                        damage: "1[W]+DEX",
-                        keywords: [
-                            "weapon", "ranged", "basic"
-                        ]
-                    }, {
+                    }).atWill().melee(),
+                    CH.rangedBasic,
+                    new CH.Power({
                         name: "Battle Guardian",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        target: {
-                            delivery: "melee",
-                            targets: 1
-                        },
                         toHit: "STR",
                         defense: "AC",
                         damage: "1[W]+STR",
@@ -122,29 +95,21 @@
                             damage: "STR"
                         },
                         keywords: [
-                            "weapon", "melee", "basic"
-                        ],
-                        description: descriptions[ "Battle Guardian" ]
-                    }, {
+                            "weapon", "basic"
+                        ]
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Hammer Rhythm",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "CON",
                         keywords: [
-                            "martial", "melee"
-                        ],
-                        description: descriptions[ "Hammer Rhythm" ]
-                    }, {
+                            "martial"
+                        ]
+                    }).atWill(),
+                    new CH.Power({
                         name: "Guardian's Counter",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         target: {
-                            delivery: "close burst",
-                            size: 2,
                             targets: 1
                         },
                         toHit: "automatic",
@@ -152,35 +117,19 @@
                         damage: "1[W]",
                         keywords: [
                             "martial", "weapon", "melee"
-                        ],
-                        description: descriptions[ "Guardian's Counter" ]
-                    }, {
+                        ]
+                    }).encounter().closeBurst(2),
+                    new CH.Power({
                         name: "Power Strike",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            delivery: "melee",
-                            targets: 1
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "1[W]",
                         keywords: [
-                            "martial", "weapon", "melee"
-                        ],
-                        description: descriptions[ "Power Strike" ]
-                    }, {
+                            "martial", "weapon"
+                        ]
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Come and Get It",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            area: "close",
-                            size: 3,
-                            enemiesOnly: true,
-                            targets: "any"
-                        },
                         toHit: "STR",
                         defense: "Will",
                         damage: "1[W]",
@@ -189,14 +138,10 @@
                         },
                         keywords: [
                             "melee", "martial", "weapon"
-                        ],
-                        description: descriptions[ "Come and Get It" ]
-                    }, {
+                        ]
+                    }).encounter().closeBurst(3, true),
+                    new CH.Power({
                         name: "Melee Basic (Battle Wrath)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        isMelee: true,
                         toHit: "STR",
                         defense: "AC",
                         damage: "1[W]+STR",
@@ -204,27 +149,22 @@
                             damage: "CON"
                         },
                         keywords: [
-                            "weapon", "melee", "basic", "Battle Wrath"
+                            "weapon", "basic", "Battle Wrath"
                         ],
                         description: descriptions[ "Battle Wrath" ]
-                    }, {
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Ranged Basic (Battle Wrath)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
                         keywords: [
-                            "weapon", "ranged", "basic", "Battle Wrath"
+                            "weapon", "basic", "Battle Wrath"
                         ],
                         description: descriptions[ "Battle Wrath" ]
-                    }, {
+                    }).atWill().ranged(),
+                    new CH.Power({
                         name: "Battle Guardian (Battle Wrath)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        isMelee: true,
                         toHit: "STR",
                         defense: "AC",
                         damage: "1[W]+STR",
@@ -232,42 +172,32 @@
                             damage: "STR"
                         },
                         keywords: [
-                            "weapon", "melee", "basic", "Battle Wrath"
+                            "weapon", "basic", "Battle Wrath"
                         ],
                         description: descriptions[ "Battle Guardian" ]
-                    }, {
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Hammer Rhythm (Battle Wrath)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "CON",
                         keywords: [
-                            "martial", "melee", "Battle Wrath"
+                            "martial", "Battle Wrath"
                         ],
                         description: descriptions[ "Hammer Rhythm" ]
-                    }, {
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Power Strike (Battle Wrath)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "1[W]",
                         keywords: [
-                            "martial", "weapon", "melee", "Battle Wrath"
+                            "martial", "weapon", "Battle Wrath"
                         ],
                         description: descriptions[ "Power Strike" ]
-                    }, {
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Come and Get It (Battle Wrath)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            area: "close",
-                            size: 3
-                        },
                         toHit: "STR",
                         defense: "Will",
                         damage: "1[W]",
@@ -278,12 +208,9 @@
                             "psionic", "melee", "Battle Wrath"
                         ],
                         description: descriptions[ "Come and Get It" ]
-                    }, {
+                    }).encounter().closeBurst(3, true),
+                    new CH.Power({
                         name: "Melee Basic (Defend the Line)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        isMelee: true,
                         toHit: "STR",
                         defense: "AC",
                         damage: "1[W]+STR",
@@ -291,27 +218,22 @@
                             damage: "CON"
                         },
                         keywords: [
-                            "weapon", "melee", "basic", "Defend the Line"
+                            "weapon", "basic", "Defend the Line"
                         ],
                         description: descriptions[ "Defend the Line" ]
-                    }, {
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Ranged Basic (Defend the Line)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
                         keywords: [
-                            "weapon", "ranged", "basic", "Defend the Line"
+                            "weapon", "basic", "Defend the Line"
                         ],
                         description: descriptions[ "Defend the Line" ]
-                    }, {
+                    }).atWill().ranged(),
+                    new CH.Power({
                         name: "Battle Guardian (Defend the Line)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        isMelee: true,
                         toHit: "STR",
                         defense: "AC",
                         damage: "1[W]+STR",
@@ -319,42 +241,32 @@
                             damage: "STR"
                         },
                         keywords: [
-                            "weapon", "melee", "basic", "Defend the Line"
+                            "weapon", "basic", "Defend the Line"
                         ],
                         description: descriptions[ "Battle Guardian" ]
-                    }, {
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Hammer Rhythm (Defend the Line)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "CON",
                         keywords: [
-                            "martial", "melee", "Defend the Line"
+                            "martial", "Defend the Line"
                         ],
                         description: descriptions[ "Hammer Rhythm" ]
-                    }, {
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Power Strike (Defend the Line)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "1[W]",
                         keywords: [
-                            "martial", "weapon", "melee", "Defend the Line"
+                            "martial", "weapon", "Defend the Line"
                         ],
                         description: descriptions[ "Power Strike" ]
-                    }, {
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Come and Get It (Defend the Line)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            area: "close",
-                            size: 3
-                        },
                         toHit: "STR",
                         defense: "Will",
                         damage: "1[W]",
@@ -365,12 +277,12 @@
                             "psionic", "melee", "Defend the Line"
                         ],
                         description: descriptions[ "Come and Get It" ]
-                    }
+                    }).encounter().closeBurst(3, true)
                 ],
                 effects: []
             };
             Camulos.hp.total = 15 + Camulos.abilities.CON + (6 * (partyLevel - 1));
-            Camulos.skills = helpers.skills(Camulos, {
+            Camulos.skills = CH.skills(Camulos, {
                 athletics: 5,
                 endurance: 5,
                 heal: 5,

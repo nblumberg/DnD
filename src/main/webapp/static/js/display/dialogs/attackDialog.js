@@ -238,7 +238,7 @@
                     hit = false;
                     miss = false;
                     for (i = 0; i < this.targets.length; i++) {
-                        if (toHit >= this.targets[ i ].defenses[ this.attack.defense.toLowerCase() ]) {
+                        if (toHit >= this.targets[ i ].getDefense(this.attack.defense, this.attack.isMelee)) {
                             hit = true;
                         }
                         else {

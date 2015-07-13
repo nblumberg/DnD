@@ -64,6 +64,9 @@
                 for (i = 0; params.keywords && i < params.keywords.length; i++) {
                     this.keywords.push(params.keywords[ i ]);
                 }
+                if (this.keywords.indexOf("melee") !== -1 && this.keywords.indexOf("ranged") === -1) {
+                    this.isMelee = true;
+                }
                 this.description = params.description || "";
                 this.description = this.description.replace(/images\/bullet.gif/g, "../images/bullet.gif");
                 this.prepared = params.prepared;
@@ -180,6 +183,7 @@
 
                 h = this.getLastRoll();
                 if (item) {
+                    h.breakdown = h.breakdown || "";
                     if (item.proficiency) {
                         h.breakdown += " [+" + item.proficiency + " proficiency]";
                     }

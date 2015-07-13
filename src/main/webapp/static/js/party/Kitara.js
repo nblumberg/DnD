@@ -7,16 +7,16 @@
 
     DnD.define(
         "Kitara",
-        [ "creature.helpers", "party.level", "jQuery", "descriptions" ],
-        function(helpers, partyLevel, jQuery, descriptions) {
+        [ "creature.helpers", "party.level", "jQuery", "html" ],
+        function(CH, partyLevel, jQuery, descriptions) {
             var Kitara, prepared;
             prepared = {
                 // Encounter 1
-                "Burning Hands": true,
+                //"Burning Hands": true,
                 //"Skewering Spikes": true,
-                //"Gorious Presence": true,
+                "Glorious Presence": true,
                 //"Orbmaster's Incendiary Detonation": true,
-                "Ray of Enfeeblement": true,
+                //"Ray of Enfeeblement": true,
                 //"Force Orb": true,
 
                 // Encounter 3
@@ -27,11 +27,15 @@
 
                 // Encounter 7
                 //"Ghoul Strike": true,
-                //"Lightning Bolt": true,
-                "Thunder Cage": true,
+                "Lightning Bolt": true,
+                //"Thunder Cage": true,
 
                 // Encounter 11
                 "Shadowy Tendrils": true,
+
+                // Encounter 17
+                // "Dancing Flames": true,
+                "Force Volley": true,
 
                 // Daily 1
                 //"Slimy Transmutation": true,
@@ -146,34 +150,10 @@
                     }
                 ],
                 attacks: [
-                    {
-                        name: "Melee Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        isMelee: true,
-                        toHit: "STR",
-                        defense: "AC",
-                        damage: "1[W]+STR",
-                        keywords: [
-                            "weapon", "melee", "basic"
-                        ]
-                    }, {
-                        name: "Ranged Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        toHit: "automatic",
-                        defense: "AC",
-                        damage: "1[W]+DEX",
-                        keywords: [
-                            "weapon", "ranged", "basic"
-                        ]
-                    }, {
+                    CH.meleeBasic,
+                    CH.rangedBasic,
+                    new CH.Power({
                         name: "Magic Missile",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: {
@@ -182,13 +162,10 @@
                         },
                         keywords: [
                             "arcane", "evocation", "force", "implement"
-                        ],
-                        description: descriptions[ "Magic Missile" ]
-                    }, {
+                        ]
+                    }).atWill().ranged(20),
+                    new CH.Power({
                         name: "Lightning Ring",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: {
@@ -197,13 +174,10 @@
                         },
                         keywords: [
                             "arcane", "bladespell", "lightning"
-                        ],
-                        description: descriptions[ "Lightning Ring" ]
-                    }, {
+                        ]
+                    }).atWill().ranged(10),
+                    new CH.Power({
                         name: "Lightning Ring (secondary)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: {
@@ -214,11 +188,9 @@
                             "arcane", "bladespell", "lightning"
                         ],
                         description: descriptions[ "Lightning Ring" ]
-                    }, {
+                    }).atWill(),
+                    new CH.Power({
                         name: "Shadow Sever",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: {
@@ -232,13 +204,10 @@
                         ],
                         keywords: [
                             "arcane", "bladespell", "necrotic"
-                        ],
-                        description: descriptions[ "Shadow Sever" ]
-                    }, {
+                        ]
+                    }).atWill().ranged(10),
+                    new CH.Power({
                         name: "Unseen Hand",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: {
@@ -247,13 +216,10 @@
                         },
                         keywords: [
                             "arcane", "bladespell", "force"
-                        ],
-                        description: descriptions[ "Unseen Hand" ]
-                    }, {
+                        ]
+                    }).atWill().ranged(10),
+                    new CH.Power({
                         name: "Gaze of the Evil Eye",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: {
@@ -262,20 +228,12 @@
                         },
                         keywords: [
                             "arcane", "psychic"
-                        ],
-                        description: descriptions[ "Gaze of the Evil Eye" ]
-                    },
+                        ]
+                    }).atWill(),
 
                     // Encounter 1
-                    {
+                    new CH.Power({
                         name: "Burning Hands",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            area: "close blast",
-                            size: 5
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -290,17 +248,9 @@
                         ],
                         description: descriptions[ "Burning Hands" ],
                         prepared: prepared[ "Burning Hands" ] === true
-                    },
-                    {
+                    }).encounter().blast(5),
+                    new CH.Power({
                         name: "Orbmaster's Incendiary Detonation",
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 10
-                        },
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -313,18 +263,10 @@
                         keywords: [
                             "arcane", "evocation", "fire", "implement", "force", "zone"
                         ],
-                        description: descriptions[ "Orbmaster's Incendiary Detonation" ],
                         prepared: prepared[ "Orbmaster's Incendiary Detonation" ] === true
-                    }, {
+                    }).encounter().burst(1, 10),
+                    new CH.Power({
                         name: "Orbmaster's Incendiary Detonation (zone)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 10
-                        },
                         toHit: "automatic",
                         defense: "Ref",
                         damage: {
@@ -339,12 +281,9 @@
                         ],
                         description: descriptions[ "Orbmaster's Incendiary Detonation" ],
                         prepared: prepared[ "Orbmaster's Incendiary Detonation" ] === true
-                    },
-                    {
+                    }).encounter().burst(1, 10),
+                    new CH.Power({
                         name: "Force Orb",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -354,18 +293,10 @@
                         keywords: [
                             "arcane", "evocation", "force", "implement"
                         ],
-                        description: descriptions[ "Force Orb" ],
                         prepared: prepared[ "Force Orb" ] === true
-                    }, {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Force Orb (secondary)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 20
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -377,31 +308,19 @@
                         ],
                         description: descriptions[ "Force Orb" ],
                         prepared: prepared[ "Force Orb" ] === true
-                    },
-                    {
+                    }).encounter().burst(1, 20),
+                    new CH.Power({
                         name: "Skewering Spikes",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            range: 5
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: "1d8+INT",
                         keywords: [
                             "arcane", "evocation", "implement"
                         ],
-                        description: descriptions[ "Skewering Spikes" ],
                         prepared: prepared[ "Skewering Spikes" ] === true
-                    }, {
+                    }).encounter().ranged(5),
+                    new CH.Power({
                         name: "Skewering Spikes (single target)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            range: 5
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: "2d8+INT",
@@ -410,16 +329,9 @@
                         ],
                         description: descriptions[ "Skewering Spikes" ],
                         prepared: prepared[ "Skewering Spikes" ] === true
-                    },
-                    {
+                    }).encounter().ranged(5),
+                    new CH.Power({
                         name: "Glorious Presence",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        target: {
-                            area: "close burst",
-                            size: 2
-                        },
                         toHit: "INT",
                         range: 2,
                         defense: "Will",
@@ -428,20 +340,13 @@
                             type: "radiant"
                         },
                         keywords: [
-                            "arcane", "charm", "echantment", "implement", "radiant", "close burst"
+                            "arcane", "charm", "echantment", "implement", "radiant"
                         ],
-                        description: descriptions[ "Glorious Presence" ],
                         prepared: prepared[ "Glorious Presence" ] === true
-                    },
-                    {
+                    }).encounter().closeBurst(2),
+                    new CH.Power({
                         name: "Ray of Enfeeblement",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "INT",
-                        target: {
-                            range: 10
-                        },
                         defense: "Fort",
                         damage: {
                             amount: "1d10+INT",
@@ -454,14 +359,13 @@
                             }
                         ],
                         keywords: [
-                            "arcane", "implement", "necromancy", "necrotic", "ranged"
+                            "arcane", "implement", "necromancy", "necrotic"
                         ],
-                        description: descriptions[ "Ray of Enfeeblement" ],
                         prepared: prepared[ "Ray of Enfeeblement" ] === true
-                    },
+                    }).encounter().ranged(10),
 
                     // Encounter 3
-                    {
+                    new CH.Power({
                         name: "Grim Shadow",
                         usage: {
                             frequency: "Encounter"
@@ -492,8 +396,8 @@
                         ],
                         description: descriptions[ "Grim Shadow" ],
                         prepared: prepared[ "Grim Shadow" ] === true
-                    },
-                    {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Icy Rays",
                         usage: {
                             frequency: "Encounter"
@@ -526,8 +430,8 @@
                         ],
                         description: descriptions[ "Icy Rays" ],
                         prepared: prepared[ "Icy Rays" ] === true
-                    },
-                    {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Color Spray",
                         usage: {
                             frequency: "Encounter"
@@ -552,8 +456,8 @@
                         ],
                         description: descriptions[ "Color Spray" ],
                         prepared: prepared[ "Color Spray" ] === true
-                    },
-                    {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Pinioning Vortex",
                         usage: {
                             frequency: "Encounter"
@@ -582,10 +486,10 @@
                         ],
                         description: descriptions[ "Pinioning Vortex" ],
                         prepared: prepared[ "Pinioning Vortex" ] === true
-                    },
+                    }).encounter(),
 
                     // Encounter 7
-                    {
+                    new CH.Power({
                         name: "Lightning Bolt",
                         usage: {
                             frequency: "Encounter"
@@ -607,8 +511,8 @@
                         ],
                         description: descriptions[ "Lightning Bolt" ],
                         prepared: prepared[ "Lightning Bolt" ] === true
-                    },
-                    {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Ghoul Strike",
                         usage: {
                             frequency: "Encounter"
@@ -637,7 +541,8 @@
                         ],
                         description: descriptions[ "Ghoul Strike" ],
                         prepared: prepared[ "Ghoul Strike" ] === true
-                    }, {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Ghoul Strike (zone)",
                         usage: {
                             frequency: "At-Will"
@@ -662,8 +567,8 @@
                         ],
                         description: descriptions[ "Ghoul Strike" ],
                         prepared: prepared[ "Ghoul Strike" ] === true
-                    },
-                    {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Thunder Cage",
                         usage: {
                             frequency: "Encounter"
@@ -682,12 +587,9 @@
                         ],
                         description: descriptions[ "Thunder Cage" ],
                         prepared: prepared[ "Thunder Cage" ] === true
-                    },
-                    {
+                    }).encounter(),
+                    new CH.Power({
                         name: "Thunder Cage (secondary)",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "automatic",
                         target: {
                             range: 10
@@ -702,14 +604,11 @@
                         ],
                         description: descriptions[ "Thunder Cage" ],
                         prepared: prepared[ "Thunder Cage" ] === true
-                    },
+                    }).encounter(),
 
                     // Encounter 11
-                    {
+                    new CH.Power({
                         name: "Shadowy Tendrils",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "0",
@@ -717,21 +616,45 @@
                         keywords: [
                             "shadow", "teleportation"
                         ],
-                        description: descriptions[ "Shadowy Tendrils" ],
                         prepared: prepared[ "Shadowy Tendrils" ] === true
-                    },
+                    }).encounter(),
+
+                    // Encounter 17
+                    new CH.Power({
+                        name: "Dancing Flames",
+                        toHit: "INT",
+                        defense: "Ref",
+                        damage: {
+                            amount: "5d6",
+                            type: "fire"
+                        },
+                        miss: { halfDamage: true },
+                        keywords: [
+                            "arcane", "evocation", "fire", "implement"
+                        ],
+                        prepared: prepared[ "Dancing Flames" ] === true
+                    }).encounter().blast(5, true),
+                    new CH.Power({
+                        name: "Force Volley",
+                        target: {
+                            targets: 3
+                        },
+                        toHit: "INT",
+                        defense: "Ref",
+                        damage: {
+                            amount: "3d6",
+                            type: "force"
+                        },
+                        effects: [ { name: "dazed", duration: "endAttackerNext" } ],
+                        keywords: [
+                            "arcane", "evocation", "force", "implement"
+                        ],
+                        prepared: prepared[ "Force Volley" ] === true
+                    }).encounter().ranged(),
 
                     // Daily 1
-                    {
+                    new CH.Power({
                         name: "Phantom Chasm",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 10
-                        },
                         toHit: "INT",
                         defense: "Will",
                         damage: {
@@ -753,18 +676,10 @@
                         keywords: [
                             "arcane", "illusion", "psychic", "implement", "zone"
                         ],
-                        description: descriptions[ "Phantom Chasm" ],
                         prepared: prepared[ "Phantom Chasm" ] === true
-                    }, {
+                    }).daily().burst(1, 10),
+                    new CH.Power({
                         name: "Phantom Chasm (zone)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 10
-                        },
                         toHit: "automatic",
                         defense: "Will",
                         damage: "0",
@@ -776,17 +691,9 @@
                         ],
                         description: descriptions[ "Phantom Chasm" ],
                         prepared: prepared[ "Phantom Chasm" ] === true
-                    },
-                    {
+                    }).atWill().burst(1, 10),
+                    new CH.Power({
                         name: "Fountain of Flame",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 10
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -799,18 +706,10 @@
                         keywords: [
                             "arcane", "evocation", "fire", "implement", "zone"
                         ],
-                        description: descriptions[ "Fountain of Flame" ],
                         prepared: prepared[ "Fountain of Flame" ] === true
-                    }, {
+                    }).daily().burst(1, 10),
+                    new CH.Power({
                         name: "Fountain of Flame (zone)",
-                        usage: {
-                            frequency: "At-WIll"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 10
-                        },
                         toHit: "automatic",
                         defense: "Ref",
                         damage: {
@@ -822,15 +721,9 @@
                         ],
                         description: descriptions[ "Fountain of Flame" ],
                         prepared: prepared[ "Fountain of Flame" ] === true
-                    },
-                    {
+                    }).atWill().burst(1, 10),
+                    new CH.Power({
                         name: "Slimy Transmutation",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            range: 10
-                        },
                         toHit: "INT",
                         defense: "Fort",
                         damage: "0",
@@ -851,17 +744,10 @@
                         keywords: [
                             "arcane", "implement", "polymorph", "transmutation"
                         ],
-                        description: descriptions[ "Slimy Transmutation" ],
                         prepared: prepared[ "Slimy Transmutation" ] === true
-                    },
-                    {
+                    }).daily().ranged(10),
+                    new CH.Power({
                         name: "Acid Arrow",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            range: 20
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -890,18 +776,10 @@
                         keywords: [
                             "arcane", "evocation", "acid", "implement"
                         ],
-                        description: descriptions[ "Acid Arrow" ],
                         prepared: prepared[ "Acid Arrow" ] === true
-                    }, {
+                    }).daily().ranged(20),
+                    new CH.Power({
                         name: "Acid Arrow (secondary)",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 20
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -921,12 +799,9 @@
                         ],
                         description: descriptions[ "Acid Arrow" ],
                         prepared: prepared[ "Acid Arrow" ] === true
-                    },
-                    {
+                    }).daily().burst(1, 20),
+                    new CH.Power({
                         name: "Rolling Thunder",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         target: {
                             range: 10
                         },
@@ -942,13 +817,10 @@
                         keywords: [
                             "arcane", "conjuration", "evocation", "implement", "thunder"
                         ],
-                        description: descriptions[ "Rolling Thunder" ],
                         prepared: prepared[ "Rolling Thunder" ] === true
-                    }, {
+                    }).daily(),
+                    new CH.Power({
                         name: "Rolling Thunder (secondary)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         target: {
                             range: 10
                         },
@@ -963,19 +835,11 @@
                         ],
                         description: descriptions[ "Rolling Thunder" ],
                         prepared: prepared[ "Rolling Thunder" ] === true
-                    },
+                    }).atWill(),
 
                     // Daily 5
-                    {
+                    new CH.Power({
                         name: "Fireball",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 3,
-                            range: 20
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -988,20 +852,10 @@
                         keywords: [
                             "arcane", "evocation", "implement", "fire"
                         ],
-                        description: descriptions[ "Fireball" ],
                         prepared: prepared[ "Fireball" ] === true
-                    },
-                    {
+                    }).daily().burst(3, 20),
+                    new CH.Power({
                         name: "Grasp of the Grave",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 2,
-                            range: 20,
-                            enemiesOnly: true
-                        },
                         toHit: "INT",
                         defense: "Ref",
                         damage: {
@@ -1023,19 +877,10 @@
                         keywords: [
                             "arcane", "implement", "necromancy", "necrotic"
                         ],
-                        description: descriptions[ "Grasp of the Grave" ],
                         prepared: prepared[ "Grasp of the Grave" ] === true
-                    }, {
+                    }).daily().burst(2, 20, true),
+                    new CH.Power({
                         name: "Grasp of the Grave (zone)",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 2,
-                            range: 20,
-                            enemiesOnly: true
-                        },
                         toHit: "automatic",
                         defense: "Ref",
                         damage: {
@@ -1047,30 +892,19 @@
                         ],
                         description: descriptions[ "Grasp of the Grave" ],
                         prepared: prepared[ "Grasp of the Grave" ] === true
-                    },
-                    {
+                    }).atWill().burst(2, 20, true),
+                    new CH.Power({
                         name: "Scattering Shock",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 3,
-                            range: 10
-                        },
                         toHit: "INT",
                         defense: "Fort",
                         damage: "0",
                         keywords: [
                             "arcane", "evocation", "implement", "lightning"
                         ],
-                        description: descriptions[ "Scattering Shock" ],
                         prepared: prepared[ "Scattering Shock" ] === true
-                    }, {
+                    }).daily().burst(3, 10),
+                    new CH.Power({
                         name: "Scattering Shock (secondary)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         target: {
                             area: "creature",
                             size: 1
@@ -1089,19 +923,11 @@
                         ],
                         description: descriptions[ "Scattering Shock" ],
                         prepared: prepared[ "Scattering Shock" ] === true
-                    },
+                    }).daily(),
 
                     // Daily 9
-                    {
+                    new CH.Power({
                         name: "Taunting Phantoms",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 10
-                        },
                         toHit: "INT",
                         defense: "Will",
                         damage: "0",
@@ -1109,18 +935,10 @@
                         keywords: [
                             "arcane", "evocation", "implement", "lightning"
                         ],
-                        description: descriptions[ "Taunting Phantoms" ],
                         prepared: prepared[ "Taunting Phantoms" ] === true
-                    }, {
+                    }).daily().burst(1, 10),
+                    new CH.Power({
                         name: "Taunting Phantoms (effect)",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 1,
-                            range: 10
-                        },
                         toHit: "automatic",
                         defense: "Will",
                         damage: "0",
@@ -1130,17 +948,9 @@
                         ],
                         description: descriptions[ "Taunting Phantoms" ],
                         prepared: prepared[ "Taunting Phantoms" ] === true
-                    },
-                    {
+                    }).daily().burst(1, 10),
+                    new CH.Power({
                         name: "Symphony of the Dark Court",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 2,
-                            range: 20
-                        },
                         toHit: "INT",
                         defense: "Will",
                         damage: "0",
@@ -1152,19 +962,10 @@
                         keywords: [
                             "arcane", "enchantment", "implement", "ranged"
                         ],
-                        description: descriptions[ "Symphony of the Dark Court" ],
                         prepared: prepared[ "Symphony of the Dark Court" ] === true
-                    },
-                    {
+                    }).daily().burst(2, 20),
+                    new CH.Power({
                         name: "Circle of Death",
-                        usage: {
-                            frequency: "Daily"
-                        },
-                        target: {
-                            area: "burst",
-                            size: 2,
-                            range: 10
-                        },
                         toHit: "INT",
                         defense: "Fort",
                         damage: { amount: "" + partyLevel, type: "necrotic" },
@@ -1176,127 +977,114 @@
                         keywords: [
                             "arcane", "necromancy", "implement", "necrotic", "shadow", "ranged"
                         ],
-                        description: descriptions[ "Circle of Death" ],
                         prepared: prepared[ "Circle of Death" ] === true
-                    },
+                    }).daily().burst(2, 10)
                 ],
                 buffs: [
-                    {
+                    new CH.Power({
                         name: "Circle of Protection",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: helpers.mod(Kitara.abilities.INT), type: "all" }
+                            { name: "resistance", amount: CH.mod(Kitara.abilities.INT), type: "all" }
                         ]
-                    },
-                    {
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (acid)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "acid" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "acid" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (cold)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "cold" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "cold" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (fire)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "fire" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "fire" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (force)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "force" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "force" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (lightning)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "lightning" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "lightning" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (necrotic)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "necrotic" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "necrotic" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (poison)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "poison" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "poison" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (psychic)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "psychic" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "psychic" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (radiant)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "radiant" }
-                        ]
-                    },
-                    {
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "radiant" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Mass Resistance (thunder)",
-                        usage: {
-                            frequency: "Daily"
+                        toHit: "automatic",
+                        effects: [
+                            { name: "resistance", amount: 5 + CH.mod(Kitara.abilities.INT), type: "thunder" }
+                        ],
+                        description: descriptions[ "Mass Resistance" ]
+                    }).daily(),
+                    new CH.Power({
+                        name: "Stoneskin",
+                        target: {
+                            targets: 1
                         },
                         toHit: "automatic",
                         effects: [
-                            { name: "resistance", amount: 5 + helpers.mod(Kitara.abilities.INT), type: "thunder" }
-                        ]
-                    }
+                            { name: "resistance", amount: 10, type: "all" }
+                        ],
+                        keywords: [ "arcane", "transmutation" ]
+                    }).daily()
 
                 ],
                 effects: []
             });
             Kitara.hp.total = 12 + Kitara.abilities.CON + (5 * (partyLevel - 1));
-            Kitara.skills = helpers.skills(Kitara, {
+            Kitara.skills = CH.skills(Kitara, {
                 arcana: 5,
                 diplomacy: 5,
                 perception: 5,

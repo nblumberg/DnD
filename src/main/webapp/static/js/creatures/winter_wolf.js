@@ -9,13 +9,13 @@
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {
-                name: "Winter Wolf", level: 9, image: "../images/portraits/winter_wolf.jpg",
+                name: "Winter Wolf", level: 14, image: "../images/portraits/winter_wolf.jpg",
                 hp: { total: 141 },
                 defenses: { ac: 28, fort: 27, ref: 26, will: 24 },
                 resistances: { cold: 20 },
                 init: 14, speed: { walk: 8 },
                 abilities: { STR: 23, CON: 21, DEX: 21, INT: 9, WIS: 17, CHA: 10 },
-                skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 10, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                skills: { perception: 10 },
                 attacks: [
                     { name: "Bite", usage: { frequency: "At-Will" }, target: { range: 1 }, range: "melee", toHit: 19, defense: "AC", damage: [ "1d10+6", { amount: "1d6", type: "cold" } ], keywords: [ "melee", "basic", "cold" ] },
                     { name: "Bite (prone)", usage: { frequency: "At-Will" }, target: { range: 1 }, range: "melee", toHit: 19, defense: "AC", damage: [ "2d10+6", { amount: "1d6", type: "cold" } ], keywords: [ "melee", "basic", "cold" ] },

@@ -1,0 +1,2835 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://www.wizards.com/dndinsider/compendium/styles/detail.css" />
+<style>
+th,h2 {
+	font-size: 150%;
+	font-weight: bold;
+}
+
+th,td,h2 {
+	padding: 5px;
+	text-align: left;
+	vertical-align: top;
+}
+
+h2 {
+	margin-top: 10px;
+	padding-left: 0;
+}
+
+ul,li {
+	list-style: none inside none;
+	padding: 0;
+}
+
+li {
+	white-space: nowrap;
+}
+
+#name {
+	font-size: 200%;
+	text-align: center;
+}
+
+.bloodied #hp,.bloodied #name {
+	color: red;
+}
+
+.fullWidth {
+	width: 100%;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.indent {
+	margin-left: 20px;
+}
+
+.trained:after {
+	content: " \2713";
+}
+
+p.weapon,p.implement {
+	margin-bottom: 0;
+}
+
+.powerRow,.itemRow {
+	display: table-row;
+}
+
+.powerBlock,.itemBlock,.ritualBlock {
+	border: 1px solid #CCCCCC;
+	float: left;
+	display: table-cell;
+	margin-right: 1%;
+	margin-bottom: 1%;
+	/* width: 400px; */
+	width: 31%;
+}
+
+#detail section .powerBlock:nth-child(3n + 4),#detail section .itemBlock:nth-child(3n + 4),#detail section .ritualBlock:nth-child(3n + 4)
+	{
+	clear: left;
+}
+
+.blockBreak {
+	clear: both;
+}
+
+.powerBullet {
+	display: inline-block;
+	margin: 0 20px 0 10px;
+}
+
+.powerBullet span {
+	background-image:
+		url('http://www.wizards.com/dndinsider/compendium/images/bullet.gif');
+	display: inline-block;
+	height: 11px;
+	width: 11px;
+}
+
+.used {
+	color: red;
+	text-decoration: line-through;
+}
+
+#detail,#detail section {
+	clear: both;
+	display: block;
+	padding: 0;
+	width: 100%;
+}
+
+#detail h1.mihead {
+	height: auto;
+}
+
+#detail h1 .level,#detail h1 .milevel {
+	max-width: 50%;
+}
+
+#detail table.magicitem {
+	white-space: nowrap;
+	width: 100%;
+}
+
+#detail p.additionalEffects {
+	border-top: 1px solid black;
+	font-size: 9px;
+}
+
+.Xportrait {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+@media all {
+	.pageBreak {
+		display: none;
+	}
+}
+
+@media print {
+	body {
+		font-size: 80%;
+		width: 100%;
+	}
+	.pageBreak {
+		display: block;
+		page-break-before: always;
+	}
+	#detail section {
+		display: table;
+		page-break-before: always;
+	}
+	#detail section .powerBlock:nth-child(3n + 4),#detail section .itemBlock:nth-child(3n + 4),#detail section .ritualBlock:nth-child(3n + 4)
+		{
+		page-break-before: always;
+	}
+	#detail div.shrink,#detail div.shrink * {
+		font-size: 90%;
+	}
+	#detail table.magicitem {
+		font-size: 80%;
+	}
+	#detail .printHide {
+		display: none;
+	}
+	#detail section .powerBlock,#detail section .itemBlock,#detail section .ritualBlock
+		{
+		display: block;
+	}
+	#detail section .ritualBlock:nth-child(-1n + 0) {
+		display: block;
+	}
+	#detail section .ritualBlock:nth-child(-1n + 4) {
+		display: none;
+	}
+}
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	var level, abilities, halfLevel, $abilities, abilityStrings, i, string, score, mod, $tmp;
+	level = parseInt(jQuery("#Level").html());
+	halfLevel = Math.floor(level / 2);
+	abilityStrings = [ "str", "con", "dex", "int", "wis", "cha" ];
+	abilities = {};
+	$abilities = jQuery("#abilities");
+	for (i = 0; i < abilityStrings.length; i++) {
+		string = abilityStrings[ i ];
+		abilities[ string ] = score = parseInt($abilities.find("#" + string).html());
+		abilities[ string + "Mod" ] = mod = Math.floor((score - 10) / 2);
+		abilities[ string + "ModLevel" ] = mod + halfLevel;
+		jQuery("." + string + "Mod").html(mod);
+		jQuery("." + string + "ModLevel").html(mod + halfLevel);
+	}
+	jQuery(".trained").each(function() {
+		var $me = jQuery(this);
+		$me.html(parseInt($me.html()) + 5);
+	});
+	
+	$tmp = jQuery(".weapon.supremely_vicious_bastard_sword_2");
+	$tmp.find(".toHit").each(function() {
+		var $me = jQuery(this), proficiency = 3, enhancement = 2, feat = 2; // White Lotus Dueling Expertise
+		$me.html(parseInt($me.html()) + proficiency + enhancement + feat);
+	});
+	$tmp.find(".damage").each(function() {
+		var $me = jQuery(this), enhancement = 2, feat = 0;
+		$me.html(parseInt($me.html()) + enhancement + feat);
+	});
+
+	$tmp = jQuery(".implement.supremely_vicious_bastard_sword_2");
+	$tmp.find(".toHit").each(function() {
+		var $me = jQuery(this), enhancement = 2, feat = 2; // White Lotus Dueling Expertise
+		$me.html(parseInt($me.html()) + enhancement + feat);
+	});
+	$tmp.find(".damage").each(function() {
+		var $me = jQuery(this), enhancement = 2, feat = 3; // Dual Implement Spellcaster
+		$me.html(parseInt($me.html()) + enhancement + ($me.hasClass("roll") ? feat : 0));
+	});
+	
+	$tmp = jQuery(".implement.orb_of_enduring_magic_3");
+	$tmp.find(".toHit").each(function() {
+		var $me = jQuery(this), enhancement = 3, feat = 2; // White Lotus Dueling Expertise
+		$me.html(parseInt($me.html()) + enhancement + feat);
+	});
+	$tmp.find(".damage").each(function() {
+		var $me = jQuery(this), enhancement = 3, feat = 2; // Dual Implement Spellcaster
+		$me.html(parseInt($me.html()) + enhancement + ($me.hasClass("roll") ? feat : 0));
+	});
+	
+	
+	window.console.debug(JSON.stringify(abilities, null, " "));
+});
+</script>
+</head>
+<body class="pageAll">
+    <table class="fullWidth page page1">
+        <thead>
+            <tr>
+                <th id="name">Kitara Melumbra</th>
+                <th>Level <span id="Level">17</span></th>
+                <th>Abilities</th>
+                <th>Skills</th>
+                <th colspan="2">Equipment (113 lbs.)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <img class="portrait" height="240" src="kitara.jpg" /> <!-- http://www.deviantart.com/download/46708270/Maiden_of_the_Mirthless_Smile_by_UdonCrew.jpg"  -->
+                </td>
+                <td>
+                    <ul>
+                        <li>
+                            <b>HP</b>
+                            <span id="HP">107/107</span>
+                        </li>
+                        <li>
+                            <b>AP</b>
+                            <span id="AP">1</span>
+                        </li>
+                        <li>
+                            <b>Surges</b>
+                            <span id="Surges">9/9</span>
+                        </li>
+                        <li>
+                            <b>Conditions</b>
+                            <span id="Conditions">none</span>
+                        </li>
+                        <li>
+                            <b>XP</b>
+                            <span id="XP">83000/99000</span>
+                        </li>
+                    </ul>
+                    <h2>Defenses</h2>
+                    <ul>
+                        <li>AC 30</li>
+                        <li>Fort 27</li>
+                        <li>Ref 29</li>
+                        <li>Will 28</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul id="abilities">
+                        <li>STR <span id="str">17</span> +<span id="strMod">3</span> (+<span class="strModLevel">10</span>)</li>
+                        <li>CON <span id="con">15</span> +<span id="conMod">2</span> (+<span class="conModLevel">9</span>)</li>
+                        <li>DEX <span id="dex">21</span> +<span id="dexMod">5</span> (+<span class="dexModLevel">12</span>)</li>
+                        <li>INT <span id="int">24</span> +<span id="intMod">7</span> (+<span class="intModLevel">14</span>)</li>
+                        <li>WIS <span id="wis">17</span> +<span id="wisMod">3</span> (+<span class="wisModLevel">10</span>)</li>
+                        <li>CHA <span id="cha">18</span> +<span id="chaMod">4</span> (+<span class="chaModLevel">11</span>)</li>
+                    </ul>
+                    <h2>Other</h2>
+                    <ul>
+                        <li>Init 13</li>
+                        <li>Speed 8</li>
+                        <li><span class="bold">Carrying Capacity:</span>
+                            <ul class="indent">
+                                <li>Normal 170</li>
+                                <li>Heavy 340</li>
+                                <li>Max 850</li>
+                            </ul></li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Acrobatics <span class="dexModLevel trained">14</span></li>
+                        <li>Arcana <span class="intModLevel">19</span></li>
+                        <li>Athletics <span class="strModLevel trained">10</span></li>
+                        <li>Bluff <span class="chaModLevel">13</span></li>
+                        <li>Diplomacy <span class="chaModLevel">16</span></li>
+                        <li>Dungeoneering <span class="wisModLevel">`0</span></li>
+                        <li>Endurance <span class="conModLevel">9</span></li>
+                        <li>Heal <span class="wisModLevel">10</span></li>
+                        <li>History <span class="intModLevel">14</span></li>
+                        <li>Insight <span class="wisModLevel">10</span></li>
+                        <li>Intimidate <span class="chaModLevel">13</span></li>
+                        <li>Nature <span class="wisModLevel">10</span></li>
+                        <li>Perception <span class="wisModLevel trained">15</span></li>
+                        <li>Religion <span class="wisModLevel">14</span></li>
+                        <li>Stealth <span class="dexModLevel trained">15</span></li>
+                        <li>Streetwise <span class="chaModLevel">11</span></li>
+                        <li>Thievery <span class="dexModLevel">17</span></li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li><span class="bold">Head</span> Helm of Languages</li>
+                        <li><span class="bold">Neck</span> Amulet of Protection +3</li>
+                        <li><span class="bold">Arms</span> Bracers of the Perfect Shot</li>
+                        <li><span class="bold">Hands</span> [empty]</li>
+                        <li><span class="bold">Rings</span> [empty]</li>
+                        <li><span class="bold">Main Hand</span> Supremely Vicious Broadsword +2</li>
+                        <li><span class="bold">Off Hand</span> Orb of Enduring Magic +3</li>
+                        <li><span class="bold">Waist</span> Belt of Vim (heroic tier)</li>
+                        <li><span class="bold">Armor</span> Gloaming Leather Armor +1</li>
+                        <li><span class="bold">Feet</span> Boots of Striding</li>
+                        <li><span class="bold">Tattoo</span> [empty]</li>
+                        <li><span class="bold">Ki Focus</span> [empty]</li>
+                        <li><span class="bold">Money:</span>
+                            <ul class="indent">
+                                <li>GP 234</li>
+                                <li>SP 0</li>
+                                <li>CP 0</li>
+                            </ul></li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+
+    <section id="detail">
+        <section id="atWillPowers">
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Wizard Attack </span>Lightning Ring
+                </h1>
+                <p class="powerstat">
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: automatic hit, 5 lightning damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You stab your opponent, and an arc of lightning leaps from your hand to encircle a foe in a crackling ring.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will (Special)</b> &bull; <b>Arcane</b>, <b>Bladespell</b>, <b>Lightning</b><br/> <b>No Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Trigger</b>: During your turn, you hit an enemy with a melee basic attack using a one-handed weapon while your other hand holds no weapon or shield.
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Dexterity modifier <span class="dexMod">(+5)</span> lightning damage, and the first time the target moves before the end of your next turn, it takes the lightning damage again.<br/>&nbsp;&nbsp;&nbsp;&nbsp;Level 11: 2 + Dexterity modifier <span class="dexMod">(+5)</span> lightning damage.<br/>&nbsp;&nbsp;&nbsp;&nbsp;Level 21: 4 + Dexterity modifier <span class="dexMod">(+5)</span> lightning damage.
+                </p>
+                <p class="powerstat">
+                    <b>Special</b>: You can use only one bladespell power per triggering attack.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 72.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Wizard Attack </span>Shadow Sever
+                </h1>
+                <p class="powerstat">
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: automatic hit, 5 necrotic damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Your attack slices away your enemy's shadow, sending it flitting across the field to pull at the feet of a foe.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will (Special)</b> &bull; <b>Arcane</b>, <b>Bladespell</b>, <b>Necrotic</b><br/> <b>No Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Trigger</b>: During your turn, you hit an enemy with a melee basic attack using a one-handed weapon while your other hand holds no weapon or shield.
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Dexterity modifier <span class="dexMod">(+5)</span> necrotic damage, and the target falls prone if it is the same size as or smaller than the target of the triggering attack.<br/>&nbsp;&nbsp;&nbsp;&nbsp;Level 11: 2 + Dexterity modifier <span class="dexMod">(+5)</span> necrotic damage.<br/>&nbsp;&nbsp;&nbsp;&nbsp;Level 21: 4 + Dexterity modifier <span class="dexMod">(+5)</span> necrotic damage.
+                </p>
+                <p class="powerstat">
+                    <b>Special</b>: You can use only one bladespell power per triggering attack.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 72.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Wizard Attack </span>Unseen Hand
+                </h1>
+                <p class="powerstat">
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: automatic hit, 5 force damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You level a crushing blow against your foe, and an unseen force grasps an enemy and drags it about the field of battle.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will (Special)</b> &bull; <b>Arcane</b>, <b>Bladespell</b>, <b>Force</b><br/> <b>No Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Trigger</b>: During your turn, you hit an enemy with a melee basic attack using a one-handed weapon while your other hand holds no weapon or shield.
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Dexterity modifier (+<span class="dexMod">6</span>) force damage, and you slide the target up to 3 squares.
+                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Level 11: 2 + Dexterity modifier (+<span class="dexMod">6</span>) force damage.
+                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Level 21: 4 + Dexterity modifier (+<span class="dexMod">6</span>) force damage.
+                </p>
+                <p class="powerstat">
+                    <b>Special</b>: You can use only one bladespell power per triggering attack.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 72.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Wizard Attack 1</span>Magic Missile
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: automatic hit, 3+<span class="intMod damage">7</span> force damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: automatic hit, 3+<span class="intMod damage">7</span> force damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>A glowing blue bolt of magical energy hurtles from your finger and unerringly strikes your target.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Force</b>, <b>Implement</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 20
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: 2 + Intelligence modifier (+<span class="intMod damage">7</span>) force damage.
+                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Level 11: 3 + Intelligence modifier (+<span class="intMod damage">7</span>) force damage.
+                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Level 21: 5 + Intelligence modifier (+<span class="intMod damage">7</span>) force damage.
+                </p>
+                <p class="powerstat">
+                    <b>Special</b>: If the implement used with this power has an enhancement bonus, add that bonus to the damage. In addition, you can use this power as a ranged basic attack.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 159, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 203, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 74, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects
+                    <br/><b>Reaper's Touch</b>: You can use this power as a melee basic attack.
+                    <br/><b>White Lotus Riposte</b>: When an enemy attacks you before the start of your next turn after you hit it with this attack power, it takes <span class="intMod damage">7</span> force damage
+                    <br/><b>White Lotus Master Riposte</b>: When an enemy attacks you before the start of your next turn after you hit it with this attack power, repeat the attack as an immediate reaction
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Wizard Utility 2</span>Mystical Debris
+                </h1>
+                <p class="flavor">
+                    <i>You create a small amount of stone and rubble that clogs up the area.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will</b> &bull; <b>Arcane</b><br/> <b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 5
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: One square in range becomes difficult terrain until the end of the encounter. You can end this effect as a minor action.
+                </p>
+                <p class="powerstat">
+                    <b>Special</b>: You cannot have more squares than your Intelligence modifier <span class="intMod">(+6)</span> under this effect at one time.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/383" target="_new">Dragon Magazine 383</a>, page(s) 52.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+
+                <h1 class="atwillpower">
+                    <span class="level">Wizard Utility </span>Prestidigitation
+                </h1>
+                <p class="flavor">
+                    <i>You perform an amusing magical trick, such as creating a dancing wisp of light, freshening a wilting flower, making a coin invisible, or warming a cold drink.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will</b> &bull; <b>Arcane</b><br>
+                    <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 2
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Use this cantrip to accomplish one of the effects given below:
+                    <br/> &bull; Change the color of items in 1 cubic foot.
+                    <br/> &bull; Create a harmless sensory effect, such as a shower of sparks, a puff of wind, faint music, or a strong odor.
+                    <br/> &bull; Clean or soil items in 1 cubic foot.
+                    <br/> &bull; Instantly light (or snuff out) a candle, a torch, or a small campfire.
+                    <br/> &bull; Chill, warm, or flavor up to 1 pound of nonliving material for up to 1 hour.
+                    <br/> &bull; Make a small mark or symbol appear on a surface for up to 1 hour.
+                    <br/> &bull; Produce out of nothingness a small item or image that exists until the end of your next turn.
+                    <br/> &bull; Make a small, handheld item invisible until the end of your next turn.
+                </p>
+                <p class="powerstat">
+                    <b>Special</b>: You can have as many as three prestidigitation effects active at one time. Nothing you create with this cantrip can deal damage, serve as a weapon or a tool, or hinder another creature’s actions. This cantrip cannot duplicate the effect of any other power.
+                </p>
+                <br>Update (1/24/2012)<br>Updated in Class Compendium.<br>
+                <br>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 159, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 202, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 73, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Wizard Utility </span>Mage Hand
+                </h1>
+                <p class="flavor">
+                    <i>You gesture toward an object nearby, and a spectral floating hand lifts the object into the air and moves it where you wish.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will</b> &bull; <b>Arcane</b>, <b>Conjuration</b><br>
+                    <b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 5
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You conjure a spectral, floating hand in an unoccupied square within range. The hand lasts until the end of your next turn or until you use this power again. If you are holding an object when you use this power, the hand can move the object into a pack, a pouch, a sheath, or a similar container and simultaneously move any one object carried or worn anywhere on your body into your hand. While the hand persists, you can take the following actions.
+                </p>
+                <p class="powerstat">
+                    &nbsp;&nbsp;<b>Minor Action</b>: The hand picks up or manipulates an object weighing 20 pounds or less. It can hold only one object at a time.
+                </p>
+                <p class="flavor">
+                    &nbsp;&nbsp;<b>Move Action</b>: The hand moves up to 5 squares in any direction, carrying the object it holds.
+                </p>
+                <p class="powerstat">
+                    &nbsp;&nbsp;<b>Free Action</b>: The hand drops the object it is holding.
+                </p>
+                <p class="flavor">
+                    <b>Sustain Minor</b>: The hand persists until the end of your next turn.
+                </p>
+                <br>Update (1/24/2012)<br>Updated in Class Compendium.<br>
+                <br>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 158, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 202, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 73, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Wizard Utility </span>Ghost Sound
+                </h1>
+                <p class="flavor">
+                    <i>With a wink, you create an illusory sound that emanates from a distant location.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will</b> &bull; <b>Arcane</b>, <b>Illusion</b><br>
+                    <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One object or unoccupied square
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You cause a sound as quiet as a whisper or as loud as a yelling or fighting creature to emanate from the target. You can produce nonvocal sounds such as the ringing of a sword blow, jingling armor, or scraping stone. If you whisper, you can whisper quietly enough that only creatures adjacent to the target can hear your words.
+                </p>
+                <br>Update (1/24/2012)<br>Updated in Class Compendium.<br>
+                <br>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 158, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 201, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 73, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">Action Point</h1>
+                <p class="flavor" style="font-size:0.75em;">
+                    Action points allow creatures to take more actions than normal. Adventurers each start with 1 action point. Typically an adventurer spends an action point to pull off an extra attack, to move farther than normal, to take the second wind action in the same turn that he or she attacks, and so on.<br/>
+                    <br/>Spend an Action Point
+                    <br/>&bull; Action: Free action. A creature must have an action point in order to take this action. Also, the creature can take this action only during its turn, and never during a surprise round.
+                    <br/>&bull; Gain an Extra Action: The creature gains an extra action to use during its current turn. The action can be a standard, a move, or a minor action. Some creatures have special abilities that trigger when they spend action points, and some have the option of gaining a benefit other than an extra action when they spend their points.
+                    <br/>&bull; Once per Encounter or Round: An adventurer can spend an action point only once per encounter. 
+                    <br/>&bull; Gone When Spent: An action point is gone when spent, regardless of the success of the action taken.
+                </p>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 286, <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786951017" target="_new">Monster Manual 2</a>, page(s) 6, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247530000" target="_new">Rules Compendium</a>, page(s) 235.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects 
+                    <br/><b>Choir of Swords:</b> Spend an action point while bladesong is active, make melee basic attack against all adjacent enemies as a standard action.
+                    <br/><b>Bladesong Ballet:</b> Use an action point while bladesong is active to shift your speed in squares.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Oracle of the Evil Eye Attack </span><span>Gaze of the Evil Eye</span>
+                </h1>
+                <p class="powerstat">
+                    <p class="weapon unarmed">
+                        <b>Unarmed</b>: automatic hit, 2 psychic damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Your foe feels the foreboding stare of your evil eye warning it away from you.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will</b> &bull; <b>Arcane</b>, <b>Psychic</b><br/> <b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 5
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature you can see that isn't marked by you
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The target takes 2 psychic damage whenever it hits you with an attack (a creature can take this damage only once per turn). The effect ends if you don't have line of sight to the target at the end of your turn, or if you use this power against a different target.<br/>&nbsp;&nbsp;&nbsp;&nbsp;Level 21: 4 psychic damage.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/405" target="_new">Dragon Magazine 405</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="atwillpower">
+                    <span class="level">Basic Attack</span>Melee Basic Attack
+                </h1>
+                <p class="powerstat">
+                    <p class="weapon supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Broadsword +2</b>: +<span class="strModLevel toHit">17</span> vs. AC, 1d10+<span class="strMod damage roll">8</span> damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You resort to the simple attack you learned when you first picked up a melee weapon.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will</b> &bull; <br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Melee</b> weapon
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="powerstat">
+                    <b>Keyword</b>: Weapon
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Strength vs. AC
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1[W] + Strength modifier (+<span class="strMod">3</span>) damage. 
+                    <br/>
+                    Level 21: 2[W] + Strength modifier (+<span class="strMod">3</span>) damage. 
+                    <br/>
+                </p>
+                <br/>
+                <p class="additionalEffects">
+                    Additional Effects
+                    <br/><b>Arcane Strike</b>: Make a melee basic attack as a minor action when you use a bladesinger daily attack power on your turn.
+                    <br/><b>Steely Retort</b>: Use a melee basic attack as an opportunity action against adjacent enemies who hit you while bladesong is active.
+                </p>
+            </div>
+
+            <div class="powerBlock printHide">
+                <h1 class="atwillpower">
+                    <span class="level">Basic Attack</span>Ranged Basic Attack
+                </h1>
+                <p class="powerstat">
+                    <p class="weapon unarmed">
+                        <b>Unarmed</b>: +<span class="dexModLevel toHit">11</span> vs. AC, 1d4+<span class="dexMod damage roll">6</span> damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You resort to the simple attack you learned when you first picked up a ranged weapon.</i>
+                </p>
+                <p class="powerstat">
+                    <b>At-Will</b> &bull; <br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> weapon
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="powerstat">
+                    <b>Keyword</b>: Weapon
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Dexterity vs. AC
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1[W] + Dexterity modifier (+<span class="dexMod">6</span>) damage. 
+                    <br/>
+                    Level 21: 2[W] + Dexterity modifier (+<span class="dexMod">6</span>) damage. 
+                    <br/>
+                </p>
+                <br/>
+                <p class="additionalEffects">Additional Effects</p>
+            </div>
+
+        </section>
+        <section id="encounterPowers">
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 1</span>Burning Hands
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> fire damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> fire damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>A gout of flame erupts from your hands and scorches nearby foes.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Fire</b>, <b>Implement</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Close</b> blast 5
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each creature in the blast
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d6 + Intelligence modifier <span class="intMod">(+6)</span> fire damage.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 159, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 206, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 72, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>, page(s) -.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 1</span>Skewering Spikes
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 1d8+ or 2d8+<span class="intMod damage roll">9</span> damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d8+ or 2d8 +<span class="intMod damage roll">9</span> damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You call forth floating spikes of metal and stone that rapidly streak toward your foes.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Implement</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 5
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One, two, or three creatures
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1d8 + Intelligence modifier (+<span class="intMod damage">7</span>) damage, or 2d8 + Intelligence modifier (+<span class="intMod damage">7</span>) damage if you target only one creature.
+                </p>
+                <br/>Update (10/18/2011)<br/>Updated in Wizard Schools article.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/383" target="_new">Dragon Magazine 383</a>, page(s) 52.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 1</span>Glorious Presence
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> radiant damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> radiant damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Radiant moonlight streams from you in all directions, and those who behold you are stricken with awe.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Charm</b>, <b>Enchantment</b>, <b>Implement</b>, <b>Radiant</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Close burst</b> 2
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each enemy in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Will
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d6 + Intelligence modifier <span class="intMod">(+6)</span> radiant damage, and you push the target up to a number of squares equal to your Wisdom modifier.
+                </p>
+                <p class="powerstat">
+                    <b>Effect</b>: You and each ally in the burst gain temporary hit points equal to your Wisdom modifier.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317310000" target="_new">Heroes of the Feywild</a>, page(s) 92.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 1</span>Orbmaster's Incendiary Detonation
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 1d6+<span class="intMod damage roll">9</span> force damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d6+<span class="intMod damage roll">9</span> force damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Gouts of flame pulse from your orb and explode amid your enemies, setting the area alight and roasting them as they attempt to escape.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Fire</b>, <b>Force</b>, <b>Implement</b>, <b>Zone</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 1 within 10 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each creature in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1d6 + Intelligence modifier (+<span class="intMod damage">7</span>) force damage, and you knock the target prone.
+                </p>
+                <p class="powerstat">
+                    <b>Effect</b>: The burst creates a zone of licking flames that lasts until the end of your next turn. Each enemy that enters the zone or starts its turn there takes 2 fire damage. An enemy can take this damage only once per turn.
+                </p>
+                <p class="flavor">
+                    &nbsp;&nbsp;<b>Orb of Imposition</b>: You can extend the duration of this effect, even though it is not an at-will power. If you do so, the area expands to burst 3 and doesn't affect you or your allies.
+                </p>
+                <br/>Update (2/17/2012)<br/>Changed in December 2011 updates.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786949571" target="_new">Arcane Power</a>, page(s) 102.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 1</span>Ray of Enfeeblement
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> necrotic damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> necrotic damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You point three fingers at your foe, curling them like talons. Weird green mist streams from your enemy's flesh, carrying away its strength.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Implement</b>, <b>Necromancy</b>, <b>Necrotic</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Fortitude
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1d10 + Intelligence modifier (+<span class="intMod damage">7</span>) necrotic damage, and the target is weakened until the end of your next turn.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 160, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 73, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/34416000" target="_new">The Book of Vile Darkness</a>, page(s) 2-78, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 1</span>Force Orb
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> force damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> force damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You hurl an orb of magical force at an enemy. It bursts against the target and throws off razor-sharp shards of force that cut nearby enemies to ribbons.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Force</b>, <b>Implement</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 20
+                </p>
+                <p class="powerstat">
+                    <b>Primary Target</b>: One creature or object
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d8 + Intelligence modifier (+<span class="intMod damage">7</span>) force damage. Make a secondary attack.
+                </p>
+                <br/>
+                <h1 class="encounterpower">
+                    <span class="level"></span>Force Orb Secondary Attack
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> force damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> force damage
+                    </p>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Force</b>, <b>Implement</b><br/> <b>Free Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 1 centered on the primary target
+                </p>
+                <p class="flavor">
+                    <b>Secondary Target</b>: Each enemy in the burst other than the primary target
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1d10 + Intelligence modifier (+<span class="intMod damage">7</span>) force damage.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 3</span>Grim Shadow
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 2d8+<span class="intMod damage roll">9</span> necrotic damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 2d8+<span class="intMod damage roll">9</span> necrotic damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Reaching into the Shadowfell, you cast a tangible, looming shadow that strikes fear into the living.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Fear</b>, <b>Implement</b>, <b>Necrotic</b>, <b>Nethermancy</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Close blast</b> 3
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each creature in the blast
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Will
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d8 + Intelligence modifier (+<span class="intMod damage">7</span>) necrotic damage, and the target takes a -2 penalty to attack rolls until the end of your next turn.
+                </p>
+                <p class="powerstat">
+                    <b>Effect</b>: Each target takes a -2 penalty to Will until the end of your next turn.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317310000" target="_new">Heroes of the Feywild</a>, page(s) 93.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 3</span>Icy Rays
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> cold damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> cold damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You fire two bolts of brilliant blue-white energy that freeze your enemies in place for a short time.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Cold</b>, <b>Evocation</b>, <b>Implement</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One or two creatures
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1d10 + Intelligence modifier (+<span class="intMod damage">7</span>) cold damage, and the target is immobilized until the end of your next turn.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: The target is slowed until the end of your next turn.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 161, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 3</span>Color Spray
+                </h1>
+                <p class="flavor">
+                    <i>A brilliant blast of flashing colors springs from your outstretched fingers, knocking nearby enemies senseless.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Implement</b>, <b>Radiant</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Close</b> blast 5
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each creature in the blast
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Will
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1d6 + Intelligence modifier (+<span class="intMod damage">7</span>) radiant damage, and the target is dazed until the end of your next turn.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/><br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 161, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 75, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 3</span>Pinioning Vortex
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>A miniature tornado roars forth to batter your enemy and lift it into the air.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Implement</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Fortitude
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d6 + Intelligence modifier (+<span class="intMod damage">7</span>) damage, and you slide the target 10 feet (2 squares) vertically. The target remains aloft until the start of its next turn; while aloft, it is dazed and immobilized, and it grants combat advantage to you and your allies. At the start of its next turn, it lands on its feet in the space it formerly occupied or in the nearest unoccupied space of its choice.
+                </p>
+                <br/>Update (10/18/2011)<br/>Updated in Wizard Schools article.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786949571" target="_new">Arcane Power</a>, page(s) 104.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Utility 6</span>Darklight
+                </h1>
+                <p class="flavor">
+                    <i>Purple flame appears over your head, though only you and your companions can see it. By its guidance, you can find your way.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Shadow</b>, <b>Zone</b><br/> <b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Close</b> burst 2
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The burst creates a zone that lasts until the end of the encounter. You and your allies have darkvision while in the zone.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/280880000" target="_new">Heroes of Shadow</a>, page(s) 102.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 7</span>Ghoul Strike
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Fort, 2d6+<span class="intMod damage roll">9</span> necrotic damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Fort, 2d6+<span class="intMod damage roll">9</span> necrotic damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You make a slashing motion against an enemy, causing darkness to bind it and filling the air around it with a charnel stench.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Implement</b>, <b>Necromancy</b>, <b>Necrotic</b>, <b>Shadow</b>, <b>Zone</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Melee</b> 1 or Ranged 5
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Fortitude
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d6 + Intelligence modifier necrotic damage, and the target is immobilized until the end of your next turn. The attack creates a zone in a burst 2 centered on the target. The zone lasts for as long as the target is immobilized by this power. Any creature (except you) that ends its turn in the zone takes 5 necrotic damage, and it grants combat advantage while in the zone.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: The power is not expended. If you use it during your next turn against the same target, you gain a +2 bonus to the attack roll.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/280880000" target="_new">Heroes of Shadow</a>, page(s) 103.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 7</span>Lightning Bolt
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> lightning damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> lightning damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Brilliant strokes of blue-white lightning erupt from your outstretched hand.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Implement</b>, <b>Lightning</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One, two, or three creatures
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d6 + Intelligence modifier (+<span class="intMod damage">7</span>) lightning damage.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 162, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 215, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 76, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Attack 7</span>Thunder Cage
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Fort, 2d10+<span class="intMod damage roll">9</span> thunder damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Fort, 2d10+<span class="intMod damage roll">9</span> thunder damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Your foe is rocked by thunderous noise, and an ominous rumble begins at your enemy's slightest move.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Implement</b>, <b>Thunder</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Fortitude
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d10 + Intelligence modifier thunder damage. If the target leaves the space it currently occupies before the start of your next turn, it takes an extra 1d10 + Intelligence modifier thunder damage.
+                </p>
+                <br/>Update (10/18/2011)<br/>Updated in Wizard Schools article.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/375" target="_new">Dragon Magazine 375</a>, page(s) 14.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Shadow Dancer Attack 11</span>Shadowy Tendrils
+                </h1>
+                <p class="flavor">
+                    <i>As you teleport, a shadowy afterimage manifests as tendrils that reach out to your foes.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Shadow</b>, <b>Teleportation</b><br/><b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Personal</b> 
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You teleport up to 5 squares, then make a basic attack. You teleport one target hit by the attack up to 3 squares, and it is dazed until the end of your next turn.
+                </p>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/280880000" target="_new">Heroes of Shadow</a>, page(s) 148.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Shadow Dancer Utility 12</span>Shadow Stalk
+                </h1>
+                <p class="flavor">
+                    <i>You attune yourself to your foeís shadow, then step through it at a momentís notice.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Shadow</b>, <b>Teleportation</b><br/><b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Close</b> burst 5
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature in the burst
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Until the end of your next turn, you can teleport to any square adjacent to the target as a move action. If you are already adjacent to the target, you can teleport up to 3 squares as a minor action.
+                </p>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/280880000" target="_new">Heroes of Shadow</a>, page(s) 148.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+				<h1 class="encounterpower">
+					<span class="level">Wizard Attack 17</span>Dancing Flames
+				</h1>
+				<p class="flavor">
+					<i>You unleash shifting streams of fire that burn down your foes while leaving allies untouched.</i>
+				</p>
+				<p class="powerstat">
+					<b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Fire</b>, <b>Implement</b>
+					<br/> 
+					<b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Close</b> blast 5
+				</p>
+				<p class="powerstat">
+					<b>Target</b>: Each enemy in the blast
+				</p>
+				<p class="powerstat">
+					<b>Attack</b>: Intelligence vs. Reflex
+				</p>
+				<p class="flavor">
+					<b>Hit</b>: 5d6 + Intelligence modifier fire damage.
+				</p>
+				<p class="powerstat">
+					<b>Miss</b>: Half damage.
+				</p>
+				<br/>
+				<p class="publishedIn">
+					Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 226, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 80.
+				</p>
+    		</div>
+
+    		<div class="powerBlock">
+				<h1 class="encounterpower">
+					<span class="level">Wizard Attack 17</span>Force Volley
+				</h1>
+				<p class="flavor">
+					<i>Silvery missiles spring from your fingertips and streak across the battlefield, striking your enemies with a staggering impact.</i>
+				</p>
+				<p class="powerstat">
+					<b>Encounter</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Force</b>, <b>Implement</b>
+					<br/>
+					<b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 20
+				</p>
+				<p class="powerstat">
+					<b>Targets</b>: One, two, or three creatures
+				</p>
+				<p class="powerstat">
+					<b>Attack</b>: Intelligence vs. Reflex. You gain a +4 power bonus to the attack roll if you target only one creature.
+				</p>
+				<p class="flavor">
+					<b>Hit</b>: 3d6 + Intelligence modifier force damage, and the target is dazed until the end of your next turn.
+				</p>
+				<br/>
+				Update (1/24/2012)
+				<br/>
+				Updated in Class Compendium.
+				<br/>
+				<br/>
+				<p class="publishedIn">
+					Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 166, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 80, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+				</p>
+		    </div>
+            
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Shadar-kai Racial Power</span>Shadow Jaunt
+                </h1>
+                <p class="flavor">
+                    <i>You move like a wraith between two points, your body rematerializing slowly after you arrive at your destination.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Teleportation</b><br/> <b>Move Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Personal</b>
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You teleport 3 squares and become insubstantial until the start of your next turn.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/372" target="_new">Dragon Magazine 372</a>, page(s) 6.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Utility </span>Bladesong
+                </h1>
+                <p class="flavor">
+                    <i>Your whirling blade begins to sing through the air as you enter a state of total concentration.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b><br/> <b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Personal</b>
+                </p>
+                <p class="flavor">
+                    <b>Requirement</b>: You must be wielding a melee weapon in one hand and no weapon or shield in the other hand. The power's effect ends if you stop fulfilling this requirement.
+                </p>
+                <p class="powerstat">
+                    <b>Effect</b>: Until the end of your next turn, you gain a +2 power bonus to attack rolls and all defenses, and a +5 power bonus to damage rolls.<br/>&nbsp;&nbsp;&nbsp;&nbsp;Level 17: +10 power bonus to damage rolls.<br/>&nbsp;&nbsp;&nbsp;&nbsp;Level 27: +15 power bonus to damage rolls.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 70.
+                </p>
+            </div>
+            <!--
+            <div class="powerBlock">
+                <h1 class="encounterpower">
+                    <span class="level">Wizard Utility 2</span>Shield
+                </h1>
+                <p class="flavor">
+                    <i>You throw up your hand, and a shield of arcane energy springs into existence, protecting you against imminent attacks.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Encounter</b> &bull; <b>Arcane</b><br/> <b>Immediate Interrupt</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Personal</b>
+                </p>
+                <p class="powerstat">
+                    <b>Trigger</b>: You are hit by an attack.
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You gain a +4 power bonus to AC and Reflex until the end of your next turn.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 161, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 209, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 74, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+            -->
+
+        </section>
+        <section id="dailyPowers">
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 1</span>Slimy Transmutation
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Fort, polymorph
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Fort, polymorph
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>A billowing cloud of greenish fog surrounds your foe. When the fog dissipates, your enemy is gone, and an ugly toad stands in its place.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b>, <b>Implement</b>, <b>Polymorph</b>, <b>Transmutation</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Fortitude
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: The target turns into a Tiny toad (save ends).
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: The target turns into a Tiny toad until the end of its next turn.
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: As a toad, the target is dazed, and the only actions it can take are to move its speed or shift. All of the target's equipment transforms with it. If it takes damage from any source, this effect ends.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/244660000" target="_new">Red Box Starter Set</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 1</span>Fountain of Flame
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 3d8+<span class="intMod damage roll">9</span> fire damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 3d8+<span class="intMod damage roll">9</span> firedamage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You weave a fiery pillar that spins like a top. With each revolution, it douses your enemies with searing heat.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b>, <b>Evocation</b>, <b>Fire</b>, <b>Implement</b>, <b>Zone</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 1 within 10 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each enemy in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 3d8 + Intelligence modifier (+<span class="intMod damage">7</span>) fire damage.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage.
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The burst creates a zone that lasts until the end of the encounter. Any enemy that enters the zone or ends its turn there takes 5 fire damage. An enemy can take this damage only once per turn.
+                </p>
+                <br/>Update (2/17/2012)<br/>Changed in December 2011 updates.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 207.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 1</span>Phantom Chasm
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> psychic damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 2d6+<span class="intMod damage roll">9</span> psychic damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Your enemies shriek in terror as, at least in their mind's eye, a bottomless pit opens beneath their feet.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b>, <b>Illusion</b>, <b>Implement</b>, <b>Psychic</b>, <b>Zone</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 1 within 10 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each enemy in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Will
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d6 + Intelligence modifier (+<span class="intMod damage">7</span>) psychic damage, and the target falls prone. The target is immobilized until the end of its next turn.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage, and the target falls prone.
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The burst creates a zone that lasts until the end of the encounter. Any enemy that enters the zone falls prone.
+                </p>
+                <br/>Update (8/4/2010)<br/>Power updated to match Essentials data.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786949571" target="_new">Arcane Power</a>, page(s) 103, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 208.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock shrink">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 1</span>Rolling Thunder
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 3d6+<span class="intMod damage roll">9</span> thunder damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 3d6+<span class="intMod damage roll">9</span> thunder damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Elemental thunder creatures tumble through your foes and knock them about.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b>, <b>Conjuration</b>, <b>Evocation</b>, <b>Implement</b>, <b>Thunder</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One or two creatures
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 3d6 + Intelligence modifier (+<span class="intMod damage">7</span>) thunder damage, and you slide the primary target 3 squares.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage, and you slide the primary target 1 square.
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You conjure a thunderball in 1 square within each primary target's space. Each thunderball lasts until the end of your next turn. Each thunderball can make a secondary attack.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+                <h1 class="dailypower">
+                    <span class="level"></span>Rolling Thunder Secondary Attack
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 5 thunder damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 5 thunder damage
+                    </p>
+                </p>
+                <p class="powerstat">
+                    &nbsp;&nbsp;<b>Opportunity Action</b>: Melee 1
+                </p>
+                <p class="powerstat">
+                    &nbsp;&nbsp;<b>Trigger</b>: A creature moves out of the thunderball's square.
+                </p>
+                <p class="flavor">
+                    &nbsp;&nbsp;<b>Secondary Target</b>: The triggering creature
+                </p>
+                <p class="powerstat">
+                    &nbsp;&nbsp;<b>Secondary Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    &nbsp;&nbsp;<b>Hit</b>: 5 thunder damage.
+                </p>
+                <p class="powerstat">
+                    <b>Sustain Minor</b>: Each thunderball persists.
+                </p>
+                <br/>Update (10/18/2011)<br/>Updated in Wizard Schools article.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786949571" target="_new">Arcane Power</a>, page(s) 103.
+                </p>
+            </div>
+
+            <div class="powerBlock shrink">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 1</span>Acid Arrow
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 2d8+<span class="intMod damage roll">9</span> acid damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 2d8+<span class="intMod damage roll">9</span> acid damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You call out an arcane word and fire an arrow of green, glowing liquid that bursts against your foe and sends out a spray of sizzling acid.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Acid</b>, <b>Arcane</b>, <b>Evocation</b>, <b>Implement</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 20
+                </p>
+                <p class="powerstat">
+                    <b>Primary Target</b>: One creature
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d8 + Intelligence modifier (+<span class="intMod damage">7</span>) acid damage, and ongoing 5 acid damage (save ends).
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage, and ongoing 2 acid damage (save ends).
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Make the secondary attack.
+                </p>
+                <br/>
+                <h1 class="dailypower">
+                    <span class="level"></span>Acid Arrow Secondary Attack
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 1d8+<span class="intMod damage roll">9</span> acid damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d8+<span class="intMod damage roll">9</span> acid damage
+                    </p>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Acid</b>, <b>Arcane</b>, <b>Evocation</b>, <b>Implement</b><br/> <b>Free Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 1 centered on the primary target
+                </p>
+                <p class="flavor">
+                    <b>Secondary Target</b>: Each creature in the burst other than the primary target
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1d8 + Intelligence modifier (+<span class="intMod damage">7</span>) acid damage, and ongoing 5 acid damage (save ends).
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 1</span>Wizard's Fury
+                </h1>
+                <p class="flavor">
+                    <i>You begin to fling force bolts with a flick of your wrist.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b>, <b>Force</b>, <b>Implement</b><br/> <b>Minor Action</b>&nbsp;&nbsp;
+                </p>
+                <p class="flavor">
+                    <b>Prerequisite</b>: You must know the magic missile at-will wizard power.
+                </p>
+                <p class="powerstat">
+                    <b>Effect</b>: Until the end of the encounter, as a minor action once per turn, you can cast magic missile.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/374" target="_new">Dragon Magazine 374</a>, page(s) 22.
+                </p>
+            </div>
+
+            <div class="powerBlock shrink">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Utility 2</span>Feather Fall
+                </h1>
+                <p class="flavor">
+                    <i>You or a creature you choose falls gently, like a feather.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b><br/> <b>Free Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Trigger</b>: You fall, or a creature within 10 squares of you falls.
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: The triggering creature
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The target takes no damage from the fall, and consequently does not fall prone at the end of it.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 160, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 74, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock shrink">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Utility 6</span>Invisibility
+                </h1>
+                <p class="flavor">
+                    <i>A creature you choose vanishes from sight.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b>, <b>Illusion</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 5
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: You or one creature
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The target becomes invisible until the end of your next turn. If the target makes an attack, the invisibility ends.
+                </p>
+                <p class="powerstat">
+                    <b>Sustain Standard</b>: If the target is within 5 squares of you, the invisibility persists until the end of your next turn.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 162, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 214, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 76, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Utility 6</span>Refocus
+                </h1>
+                <p class="flavor">
+                    <i>You take a deep breath and picture the pages of your spellbook in your mind.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b><br/> <b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Personal</b>
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You can replace an unexpended wizard utility or daily power with another power of the same level that is in your spellbook. You gain a +1 power bonus to attack rolls with that power until the end of your next turn.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndmin/9780786952793" target="_new">PH Heroes: Series 2</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock shrink">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Utility 10</span>Circle of Protection
+                </h1>
+                <p class="flavor">
+                    <i>You weave a circle of protective runes that guard your allies and can draw power from your familiar for greater strength.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b>, <b>Implement</b>, <b>Zone</b><br/> <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 1 within 20 squares
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The burst becomes a zone of protection until the end of your next turn. You and allies gain resist to all damage equal to your Intelligence modifier while in the zone. Enemies must spend 2 extra squares of movement to enter the zone. You make an attack.
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each enemy in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Fortitude
+                </p>
+                <p class="flavor">
+                    &nbsp;&nbsp;<b>Arcane Familiar</b>: Add a +4 power bonus to the attack roll if your familiar is in the burst.
+                </p>
+                <p class="powerstat">
+                    <b>Hit</b>: Push the target from the burst's origin square to a space outside the zone. You cannot push the target when doing so causes the target to take damage or make a saving throw.
+                </p>
+                <p class="flavor">
+                    <b>Sustain Minor</b>: The effect persists.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/382" target="_new">Dragon Magazine 382</a>, page(s) 27.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Utility 10</span>Mass Resistance
+                </h1>
+                <p class="flavor">
+                    <i>You wrap arcane strands about yourself and all your allies, insulating all against a particular type of damage.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b><br/> <b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Close</b> burst 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: You and each ally in the burst
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Choose acid, cold, fire, force, lightning, necrotic, poison, psychic, radiant, or thunder. Until the end of the encounter, each target gains resistance to that damage type equal to 5 + your Intelligence modifier (+<span class="intMod">7</span>).
+                </p>
+                <br/>Update (8/4/2010)<br/>Power updated to match Essentials data.<br/><br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786949571" target="_new">Arcane Power</a>, page(s) 107, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 219.
+                </p>
+            </div>
+
+            <!--
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Utility 10</span>Blur
+                </h1>
+                <p class="flavor">
+                    <i>You cloak yourself with a shimmering aura, making your outline almost impossible to discern.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> <b>Arcane</b>, <b>Illusion</b><br/>
+                    <b>Minor Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Personal</b>
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Until the end of the encounter, you gain a +2 power bonus to all defenses, and you are invisible to enemies 5 squares or more away from you.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 163, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 218, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 77, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 5</span>Fire Mantle
+                </h1>
+                <p class="flavor">
+                    <i>You wreathe yourself or an ally in protective fire, which punishes nearby foes.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Arcane</b>, <b>Aura</b>, <b>Evocation</b>, <b>Fire</b><br/>
+                    <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: You or one ally
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You activate an aura 1 on the target that lasts until the end of the encounter or until the target dismisses it as a minor action. When any enemy enters the aura or ends its turn there, that enemy takes fire damage equal to your Intelligence modifier <span class="intMod">(+6)</span>. An enemy can take this damage only once per turn.<br/>&nbsp;&nbsp;&nbsp;&nbsp;In addition, until the aura ends, the target has partial concealment and resist 10 fire.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/356170000" target="_new">Heroes of the Elemental Chaos</a>, page(s) 113.
+                </p>
+            </div>
+            -->
+                
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 5</span>Fireball
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 4d6+<span class="intMod damage roll">9</span> fire damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 4d6+<span class="intMod damage roll">9</span> fire damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>A globe of orange flame coalesces in your hand. You hurl it at your enemies, and it explodes on impact.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> <b>Arcane</b>, <b>Evocation</b>, <b>Fire</b>, <b>Implement</b><br/>
+                    <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 3 within 20 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each creature in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 4d6 + Intelligence modifier (+<span class="intMod damage">7</span>) fire damage.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 161, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 212, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+            
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 5</span>Grasp of the Grave
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> necrotic damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 1d10+<span class="intMod damage roll">9</span> necrotic damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Skeletal hands burst from the earth and ghostly claws swirl from the air to snatch at your foes.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> <b>Arcane</b>, <b>Implement</b>, <b>Necromancy</b>, <b>Necrotic</b>, <b>Zone</b><br/>
+                    <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 2 within 20 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each enemy in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 1d10 + Intelligence modifier (+<span class="intMod damage">7</span>) necrotic damage, and the target is dazed until the end of your next turn.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: 1d10 + Intelligence modifier (+<span class="intMod damage">7</span>) necrotic damage.
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The burst creates a zone that lasts until the end of the encounter. An enemy that enters the zone or that starts its turn in the zone takes 5 necrotic damage. An enemy can take this damage only once per turn.
+                </p>
+                <br/>Update (2/17/2012)<br/>Changed in December 2011 updates.<br/>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/372" target="_new">Dragon Magazine 372</a>, page(s) 24.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 5</span>Scattering Shock
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Fort, slide 2
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Fort, slide 2
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Mystical forces draw your foes together as they are struck by a blast of lightning.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> <b>Arcane</b>, <b>Evocation</b>, <b>Implement</b>, <b>Lightning</b><br/>
+                    <b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 3 within 10 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each creature in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Fortitude
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: You slide the target 2 squares.
+                </p>
+                <p class="powerstat">
+                    <b>Effect</b>: Make a secondary attack.
+                </p>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Reflex, 2d8+<span class="intMod damage roll">9</span> lightning damage
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Reflex, 2d8+<span class="intMod damage roll">9</span> lightning damage
+                    </p>
+                </p>
+                <p class="flavor">
+                    &nbsp;&nbsp;<b>Secondary Target</b>: One enemy in the burst and each creature adjacent to that enemy
+                </p>
+                <p class="powerstat">
+                    &nbsp;&nbsp;<b>Secondary Attack</b>: Intelligence vs. Reflex
+                </p>
+                <p class="flavor">
+                    &nbsp;&nbsp;<b>Hit</b>: 2d8 + Intelligence modifier (+<span class="intMod damage">7</span>) lightning damage.
+                </p>
+                <p class="powerstat">
+                    &nbsp;&nbsp;<b>Miss</b>: Half damage.
+                </p>
+                <br/>Update (10/18/2011)<br/>Updated in Wizard Schools article.<br/>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/383" target="_new">Dragon Magazine 383</a>, page(s) 53.
+                </p>
+                <p class="additionalEffects">
+                    Additional Effects <br/> +3 to damage rolls if you hit two or more creatures - Destructive Wizardry
+                </p>
+            </div>
+            <!--
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 9</span>Phantasmal Killer
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Will
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Will
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Your enemy wails as its greatest fears manifest within its mind.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> <b>Arcane</b>, <b>Fear</b>, <b>Illusion</b>
+                    <br/>
+                    <b>Minor Action</b> <b>Ranged</b> 10
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: One creature
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The target becomes haunted by an illusion of its deepest fears (save ends). Until the illusion ends, the target can't make opportunity attacks and you can use the secondary power against it. Whenever the target is either hit by or takes damage from any effect other than the secondary power, it can make another saving throw to end the illusion.
+                </p>
+                <br/>
+                <h1 class="dailypower">
+                    <span class="level"></span>Phantasmal Killer Secondary Power
+                </h1>
+                <p class="powerstat">
+                    <b>Daily</b> <b>Arcane</b>, <b>Illusion</b>, <b>Implement</b>, 
+                    <b>Psychic</b>
+                    <br/>
+                    <b>Standard Action</b> <b>Ranged</b> 20
+                </p>
+                <p class="flavor">
+                    <b>Requirement</b>: The power Phantasmal Killer must be active in order to use this power.
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Will. The attack roll takes no penalty from concealment, if any.
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 3d10 + Intelligence modifier (+<span class="intMod damage">7</span>) psychic damage.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 217.
+                </p>
+            </div>
+            -->
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 9</span>Taunting Phantoms
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Will
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Will
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Your foes are beset by tormenting images that dart among them, daring them to attack and driving them to lash out with reckless abandon.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b>&bull; <b>Arcane</b>, <b>Illusion</b>, <b>Implement</b><br/><b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 1 within 10 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each creature in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Will
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: The target makes a melee basic attack roll against a creature of your choice, including itself.
+                </p>
+                <p class="powerstat">
+                    <b>Effect</b>: The target takes 5 damage each time it misses with a melee attack (save ends).
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786949571" target="_new">Arcane Power</a>, page(s) 107.
+                </p>
+            </div>
+
+            <div class="powerBlock">       
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 9</span>Symphony of the Dark Court
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Will
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Will
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>Your magic unleashes an echoing song of the Feywild, corrupting your enemies in body and mind even as it grants your allies a burst of battle frenzy.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> <b>Arcane</b>, <b>Enchantment</b>, <b>Implement</b>
+                    <br/>
+                    <b>Standard Action</b> <b>Area</b> burst 2 within 20 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each enemy in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Will
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: The target is dazed and immobilized (save ends both).
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: The target is dazed until the end of its next turn.
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: Each ally in the burst can shift up to 4 squares as a free action and gains a +4 power bonus to damage rolls until the end of your next turn.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 217.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Attack 9</span>Circle of Death
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Fort
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Fort
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You wave your hand and snuff out the lives of your enemies.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b>&bull; <b>Arcane</b>, <b>Implement</b>, <b>Necromancy</b>, <b>Necrotic</b>, <b>Shadow</b><br/><b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Area</b> burst 2 within 10 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each creature in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Fortitude
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: The target takes necrotic damage equal to your level. It is also dazed, slowed, and weakened (save ends all).
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage, and the target is slowed until the end of your next turn.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/280880000" target="_new">Heroes of Shadow</a>, page(s) 104.
+                </p>
+            </div>
+
+            <!--
+            <div class="powerBlock">
+                <h1 class="dailypower"><span class="level">
+                    Wizard Attack 9</span>Hex of Madness
+                </h1>
+                <p class="powerstat">
+                    <p class="implement orb_of_enduring_magic_3">
+                        <b>Orb of Enduring Magic +3</b>: +<span class="intModLevel toHit">17</span> vs. Will
+                    </p>
+                    <p class="implement supremely_vicious_bastard_sword_2">
+                        <b>Supremely Vicious Bastard Sword +2</b>: +<span class="intModLevel toHit">16</span> vs. Will
+                    </p>
+                </p>
+                <p class="flavor">
+                    <i>You incite a mob of your enemies, turning them into a frenzy of raving madness.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> <b>Arcane</b>, <b>Enchantment</b>, <b>Implement</b>, 
+                    <b>Psychic</b>, <b>Zone</b>
+                    <br/>
+                    <b>Standard Action</b> <b>Area</b> burst 1 within 10 squares
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: Each enemy in the burst
+                </p>
+                <p class="powerstat">
+                    <b>Attack</b>: Intelligence vs. Will
+                </p>
+                <p class="flavor">
+                    <b>Hit</b>: 2d12 + Intelligence modifier (+<span class="intMod damage">7</span>) psychic damage.
+                </p>
+                <p class="powerstat">
+                    <b>Miss</b>: Half damage.
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The burst creates a zone that lasts until the end of your next turn. Each enemy that ends its turn in the zone takes psychic damage equal to 2 + your Intelligence modifier (+<span class="intMod damage">7</span>).
+                </p>
+                <p class="powerstat">
+                    <b>Sustain Minor</b>: The zone persists until the end of your next turn.
+                </p>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317310000" target="_new">Heroes of the Feywild</a>, page(s) 96.
+                </p>
+            </div>
+            -->
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Utility 16</span>Fly
+                </h1>
+                <p class="flavor">
+                    <i>You leap into the air and are borne aloft on wings of magic.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b>&bull; <b>Arcane</b><br/><b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Personal</b> 
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You gain a fly speed of 8 until the end of your next turn. When the fly speed ends, you float to the ground without taking falling damage.
+                </p>
+                <p class="powerstat">
+                    <b>Sustain Minor</b>: The fly speed persists until the end of your next turn.
+                </p>
+                <br/>Update (1/24/2012)
+                <br/>Updated in Class Compendium.
+                <br/>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 165, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 225, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 79, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Wizard Utility 16</span>Stoneskin
+                </h1>
+                <p class="flavor">
+                    <i>With an arcane word and a sprinkle of diamond dust, you imbue yourself or an ally with skin as hard as granite.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b>&bull; <b>Arcane</b>, <b>Transmutation</b><br/><b>Standard Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Melee</b> touch
+                </p>
+                <p class="powerstat">
+                    <b>Target</b>: You or one ally
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: The target gains resist 10 to all damage until the end of the encounter.
+                </p>
+                <br/>Update (1/24/2012)<br/>Updated in Class Compendium.<br/><br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 166, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/317290000" target="_new">Neverwinter Campaign Setting</a>, page(s) 79, <a href="http://www.wizards.com/dnd" target="_new">Class Compendium</a>.
+                </p>
+            </div>
+
+            <!--
+            <div class="powerBlock">
+                <h1 class="dailypower">
+                    <span class="level">Shadow Dancer Attack 20</span>Trail of Shadows
+                </h1>
+                <p class="flavor">
+                    <i>You streak through your foes as a blur of shadow, leaving a field of bitter darkness behind you that freezes your foes to the marrow.</i>
+                </p>
+                <p class="powerstat">
+                    <b>Daily</b> &bull; <b>Cold</b>, <b>Shadow</b>, <b>Zone</b><br/><b>Move Action</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Personal</b> 
+                </p>
+                <p class="flavor">
+                    <b>Effect</b>: You shift up to your speed. The squares you enter during this movement become a zone that lasts until the end of the encounter. Any enemy in the zone or adjacent to it when it is created takes 15 cold damage. The zone is totally obscured to your enemies. Any enemy that ends its turn in the zone or adjacent to it takes 10 cold damage, and that enemy is slowed (save ends).
+                </p>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/280880000" target="_new">Heroes of Shadow</a>, page(s) 148.
+                </p>
+            </div>
+            -->
+
+            </div>
+
+        </section>
+        <section id="items">
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 5 Uncommon</span><span>Bag of Holding</span>
+                </h1>
+                <p class="miflavor">This item appears to be a simple sack of brown canvas.</p>
+                <p class="mistat">
+                    <b>Wondrous Item</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1,000 gp
+                </p>
+                <h2 class="mihead">Property</h2>
+                <p class="mistat">
+                    This bag can hold up to 200 pounds in weight or 20 cubic feet in volume, but it always weighs only 1 pound.<br/>&nbsp;&nbsp;&nbsp;&nbsp;Drawing an item from the bag is a minor action.<br/>
+                </p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 253, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/244640000" target="_new">Dungeon Master's Kit</a>, page(s) 269.
+                </p>
+            </div>
+
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 9 Common</span>Boots of Striding
+                </h1>
+                <p class="miflavor">These enchanted boots increase your speed if you wear light armor or no armor.</p>
+                <p class="mistat">
+                    <b>Feet Slot</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4,200 gp
+                </p>
+                <h2 class="mihead">Property</h2>
+                <p class="mistat">
+                    You gain a +1 item bonus to speed when wearing light or no armor.<br/>
+                </p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 246, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 349, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247510000" target="_new">Heroes of the Forgotten Kingdoms</a>, page(s) 350.
+                </p>
+            </div>
+
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 9 Uncommon</span>Darkskull
+                </h1>
+                <p class="miflavor">Darkness swells around this menacing onyx skull.</p>
+                <p class="mistat">
+                    <b>Wondrous Item</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4,200 gp
+                </p>
+                <h2 class="mihead">
+                    Power (Illusion) &bull; Encounter
+                </h2>
+                <p class="mistat indent">As a minor action, you cause all active light sources within 10 squares of you to be suppressed until the end of the encounter. Light sources activated after you use this power function normally.</p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217837200" target="_new">Adventurer's Vault</a>, page(s) 169.
+                </p>
+            </div>
+
+            <div class="itemBlock shrink">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 3 Uncommon</span>Orb of Nimble Thoughts +1
+                </h1>
+                <p class="miflavor">This scarlet crystal lets you move across the battlefield at the speed of thought to avoid your foes' attacks.</p>
+                <table class="magicitem">
+                    <tbody>
+                        <tr>
+                            <td class="mic1">Lvl 3</td>
+                            <td class="mic2">+1</td>
+                            <td class="mic3">680 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 18</td>
+                            <td class="mic2">+4</td>
+                            <td class="mic3">85,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 8</td>
+                            <td class="mic2">+2</td>
+                            <td class="mic3">3,400 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 23</td>
+                            <td class="mic2">+5</td>
+                            <td class="mic3">425,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 13</td>
+                            <td class="mic2">+3</td>
+                            <td class="mic3">17,000 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 28</td>
+                            <td class="mic2">+6</td>
+                            <td class="mic3">2,125,000 gp</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mistat">
+                    <b>Implement: </b>Orb
+                </p>
+                <p class="mistat">
+                    <b>Enhancement Bonus:</b> attack rolls and damage rolls
+                </p>
+                <p class="mistat indent">
+                    <b>Critical:</b> +1d6 psychic damage per plus
+                </p>
+                <h2 class="mihead">Property</h2>
+                <p class="mistat">
+                    You gain an item bonus to initiative checks equal to the enhancement bonus of this orb.<br/>
+                </p>
+                <h2 class="mihead">
+                    Power (Augmentable) &bull; Encounter (Move Action)
+                </h2>
+                <p class="mistat indent">You shift a number of squares equal to your Intelligence modifier.</p>
+                <p class="mistat indent1">
+                    <b>Augment 1:</b> You regain the use of this power.
+                </p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndlist&amp;brand=All&amp;year=All&amp;type=CoreGameProducts" target="_new">Player's Handbook 3</a>, page(s) 207.
+                </p>
+            </div>
+
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 8 Common</span>Belt of Vim
+                </h1>
+                <p class="miflavor">You feel hale and hearty while wearing this wide belt.</p>
+                <table class="magicitem">
+                    <tbody>
+                        <tr>
+                            <td class="mic1">Lvl 8</td>
+                            <td class="mic2"></td>
+                            <td class="mic3">3,400 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 28</td>
+                            <td class="mic2"></td>
+                            <td class="mic3">2,125,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 18</td>
+                            <td class="mic2"></td>
+                            <td class="mic3">85,000 gp</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mistat">
+                    <b>Waist Slot</b>
+                </p>
+                <h2 class="mihead">Property</h2>
+                <p class="mistat">
+                    Gain a +1 bonus to Fortitude defense.<br/>&nbsp;&nbsp;&nbsp;&nbsp;<i>Level 18:</i> Gain a +2 bonus to Fortitude defense<br/>&nbsp;&nbsp;&nbsp;&nbsp;<i>Level 28:</i> Gain a +3 bonus to Fortitude defense
+                </p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217837200" target="_new">Adventurer's Vault</a>, page(s) 164.
+                </p>
+            </div>
+
+            <div class="itemBlock shrink">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 5 Rare</span>Gloaming Armor
+                </h1>
+                <p class="miflavor">You fade from view even as the noise of your footfalls recedes.</p>
+                <table class="magicitem">
+                    <tbody>
+                        <tr>
+                            <td class="mic1">Lvl 5</td>
+                            <td class="mic2">+1</td>
+                            <td class="mic3">1,000 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 20</td>
+                            <td class="mic2">+4</td>
+                            <td class="mic3">125,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 10</td>
+                            <td class="mic2">+2</td>
+                            <td class="mic3">5,000 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 25</td>
+                            <td class="mic2">+5</td>
+                            <td class="mic3">625,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 15</td>
+                            <td class="mic2">+3</td>
+                            <td class="mic3">25,000 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 30</td>
+                            <td class="mic2">+6</td>
+                            <td class="mic3">3,125,000 gp</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mistat">
+                    <b>Armor: </b>Cloth, leather or hide
+                </p>
+                <p class="mistat">
+                    <b>Enhancement Bonus:</b> AC
+                </p>
+                <h2 class="mihead">Property</h2>
+                <p class="mistat">
+                    You gain an item bonus to Stealth checks equal to the armor's enhancement bonus.<br/>
+                </p>
+                <h2 class="mihead">
+                    Utility Power (Illusion) &bull; Encounter (Standard Action)
+                </h2>
+                <p class="mistat indent">
+                    <i>Effect:</i> You become invisible until you attack or until the end of the encounter. You can end this effect as a minor action.
+                </p>
+                <p class="mistat indent1">
+                    <i>Level 15, 20, 25, or 30:</i> While you are invisible, allies within 5 squares of you gain an item bonus to Stealth checks equal to the armor's enhancement bonus.
+                </p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/28069000" target="_new">Mordenkainen's Magnificent Emporium</a>, page(s) 15.
+                </p>
+            </div>
+
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 7 Uncommon</span>Pearl of Power
+                </h1>
+                <p class="miflavor">This pearl grows warm to the touch each time you attack, ready to overcome your enemies' best attempts to thwart you.</p>
+                <table class="magicitem">
+                    <tbody>
+                        <tr>
+                            <td class="mic1">Lvl 7</td>
+                            <td class="mic2"></td>
+                            <td class="mic3">2,600 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 27</td>
+                            <td class="mic2"></td>
+                            <td class="mic3">1,625,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 17</td>
+                            <td class="mic2"></td>
+                            <td class="mic3">65,000 gp</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mistat">
+                    <b>Wondrous Item</b>
+                </p>
+                <h2 class="mihead">
+                    Utility Power &bull; Daily (Free Action)
+                </h2>
+                <p class="mistat indent">
+                    <i>Trigger:</i> You miss all targets with an encounter attack power of level 3 or lower.
+                </p>
+                <p class="mistat indent1">
+                    <i>Level 17:</i> You can use the pearl with an encounter attack power of level 13 or lower.
+                </p>
+                <p class="mistat indent1">
+                    <i>Level 27:</i> You can use the pearl with an encounter attack power of level 23 or lower.
+                </p>
+                <p class="mistat indent">
+                    <i>Effect:</i> You do not expend the use of the power.
+                </p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/28069000" target="_new">Mordenkainen's Magnificent Emporium</a>, page(s) 88.
+                </p>
+            </div>
+
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 2+ Uncommon</span>Amulet of Mental Resolve +1
+                </h1>
+                <p class="miflavor">Your mind is guarded when wearing this cold iron talisman.</p>
+                <table class="magicitem">
+                    <tbody>
+                        <tr>
+                            <td class="mic1">Lvl 2</td>
+                            <td class="mic2">+1</td>
+                            <td class="mic3">520 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 17</td>
+                            <td class="mic2">+4</td>
+                            <td class="mic3">65,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 7</td>
+                            <td class="mic2">+2</td>
+                            <td class="mic3">2,600 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 22</td>
+                            <td class="mic2">+5</td>
+                            <td class="mic3">325,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 12</td>
+                            <td class="mic2">+3</td>
+                            <td class="mic3">13,000 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 27</td>
+                            <td class="mic2">+6</td>
+                            <td class="mic3">1,625,000 gp</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mistat">
+                    <b>Neck Slot</b>
+                </p>
+                <p class="mistat">
+                    <b>Enhancement Bonus:</b> Fortitude, Reflex, and Will
+                </p>
+                <h2 class="mihead">Property</h2>
+                <p class="mistat">
+                    Gain a +2 item bonus to saving throws against effects with the charm, illusion, or sleep keyword.<br/>
+                </p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217837200" target="_new">Adventurer's Vault</a>, page(s) 148.
+                </p>
+            </div>
+
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 5 Common</span>Potion of Healing
+                </h1>
+                <p class="miflavor">This simple potion draws on the body's natural healing ability to cure your wounds.</p>
+                <p class="mistat">
+                    <b>Consumable: </b>Potion&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50 gp
+                </p>
+                <h2 class="mihead">
+                    Power (Healing) &bull; Consumable (Minor Action)
+                </h2>
+                <p class="mistat indent">Drink this potion and spend a healing surge. Instead of the hit points you would normally regain, you regain 10 hit points.</p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 255, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247520000" target="_new">Heroes of the Fallen Lands</a>, page(s) 352, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/247510000" target="_new">Heroes of the Forgotten Kingdoms</a>, page(s) 352.
+                </p>
+            </div>
+
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 7 Common</span><span>Supremely Vicious Bastard Sword +2</span>
+                </h1>
+                <p class="miflavor">Pure lethality</p>
+                <table class="magicitem">
+                    <tbody>
+                        <tr>
+                            <td class="mic1">Lvl 2</td>
+                            <td class="mic2">+1</td>
+                            <td class="mic3">520 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 17</td>
+                            <td class="mic2">+4</td>
+                            <td class="mic3">65,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 7</td>
+                            <td class="mic2">+2</td>
+                            <td class="mic3">2,600 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 22</td>
+                            <td class="mic2">+5</td>
+                            <td class="mic3">325,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 12</td>
+                            <td class="mic2">+3</td>
+                            <td class="mic3">13,000 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 27</td>
+                            <td class="mic2">+6</td>
+                            <td class="mic3">1,625,000 gp</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mistat">
+                    <b>Weapon: </b>Any
+                </p>
+                <p class="mistat">
+                    <b>Enhancement Bonus:</b> attack rolls and damage rolls
+                </p>
+                <p class="mistat indent">
+                    <b>Critical:</b> +1d8 damage per plus, and you can choose to reroll any or all of your critical damage dice, but you must take the second result of each die.
+                </p>
+                <br/> <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/241777200" target="_new">Adventurer's Vault 2</a>, page(s) 24.
+                </p>
+            </div>
+
+			<div class="itemBlock">
+				<h1 class="mihead">
+					<span class="milevel" id="headerlevel">Level 9+ Uncommon</span><span>Githyanki Silver Weapon +2</span>
+				</h1>
+				<p class="miflavor">The rune-engraved weapon assaults a creature's mind and has the power to banish it to another plane.</p>
+				<table class="magicitem">
+					<tbody>
+						<tr>
+							<td class="mic1">Lvl 9</td>
+							<td class="mic2">+2</td>
+							<td class="mic3">4,200 gp</td>
+							<td class="mic4"> </td>
+							<td class="mic1">Lvl 24</td>
+							<td class="mic2">+5</td>
+							<td class="mic3">525,000 gp</td>
+						</tr>
+						<tr>
+							<td class="mic1">Lvl 14</td>
+							<td class="mic2">+3</td>
+							<td class="mic3">21,000 gp</td>
+							<td class="mic4"> </td>
+							<td class="mic1">Lvl 29</td>
+							<td class="mic2">+6</td>
+							<td class="mic3">2,625,000 gp</td>
+						</tr>
+						<tr>
+							<td class="mic1">Lvl 19</td>
+							<td class="mic2">+4</td>
+							<td class="mic3">105,000 gp</td>
+							<td></td><td></td><td></td><td></td>
+						</tr>
+					</tbody>
+				</table>
+				<p class="mistat">
+					<b>Weapon: </b>Heavy blade
+				</p>
+				<p class="mistat">
+					<b>Enhancement Bonus:</b> attack rolls and damage rolls
+				</p>
+				<p class="mistat indent">
+					<b>Critical:</b> +1d8 psychic damage per plus
+				</p>
+				<h2 class="mihead">
+					Power (Psychic) &bull;  (Free Action)
+				</h2>
+				<p class="mistat indent">
+					All damage dealt by this weapon is psychic damage. Another free action returns the damage to normal.
+				</p>
+				<h2 class="mihead">
+					Power (Teleportation) &bull; Daily (Free Action)
+				</h2>
+				<p class="mistat indent">
+					Use this power when you hit with this weapon. The target is banished to a demiplane (save ends). It disappears from sight, cannot take actions, and cannot be targeted. On a save, the target reappears in the space it last occupied. If that space is occupied, the target returns to the nearest unoccupied space of its choosing.
+				</p>
+				<br/>
+				<br/>
+				<p class="publishedIn">
+					Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/218937200" target="_new">Manual of the Planes</a>, page(s) 153.
+				</p>
+			</div>
+
+            <div class="itemBlock">
+                <h1 class="mihead">
+                    <span class="milevel" id="headerlevel">Level 7+ Uncommon</span><span>Orb of Enduring Magic +3</span>
+                </h1>
+                <p class="miflavor">Carved from iron to resemble a clenched gauntlet, this orb allows you to extend your magical abilities while absorbing your foes' attacks.</p>
+                <table class="magicitem">
+                    <tbody>
+                        <tr>
+                            <td class="mic1">Lvl 7</td>
+                            <td class="mic2">+2</td>
+                            <td class="mic3">2,600 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 22</td>
+                            <td class="mic2">+5</td>
+                            <td class="mic3">325,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 12</td>
+                            <td class="mic2">+3</td>
+                            <td class="mic3">13,000 gp</td>
+                            <td class="mic4"></td>
+                            <td class="mic1">Lvl 27</td>
+                            <td class="mic2">+6</td>
+                            <td class="mic3">1,625,000 gp</td>
+                        </tr>
+                        <tr>
+                            <td class="mic1">Lvl 17</td>
+                            <td class="mic2">+4</td>
+                            <td class="mic3">65,000 gp</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mistat">
+                    <b>Implement: </b>Orb
+                </p>
+                <p class="mistat">
+                    <b>Enhancement Bonus:</b> Attack rolls and damage rolls
+                </p>
+                <p class="mistat indent">
+                    <b>Critical:</b> +1d6 damage per plus
+                </p>
+                <h2 class="mihead">
+                    Utility Power &bull; Encounter (Minor Action)
+                </h2>
+                <p class="mistat indent">
+                    <i>Effect:</i> You sustain all of your active powers that can be sustained with a minor action. In addition, you gain temporary hit points equal to 2 + the orb's enhancement bonus.
+                </p>
+                <br/>
+                <br/>
+                <p class="publishedIn">
+                    Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/28069000" target="_new">Mordenkainen's Magnificent Emporium</a>, page(s) 45.
+                </p>
+            </div>
+
+            <div class="itemBlock">
+				<h1 class="mihead">
+					Helm of Languages<span class="milevel" id="headerlevel">Level 10 Common</span>
+				</h1>
+				<p class="miflavor">
+					When you slip on this helm, the haze of garbled voices around you quickly gives way to perfect understanding.
+				</p>
+				<p class="mistat">
+					<b>Head Slot</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5,000 gp
+				</p>
+				<h2 class="mihead">
+					Property
+				</h2>
+				<p class="mistat">
+					You can speak and understand any spoken language (the helm does not grant literacy or the ability to speak Abyssal or Supernal).
+					<br/>
+				</p>
+				<br/>
+				<br/>
+				<p class="publishedIn">
+					Published in <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/28069000" target="_new">Mordenkainen's Magnificent Emporium</a>, page(s) 68.
+				</p>
+		    </div>
+
+        </section>
+    </section>
+
+</body>
+</html>

@@ -19,7 +19,7 @@
                 this.__log("constructor", [ creature ? creature.name : "undefined", count, "currentState" ]);
 
                 if (creature instanceof Creature) {
-                    creature = creature.raw();
+                    creature = jQuery.extend({}, creature); // creature.raw();
                     creature.id = 0;
                 }
 
@@ -60,6 +60,7 @@
                     for (i = 0; currentState.effects && i < currentState.effects.length; i++) {
                         this.effects.push(new Effect(jQuery.extend({}, currentState.effects[ i ], { target: this })));
                     }
+                    this.imposedEffects = [];
                 }
             }
 
@@ -325,7 +326,7 @@
                 }
                 this.hp.current -= damage;
                 if (this.hp.current < 0 && !this.hasCondition("dying")) {
-                    this.effects.push(new Effect({ name: "Dying", round: this.history._round, target: this }));
+                    this.addEffect(new Effect({ name: "Dying", round: this.history._round, target: this }));
                     msg += "; " + this.name + " falls unconscious and is dying";
                 }
                 //        this.addDamageIndicator(damage, type);
@@ -342,7 +343,7 @@
             /**
              * Adds an Effect to the Actor
              * @param effect {Effect} The Effect to add
-             * @param attacker {Actor} The Actor imposing the Effect
+             * @param [attacker] {Actor} The Actor imposing the Effect
              * @returns {Effect} The added Effect
              */
             Actor.prototype.addEffect = function(effect, attacker) {
@@ -356,8 +357,18 @@
                         }
                     }
                 }
-                effect = new Effect(jQuery.extend({}, effect.raw ? effect.raw() : effect, { target: this, attacker: attacker, round: this.history._round }));
-                attacker.imposedEffects.push(effect);
+                if (typeof effect.call === "function") {
+                    effect = effect.call(this, attacker, this.history._round);
+                    if (!effect) {
+                        return null;
+                    }
+                }
+                else {
+                    effect = new Effect(jQuery.extend({}, effect.raw ? effect.raw() : effect, { target: this, attacker: attacker, round: this.history._round }));
+                }
+                if (attacker && attacker.imposedEffects) {
+                    attacker.imposedEffects.push(effect);
+                }
                 this.effects.push(effect);
                 if (effect.hasOwnProperty("duration") && (effect.duration === "startAttackerNext" || effect.duration === "endAttackerNext")) {
                     effect.isNextTurn = false;
@@ -767,19 +778,33 @@
              * @private
              */
             Actor.prototype._attackTarget = function(attack, item, combatAdvantage, target, toHit, damage) {
-                var toHitTarget, targetDamage, i, targetDefense, msg, result, entry;
+                var toHitTarget, targetDamage, i, targetDefense, msg, attackerMsg, result, entry;
+
+                function concatMsg(suffix) {
+                    msg += suffix;
+                    attackerMsg += suffix;
+                }
+
                 this.__log("_attackTarget", [ attack.name, item ? item.name : "undefined", combatAdvantage, target.name, toHit, damage ]);
 
                 targetDefense = null;
                 result = { hit: false, damage: [] };
-
                 toHitTarget = {
                     roll: toHit.roll + (toHit.conditional.mod ? toHit.conditional.mod : 0),
                     conditional: jQuery.extend({ mod: 0, breakdown: "" }, toHit.conditional)
                 };
                 targetDamage = {
                     amount: damage.amount,
-                    effects: attack.effects ? attack.effects.slice(0) : [],
+                    effects: (function actor_attackTarget_targetDamage_effects() {
+                        var effects = [];
+                        if (attack.effects) {
+                            effects = attack.effects.slice(0);
+                        }
+                        if (item && item.effects) {
+                            effects = effects.concat(item.effects);
+                        }
+                        return effects;
+                    })(),
                     missAmount: damage.missAmount,
                     missEffects: attack.miss && attack.miss.effects ? attack.miss.effects.slice(0) : [],
                     conditional: jQuery.extend({ mod: 0, total: 0, breakdown: "" }, damage.conditional)
@@ -790,51 +815,62 @@
                 // Calculate hit (for this target)
                 if (!toHit.isAutomaticHit && !toHit.isFumble && !toHit.isCrit) {
                     toHitTarget.roll += (combatAdvantage || target.grantsCombatAdvantage() ? 2 : 0);
-                    targetDefense = target.defenses[ attack.defense.toLowerCase() ] + target.defenseModifier(attack.isMelee);
+                    targetDefense = target.getDefense(attack.defense.toLowerCase(), attack.isMelee);
                 }
 
                 if (!toHit.isFumble && (toHit.isAutomaticHit || toHit.isCrit || toHitTarget.roll >= targetDefense)) {
                     // Hit
                     result.hit = true;
-                    msg = "Hit by " + this.name + "'s " + attack.anchor(toHitTarget.conditional) + " for ";
+                    (function actor_attackTarget_hitAnchor() {
+                        var anchor = attack.anchor(toHitTarget.conditional);
+                        msg = "Hit by " + this.name + "'s " + anchor + " for ";
+                        attackerMsg = "Hit " + target.name + " with " + anchor + " for ";
+                    }.bind(this))();
                     if (isArray(attack.damage)) {
                         for (i = 0; i < attack.damage.length; i++) {
                             if (i !== 0) {
                                 msg += " and ";
                             }
-                            msg += this._applyDamageAndEffects(target, item, attack.damage[ i ], i === attack.damage.length - 1 ? targetDamage.effects : null, targetDamage.conditional, i === 0, result);
+                            concatMsg(this._applyDamageAndEffects(target, item, attack.damage[ i ], i === attack.damage.length - 1 ? targetDamage.effects : null, targetDamage.conditional, i === 0, result));
                         }
                     }
                     else {
-                        msg += this._applyDamageAndEffects(target, item, attack.damage, targetDamage.effects, targetDamage.conditional, true, result);
+                        concatMsg(this._applyDamageAndEffects(target, item, attack.damage, targetDamage.effects, targetDamage.conditional, true, result));
                     }
                 }
                 else {
                     // Miss
-                    msg = "Missed by " + this.name + "'s " + attack.anchor(toHit.conditional);
+                    (function actor_attackTarget_missAnchor() {
+                        var anchor = attack.anchor(toHit.conditional);
+                        msg = "Missed by " + this.name + "'s " + anchor;
+                        attackerMsg = "Missed " + target.name + " with " + anchor + " for ";
+                    }.bind(this))();
                     if (targetDamage.missAmount || attack.hasOwnProperty("miss")) {
                         msg += " but takes ";
+                        attackerMsg += " but does ";
                         if (isArray(attack.miss.damage)) {
                             for (i = 0; i < attack.miss.damage.length; i++) {
                                 if (i !== 0) {
-                                    msg += " and ";
+                                    concatMsg(" and ");
                                 }
-                                msg += this._applyDamageAndEffects(target, item, attack.miss.damage[ i ], i === attack.miss.damage.length - 1 ? targetDamage.missEffects : null, targetDamage.conditional, i === 0, result);
+                                concatMsg(this._applyDamageAndEffects(target, item, attack.miss.damage[ i ], i === attack.miss.damage.length - 1 ? targetDamage.missEffects : null, targetDamage.conditional, i === 0, result));
                             }
                         }
                         else {
-                            msg += this._applyDamageAndEffects(target, item, attack.miss.damage, targetDamage.missEffects, targetDamage.conditional, true, result);
+                            concatMsg(this._applyDamageAndEffects(target, item, attack.miss.damage, targetDamage.missEffects, targetDamage.conditional, true, result));
                         }
-                        msg += " on a miss";
+                        concatMsg(" on a miss");
                         // TODO: miss effects without damage
                     }
                 }
-                msg += " (HP " + target.hp.current + ")";
+                concatMsg(" (HP " + target.hp.current + ")");
 
                 // Record in target and central Histories
                 entry = new HistoryEntry({ subject: target, message: msg });
                 target.history.add(entry);
                 History.central.add(entry);
+                entry = new HistoryEntry({ subject: this, message: attackerMsg, localOnly: true });
+                this.history.add(entry);
                 out.console.info(target.name + " " + msg.charAt(0).toLowerCase() + msg.substr(1));
 
                 return result;

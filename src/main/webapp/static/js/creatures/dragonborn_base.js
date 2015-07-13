@@ -5,7 +5,7 @@
 (function (DnD) {
     "use strict";
     DnD.define(
-        "creatures.monsters.dragonborn_base",
+        "creatures.monsters.base.dragonborn",
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {

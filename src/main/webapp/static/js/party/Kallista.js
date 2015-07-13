@@ -7,8 +7,8 @@
 
     DnD.define(
         "Kallista",
-        [ "creature.helpers", "party.level", "jQuery", "descriptions" ],
-        function(helpers, partyLevel, jQuery, descriptions) {
+        [ "creature.helpers", "party.level", "jQuery", "html" ],
+        function(CH, partyLevel, jQuery, descriptions) {
             var Kallista;
             Kallista = {
                 name: "Kallista",
@@ -86,107 +86,56 @@
                     }
                 ],
                 attacks: [
-                    {
-                        name: "Melee Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        isMelee: true,
-                        toHit: "STR",
-                        defense: "AC",
-                        damage: "1[W]+STR",
-                        keywords: [
-                            "weapon", "melee", "basic"
-                        ]
-                    }, {
-                        name: "Ranged Basic",
-                        usage: {
-                            frequency: "At-Will"
-                        },
-                        toHit: "DEX",
-                        defense: "AC",
-                        damage: "1[W]+DEX",
-                        keywords: [
-                            "weapon", "ranged", "basic"
-                        ]
-                    }, {
+                    CH.meleeBasic,
+                    CH.rangedBasic,
+                    new CH.Power({
                         name: "Duelist's Flurry",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "DEX",
                         keywords: [
-                            "weapon", "martial", "melee"
-                        ],
-                        description: descriptions[ "Duelist's Flurry" ]
-                    }, {
+                            "weapon", "martial"
+                        ]
+                    }).atWill().melee(),
+                    new CH.Power({
                         name: "Sly Flourish",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX+CHA",
                         keywords: [
                             "weapon", "martial"
-                        ],
-                        description: descriptions[ "Sly Flourish" ]
-                    }, {
+                        ]
+                    }).atWill(),
+                    new CH.Power({
                         name: "Demonic Frenzy",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "1d6",
                         keywords: [
                             "elemental"
-                        ],
-                        description: descriptions[ "Demonic Frenzy" ]
-                    }, {
-                        name: "Acrobat's Blade Trick",
-                        usage: {
-                            frequency: "Encounter"
-                        },
-                        toHit: "DEX",
-                        defense: "AC",
-                        damage: "1[W]+DEX",
-                        keywords: [
-                            "weapon", "martial", "melee"
-                        ],
-                        description: descriptions[ "Acrobat's Blade Trick" ]
-                    }, {
+                        ]
+                    }).encounter(),
+                    new CH.Power({
                         name: "Stunning Strike",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
                         effects: [ { name: "Stunned", duration: "endAttackerNext" } ],
                         keywords: [
-                            "weapon", "martial", "melee"
-                        ],
-                        description: descriptions[ "Stunning Strike" ]
-                    }, {
+                            "weapon", "martial"
+                        ]
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Cloud of Steel",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "DEX",
                         defense: "AC",
                         damage: "1[W]+DEX",
                         keywords: [
                             "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Cloud of Steel" ]
-                    }, {
+                        ]
+                    }).encounter().blast(5, true),
+                    new CH.Power({
                         name: "Hell's Ram",
-                        usage: {
-                            frequency: "Encounter"
-                        },
                         toHit: "STR^DEX+4",
                         defense: "Fort",
                         damage: "0",
@@ -198,13 +147,17 @@
                         ],
                         keywords: [
                             "martial"
-                        ],
-                        description: descriptions[ "Hell's Ram" ]
-                    }, {
+                        ]
+                    }).encounter(),
+                    new CH.Power({
+                        name: "Tumbling Strike",
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "3[W]+DEX",
+                        keywords: [ "martial", "weapon" ]
+                    }).encounter().melee(),
+                    new CH.Power({
                         name: "Bloodbath",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "Fort",
                         damage: "1[W]+DEX",
@@ -216,62 +169,57 @@
                         ],
                         keywords: [
                             "weapon", "martial"
-                        ],
-                        description: descriptions[ "Bloodbath" ]
-                    }, {
+                        ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Burst Fire",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "Ref",
                         damage: "2[W]+DEX",
                         keywords: [
                             "weapon", "martial", "ranged"
-                        ],
-                        description: descriptions[ "Burst Fire" ]
-                    }, {
+                        ]
+                    }).daily().burst(1, 10, true),
+                    new CH.Power({
                         name: "Black Wrath of Hell",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         defense: "AC",
                         damage: "2d10",
                         effects: [ { name: "Penalty", amount: "INT^CHA", other: "to hit Kallista", saveEnds: true } ], // TODO: implement penalty against specific creature
-                        keywords: [ "racial" ],
-                        description: descriptions[ "Black Wrath of Hell" ]
-                    }/*, {
-                     name: "Duelist's Prowess",
-                     usage: {
-                     frequency: "At-Will",
-                     action: "Immediate Interrupt"
-                     },
-                     toHit: "DEX",
-                     defense: "Ref",
-                     damage: "1[W]+DEX",
-                     keywords: [
-                     "weapon", "martial", "melee"
-                     ],
-                     description: descriptions[ "Duelist's Prowess" ]
-                     }*/, {
+                        keywords: [ "racial" ]
+                    }).daily(),
+                    /*
+                    new CH.Power({
+                        name: "Acrobat's Blade Trick",
+                        toHit: "DEX",
+                        defense: "AC",
+                        damage: "1[W]+DEX",
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).encounter().melee(),
+                    new CH.Power({
+                        name: "Duelist's Prowess",
+                        toHit: "DEX",
+                        defense: "Ref",
+                        damage: "1[W]+DEX",
+                        keywords: [
+                            "weapon", "martial"
+                        ]
+                    }).atWill().immediateInterrupt().melee(),
+                    */
+                    new CH.Power({
                         name: "Garrote Grip",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "DEX",
                         defense: "Ref",
                         damage: "2[W]+DEX",
                         effects: [
                             { name: "Grabbed" }
                         ],
-                        keywords: [ "melee", "martial", "reliable", "weapon" ],
-                        description: descriptions[ "Garrote Grip" ]
-                    }, {
+                        keywords: [ "melee", "martial", "reliable", "weapon" ]
+                    }).daily(),
+                    new CH.Power({
                         name: "Garrote Grip (3rd failed save)",
-                        usage: {
-                            frequency: "Daily"
-                        },
                         toHit: "automatic",
                         defense: "Ref",
                         damage: "0",
@@ -280,23 +228,20 @@
                         ],
                         keywords: [ "melee", "martial", "reliable", "weapon" ],
                         description: descriptions[ "Garrote Grip" ]
-                    }, {
+                    }).daily(),
+                    new CH.Power({
                         name: "Sneak Attack",
-                        usage: {
-                            frequency: "At-Will"
-                        },
                         toHit: "automatic",
                         defense: "AC",
-                        damage: "2d8",
-                        description: descriptions[ "Sneak Attack" ]
-                    }
+                        damage: "2d8"
+                    }).atWill()
                 ],
                 effects: []
             };
             Kallista.hp.total = 12 + Kallista.abilities.CON + (5 * (partyLevel - 1));
-            Kallista.skills = helpers.skills(Kallista, {
-                acrobatics: 5 + helpers.mod(Kallista.abilities.CHA), // Duelist's Panache feat
-                athletics: 5 + helpers.mod(Kallista.abilities.CHA), // Duelist's Panache feat
+            Kallista.skills = CH.skills(Kallista, {
+                acrobatics: 5 + CH.mod(Kallista.abilities.CHA), // Duelist's Panache feat
+                athletics: 5 + CH.mod(Kallista.abilities.CHA), // Duelist's Panache feat
                 bluff: 5,
                 intimidate: 2, // Demon Spawn level 5 feature
                 perception: 5,

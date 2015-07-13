@@ -1,0 +1,808 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://www.wizards.com/dndinsider/compendium/styles/detail.css" />
+<style>
+@media all {
+  .pageBreak {
+    display: none;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+th {
+  font-size: 150%;
+  font-weight: bold;
+}
+
+th,td {
+  padding: 5px;
+  text-align: left;
+  vertical-align: top;
+}
+
+ul,li {
+  list-style: none inside none;
+  padding: 0;
+}
+
+.core {
+  font-size: 1.5em;
+}
+
+.core div {
+  font-size: 60px;
+  font-weight: bold;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.bloodied #hp,
+.bloodied #name {
+  color: red;
+}
+
+.fullWidth {
+  clear: both;
+  width: 100% !important;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.indent {
+  margin-left: 20px;
+}
+
+.powerRow,
+.itemRow,
+.ritualRow {
+  display: table-row;
+}
+
+.powerBlock,
+.itemBlock,
+.ritualBlock {
+  border: 1px solid #CCCCCC;
+  float: left;
+  display: table-cell;
+  margin-right: 1%;
+  margin-bottom: 1%;
+  /* width: 400px; */
+  width: 31%;
+}
+
+.blockBreak {
+  clear: both;
+}
+
+.powerBullet {
+  display: inline-block;
+  margin: 0 20px 0 10px;
+}
+
+.powerBullet span {
+  background-image: url('http://www.wizards.com/dndinsider/compendium/images/bullet.gif');
+  display: inline-block;
+  height: 11px;
+  width: 11px;
+}
+
+.used {
+  color: red;
+  text-decoration: line-through;
+}
+
+#detail,
+#detail section {
+  clear: both;
+  display: table;
+  width: 100%;
+}
+
+#detail section .powerBlock:nth-child(3n + 4),
+#detail section .itemBlock:nth-child(3n + 4),
+#detail section .ritualBlock:nth-child(3n + 4) {
+  clear: left;
+}
+
+#detail table.magicitem {
+  width: 100%;
+}
+
+#detail p.additionalEffects {
+  border-top: 1px solid black;
+  font-size: 9px;
+}
+
+.portrait {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+@media print {
+  body {
+    font-size: 80%;
+    width: 100%;
+  }
+  
+  .pageBreak {
+    display: block;
+    page-break-before: always;
+  }
+  
+  #detail section {
+    display: table;
+    page-break-before: always;
+  }
+  
+  #detail section .powerBlock:nth-child(3n + 4),
+  #detail section .itemBlock:nth-child(3n + 4),
+  #detail section .ritualBlock:nth-child(3n + 4) {
+    page-break-before: always;
+  }
+  
+  #detail section .powerBlock,
+  #detail section .itemBlock,
+  #detail section .ritualBlock {
+    display: none;
+  }
+  #detail section .ritualBlock:nth-child(-1n + 28) {
+    display: block;
+  }
+  #detail section .ritualBlock:nth-child(-1n + 27) {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+  <section id="detail"> 
+    <section id="rituals">
+
+      <div class="ritualBlock">
+        <h1 class="player">Amanuensis</h1>
+        <i>You touch the writing, tracing each character or glyph with a gently glowing crystal. As you do so, the words you flicker into existence onto the specially prepared parchment before solidifying into a near-perfect copy.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 10 gp<br /> <b>Market Price</b>: 20 gp<br /> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 1<br /> <b>Category</b>: Creation<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: Permanent
+        </p>
+        <p>
+          You capture the writing from one source (a book, scroll, or tablet) and cause it to appear onto a special prepared paper, parchment, book, or some other similar item. This ritual copies up to 250 words of text, enough to fill one page with text. A copied illustration counts as a number of words proportional to the amount of the page the illustration requires.<br />&nbsp;&nbsp;&nbsp;&nbsp;This ritual can be used to copy a ritual scroll, even if you have not mastered the ritual on the original scroll. Creating a ritual scroll in this manner takes twice as long as creating a ritual book but has the same cost (in addition to the component cost of this ritual).
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/218587200" target="_new">Forgotten Realms Player's Guide</a>, page(s) 142.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Arcane Mark</h1>
+        <i>Onto the object's surface you etch a glowing rune, which shimmers for a moment before fading, marking the item as your own.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 10 gp<br /> <b>Market Price</b>: 20 gp<br /> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 1<br /> <b>Category</b>: Creation<br /> <b>Time</b>: 5 minutes<br /> <b>Duration</b>: Permanent
+        </p>
+        <p>You set your personal arcane mark on an object. It manifests as a unique sigil of your devising. After the first moment, it is invisible and can be seen only by a creature using Arcana to detect magic. Ritual casters use arcane marks to identify their property and sometimes to designate places of great import.</p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/218587200" target="_new">Forgotten Realms Player's Guide</a>, page(s) 142.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Brew Potion</h1>
+        <i>Liquids brew and bubble, coalescing the raw substance of magic into a form you can drink.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: Special<br /> <b>Market Price</b>: 75 gp<br /> <b>Key Skill</b>: Arcana or Religion (no check)</span><b>Level</b>: 1<br /> <b>Category</b>: Creation<br /> <b>Time</b>: 1 hour<br /> <b>Duration</b>: Permanent until consumed
+        </p>
+        <p>You create a common potion or elixir of your level or lower. The ritual's component cost is equal to the price of the potion or elixir you create.</p>
+        <br />Update (11/17/2010)<br />In the first sentence of the ritual's effect text, replace "potion" with "common potion or elixir." In the second sentence of the ritual's effect text, add "or elixir" after "potion."<br /> <br />
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 301.
+        </p>
+      </div>
+    
+    
+      <div class="ritualBlock">
+        <h1 class="player">Comprehend Language</h1>
+        <i>As you finish the ritual, the guttural language of the creatures before you clarifies into something you understand.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 10 gp<br /> <b>Market Price</b>: 50 gp<br /> <b>Key Skill</b>: Arcana</span><b>Level</b>: 1<br /> <b>Category</b>: Exploration<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: 24 hours
+        </p>
+        <p>
+          When beginning the ritual, choose a language you have heard or a piece of writing you have seen within the past 24 hours.<br />&nbsp;&nbsp;&nbsp;&nbsp;Using this ritual on a language you have heard allows you to understand it when spoken for the next 24 hours and, if your Arcana check result is 35 or higher, to speak the language fluently for the duration.<br />&nbsp;&nbsp;&nbsp;&nbsp;Using this ritual on a language you have seen as a piece of writing allows you to read the language for the next 24 hours and, if your Arcana check result is 35 or higher, to write the language in its native script or in any other script you know for the duration.<br />&nbsp;&nbsp;&nbsp;&nbsp;Using this ritual on a language you have both heard and seen as a piece of writing within the past 24 hours allows you to understand it in both forms for the next 24 hours, and an Arcana check result of 35 or higher allows you to speak and write the language.
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 302.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Disenchant Magic Item</h1>
+        <i>The item ignites in a brief flash of brilliant light, then crumbles to golden dust in your hands.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 25 gp<br /> <b>Market Price</b>: 360 gp<br /> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 6<br /> <b>Category</b>: Creation<br /> <b>Time</b>: 1 hour<br /> <b>Duration</b>: Instantaneous
+        </p>
+        <p>The ritual destroys a magic item of your level or lower, and the item can be common, uncommon, or rare. The ritual returns an amount of residuum based on the item's rarity: 20 percent of a common item's gold piece value, 50 percent of an uncommon item's gold piece value, and 100 percent of a rare item's gold piece value.</p>
+        <br />Update (11/17/2010)<br />Replace the ritual's effect text with the text below.<br /> <br />
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 304.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Enchant Magic Item</h1>
+        <i>Magic drawn from the warp and weft of the universe infuses the item you hold in your hands.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: Special<br /> <b>Market Price</b>: 175 gp<br /> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 4<br /> <b>Category</b>: Creation<br /> <b>Time</b>: 1 hour<br /> <b>Duration</b>: Permanent
+        </p>
+        <p>
+          You touch a normal item and turn it into a magic item of your level or lower. The ritual's component cost is equal to the price of the magic item you create. Alternatively, you can use the ritual to upgrade a common, uncommon, or rare item to a more powerful version of the item that is 5 levels higher. The new version must be your level or lower, and the component cost equals the difference in gold piece value between the old version and the new.<br />&nbsp;&nbsp;&nbsp;&nbsp;You can also use this ritual to resize magic armor (for example, shrink a fire giant's magic armor to fit a halfling). There is no component cost for this use.
+        </p>
+        <br />Update (11/17/2010)<br />Add the text below to the end of the first paragraph of the ritual's effect text.<br /> <br />
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 304.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Gentle Repose</h1>
+        <i>Your practiced hands perform the ritual fast enough to preserve the body for a later casting of Raise Dead.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 10 gp<br /> <b>Market Price</b>: 50 gp<br /> <b>Key Skill</b>: Heal (no check)</span><b>Level</b>: 1<br /> <b>Category</b>: Restoration<br /> <b>Time</b>: 1 hour<br /> <b>Duration</b>: Special
+        </p>
+        <p>This ritual is performed on an adjacent corpse. It quintuples the time the corpse can lie dead and still be affected by Raise Dead or a similar ritual. Gentle Repose also protects the corpse from being raised as an undead creature for 150 days.</p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 305.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Make Whole</h1>
+        <i>As you finish the ritual, the oaken door stands whole and unblemished as if Orten the Rager hadn't just burst through it with murder in his eyes. It's the least you can do after using the inn to ambush the infamous barbarian.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: Special<br /> <b>Market Price</b>: 50 gp<br /> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 1<br /> <b>Category</b>: Exploration<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: Permanent
+        </p>
+        <p>A single object that can fit in a 10-foot cube is completely repaired. The component cost is 20 percent of the item's cost. In cases where you attempt to repair an item not on any price list, the DM determines the cost.</p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 309.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Preservation</h1>
+        <i>Wizards use this spell to keep their tomes from mold and other dangers. Explorers wish the wizards would do the same for trail rations.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 25 gp<br /> <b>Market Price</b>: 100 gp<br /> <b>Key Skill</b>: Arcana or Nature</span><b>Level</b>: 2<br /> <b>Category</b>: Warding<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: Permanent
+        </p>
+        <p>
+          You enchant a quantity of nonliving organic material so that it resists all natural deterioration. Rot, mold, consuming vermin, and the like all leave the enchanted material alone. Damage intentionally done can still harm the material.<br />&nbsp;&nbsp;&nbsp;&nbsp;Your Arcana or Nature check determines how much material you can affect with one ritual casting.<br /> <br />
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Arcana or Nature Check Result</th>
+              <th>Quantity</th>
+            </tr>
+            <tr>
+              <td>19 or lower</td>
+              <td>10 pounds</td>
+            </tr>
+            <tr>
+              <td>20-24</td>
+              <td>20 pounds</td>
+            </tr>
+            <tr>
+              <td>25-29</td>
+              <td>50 pounds</td>
+            </tr>
+            <tr>
+              <td>30-39</td>
+              <td>100 pounds</td>
+            </tr>
+            <tr>
+              <td>40 or higher</td>
+              <td>200 pounds</td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/366" target="_new">Dragon Magazine 366</a>, page(s) 30.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Secret Page</h1>
+        <i>You laugh through your broken teeth. The duke's impersonator might have found your journal, but he'll never see what you wrote there.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 10 gp<br /> <b>Market Price</b>: 50 gp<br /> <b>Key Skill</b>: Arcana</span><b>Level</b>: 1<br /> <b>Category</b>: Warding<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: Permanent
+        </p>
+        <p>
+          You ward writings so others cannot read them. Use of this ritual protects one page (maximum 250 words). You make the page appear not to exist, causing anyone other than you to ignore it; the page's presence is blocked from a reader's mind. You can choose instead to obscure the page with false writings, which you produce before performing the ritual. Other readers see the false text rather than the real text.<br />&nbsp;&nbsp;&nbsp;&nbsp;When you perform the ritual, make an Arcana check, with a +5 bonus. The result is the DC for a Perception check to notice the concealed writing (readers use passive Perception unless they are specifically looking for concealed text).
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 311.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Tenser's Floating Disk</h1>
+        <i> "Oh, this? It follows me everywhere, like a porter that never needs to rest."</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 10 gp<br /> <b>Market Price</b>: 50 gp<br /> <b>Key Skill</b>: Arcana</span><b>Level</b>: 1<br /> <b>Category</b>: Exploration<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: 24 hours
+        </p>
+        <p>
+          You create a slightly concave, circular plane of force that floats a foot off the ground and can carry what you lay upon it. The disk is 3 feet in diameter and 1 inch deep at its center. It remains stationary unless you move more than 5 squares away from it, in which case it moves with your base speed once per round until it is within 5 squares of you. You can command the disk to move up to your speed as a move action. If you are more than 5 squares from the disk for 2 consecutive rounds, the disk disappears, dropping whatever it was carrying.<br />&nbsp;&nbsp;&nbsp;&nbsp;Your Arcana check result determines the maximum load the disk can carry.<br /> <br />
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Arcana Check Result</th>
+              <th>Maximum Load</th>
+            </tr>
+            <tr>
+              <td>9 or lower</td>
+              <td>250 pounds</td>
+            </tr>
+            <tr>
+              <td>10-24</td>
+              <td>500 pounds</td>
+            </tr>
+            <tr>
+              <td>25-39</td>
+              <td>1,000 pounds</td>
+            </tr>
+            <tr>
+              <td>40 or higher</td>
+              <td>2,000 pounds</td>
+            </tr>
+          </tbody>
+        </table>
+        <br /> <br />
+        <p></p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 312.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Transfer Enchantment</h1>
+        <i>With great care and concentration, you carefully strip magical power from one object to imbue it in another.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 25 gp<br /> <b>Market Price</b>: 175 gp<br /> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 4<br /> <b>Category</b>: Creation<br /> <b>Time</b>: 1 hour<br /> <b>Duration</b>: Permanent
+        </p>
+        <p>
+          You transfer the magical qualities (properties, powers, and enhancement bonus) of an enchanted item into another object. You must maintain physical contact with both items for the duration of the ritual. The receiving item must occupy the same magic item slot (head, waist, armor, and so on) and be the same type (wand, rod, weapon, and so on) as the original item. The enchantment to be moved must be valid for the receiving item, so that you cannot transfer ranged weapon properties to melee weapons, cloth-only armor properties to chainmail, and so on.<br /> You can transfer an enchantment to an item that already contains a lower-level enchantment, but the receiving item's previous magic is lost. For example, the enhancement bonus and power of a suit of +1 barkskin hide (5th level) could be placed into a suit of +1 curseforged scale (3rd level), but the scale armor's existing power is lost in doing so. You cannot transfer an enchantment to an item that already has a higher-level
+          enchantment.
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217837200" target="_new">Adventurer's Vault</a>, page(s) 199.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Traveler's Chant</h1>
+        <i>Your chant lifts your allies' steps and helps take their minds off the drudgery of the journey.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 10 gp, plus a focus worth 5 gp<br /> <b>Market Price</b>: 75 gp<br /> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 1<br /> <b>Category</b>: Exploration<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: 8 hours<br /> <b>Prerequisite</b>: Bard
+        </p>
+        <p>
+          For the ritual's duration, you and up to eight allies who heard the whole performance of the ritual can travel farther than normal. For the purpose of determining how far you and the allies can travel in an hour or a day, treat the group's speed as the slowest member's speed + 2.<br />Focus: A musical instrument you play as part of performing the ritual.
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786950164" target="_new">Player's Handbook 2</a>, page(s) 217.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Unseen Servant</h1>
+        <i>Why bother with real servants when magical ones are so much more obedient?</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 20 gp, plus a focus worth at least 25 gp<br /> <b>Market Price</b>: 50 gp<br /> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 1<br /> <b>Category</b>: Creation<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: Until your next extended rest or until you dismiss the servant
+        </p>
+        <p>
+          You conjure a Medium unseen servant of invisible force. It obeys your commands, moves at your speed, can lift up to 100 pounds, and performs basic functions and repetitive tasks, such as cleaning, making camp, and moving, holding, or carrying objects.<br />An unseen servant never tires. It cannot move more than 20 squares from your space. It does not occupy any space and cannot attack or be attacked. Each unseen servant you currently control doubles the component cost to create the next.<br />Focus: A ceramic hand. The person who holds this focus is empowered to command any unseen servants summoned with it. If the focus is broken or not in anyone's possession for a minute or longer, all unseen servants bound to it disappear.
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786949571" target="_new">Arcane Power</a>, page(s) 158.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Analyze Portal</h1>
+        <i>Scintillating motes of color sparkle inside the portal and from their patterns and movements you discern its secrets.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 250 gp<br> <b>Market Price</b>: 800 gp<br> <b>Key Skill</b>: Arcana</span><b>Level</b>: 8<br> <b>Category</b>: Divination<br> <b>Time</b>: 1 hour<br> <b>Duration</b>: Instantaneous
+        </p>
+        <p>
+          When you perform this ritual, choose a specific active and permanent portal you can clearly see. Analyze Portal causes the portal to erupt with faint lights that flicker and spin, letting you learn a great deal about its destination and function. Its most basic effect is to reveal the portal's destination. Although a portal usually displays what its destination looks like, this ritual reveals the destination's name and its general location in the world or the plane on which it is located.<br>&nbsp;&nbsp;&nbsp;&nbsp;When you learn the origin and type of the last creature to use the portal, you also learn any keywords associated with that creature.<br>&nbsp;&nbsp;&nbsp;&nbsp;Analyze Portal can also reveal the identity of the creature that created the portal. If no creature created it, you learn of the event that created it.<br> <br>
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Arcana Check Result</th>
+              <th>Information Learned</th>
+            </tr>
+            <tr>
+              <td>29 or lower</td>
+              <td>The name of the portal's destination</td>
+            </tr>
+            <tr>
+              <td>30 or higher</td>
+              <td>The origin and type of the creature to use it last</td>
+            </tr>
+            <tr>
+              <td>30 + one-half creator's level</td>
+              <td>Identity of the creature that created it, if any</td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/218587200" target="_new">Forgotten Realms Player's Guide</a>, page(s) 142.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Comrades' Succor</h1>
+        <i>Ritual participants share their vitality and luck with one another.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 10 gp<br> <b>Market Price</b>: 150 gp<br> <b>Key Skill</b>: Heal (no check)</span><b>Level</b>: 1<br> <b>Category</b>: Restoration<br> <b>Time</b>: 5 minutes<br> <b>Duration</b>: Instantaneous
+        </p>
+        <p>While performing this ritual, you and up to 5 participants in the ritual can choose to lose any number of healing surges and select another participant to gain an equal number of healing surges. No participant can have more healing surges than his or her daily maximum. Additionally, you or one participant must lose 1 healing surge when performing this ritual.</p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/380" target="_new">Dragon Magazine 380</a>, page(s) 89.
+        </p>
+      </div>
+    
+      <div class="ritualBlock hidden">
+        <h1 class="player">Fey Passage</h1>
+        <i>You open a path marked by standing stones, allowing you and your allies to step into the Feywild.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 140 gp<br> <b>Market Price</b>: 360 gp<br> <b>Key Skill</b>: Arcana or Nature (no check)</span><b>Level</b>: 6<br> <b>Category</b>: Travel<br> <b>Time</b>: 10 minutes<br> <b>Duration</b>: Instantaneous
+        </p>
+        <p>
+          Use this ritual at a fey crossing. When you perform this ritual, you transport yourself and up to eight allies from the world to a corresponding location in the Feywild, or from the Feywild to a corresponding location in the world. The fey crossing need not be active for Fey Passage to work.<br>&nbsp;&nbsp;&nbsp;&nbsp;You remain in the Feywild until you leave by another means or you perform this ritual again at a fey crossing.<br>&nbsp;&nbsp;&nbsp;&nbsp;Special: Eladrin have a special connection to the Feywild. Consequently, an eladrin who has mastered this ritual or performs it from a scroll does not pay the component cost.
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/218937200" target="_new">Manual of the Planes</a>, page(s) 150, <a href="http://www.wizards.com/dnd/Product.aspx?x=dnd/products/dndacc/250317200" target="_new">Dungeon Magazine Annual</a>, page(s) 31, <a href="http://www.wizards.com/default.asp?x=dnd/dutoc/162" target="_new">Dungeon Magazine 162</a>, page(s) 35.
+        </p>
+      </div>
+    
+      <div class="ritualBlock hidden">
+        <h1 class="player">Hallucinatory Terrain</h1>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 125 gp<br> <b>Market Price</b>: 680 gp<br> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 8<br> <b>Category</b>: Deception<br> <b>Time</b>: 10 minutes<br> <b>Duration</b>: 24 hours
+        </p>
+        <p>
+          You lay an illusion over an area of natural terrain, no more than 20 squares by 20 squares in size, to make it look, sound, and smell as if it were a different type of natural terrain. Artificial structures, equipment, and creatures cannot be changed. A meadow might look like a hill, a pond could look like a meadow, and so on; but a road or a tower in the area remains the same.<br>&nbsp;&nbsp;&nbsp;&nbsp;A creature can discern the illusion if it succeeds on an Arcana check or a Perception check (DC 10 + your Arcana check modifier). This check is a minor action if the creature has not interacted with the illusion, but can be made as a free action the first time the creature interacts with the illusion. If you conceal an area of hindering terrain, a creature is still entitled to a saving throw if forced into that terrain.
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/405" target="_new">Dragon Magazine 405</a>.
+        </p>
+      </div>
+    
+      <div class="ritualBlock hidden">
+        <h1 class="player">Mindshape Warwing Drake</h1>
+        <i>Like the dragonborn beastmasters of old, you instantly tame a warwing drake with a violent burst of psychic energy.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 100 gp<br> <b>Market Price</b>: 250 gp<br> <b>Key Skill</b>: Arcana or Nature</span><b>Level</b>: 5<br> <b>Category</b>: Creation<br> <b>Time</b>: 1 Hour<br> <b>Duration</b>: Permanent
+        </p>
+        <p>
+          To perform this ritual, you require a single warwing drake bound inside a magic circle drawn to bind a natural creature. When you successfully perform this ritual, the warwing drake is tamed as determined by your Arcana or Nature check result.<br>
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Check Result</th>
+              <th>Effect on Warwing Drake</th>
+            </tr>
+            <tr>
+              <td>7 or lower</td>
+              <td>-4 Int; attacks all other creatures.</td>
+            </tr>
+            <tr>
+              <td>8-13</td>
+              <td>-2 Int; still wild.</td>
+            </tr>
+            <tr>
+              <td>14-19</td>
+              <td>-1 Int; tame and trained.</td>
+            </tr>
+            <tr>
+              <td>20-25</td>
+              <td>Tame and trained.</td>
+            </tr>
+            <tr>
+              <td>26 or higher</td>
+              <td>Tame and trained; can speak</td>
+            </tr>
+          </tbody>
+        </table>
+        <br> <br>A tame and trained warwing drake is ready to accept a rider and riding gear, and it understands commands. It is loyal to the ritual caster or someone the ritual caster designates. Such a drake can be trained to accept other potential riders and masters. If the ritual grants the drake the ability to speak, the drake speaks in a broken form of a language the ritual caster selects. If use of this ritual reduces a warwing drake to 0 Intelligence, the drake dies.
+        <p></p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=dnd/dutoc/165" target="_new">Dungeon Magazine 165</a>, page(s) 77.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Pyrotechnics</h1>
+        <i>A flare soars into the night sky and explodes with brilliant color.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 20 gp<br> <b>Market Price</b>: 50 gp<br> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 2<br> <b>Category</b>: Creation<br> <b>Time</b>: 1 minute<br> <b>Duration</b>: 10 minutes
+        </p>
+        <p>You send a barrage of small, colorful explosions into the sky. The explosions blossom into whatever color or shape you choose for 1 minute. At the end of each minute of the ritual's duration, you can choose a new color and shape. At night, the lights are visible within a 10-mile radius. During the day, the lights are visible within a 1-mile radius.</p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786950164" target="_new">Player's Handbook 2</a>, page(s) 215.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Reverse Portal</h1>
+        <i>You open a portal not from here to there, but from there to here.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 500 gp<br> <b>Market Price</b>: 2,600 gp<br> <b>Key Skill</b>: Arcana</span><b>Level</b>: 12<br> <b>Category</b>: Travel<br> <b>Time</b>: 10 minutes<br> <b>Duration</b>: Special
+        </p>
+        <p>
+          You create a shortcut across the fabric of the world, linking your location with a permanent teleportation circle elsewhere on the same plane (see the Linked Portal ritual, Player's Handbook, page 307). As part of performing this ritual, you sketch out a 10-foot-diameter circle in rare chalks and inks. Alternatively, you can use a permanent teleportation circle, which reduces the component cost to 150 gp and grants you a +5 bonus to your Arcana check.<br>At the ritual's completion, make an Arcana check. The result determines the duration that the portal remains open.<br> <br>
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Arcana Check Result</th>
+              <th>Portal Duration</th>
+            </tr>
+            <tr>
+              <td>19 or lower</td>
+              <td>1 round</td>
+            </tr>
+            <tr>
+              <td>20-39</td>
+              <td>3 rounds</td>
+            </tr>
+            <tr>
+              <td>40 or higher</td>
+              <td>5 rounds</td>
+            </tr>
+          </tbody>
+        </table>
+        <br> <br>The portal displays views of the other location in the same way as that created by the Linked Portal ritual, but creatures cannot enter the origin point and appear at the other location. Instead, creatures can only step into the distant end of the portal to appear at the origin point with you.
+        <p></p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/9780786950164" target="_new">Player's Handbook 2</a>, page(s) 216.
+        </p>
+      </div>
+    
+      <div class="ritualBlock hidden">
+        <h1 class="player">Seal Portal</h1>
+        <i>You close a portal between two locations safely, ensuring that nothing can come through it in the future.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 100 gp<br> <b>Market Price</b>: 680 gp<br> <b>Key Skill</b>: Arcana</span><b>Level</b>: 8<br> <b>Category</b>: Binding<br> <b>Time</b>: 10 minutes<br> <b>Duration</b>: Permanent
+        </p>
+        <p>
+          You sever the magical connections that bind one place to another by way of a portal. The completion of this ritual successfully shuts a currently active portal and seals it. No creature, object, or energy can pass through a sealed portal. The portal is not destroyed, though it becomes both invisible and intangible, meaning that it cannot be perceived or interacted with while sealed. If the portal would normally disappear after a certain amount of time, it does so.<br>&nbsp;&nbsp;&nbsp;&nbsp;At the completion of this ritual, make an Arcana check. A sealed portal can be reopened with the linked portal, planar portal, or true portal rituals, but the creature performing the ritual to reopen the portal must make an Arcana check that equals or exceeds the results of the Arcana check you made when performing this ritual. You can remove the seal on a portal you have sealed by performing this ritual on it again.<br>&nbsp;&nbsp;&nbsp;&nbsp;The magic of a sealed portal can be
+          detected with the Arcana skill. The level of the magical phenomenon (the seal, not the portal itself) is equal to your level at the time you performed this ritual.
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=dnd/dutoc/160" target="_new">Dungeon Magazine 160</a>, page(s) 27.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Sending</h1>
+        <i>You can see him in your mind's eye, clear as the first time you met him. Your magic lets him know that you're safe, despite encountering the followers of Thoon, and he reassures you that the red dragon caused him no harm.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 50 gp<br> <b>Market Price</b>: 360 gp<br> <b>Key Skill</b>: Arcana</span><b>Level</b>: 6<br> <b>Category</b>: Exploration<br> <b>Time</b>: 10 minutes<br> <b>Duration</b>: Instantaneous
+        </p>
+        <p>
+          You convey a mental message of up to 25 words to a person you know. If the target is within range, he or she receives the message mentally and can respond likewise. The ritual's maximum range is determined by your Arcana check result.<br> <br>
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Arcana Check Result</th>
+              <th>Maximum Range</th>
+            </tr>
+            <tr>
+              <td>9 or lower</td>
+              <td>10 miles</td>
+            </tr>
+            <tr>
+              <td>10-19</td>
+              <td>100 miles</td>
+            </tr>
+            <tr>
+              <td>20-29</td>
+              <td>500 miles</td>
+            </tr>
+            <tr>
+              <td>30-39</td>
+              <td>1,000 miles</td>
+            </tr>
+            <tr>
+              <td>40 or higher</td>
+              <td>Anywhere on the same plane</td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 312.
+        </p>
+      </div>
+    
+      <div class="ritualBlock">
+        <h1 class="player">Tongues</h1>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 25 gp and 1 healing surge<br> <b>Market Price</b>: 200 gp<br> <b>Key Skill</b>: Arcana or Religion (no check)</span><b>Level</b>: 5<br> <b>Category</b>: Exploration<br> <b>Time</b>: 1 minute<br> <b>Duration</b>: 10 minutes
+        </p>
+        <p>You or one ally present during the ritual's performance gains the ability to speak and understand all languages. Creatures that can hear the target understand what he or she says as if he or she were speaking their native language. If the target can hear another creature that is speaking a language, he or she understands what that creature says as if it were speaking the target's native language.</p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=dnd/drtoc/405" target="_new">Dragon Magazine 405</a>.
+        </p>
+      </div>
+
+      <div class="ritualBlock">
+        <h1 class="player">Consult Mystic Sages</h1>
+        <i>You enter a trance in which you commune with the spirits of long-dead sages and otherworldly loremasters, seeking answers to your esoteric questions.</i><br>
+        <p>
+            <span class="ritualstats"><b>Component Cost</b>: 400 gp<br>
+            <b>Market Price</b>: 1,000 gp<br>
+            <b>Key Skill</b>: Religion</span><b>Level</b>: 10<br>
+            <b>Category</b>: Divination<br>
+            <b>Time</b>: 30 minutes<br>
+            <b>Duration</b>: 10 minutes
+        </p>
+        <p>
+            You ask a single question of mysterious, extraplanar presences about matters beyond your ken. Make a Religion check with a +10 bonus instead of an Arcana or a History check to uncover a clue, remember a bit of lore, or otherwise gain information about the world around you.
+            <br/>
+            The ritual grants you a single piece of information. That information can take the form of a word, a name, a phrase, or even a brief story, depending on what exactly you're looking for. 
+            You can learn the name of the usurper who ended the Katerran Dynasty a thousand years ago, the burial rites of the Crimson Wolf clan, or the weaknesses of the shadow assassins who have been dogging your steps.
+            <br/>
+            The ritual can't uncover information beyond the ken of the most learned sages. It's of no use if you're trying to find the magic word that unlocks the vampire's crypt, because only the vampire knows the word. Nor can the ritual tell you
+            definitively where great stores of treasure are, but the mystic sages could tell you where a specific empress kept her treasury in ancient times or whether the treasure was looted when her empire fell.
+        </p>
+        <p class="publishedIn">
+            Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 302.
+        </p>
+      </div>
+      
+      <div class="ritualBlock hidden">
+        <h1 class="player">Solace Bole</h1>
+        <i>You transport yourself and your companions to the hollow of an enormous tree trunk in the Feywild. While you're there, time passes slowly in the place you once were.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 500 gp<br> <b>Market Price</b>: 2,600 gp<br> <b>Key Skill</b>: Arcana (no check)</span><b>Level</b>: 12<br> <b>Category</b>: Travel<br> <b>Time</b>: 10 minutes<br> <b>Duration</b>: 1 hour
+        </p>
+        <p>
+          You and up to five other creatures you designate within 10 squares of you are transported to a sealed hollow the size of a comfortable room within a magical tree in the Feywild. The hollow has a glowing light you can control and is filled with sweet air. You can remain within the bole for up to 12 hours. Thereafter, or when you will it to be so, you and all the creatures the ritual took to the hollow return to the exact place they left. Only 1 hour of time has passed in the world. If you took an extended rest within the bole, you must wait 12 hours after your return to the world to take another one.<br>If you have assistance when performing this ritual, divide the casting time by the number of participants. The assistants all chant in a fey harmony while you perform the ritual. Anyone you want to assist you in this way can learn the proper harmony during an extended rest.
+        </p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=dnd/dutoc/165" target="_new">Dungeon Magazine 165</a>, page(s) 50.
+        </p>
+      </div>
+    
+      <div class="ritualBlock fullWidth">
+        <h1 class="player">Linked Portal</h1>
+        <i>You create a glowing circle of sigils on the ground nearby, and you can see a hazy vision of a far-off city. You and your friends step into the circle, and you're instantly whisked away to that place.</i><br />
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 135 gp (see text)<br /> <b>Market Price</b>: 680 gp<br /> <b>Key Skill</b>: Arcana</span><b>Level</b>: 8<br /> <b>Category</b>: Travel<br /> <b>Time</b>: 10 minutes<br /> <b>Duration</b>: Special
+        </p>
+        <p>
+          You create a shortcut across the fabric of the world, linking your location with a permanent teleportation circle somewhere else on the same plane. With a step, you can move from one circle to the other. As part of performing the ritual, you must sketch out a 10-foot-diameter circle in various rare chalks and inks. This temporary teleportation circle must exactly match the permanent teleportation circle at your destination. It disappears at the end of the portal's duration.<br />&nbsp;&nbsp;&nbsp;&nbsp;At the completion of this ritual, make an Arcana check. The result determines the duration that the portal remains open. <br /> <br />
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Arcana Check Result</th>
+              <th>Portal Duration</th>
+            </tr>
+            <tr>
+              <td>19 or lower</td>
+              <td>1 round</td>
+            </tr>
+            <tr>
+              <td>20-39</td>
+              <td>3 rounds</td>
+            </tr>
+            <tr>
+              <td>40 or higher</td>
+              <td>5 rounds</td>
+            </tr>
+          </tbody>
+        </table>
+        <br /> <br />&nbsp;&nbsp;&nbsp;&nbsp;You can use a permanent teleportation circle as the origin point of this ritual, making minor temporary modifications as part of the ritual. Doing this reduces the cost to 50 gp of reagents and grants you a +5 bonus to your Arcana check.<br />&nbsp;&nbsp;&nbsp;&nbsp;While the portal is open, any creature that enters the circle at the origin point instantly appears at the other location, along with anything the creature holds or carries. The creature can even finish the rest of its move. Any number of creatures of any size can use an open portal; the only limitation is the number that can reach the circle before it ends.<br />&nbsp;&nbsp;&nbsp;&nbsp;Anyone standing in the vicinity of either end of the portal can see a haze-infused vision of the teleportation circle at the other end of the connection, as well as the environment 60 feet beyond it. Effectively, everything at the destination within this area of visibility is lightly obscured, and
+        the area beyond is completely fogged out. (Naturally, portals that last longer give you a better opportunity to study the place you're going to before you step into the circle.) Environmental effects at one end of the connection don't affect the other end.<br />&nbsp;&nbsp;&nbsp;&nbsp;Most major temples, important wizards' guilds, and large cities have permanent teleportation circles, each of which has a unique set of magic sigils etched or inlaid into the ground. The exact sequence of sigils matters, because you've got to match it if you want to open a portal leading there. The sigils aren't any more complex than remembering a string of letters and numbers. You can use Linked Portal to any permanent teleportation circle whose sequence of sigils you know. When you learn this ritual, your DM will tell you at least two such sequences. In your travels and research, you'll undoubtedly learn more.<br />&nbsp;&nbsp;&nbsp;&nbsp;This ritual can take you anywhere in the world, but it can't
+        take you to other planes. Sufficiently powerful warding magic, such as the Forbiddance ritual, can block a teleportation ritual. If the location is warded in such a manner, you learn that as soon as you begin the ritual, so you can interrupt the ritual and not expend any components.
+        <p></p>
+        <br />Revision (7/28/2008)<br />Replaced "has concealment" with "is lightly obscured" in 5th paragraph, 2nd sentence, also added period before parenths in same sentence, removed period after parenths.<br /> <br />
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 307.
+        </p>
+      </div>
+    
+      <div class="ritualBlock fullWidth hidden">
+        <h1 class="player">Hallucinatory Creature</h1>
+        <i>A few words of description, some arcane gestures, and a fearsome image appears before you. </i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 500 gp<br> <b>Market Price</b>: 2,600 gp<br> <b>Key Skill</b>: Arcana</span><b>Level</b>: 12<br> <b>Category</b>: Deception<br> <b>Time</b>: 10 minutes<br> <b>Duration</b>: 24 Hours
+        </p>
+        <p>
+          You create the illusion of a single creature, of any size from Small to Large. It looks and smells like the creature in question. If the creature can speak or emit sounds, the illusion can do so as well, but on a limited basis (subject to the DM's judgment)Ñit's not possible, for instance, for the illusion to engage in an extended conversation.<br>&nbsp;&nbsp;&nbsp;&nbsp;You can give the illusion simple instructions, such as having it wander a set area, appear to chew on local plants, and the like. Your Arcana check determines the number of actions you can instruct the illusion to take.<br> <br>
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Arcana Check Result</th>
+              <th>Actions</th>
+            </tr>
+            <tr>
+              <td>19 or lower</td>
+              <td>1 minor, 1 move</td>
+            </tr>
+            <tr>
+              <td>20-29</td>
+              <td>1 minor, 1 move, 1 standard</td>
+            </tr>
+            <tr>
+              <td>30-39</td>
+              <td>2 minor, 2 move, 1 standard</td>
+            </tr>
+            <tr>
+              <td>40 or higher</td>
+              <td>2 minor, 2 move, 2 standard</td>
+            </tr>
+          </tbody>
+        </table>
+        <br> <br>The illusion can perform these actions in a specific sequence, such as moving, taking a standard action, and then moving again, either in an endless loop or starting in response to a specific trigger, such as a door opening.<br>&nbsp;&nbsp;&nbsp;&nbsp;You can also match each action to a specific trigger. An illusion might move when a creature moves next to it or cower and scream when it is attacked.<br>&nbsp;&nbsp;&nbsp;&nbsp;Creatures that view or interact with the illusion are entitled to Insight checks to detect the fact that it is false. This check's DC equals your Arcana check result. A creature is allowed a check the first time it sees the illusion and each time it interacts with it. A creature that touches an illusion automatically determines that the image is a fake.<br>&nbsp;&nbsp;&nbsp;&nbsp;The illusion cannot travel more than 20 squares from the spot where it first appeared.
+        <p></p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 305.
+        </p>
+      </div>
+    
+      <div class="ritualBlock fullWidth hidden">
+        <h1 class="player">Hallucinatory Item</h1>
+        <i>At your command, a phantasm of the item you've pictured in your mind shimmers into being before you. It wavers once, twice, and then seems to take on solid form.</i><br>
+        <p>
+          <span class="ritualstats"><b>Component Cost</b>: 25 gp<br> <b>Market Price</b>: 250 gp<br> <b>Key Skill</b>: Arcana</span><b>Level</b>: 5<br> <b>Category</b>: Deception<br> <b>Time</b>: 10 minutes<br> <b>Duration</b>: 24 Hours
+        </p>
+        <p>
+          You create the illusion of a single inanimate object that appears, to all intents and purposes, to be real. You can use this ritual to create an illusory wall, door, weapon, or other object.<br>&nbsp;&nbsp;&nbsp;&nbsp;Your Arcana check result determines the illusion's maximum size.<br> <br>
+        </p>
+        <table>
+          <tbody>
+            <tr>
+              <th>Arcana Check Result</th>
+              <th>Maximum Size</th>
+            </tr>
+            <tr>
+              <td>19 or lower</td>
+              <td>Small</td>
+            </tr>
+            <tr>
+              <td>20-29</td>
+              <td>Medium</td>
+            </tr>
+            <tr>
+              <td>30-39</td>
+              <td>Large</td>
+            </tr>
+            <tr>
+              <td>40 or higher</td>
+              <td>Huge</td>
+            </tr>
+          </tbody>
+        </table>
+        <br> <br>Once you create the illusion, you cannot move it, and it can't include moving parts.<br>&nbsp;&nbsp;&nbsp;&nbsp;Creatures that view or interact with the illusion are entitled to Insight checks to detect the fact that it is false. This check's DC equals your Arcana check result. A creature is allowed a check the first time it sees the illusion and each time it interacts with it. A creature that touches an illusion automatically determines that the image is a fake.
+        <p></p>
+        <p class="publishedIn">
+          Published in <a href="http://www.wizards.com/default.asp?x=products/dndacc/217367200" target="_new">Player's Handbook</a>, page(s) 306.
+        </p>
+      </div>
+    </section> 
+  </section>
+</body>
+</html>

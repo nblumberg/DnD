@@ -257,6 +257,29 @@
                 return false;
             };
 
+            Creature.prototype.getDefense = function(defense, isMelee) {
+                var value, bonus, penalty, i;
+                if (!defense || typeof defense !== "string") {
+                    return null;
+                }
+                defense = defense.toLowerCase();
+                value = this.defenses[ defense ];
+                value += this.defenseModifier(isMelee);
+                bonus = penalty = 0;
+                for (i = 0; i < this.effects.length; i++) {
+                    if (this.effects[ i ].type === defense) {
+                        if (this.effects[ i ].name.toLowerCase() === "bonus") {
+                            bonus = window.Math.max(this.effects[ i ].amount, bonus);
+                        }
+                        else if (this.effects[ i ].name.toLowerCase() === "penalty") {
+                            penalty = window.Math.max(this.effects[ i ].amount, penalty);
+                        }
+                    }
+                }
+                value += bonus - penalty;
+                return value;
+            };
+
             Creature.prototype.defenseModifier = function(isMelee) {
                 var i, mod = 0;
                 this.__log("defenseModifier", arguments);
@@ -267,7 +290,7 @@
                         }
                             break;
                         case "prone": {
-                            mod += isMelee ? 0 : 2;
+                            mod += isMelee === false ? 2 : 0;
                         }
                             break;
                     }

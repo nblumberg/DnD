@@ -24,7 +24,7 @@
                     { name: "Ghostraven Strike", usage: { frequency: "At-Will" }, range: "melee", toHit: "automatic", defense: "AC", damage: "2d8", keywords: [ "melee" ] }
                 ],
                 buffs: [
-                    { name: "Ghostraven Form", effects: [ { name: "insubstantial" }, { name: "phasing" }, { name: "concealment" } ] }
+                    { name: "Ghostraven Form", effects: [ { name: "resistance", amount: 50, type: "insubstantial" }, { name: "phasing" }, { name: "concealment" } ] }
                 ]
             };
             return jQuery.extend(true, {}, Creature.base, o);
