@@ -2,13 +2,13 @@
  * Created by nblumberg on 4/13/15.
  */
 
-(function () {
+(function createHelpersIIFE() {
     "use strict";
 
     DnD.define(
         "creature.helpers",
         [ "html" ],
-        function(descriptions) {
+        function createHelpersFactory(descriptions) {
             var helpers;
 
             function Power(params) {
@@ -25,7 +25,7 @@
             }
 
             Power.prototype = {
-                frequency: function(f) {
+                frequency: function frequency(f) {
                     if (f) {
                         if (!this.usage) {
                             this.usage = {};
@@ -34,14 +34,14 @@
                     }
                     return this;
                 },
-                action: function(a) {
+                action: function action(a) {
                     if (!this.usage) {
                         this.usage = {};
                     }
                     this.usage.action = a;
                     return this;
                 },
-                addKeywords: function() { // takes an arbitrary number of arguments
+                addKeywords: function addKeywords() { // takes an arbitrary number of arguments
                     var i, keyword;
                     if (!this.keywords) {
                         this.keywords = [];
@@ -54,7 +54,7 @@
                     }
                     return this;
                 },
-                area: function(area, size, range, enemiesOnly) {
+                area: function area(area, size, range, enemiesOnly) {
                     this.isMelee = false;
                     if (!this.target) {
                         this.target = {};
@@ -72,20 +72,20 @@
                     return this.addKeywords(area);
                 },
 
-                atWill: function() {
+                atWill: function atWill() {
                     return this.frequency("At-Will");
                 },
-                encounter: function(perEncounter) {
+                encounter: function encounter(perEncounter) {
                     this.frequency("Encounter");
                     if (perEncounter) {
                         this.usage.perEncounter = perEncounter;
                     }
                     return this;
                 },
-                daily: function() {
+                daily: function daily() {
                     return this.frequency("Daily");
                 },
-                recharge: function(recharge) {
+                recharge: function recharge(recharge) {
                     this.frequency("Recharge");
                     if (recharge) {
                         this.usage.recharge = recharge;
@@ -93,31 +93,31 @@
                     return this;
                 },
 
-                free: function() {
+                free: function free() {
                     return this.action("Free");
                 },
-                immediateInterrupt: function() {
+                immediateInterrupt: function immediateInterrupt() {
                     return this.action("Immediate Interrupt");
                 },
-                immediateReaction: function() {
+                immediateReaction: function immediateReaction() {
                     return this.action("Immediate Reaction");
                 },
-                minor: function() {
+                minor: function minor() {
                     return this.action("Minor");
                 },
-                move: function() {
+                move: function move() {
                     return this.action("Move");
                 },
-                noAction: function() {
+                noAction: function noAction() {
                     return this.action("No Action");
                 },
 
-                melee: function() {
+                melee: function melee() {
                     this.isMelee = true;
                     this.range = "melee";
                     return this.addKeywords("melee");
                 },
-                ranged: function(shortRange, longRange) {
+                ranged: function ranged(shortRange, longRange) {
                     this.isMelee = false;
                     if (shortRange || longRange) {
                         if (!this.target) {
@@ -128,25 +128,25 @@
                     }
                     return this.addKeywords("ranged");
                 },
-                closeBurst: function(size, enemiesOnly) {
+                closeBurst: function closeBurst(size, enemiesOnly) {
                     return this.area("close burst", size, 0, enemiesOnly);
                 },
-                blast: function(size, enemiesOnly) {
+                blast: function blast(size, enemiesOnly) {
                     return this.area("blast", size, 0, enemiesOnly);
                 },
-                burst: function(size, range, enemiesOnly) {
+                burst: function burst(size, range, enemiesOnly) {
                     return this.area("burst", size, range, enemiesOnly);
                 },
-                wall: function(size, range, enemiesOnly) {
+                wall: function wall(size, range, enemiesOnly) {
                     return this.area("wall", size, range, enemiesOnly);
                 }
             };
 
             helpers = {
-                mod: function(ability) {
+                mod: function mod(ability) {
                     return window.Math.floor((ability - 10) / 2);
                 },
-                skill: function(name, level, abilities, extra) {
+                skill: function skill(name, level, abilities, extra) {
                     switch(name) {
                         case "acrobatics":
                         case "stealth":
@@ -184,7 +184,7 @@
                         } break;
                     }
                 },
-                skills: function(baseCreature, extra) {
+                skills: function skills(baseCreature, extra) {
                     var o, skills, i, name;
                     o = {};
                     skills = [ "acrobatics", "arcana", "athletics", "bluff", "diplomacy", "dungeoneering", "endurance", "heal", "history", "insight", "intimidate", "nature", "perception", "religion", "stealth", "streetwise", "thievery" ];
@@ -193,6 +193,9 @@
                         o[ name ] = helpers.skill(name, baseCreature.level, baseCreature.abilities, extra[ name ] || 0);
                     }
                     return o;
+                },
+                tier: function tier(partyLevel) {
+                    return 1 + Math.floor((partyLevel - 1) / 10);
                 },
                 Power: Power,
                 meleeBasic: new Power({

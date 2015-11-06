@@ -53,6 +53,7 @@
                 this.__log = out.logFn.bind(this, "Weapon");
                 params = params || {};
                 this._init(params);
+                this.category = params.category;
                 this.isMelee = params.isMelee || false;
                 this.proficiency = params.proficiency || 0;
                 this.damage = new Damage(params.damage);
