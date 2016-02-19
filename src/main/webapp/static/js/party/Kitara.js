@@ -12,9 +12,9 @@
             var Kitara, prepared;
             prepared = {
                 // Encounter 1
-                //"Burning Hands": true,
+                "Burning Hands": true,
                 //"Skewering Spikes": true,
-                "Glorious Presence": true,
+                //"Glorious Presence": true,
                 //"Orbmaster's Incendiary Detonation": true,
                 //"Ray of Enfeeblement": true,
                 //"Force Orb": true,
@@ -39,16 +39,16 @@
 
                 // Daily 1
                 //"Slimy Transmutation": true,
-                //"Fountain of Flame": true,
-                "Phantom Chasm": true,
+                "Fountain of Flame": true,
+                //"Phantom Chasm": true,
                 //"Rolling Thunder": true,
                 //"Acid Arrow": true,
                 "Wizard's Fury": true,
 
                 // Daily 5
-                "Fireball": true,
+                //"Fireball": true,
                 //"Grasp of the Grave": true,
-                //"Scattering Shock": true,
+                "Scattering Shock": true,
 
                 // Daily 9
                 "Taunting Phantoms": true,
@@ -68,8 +68,8 @@
                 //"Invisibility": true,
 
                 // Utility 10
-                //"Circle of Protection": true,
-                "Mass Resistance": true,
+                "Circle of Protection": true,
+                //"Mass Resistance": true,
 
                 // Utility 12
                 "Shadow Stalk": true,
@@ -147,6 +147,11 @@
                             "implement"
                         ],
                         damage: 2 // Assume using the Orb +3, so this is from Supremely Vicious Bastard Sword +2
+                    },
+                    {
+                        name: "Destructive Wizardry",
+                        minTargets: 2,
+                        damage: CH.tier()
                     }
                 ],
                 attacks: [

@@ -180,7 +180,7 @@
                     }).daily().immediateReaction(),
                     new CH.Power({
                         name: "Unyielding Avalanche",
-                        toHit: "STR",
+                        toHit: "automatic",
                         defense: "AC",
                         damage: "1[W]",
                         effects: [ { name: "Slowed", duration: "startTargetNext" } ],
@@ -282,7 +282,7 @@
                     attackerStatus: [ "tempHp" ], // also the character must be wearing light armor or chainmail
                     keywords: [ "melee" ], // or close
                     damage: 2,
-                    tempHp: "CON"
+                    tempHp: "CON+" + (2 * CH.tier(partyLevel)) // Dwarf Stoneblood
                 },
                 {
                     name: "Axe Expertise",
@@ -300,9 +300,6 @@
                         "melee"
                     ],
                     effects: [ { name: "Marked", duration: "endAttackerNext" } ]
-                },
-                {
-                    name: ""
                 }//,
                 //{
                 //    name: "Combat Superiority",
