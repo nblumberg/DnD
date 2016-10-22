@@ -36,6 +36,12 @@ module.exports = function(grunt) {
         // watch files and do stuff
         watch: {
             html: {
+                options: {
+                    interrupt: false,
+                    debounceDelay: 250,
+                    reload: false,
+                    livereload: 9001
+                },
                 files: [ "<%= htmlFiles %>" ],
                 tasks: [ "includes:html" ]
             }
@@ -44,22 +50,15 @@ module.exports = function(grunt) {
         // serve up docs and fixtures
         // https://github.com/gruntjs/grunt-contrib-connect
         connect: {
-            docs: {
+            server: {
                 options: {
-                    //visit http://localhost:9000 when running
                     port: 9000,
-                    keepalive: true,
+                    protocol: "http",
+                    hostname: "localhost",
                     base: "./",
-                    hostname: "*"
-                }
-            },
-            fixtures: {
-                options: {
-                    //visit http://localhost:9001 when running
-                    port: 9001,
-                    //keepalive: true,
-                    base: "./",
-                    hostname: "*"
+                    keepalive: false,
+                    livereload: 9001,
+                    open: "http://localhost:9000"
                 }
             }
          }
@@ -70,8 +69,8 @@ module.exports = function(grunt) {
     grunt.registerTask("default", []);
 
     //development-based tasks
-    grunt.registerTask("html", [ "watch:html" ]);
+    grunt.registerTask("html", [ "includes:html", "watch:html" ]);
 
     // Serve locally
-    grunt.registerTask("serve", [ "connect", "watch" ]);
+    grunt.registerTask("serve", [ "connect", "html" ]);
 };
