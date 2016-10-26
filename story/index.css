@@ -5,10 +5,23 @@ html {
 }
 img {
     cursor: url("http://cursors1.totallyfreecursors.com/thumbnails/magnifyingglass.gif"), move;
+}
+img, .slides {
     margin: 12px;
     margin: 1em;
     margin: 1rem;
     max-width: 33%;
+}
+.slides {
+    width: 33%;
+}
+.slides img {
+    margin: 0;
+    max-width: 100%;
+    width: 100%;
+}
+.slides .hide {
+    display: none;
 }
 section, article {
     clear: both;

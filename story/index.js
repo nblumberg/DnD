@@ -38,6 +38,7 @@ jQuery(document).ready(function() {
         "Durkik",
         "Fangren",
         "Falrinth",
+        "Fariex",
         "Filth King",
         "Gallia",
         "Gal'ott",
@@ -333,23 +334,46 @@ jQuery(document).ready(function() {
     });
 
     // Slideshows
-    (function() {
-        var $slides = jQuery("img[data-slides]");
+    (function slidesPlugin() {
+        var $slides, i, $containers;
+        $slides = jQuery("img[data-slides]");
         if ($slides.length) {
-            $slides.css({ width: "33%" });
-            window.setInterval(function() {
-                $slides.each(function() {
-                    var imgs, src, i;
-                    imgs = jQuery(this).data("slides").split(",");
-                    src = window.decodeURIComponent(this.src);
-                    for (i = 0; i < imgs.length; i++) {
-                        if (src.indexOf(imgs[ i ]) !== -1) {
-                            this.src = imgs[ (i + 1) % imgs.length ];
-                            break;
-                        }
+            $slides.each(function slidesInit() {
+                var $plugin, $container, urls, images, i;
+                $plugin = jQuery(this);
+                $container = jQuery("<div></div>");
+                $container.addClass($plugin[ 0 ].className).addClass("slides");
+                $plugin.replaceWith($container);
+                $plugin.data("container", $container);
+
+                urls = $plugin.data("slides").split(",");
+                images = [];
+                for (i = 0; i < urls.length; i++) {
+                    images.push(new Image());
+                    images[ i ].src = urls[ i ];
+                    $container.append(images[ i ]);
+                    images[ i ].addEventListener("load", function slideImageLoaded() {
+                        $container.height(Math.max(this.naturalHeight / this.naturalWidth * $container.width(), $container.height()));
+                    }.bind(images[ i ]));
+                }
+                $plugin.data("images", images);
+            });
+
+            i = 0;
+            function slidesChange() {
+                $slides.each(function slideChange() {
+                    var $plugin, images, j;
+                    $plugin = jQuery(this);
+                    images = $plugin.data("images");
+                    for (j = 0; j < images.length; j++) {
+                        jQuery(images[ j ]).addClass("hide");
                     }
+                    jQuery(images[ i % images.length ]).removeClass("hide");
                 });
-            }, 2000);
+                i++;
+            }
+            slidesChange();
+            window.setInterval(slidesChange, 2000);
         }
     })();
     
