@@ -2,7 +2,7 @@
  * Created by nblumberg on 11/16/14.
  */
 
-module.exports = function (grunt) {
+module.exports = function gruntFile(grunt) {
     "use strict";
 
     var options;
@@ -13,6 +13,8 @@ module.exports = function (grunt) {
 
     // loads all grunt tasks from package.json
     require("load-grunt-tasks")(grunt);
+
+    require("./grunt-jasmine-html-from-karma-conf.js")(grunt);
 
     // uncomment to time each grunt tasks
     require("time-grunt")(grunt);

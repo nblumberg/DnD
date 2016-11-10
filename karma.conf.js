@@ -3,7 +3,7 @@
 
 /* global module, process */
 
-module.exports = function(config) {
+module.exports = function karmaConf(config) {
     "use strict";
 
     var options, libFiles, fixtures, coverageFiles, specFiles, i;
@@ -23,7 +23,7 @@ module.exports = function(config) {
         // possible values: "dots", "progress"
         // CLI --reporters progress
         reporters: [
-            "progress", "junit", "coverage"//, "html"
+            "spec", "progress", "junit", "coverage"//, "html"
         ],
 
         junitReporter: {

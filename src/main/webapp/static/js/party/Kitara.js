@@ -20,15 +20,15 @@
                 //"Force Orb": true,
 
                 // Encounter 3
-                //"Icy Rays": true,
+                "Icy Rays": true,
                 "Grim Shadow": true,
-                "Color Spray": true,
+                //"Color Spray": true,
                 //"Pinioning Vortex": true,
 
                 // Encounter 7
                 //"Ghoul Strike": true,
-                "Lightning Bolt": true,
-                //"Thunder Cage": true,
+                //"Lightning Bolt": true,
+                "Thunder Cage": true,
 
                 // Encounter 11
                 "Shadowy Tendrils": true,
@@ -47,8 +47,8 @@
 
                 // Daily 5
                 //"Fireball": true,
-                //"Grasp of the Grave": true,
-                "Scattering Shock": true,
+                "Grasp of the Grave": true,
+                //"Scattering Shock": true,
 
                 // Daily 9
                 "Taunting Phantoms": true,

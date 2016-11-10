@@ -14,7 +14,7 @@
                 name: "Dart",
                 isPC: true,
                 level: partyLevel,
-                image: "../images/portraits/Dart.png-c200", // http://rs997.pbsrc.com/albums/af94/garryypicture/Games/RacePortRevenant.png~c200Dart
+                image: "../images/portraits/Dart.png", // http://rs997.pbsrc.com/albums/af94/garryypicture/Games/RacePortRevenant.png~c200Dart
                 abilities: {
                     STR: 16,
                     CON: 23,
@@ -76,7 +76,8 @@
                         defense: "AC",
                         damage: "0",
                         effects: [ { name: "Marked", duration: "startAttackerNext" } ], // TODO: duration should be end of encounter or until this power is used again
-                        keywords: [ "augmentable", "psionic" ]
+                        keywords: [ "augmentable", "psionic" ],
+                        description: descriptions[ "Battlemind's Demand" ]
                     }).atWill().minor().ranged({ range: 5, area: "closeBurst", targets: 2 }), // range 5 due to Deman's Reach feat
 
                     new CH.Power({
@@ -94,37 +95,39 @@
                         defense: "AC",
                         damage: "1[W]+CON",
                         keywords: [ "augmentable", "psionic", "weapon" ]
-                    }).immediateInterrupt().melee(),
+                    }).atWill().immediateInterrupt().melee(),
                     new CH.Power({
                         name: "Lightning Rush (1 augment)",
                         toHit: "CON",
                         defense: "AC",
                         damage: "1[W]+CON",
-                        effects: [ 
-                            { 
-                                name: "penalty", 
+                        effects: [
+                            {
+                                name: "penalty",
                                 amount: 4, // TODO: amount should be CHA
-                                type: "attacks", 
+                                type: "attacks",
                                 duration: "startTargetNext" // TODO: duration should be just the next attack
-                            } 
-                        ], 
-                        keywords: [ "augmentable", "psionic", "weapon" ]
-                    }).immediateInterrupt().melee(),
+                            }
+                        ],
+                        keywords: [ "augmentable", "psionic", "weapon" ],
+                        description: descriptions[ "Lightning Rush" ]
+                    }).atWill().immediateInterrupt().melee(),
                     new CH.Power({
                         name: "Lightning Rush (2 augment)",
                         toHit: "CON",
                         defense: "AC",
                         damage: "2[W]+CON",
-                        effects: [ 
-                            { 
-                                name: "penalty", 
+                        effects: [
+                            {
+                                name: "penalty",
                                 amount: 4, // TODO: amount should be CHA
-                                type: "attacks", 
+                                type: "attacks",
                                 duration: "startTargetNext" // TODO: duration should be just the next attack
-                            } 
-                        ], 
-                        keywords: [ "augmentable", "psionic", "weapon" ]
-                    }).immediateInterrupt().melee(),
+                            }
+                        ],
+                        keywords: [ "augmentable", "psionic", "weapon" ],
+                        description: descriptions[ "Lightning Rush" ]
+                    }).atWill().immediateInterrupt().melee(),
 
                     new CH.Power({
                         name: "Intellect Snap",
@@ -140,7 +143,8 @@
                         defense: "Will",
                         damage: { amount: "CON", type: "psychic" },
                         effects: [ { name: "Dazed", duration: "startAttackerNext" } ], // TODO: stops self dazed/marked
-                        keywords: [ "augmentable", "psionic", "psychic", "weapon" ]
+                        keywords: [ "augmentable", "psionic", "psychic", "weapon" ],
+                        description: descriptions[ "Intellect Snap" ]
                     }).atWill().melee(),
                     new CH.Power({
                         name: "Intellect Snap (4 augment)",
@@ -148,7 +152,8 @@
                         defense: "Will",
                         damage: { amount: "2[W]+CON", type: "psychic" },
                         effects: [ { name: "Dazed", duration: "endAttackerNext" } ], // TODO: you or ally save vs. dazed/stunned
-                        keywords: [ "augmentable", "psionic", "psychic", "weapon" ]
+                        keywords: [ "augmentable", "psionic", "psychic", "weapon" ],
+                        description: descriptions[ "Intellect Snap" ]
                     }).atWill().melee(),
 
                     new CH.Power({
@@ -157,7 +162,8 @@
                         defense: "AC",
                         damage: "1[W]+CON",
                         effects: [], // TODO: slide marked creature 3
-                        keywords: [ "augmentable", "psionic", "weapon" ]
+                        keywords: [ "augmentable", "psionic", "weapon" ],
+                        description: descriptions[ "Ruinous Grasp" ]
                     }).atWill().melee(),
                     new CH.Power({
                         name: "Ruinous Grasp (1 augment)",
@@ -165,7 +171,8 @@
                         defense: "AC",
                         damage: "1[W]+CON",
                         effects: [], // TODO: slide marked creature 3, you shift 1 & gain +2 power bonus to 1 defense of your choice endAttackerNext
-                        keywords: [ "augmentable", "psionic", "weapon" ]
+                        keywords: [ "augmentable", "psionic", "weapon" ],
+                        description: descriptions[ "Ruinous Grasp" ]
                     }).atWill().melee(),
                     new CH.Power({
                         name: "Ruinous Grasp (4 augment)",
@@ -173,7 +180,8 @@
                         defense: "AC",
                         damage: "2[W]+CON",
                         effects: [ { name: "Immobilized", duration: "endAttackerNext" } ], // TODO: push target creature CHA, slide target 1 as free action whenever you take damage
-                        keywords: [ "augmentable", "psionic", "weapon" ]
+                        keywords: [ "augmentable", "psionic", "weapon" ],
+                        description: descriptions[ "Ruinous Grasp" ]
                     }).atWill().melee(),
 
                     new CH.Power({
@@ -181,7 +189,8 @@
                         toHit: "CON",
                         defense: "AC",
                         damage: "2[W]+CON",
-                        keywords: [ "augmentable", "psionic", "teleportation", "weapon" ]
+                        keywords: [ "augmentable", "psionic", "teleportation", "weapon" ],
+                        description: descriptions[ "Cunning Abduction" ]
                     }).encounter().melee(),
                     new CH.Power({
                         name: "Cunning Abduction (2 augment)",
@@ -189,7 +198,8 @@
                         defense: "AC",
                         damage: "2[W]+CON",
                         effects: [ { name: "Dazed", duration: "endAttackerNext" } ],
-                        keywords: [ "augmentable", "psionic", "teleportation", "weapon" ]
+                        keywords: [ "augmentable", "psionic", "teleportation", "weapon" ],
+                        description: descriptions[ "Cunning Abduction" ]
                     }).encounter().melee(),
 
                     new CH.Power({
@@ -226,10 +236,11 @@
                         damage: { amount: "3[W]+CON" },
                         effects: { name: "Marked", duration: "endAttackerNext" },
                         miss: {
-                            halfDamage: true
+                            halfDamage: true,
                             effects: { name: "Marked", duration: "endAttackerNext" }
                         },
-                        keywords: [ "psionic", "teleportation" ]
+                        keywords: [ "psionic", "teleportation" ],
+                        description: descriptions[ "Fated Confrontation" ]
                     }).daily().ranged({ range: 5 }),
 
                     new CH.Power({
@@ -239,7 +250,7 @@
                         damage: { amount: "2[W]+CON" },
                         effects: { name: "Marked", duration: "10" }, // TODO: duration should be end of encounter
                         miss: {
-                            halfDamage: true
+                            halfDamage: true,
                             effects: { name: "Marked", duration: "endAttackerNext" }
                         },
                         keywords: [ "psionic", "stance", "weapon" ]
@@ -252,6 +263,7 @@
                         effects: [ { name: "Marked", duration: "endAttackerNext" } ],
                         keywords: [ "psionic" ]
                     }).daily().noAction().melee(),
+
                     new CH.Power({
                         name: "Bracers of Tactical Blows",
                         toHit: "automatic",
@@ -329,7 +341,8 @@
                             usesHealingSurge: false,
                             amount: "30"
                         },
-                        keywords: [ "healing" ]
+                        keywords: [ "healing" ],
+                        description: descriptions[ "Lifegiving Armor" ]
                     }).daily().minor(),
                     new CH.Power({
                         name: "Stalwart Belt",
@@ -350,7 +363,8 @@
                     }).daily().move(),
                     new CH.Power({
                         name: "Cloak of Translocation +2", // TODO: regain a encounter teleportation power
-                        keywords: []
+                        keywords: [],
+                        description: descriptions[ "Cloak of Translocation" ]
                     }).daily().minor()
                 ]
             };
