@@ -10,6 +10,8 @@
             function AttackDialog(params) {
                 this.$weapons = null;
                 this.$attacks = null;
+                this.$toHitBonus = null;
+                this.$defense = null;
                 this.$damage = null;
                 this.$keywords = null;
                 this.$description = null;
@@ -41,6 +43,8 @@
                     var $a = jQuery(this);
                     _self._attackChange($a);
                 });
+                this.$toHitBonus = this.$dialog.find(".column2 .toHit .bonus");
+                this.$defense = this.$dialog.find(".column2 .toHit .defense");
                 this.$damage = this.$dialog.find(".column2 .damage");
                 this.$keywords = this.$dialog.find(".column2 .keywords");
                 this.$description = this.$dialog.find(".column2 .description");
@@ -138,6 +142,8 @@
                 d = this.attack ? this.attack.damage.toString() : "";
                 w = this.weapon && this.weapon.damage ? this.weapon.damage.toString() : "W";
                 plus = this.weapon ? this.weapon.enhancement : "";
+                this.$toHitBonus.html(this.attack.toHit === "automatic" ? "automatic" : this.attacker.abilities[ this.attack.toHit + "mod" ] + Math.floor(this.attacker.level / 2) + (this.weapon ? this.weapon.proficiency : 0) + (plus || 0));
+                this.$defense.html(this.attack.defense);
                 this.$damage.html((plus ? "" + plus + " + " : "") + d.replace("[W]", "[" + w + "]"));
             };
 

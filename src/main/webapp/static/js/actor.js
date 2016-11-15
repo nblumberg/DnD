@@ -134,6 +134,9 @@
                         misses.push(result);
                     }
                 }
+                if (attack.keywords.indexOf("invigorating") !== -1) {
+                    this.heal(this.abilities.CONmod, true, false, "Invigorating power", this);
+                }
                 return { hits: hits, misses: misses };
             };
 
@@ -652,10 +655,12 @@
                 if (!toHit.isAutomaticHit) {
                     if (manualRolls && manualRolls.attack && (manualRolls.attack.roll || manualRolls.attack.isCritical || manualRolls.attack.isFumble)) {
                         toHit.roll = manualRolls.attack.roll;
+                        toHit.isManual = true;
                         attack.addItem(item, manualRolls.attack.roll, manualRolls.attack.isCritical, manualRolls.attack.isFumble);
                     }
                     else {
                         toHit.roll = item ? attack.rollItem(item) : attack.roll(); // TODO: attack.meleeExtra vs. attack.rangdExtra when no item - how to determine isMelee?
+                        toHit.isManual = false;
                     }
                     toHit.isCrit = attack.isCritical() || (manualRolls && manualRolls.attack ? manualRolls.attack.isCritical : false);
                     toHit.isFumble = attack.isFumble() || (manualRolls && manualRolls.attack ? manualRolls.attack.isFumble : false);
@@ -791,6 +796,7 @@
                 result = { hit: false, damage: [] };
                 toHitTarget = {
                     roll: toHit.roll + (toHit.conditional.mod ? toHit.conditional.mod : 0),
+                    isManual: toHit.isManual,
                     conditional: jQuery.extend({ mod: 0, breakdown: "" }, toHit.conditional)
                 };
                 targetDamage = {
@@ -895,14 +901,15 @@
                 for (i = 0; attackBonuses && i < attackBonuses.length; i++) {
                     attackBonus = attackBonuses[ i ];
                     if (attackBonus.toHit) {
-                        if (!damage.isManual) {
-                            toHitTarget.roll += attackBonus.toHit;
-                            toHitTarget.conditional.mod += attackBonus.toHit;
+                        if (!toHitTarget.isManual) {
+                            amount = (new Damage(typeof attackBonus.toHit === "number" ? "" + attackBonus.toHit : attackBonus.toHit, this)).roll();
+                            toHitTarget.roll += amount;
+                            toHitTarget.conditional.mod += amount;
                         }
                         toHitTarget.conditional.breakdown += (attackBonus.toHit >= 0 ? " +" + attackBonus.toHit + " (" + attackBonus.name + ")" : "");
                     }
                     if (attackBonus.damage) {
-                        amount = (new Damage(typeof attackBonus.damage === "number" ? "" + attackBonus.damage : attackBonus.damage)).roll();
+                        amount = (new Damage(typeof attackBonus.damage === "number" ? "" + attackBonus.damage : attackBonus.damage, this)).roll();
                         if (!damage.isManual) {
                             targetDamage.amount += amount;
                             targetDamage.conditional.total += amount; // TODO: why is this on hit only?
@@ -923,6 +930,13 @@
                     }
                     if (attackBonus.miss && attackBonus.miss.effects) {
                         targetDamage.missEffects = targetDamage.missEffects.concat(attackBonus.miss.effects);
+                    }
+                    if (attackBonus.tempHp) {
+                        amount = new Damage(typeof attackBonus.tempHp === "number" ? "" + attackBonus.tempHp : attackBonus.tempHp, this).roll();
+                        if (attack.keywords.indexOf("invigorating") !== -1) {
+                            amount += Math.max(this.abilities.CONmod, 0);
+                        }
+                        this.heal(Math.max(amount, 0), true, false, attackBonus.name, this);
                     }
                 }
             };

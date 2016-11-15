@@ -11,7 +11,7 @@
         function(out) {
             function Abilities(params) {
                 var i, ability, abilities;
-                out.logFn("Abiltiies", "constructor", arguments);
+                out.logFn("Abilities", "constructor", arguments);
                 abilities = [ "STR", "DEX", "CON", "INT", "WIS", "CHA" ];
                 params = params || {};
                 for (i = 0; i < abilities.length; i++) {

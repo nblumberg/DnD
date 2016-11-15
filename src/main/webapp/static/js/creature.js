@@ -163,6 +163,9 @@
                         if (attackBonus.status.indexOf("bloodied") !== -1 && !this.isBloodied()) {
                             return false;
                         }
+                        if (attackBonus.status.indexOf("tempHp") !== -1 && !this.hp.temp) {
+                            return false;
+                        }
                     }
                     return true;
                 }
@@ -175,6 +178,14 @@
                             return false;
                         }
                         if (attackBonus.foeStatus.indexOf("prone") !== -1 && target.hasCondition("prone")) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                function matchesWeapon(attackBonus) {
+                    if (attackBonus.weapon) {
+                        if (!item || !item.category || item.category.toLowerCase() !== attackBonus.weapon) {
                             return false;
                         }
                     }
@@ -196,6 +207,9 @@
                             continue;
                         }
                         if (!matchesFoeStatus(attackBonus)) {
+                            continue;
+                        }
+                        if (!matchesWeapon(attackBonus)) {
                             continue;
                         }
                         attackBonuses.push(attackBonus);
