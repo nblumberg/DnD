@@ -24,7 +24,7 @@
         "grunt-contrib-jshint": "1.0.0",
         "grunt-contrib-uglify": "2.0.0",
         "grunt-contrib-watch": "1.0.0",
-        "grunt-execute": "0.2.2",
+        "grunt-exec": "1.0.0",
         "grunt-karma": "2.0.0",
         "grunt-htmlhint": "0.9.13",
         "grunt-html-validation": "0.1.18",

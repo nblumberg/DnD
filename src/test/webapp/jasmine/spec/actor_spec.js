@@ -1190,12 +1190,14 @@
                     actor._attackBonuses.andReturn([ { name: "test", toHit: 1 } ]);
                 });
                 it("it should add the attack bonus", function() {
+                    toHitTarget.isManual = true;
                     actor._applyAttackBonuses(attack, { isManual: true }, item, target, false, toHitTarget, targetDamage);
                     expect(toHitTarget.conditional.breakdown).toEqual(" +1 (test)");
                     expect(toHitTarget.roll).toEqual(10);
                     expect(toHitTarget.conditional.mod).toEqual(0);
                     toHitTarget.conditional.breakdown = "";
 
+                    toHitTarget.isManual = false;
                     actor._applyAttackBonuses(attack, { isManual: false }, item, target, false, toHitTarget, targetDamage);
                     expect(toHitTarget.conditional.breakdown).toEqual(" +1 (test)");
                     expect(toHitTarget.roll).toEqual(11);

@@ -161,7 +161,7 @@
                         toHit: "CON",
                         defense: "AC",
                         damage: "1[W]+CON",
-                        effects: [], // TODO: slide marked creature 3
+                        //effects: [], // TODO: slide marked creature 3
                         keywords: [ "augmentable", "psionic", "weapon" ],
                         description: descriptions[ "Ruinous Grasp" ]
                     }).atWill().melee(),
@@ -170,7 +170,7 @@
                         toHit: "CON",
                         defense: "AC",
                         damage: "1[W]+CON",
-                        effects: [], // TODO: slide marked creature 3, you shift 1 & gain +2 power bonus to 1 defense of your choice endAttackerNext
+                        //effects: [], // TODO: slide marked creature 3, you shift 1 & gain +2 power bonus to 1 defense of your choice endAttackerNext
                         keywords: [ "augmentable", "psionic", "weapon" ],
                         description: descriptions[ "Ruinous Grasp" ]
                     }).atWill().melee(),
@@ -234,10 +234,10 @@
                         toHit: "CON",
                         defense: "AC",
                         damage: { amount: "3[W]+CON" },
-                        effects: { name: "Marked", duration: "endAttackerNext" },
+                        effects: [ { name: "Marked", duration: "endAttackerNext" } ],
                         miss: {
                             halfDamage: true,
-                            effects: { name: "Marked", duration: "endAttackerNext" }
+                            effects: [ { name: "Marked", duration: "endAttackerNext" } ]
                         },
                         keywords: [ "psionic", "teleportation" ],
                         description: descriptions[ "Fated Confrontation" ]
@@ -248,10 +248,10 @@
                         toHit: "CON",
                         defense: "AC",
                         damage: { amount: "2[W]+CON" },
-                        effects: { name: "Marked", duration: "10" }, // TODO: duration should be end of encounter
+                        effects: [ { name: "Marked" } ], // TODO: duration should be end of encounter
                         miss: {
                             halfDamage: true,
-                            effects: { name: "Marked", duration: "endAttackerNext" }
+                            effects: [ { name: "Marked", duration: "endAttackerNext" } ]
                         },
                         keywords: [ "psionic", "stance", "weapon" ]
                     }).daily().melee(),

@@ -22,7 +22,7 @@ module.exports = function gruntJasmineHtmlFromKarmaConf(grunt) {
             path = require("path");
             absolutePath = path.resolve(options.configFile);
             relativePath = path.relative(__dirname, absolutePath);
-            loadPath = relativePath;
+            loadPath = "./" + relativePath;
             if (options.verbose) {
                 grunt.log.writeln("Loading " + loadPath + " (" + absolutePath + ")");
             }

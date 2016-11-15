@@ -32,10 +32,6 @@ module.exports = function gruntFile(grunt) {
     options.genPath = options.staticPath + "gen/";
     options.mappingPath = options.webappPath + "gen/";
 
-    // test
-    options.testPath = "src/test/webapp/jasmine/spec";
-    options.testFiles = "<%= testPath %>/*.js";
-
     // css
     options.cssPath = options.staticPath + "css/";
     options.cssFiles = options.cssPath + "**.css";
@@ -52,7 +48,7 @@ module.exports = function gruntFile(grunt) {
         options.jsPath + "lib/bootstrap.min.js",
         options.jsPath + "js.js",
         options.jsPath + "dnd.js",
-        options.jsPath + "*.js"
+        options.jsPath + "**.js"
     ];
     options.jsNoMinifyGroups = [];
     options.jsGroups = (function() {
@@ -70,6 +66,11 @@ module.exports = function gruntFile(grunt) {
 
         return o;
     })();
+
+    // test
+    options.testPath = "src/test/webapp/jasmine/spec";
+    options.testFiles = "<%= testPath %>/*.js";
+
 
     //console.log("options.jsGroups: " + JSON.stringify(options.jsGroups, null, "    "));
 
@@ -285,13 +286,10 @@ module.exports = function gruntFile(grunt) {
      * SERVING
      *************/
 
-    options.execute = {
+    options.exec = {
         server: {
-            options: {
-                // overide code cwd (defaults to "." for project main)
-                cwd: "."
-            },
-            src: [ "src/main/webapp/server.js" ]
+            command: "node src/main/webapp/server.js",
+            exitCode: [ 0 ]
         }
     };
 
@@ -353,7 +351,8 @@ module.exports = function gruntFile(grunt) {
                 spawn: false,
                 reload: true
             },
-            files: [ "GruntFile.js", "karma.config.js", "<%= jsFiles %>", "<%= testFiles %>" ]
+            files: [ "GruntFile.js", "karma.config.js", "<%= jsFiles %>", "<%= testFiles %>" ],
+            tasks: [ "build", "specRunner" ]
         }
     };
 
@@ -446,7 +445,8 @@ module.exports = function gruntFile(grunt) {
 
     // continuous dev mode
     grunt.registerTask("dev", [ "build", "specRunner", "watch:dev" ]);
+    grunt.registerTask("test", [ "build", "specRunner", "connect:tests", "open:specRunner", "watch:specRunner" ]);
 
-    grunt.registerTask("launch", [ "build", "open:admin", "execute:server" ]);
+    grunt.registerTask("launch", [ "build", "open:admin", "exec:server" ]);
 
 };
