@@ -23,6 +23,9 @@ img, .slides {
 .slides .hide {
     display: none;
 }
+.toc ul {
+    list-style: none;
+}
 section, article {
     clear: both;
 }
@@ -108,16 +111,16 @@ dfn.group {
 }
 
 .legend {
-    background: black; 
+    background: black;
     font-size: 0.75rem;
     padding: 0 1rem 1rem 0.5rem;
-    position: fixed; 
+    position: fixed;
     max-height: 10%;
     max-width: 10%;
     overflow-y: hidden;
-    right: 0; 
-    text-align: right; 
-    top: 0; 
+    right: 0;
+    text-align: right;
+    top: 0;
 }
 
 .bios .bio,
@@ -180,7 +183,7 @@ dfn.group {
 	display: none;
 }
 img.kidnappee {
-    clear:none; 
+    clear:none;
     max-height: 100px;
     margin-right: 0;
 }

@@ -57,8 +57,6 @@
         "karma-phantomjs-launcher": "0.1.4",
         "karma-safari-launcher": "0.1.1",
         "karma-script-launcher": "0.1.0",
-        "grunt-hash": "0.5.0",
-        "grunt-jasmine-html-from-karma-conf": "0.1.2",
-        "phantomjs": "1.9.10"
+        "grunt-hash": "0.5.0"
     }
 }

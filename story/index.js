@@ -16,7 +16,7 @@ jQuery(document).ready(function() {
         "Richard D'Eversholt",
         "Ringo",
         "Smudge",
-        
+
         "Adronsius",
         "Aerun",
         "Alys",
@@ -176,7 +176,7 @@ jQuery(document).ready(function() {
         "Skull Gorge",
         "Stonehome Mountains",
         "Sunset Sea",
-        "Talar", 
+        "Talar",
         "Terrelton",
         "Tower of Djamela",
         "Tu'narath",
@@ -216,7 +216,7 @@ jQuery(document).ready(function() {
             name = $h.html();
             $h.html(jQuery("<a/>").attr("name", name).html(name));
         });
-        
+
         $partial.find(".person, .place, .group").on({
             click: function() {
                 var w, $trigger;
@@ -311,27 +311,27 @@ jQuery(document).ready(function() {
     });
 
     // Set Table of Content link hrefs
-    jQuery(".toc a").each(function() {
-        var $link, html;
-        $link = jQuery(this);
-        html = $link.html();
-        $link.attr("href", "#" + html);
-    });
-        
+    // jQuery(".toc a").each(function() {
+    //     var $link, html;
+    //     $link = jQuery(this);
+    //     html = $link.html();
+    //     $link.attr("href", "#" + html);
+    // });
+
     // Load character descriptions via AJAX
     // jQuery("<div></div>").load("html/characters.html", function() {
     //     jQuery(this).children().appendTo("body");
     // });
 
     // Accordion headers
-    $body.on("click", "h1, h2, h3, h4", function() {
-        var h = this;
-        jQuery(h).parent().children().each(function() {
-            if (this !== h) {
-                jQuery(this).toggle();
-            }
-        });
-    });
+    // $body.on("click", "h1, h2, h3, h4", function() {
+    //     var h = this;
+    //     jQuery(h).parent().children().each(function() {
+    //         if (this !== h) {
+    //             jQuery(this).toggle();
+    //         }
+    //     });
+    // });
 
     // Image windows
     $body.on("click", "img", function() {
@@ -341,6 +341,20 @@ jQuery(document).ready(function() {
     // Slideshows
     (function slidesPlugin() {
         var $slides, i, $containers;
+
+        function slidesChange() {
+            $slides.each(function slideChange() {
+                var $plugin, images, j;
+                $plugin = jQuery(this);
+                images = $plugin.data("images");
+                for (j = 0; j < images.length; j++) {
+                    jQuery(images[ j ]).addClass("hide");
+                }
+                jQuery(images[ i % images.length ]).removeClass("hide");
+            });
+            i++;
+        }
+
         $slides = jQuery("img[data-slides]");
         if ($slides.length) {
             $slides.each(function slidesInit() {
@@ -365,23 +379,11 @@ jQuery(document).ready(function() {
             });
 
             i = 0;
-            function slidesChange() {
-                $slides.each(function slideChange() {
-                    var $plugin, images, j;
-                    $plugin = jQuery(this);
-                    images = $plugin.data("images");
-                    for (j = 0; j < images.length; j++) {
-                        jQuery(images[ j ]).addClass("hide");
-                    }
-                    jQuery(images[ i % images.length ]).removeClass("hide");
-                });
-                i++;
-            }
             slidesChange();
             window.setInterval(slidesChange, 2000);
         }
     })();
-    
+
     (function() {
         var $pin, $ul, i, $li, $a, PINS = [
               "Akma'ad",
@@ -414,7 +416,7 @@ jQuery(document).ready(function() {
               "Skull Gorge",
               "Stonehome Mountains",
               //"Sunset Sea",
-              "Talar", 
+              "Talar",
               "Terrelton",
               "the Vents",
               "Vraath Keep",
@@ -423,7 +425,7 @@ jQuery(document).ready(function() {
               "Wyvernwatch Mountains"
         ];
         $pin = jQuery("#Places .pin");
-        $ul = jQuery("#placeNav");        
+        $ul = jQuery("#placeNav");
         for (i = 0; i < PINS.length; i++) {
             $li = jQuery("<li></li>").appendTo($ul);
             jQuery("<a href=\"javascript:void(0);\">" + PINS[ i ] + "</a>").on("click", function() {
@@ -439,7 +441,7 @@ jQuery(document).ready(function() {
         var $toc, i;
         i = 0;
         $toc = jQuery(".toc ol");
-        
+
         function listHeadings($parent, level) {
             var $h, $li, $a, $ol;
             i++;
@@ -456,7 +458,7 @@ jQuery(document).ready(function() {
                 });
             }
         }
-        
+
         jQuery("h1").each(function() {
             listHeadings.call(this, $toc, 1);
         });

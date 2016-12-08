@@ -2,9 +2,8 @@ module.exports = function(grunt) {
 
     "use strict";
 
-    grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks("grunt-contrib-connect");
-    grunt.loadNpmTasks("grunt-includes");
+    // loads all grunt tasks from package.json
+    require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
 
     grunt.initConfig({
 
@@ -18,12 +17,30 @@ module.exports = function(grunt) {
          * DEVELOPER CONVENIENCE
          ***********************/
 
+        concat: (function concatConfig() {
+            var config = {};
+            grunt.file.recurse("html/", function concatConfigEachFile(abspath, rootdir, subdir, filename) {
+                var noExt, ext;
+                noExt = filename.split(".").shift();
+                ext = filename.split(".").pop();
+                if (!noExt || noExt === "prefix" || noExt === "suffix" || ext !== "html") {
+                    return;
+                }
+                config[ noExt ] = {
+                    src: [ "dist/prefix.html", abspath, "html/suffix.html" ],
+                    dest: "dist/" + filename
+                };
+            });
+            grunt.log.writeln(JSON.stringify(config, null, "  "));
+            return config;
+        })(),
+
         // Build the html using grunt-includes
         includes: {
             html: {
                 cwd: "html",
-                src: [ "index.html" ],
-                dest: ".",
+                src: [ "prefix.html" ],
+                dest: "dist/",
                 options: {
                     flatten: true,
                     includePath: "html",
@@ -43,7 +60,7 @@ module.exports = function(grunt) {
                     livereload: 9001
                 },
                 files: [ "<%= htmlFiles %>" ],
-                tasks: [ "includes:html" ]
+                tasks: [ "build" ]
             }
         },
 
@@ -69,7 +86,8 @@ module.exports = function(grunt) {
     grunt.registerTask("default", []);
 
     //development-based tasks
-    grunt.registerTask("html", [ "includes:html", "watch:html" ]);
+    grunt.registerTask("build", [ "includes:html", "concat" ]);
+    grunt.registerTask("html", [ "build", "watch:html" ]);
 
     // Serve locally
     grunt.registerTask("serve", [ "connect", "html" ]);
