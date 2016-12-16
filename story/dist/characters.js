@@ -77,6 +77,7 @@ var PEOPLE = [
     "Reniss",
     "Richard D'Eversholt",
     "Ringo",
+    "Sangwyr",
     "Sariel",
     "Sarshan",
     "Sertanian",
