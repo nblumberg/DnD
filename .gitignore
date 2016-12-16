@@ -12,3 +12,8 @@ test-results.xml
 spec-runner.html
 TODO.rtf
 libpeerconnection.log
+.idea
+.com.apple.timemachine.supported
+main.iml
+test.iml
+story.iml

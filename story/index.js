@@ -1,213 +1,87 @@
 jQuery(document).ready(function() {
     "use strict";
 
-    var PEOPLE, GROUPS, PLACES, $window, $body, $fragment, $popover = null;
-    PEOPLE = [
-        "Barases",
-        "Bin",
-        "Camulos",
-        "Festivus",
-        "Kallista",
-        "Karrion",
-        "Kitara",
-        "Lechonero",
-        "Melvin",
-        "Oomoroo",
-        "Richard D'Eversholt",
-        "Ringo",
-        "Smudge",
+    var TERMS, $window, $body, $fragment, $popover = null;
 
-        "Adronsius",
-        "Aerun",
-        "Alys",
-        "Amyria",
-        "Andor and Toris Scrollstone",
-        "Azarr Kul",
-        "Aziff",
-        "Bahamut",
-        "Bede",
-        "Bernath",
-        "Birdman",
-        "Bram Ironfell",
-        "Brandowen",
-        "Cachlain",
-        "Cadrick",
-        "Caliandra",
-        "Chend",
-        "Coggin",
-        "Darkus Comahni",
-        "Divian Torrance",
-        "Dorion Light-Step",
-        "Durkik",
-        "Fangren",
-        "Falrinth",
-        "Fariex",
-        "Filth King",
-        "Gallia",
-        "Gal'ott",
-        "Garth Cooper",
-        "Gilgathorn",
-        "Gith",
-        "Grovald",
-        "Hethralga",
-        "Inogo",
-        "Ioun",
-        "Iquel",
-        "Iranda",
-        "Jalissa",
-        "Jen",
-        "Jerra Dauralis",
-        "Kalad",
-        "Karros",
-        "Kartenix",
-        "Kath'ik",
-        "Kerden Jarmaan",
-        "Kyrion",
-        "Lavinya",
-        "Leena",
-        "Leucis",
-        "Lotho Elberesk",
-        "Maglubiyet",
-        "Marduk Goldbludgeon",
-        "Megan Swiftblade",
-        "Mirtala",
-        "Modra",
-        "Morgoff",
-        "Morrik",
-        "Myrissa",
-        "Nial",
-        "Nerislove Stoneheart",
-        "Odos",
-        "Onthorirfel",
-        "Pennel",
-        "Reniss",
-        "Sariel",
-        "Sarshan",
-        "Sertanian",
-        "Serten",
-        "Shephatiah",
-        "Sinruth",
-        "Sovacles",
-        "Telicanthus",
-        "Thannu",
-        "Tiamat",
-        "Tokk'it",
-        "Tusk",
-        "Two-Teeth",
-        "Tyrgarun",
-        "Thurann",
-        "Vlaakith",
-        "Warden",
-        "Wellik",
-        "Yeenoghu",
-        "Zereni Cyss",
-        "Zerthimon",
-        "Zerriska",
-        "Zithiruun",
-        "_END_"
-    ];
-    GROUPS = [
-        "Axenhaft Security",
-        "Black Knife Goblins",
-        "Council of Elders",
-        "Dawn Wardens",
-        "Dusk Wardens",
-        "Elsir Consortium",
-        "Farstriders",
-        "Gatekeepers",
-        "Freeriders",
-        "Kulkor Zhul",
-        "Laughing Shadows",
-        "Lost Ones",
-        "Red Hand of Doom",
-        "Red Hand",
-        "Tiri Kitor",
-        "Wicked Fang",
-        "Wyrmsmoke tribe",
-        "_END_"
-    ];
-    PLACES = [
-        "Akma'ad",
-        "Antler and Thistle",
-        "Astral Sea",
-        "Astrazalian",
-        "Auger",
-        "Blackfens Swamp",
-        "Bordrin's Watch",
-        "Brindol",
-        "Caer Overlook",
-        "Castle Rivenroar",
-        "City of Greyhawk",
-        "Dauth",
-        "Dawn Way",
-        "Deep Cartography",
-        "Dennovar",
-        "Divine Knot",
-        "Drellin's Ferry",
-        "Dunesend",
-        "Elemental Chaos",
-        "Elsir Vale",
-        "Endless Plains",
-        "Fane of Tiamat",
-        "Feydark",
-        "Feywild",
-        "Fortress Graystone",
-        "Giantshield Mountains",
-        "Golden Plains",
-        "Hall of Great Valor",
-        "Happy Beggar",
-        "Harg Kulkor",
-        "High Hall",
-        "Jarmaan Keep",
-        "Karak Lode",
-        "Lake Ern",
-        "Monastery of the Sundered Chain",
-        "Nine Bells",
-        "the Nexus",
-        "Overlook",
-        "Pig and Bucket Tavern",
-        "Prosser",
-        "Red Rock",
-        "Rhestilor",
-        "Rhest",
-        "Sayre",
-        "Shadowfell",
-        "Sherrbyr",
-        "Skull Gorge",
-        "Stonehome Mountains",
-        "Sunset Sea",
-        "Talar",
-        "Terrelton",
-        "Tower of Djamela",
-        "Tu'narath",
-        "Umbraforge",
-        "the Vents",
-        "Vraath Keep",
-        "Witchwood",
-        "Wyrmsmoke Mountains",
-        "Wyvernwatch Mountains",
-        "Zerthadlun",
-        "_END_"
-    ];
+    TERMS = (function formRegEx() {
+        var TERMS, baseUrl, type, dir, term, token, i;
+        function newToken() {
+            return term.replace(/\s/gi, "_") +  + (new Date().getTime());
+        }
+        function newTarget() {
+            TERMS.push({
+                term: term,
+                termRegex: new RegExp("\\b" + term + "\\b", "gi"),
+                token: token,
+                tokenRegex: new RegExp("\\b" + token + "\\b", "gi"),
+                found: false,
+                replace: `<dfn class="${type}"><a href="${baseUrl}/${dir}/${term}.html">${term}</a></dfn>`
+            });
+        }
+        TERMS = [];
+        baseUrl = window.location.pathname.substring(0, window.location.pathname.indexOf("/story/dist") + "/story/dist".length);
+        type = "person";
+        dir = "characters";
+        for (i = 0; i < PEOPLE.length; i++) {
+            term = PEOPLE[ i ];
+            token = newToken();
+            newTarget();
+        }
+        type = "group";
+        dir = "groups";
+        for (i = 0; i < GROUPS.length; i++) {
+            term = GROUPS[ i ];
+            token = newToken();
+            newTarget();
+        }
+        type = "place";
+        dir = "places";
+        for (i = 0; i < PLACES.length; i++) {
+            term = PLACES[ i ];
+            token = newToken();
+            newTarget();
+        }
+        return TERMS;
+    })();
+
     $window = jQuery(window);
     $body = jQuery("body");
     $fragment = jQuery(document.createDocumentFragment());
 
     function initPartial($partial) {
         // Highlight terms
-        $partial.find("p, ul").html(function(index, html) {
-            var i;
-            for (i = 0; i < PEOPLE.length; i++) {
-                html = html.replace(new RegExp("\\b" + PEOPLE[ i ] + "\\b", "gim"), "<dfn class=\"person\">" + PEOPLE[ i ] + "</dfn>");
+        function wrapTerms(element, terms, depth) {
+            var childNodes, i, j, childNode, target;
+            depth = typeof depth === "undefined" ? 0 : (depth + 1);
+            childNodes = Array.prototype.slice.call(element.childNodes);
+            for (i = 0; i < childNodes.length; i++) {
+                childNode = childNodes[ i ];
+                if (childNode.nodeType === 1) {
+                    // Element node
+                    wrapTerms(childNode, terms, depth);
+                }
+                else if (childNode.nodeType === 3) {
+                    // Text node
+                    for (j = 0; j < terms.length; j++) {
+                        target = terms[ j ];
+                        if (target.termRegex.test(childNode.textContent)) {
+                            childNode.textContent = childNode.textContent.replace(target.termRegex, target.token);
+                            target.found = true;
+                        }
+                    }
+                }
             }
-            for (i = 0; i < GROUPS.length; i++) {
-                html = html.replace(new RegExp("\\b" + GROUPS[ i ] + "\\b", "gim"), "<dfn class=\"group\">" + GROUPS[ i ] + "</dfn>");
+            if (!depth) {  // wait until the top element to replace innerHTML
+                for (j = 0; j < terms.length; j++) {
+                    target = terms[ j ];
+                    if (target.found) {
+                        element.innerHTML = element.innerHTML.replace(target.tokenRegex, target.replace);
+                    }
+                }
             }
-            for (i = 0; i < PLACES.length; i++) {
-                html = html.replace(new RegExp("\\b" + PLACES[ i ] + "\\b", "gim"), "<dfn class=\"place\">" + PLACES[ i ] + "</dfn>");
-            }
-            return html;
-        });
+        }
+
+        wrapTerms($partial[ 0 ], TERMS);
 
         // Anchor headers
         $partial.find("h1, h2, h3, h4, h5, h6").each(function() {
@@ -218,16 +92,16 @@ jQuery(document).ready(function() {
         });
 
         $partial.find(".person, .place, .group").on({
-            click: function() {
-                var w, $trigger;
-                $trigger = jQuery(this);
-                $popover = jQuery(document.getElementById($trigger.html())).show();
-                w = window.open("", "_blank");
-                w.document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"index.css\" />\n");
-                w.document.write("<style>img { float: left; }</style>\n");
-                w.document.write($popover.html());
-                initPartial(jQuery(w.document.documentElement));
-            },
+            // click: function() {
+            //     var w, $trigger;
+            //     $trigger = jQuery(this);
+            //     $popover = jQuery(document.getElementById($trigger.html())).show();
+            //     w = window.open("", "_blank");
+            //     w.document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"index.css\" />\n");
+            //     w.document.write("<style>img { float: left; }</style>\n");
+            //     w.document.write($popover.html());
+            //     initPartial(jQuery(w.document.documentElement));
+            // },
             mouseover: function() {
                 var $trigger, offset;
                 $trigger = jQuery(this);
@@ -306,7 +180,7 @@ jQuery(document).ready(function() {
     // Load body via AJAX according to Table of Contents
     // jQuery(".toc a.section").each(loadSection);
 
-    jQuery("article").each(function() {
+    jQuery("body").each(function() {
         initPartial(jQuery(this));
     });
 

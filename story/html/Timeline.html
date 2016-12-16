@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Timeline</title>
+  <style>
+    body {
+      background-color: #aaaaaa;
+    }
+
+    h1, h2, h3 {
+      font-weight: 300;
+    }
+
+    .container {
+      padding: 1em;
+    }
+
+    .timeline {
+      position: relative;
+      overflow: auto;
+    }
+    .timeline:before {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 5px;
+      background: black;
+      left: 0;
+    }
+    .timeline h2 {
+      background: black;
+      max-width: 6em;
+      margin: 0 auto 1em;
+      padding: 0.5em;
+      text-align: center;
+      position: relative;
+      clear: both;
+    }
+    .timeline ul {
+      list-style: none;
+      padding: 0 0 0 1em;
+      z-index: 1;
+    }
+    .timeline li {
+      background-color: black;
+      padding: 1em;
+      margin-bottom: 1em;
+      position: relative;
+    }
+    .timeline li:before {
+      content: '';
+      width: 0;
+      height: 0;
+      border-top: 1em solid black;
+      border-left: 1em solid transparent;
+      position: absolute;
+      left: -1em;
+      top: 0;
+    }
+    .timeline h3 {
+      margin-top: 0;
+    }
+    .timeline time {
+      font-style: italic;
+    }
+
+    @media screen and (min-width: 40em) {
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .timeline:before {
+        left: 50%;
+      }
+      .timeline ul {
+        padding-left: 0;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .timeline li {
+        width: 42%;
+      }
+      .timeline li:nth-child(even) {
+        float: right;
+        margin-top: 2em;
+      }
+      .timeline li:nth-child(odd) {
+        float: left;
+      }
+      .timeline li:nth-child(odd):before {
+        border-top: 1em solid black;
+        border-right: 1em solid transparent;
+        right: -1em;
+        left: auto;
+      }
+      .timeline li:nth-of-type(2n+1) {
+        clear: both;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<article class="container">
+  <div class="timeline">
+    <h2>Backstory</h2>
+    <ul>
+      <li class="lechonero">
+        <h3>Lechonero</h3>
+        <p>Lechonero is born</p>
+        <time>Year 488</time>
+      </li>
+      <li class="barases">
+        <h3>Barases</h3>
+        <p>Barases is born</p>
+        <time>Year 496</time>
+      </li>
+      <li>
+        <h3>The Red Hand of Doom</h3>
+        <p>Azarr Kul attacks Elsir Vale and is defeated by the Dawn Wardens</p>
+        <time>Year 535-536</time>
+      </li>
+      <li class="bin">
+        <h3>Bin</h3>
+        <p>Bin is born</p>
+        <time>Year 539</time>
+      </li>
+      <li class="karrion">
+        <h3>Karrion and Kallista</h3>
+        <p>Karrion and Kallista are born</p>
+        <time>Year 547</time>
+      </li>
+      <li class="kitara">
+        <h3>Kitara</h3>
+        <p>Kitara is kidnapped by Hethralga</p>
+        <time>Year 553</time>
+      </li>
+      <li class="festivus">
+        <h3>Festivus</h3>
+        <p>Festivus is born</p>
+        <time>Year 556</time>
+      </li>
+      <li class="sangwyr">
+        <h3>Sangwyr</h3>
+        <p>Sangwyr becomes Cachlain's advisor</p>
+        <time>Year 557</time>
+      </li>
+      <li class="sangwyr">
+        <h3>Sangwyr</h3>
+        <p>Sangwyr betrays Cachlain, Talryn becomes Cachlain's advisor</p>
+        <time>Year 565</time>
+      </li>
+      <li class="sarshan">
+        <h3>Sarshan</h3>
+        <p>Sarshan enters Sangwyr's employ</p>
+        <time>Year 566</time>
+      </li>
+      <li class="kitara">
+        <h3>Kitara</h3>
+        <p>Kitara escapes from Hethralga, enters Sarshan's camps</p>
+        <time>Year 566</time>
+      </li>
+      <li class="barases">
+        <h3>Papposilenus</h3>
+        <p>Papposilenus dies</p>
+        <time>late October, Year 571</time>
+      </li>
+      <li class="barases">
+        <h3>Barases</h3>
+        <p>Barases joins the search for Petraynus</p>
+        <time>March, Year 575</time>
+      </li>
+      <li class="cachlain">
+        <h3>Cachlain</h3>
+        <p>Sovacles becomes Cachlain’s advisor</p>
+        <time>late February, Year 576</time>
+      </li>
+      <li class="barases">
+        <h3>Azuveloth</h3>
+        <p>Sovacles has Cachlain execute Azuveloth</p>
+        <time>mid April, Year 576</time>
+      </li>
+      <li class="barases">
+        <h3>Barases</h3>
+        <p>Barases is imprisoned by Sarshan</p>
+        <time>late July, Year 576</time>
+      </li>
+      <li class="camulos">
+        <h3>Camulos</h3>
+        <p>Camulos is imprisoned by Sarshan</p>
+        <time>early August, Year 576</time>
+      </li>
+    </ul>
+    <h2>Orc Invasion</h2>
+    <ul>
+      <li>
+        <h3>Rescue at Rivenroar</h3>
+        <p>Our heroes rescue Brindolin hostages from the hobgoblin Sinruth</p>
+        <time>late August, Year 576</time>
+      </li>
+      <li>
+        <h3>Siege of Bordrin’s Watch</h3>
+        <p>Our heroes prevent Tusk's orc horde from bypassing Overlook's mountain forts</p>
+        <time>mid September, Year 576</time>
+      </li>
+    </ul>
+    <h2>Sarshan's Plot</h2>
+    <ul>
+      <li>
+        <h3>The Shadow Rift of Umbraforge</h3>
+        <p>Our heroes follow Tusk's weapons back to their blackmarket dealer Modra in the Shadowfell,
+          and find new allies and a new enemy in Modra's boss: Sarshan</p>
+        <time>late October, Year 576</time>
+      </li>
+      <li>
+        <h3>The Lost Mines of Karak</h3>
+        <p>Hired by Bram Ironfell, our heroes trek to the distant Karak Lode to recover dwarven treasure,
+          but find a demonic infestation</p>
+        <time>early December, Year 576-early February, Year 577</time>
+      </li>
+      <li>
+        <h3>Den of the Destroyer</h3>
+        <p>Summoned back to Brindol by a talking magic sword, our heroes stop a cult of gnolls lead by
+          Fangren from completing a dangerous ritual, gain an ally, and release the deva Amyria from the sword</p>
+        <time>late March, Year 577</time>
+      </li>
+    </ul>
+    <h2>Githyanki Invasion</h2>
+    <ul>
+      <li>
+        <h3>The Temple Between</h3>
+        <p>Our heroes stop a plot by the githyanki general Zithiruun to infiltrate and then invade Overlook,
+          after they are pulled into a three-way race to recover a dwarven artifact from a temple hidden beneath the city</p>
+        <time>early April, Year 577</time>
+      </li>
+      <li>
+        <h3>Beyond the Mottled Tower</h3>
+        <p>Megan Swiftblade of the Freeriders found intelligence on the Overlook invaders and our heroes go to
+          escort her home, only to find and stop an interplanar incursion lead by Sarshan</p>
+        <time>late April, Year 577-early May, Year 577</time>
+      </li>
+      <li>
+        <h3>Haven of the Bitterglass</h3>
+        <p>Our heroes follow a githyanki invasion and rescue a besieged contingent of githzerai. They escort the
+          githerzai to a meeting of world powers and broker an alliance against the githyanki named the Gatekeepers.
+          Acting on the Gatekeeper's behalf our heroes unearth a githyanki spy and destroy an artifact aiding the
+          githyanki intelligence efforts</p>
+        <time>mid July-late August, Year 577</time>
+      </li>
+      <li>
+        <h3>Alliance at Nefelus</h3>
+        <p>Our heroes join Amyria to rescue the island of Nefelus from Chillreaver, an exarch of Tiamat.
+          After breaking Chillreaver's arctic assault on the tropical nation, they bring the deva mages into the
+          Gatekeepers and recover the Seed of Winter</p>
+        <time>early September, Year 577</time>
+      </li>
+      <li>
+        <h3>Throne of the Stone Skinned King</h3>
+        <p>Our heroes join Amyria to rescue the island of Nefelus from Chillreaver, an exarch of Tiamat.
+          After breaking Chillreaver's arctic assault on the tropical nation, they bring the deva mages into the
+          Gatekeepers and recover the Seed of Winter</p>
+        <time>mid October-late November, Year 577</time>
+      </li>
+    </ul>
+    <h2>Present</h2>
+
+  </div>
+</article>
+
+</body>
+</html>
