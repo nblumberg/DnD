@@ -156,6 +156,62 @@
                 return name;
             };
 
+            Effect.prototype.breakdown = function () {
+                let condition, title, amount;
+                function type2Condition(type) {
+                    if (!type) {
+                        return;
+                    }
+                    if (type.constructor === Array) {
+                        if (type.length === 1) {
+                            condition = condition[ type[ 0 ] ];
+                        }
+                        else {
+                            condition = { image: "../images/symbols/unknown.png" }; // TODO: how should we display multiple damage types?
+                        }
+                    }
+                    else if (typeof type.toLowerCase === "function") {
+                        condition = condition[ type.toLowerCase() || "untyped" ];
+                    }
+                }
+                condition = Effect.CONDITIONS[ this.name.toLowerCase() ] || { image: "../images/symbols/unknown.png" }; // TODO: how should we display multiple damage types?
+                amount = this.amount;
+                switch (this.name.toLowerCase()) {
+                    case "ongoing damage": {
+                        type2Condition(this.type);
+                        title = (condition && condition.type ? "Ongoing " + condition.type + " damage" : "Ongoing damage") + (this.attacker ? " (" + this.attacker + ")" : "");
+                    }
+                        break;
+                    case "resistance": {
+                        type2Condition(this.type);
+                        title = (condition && condition.type ? condition.type + " damage resistance" : "Damage resistance") + (this.attacker ? " (" + this.attacker + ")" : "");
+                        amount *= -1;
+                    }
+                        break;
+                    case "vulnerable": {
+                        type2Condition(this.type);
+                        title = (condition && condition.type ? condition.type + " vulnerability" : "Vulnerable") + (this.attacker ? " (" + this.attacker + ")" : "");
+                        amount *= -1;
+                    }
+                        break;
+                    case "penalty": {
+                        type2Condition(this.type);
+                        title = (condition && condition.type ? "Penalty to " + condition.type : "Unknown penalty") + (this.attacker ? " (" + this.attacker + ")" : "");
+                        amount *= -1;
+                    }
+                        break;
+                    case "bonus": {
+                        type2Condition(this.type);
+                        title = (condition && condition.type ? "Bonus to " + condition.type : "Unknown bonus") + (this.attacker ? " (" + this.attacker + ")" : "");
+                    }
+                        break;
+                    default: {
+                        title = this.name + (this.attacker ? " (" + this.attacker + ")" : "");
+                    }
+                }
+                return { condition: condition, amount: amount, title: title };
+            };
+
             Effect.prototype.raw = function() {
                 var target, attacker, r;
                 target = this.target;

@@ -213,6 +213,9 @@
                 else if ($action.hasClass("buff")) {
                     row.params.buff();
                 }
+                else if ($action.hasClass("effects")) {
+                    row.params.effects();
+                }
                 else if ($action.hasClass("heal")) {
                     row.params.heal();
                 }

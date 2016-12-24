@@ -306,36 +306,10 @@
             ActorCard.Condition.MAX_COLUMNS = 4;
 
             ActorCard.Condition.prototype._render = function () {
-                var condition, title, amount;
+                let condition, title, amount;
+                ({ condition, title, amount } = this.effect.breakdown());
                 this.$container = jQuery("<div/>").addClass("condition").on({ click: this._clickHandler.bind(this) });
-                condition = DnD.Effect.CONDITIONS[ this.effect.name.toLowerCase() ];
-                amount = this.effect.amount;
-                if (this.effect.name.toLowerCase() === "ongoing damage") {
-                    condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
-                    title = (condition && condition.type ? "Ongoing " + condition.type + " damage" : "Ongoing damage") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
-                }
-                else if (this.effect.name.toLowerCase() === "resistance") {
-                    condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
-                    title = (condition && condition.type ? condition.type + " damage resistance" : "Damage resistance") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
-                    amount *= -1;
-                }
-                else if (this.effect.name.toLowerCase() === "vulnerable") {
-                    condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
-                    title = (condition && condition.type ? condition.type + " vulnerability" : "Vulnerable") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
-                    amount *= -1;
-                }
-                else if (this.effect.name.toLowerCase() === "penalty") {
-                    condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
-                    title = (condition && condition.type ? "Penalty to " + condition.type : "Unknown penalty") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
-                    amount *= -1;
-                }
-                else if (this.effect.name.toLowerCase() === "bonus") {
-                    condition = condition[ this.effect.type ? this.effect.type.toLowerCase() : "untyped" ];
-                    title = (condition && condition.type ? "Bonus to " + condition.type : "Unknown bonus") + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
-                }
-                else {
-                    title = this.effect.name + (this.effect.attacker ? " (" + this.effect.attacker + ")" : "");
-                }
+
                 this.$container.attr("title", title).css({
                     "background-image": "url(\"" + (condition && condition.image ? condition.image : "../images/symbols/unknown.png") + "\")"
                 });

@@ -239,6 +239,14 @@ body.dialog { overflow: hidden; }
 #buffsDialog .description { max-height: 400px; overflow-y: scroll; }
 #playerAttackRoll { display: inline-block; }
 
+/* effectsDialog */
+.effectsDialog #effectsDialog { display: block; }
+.effectsDialog table { text-align: center; width: 100%; }
+.effectsDialog table td { border: 1px solid white; padding: 1em; }
+.effectsDialog table img { background-color: white; height: 50px; }
+#effectsDialog .parent {}
+#effectsDialog .child .indent { text-align: right; }
+
 /* exportDialog */
 .exportDialog #exportDialog { display: block; }
 #exportDialog textarea { height: 100%; width: 100%; }

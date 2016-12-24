@@ -21,6 +21,7 @@
             "Display.Dialog.Attack",
             "Display.Dialog.Buff",
             "Display.Dialog.Creature",
+            "Display.Dialog.Effects",
             "Display.Dialog.Export",
             "Display.Dialog.Heal",
             "Display.Dialog.Image",
@@ -47,6 +48,7 @@
                 AttackDialog,
                 BuffDialog,
                 CreatureDialog,
+                EffectsDialog,
                 ExportDialog,
                 HealDialog,
                 ImageDialog,
@@ -93,6 +95,7 @@
                 this.$clearMonsters = null;
                 this.$clearHistory = null;
                 this.creatureDialog = null;
+                this.effectsDialog = null;
                 this.imageDialog = null;
                 this.initiativeDialog = null;
                 this.attackDialog = null;
@@ -281,6 +284,13 @@
                                 this._addActor(creature);
                             }
                             this._render(true);
+                        }.bind(this)
+                    });
+
+                    this.effectsDialog = new EffectsDialog({
+                        callback: function(msg) { // actor, changes
+                            this._render(false);
+                            this._messageDisplay(msg, false);
                         }.bind(this)
                     });
 
@@ -580,6 +590,7 @@
                             },
                             attack: attack.bind(this, actor),
                             buff: buff.bind(this, actor),
+                            effects: this.effectsDialog.show.bind(this.effectsDialog, actor),
                             heal: this.healDialog.show.bind(this.healDialog, { patient: actor }), // TODO: pass special healing surge values
                             showHistory: this.historyDialog.show.bind(this.historyDialog, actor.history),
                             exit: this._exit.bind(this, actor),
