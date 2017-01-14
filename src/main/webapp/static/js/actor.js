@@ -546,6 +546,9 @@
                         if (savingThrowRoll >= 10) {
                             msg += effect.remove();
                         }
+                        else {
+                            msg += effect.failedSave();
+                        }
                         this.history.add(new HistoryEntry({ round: this.history._round, subject: this, message: msg }));
                     }
 

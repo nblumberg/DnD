@@ -18,6 +18,7 @@
              * @param [params.saveEnds] {Boolean} Indicates that a saving throw ends this Effect
              * @param [params.children] {Array of params} A list of child Effects
              * @param [params.afterEffects] {Array of params} A list of Effects that take effect after this one expires
+             * @param [params.failedEffects] {Array of params} A list of Effects that take effect if the target fails a saving throw
              * @param [params.call] {Function} A Function of the form function(target, attacker, round) {...} to call to get the final Effect to apply rather than take this Effect at face value
              */
             function Effect(params) {
@@ -72,6 +73,12 @@
                     childParams = typeof(params.afterEffects[ i ]) === "string" ? params.afterEffects[ i ] : jQuery.extend({}, params.afterEffects[ i ], { round: params.round, target: this.target, attacker: this.attacker });
                     this.afterEffects.push(new Effect(childParams));
                 }
+
+                this.failedEffects = [];
+                for (i = 0; params.failedEffects && i < params.failedEffects.length; i++) {
+                    childParams = typeof(params.failedEffects[ i ]) === "string" ? params.failedEffects[ i ] : jQuery.extend({}, params.failedEffects[ i ], { round: params.round, target: this.target, attacker: this.attacker });
+                    this.failedEffects.push(new Effect(childParams));
+                }
             }
 
             Effect.prototype = new Serializable();
@@ -103,6 +110,19 @@
                 for (i = 0; i < this.afterEffects.length; i++) {
                     msg += ", " + (msg ? "" : "suffers after effect ") + this.afterEffects[ i ].toString();
                     this.target.addEffect(this.afterEffects[ i ], this.attacker);
+                }
+                return msg;
+            };
+
+            /**
+             * Called (externally) when the target fails a saving throw against this Effect
+             */
+            Effect.prototype.failedSave = function () {
+                var i, msg;
+                msg = this.remove();
+                for (i = 0; i < this.failedEffects.length; i++) {
+                    msg += ", " + (msg ? "" : "suffers failed saving throw effect ") + this.failedEffects[ i ].toString();
+                    this.target.addEffect(this.failedEffects[ i ], this.attacker);
                 }
                 return msg;
             };
