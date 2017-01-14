@@ -9,7 +9,7 @@
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {
-                name: "Astral Vent", level: 19 , image: "../images/portraits/githyanki_lancer.jpg",
+                name: "Astral Vent", level: 19 , image: "../images/portraits/astral_vent.jpg", // https://s-media-cache-ak0.pinimg.com/236x/24/1e/36/241e36347bfbf9a62848340e172a5286.jpg
                 hp: { total: 1 },
                 defenses: { ac: 10, fort: 10, ref: 10, will: 10 },
                 init: 0, speed: { walk: 0 },

@@ -9,7 +9,7 @@
         [ "jQuery", "Creature" ],
         function(jQuery, Creature) {
             var o = {
-                name: "Githyanki Shade", level: 16, image: "../images/portraits/githyanki_lancer.jpg", // http://scalesofwar4.webs.com/62githyanki.jpg
+                name: "Githyanki Shade", level: 16, image: "../images/portraits/githyanki_shade.png",
                 hp: { total: 84 },
                 defenses: { ac: 30, fort: 26, ref: 29, will: 28 },
                 resistances: { insubstantial: 50 },
