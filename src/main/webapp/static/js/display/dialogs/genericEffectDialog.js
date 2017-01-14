@@ -31,7 +31,24 @@
                 this.buttons = {
                     $cause: null
                 };
-                this.actor = { name: "The DM", imposedEffects: [] };
+                this.actor = new Actor({
+                    name: "The DM", level: 1, image: "../images/portraits/unknown.png",
+                    hp: { total: 1 },
+                    defenses: { ac: 10, fort: 10, ref: 10, will: 10 },
+                    resistances: {},
+                    immunities: [],
+                    vulnerabilities: [],
+                    savingThrows: 0,
+                    init: 0,
+                    speed: { walk: 6 },
+                    abilities: { STR: 10, CON: 10, DEX: 10, INT: 10, WIS: 10, CHA: 10 },
+                    skills: { acrobatics: 0, arcana: 0, athletics: 0, bluff: 0, diplomacy: 0, dungeoneering: 0, endurance: 0, heal: 0, history: 0, insight: 0, intimidate: 0, nature: 0, perception: 0, religion: 0, stealth: 0, streetwise: 0, thievery: 0 },
+                    weapons: [],
+                    implements: [],
+                    healing: [],
+                    attackBonuses: [],
+                    attacks: []
+                });
                 this.actor.attack = Actor.prototype.attack.bind(this.actor);
                 this.actor.__log = Actor.prototype.__log.bind(this.actor);
                 this.actor._attackToHit = Actor.prototype._attackToHit.bind(this.actor);
@@ -157,7 +174,7 @@
                 if (amount) {
                     o.amount = amount;
                 }
-                this.effects.push(o);
+                this.effects.push(new Effect(o));
                 $effect = jQuery("<div><strong>" + o.name + "</strong>" + (o.type ? " (" + o.type + ")" : "") + (o.amount ? " " + o.amount : "") + (o.duration ? " " + o.duration : "") + "</div>");
                 $remove = jQuery("<button class=\"removeEffect btn btn-default\" style=\"margin-left: 1rem;\"><i class=\"icon-minus icon-white\">-</i></button>").on("click", function() {
                     this.effects.splice(this.effects.indexOf(o), 1);
