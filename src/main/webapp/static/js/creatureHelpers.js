@@ -186,10 +186,40 @@
                 },
 
                 addDamage: function addDamage() { // takes an arbitrary number of arguments
-                    return addToArrayProperty.call(this, "damage", arguments);
+                    var i;
+                    addToArrayProperty.call(this, "damage", arguments);
+                    for (i = 0; i < arguments.length; i++) {
+                        if (arguments[ i ] && typeof arguments[ i ] === "object" && arguments[ i ].type) {
+                            if (typeof arguments[ i ].type === "string") {
+                                this.addKeywords(arguments[ i ].type);
+                            }
+                            else if (arguments[ i ].type.constructor === Array) {
+                                this.addKeywords.apply(this, arguments[ i ].type);
+                            }
+                        }
+                    }
+                    return this;
                 },
                 addEffects: function addEffects() { // takes an arbitrary number of arguments
                     return addToArrayProperty.call(this, "effects", arguments);
+                },
+
+                miss: function miss(damage, effects, notExpended) {
+                    this.miss = Power.attack(this.name + " (miss)");
+                    delete this.miss.damage;
+                    if (damage === 0.5) {
+                        this.miss.halfDamage = true;
+                    }
+                    else if (damage) {
+                        this.miss.addDamage(damage);
+                    }
+                    if (effects) {
+                        this.miss.addEffects.apply(this.miss, effects);
+                    }
+                    if (notExpended) {
+                        this.miss.notExpended = true;
+                    }
+                    return this;
                 }
             };
 
@@ -228,7 +258,7 @@
                         return new Damage()[ type ](amount);
                     };
                 });
-            })([ "acid", "cold", "fire", "lightning", "necrotic", "poison", "psychic", "radiant", "thunder" ]);
+            })([ "acid", "cold", "fire", "force", "lightning", "necrotic", "poison", "psychic", "radiant", "thunder" ]);
 
 
             function Effect(params) {

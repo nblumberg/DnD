@@ -52,8 +52,17 @@
                 if (params.miss) {
                     this.miss = new Attack(params.miss, creature);
                     if (params.miss.halfDamage) {
-                        this.miss.damage = new Damage(this.damage.raw(), creature);
-                        this.miss.damage.rollMultiplier = 0.5;
+                        if (typeof params.damage === "object" && params.damage.constructor === Array) {
+                            this.miss.damage = [];
+                            for (i = 0; i < params.damage.length; i++) {
+                                this.miss.damage.push(new Damage(params.damage[ i ], creature));
+                                this.miss.damage[ i ].rollMultiplier = 0.5;
+                            }
+                        }
+                        else {
+                            this.miss.damage = new Damage(params.damage, creature);
+                            this.miss.damage.rollMultiplier = 0.5;
+                        }
                     }
                 }
                 this.effects = [];

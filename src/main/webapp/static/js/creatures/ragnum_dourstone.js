@@ -7,8 +7,8 @@
     "use strict";
     DnD.define(
         "creatures.monsters.ragnum_dourstone",
-        [ "jQuery", "Creature", "creature.helpers" ],
-        function(jQuery, Creature, CH) {
+        [ "jQuery", "Creature", "creature.helpers", "html" ],
+        function(jQuery, Creature, CH, descriptions) {
             var o = {
                 name: "Ragnum Dourstone", level: 17, image: "../images/portraits/ragnum_dourstone.png",
                 hp: { total: 164 },
@@ -33,12 +33,23 @@
                     CH.Power.attack("Anvil Strike (zone)")
                         .atWill().burst(1, 5).automatic().addDamage(CH.Damage.fire("10")).addKeywords("fire", "zone"),
                     CH.Power.attack("Hammer Smite")
-                        .minor().ranged(3).ac(22).addDamage("2d8+6").addEffects(
+                        .encounter().minor().ranged(3).ac(22).addDamage("2d8+6").addEffects(
                             CH.Effect.multiple(
                                 CH.Effect.ongoing(10, "fire"),
                                 CH.Effect.penalty(2, "attacks")
                             ).saveEnds()
                         )
+                ],
+                buffs: [
+                    CH.Power.buff({
+                        name: "Healing Word",
+                        healing: {
+                            isTempHP: false,
+                            usesHealingSurge: true,
+                            amount: "4d6+HS"
+                        },
+                        description: descriptions[ "Healing Word" ]
+                    }).encounter(3)
                 ]
             };
             return jQuery.extend(true, {}, Creature.base, o);
