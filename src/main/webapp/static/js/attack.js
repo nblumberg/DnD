@@ -67,6 +67,9 @@
                 }
                 this.effects = [];
                 for (i = 0; params.effects && i < params.effects.length; i++) {
+                    if (typeof params.effects[ i ] === "string") {
+                        params.effects[ i ] = { name: params.effects[ i ] };
+                    }
                     this.effects.push(new Effect(jQuery.extend({}, params.effects[ i ], { noId: true, attacker: creature })));
                 }
                 this.keywords = [];

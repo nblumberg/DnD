@@ -15,18 +15,18 @@
                 level: partyLevel,
                 abilities: {
                     STR: 12,
-                    CON: 20,
+                    CON: 21,
                     DEX: 11,
                     INT: 11,
-                    WIS: 22,
+                    WIS: 23,
                     CHA: 11
                 },
                 // Druid of Summer
                 defenses: {
-                    ac: 28,
-                    fort: 30,
-                    ref: 23,
-                    will: 29
+                    ac: 29,
+                    fort: 31,
+                    ref: 24,
+                    will: 30
                 },
                 // Druid of the Wastes
                 //defenses: {
@@ -36,7 +36,7 @@
                 //    will: 29
                 //},
                 ap: 0,
-                init: 7,
+                init: 9,
                 hp: {
                 },
                 surges: {

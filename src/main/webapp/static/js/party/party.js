@@ -5,7 +5,7 @@
         "party.level",
         [],
         function() {
-            return 17;
+            return 18;
         },
         false
     );

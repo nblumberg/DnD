@@ -12,23 +12,23 @@
             var Kitara, prepared;
             prepared = {
                 // Encounter 1
-                "Burning Hands": true,
+                //"Burning Hands": true,
                 //"Skewering Spikes": true,
                 //"Glorious Presence": true,
                 //"Orbmaster's Incendiary Detonation": true,
                 //"Ray of Enfeeblement": true,
-                //"Force Orb": true,
+                "Force Orb": true,
 
                 // Encounter 3
                 "Icy Rays": true,
-                "Grim Shadow": true,
-                //"Color Spray": true,
+                //"Grim Shadow": true,
+                "Color Spray": true,
                 //"Pinioning Vortex": true,
 
                 // Encounter 7
                 //"Ghoul Strike": true,
-                //"Lightning Bolt": true,
-                "Thunder Cage": true,
+                "Lightning Bolt": true,
+                //"Thunder Cage": true,
 
                 // Encounter 11
                 "Shadowy Tendrils": true,
@@ -46,8 +46,8 @@
                 "Wizard's Fury": true,
 
                 // Daily 5
-                //"Fireball": true,
-                "Grasp of the Grave": true,
+                "Fireball": true,
+                //"Grasp of the Grave": true,
                 //"Scattering Shock": true,
 
                 // Daily 9
@@ -88,8 +88,8 @@
                 abilities: {
                     STR: 17,
                     CON: 15,
-                    DEX: 21,
-                    INT: 24,
+                    DEX: 22,
+                    INT: 25,
                     WIS: 17,
                     CHA: 18
                 },
@@ -101,15 +101,15 @@
                     current: 9
                 },
                 defenses: {
-                    ac: 30,
-                    fort: 27,
-                    ref: 29,
-                    will: 28
+                    ac: 31,
+                    fort: 29,
+                    ref: 31,
+                    will: 30
                 },
                 resistances: {
                     psychic: 5 // Mental Block (alternative reward)
                 },
-                init: 12,
+                init: 15,
                 speed: 8
             };
             Kitara = jQuery.extend({}, Kitara, {

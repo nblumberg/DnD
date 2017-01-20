@@ -17,29 +17,30 @@
                 image: "../images/portraits/Dart.png", // http://rs997.pbsrc.com/albums/af94/garryypicture/Games/RacePortRevenant.png~c200Dart
                 abilities: {
                     STR: 16,
-                    CON: 23,
+                    CON: 24,
                     DEX: 19,
                     INT: 13,
                     WIS: 14,
-                    CHA: 19
+                    CHA: 20
                 },
                 ap: 1,
                 hp: {
                 },
                 surges: {
-                    perDay: 15,
-                    current: 15
+                    perDay: 16,
+                    current: 16
                 },
                 defenses: {
-                    ac: 36,
-                    fort: 28,
-                    ref: 28,
-                    will: 30,
+                    ac: 37,
+                    fort: 30,
+                    ref: 29,
+                    will: 32
                 },
                 resistances: {
-                    necrotic: 10 // Lifegiving Plate Armor +4
+                    necrotic: 10, // Lifegiving Plate Armor +4
+                    poison: 10
                 },
-                init: 12,
+                init: 13,
                 speed: 5,
                 weapons: [
                     {

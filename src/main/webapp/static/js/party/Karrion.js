@@ -16,31 +16,32 @@
                 level: partyLevel,
                 image: "../images/portraits/karrion.jpg", // "http://rogueartfx.com/images/tiefling03.jpg",
                 abilities: {
-                    STR: 21,
+                    STR: 22,
                     CON: 17,
-                    DEX: 20,
+                    DEX: 21,
                     INT: 19,
                     WIS: 18,
                     CHA: 17
                 },
                 ap: 1,
                 hp: {
-                    total: 104
+                    total: 114
                 },
                 surges: {
                     perDay: 9,
                     current: 9
                 },
                 defenses: {
-                    ac: 27,
-                    fort: 25,
-                    ref: 25,
-                    will: 23
+                    ac: 28,
+                    fort: 27,
+                    ref: 26,
+                    will: 24
                 },
                 resistances: {
-                    fire: 12
+                    fire: 14,
+                    necrotic: 14
                 },
-                init: 14,
+                init: 16,
                 speed: 6,
                 weapons: [
                     {
