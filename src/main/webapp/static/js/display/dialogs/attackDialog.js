@@ -138,13 +138,27 @@
 
             // Data binding methods
             AttackDialog.prototype._stringifyDamage = function() {
-                var d, w, plus;
+                var d, w, proficiency, enhancement;
                 d = this.attack ? this.attack.damage.toString() : "";
                 w = this.weapon && this.weapon.damage ? this.weapon.damage.toString() : "W";
-                plus = this.weapon ? this.weapon.enhancement : "";
-                this.$toHitBonus.html(this.attack.toHit === "automatic" ? "automatic" : this.attacker.abilities[ this.attack.toHit + "mod" ] + Math.floor(this.attacker.level / 2) + (this.weapon ? this.weapon.proficiency : 0) + (plus || 0));
+                proficiency = enhancement = 0;
+                if (this.weapon) {
+                    proficiency = this.weapon.proficiency || 0;
+                    enhancement = this.weapon.enhancement || 0;
+                }
+                if (typeof this.attack.toHit === "number") {
+                    this.$toHitBonus.html(this.attack.toHit + proficiency + enhancement);
+                }
+                else if (typeof this.attack.toHit === "string") {
+                    if (this.attack.toHit === "automatic") {
+                        this.$toHitBonus.html("automatic");
+                    }
+                    else {
+                        this.$toHitBonus.html(this.attacker.abilities[ this.attack.toHit + "mod" ] + Math.floor(this.attacker.level / 2) + proficiency + enhancement);
+                    }
+                }
                 this.$defense.html(this.attack.defense);
-                this.$damage.html((plus ? "" + plus + " + " : "") + d.replace("[W]", "[" + w + "]"));
+                this.$damage.html((enhancement ? "" + enhancement + " + " : "") + d.replace("[W]", "[" + w + "]"));
             };
 
             AttackDialog.prototype._attackChange = function($a) {
