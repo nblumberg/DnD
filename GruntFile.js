@@ -448,5 +448,6 @@ module.exports = function gruntFile(grunt) {
     grunt.registerTask("test", [ "build", "specRunner", "connect:tests", "open:specRunner", "watch:specRunner" ]);
 
     grunt.registerTask("launch", [ "build", "open:admin", "exec:server" ]);
+    grunt.registerTask("relaunch", [ "build", "exec:server" ]);
 
 };

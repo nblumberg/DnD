@@ -271,7 +271,8 @@
                         defense: "AC",
                         damage: "1d6",
                         keywords: []
-                    }).daily().noAction().melee()
+                    }).daily().noAction().melee(),
+                    CH.Power.attack("Jagged Broadsword +4 crit").atWill().noAction().melee().automatic().addDamage("0").addEffects(CH.Effect.ongoing(10).saveEnds())
                 ],
                 buffs: [
                     new CH.Power({

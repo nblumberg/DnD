@@ -7,8 +7,8 @@
 
     DnD.define(
         "Implement",
-        [ "out", "Damage", "Effect" ],
-        function(out, Damage, Effect) {
+        [ "out", "Damage", "Effect", "Attack", "jQuery" ],
+        function(out, Damage, Effect, Attack, jQuery) {
             function Implement(params) {
                 this._init(params);
             }
@@ -21,7 +21,8 @@
                 params = params || {};
                 this.name = params.name;
                 this.enhancement = params.enhancement;
-                this.crit = new Damage(params.crit);
+                this.crit = new Attack(jQuery.extend({ toHit: "automatic", defense: "ac" }, params.crit));
+                // TODO item miss damage
                 this.isMelee = false;
                 this.type = params.type;
                 this.effects = [];

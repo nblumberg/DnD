@@ -9,6 +9,31 @@
         "Attack",
         [ "Roll", "Damage", "Effect", "Serializable", "out" ],
         function(Roll, Damage, Effect, Serializable, out) {
+            /**
+             *
+             * @param {Object} params
+             * @param {String} params.name The name of the attack
+             * @param {String} params.type ???
+             * @param {Object} params.usage
+             * @param {String} params.usage.frequency How frequently the attack can be used "At-Will" | "Encounter" | "Recharge" | "Daily"
+             * @param {Number} params.usage.recharge The likelihood of a power recharging in a round (the minimum roll necessary on a d6)
+             * @param {Boolean} params.used Whether the attack has already been used (for limited uses, e.g. "Encounter" | "Recharge" | "Daily")
+             * @param {Number | String} params.toHit Bonus/penalty to the d20 attack roll, if it's a String its interpreted as an ability modifier or "automatic" if the attack always hits, see _toHitFromString()
+             * @param {String} params.defense The defense targeted by the attack: "ac" | "fort" | "ref" | "will"
+             * @param {Damage | Array} params.damage] The damage(s) applied when the attack is successful
+             * @param {Number} [params.meleeExtra] The extra damage applied when the attack is used as a melee attack
+             * @param {Number} [params.rangedExtra] The extra damage applied when the attack is used as a melee attack
+             * @param {Attack} [params.miss] The damage(s) applied when the attack is not successful
+             * @param {Boolean} [params.halfDamage] If this Attack is used as the miss property of another Attack, it's damage is interpreted as half that of its parent Attack
+             * @param {Array} [params.effects] The Effects applied when the attack is successful
+             * @param {Array} [params.keywords] The keywords (Strings) for this Attack
+             * @param {String} [params.description] The description of this Attack
+             * @param {Boolean} [params.prepared] TODO: implement
+             * @param {?} [params.healing] TODO: implement
+             *
+             * @param creature
+             * @constructor
+             */
             function Attack(params, creature) {
                 this._init(params, creature);
             }

@@ -7,8 +7,8 @@
 
     DnD.define(
         "Actor",
-        [ "out", "Creature", "Effect", "History", "History.Entry", "Attack", "Damage", "Recharge", "SavingThrow" ],
-        function(out, Creature, Effect, History, HistoryEntry, Attack, Damage, Recharge, SavingThrow) {
+        [ "out", "Creature", "Effect", "History", "History.Entry", "Attack", "Damage", "Recharge", "SavingThrow", "Property.Number" ],
+        function(out, Creature, Effect, History, HistoryEntry, Attack, Damage, Recharge, SavingThrow, NumberProperty) {
             function isArray(x) {
                 return x && typeof x === "object" && x.constructor === Array;
             }
@@ -46,11 +46,10 @@
                 if (currentState) {
                     // Update new Actor with current state from raw data
                     this.name = currentState.name;
-                    this.ap = typeof(currentState.ap) === "number" ? currentState.ap : this.ap;
-                    this.hp.current = currentState.hp.current;
-                    this.hp.temp = currentState.hp.temp;
-                    this.surges.current = currentState.surges.current;
-                    this.ap = currentState.ap;
+                    this.ap = new NumberProperty("Action points", (typeof currentState.ap === "number" ? currentState.ap : this.ap) || 0);
+                    this.hp.current = new NumberProperty("Current hit points", currentState.hp.current || creature.hp.total);
+                    this.hp.temp = new NumberProperty("Temporary hit points", currentState.hp.temp || 0);
+                    this.surges.current = new NumberProperty("Current healing surges", currentState.surges.current || creature.surges.total);
                     for (i = 0; i < this.attacks.length; i++) {
                         if (currentState.attacks && currentState.attacks[ this.attacks[ i ].name ] && currentState.attacks[ this.attacks[ i ].name ].used) {
                             this.attacks[ i ].used = true;
