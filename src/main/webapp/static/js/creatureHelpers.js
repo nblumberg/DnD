@@ -37,9 +37,11 @@
 
             function Power(params) {
                 params = Property.call(this, params);
-                if (!params.description && params.name) {
-                    params.description = descriptions[ params.name ];
+                let name = this.baseName || this.name;
+                if (!params.description && name) {
+                    this.description = descriptions[ name ];
                 }
+                this.prepared = true;
             }
 
             Power.attack = function attack(nameOrDuplicate, overrideName) {
@@ -163,6 +165,9 @@
                 wall: function wall(size, range, enemiesOnly) {
                     return this.area("wall", size, range, enemiesOnly);
                 },
+                personal: function personal() {
+                    return this.area("personal", 1, 0);
+                },
 
                 defense: function defense(defense, dc) {
                     this.defense = defense;
@@ -205,7 +210,7 @@
                 },
 
                 miss: function miss(damage, effects, notExpended) {
-                    this.miss = Power.attack(this.name + " (miss)");
+                    this.miss = Power.attack(this.name + " (miss)"); // TODO: this overwrites this containing method, rename the method
                     delete this.miss.damage;
                     if (damage === 0.5) {
                         this.miss.halfDamage = true;
@@ -221,6 +226,32 @@
                     }
                     return this;
                 }
+            };
+
+            function PreparedPower(params, prepared) {
+                Power.call(this, params);
+                let name = this.baseName || this.name;
+                if (typeof params.prepared === "undefined" && name && prepared && typeof prepared === "object") {
+                    this.prepared = !!prepared[ name ];
+                }
+            }
+
+            PreparedPower.prototype = Power.prototype;
+
+            /**
+             * Set this.prepared value
+             * @param {Boolean|Object} prepped Either the Boolean value to set this.prepared to, or a map of Power names to Boolean values to use as a lookup
+             * @param {String} [altName] The name to use for lookup in the prepped Object
+             * @returns {Power} This Power helper, to support chaining expressions
+             */
+            PreparedPower.prototype.markPrepared = function prepared(prepped, altName) {
+                if (typeof prepped === "boolean") {
+                    this.prepared = prepped;
+                }
+                else if (typeof prepped === "object" && prepped) {
+                    this.prepared = !!prepped[ altName || this.baseName || this.name ];
+                }
+                return this;
             };
 
             function Damage(params) {
@@ -423,6 +454,7 @@
                 Damage: Damage,
                 Effect: Effect,
                 Power: Power,
+                PreparedPower: PreparedPower,
                 meleeBasic: new Power({
                     name: "Melee Basic",
                     toHit: "STR",
