@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    <title>Canvas map</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+    <style>
+        body {
+            margin: 0;
+        }
+        #map {
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            overflow: auto;
+            top: 0;
+        }
+        .floor {
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+        .lower:after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            transition: all .3s linear;
+        }
+        .upper {
+            display: none;
+        }
+        .layer {
+            left: 0;
+            position: absolute;
+            top: 0;
+        }
+        .controls {
+            background: white;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1000;
+        }
+        .controls select {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="../js/dnd.js"></script>
+    <script src="../js/gameMap/basicModules.js"></script>
+    <script src="../js/gameMap/actor.js"></script>
+    <script src="../js/gameMap/material.js"></script>
+    <script src="../js/gameMap/wall.js"></script>
+    <script src="../js/gameMap/tile.js"></script>
+    <script src="../js/gameMap/floor.js"></script>
+    <script src="../js/gameMap/controls.js"></script>
+    <script src="../js/gameMap/map.js"></script>
+    <script src="../js/gameMap/generator.js"></script>
+
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>-->
+    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>-->
+</body>
+</html>

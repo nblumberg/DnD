@@ -125,7 +125,8 @@ module.exports = function karmaConf(config) {
     coverageFiles = [
         "src/main/webapp/static/js/*.js",
         "src/main/webapp/static/js/party/*.js",
-        "src/main/webapp/static/js/creatures/*.js"
+        "src/main/webapp/static/js/creatures/*.js",
+        "src/main/webapp/static/js/properties/*.js",
     ];
 
     // test specs to run

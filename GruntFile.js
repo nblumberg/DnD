@@ -374,6 +374,8 @@ module.exports = function gruntFile(grunt) {
     // debug mode
     grunt.registerTask("specRunner", [ "jasmine_html_from_karma_conf:specRunner" ]);
     grunt.registerTask("debug", [ "includeSource", "specRunner", "connect:tests", "open", "watch:specRunner" ]);
+    grunt.registerTask("debugRestart", [ "includeSource", "specRunner", "connect:tests", "watch:specRunner" ]);
+
 //    grunt.registerTask("debug", "start web server for jasmine tests in browser", function() {
 //        grunt.task.run("specRunner");
 //

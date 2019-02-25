@@ -1,4 +1,4 @@
-(function() {
+(() => {
     "use strict";
 
     DnD.define(
@@ -8,6 +8,7 @@
             "out",
             "jQuery",
             "Effect",
+            "Creature",
             "Actor",
             "creatures.party",
             "creatures.monsters",
@@ -18,6 +19,7 @@
                 out,
                 jQuery,
                 Effect,
+                Creature,
                 Actor,
                 party,
                 monsters,
@@ -25,6 +27,9 @@
             function Listener() {
                 this.$actorCards = {};
                 this.creatures = jQuery.extend({}, party, monsters);
+                Object.keys(this.creatures).forEach((name) => {
+                    this.creatures[ name ] = new Creature(this.creatures[ name ]);
+                });
                 this.actors = [];
                 this.current = null;
                 this.messages = [];
