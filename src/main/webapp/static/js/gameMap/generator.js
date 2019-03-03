@@ -35,6 +35,20 @@
                 return undefined;
             }
 
+            /**
+             * @returns {Object} A random Actor
+             */
+            function randomActor() {
+                return {
+                    floor: Math.floor(Math.random() * 3),
+                    x: Math.floor(Math.random() * 10),
+                    y: Math.floor(Math.random() * 10),
+                    image: Actor.PORTRAIT[ randomProperty(Actor.PORTRAIT) ],
+                    size: [ "tiny", "small", "medium", "large", "huge", "colossal" ][ Math.floor(Math.random() * 6) ],
+                    pc: Math.random() > 0.5
+                };
+            }
+
             for (let floor = 0; floor < 3; floor++) {
                 for (let row = 0; row < 10; row++) {
                     for (let column = 0; column < 10; column++) {
@@ -56,49 +70,53 @@
             map.setTiles(Tile.getInstances());
             map.setActors([
                 {
+                    name: "Amyria",
+                    pc: true,
+                    image: Actor.PORTRAIT.AMYRIA,
+                    size: "medium",
                     floor: 2,
                     x: 0,
                     y: 0,
-                    image: Actor.PORTRAIT.AMYRIA,
-                    size: "medium",
-                    pc: true
                 },
                 {
-                    floor: 2,
-                    x: 1,
-                    y: 0,
+                    name: "Shorty",
                     image: Actor.PORTRAIT.BERBALANG,
                     size: "small",
-                    pc: false
-                },
-                {
-                    floor: 2,
-                    x: 2,
-                    y: 0,
-                    image: Actor.PORTRAIT.BERBALANG,
-                    size: "tiny",
-                    pc: false
-                },
-                {
                     floor: 2,
                     x: 1,
-                    y: 1,
-                    image: Actor.PORTRAIT.BEHIR,
-                    size: "large"
+                    y: 0
                 },
                 {
+                    name: "Tiny",
+                    image: Actor.PORTRAIT.BERBALANG,
+                    size: "tiny",
+                    floor: 2,
+                    x: 2,
+                    y: 0
+                },
+                {
+                    name: "Giant",
+                    image: Actor.PORTRAIT.BEHIR,
+                    size: "large",
+                    floor: 2,
+                    x: 1,
+                    y: 1
+                },
+                {
+                    name: "Hulk",
+                    image: Actor.PORTRAIT.ANTHAROSK,
+                    size: "huge",
                     floor: 2,
                     x: 3,
                     y: 3,
-                    image: Actor.PORTRAIT.ANTHAROSK,
-                    size: "huge"
                 },
                 {
+                    name: "Colossus",
+                    image: Actor.PORTRAIT.ANTHAROSK,
+                    size: "colossal",
                     floor: 2,
                     x: 6,
-                    y: 0,
-                    image: Actor.PORTRAIT.ANTHAROSK,
-                    size: "colossal"
+                    y: 0
                 }
             ]);
         });

@@ -1,39 +1,60 @@
 (function controlsIIFE(DnD) {
     "use strict";
 
-    DnD.define("controls", [ "document", "Floor", "Math", "window" ], (document, Floor, Math, window) => {
+    let template =
+        `<nav id="controls" class="controls">
+            <table>
+                <thead>
+                    <th>Floors</th>
+                    <th>Characters</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="align-top">
+                            <select id="floors" multiple size="10"></select>
+                        </td>
+                        <td class="align-top">
+                            <select id="characters" size="10"></select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </nav>`;
+
+    DnD.define("controls", [ "dom", "Floor", "Math", "parseInt" ], (dom, Floor, Math, parseInt) => {
         class Controls {
             /**
              * Represents the control panel for the map
              * @param {Object} params
              * @param {HTMLElement} params.parent The element to insert the canvas layers into
-             * @param {Function} params.parent The element to insert the canvas layers into
              */
             constructor(params) {
-                this.parent = document.createElement("nav");
-                this.parent.id = "Controls";
-                this.parent.className = "controls";
-                params.parent.appendChild(this.parent);
+                let result = dom(template);
 
-                this.header = document.createElement("h3");
-                this.header.innerText = "Floors";
-                this.parent.appendChild(this.header);
+                params.parent.appendChild(result.ids.controls);
 
-                this.enabledFloors = document.createElement("select");
-                this.enabledFloors.multiple = true;
-                this.enabledFloors.size = 10;
-                this.parent.appendChild(this.enabledFloors);
+                this.enabledFloors = result.ids.floors;
+                this.selectedActor = result.ids.characters;
+
                 this.enabledFloors.onchange = this.enableFloors.bind(this);
+                this.selectedActor.onchange = this.selectActor.bind(this);
+            }
+
+            setActors(actors) {
+                this.actors = actors;
+                this.selectedActor.innerHTML = "";
+                this.selectedActor.size = Math.min(10, this.actors.length);
+                actors.forEach((actor, i) => {
+                    this.selectedActor.appendChild(dom(`<option value="${i}">${actor.name}</option>`).elements[ 0 ]);
+                });
             }
 
             setFloors(floors) {
                 this.floors = floors;
                 this.enabledFloors.innerHTML = "";
-                this.enabledFloors.size = Math.min(10, this.enabledFloors.length);
+                this.enabledFloors.size = Math.min(10, this.floors.length);
                 floors.forEach((floor, i) => {
-                    let option = document.createElement("option");
-                    option.value = option.innerText = floor.index;
-                    option.selected = true;
+                    let option = dom(`<option selected value="${floor.index}">${floor.index}</option>`).elements[ 0 ];
                     if (!i) {
                         this.enabledFloors.appendChild(option);
                     } else {
@@ -45,7 +66,7 @@
             enableFloors() {
                 let selectedIndices = [];
                 for (let option of this.enabledFloors.selectedOptions) {
-                    selectedIndices.push(window.parseInt(option.value, 10));
+                    selectedIndices.push(parseInt(option.value));
                 }
                 selectedIndices.sort();
                 this.floors.forEach((floor, i) => {
@@ -57,7 +78,19 @@
                 });
                 Floor.current = selectedIndices.pop();
             }
+
+            selectActor() {
+                let index = parseInt(this.selectedActor.options[ this.selectedActor.selectedIndex ].value);
+                this.actors.forEach((actor, i) => {
+                    if (index === i) {
+                        actor.select(true);
+                    } else {
+                        actor.select(false);
+                    }
+                });
+            }
         }
+
         return Controls;
     }, false);
 })(window.DnD);

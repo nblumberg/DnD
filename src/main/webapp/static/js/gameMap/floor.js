@@ -94,8 +94,6 @@
                     return tiles[ y ][ x ];
                 };
 
-
-
                 ORDER.forEach((name, i) => {
                     let canvas = document.createElement("canvas");
                     let context = canvas.getContext("2d");
@@ -217,6 +215,8 @@
              */
             resize(size) {
                 this.size = size;
+                this.parent.style.minHeight = `${this.height}px`;
+                this.parent.style.minWidth = `${this.width}px`;
                 this.layers.forEach(layer => {
                     layer.canvas.height = this.height;
                     layer.canvas.width = this.width;

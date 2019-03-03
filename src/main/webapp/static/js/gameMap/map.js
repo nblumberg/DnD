@@ -17,6 +17,7 @@
          * @param {Number} [characters[].floor] The Floor the Actor is on
          * @param {Number} [characters[].x] The x of the Tile the Actor is on
          * @param {Number} [characters[].y] The y of the Tile the Actor is on
+         * @param {String} [characters[].name] The name of the Actor
          * @param {String} [characters[].image] The image used to draw the Actor
          * @param {String} [characters[].size] "tiny" | "small" | "medium" | "large" | "huge" | "colossal", default "medium"
          */
@@ -33,6 +34,7 @@
                     );
                 }
             );
+            controls.setActors(actors);
             resize();
         }
 
