@@ -44,6 +44,10 @@
                 }
             }
 
+            /**
+             * Returns a Promise that resolves when all Material images are loaded
+             * @returns {Promise<undefined>} A Promise that resolves when all Material images are loaded
+             */
             static ready() {
                 if (!promise) {
                     promise = new Promise(_resolve => {
@@ -56,7 +60,6 @@
                 return promise;
             }
         }
-
 
         Material.WALL = {
             STONE: new Material({

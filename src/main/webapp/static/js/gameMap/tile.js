@@ -118,6 +118,10 @@
                 instances[ this.z ][ this.y ][ this.x ] = null;
             }
 
+            /**
+             * Destroys a Floor
+             * @param floor
+             */
             static destroyFloor(floor) {
                 instances = instances.splice(floor, 1);
             }
@@ -160,6 +164,10 @@
                 );
             }
 
+            /**
+             * Returns all instances of Tile
+             * @returns {Tile[]} All instances of Tile
+             */
             static getInstances() {
                 return instances;
             }
