@@ -127,7 +127,8 @@ The overcast sky adds an air of oppression to the scene, seeming to envelop the 
 const toxicWeird = () => ({
     description: `The acidic lake water gathers into an undulating, amphorous form and lunges toward you, trying to drown you in a stinging undertow. 
 Make a Dexterity saving throw to dodge the crashing wave.`,
-    image: 'https://static.wikia.nocookie.net/moms-basement-dd/images/2/24/6aa84bc0f02ce842cd50dde402ce5aaa.jpg/revision/latest?cb=20181125133502',
+    image: 'https://cdn.hearthstonetopdecks.com/wp-content/uploads/2017/04/featured-hotspringguardian.jpg',
+    // image: 'https://static.wikia.nocookie.net/moms-basement-dd/images/2/24/6aa84bc0f02ce842cd50dde402ce5aaa.jpg/revision/latest?cb=20181125133502',
     dc: 10,
     failure: { description: 'The chemicals in the water sear your skin.', roll: 6, type: 'acid' },
 });
