@@ -3,9 +3,15 @@
     <head>
         <title>The Forest</title>
         <style>
-            #restart {
+            #corner {
                 position: absolute;
+                width: 5%;
                 z-index: 1;
+            }
+            #restart {
+                font-size: xx-large;
+                height: 5%;
+                width: 100%;
             }
             #forest {
                 background-position: center;
@@ -66,7 +72,10 @@
     </head>
     <body>
         <div id="forest"></div>
-        <button id="restart">⟳</button>
+        <div id="corner">
+            <button id="restart">⟳</button>
+            <div id="health"></div>    
+        </div>
         <div id="up" class="direction"></div>
         <div id="right" class="direction"></div>
         <div id="down" class="direction"></div>
