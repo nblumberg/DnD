@@ -1,0 +1,176 @@
+:root {
+  --border-radius: 5px;
+  --card-width: 225px;
+  --card-height: 350px;
+  --outer-bg-color: white;
+  --inner-bg-color: white;
+  --bubble-size: 40px;
+}
+
+.items {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: calc(5 * var(--card-width));
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+}
+
+@media screen {
+  .outer {
+    width: var(--card-width);
+    height: var(--card-height);
+  }
+}
+@media print {
+  .outer {
+    width: 2.25in;
+    height: 3.5in;
+  }
+
+  nav {
+    display: none;
+  }
+}
+
+.outer {
+  border: 1px solid black;
+  position: relative;
+}
+
+.background {
+  background-color: var(--outer-bg-color);
+  position: relative;
+  height: 95%;
+  width: 95%;
+  transform: translate(2.5%, 2.5%);
+}
+
+.fields {
+  position: absolute;
+  bottom: 2.5%;
+  left: 2.5%;
+  right: 2.5%;
+  top: 2.5%;
+}
+
+/* inner */
+.background, .fields {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+
+  margin: 0;
+}
+
+/* rounded rectangle */
+.outer, .background {
+  border-radius: var(--border-radius);
+}
+
+.background .heading {
+  /* background-image: url('https://thumbs.dreamstime.com/b/set-two-aged-paper-scroll-banners-isolated-white-background-digital-illustration-set-two-fantasy-old-paper-scroll-193359567.jpg'); */
+  /* background-image: url('https://i.pinimg.com/736x/ed/ad/dc/edaddc2f53d2a93b6c9a224c12912304.jpg'); */
+  /* background-image: url('https://static.wixstatic.com/media/6a86f2_be2b3861192d4f61a47c2ea4b73ccdcd~mv2.png/v1/fill/w_934,h_300,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/old_ribbon.png'); */
+  background-image: url('../img/name-background.png'); /* from https://thumbs.dreamstime.com/b/set-two-aged-paper-scroll-banners-isolated-white-background-digital-illustration-set-two-fantasy-old-paper-scroll-193359567.jpg */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  height: 15%;
+}
+
+.background .description {
+  background-image: url('http://www.templeofsacredsound.com/wp-content/uploads/2012/11/Background-Scroll-png.png');
+  background-size: 112% 107%;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  opacity: 0.5;
+  width: 100%;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 10%;
+  text-align: center;
+}
+
+.heading h1 {
+  display: inline;
+  font-family: Luminari;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80%;
+  overflow: hidden;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 90%;
+  overflow-y: hidden;
+}
+
+.description p:first-of-type {
+  margin-top: 0;
+}
+
+/* inner section */
+.background .heading {
+  width: 100%;
+}
+
+.fields .heading, .fields .image, .fields .description {
+  width: 95%;
+}
+.fields .image {
+  background-color: var(--inner-bg-color);
+  border-radius: var(--border-radius);
+}
+
+.hero {
+  display: block;
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
+  position: relative;
+}
+
+.bubbles {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: center;
+  width: 100%;
+}
+
+.bubbles .block {
+  border: 1px solid black;
+  border-radius: var(--border-radius);
+}
+
+.bubbles .text {
+  white-space: nowrap;
+}
+
+.background .bubble {
+  background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2f899b52-daf8-4098-83fe-5c5e27b69915/dba5mo1-fd6db620-1b94-4645-badd-099b88fa85de.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzJmODk5YjUyLWRhZjgtNDA5OC04M2ZlLTVjNWUyN2I2OTkxNVwvZGJhNW1vMS1mZDZkYjYyMC0xYjk0LTQ2NDUtYmFkZC0wOTliODhmYTg1ZGUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.FvIXkmhKaGKg5hlMpEo5xKbQwEnruxRHrQTM1sblmo8');
+  /* background-image: url('../img/field.png'); */
+  /* background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Magic_Circle.svg/848px-Magic_Circle.svg.png?20210920030105'); */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
