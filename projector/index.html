@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Projector</title>
+    <link type="text/css" rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="flexrow">
+    <section class="left">
+        <div class="next">
+            <div>
+                <label for="name">Name</label>
+                <input id="name" type="text"/>
+            </div>
+            <div>
+                <label for="url">URL</label>
+                <input id="url" type="url"/>
+                <button id="load">Load</button>
+            </div>
+            <div>
+                <select id="entries"></select>
+            </div>
+        </div>
+        <ul id="entryList" class="entries"></ul>
+    </section>
+    <section class="right">
+        <img id="selectionPreview"></img>
+    </section>
+</div>
+<script src="index.js"></script>
+</body>
+</html>

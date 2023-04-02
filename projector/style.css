@@ -1,0 +1,70 @@
+.flexrow {
+    align-items: stretch;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.left {
+    flex-grow: 1;
+}
+
+.next div {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.next input {
+    flex-grow: 10;
+}
+
+.entries {
+    padding: 0;
+    list-style-type: none;
+    max-height: 90%;
+    overflow-y: scroll;
+    text-align: left;
+}
+
+.entry {
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 250px;
+    /* justify-content: space-evenly; */
+}
+
+.entry .buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.entry iframe {
+    flex-grow: 10;
+    height: 100%;
+    zoom: 0.025;
+}
+
+.right {
+    flex-grow: 1;
+}
+
+.right #selectionPreview {
+    border: 0;
+    height: 95%;
+    left: 0;
+    position: relative;
+    object-fit: contain;
+    width: 95%;
+    top: 0;
+    zoom: 0.5;
+}
