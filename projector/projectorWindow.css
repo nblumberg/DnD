@@ -1,0 +1,23 @@
+body {
+    background-color: black;
+}
+
+#image {
+    height: 100vh;
+    left: 0;
+    object-fit: contain;
+    object-position: left top;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+}
+
+#dot {
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    top: -999px;
+  }

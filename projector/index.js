@@ -82,7 +82,7 @@
         }
         const entry = { name, url };
         preview.src = url;
-        projectedWindow.location.href = url;
+        projectedWindow.postMessage({ type: 'projector', url });
         const match = entries.find(({ url: u }) => u === url);
         if (match) {
             if (match.name !== name) {
@@ -185,7 +185,7 @@
     const entries = getEntries();
     entries.forEach(createEntry);
 
-    const projectedWindow = window.open('https://www.dndbeyond.com/', 'projected', 'popup,left=0,top=0');
+    const projectedWindow = window.open('projectorWindow.html', 'projected', 'popup,left=0,top=0,location=no,toolbar=no,menubar=no,scrollbars=no,resizable=yes');
 
     loadButton.addEventListener('click', loadUrl);
     document.body.addEventListener('click', delegatedClickHandlers);
