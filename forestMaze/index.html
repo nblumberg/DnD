@@ -2,6 +2,8 @@
 <html>
     <head>
         <title>The Forest</title>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
         <style>
             #corner {
                 position: absolute;
@@ -57,14 +59,14 @@
                 width: 10%;
                 height: 50%;
             }
-            .hidden { 
+            .hidden {
                 display: none;
             }
-            .navigateOut { 
+            .navigateOut {
                 opacity: 0;
                 transition: visibility 0s 2s, opacity 2s linear;
              }
-             .navigateIn { 
+             .navigateIn {
                 opacity: 1;
                 transition: visibility 0s 2s, opacity 2s linear;
              }
@@ -74,7 +76,7 @@
         <div id="forest"></div>
         <div id="corner">
             <button id="restart">⟳</button>
-            <div id="health"></div>    
+            <div id="health"></div>
         </div>
         <div id="up" class="direction"></div>
         <div id="right" class="direction"></div>
