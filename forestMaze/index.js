@@ -5,15 +5,15 @@ import { goToTile } from './navigate.js';
 (async function IIFE() {
     const here = new URL(window.location.href);
     const path = `${here.protocol}//${here.hostname}${here.port ? `:${here.port}` : ''}/${new URLSearchParams(window.location.search).get('path') ?? 'vermeillon'}`;
-    const [{ tiles }, { randomEncounters }] = await Promise.all([
+    const [{ tiles }, { encounters }] = await Promise.all([
         import(`${path}/tiles.js`),
-        import(`${path}/randomEncounters.js`),
+        import(`${path}/encounters.js`),
     ]);
 
     // Attach event handlers
-    addEventHandlers(tiles, randomEncounters);
+    addEventHandlers(tiles, encounters);
 
     // Initial state
-    goToTile(tiles, randomEncounters, getTile() || tiles[0].name, false);
+    goToTile(tiles, encounters, getTile() || tiles[0].name, false);
     setState();
 })();

@@ -38,7 +38,7 @@ function createForcedEncounter(name, description, image) {
     return ({ forcedEncounter }) => (forcedEncounter !== name || data.resolved ? null : data);
 }
 
-export const randomEncounters = [
+export const encounters = [
     createForcedEncounter(
         `Balloon Crash`,
         `In the distant sky, Eaton spots a great balloon made of patchwork material. It spins out of control as though punctured, causing the wicker basket that hangs from it to swing wildly. The balloon plunges out of sight, disappearing into the fog approximately a mile away.`,

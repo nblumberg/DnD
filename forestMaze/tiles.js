@@ -33,10 +33,11 @@ function mapTile(unvisitedTileNames, tile, i, array) {
   };
 }
 
-function findTile(tiles, name, referrer) {
+export function findTile(tiles, name, referrer) {
   const tile = tiles.find(tile => tile.name === name);
   if (!tile) {
-      throw new Error(`Tile ${referrer.name} references non-existant ${name} tile`);
+    const fromTile = typeof referrer === 'string' ? referrer : (referrer ?? {}).name;
+    throw new Error(fromTile ? `Tile ${fromTile} references non-existant ${name} tile` : `No tile named ${name} exists`);
   }
   return tile;
 }
