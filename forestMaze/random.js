@@ -1,6 +1,8 @@
 import 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js';
+import { getUrlParam } from './getUrlParam';
 
-const seed = new URLSearchParams(window.location.search).get('seed');
+
+const seed = getUrlParam('seed');
 if (seed) {
   Math.seedrandom(seed);
 }

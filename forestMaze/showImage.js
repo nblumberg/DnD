@@ -1,8 +1,7 @@
-import {
-  forest,
-} from './elements.js';
+import { forest } from './elements.js';
+import { getUrlParam } from './getUrlParam.js';
 
-const transition = 2000;
+const transition = parseInt(getUrlParam('transition'), 10) || 2000;
 
 export function showImage(image, rotate = 0) {
   return new Promise(resolve => {

@@ -1,12 +1,11 @@
-import {
-  health,
-} from './elements.js';
+import { health } from './elements.js';
+import { getUrlParam } from './getUrlParam.js';
 
 const storageKeyTile = 'tileName';
 const storageTileCharacter = 'characterState';
 
 export function getTile() {
-  return new URLSearchParams(window.location.search).get('tile') || localStorage.getItem(storageKeyTile);
+  return getUrlParam('tile') || localStorage.getItem(storageKeyTile);
 }
 
 export function setTile(name) {
