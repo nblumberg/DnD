@@ -22,12 +22,12 @@ function createStreamVision(vision, image) {
     return ({ stream }) => (!stream || data.resolved ? null : data);
 }
 
-function createGushingOwell(description, image) {
+function createGushingOwell(description, image, onlyOnce) {
     const data = {
         description,
         image,
     };
-    return ({ owell, gushing }) => (!owell || !gushing || data.resolved ? null : data);
+    return ({ owell, gushing }) => (!owell || !gushing || (onlyOnce && data.resolved) ? null : data);
 }
 
 export const encounters = [
@@ -117,6 +117,7 @@ export const encounters = [
         `A repulsive monstrosity capers around the gushing O'-Well, staring covetously at the peak of the water plume.
 
         On closer inspection you notice a gold-flecked purple jewel embedded in its chest, the gem's beauty in stark contrast to the rest of the beast.`,
-        'https://www.dndbeyond.com/avatars/thumbnails/30781/610/1000/1000/638061931201709292.png'
+        'https://www.dndbeyond.com/avatars/thumbnails/30781/610/1000/1000/638061931201709292.png',
+        true,
     ),
 ];
