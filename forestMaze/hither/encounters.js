@@ -1,4 +1,5 @@
 import { roll, randomFrom } from '../random.js';
+import { createForcedEncounter } from '../encounters.js';
 
 function createMarshGas(failure) {
     const data = {
@@ -29,40 +30,35 @@ function createGushingOwell(description, image) {
     return ({ owell, gushing }) => (!owell || !gushing || data.resolved ? null : data);
 }
 
-function createForcedEncounter(name, description, image) {
-    const data = {
-        name,
-        description,
-        image,
-    };
-    return ({ forcedEncounter }) => (forcedEncounter !== name || data.resolved ? null : data);
-}
-
 export const encounters = [
-    createForcedEncounter(
-        `Balloon Crash`,
-        `In the distant sky, Eaton spots a great balloon made of patchwork material. It spins out of control as though punctured, causing the wicker basket that hangs from it to swing wildly. The balloon plunges out of sight, disappearing into the fog approximately a mile away.`,
-        'https://media.dndbeyond.com/compendium-images/twbtw/JtUXxjur9QWtb7E3/02-001.chapter-splash.jpg',
-    ),
-    createForcedEncounter(
-        `Giant crane flees`,
-        `As you reach the marshy ground, a giant crane previously hidden by the fog emerges and takes flight.`,
-        'https://goldengateaudubon.org/wp-content/uploads/aurich2.jpg',
-    ),
-    createForcedEncounter(
-        `Queen's Way Brigands`,
-        `Coming from one direction are several voices joined in a marching song. The singing grows louder as six bipedal rabbits wearing clothing emerge from the fog. Two of them tug at the reins of a giant snail, and the others carry clubs and slings.`,
-        'https://storage.googleapis.com/dream-machines-output/826dddb9-4409-4879-bb6a-d21007e4d5f5/0_0.png',
-    ),
-    createForcedEncounter(
-        `Agdon Longscarf`,
-        `An odd feeling suddenly comes over you as you become aware that somewhere along the way, a hunched, hooded figure has joined the group.
+    createForcedEncounter({
+        name: `Balloon Crash`,
+        description: `In the distant sky, Eaton spots a great balloon made of patchwork material. It spins out of control as though punctured, causing the wicker basket that hangs from it to swing wildly. The balloon plunges out of sight, disappearing into the fog approximately a mile away.`,
+        image: 'https://media.dndbeyond.com/compendium-images/twbtw/JtUXxjur9QWtb7E3/02-001.chapter-splash.jpg',
+        onlyOnce: true,
+    }),
+    createForcedEncounter({
+        name: `Giant crane flees`,
+        description: `As you reach the marshy ground, a giant crane previously hidden by the fog emerges and takes flight.`,
+        image: 'https://goldengateaudubon.org/wp-content/uploads/aurich2.jpg',
+        onlyOnce: true,
+    }),
+    createForcedEncounter({
+        name: `Queen's Way Brigands`,
+        description: `Coming from one direction are several voices joined in a marching song. The singing grows louder as six bipedal rabbits wearing clothing emerge from the fog. Two of them tug at the reins of a giant snail, and the others carry clubs and slings.`,
+        image: 'https://storage.googleapis.com/dream-machines-output/826dddb9-4409-4879-bb6a-d21007e4d5f5/0_0.png',
+        onlyOnce: true,
+    }),
+    createForcedEncounter({
+        name: `Agdon Longscarf`,
+        description: `An odd feeling suddenly comes over you as you become aware that somewhere along the way, a hunched, hooded figure has joined the group.
 
         He casts off his cloak with a flourish, revealing a Harengon with a wide grin on his face and wearing a 15-foot-long, bright blue scarf. He holds a hot branding iron in one hand and a small round shield in the other.
 
         The sound of a bagpipe erupts from somewhere up ahead.`,
-        'https://media.dndbeyond.com/compendium-images/twbtw/JtUXxjur9QWtb7E3/02-006.agdon-longscarf.png',
-    ),
+        image: 'https://media.dndbeyond.com/compendium-images/twbtw/JtUXxjur9QWtb7E3/02-006.agdon-longscarf.png',
+        onlyOnce: true,
+    }),
 
     createMarshGas('whenever you speak, your words come out as gibberish that only you and others affected by the gas can understand. This effect does not impede the ability to cast spells that have verbal components.'),
     createMarshGas('you experience a most annoying case of the hiccups. To cast a spell that has a verbal component, you must succeed on a DC 10 Constitution check. Also, you has disadvantage on Dexterity (Stealth) checks made to hide.'),

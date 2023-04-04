@@ -82,3 +82,8 @@ export async function generateEncounter(encounters, tile) {
     }
   }
 }
+
+export function createForcedEncounter(data) {
+  const { name, onlyOnce } = data;
+  return ({ forcedEncounter }) => (forcedEncounter !== name || (onlyOnce && data.resolved) ? null : data);
+}
