@@ -1,4 +1,6 @@
-const toxicWeird = () => ({
+import { randomFrom, roll } from '../random.js';
+
+const toxicWeird = ({ acidLake }) => (!acidLake ? null : {
     description: `The acidic lake water gathers into an undulating, amphorous form and lunges toward you, trying to drown you in a stinging undertow.
 Make a Dexterity saving throw to dodge the crashing wave.`,
     image: 'https://cdn.hearthstonetopdecks.com/wp-content/uploads/2017/04/featured-hotspringguardian.jpg',
@@ -16,6 +18,7 @@ Make a Constitution saving throw to weather the gas.`,
 });
 
 export const encounters = [
+    toxicWeird,
     () => ({
         description: `A wave of hunger overcomes you moments before ${roll(5) + 1} rats come scurrying out of the underbrush.
 Each of their heads glows with a dim light, and as they nip at your ankles you realize you can see their exposed brains.
