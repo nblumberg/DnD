@@ -6,7 +6,7 @@ const storageKeyTile = 'tileName';
 const storageTileCharacter = 'characterState';
 
 export function getTile() {
-  return localStorage.getItem(storageKeyTile);
+  return new URLSearchParams(window.location.search).get('tile') || localStorage.getItem(storageKeyTile);
 }
 
 export function setTile(name) {
