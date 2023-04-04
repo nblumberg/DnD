@@ -13,6 +13,7 @@ export async function goToTile(tiles, encounters, name, allowEncounters = true) 
       return;
   }
   setTile(name);
+  console.log(`Visiting ${name}`);
   const {
       src: backgroundImage,
       rotate = 0,
