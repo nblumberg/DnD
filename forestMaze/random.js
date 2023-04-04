@@ -1,5 +1,5 @@
 import 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js';
-import { getUrlParam } from './getUrlParam';
+import { getUrlParam } from './getUrlParam.js';
 
 
 const seed = getUrlParam('seed');
