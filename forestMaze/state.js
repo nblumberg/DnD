@@ -4,6 +4,23 @@ import { getUrlParam } from './getUrlParam.js';
 const storageKeyPrefix = `forestMaze_${getUrlParam('path')}`;
 const storageKeyLocation = `${storageKeyPrefix}_locationName`;
 const storageKeyCharacter = `${storageKeyPrefix}_characterState`;
+const storageKeyEncounters = `${storageKeyPrefix}_encounters`;
+
+export function getEncounters() {
+  const str = localStorage.getItem(storageKeyEncounters);
+  if (!str) {
+    return [];
+  }
+  return JSON.parse(str);
+}
+
+export function markEncounter(name) {
+  const encounters = getEncounters();
+  if (!encounters.includes(name)) {
+    encounters.push(name);
+    localStorage.setItem(storageKeyEncounters, JSON.stringify(encounters));
+  }
+}
 
 export function getLocation() {
   return getUrlParam('location') || localStorage.getItem(storageKeyLocation);

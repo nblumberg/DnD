@@ -1,8 +1,10 @@
 import { randomFrom, roll } from './random.js';
 import { showImage } from './showImage.js';
-import { getState, setState } from './state.js';
+import { getEncounters, getState, markEncounter, setState } from './state.js';
 
 export class Encounter {
+  static count = 1;
+
   constructor(params) {
     Object.entries(params).forEach(([name, value]) => {
       if (Object.prototype.hasOwnProperty.call(Encounter.prototype, name)) {
@@ -12,7 +14,10 @@ export class Encounter {
       this[name] = value;
     });
     if (!this.name) {
-      this.name = 'Unknown Encounter';
+      this.name = `Unknown Encounter ${count++}`;
+    }
+    if (this.onlyOnce && getEncounters().includes(this.name)) {
+      this.resolved = true;
     }
   }
 
@@ -37,10 +42,10 @@ export class Encounter {
 
   resolve() {
     const { description, dc, failure } = this;
-    const text = typeof description === 'function' ? description() : description;
+    const descriptionText = typeof description === 'function' ? description() : description;
     return new Promise(resolve => {
         if (dc) {
-            const savingThrow = parseInt(prompt(text), 10);
+            const savingThrow = parseInt(prompt(descriptionText), 10);
             if (savingThrow < dc) {
                 const damage = roll(failure.roll);
                 alert(`${failure.description}${!Number.isNaN(damage) ? ` Take ${damage} ${failure.type} damage.` : ''}`);
@@ -51,9 +56,11 @@ export class Encounter {
                 }
             }
         } else {
-            alert(text);
+            alert(descriptionText);
         }
         this.resolved = true;
+        const nameText = typeof this.name === 'function' ? this.name() : this.name;
+        markEncounter(nameText);
         resolve();
     });
   }
@@ -96,7 +103,7 @@ export async function generateEncounter(encounters, location) {
 
   let encounter;
   if (forcedEncounter) {
-      encounter = encounters.find(({ name }) => name === forcedEncounter);
+      encounter = encounters.find((encounter) => encounter.name === forcedEncounter && encounter.valid(location));
   } else {
     encounter = randomEncounter(encounters, location);
   }
