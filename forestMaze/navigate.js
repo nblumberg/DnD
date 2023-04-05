@@ -1,19 +1,21 @@
 import { downButton, leftButton, rightButton, upButton } from './elements.js';
 import { generateEncounter } from './encounters.js';
 import { showImage } from './showImage.js';
-import { resetLocation, setLocation } from './state.js';
+import { resetLocation } from './state.js';
+import { trackDirection, trackLocation } from './tracker.js';
 
 let location;
 
-export async function goToLocation(locations, encounters, name, allowEncounters = true) {
+export async function goToLocation(locations, encounters, name, fromPageLoad) {
   location = locations.find(location => location.name === name);
   // location = locations[0];
   if (!location) {
       alert(`Couldn't find location "${name}"`);
       return;
   }
-  setLocation(name);
-  console.log(`Visited ${name}`);
+
+  trackLocation(location, fromPageLoad);
+
   const {
       src: backgroundImage,
       rotate = 0,
@@ -44,21 +46,21 @@ export async function goToLocation(locations, encounters, name, allowEncounters 
   if (description) {
       alert(description);
   }
-  if (allowEncounters || forcedEncounter) {
+  if (!fromPageLoad || forcedEncounter) {
     await generateEncounter(encounters, location);
   }
 }
 
 export function onNavigate(locations, encounters, event) {
   const { id: direction } = event.target;
-  if (!location[direction]) {
+  if (!location || !location[direction]) {
       return;
   }
-  console.log(`Went ${direction}`);
+  trackDirection(direction);
   goToLocation(locations, encounters, location[direction]);
 }
 
 export function onReset(locations, encounters) {
-  goToLocation(locations, encounters, locations[0].name);
   resetLocation();
+  goToLocation(locations, encounters, locations[0].name);
 }

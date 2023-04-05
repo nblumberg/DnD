@@ -1,6 +1,8 @@
+import { getUrlParam } from './getUrlParam.js';
 import { randomFrom, roll } from './random.js';
 import { showImage } from './showImage.js';
-import { getEncounters, getState, markEncounter, setState } from './state.js';
+import { getState, setState } from './state.js';
+import { hasEncountered, trackEncounter } from './tracker.js';
 
 export class Encounter {
   static count = 1;
@@ -16,9 +18,17 @@ export class Encounter {
     if (!this.name) {
       this.name = `Unknown Encounter ${count++}`;
     }
-    if (this.onlyOnce && getEncounters().includes(this.name)) {
+    if (this.onlyOnce && hasEncountered(this)) {
       this.resolved = true;
     }
+  }
+
+  getName() {
+    return typeof this.name === 'function' ? this.name() : this.name;
+  }
+
+  getDescription() {
+    return typeof this.description === 'function' ? this.description() : this.description;
   }
 
   // Override this, but call it with super.valid(), in subclasses
@@ -28,9 +38,8 @@ export class Encounter {
   }
 
   async show(location) {
-    const { image, name } = this;
-    const text = typeof name === 'function' ? name() : name;
-    console.log(`Encountered ${text}`);
+    trackEncounter(this);
+    const { image } = this;
     if (image) {
         await showImage(image)
     }
@@ -41,11 +50,11 @@ export class Encounter {
   }
 
   resolve() {
-    const { description, dc, failure } = this;
-    const descriptionText = typeof description === 'function' ? description() : description;
+    const { dc, failure } = this;
+    const description = this.getDescription();
     return new Promise(resolve => {
         if (dc) {
-            const savingThrow = parseInt(prompt(descriptionText), 10);
+            const savingThrow = parseInt(prompt(description), 10);
             if (savingThrow < dc) {
                 const damage = roll(failure.roll);
                 alert(`${failure.description}${!Number.isNaN(damage) ? ` Take ${damage} ${failure.type} damage.` : ''}`);
@@ -56,11 +65,10 @@ export class Encounter {
                 }
             }
         } else {
-            alert(descriptionText);
+            alert(description);
         }
         this.resolved = true;
-        const nameText = typeof this.name === 'function' ? this.name() : this.name;
-        markEncounter(nameText);
+        const name = this.getName();
         resolve();
     });
   }
@@ -72,7 +80,7 @@ export class ForcedEncounter extends Encounter {
   }
 }
 
-const randomEncounterChance = 16;
+const randomEncounterChance = parseInt(getUrlParam('encounter'), 10) || 16;
 
 function validEncounters(encounters, location) {
   return encounters.filter(encounter => encounter.valid(location));

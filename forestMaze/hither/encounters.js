@@ -4,14 +4,14 @@ import { Encounter, ForcedEncounter } from '../encounters.js';
 class MarshGasEncounter extends Encounter {
     constructor(failure) {
         super({
-            name: 'Marsh gas',
+            name: `Marsh gas: ${failure.substr(0, 10)}`,
             description: `Marsh gas erupts from iridescent bubbles in the muck.
             When a bubble touches something edged, such as a twig or a blade of grass, it pops, releasing its gas with a sound of stifled laughter.
             The gas smells like old cheese.
             Make a Wisdom (Survival) group check`,
             image: `https://www.erasmatazz.com/_Media/unexplained-marsh-lights_med_hr.jpeg`,
             dc: 10,
-            failure: { description: `Make a DC 10 Constitution save. On a failure, for the next hour, ${failure}` },
+            failure: { description: `Make a DC 10 Constitution save. On a failure, for the next 3 hours, ${failure}` },
         });
     }
 }
@@ -19,9 +19,10 @@ class MarshGasEncounter extends Encounter {
 class StreamVisionEncounter extends Encounter {
     constructor(vision, image) {
         super({
-            name: 'Stream from Downfall',
+            name: `Stream from Downfall: ${vision.substr(0, 10)}`,
             description: `You chance upon a 10-foot-wide stream, and looking into it, see a vision in the reflections: ${vision}`,
             image,
+            onlyOnce: true,
         });
     }
 
@@ -33,6 +34,25 @@ class StreamVisionEncounter extends Encounter {
 class GushingOWellEncounter extends Encounter {
     valid(location) {
         return super.valid(location) && !!location.owell;
+    }
+}
+
+class CombatEncounter extends Encounter {
+    constructor(params) {
+        super({
+            onlyOnce: true,
+            ...params,
+        });
+    }
+
+    valid(location) {
+        return super.valid(location) && !!location.battleMap;
+    }
+}
+
+class LowTideEncounter extends Encounter {
+    valid(location) {
+        return super.valid(location) && location.tide === 'low';
     }
 }
 
@@ -72,12 +92,16 @@ export const encounters = [
     new MarshGasEncounter('you experience a most annoying case of the hiccups. To cast a spell that has a verbal component, you must succeed on a DC 10 Constitution check. Also, you has disadvantage on Dexterity (Stealth) checks made to hide.'),
     new MarshGasEncounter('a foul taste fills your mouth, and everything the character eats or drinks tastes awful. You feel a compulsion to eat slugs.'),
 
-    ({ tide }) => (tide === 'high' ? null : {
+
+    new LowTideEncounter({
+        name: 'Mud Mephits',
         description: `Five slow, unctuous creatures of earth and water burst forth from the muck and in between droning complains threaten to attack you unless you can guess their favorite food.`,
         image: `https://www.dndbeyond.com/avatars/thumbnails/18/297/1000/1000/636379807088272583.jpeg`,
+        onlyOnce: true,
     }),
 
-    () => ({
+    new Encounter({
+        name: 'Stilt walkers',
         description: `In a mist-veiled field of tall swamp grass dotted with clusters of cattails, you hear rustling in the vegetation ahead of you. The sound foreshadows the arrival of six humanoid creatures on stilts. The stilts allow these creatures to move more easily through the muck and to stay above the water. Their movement on stilts is seemingly not reduced by mud or water.`,
         image: `https://media.dndbeyond.com/compendium-images/twbtw/JtUXxjur9QWtb7E3/02-003.stilt-walker.png`,
     }),
@@ -127,5 +151,48 @@ export const encounters = [
         On closer inspection you notice a gold-flecked purple jewel embedded in its chest, the gem's beauty in stark contrast to the rest of the beast.`,
         image: 'https://www.dndbeyond.com/avatars/thumbnails/30781/610/1000/1000/638061931201709292.png',
         onlyOnce: true,
+    }),
+
+    new CombatEncounter({
+        name: 'Cranium rat swarm',
+        description: `You think you hear the wind rustling through the leaves until the sussuration is punctuated by squeeking telepathic thoughts like "They are here" and "We must find them." You recognize the pitter patter of many rat feet before a swarm of rodents with exposed brains erupts from the underbrush.`,
+        image: `https://www.dndbeyond.com/avatars/thumbnails/25746/698/1000/1000/637880558074808985.jpeg`,
+    }),
+    new CombatEncounter({
+        name: 'Intellect Devourer',
+        description: `The swamp water receeds and exposes a walking brain protected by a crusty covering and set on bestial clawed legs. Without words it communicates its hunger - for your mind.`,
+        image: `https://www.dndbeyond.com/avatars/thumbnails/30831/57/1000/1000/638063804285013333.png`,
+    }),
+    new CombatEncounter({
+        name: 'Intellect Devourer',
+        description: `The swamp water receeds and exposes a walking brain protected by a crusty covering and set on bestial clawed legs. Without words it communicates its hunger - for your mind.`,
+        image: `https://www.dndbeyond.com/avatars/thumbnails/30831/57/1000/1000/638063804285013333.png`,
+    }),
+    new CombatEncounter({
+        name: 'Intellect Devourer',
+        description: `The swamp water receeds and exposes a walking brain protected by a crusty covering and set on bestial clawed legs. Without words it communicates its hunger - for your mind.`,
+        image: `https://www.dndbeyond.com/avatars/thumbnails/30831/57/1000/1000/638063804285013333.png`,
+    }),
+    new CombatEncounter({
+        name: 'Dolgaunt and Dolgrims',
+        description: `You hear the sound of marching feet and grumbles in Goblin ahead. As you turn a bend and come face to face with the goblins, you realize something is wrong with the squat, deformed things. Each is essentially two goblins crushed into one creature, their misshapen body boasting four arms and a pair of twisted mouths that gibber and slather at the front of a headless torso. The two mouths carry on demented conversations with one another.`,
+        image: `https://www.dndbeyond.com/avatars/thumbnails/7725/608/1000/1000/637091619688542557.png`,
+    }),
+    new CombatEncounter({
+        name: 'Slithering Tracker',
+        description: `A body floats in the muck. As you look closer, the rippling water forms into a pseudopod topped with a face that screams and lunges at you.`,
+        image: `https://www.dndbeyond.com/avatars/thumbnails/25746/651/1000/1000/637880558006828597.jpeg`,
+    }),
+    new CombatEncounter({
+        name: 'Neh-thalggu',
+        description: `At first you think the swamp gas is getting thicker, but soon realize something more sinister is making you dizzy.
+        You spot an elf leaning against a tree up ahead wearing a glazed look before they jerk unnaturally and fall to the ground in a heap, leaving a spider-like crab attached to the tree and gobbling what looks like brains.`,
+        image: `https://www.dndbeyond.com/avatars/thumbnails/28079/897/1000/1000/637961800886575218.jpeg`,
+    }),
+    new CombatEncounter({
+        name: 'Adult Oblex',
+        description: `An elf steps from between two trees and notices you:
+        "Thank the Lady, someone to help! Please come with me, my friends are trapped."`,
+        image: `https://www.worldanvil.com/media/cache/apollo_preview/uploads/images/0ff8c3d73bb7eb00bb85de63e70056bc.jpg`,
     }),
 ];

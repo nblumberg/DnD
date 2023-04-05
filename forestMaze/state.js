@@ -4,22 +4,40 @@ import { getUrlParam } from './getUrlParam.js';
 const storageKeyPrefix = `forestMaze_${getUrlParam('path')}`;
 const storageKeyLocation = `${storageKeyPrefix}_locationName`;
 const storageKeyCharacter = `${storageKeyPrefix}_characterState`;
-const storageKeyEncounters = `${storageKeyPrefix}_encounters`;
+const storageKeyHistory = `${storageKeyPrefix}_history`;
+const storageKeyHistoryNames = `${storageKeyPrefix}_history_names`;
 
-export function getEncounters() {
-  const str = localStorage.getItem(storageKeyEncounters);
+export function getHistory() {
+  const str = localStorage.getItem(storageKeyHistory);
   if (!str) {
     return [];
   }
-  return JSON.parse(str);
+  const indices = JSON.parse(str);
+  const names = JSON.parse(localStorage.getItem(storageKeyHistoryNames));
+  return indices.map(entry => entry.map(index => typeof index === 'number' ? names[index] : index));
 }
 
-export function markEncounter(name) {
-  const encounters = getEncounters();
-  if (!encounters.includes(name)) {
-    encounters.push(name);
-    localStorage.setItem(storageKeyEncounters, JSON.stringify(encounters));
-  }
+/**
+ * Use indices into an array of names to save space for repeated locations/encounters/directions
+ * and to allow the locations/encounters to change after written to location storage
+ */
+export function setHistory(history) {
+  const indexMap = new Map();
+  const names = [];
+  const indices = history.map(entry => entry.map(name => {
+    if (!name) {
+      return '';
+    }
+    if (indexMap.has(name)) {
+      return indexMap.get(name);
+    }
+    const index = names.length;
+    indexMap.set(name, index);
+    names.push(name);
+    return index;
+  }));
+  localStorage.setItem(storageKeyHistoryNames, JSON.stringify(names));
+  localStorage.setItem(storageKeyHistory, JSON.stringify(indices));
 }
 
 export function getLocation() {

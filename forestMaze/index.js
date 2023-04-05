@@ -15,6 +15,6 @@ import { getLocation, setState } from './state.js';
     addEventHandlers(locations, encounters);
 
     // Initial state
-    goToLocation(locations, encounters, getLocation() || locations[0].name, false);
+    goToLocation(locations, encounters, getLocation() || locations[0].name, true);
     setState();
 })();
