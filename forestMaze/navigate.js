@@ -54,6 +54,7 @@ export function onNavigate(locations, encounters, event) {
   if (!location[direction]) {
       return;
   }
+  console.log(`Went ${direction}`);
   goToLocation(locations, encounters, location[direction]);
 }
 
