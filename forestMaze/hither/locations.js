@@ -1,56 +1,42 @@
-import { linkTiles } from '../tiles.js';
+import { Location, linkLocations } from '../locations.js';
+
+class HitherLocation extends Location {
+    constructor(params = {}) {
+        const { tide } = params;
+        delete params.tide;
+        super(params);
+        if (tide) {
+            this.setTide(tide);
+        } else {
+            this.setTide(Math.random() > 0.5 ? 'high' : 'low');
+        }
+    }
+    setTide(value = 'low') {
+        this.tide = value;
+        return this;
+    }
+    setOwell() {
+        this.owell = true;
+        return this;
+    }
+    setGushing() {
+        this.setOwell();
+        this.description = `You hear the rush of water in the distance. You come to an o'-well that is 10 feet tall and 5 feet in diameter. A steady geyser of water shoots from the well, rising to a height of 30 feet above the well.`;
+        this.gushing = true;
+        return this;
+    }
+    setStream() {
+        this.setTide('low');
+        this.stream = true;
+        return this;
+    }
+}
 
 function createLocation(params) {
-    return {
-        tide: Math.random() > 0.5 ? 'high' : 'low',
-        ...params,
-    };
+    return new HitherLocation(params);
 }
 
-function createEncounterlessLocation(params) {
-    return createLocation({
-        ...params,
-        noEncounters: true,
-    });
-}
-
-function createLowTide(params) {
-    return createLocation({
-        ...params,
-        tide: 'low',
-    });
-}
-
-function createHighTide(params) {
-    return createLocation({
-        ...params,
-        tide: 'low',
-    });
-}
-
-function createOWell(params) {
-    return createLocation({
-        ...params,
-        owell: true,
-    });
-}
-
-function createGushingOWell(params) {
-    return createOWell({
-        description: `You hear the rush of water in the distance. You come to an o'-well that is 10 feet tall and 5 feet in diameter. A steady geyser of water shoots from the well, rising to a height of 30 feet above the well.`,
-        ...params,
-        gushing: true,
-    });
-}
-
-function createStream(params) {
-    return createLowTide({
-        ...params,
-        stream: true,
-    });
-}
-
-const rawTiles = [
+const rawLocations = [
     // Key locations
     createLocation({
         name: `Queen's Way, top`,
@@ -77,12 +63,12 @@ const rawTiles = [
         forcedEncounter: `Queen's Way Brigands`,
         notRandom: true,
         right: `Queen's Way bottom`,
-    }),
+    }).setBattleMap(),
     createLocation({
         name: `Queen's Way bottom`,
         src: `https://preview.redd.it/dtvz93twv3q71.jpg?auto=webp&s=6eb33e9f49a18d7a58f4568df1176bec2f01b219`,
-    }),
-    createEncounterlessLocation({
+    }).setBattleMap(),
+    createLocation({
         name: `Inn at the End of the Road`,
         description: `Nearby you feel, as much as hear, a thundering rumble like a stampede or an earthquake, growing stronger as time passes.
 
@@ -92,110 +78,111 @@ const rawTiles = [
         src: `https://i.pinimg.com/originals/bc/c4/ae/bcc4ae1d0e544d09bb2fe6542c74decc.jpg`,
         // src: `https://64.media.tumblr.com/f31dc781960d2bb1878c6415a69091b9/tumblr_ps68eseLL11re1snbo1_r1_1280.png`,
         // src: `https://media.dndbeyond.com/compendium-images/twbtw/JtUXxjur9QWtb7E3/02-002.the-inn.png`,
-    }),
-    createEncounterlessLocation({
+    }).encounterLess(),
+    createLocation({
         name: `Slanty Tower`,
         description: `A crumbling stone tower rises out of the swamp, leaning at such an angle that it threatens to keel over. Black brambles surround the base of the tower and cling to its lower half. Hanging from the crenellations on the lower side of the tower's peak is a large woven basket at the end of a tangle of ropes and tattered fabric. The basket dangles thirty feet above the surface of the swamp.`,
         src: `https://i.redd.it/c1fg5haj0ni81.png`,
-    }),
-    createEncounterlessLocation({
+    }).encounterLess(),
+    createLocation({
         name: `Telemy Hill`,
         description: `You are greeted by the scent of sweet-smelling fruit. Damp, downy, silvery-green moss blankets a gentle upward slope before giving way to a craggy ridge that marks the top of the hill. Dozens of enormous willow trees dot the hillside, swaying as though in a breeze despite the absence of one.`,
         src: `https://i.redd.it/3q5ngxf4ykp81.png`,
-    }),
+    }).encounterLess(),
     createLocation({
         name: `Brigand's Tollway`,
         description: `A foggy marsh stretches out before you. Rickety causeways made of wooden planks form a wide, web-like structure above the bog. Three hundred feet away, many of these causeways converge on an enormous, ivy-covered tree stump that rises a good ten feet above the twenty-foot-high fog bank that enshrouds it.`,
         forcedEncounter: `Agdon Longscarf`,
         src: `https://i.redd.it/1mdat11476o81.png`,
     }),
-    createEncounterlessLocation({
+    createLocation({
         name: `Downfall`,
         description: `Thick fog hangs heavy in the air, obscuring the area around you so that the world appears to have shrunk to only twenty feet in all directions. Before you, the waterway widens and the current slows, giving the impression that you have entered a lake. Croaking voices penetrate the fog, through which dark shapes appear, resolving into two rowboats. Manning the oars of each rowboat are two bullywugs.`,
         src: `https://i.redd.it/pykbrqksj2k81.png`,
-    }),
+    }).encounterLess(),
 
     // O'-Wells
-    createOWell(createLowTide({
+    createLocation({
         name: `Low-tide O'-Well`,
         src: `https://i.redd.it/the-gushing-well-and-a-mini-dungeon-for-hither-v0-hjw3ika29tv81.jpg?width=1600&format=pjpg&auto=webp&s=ff2161b82467ed0e50df58748b52848ef985e5c8`,
-    })),
-    createGushingOWell(createHighTide({
+        battleMap: true,
+    }).setOwell().setTide('low'),
+    createLocation({
         name: `Hide-tide O'-Well`,
         description: ``,
         src: `https://preview.redd.it/the-gushing-well-and-a-mini-dungeon-for-hither-v0-u1vtjga29tv81.jpg?width=640&crop=smart&auto=webp&s=e77501e0a90e2b361a3e80b886d002f4cdc39595`,
-    })),
-    createOWell(createHighTide({
+    }).setGushing().setTide('high'),
+    createLocation({
         name: `Swampy O'-Well`,
         description: ``,
         src: `https://preview.redd.it/813q1e349ij81.jpg?width=640&crop=smart&auto=webp&s=5430e4a9a92729177652b04928f5daaa69f5d82d`,
-    })),
-    createGushingOWell({
+    }).setOwell().setTide('high').setBattleMap(),
+    createLocation({
         name: `Gushing O'-Well`,
         src: `https://assets.simpleviewinc.com/simpleview/image/upload/crm/napavalley/Geyser-rainbow_9D25005D-5056-A36A-08FDE367602B3064-9d24fe865056a36_9d250a6f-5056-a36a-0809ebfc394e088f.jpg`,
-    }),
-    createGushingOWell({
+    }).setGushing(),
+    createLocation({
         name: `Gushing O'-Well 2`,
         src: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoi-0BBHJAVfbeQbW-Cd5Za9RCbMriWku-Yw&usqp=CAU`,
-    }),
-    createGushingOWell({
+    }).setGushing(),
+    createLocation({
         name: `Gushing O'-Well 3`,
         src: `https://live.staticflickr.com/5594/31311915221_cdc7ca8ec6_b.jpg`,
-    }),
-    createGushingOWell({
+    }).setGushing(),
+    createLocation({
         name: `Gushing O'-Well 4`,
         src: `https://www.nps.gov/yell/learn/nature/images/HydrothermalFeatures.jpg`,
-    }),
-    createGushingOWell({
+    }).setGushing(),
+    createLocation({
         name: `Gushing O'-Well 5`,
         src: `https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/great-fountain-geyser-richard-mitchell-touching-light-photography.jpg`,
-    }),
-    createGushingOWell({
+    }).setGushing(),
+    createLocation({
         name: `Gushing O'-Well 6`,
         src: `https://i0.wp.com/craigniesen.com/wp-content/uploads/2019/02/Great-Fountain-Geyser-Yellowstone-National-Park-2012.jpg?fit=1500%2C995&ssl=1`,
-    }),
-    createGushingOWell({
+    }).setGushing(),
+    createLocation({
         name: `Gushing O'-Well 7`,
         src: `https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Fountain_Geyser_eruption_%281_00-1_29_PM%2C_6_August_2017%29_%2836202001980%29.jpg/391px-Fountain_Geyser_eruption_%281_00-1_29_PM%2C_6_August_2017%29_%2836202001980%29.jpg`,
-    }),
-    createGushingOWell({
+    }).setGushing(),
+    createLocation({
         name: `Multiple gushing O'-Wells`,
         src: `https://static.wikia.nocookie.net/nodiatis/images/5/57/Geyser_Valley-Main.jpg/revision/latest`,
-    }),
+    }).setGushing(),
 
     // Downfall streams
-    createStream({
+    createLocation({
         name: `Stream from Downfall 1`,
         src: `https://cdn.pixabay.com/photo/2016/12/15/12/41/waterfalls-1908788__340.jpg`,
-    }),
-    createStream({
+    }).setStream(),
+    createLocation({
         name: `Stream from Downfall 2`,
         src: `https://www.floridastateparks.org/sites/default/files/styles/single/public/media/image/Blackwater%20stream.jpg?itok=zke65YDv`,
-    }),
-    createStream({
+    }).setStream(),
+    createLocation({
         name: `Stream from Downfall 3`,
         src: `https://extension.unh.edu/sites/default/files/migrated_unmanaged_files/3BenKimball2stream4Bradford.jpg`,
-    }),
-    createStream({
+    }).setStream(),
+    createLocation({
         name: `Stream from Downfall 4`,
         src: `https://www.researchgate.net/publication/271078331/figure/fig17/AS:646462291578892@1531140029894/A-slow-moving-freshwater-swamp-forest-stream-at-Nee-Soon-Swamp-Forest-Photograph-by.png`,
-    }),
-    createStream({
+    }).setStream(),
+    createLocation({
         name: `Stream from Downfall 5`,
         src: `https://c.pxhere.com/photos/35/7d/lake_reflection_high_hires_trail_swamp_resolution_5d-579761.jpg!s2`,
-    }),
-    createStream({
+    }).setStream(),
+    createLocation({
         name: `Stream from Downfall 6`,
         src: `https://c.pxhere.com/photos/aa/fe/bach_water_waters_flowing_forest_green_movement_wood-1121440.jpg!s2`,
-    }),
-    createStream({
+    }).setStream(),
+    createLocation({
         name: `Stream from Downfall 7`,
         src: `https://media-cdn.tripadvisor.com/media/photo-m/1280/17/41/dc/15/stream-through-the-swamp.jpg`,
-    }),
-    createStream({
+    }).setStream(),
+    createLocation({
         name: `Stream from Downfall 8`,
         src: `https://live.staticflickr.com/65535/43283828015_5dfd30cf3e_b.jpg`,
-    }),
+    }).setStream(),
 
     // Waterlogged battlefield
     createLocation({
@@ -240,31 +227,30 @@ const rawTiles = [
         tide: 'low',
         src: `http://www.kekaiart.com/uploads/5/4/7/6/5476798/7824023_orig.jpg`,
     }),
-    createHighTide({
+    createLocation({
         name: `Flooded Swamp 1`,
         src: `https://pbs.twimg.com/media/EHGMtyaXUAAdffU.jpg`,
-    }),
-    createHighTide({
+    }).setTide('high'),
+    createLocation({
         name: `Flooded Swamp 2`,
         src: `https://i.redd.it/hcrqj7rfgw581.jpg`,
-    }),
-    createLowTide({
+    }).setTide('high'),
+    createLocation({
         name: `Flowers`,
         src: `https://inkarnate-api-as-production.s3.amazonaws.com/LZ4V3oZvNL1jcL3xnFRu2M`,
-    }),
-    createLowTide({
+    }).setTide('low'),
+    createLocation({
         name: `Foggy Road`,
         src: `https://inkarnate-api-as-production.s3.amazonaws.com/3urZb7xiqUraNnxbGoBZNT`,
-    }),
-    createLowTide({
+    }).setTide('low'),
+    createLocation({
         name: `Ruined Statue`,
         src: `https://i.redd.it/5bjgt9r6kf961.jpg`,
-    }),
-    createHighTide({
+    }).setTide('low'),
+    createLocation({
         name: `Flooded swamp`,
-        tide: 'high',
         src: `https://preview.redd.it/hither-encounter-map-with-flooded-variant-v0-i7ora0oopxk91.png?width=640&crop=smart&auto=webp&s=4f1fc58eebbe84b0f40876e71574475e8da58ef9`,
-    }),
+    }).setTide('high'),
     createLocation({
         name: `Abandoned Raft`,
         description: `You find an abandoned, 8-foot-square wooden raft. It lacks any means of steering.`,
@@ -284,4 +270,4 @@ const rawTiles = [
     }),
 ];
 
-export const tiles = linkTiles(rawTiles);
+export const locations = linkLocations(rawLocations);

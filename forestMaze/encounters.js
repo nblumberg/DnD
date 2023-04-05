@@ -4,8 +4,8 @@ import { getState, setState } from './state.js';
 
 const randomEncounterChance = 16;
 
-function validEncounters(encounters, tile) {
-  return encounters.map(encounterFn => encounterFn(tile)).filter(encounterData => !!encounterData);
+function validEncounters(encounters, location) {
+  return encounters.map(encounterFn => encounterFn(location)).filter(encounterData => !!encounterData);
 }
 
 function resolveEncounter(encounter) {
@@ -30,7 +30,7 @@ function resolveEncounter(encounter) {
   });
 }
 
-async function showEncounter(encounter, tile) {
+async function showEncounter(encounter, location) {
   if (!encounter) {
     return;
   }
@@ -40,21 +40,21 @@ async function showEncounter(encounter, tile) {
   }
   await resolveEncounter(encounter);
   if (image) {
-      showImage(tile.src, tile.rotate);
+      showImage(location.src, location.rotate);
   }
 }
 
-function randomEncounter(encounters, tile) {
+function randomEncounter(encounters, location) {
   if (roll(20) < randomEncounterChance) {
     return;
   }
-  const valid = validEncounters(encounters, tile);
+  const valid = validEncounters(encounters, location);
   if (valid.length) {
     return randomFrom(valid);
   }
 }
 
-export async function generateEncounter(encounters, tile) {
+export async function generateEncounter(encounters, location) {
   if (!encounters || !encounters.length) {
     alert(`No encounter data found!`);
     return;
@@ -62,23 +62,23 @@ export async function generateEncounter(encounters, tile) {
   const {
     forcedEncounter = false,
     noEncounters = false,
-  } = tile;
+  } = location;
   if (noEncounters) {
     return;
   }
 
   if (forcedEncounter) {
-      const encounterFn = encounters.find(encounterFn => (encounterFn(tile) ?? {}).name === forcedEncounter);
+      const encounterFn = encounters.find(encounterFn => (encounterFn(location) ?? {}).name === forcedEncounter);
       if (encounterFn) {
-          const encounter = encounterFn(tile);
+          const encounter = encounterFn(location);
           if (encounter) {
-              await showEncounter(encounter, tile);
+              await showEncounter(encounter, location);
           }
       }
   } else {
-    const encounter = randomEncounter(encounters, tile);
+    const encounter = randomEncounter(encounters, location);
     if (encounter) {
-      await showEncounter(encounter, tile);
+      await showEncounter(encounter, location);
     }
   }
 }

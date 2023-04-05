@@ -1,18 +1,18 @@
 import { downButton, leftButton, rightButton, upButton } from './elements.js';
 import { generateEncounter } from './encounters.js';
 import { showImage } from './showImage.js';
-import { resetTile, setTile } from './state.js';
+import { resetLocation, setLocation } from './state.js';
 
-let tile;
+let location;
 
-export async function goToTile(tiles, encounters, name, allowEncounters = true) {
-  tile = tiles.find(tile => tile.name === name);
-  // tile = tiles[0];
-  if (!tile) {
-      alert(`Couldn't find tile ${name}`);
+export async function goToLocation(locations, encounters, name, allowEncounters = true) {
+  location = locations.find(location => location.name === name);
+  // location = locations[0];
+  if (!location) {
+      alert(`Couldn't find location "${name}"`);
       return;
   }
-  setTile(name);
+  setLocation(name);
   console.log(`Visiting ${name}`);
   const {
       src: backgroundImage,
@@ -23,7 +23,7 @@ export async function goToTile(tiles, encounters, name, allowEncounters = true) 
       left,
       description,
       forcedEncounter = false,
-  } = tile;
+  } = location;
   upButton.classList.add('hidden');
   rightButton.classList.add('hidden');
   downButton.classList.add('hidden');
@@ -45,19 +45,19 @@ export async function goToTile(tiles, encounters, name, allowEncounters = true) 
       alert(description);
   }
   if (allowEncounters || forcedEncounter) {
-    await generateEncounter(encounters, tile);
+    await generateEncounter(encounters, location);
   }
 }
 
-export function onNavigate(tiles, encounters, event) {
+export function onNavigate(locations, encounters, event) {
   const { id: direction } = event.target;
-  if (!tile[direction]) {
+  if (!location[direction]) {
       return;
   }
-  goToTile(tiles, encounters, tile[direction]);
+  goToLocation(locations, encounters, location[direction]);
 }
 
-export function onReset(tiles, encounters) {
-  goToTile(tiles, encounters, tiles[0].name);
-  resetTile();
+export function onReset(locations, encounters) {
+  goToLocation(locations, encounters, locations[0].name);
+  resetLocation();
 }

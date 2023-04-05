@@ -1,23 +1,24 @@
 import { health } from './elements.js';
 import { getUrlParam } from './getUrlParam.js';
 
-const storageKeyTile = 'tileName';
-const storageTileCharacter = 'characterState';
+const storageKeyPrefix = `forestMaze_${getUrlParam('path')}`;
+const storageKeyLocation = `${storageKeyPrefix}_locationName`;
+const storageKeyCharacter = `${storageKeyPrefix}_characterState`;
 
-export function getTile() {
-  return getUrlParam('tile') || localStorage.getItem(storageKeyTile);
+export function getLocation() {
+  return getUrlParam('location') || localStorage.getItem(storageKeyLocation);
 }
 
-export function setTile(name) {
-  localStorage.setItem(storageKeyTile, name);
+export function setLocation(name) {
+  localStorage.setItem(storageKeyLocation, name);
 }
 
-export function resetTile() {
-  localStorage.removeItem(storageTileCharacter);
+export function resetLocation() {
+  localStorage.removeItem(storageKeyCharacter);
 }
 
 export function getState() {
-  return JSON.parse(localStorage.getItem(storageTileCharacter) || '{}');
+  return JSON.parse(localStorage.getItem(storageKeyCharacter) || '{}');
 }
 
 export function setState(state = getState()) {
@@ -26,5 +27,5 @@ export function setState(state = getState()) {
   }
   const str = JSON.stringify(state, null, '  ');
   health.innerText = str;
-  localStorage.setItem(storageTileCharacter, str);
+  localStorage.setItem(storageKeyCharacter, str);
 }
