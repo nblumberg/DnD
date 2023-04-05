@@ -105,44 +105,43 @@ const rawLocations = [
     createLocation({
         name: `Low-tide O'-Well`,
         src: `https://i.redd.it/the-gushing-well-and-a-mini-dungeon-for-hither-v0-hjw3ika29tv81.jpg?width=1600&format=pjpg&auto=webp&s=ff2161b82467ed0e50df58748b52848ef985e5c8`,
-        battleMap: true,
-    }).setOwell().setTide('low'),
+    }).setOwell().setTide('low').setBattleMap(),
     createLocation({
         name: `Hide-tide O'-Well`,
         description: ``,
         src: `https://preview.redd.it/the-gushing-well-and-a-mini-dungeon-for-hither-v0-u1vtjga29tv81.jpg?width=640&crop=smart&auto=webp&s=e77501e0a90e2b361a3e80b886d002f4cdc39595`,
-    }).setGushing().setTide('high'),
+    }).setGushing().setTide('high').setBattleMap(),
     createLocation({
         name: `Swampy O'-Well`,
         description: ``,
         src: `https://preview.redd.it/813q1e349ij81.jpg?width=640&crop=smart&auto=webp&s=5430e4a9a92729177652b04928f5daaa69f5d82d`,
     }).setOwell().setTide('high').setBattleMap(),
     createLocation({
-        name: `Gushing O'-Well`,
+        name: `Rainbow gushing O'-Well`,
         src: `https://assets.simpleviewinc.com/simpleview/image/upload/crm/napavalley/Geyser-rainbow_9D25005D-5056-A36A-08FDE367602B3064-9d24fe865056a36_9d250a6f-5056-a36a-0809ebfc394e088f.jpg`,
     }).setGushing(),
     createLocation({
-        name: `Gushing O'-Well 2`,
+        name: `Low gushing O'-Well`,
         src: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoi-0BBHJAVfbeQbW-Cd5Za9RCbMriWku-Yw&usqp=CAU`,
     }).setGushing(),
     createLocation({
-        name: `Gushing O'-Well 3`,
+        name: `Mist plume gushing O'-Well in blasted tree lake`,
         src: `https://live.staticflickr.com/5594/31311915221_cdc7ca8ec6_b.jpg`,
     }).setGushing(),
     createLocation({
-        name: `Gushing O'-Well 4`,
+        name: `Lake eruption gushing O'-Well`,
         src: `https://www.nps.gov/yell/learn/nature/images/HydrothermalFeatures.jpg`,
     }).setGushing(),
     createLocation({
-        name: `Gushing O'-Well 5`,
+        name: `Steps eruption gushing O'-Well`,
         src: `https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/great-fountain-geyser-richard-mitchell-touching-light-photography.jpg`,
     }).setGushing(),
     createLocation({
-        name: `Gushing O'-Well 6`,
-        src: `https://i0.wp.com/craigniesen.com/wp-content/uploads/2019/02/Great-Fountain-Geyser-Yellowstone-National-Park-2012.jpg?fit=1500%2C995&ssl=1`,
+        name: `Rocky gushing O'-Well`,
+        src: `https://yellowstone.net/geysers/wp-content/uploads/sites/2/2022/07/yellowstone05IMG0028.jpg`,
     }).setGushing(),
     createLocation({
-        name: `Gushing O'-Well 7`,
+        name: `Cloudy gushing O'-Well`,
         src: `https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Fountain_Geyser_eruption_%281_00-1_29_PM%2C_6_August_2017%29_%2836202001980%29.jpg/391px-Fountain_Geyser_eruption_%281_00-1_29_PM%2C_6_August_2017%29_%2836202001980%29.jpg`,
     }).setGushing(),
     createLocation({
@@ -152,46 +151,46 @@ const rawLocations = [
 
     // Downfall streams
     createLocation({
-        name: `Stream from Downfall 1`,
-        src: `https://cdn.pixabay.com/photo/2016/12/15/12/41/waterfalls-1908788__340.jpg`,
+        name: `Mossy stream`,
+        src: `https://pixnio.com/free-images/2018/07/30/2018-07-30-09-06-13.jpg`,
     }).setStream(),
     createLocation({
-        name: `Stream from Downfall 2`,
+        name: `Brown stream`,
         src: `https://www.floridastateparks.org/sites/default/files/styles/single/public/media/image/Blackwater%20stream.jpg?itok=zke65YDv`,
     }).setStream(),
     createLocation({
-        name: `Stream from Downfall 3`,
+        name: `Winding stream`,
         src: `https://extension.unh.edu/sites/default/files/migrated_unmanaged_files/3BenKimball2stream4Bradford.jpg`,
     }).setStream(),
     createLocation({
-        name: `Stream from Downfall 4`,
+        name: `Leaf-choked stream`,
         src: `https://www.researchgate.net/publication/271078331/figure/fig17/AS:646462291578892@1531140029894/A-slow-moving-freshwater-swamp-forest-stream-at-Nee-Soon-Swamp-Forest-Photograph-by.png`,
     }).setStream(),
     createLocation({
-        name: `Stream from Downfall 5`,
+        name: `Log over a stream`,
         src: `https://c.pxhere.com/photos/35/7d/lake_reflection_high_hires_trail_swamp_resolution_5d-579761.jpg!s2`,
     }).setStream(),
     createLocation({
-        name: `Stream from Downfall 6`,
+        name: `Driftwood dammed stream`,
         src: `https://c.pxhere.com/photos/aa/fe/bach_water_waters_flowing_forest_green_movement_wood-1121440.jpg!s2`,
     }).setStream(),
     createLocation({
-        name: `Stream from Downfall 7`,
+        name: `Tree finger stream`,
         src: `https://media-cdn.tripadvisor.com/media/photo-m/1280/17/41/dc/15/stream-through-the-swamp.jpg`,
     }).setStream(),
     createLocation({
-        name: `Stream from Downfall 8`,
+        name: `Root-choked stream`,
         src: `https://live.staticflickr.com/65535/43283828015_5dfd30cf3e_b.jpg`,
     }).setStream(),
 
     // Waterlogged battlefield
     createLocation({
-        name: `Waterlogged battlefield`,
+        name: `Battle of Mag Itha`,
         description: `You come upon a bog that was the site of a battle between elves and fomorians long ago. The area is littered with rusted and broken weapons and armor, along with the bones of the dead. As you enter the area, two suits of animated armor stand up from the detritus. The suits are clearly of elven design, their helmets shaped like stylized owl heads.`,
         src: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvywOiNDQ1ALyfX-InIo70Kf1vJpMr9Gv2fxanLnlkhde6Rt9uBxLg97ec3FuWDh4m5P8&usqp=CAU`,
     }),
     createLocation({
-        name: `Waterlogged battlefield 2`,
+        name: `Battle fo Mag Tuired`,
         description: `You come upon a bog that was the site of a battle between elves and fomorians long ago. The area is littered with rusted and broken weapons and armor, along with the bones of the dead. As you enter the area, two suits of animated armor stand up from the detritus. The suits are clearly of elven design, their helmets shaped like stylized owl heads.`,
         src: `https://blogger.googleusercontent.com/img/a/AVvXsEg6A2wVePQ99ZMgG4hxVGszEOQQ58OmK-sG5ZxFWZ8eqCe8HVdvcpfuhn6SyBxTbET4DM9WrZgyrkw972zCd99I0R0xNGjvlUQOCiqvlIyhUF6tnallzIRLVqIzgsIq9VLss0--f4U-7fOJeY-IDCPF47o2DJ4CsTu82PkyvTmde2NtYQGbHvOefLYP=w449-h253`,
     }),
@@ -199,58 +198,57 @@ const rawLocations = [
 
     // Filler locations
     createLocation({
-        name: `Swamp bird's eye view 1`,
+        name: `Purple toadstools`,
         src: `https://inkarnate-api-as-production.s3.amazonaws.com/KaqfzESeEhThtxJp2Rqomo`,
-    }),
+    }).setBattleMap(),
     createLocation({
-        name: `Swamp bird's eye view 2`,
+        name: `Green swamp gas`,
         src: `https://preview.redd.it/lhkh1yvlp3r71.jpg?auto=webp&s=0767cf96ea5c734eaa7a0af061e155c436953eed`,
-    }),
+    }).setBattleMap(),
     createLocation({
-        name: `Swamp bird's eye view 3`,
+        name: `Abandoned dock`,
         src: `https://preview.redd.it/z3rfw7873bp71.jpg?auto=webp&s=63c826470a579da8e76574bc31768d18fbfdf490`,
-    }),
+    }).setBattleMap(),
     createLocation({
         name: `Swamp 1`,
         src: `http://www.kekaiart.com/uploads/5/4/7/6/5476798/2488138_orig.jpg`,
     }),
     createLocation({
-        name: `Swamp 2`,
+        name: `Mossy canyon`,
         src: `http://www.kekaiart.com/uploads/5/4/7/6/5476798/6087845_orig.jpg`,
-    }),
+    }).setTide('high'),
     createLocation({
-        name: `Swamp 3`,
+        name: `Sunken temple`,
         src: `http://www.kekaiart.com/uploads/5/4/7/6/5476798/1744742_orig.jpg`,
-    }),
+    }).setTide('high'),
     createLocation({
         name: `Abandoned Village`,
-        tide: 'low',
         src: `http://www.kekaiart.com/uploads/5/4/7/6/5476798/7824023_orig.jpg`,
-    }),
+    }).setTide('low'),
     createLocation({
-        name: `Flooded Swamp 1`,
+        name: `Blasted heath`,
         src: `https://pbs.twimg.com/media/EHGMtyaXUAAdffU.jpg`,
     }).setTide('high'),
     createLocation({
-        name: `Flooded Swamp 2`,
+        name: `Canyon's edge`,
         src: `https://i.redd.it/hcrqj7rfgw581.jpg`,
     }).setTide('high'),
     createLocation({
-        name: `Flowers`,
+        name: `Field of flowers`,
         src: `https://inkarnate-api-as-production.s3.amazonaws.com/LZ4V3oZvNL1jcL3xnFRu2M`,
-    }).setTide('low'),
+    }).setTide('low').setBattleMap(),
     createLocation({
         name: `Foggy Road`,
         src: `https://inkarnate-api-as-production.s3.amazonaws.com/3urZb7xiqUraNnxbGoBZNT`,
-    }).setTide('low'),
+    }).setTide('low').setBattleMap(),
     createLocation({
         name: `Ruined Statue`,
         src: `https://i.redd.it/5bjgt9r6kf961.jpg`,
-    }).setTide('low'),
+    }).setTide('low').setBattleMap(),
     createLocation({
         name: `Flooded swamp`,
         src: `https://preview.redd.it/hither-encounter-map-with-flooded-variant-v0-i7ora0oopxk91.png?width=640&crop=smart&auto=webp&s=4f1fc58eebbe84b0f40876e71574475e8da58ef9`,
-    }).setTide('high'),
+    }).setTide('high').setBattleMap(),
     createLocation({
         name: `Abandoned Raft`,
         description: `You find an abandoned, 8-foot-square wooden raft. It lacks any means of steering.`,
@@ -262,10 +260,6 @@ const rawLocations = [
     }),
     createLocation({
         name: `Will o'the wisps 2`,
-        src: `https://cdna.artstation.com/p/assets/images/images/003/796/812/large/hector-ortiz-157913-will-o-wisp-hortiz-final.jpg?1477540654`,
-    }),
-    createLocation({
-        name: `Will o'the wisps 3`,
         src: `https://cdna.artstation.com/p/assets/images/images/003/796/812/large/hector-ortiz-157913-will-o-wisp-hortiz-final.jpg?1477540654`,
     }),
 ];
