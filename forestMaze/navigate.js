@@ -13,7 +13,7 @@ export async function goToLocation(locations, encounters, name, allowEncounters 
       return;
   }
   setLocation(name);
-  console.log(`Visiting ${name}`);
+  console.log(`Visited ${name}`);
   const {
       src: backgroundImage,
       rotate = 0,
