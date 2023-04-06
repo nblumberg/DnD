@@ -1,8 +1,11 @@
 import { downButton, leftButton, rightButton, upButton } from './elements.js';
 import { generateEncounter } from './encounters.js';
+import { getUrlParam } from './getUrlParam.js';
 import { showImage } from './showImage.js';
-import { resetLocation } from './state.js';
+import { getState, resetLocation, setState } from './state.js';
 import { trackDirection, trackLocation } from './tracker.js';
+
+const travelTime = parseInt(getUrlParam('travelTime'), 10) || 30;
 
 let location;
 
@@ -51,12 +54,22 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
   }
 }
 
+const timeRegExp = /^(\d+) hrs (\d+) min$/;
+
 export function onNavigate(locations, encounters, event) {
   const { id: direction } = event.target;
   if (!location || !location[direction]) {
       return;
   }
   trackDirection(direction);
+  const state = getState();
+  let { hours, minutes } = state;
+  minutes += travelTime;
+  hours += Math.floor(minutes / 60);
+  minutes = minutes % 60;
+  state.hours = hours;
+  state.minutes = minutes;
+  setState(state);
   goToLocation(locations, encounters, location[direction]);
 }
 

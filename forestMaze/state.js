@@ -1,5 +1,6 @@
 import { health } from './elements.js';
 import { getUrlParam } from './getUrlParam.js';
+import { showState } from './showState.js';
 
 const storageKeyPrefix = `forestMaze_${getUrlParam('path')}`;
 const storageKeyLocation = `${storageKeyPrefix}_locationName`;
@@ -53,14 +54,14 @@ export function resetLocation() {
 }
 
 export function getState() {
-  return JSON.parse(localStorage.getItem(storageKeyCharacter) || '{}');
+  return JSON.parse(localStorage.getItem(storageKeyCharacter) || '{"hours":0,"minutes":0}');
 }
 
 export function setState(state = getState()) {
   if (!Object.keys(state).length) {
       return;
   }
+  showState(state);
   const str = JSON.stringify(state, null, '  ');
-  health.innerText = str;
-  localStorage.setItem(storageKeyCharacter, str);
+  localStorage.setItem(storageKeyCharacter, JSON.stringify(state, null, '  '));
 }
