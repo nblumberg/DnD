@@ -1,6 +1,7 @@
 import { getUrlParam } from './getUrlParam.js';
 import { randomFrom, roll } from './random.js';
 import { showImage } from './showImage.js';
+import { getPlayerRoll, showText } from './showText.js';
 import { getState, setState } from './state.js';
 import { hasEncountered, trackEncounter } from './tracker.js';
 
@@ -53,23 +54,31 @@ export class Encounter {
     const { dc, failure } = this;
     const description = this.getDescription();
     return new Promise(resolve => {
-        if (dc) {
-            const savingThrow = parseInt(prompt(description), 10);
-            if (savingThrow < dc) {
-                const damage = roll(failure.roll);
-                alert(`${failure.description}${!Number.isNaN(damage) ? ` Take ${damage} ${failure.type} damage.` : ''}`);
-                if (!Number.isNaN(damage)) {
-                  const state = getState();
-                  state[failure.type] = (state[failure.type] || 0) + damage;
-                  setState(state);
-                }
-            }
-        } else {
-            alert(description);
-        }
+      const complete = () => {
         this.resolved = true;
         const name = this.getName();
         resolve();
+      };
+      if (dc) {
+        getPlayerRoll(description).then(value => {
+          const savingThrow = parseInt(value, 10);
+          if (savingThrow < dc) {
+            const damage = roll(failure.roll);
+            showText(
+              `${failure.description}${!Number.isNaN(damage) ? ` Take ${damage} ${failure.type} damage.` : ''}`
+            ).then(() => {
+              if (!Number.isNaN(damage)) {
+                const state = getState();
+                state[failure.type] = (state[failure.type] || 0) + damage;
+                setState(state);
+              }
+              complete();
+            });
+          }
+        })
+      } else {
+        showText(description).then(complete);
+      }
     });
   }
 }

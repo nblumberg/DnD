@@ -1,4 +1,4 @@
-import { health } from './elements.js';
+import { status } from './elements.js';
 import { getUrlParam } from './getUrlParam.js';
 import { showState } from './showState.js';
 

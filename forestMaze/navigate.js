@@ -2,6 +2,7 @@ import { downButton, leftButton, rightButton, upButton } from './elements.js';
 import { generateEncounter } from './encounters.js';
 import { getUrlParam } from './getUrlParam.js';
 import { showImage } from './showImage.js';
+import { showText } from './showText.js';
 import { getState, resetLocation, setState } from './state.js';
 import { trackDirection, trackLocation } from './tracker.js';
 
@@ -47,7 +48,7 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
       leftButton.classList.remove('hidden');
   }
   if (description) {
-      alert(description);
+      await showText(description);
   }
   if (!fromPageLoad || forcedEncounter) {
     await generateEncounter(encounters, location);

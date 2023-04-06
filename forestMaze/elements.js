@@ -4,4 +4,5 @@ export const rightButton = document.getElementById('right');
 export const downButton = document.getElementById('down');
 export const leftButton = document.getElementById('left');
 export const restart = document.getElementById('restart');
-export const health = document.getElementById('health');
+export const status = document.getElementById('status');
+export const dialog = document.getElementById('dialog');

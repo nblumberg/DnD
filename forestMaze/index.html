@@ -9,17 +9,26 @@
         <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
         <link rel="manifest" href="favicon_io/site.webmanifest">
         <style>
-            body {
+            body, dialog {
                 background-color: black;
                 color: white;
+            }
+            dialog {
+                margin-right: 0;
+                margin-top: 0;
+                max-width: 25%;
             }
             dd {
                 white-space: nowrap;
             }
-            #corner {
-                position: absolute;
-                width: 5%;
+            .rail {
+                position: fixed;
+                height: 100%;
+                max-width: 33%;
                 z-index: 1;
+            }
+            .rail.right {
+                right: 0;
             }
             #restart {
                 font-size: xx-large;
@@ -85,14 +94,17 @@
     </head>
     <body>
         <div id="forest"></div>
-        <div id="corner">
+        <div class="rail">
             <button id="restart">⟳</button>
-            <div id="health"></div>
+            <div id="status"></div>
+        </div>
+        <div class="rail right">
+            <dialog id="dialog"></dialog>
         </div>
         <div id="up" class="direction"></div>
         <div id="right" class="direction"></div>
         <div id="down" class="direction"></div>
         <div id="left" class="direction"></div>
-    <script src="index.js" type="module"></script>
+        <script src="index.js" type="module"></script>
     </body>
 </html>

@@ -1,7 +1,7 @@
-import { health } from './elements.js';
+import { status } from './elements.js';
 
 export function showState(state) {
-  health.innerHTML = '';
+  status.innerHTML = '';
 
   const stats = document.createElement('dl');
   const { hours, minutes } = state;
@@ -10,7 +10,7 @@ export function showState(state) {
     .filter(([key]) => key !== 'hours' && key !== 'minutes')
     .forEach(createStat.bind(null, stats));
 
-  health.appendChild(stats);
+  status.appendChild(stats);
 }
 
 function createStat(parent, [key, value]) {
