@@ -6,3 +6,5 @@ export const leftButton = document.getElementById('left');
 export const restart = document.getElementById('restart');
 export const status = document.getElementById('status');
 export const dialog = document.getElementById('dialog');
+export const dialogContent = document.getElementById('dialogContent');
+export const dialogInput = document.getElementById('dialogInput');

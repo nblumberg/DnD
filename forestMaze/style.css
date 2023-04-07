@@ -1,0 +1,100 @@
+body, dialog {
+  background-color: black;
+  color: white;
+}
+
+dialog {
+  margin-right: 0;
+  margin-top: 0;
+  max-width: 25%;
+}
+
+dialog input {
+  width: 100%;
+}
+
+dd {
+  white-space: nowrap;
+}
+
+.rail {
+  position: fixed;
+  height: 100%;
+  max-width: 25%;
+  z-index: 1;
+}
+
+.rail.right {
+  right: 0;
+}
+
+#restart {
+  font-size: xx-large;
+  height: 5%;
+  width: 100%;
+}
+
+#forest {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.direction {
+  background-color: red;
+  opacity: 0.5;
+  position: absolute;
+  z-index: 1;
+}
+
+.direction:hover {
+  opacity: 1;
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+#up {
+  top: 0;
+  left: 25%;
+  width: 50%;
+  height: 10%;
+}
+
+#right {
+  top: 25%;
+  right: 0;
+  width: 10%;
+  height: 50%;
+}
+
+#down {
+  bottom: 0;
+  left: 25%;
+  width: 50%;
+  height: 10%;
+}
+
+#left {
+  top: 25%;
+  left: 0;
+  width: 10%;
+  height: 50%;
+}
+
+.hidden {
+  display: none;
+}
+
+.navigateOut {
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+.navigateIn {
+  opacity: 1;
+  transition: visibility 0s 2s, opacity 2s linear;
+}

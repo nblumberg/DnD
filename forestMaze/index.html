@@ -8,89 +8,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
         <link rel="manifest" href="favicon_io/site.webmanifest">
-        <style>
-            body, dialog {
-                background-color: black;
-                color: white;
-            }
-            dialog {
-                margin-right: 0;
-                margin-top: 0;
-                max-width: 25%;
-            }
-            dd {
-                white-space: nowrap;
-            }
-            .rail {
-                position: fixed;
-                height: 100%;
-                max-width: 33%;
-                z-index: 1;
-            }
-            .rail.right {
-                right: 0;
-            }
-            #restart {
-                font-size: xx-large;
-                height: 5%;
-                width: 100%;
-            }
-            #forest {
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size: contain;
-                position: absolute;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-            }
-            .direction {
-                background-color: red;
-                opacity: 0.5;
-                position: absolute;
-                z-index: 1;
-            }
-            .direction:hover {
-                opacity: 1;
-                transition: cubic-bezier(0.075, 0.82, 0.165, 1);
-            }
-            #up {
-                top: 0;
-                left: 25%;
-                width: 50%;
-                height: 10%;
-            }
-            #right {
-                top: 25%;
-                right: 0;
-                width: 10%;
-                height: 50%;
-            }
-            #down {
-                bottom: 0;
-                left: 25%;
-                width: 50%;
-                height: 10%;
-            }
-            #left {
-                top: 25%;
-                left: 0;
-                width: 10%;
-                height: 50%;
-            }
-            .hidden {
-                display: none;
-            }
-            .navigateOut {
-                opacity: 0;
-                transition: visibility 0s 2s, opacity 2s linear;
-             }
-             .navigateIn {
-                opacity: 1;
-                transition: visibility 0s 2s, opacity 2s linear;
-             }
-        </style>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div id="forest"></div>
@@ -99,7 +17,10 @@
             <div id="status"></div>
         </div>
         <div class="rail right">
-            <dialog id="dialog"></dialog>
+            <dialog id="dialog">
+                <div id="dialogContent"></div>
+                <input id="dialogInput" />
+            </dialog>
         </div>
         <div id="up" class="direction"></div>
         <div id="right" class="direction"></div>
