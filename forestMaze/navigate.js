@@ -70,6 +70,17 @@ export function onNavigate(locations, encounters, event) {
   minutes = minutes % 60;
   state.hours = hours;
   state.minutes = minutes;
+  Object.entries(state).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      let duration = value[1];
+      duration -= travelTime;
+      if (duration <= 0) {
+        delete state[key];
+      } else {
+        state[key][1] = duration;
+      }
+    }
+  })
   setState(state);
   goToLocation(locations, encounters, location[direction]);
 }

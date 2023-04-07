@@ -38,13 +38,19 @@ function mapLocation(unvisitedLocationNames, location, _i, array) {
       unvisitedLocationNames.delete(location.name);
       return location;
   }
-  return {
+
+  let result;
+  do {
+    result = {
       ...location,
       up: generateDirection(location, array, unvisitedLocationNames),
       right: generateDirection(location, array, unvisitedLocationNames),
       down: generateDirection(location, array, unvisitedLocationNames),
       left: generateDirection(location, array, unvisitedLocationNames),
-  };
+    };
+    // Don't allow locations without an exit
+  } while (!result.up && !result.right && !result.down && !result.left);
+  return result;
 }
 
 function findLocation(locations, name, referrer) {

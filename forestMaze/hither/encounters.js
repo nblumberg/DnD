@@ -1,17 +1,27 @@
 import { roll, randomFrom } from '../random.js';
-import { Encounter, ForcedEncounter } from '../encounters.js';
+import { Encounter, ForcedEncounter, makeSavingThrow } from '../encounters.js';
 
 class MarshGasEncounter extends Encounter {
-    constructor(failure) {
+    constructor(status, failureText) {
         super({
-            name: `Marsh gas: ${failure.substr(0, 10)}`,
+            name: `Marsh gas: ${status}`,
             description: `Marsh gas erupts from iridescent bubbles in the muck.
-            When a bubble touches something edged, such as a twig or a blade of grass, it pops, releasing its gas with a sound of stifled laughter.
-            The gas smells like old cheese.
-            Make a Wisdom (Survival) group check`,
+
+            When a bubble touches something edged, such as a twig or a blade of grass, it pops, releasing its gas with a sound of stifled laughter. The gas smells like old cheese.
+
+            Make a Wisdom (Survival) group check.`,
             image: `https://www.erasmatazz.com/_Media/unexplained-marsh-lights_med_hr.jpeg`,
-            dc: 10,
-            failure: { description: `Make a DC 10 Constitution save. On a failure, for the next 3 hours, ${failure}` },
+            failure: makeSavingThrow(10, () => {
+                return {
+                    description: `Make a Constitution saving throw`,
+                    failure: makeSavingThrow(10, () => {
+                        return {
+                            description: `For the next 3 hours, ${failureText}`,
+                            status: [`Marsh gas: ${status}`, 'remaining', 3 * 60],
+                        };
+                    }),
+                };
+            })
         });
     }
 }
@@ -86,12 +96,10 @@ export const encounters = [
         onlyOnce: true,
     }),
 
-    new MarshGasEncounter('whenever you speak, your words come out as gibberish that only you and others affected by the gas can understand. This effect does not impede the ability to cast spells that have verbal components.'),
-    new MarshGasEncounter('you experience a most annoying case of the hiccups. To cast a spell that has a verbal component, you must succeed on a DC 10 Constitution check. Also, you has disadvantage on Dexterity (Stealth) checks made to hide.'),
-    new MarshGasEncounter('hideous warts erupt across your body. The warts are unattractive but have no harmful effect.'),
-    new MarshGasEncounter('you experience a most annoying case of the hiccups. To cast a spell that has a verbal component, you must succeed on a DC 10 Constitution check. Also, you has disadvantage on Dexterity (Stealth) checks made to hide.'),
-    new MarshGasEncounter('a foul taste fills your mouth, and everything the character eats or drinks tastes awful. You feel a compulsion to eat slugs.'),
-
+    new MarshGasEncounter('gibberish', 'whenever you speak, your words come out as gibberish that only you and others affected by the gas can understand. This effect does not impede the ability to cast spells that have verbal components.'),
+    new MarshGasEncounter('hiccups', 'you experience a most annoying case of the hiccups. To cast a spell that has a verbal component, you must succeed on a DC 10 Constitution check. Also, you has disadvantage on Dexterity (Stealth) checks made to hide.'),
+    new MarshGasEncounter('warts', 'hideous warts erupt across your body. The warts are unattractive but have no harmful effect.'),
+    new MarshGasEncounter('slugs', 'a foul taste fills your mouth, and everything the character eats or drinks tastes awful. You feel a compulsion to eat slugs.'),
 
     new LowTideEncounter({
         name: 'Mud Mephits',

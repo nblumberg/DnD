@@ -50,36 +50,25 @@ export class Encounter {
     }
   }
 
-  resolve() {
-    const { dc, failure } = this;
-    const description = this.getDescription();
-    return new Promise(resolve => {
-      const complete = () => {
-        this.resolved = true;
-        const name = this.getName();
-        resolve();
-      };
-      if (dc) {
-        getPlayerRoll(description).then(value => {
-          const savingThrow = parseInt(value, 10);
-          if (savingThrow < dc) {
-            const damage = roll(failure.roll);
-            showText(
-              `${failure.description}${!Number.isNaN(damage) ? ` Take ${damage} ${failure.type} damage.` : ''}`
-            ).then(() => {
-              if (!Number.isNaN(damage)) {
-                const state = getState();
-                state[failure.type] = (state[failure.type] || 0) + damage;
-                setState(state);
-              }
-              complete();
-            });
-          }
-        })
-      } else {
-        showText(description).then(complete);
+  async resolve() {
+    let { failure } = this;
+    let description = this.getDescription();
+    let status;
+
+    while (failure) {
+      const savingThrow = await getPlayerRoll(description);
+      ({ failure, description, status } = failure(savingThrow));
+      if (status) {
+        const [key, value, duration] = status;
+        const state = getState();
+        state[key] = duration ? [value, duration] : value;
+        setState(state);
       }
-    });
+    }
+    if (description) {
+      await showText(description);
+    }
+    this.resolved = true;
   }
 }
 
@@ -87,6 +76,30 @@ export class ForcedEncounter extends Encounter {
   valid(location) {
     return super.valid(location) && location.forcedEncounter === this.name;
   }
+}
+
+export function makeSavingThrow(dc, failure, success) {
+  return (savingThrow) => {
+    if (savingThrow >= dc) {
+      return success ? success() : undefined;
+    }
+    return failure();
+  };
+}
+
+export function takeDamage({ description, damage = 0, damageRoll, damageType }) {
+  return () => {
+    if (damageRoll) {
+      damage += roll(damageRoll);
+    }
+    if (damage) {
+      const fullDescription = `${description ? `${description} ` : ''}Take ${damage}${damageType ? ` ${damageType}` : ''} damage.`;
+      return {
+        description: fullDescription,
+        status: [damageType || 'damage', damage]
+      };
+    }
+  };
 }
 
 const randomEncounterChance = parseInt(getUrlParam('encounter'), 10) || 16;

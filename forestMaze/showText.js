@@ -22,7 +22,7 @@ export async function getPlayerRoll(text) {
       if (event.keyCode !== 13) {
         return false;
       }
-      const value = dialogInput.value;
+      const value = parseInt(dialogInput.value, 10);
       dialog.close();
       dialogInput.removeEventListener('keyup', closeDialog);
       dialog.removeEventListener('close', closeDialog);

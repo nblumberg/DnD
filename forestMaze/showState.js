@@ -19,6 +19,12 @@ function createStat(parent, [key, value]) {
   parent.appendChild(dt);
 
   const dd = document.createElement('dd');
-  dd.innerText = value;
+  if (Array.isArray(value)) {
+    const text = value[0];
+    const duration = value[1];
+    dd.innerText = `${text} ${duration} min`;
+  } else {
+    dd.innerText = value;
+  }
   parent.appendChild(dd);
 }
