@@ -1,4 +1,3 @@
-import { status } from './elements.js';
 import { getUrlParam } from './getUrlParam.js';
 import { showState } from './showState.js';
 
@@ -41,6 +40,11 @@ export function setHistory(history) {
   localStorage.setItem(storageKeyHistory, JSON.stringify(indices));
 }
 
+function resetHistory() {
+  localStorage.removeItem(storageKeyHistoryNames);
+  localStorage.removeItem(storageKeyHistory);
+}
+
 export function getLocation() {
   return getUrlParam('location') || localStorage.getItem(storageKeyLocation);
 }
@@ -64,4 +68,15 @@ export function setState(state = getState()) {
   showState(state);
   const str = JSON.stringify(state, null, '  ');
   localStorage.setItem(storageKeyCharacter, JSON.stringify(state, null, '  '));
+}
+
+function resetState() {
+  localStorage.removeItem(storageKeyCharacter);
+}
+
+export function resetAll() {
+  resetHistory();
+  resetLocation();
+  resetState();
+  showState();
 }

@@ -3,7 +3,7 @@ import { generateEncounter } from './encounters.js';
 import { getUrlParam } from './getUrlParam.js';
 import { showImage } from './showImage.js';
 import { showText } from './showText.js';
-import { getState, resetLocation, setState } from './state.js';
+import { getState, resetAll, resetLocation, setState } from './state.js';
 import { trackDirection, trackLocation } from './tracker.js';
 
 const travelTime = parseInt(getUrlParam('travelTime'), 10) || 30;
@@ -83,6 +83,11 @@ export function onNavigate(locations, encounters, event) {
   })
   setState(state);
   goToLocation(locations, encounters, location[direction]);
+}
+
+export function onClear(locations, encounters) {
+  resetAll();
+  goToLocation(locations, encounters, locations[0].name);
 }
 
 export function onReset(locations, encounters) {

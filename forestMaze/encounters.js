@@ -57,7 +57,7 @@ export class Encounter {
 
     while (failure) {
       const savingThrow = await getPlayerRoll(description);
-      ({ failure, description, status } = failure(savingThrow));
+      ({ failure, description, status } = failure(savingThrow) ?? {});
       if (status) {
         const [key, value, duration] = status;
         const state = getState();
