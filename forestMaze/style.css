@@ -46,8 +46,11 @@ dd {
 }
 
 .direction {
+  font-size: xxx-large;
   opacity: 0.5;
   position: absolute;
+  text-align: center;
+  text-shadow: 2px 2px black;
   z-index: 1;
 }
 
@@ -69,6 +72,10 @@ dd {
   background-size: contain;
 }
 
+.direction .label {
+  position: absolute;
+}
+
 #up {
   top: 0;
   left: 25%;
@@ -78,6 +85,10 @@ dd {
 #up:before {
   left: 50%;
   transform: translate(-25%, 0);
+}
+#up .label {
+  left: 15%;
+  top: 0;
 }
 
 #right {
@@ -90,6 +101,11 @@ dd {
   background-image: url('./Scrollwork\ arrow\,\ right.png');
   background-position-x: right;
 }
+#right .label {
+  left: auto;
+  transform: rotate(90deg);
+  top: 15%;
+}
 
 #down {
   bottom: 0;
@@ -100,6 +116,11 @@ dd {
 #down:before {
   left: -50%;
   transform: rotate(180deg) translate(-25%);
+}
+#down .label {
+  right: 25%;
+  transform: rotate(180deg);
+  bottom: 0;
 }
 
 #left {
@@ -112,6 +133,11 @@ dd {
   background-image: url('./Scrollwork\ arrow\,\ right.png');
   background-position-x: right;
   transform: rotate(180deg);
+}
+#left .label {
+  left: 0;
+  transform: rotate(270deg);
+  top: 15%;
 }
 
 .hidden {
