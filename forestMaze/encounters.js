@@ -102,7 +102,7 @@ export function takeDamage({ description, damage = 0, damageRoll, damageType }) 
   };
 }
 
-const randomEncounterChance = parseInt(getUrlParam('encounter'), 10) || 16;
+const randomEncounterChance = parseInt(getUrlParam('encounter'), 10) || 13;
 
 function validEncounters(encounters, location) {
   return encounters.filter(encounter => encounter.valid(location));
