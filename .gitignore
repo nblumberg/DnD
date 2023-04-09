@@ -17,3 +17,7 @@ libpeerconnection.log
 main.iml
 test.iml
 story.iml
+.vscode
+equipmentCards/*.tsv
+equipmentCards/.gitBACKUP
+projector/*.json
