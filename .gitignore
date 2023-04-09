@@ -13,3 +13,6 @@ spec-runner.html
 TODO.rtf
 libpeerconnection.log
 equipmentCards/.gitBACKUP
+.vscode
+equipmentCards/*.tsv
+projector/*.json
