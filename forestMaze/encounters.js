@@ -149,11 +149,11 @@ export async function generateEncounter(encounters, location) {
   }
 }
 
-export function showEncounter(encounters, location, name) {
+export async function showEncounter(encounters, location, name) {
   const encounter = findEncounter(encounters, name, location, true);
   if (!encounter) {
     console.warn(`Can't find encounter ${name}`);
     return;
   }
-  encounter.show(location);
+  return encounter.show(location);
 }
