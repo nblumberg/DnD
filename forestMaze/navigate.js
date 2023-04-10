@@ -1,5 +1,5 @@
 import { hideButtons, showButtons } from './elements.js';
-import { generateEncounter, showEncounter } from './encounters.js';
+import { findEncounter, generateEncounter, showEncounter } from './encounters.js';
 import { getUrlParam } from './getUrlParam.js';
 import { roll } from './random.js';
 import { showImage } from './showImage.js';
@@ -44,7 +44,10 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
     if (newTide !== tide) {
       tide = newTide;
       showTide(tide);
-      await showEncounter(encounters, location, `${tide.charAt(0).toUpperCase()}${tide.substring(1)} tide`);
+      const encounter = findEncounter(encounters, location, `${tide.charAt(0).toUpperCase()}${tide.substring(1)} tide`, false);
+      if (encounter) {
+        await encounter.show(location);
+      }
     }
   }
 

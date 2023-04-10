@@ -1,4 +1,5 @@
 import { Encounter, ForcedEncounter, makeSavingThrow } from '../encounters.js';
+import { getUrlParam } from '../getUrlParam.js';
 import { randomFrom, roll } from '../random.js';
 import { showTide } from '../showState.js';
 import { setTide } from '../state.js';
@@ -69,6 +70,7 @@ class TideEncounter extends Encounter {
   constructor(params) {
     super(params);
     this.tide = params.tide;
+    this.onlyOnce = getUrlParam('tideEncounters') !== 'true';
   }
   valid(location) {
       return super.valid(location) && location.tide === this.tide;
@@ -161,7 +163,8 @@ export const encounters = [
     ),
     new StreamVisionEncounter(
         'A short, mean-looking old woman wearing a crimson cap, a leather apron, and iron boots uses a cleaver to chop meat in a drab kitchen.',
-        'https://static.wikia.nocookie.net/the-hollow-on-netflix/images/0/0f/Red_Cap.png/revision/latest'
+        'https://static.wikia.nocookie.net/the-hollow-on-netflix/images/0/0f/Red_Cap.png',
+        // 'https://static.wikia.nocookie.net/the-hollow-on-netflix/images/0/0f/Red_Cap.png/revision/latest',
     ),
     new StreamVisionEncounter(
         'Two merrow swim past each other in murky water.',
