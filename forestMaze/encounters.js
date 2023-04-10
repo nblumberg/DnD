@@ -111,8 +111,48 @@ function validEncounters(encounters, location) {
   return encounters.filter(encounter => encounter.valid(location));
 }
 
-function findEncounter(encounters, name, location, ignoreValid = false) {
-  return encounters.find((encounter) => encounter.name === name && (ignoreValid || encounter.valid(location)));
+/**
+ * Find matching Encounters by name
+ * @param {Encounter[]} encounters
+ * @param {string | RegExp} name
+ * @param {Location} location
+ * @param {boolean} ignoreValid Don't bother testing Encounter.valid()
+ * @returns
+ */
+function findEncounters(encounters, name, location, ignoreValid = false) {
+  return encounters.filter((encounter) => {
+    if (typeof name === 'string') {
+      if (encounter.name !== name) {
+        return false;
+      }
+    } else if (name instanceof RegExp) {
+      if (!name.test(encounter.name)) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    if (ignoreValid) {
+      return true;
+    }
+    return encounter.valid(location);
+  });
+}
+
+/**
+ * Find a matching Encounter by name, if multiple match a RegExp, return one at random
+ * @param {Encounter[]} encounters
+ * @param {string | RegExp} name
+ * @param {Location} location
+ * @param {boolean} ignoreValid Don't bother testing Encounter.valid()
+ * @returns
+ */
+export function findEncounter(encounters, name, location, ignoreValid = false) {
+  const matches = findEncounters(encounters, name, location, ignoreValid);
+  if (!matches || !matches.length) {
+    return undefined;
+  }
+  return randomFrom(matches);
 }
 
 function randomEncounter(encounters, location) {
@@ -149,8 +189,8 @@ export async function generateEncounter(encounters, location) {
   }
 }
 
-export async function showEncounter(encounters, location, name) {
-  const encounter = findEncounter(encounters, name, location, true);
+export async function showEncounter(encounters, location, name, ignoreValid = true) {
+  const encounter = findEncounter(encounters, name, location, ignoreValid);
   if (!encounter) {
     console.warn(`Can't find encounter ${name}`);
     return;

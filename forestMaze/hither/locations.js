@@ -18,6 +18,7 @@ class HitherLocation extends Location {
     setStream() {
         this.setTide('low');
         this.stream = true;
+        this.forcedEncounter = /^Stream from Downfall\: /;
         return this;
     }
 }
