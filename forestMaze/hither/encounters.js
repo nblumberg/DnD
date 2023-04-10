@@ -1,5 +1,7 @@
-import { roll, randomFrom } from '../random.js';
 import { Encounter, ForcedEncounter, makeSavingThrow } from '../encounters.js';
+import { randomFrom, roll } from '../random.js';
+import { showTide } from '../showState.js';
+import { setTide } from '../state.js';
 
 class MarshGasEncounter extends Encounter {
     constructor(status, failureText) {
@@ -24,6 +26,9 @@ class MarshGasEncounter extends Encounter {
             })
         });
     }
+    valid(location) {
+      return super.valid(location) && !location.owell && !location.stream;
+    }
 }
 
 class StreamVisionEncounter extends Encounter {
@@ -37,7 +42,7 @@ class StreamVisionEncounter extends Encounter {
     }
 
     valid(location) {
-        return super.valid(location) &&  !!location.stream;
+        return super.valid(location) && !!location.stream;
     }
 }
 
@@ -60,11 +65,30 @@ class CombatEncounter extends Encounter {
     }
 }
 
-class LowTideEncounter extends Encounter {
-    valid(location) {
-        return super.valid(location) && location.tide === 'low';
-    }
+class TideEncounter extends Encounter {
+  constructor(params) {
+    super(params);
+    this.tide = params.tide;
+  }
+  valid(location) {
+      return super.valid(location) && location.tide === this.tide;
+  }
 }
+
+const mudTrapSuccess = {
+  description: `You manage to claw your way to safety`,
+};
+const mudTrap = (priorDepth = 0) => {
+  const depth = Math.min(10, priorDepth + roll(4));
+  return {
+    description: `You have sunk ${depth} feet into the muck and are restrained. If you are not completely submerged, make a Strength check to escape.`,
+    failure: makeSavingThrow(
+      10 + depth,
+      mudTrap.bind(null, depth),
+      () => mudTrapSuccess,
+    ),
+  };
+};
 
 export const encounters = [
     new ForcedEncounter({
@@ -101,11 +125,12 @@ export const encounters = [
     new MarshGasEncounter('warts', 'hideous warts erupt across your body. The warts are unattractive but have no harmful effect.'),
     new MarshGasEncounter('slugs', 'a foul taste fills your mouth, and everything the character eats or drinks tastes awful. You feel a compulsion to eat slugs.'),
 
-    new LowTideEncounter({
+    new TideEncounter({
         name: 'Mud Mephits',
         description: `Five slow, unctuous creatures of earth and water burst forth from the muck and in between droning complains threaten to attack you unless you can guess their favorite food.`,
         image: `https://www.dndbeyond.com/avatars/thumbnails/18/297/1000/1000/636379807088272583.jpeg`,
         onlyOnce: true,
+        tide: 'low',
     }),
 
     new Encounter({
@@ -192,5 +217,40 @@ export const encounters = [
         description: `An elf steps from between two trees and notices you:
         "Thank the Lady, someone to help! Please come with me, my friends are trapped."`,
         image: `https://www.worldanvil.com/media/cache/apollo_preview/uploads/images/0ff8c3d73bb7eb00bb85de63e70056bc.jpg`,
+    }),
+    new TideEncounter({
+      name: 'Mud pit',
+      description: `Marching across the swamp you blunder into swampy terrain that contains a pit of sucking mud. Make a group Wisdom (Survival) check.`,
+      image: `https://pbs.twimg.com/media/ByJxxasCQAIu7nS.jpg`,
+      tide: 'low',
+      failure: makeSavingThrow(
+        10,
+        mudTrap,
+        () => ({
+          description: `You spot and avoid the hazard.`,
+        })
+      ),
+    }),
+    new TideEncounter({
+      name: 'High tide',
+      description: () => {
+        setTide('high');
+        showTide('high');
+        return `You hear the roar of rushing water and a wave of brown sludge thunders through the trees and washes around your ankles.
+        Within ${roll(10)} minutes the water is 5 feet deep and you're treading water.`
+      },
+      image: `https://i.giphy.com/media/KYWdVhA36WuRLyiy9H/giphy.webp`,
+      tide: 'low',
+    }),
+    new TideEncounter({
+      name: 'Low tide',
+      description: () => {
+        setTide('low');
+        showTide('low');
+        return `You hear the roar of rushing water and you are swept away, banging against obstacles, as the floodwater drains rapidly.
+        Within ${roll(10)} minutes the water is gone completely and you're standing ankle-deep in mud.`;
+      },
+      image: `https://www.gizmodo.com.au/wp-content/uploads/sites/2/2014/08/01/qidj7fkfi3d1ryii9vng.gif`,
+      tide: 'high',
     }),
 ];

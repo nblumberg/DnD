@@ -1,16 +1,6 @@
-import { Location, linkLocations } from '../locations.js';
+import { linkLocations, Location } from '../locations.js';
 
 class HitherLocation extends Location {
-    constructor(params = {}) {
-        const { tide } = params;
-        delete params.tide;
-        super(params);
-        if (tide) {
-            this.setTide(tide);
-        } else {
-            this.setTide(Math.random() > 0.5 ? 'high' : 'low');
-        }
-    }
     setTide(value = 'low') {
         this.tide = value;
         return this;
@@ -48,14 +38,14 @@ const rawLocations = [
         forcedEncounter: `Balloon Crash`,
         notRandom: true,
         down: `Queen's Way, descent`,
-    }),
+    }).setTide('low'),
     createLocation({
         name: `Queen's Way, descent`,
         src: `https://rabailen.files.wordpress.com/2022/08/image-8.png`,
         forcedEncounter: `Giant crane flees`,
         notRandom: true,
         down: `Queen's Way Brigands`,
-    }),
+    }).setTide('low'),
     createLocation({
         name: `Queen's Way Brigands`,
         description: `Sticky mud squelches beneath your feet. Tangled mangroves grow out of pools of rippling water, half hidden by the thick fog, and purple mushrooms cling to rotting logs and stumps scattered throughout the marsh. Crickets that glow like fireflies chirp serenely before they're snatched out of the air by the tongues of hungry frogs.`,
@@ -63,10 +53,11 @@ const rawLocations = [
         forcedEncounter: `Queen's Way Brigands`,
         notRandom: true,
         right: `Queen's Way bottom`,
-    }).setBattleMap(),
+    }).setBattleMap().setTide('low'),
     createLocation({
         name: `Queen's Way bottom`,
         src: `https://preview.redd.it/dtvz93twv3q71.jpg?auto=webp&s=6eb33e9f49a18d7a58f4568df1176bec2f01b219`,
+        forcedEncounter: `High tide`,
     }).setBattleMap(),
     createLocation({
         name: `Inn at the End of the Road`,
@@ -145,14 +136,15 @@ const rawLocations = [
         src: `https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Fountain_Geyser_eruption_%281_00-1_29_PM%2C_6_August_2017%29_%2836202001980%29.jpg/391px-Fountain_Geyser_eruption_%281_00-1_29_PM%2C_6_August_2017%29_%2836202001980%29.jpg`,
     }).setGushing(),
     createLocation({
-        name: `Multiple gushing O'-Wells`,
-        src: `https://static.wikia.nocookie.net/nodiatis/images/5/57/Geyser_Valley-Main.jpg/revision/latest`,
+        name: `Animated gushing O'-Well`,
+        src: `https://media.tenor.com/eBHKVHsOHBMAAAAM/flood-water-fall.gif`,
     }).setGushing(),
 
     // Downfall streams
     createLocation({
         name: `Mossy stream`,
-        src: `https://pixnio.com/free-images/2018/07/30/2018-07-30-09-06-13.jpg`,
+        src: `https://www.outdoorphotographer.com/images/gallery/full/309/11309.jpg`,
+        // src: `https://pixnio.com/free-images/2018/07/30/2018-07-30-09-06-13.jpg`,
     }).setStream(),
     createLocation({
         name: `Brown stream`,

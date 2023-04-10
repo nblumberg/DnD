@@ -2,10 +2,11 @@ import { getUrlParam } from './getUrlParam.js';
 import { showState } from './showState.js';
 
 const storageKeyPrefix = `forestMaze_${getUrlParam('path')}`;
-const storageKeyLocation = `${storageKeyPrefix}_locationName`;
-const storageKeyCharacter = `${storageKeyPrefix}_characterState`;
 const storageKeyHistory = `${storageKeyPrefix}_history`;
 const storageKeyHistoryNames = `${storageKeyPrefix}_history_names`;
+const storageKeyLocation = `${storageKeyPrefix}_locationName`;
+const storageKeyTide = `${storageKeyPrefix}_tide`;
+const storageKeyCharacter = `${storageKeyPrefix}_characterState`;
 
 export function getHistory() {
   const str = localStorage.getItem(storageKeyHistory);
@@ -74,9 +75,22 @@ function resetState() {
   localStorage.removeItem(storageKeyCharacter);
 }
 
+export function getTide() {
+  return localStorage.getItem(storageKeyTide) ?? 'low';
+}
+
+export function setTide(level = 'low') {
+  localStorage.setItem(storageKeyTide, level);
+}
+
+function resetTide() {
+  localStorage.removeItem(storageKeyTide);
+}
+
 export function resetAll() {
   resetHistory();
   resetLocation();
   resetState();
-  showState();
+  resetTide();
+  showState(getState());
 }

@@ -5,6 +5,22 @@ body, dialog {
   text-shadow: 2px 2px black;
 }
 
+body {
+  background: linear-gradient(to top, mediumaquamarine 50%, black 50%);
+  /* background-image: url('https://i.giphy.com/media/KYWdVhA36WuRLyiy9H/giphy.webp');
+  background-size: cover; */
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 100% 200%;
+  height: 100vh;
+  transition: all 2sec ease-in;
+  width: 100%;
+}
+
+body.highTide {
+  background-position: left 50%;
+}
+
 /* Dialog */
 dialog {
   margin-right: 0;

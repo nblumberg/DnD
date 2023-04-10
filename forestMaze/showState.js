@@ -28,3 +28,7 @@ function createStat(parent, [key, value]) {
   }
   parent.appendChild(dd);
 }
+
+export function showTide(tide) {
+  document.body.classList[tide === 'high' ? 'add' : 'remove']('highTide');
+}

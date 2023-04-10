@@ -1,4 +1,4 @@
-import { roll, randomFrom } from './random.js';
+import { randomFrom, roll } from './random.js';
 import { getLocation } from './state.js';
 
 export class Location {
@@ -16,17 +16,14 @@ export class Location {
 }
 
 function generateDirection(location, allLocations, unvisitedLocationNames) {
-  if (roll(2) === 2) {
-      return;
-  }
   let destination;
   do {
-      if (unvisitedLocationNames.size) {
-          // Use unvisited locations first to make sure they're all reachable
-          destination = findLocation(allLocations, randomFrom(Array.from(unvisitedLocationNames.values())), location);
-      } else {
-          destination = randomFrom(allLocations);
-      }
+    if (unvisitedLocationNames.size) {
+      // Use unvisited locations first to make sure they're all reachable
+      destination = findLocation(allLocations, randomFrom(Array.from(unvisitedLocationNames.values())), location);
+    } else {
+      destination = randomFrom(allLocations);
+    }
   } while (destination === location);
   unvisitedLocationNames.delete(destination.name);
   return destination.name;
@@ -34,22 +31,20 @@ function generateDirection(location, allLocations, unvisitedLocationNames) {
 
 function mapLocation(unvisitedLocationNames, location, _i, array) {
   if (location.notRandom) {
-      delete location.notRandom;
-      unvisitedLocationNames.delete(location.name);
-      return location;
+    delete location.notRandom;
+    unvisitedLocationNames.delete(location.name);
+    return location;
   }
 
-  let result;
-  do {
-    result = {
-      ...location,
-      up: generateDirection(location, array, unvisitedLocationNames),
-      right: generateDirection(location, array, unvisitedLocationNames),
-      down: generateDirection(location, array, unvisitedLocationNames),
-      left: generateDirection(location, array, unvisitedLocationNames),
-    };
-    // Don't allow locations without an exit
-  } while (!result.up && !result.right && !result.down && !result.left);
+  const exitCount = roll(4);
+  const exits = new Set();
+  while (exits.size < exitCount) {
+    exits.add(randomFrom(directions));
+  }
+  const result = { ...location };
+  for (const dir of exits.values()) {
+    result[dir] = generateDirection(location, array, unvisitedLocationNames);
+  }
   return result;
 }
 
@@ -65,14 +60,14 @@ function findLocation(locations, name, referrer) {
 const directions = ['up', 'right', 'down', 'left'];
 function followPaths(locations, location, reachable = new Map()) {
   if (reachable.has(location.name)) {
-      return;
+    return;
   }
-  reachable.set(location.name, [,,,]);
+  reachable.set(location.name, [, , ,]);
   directions.forEach(direction => {
-      if (location[direction]) {
-          reachable.get(location.name)[directions.indexOf(direction)] = location[direction];
-          followPaths(locations, findLocation(locations, location[direction], location), reachable);
-      }
+    if (location[direction]) {
+      reachable.get(location.name)[directions.indexOf(direction)] = location[direction];
+      followPaths(locations, findLocation(locations, location[direction], location), reachable);
+    }
   });
   return reachable;
 }
@@ -80,10 +75,10 @@ function followPaths(locations, location, reachable = new Map()) {
 export function linkLocations(rawLocations) {
   const usedNames = new Set();
   rawLocations.forEach(({ name }) => {
-      if (usedNames.has(name)) {
-          throw new Error(`Multiple locations are called "${name}"`);
-      }
-      usedNames.add(name);
+    if (usedNames.has(name)) {
+      throw new Error(`Multiple locations are called "${name}"`);
+    }
+    usedNames.add(name);
   });
   const allLocationNames = new Set(usedNames);
 
@@ -91,32 +86,32 @@ export function linkLocations(rawLocations) {
   let theMap;
   let valid;
   do {
-      valid = true;
-      mappedLocations = rawLocations.map(mapLocation.bind(null, usedNames));
-      try {
-          theMap = followPaths(mappedLocations, mappedLocations[0]);
-          const reachableLocations = new Set(theMap.values());
-          const unreachableLocations = Array.from(allLocationNames.values()).filter(name => !reachableLocations.has(name));
-          if (unreachableLocations.size) {
-              throw new Error(`Can't reach ${unreachableLocations.join(', ')}`);
-          }
-          // for (const startLocation of mappedLocations) {
-          //   for (const endLocation of mappedLocations) {
-          //     if (startLocation === endLocation) {
-          //       continue;
-          //     }
-          //     const path = getDirections(mappedLocations, startLocation.name, endLocation.name);
-          //     if (!path) {
-          //       throw new Error(`Can't get from ${startLocation.name} to ${endLocation.name}`);
-          //     } else {
-          //       console.log(`"${startLocation.name}" -> "${endLocation.name}" √`);
-          //     }
-          //   }
-          // }
-      } catch(e) {
-          // try again
-          valid = false;
+    valid = true;
+    mappedLocations = rawLocations.map(mapLocation.bind(null, usedNames));
+    try {
+      theMap = followPaths(mappedLocations, mappedLocations[0]);
+      const reachableLocations = new Set(theMap.values());
+      const unreachableLocations = Array.from(allLocationNames.values()).filter(name => !reachableLocations.has(name));
+      if (unreachableLocations.size) {
+        throw new Error(`Can't reach ${unreachableLocations.join(', ')}`);
       }
+      // for (const startLocation of mappedLocations) {
+      //   for (const endLocation of mappedLocations) {
+      //     if (startLocation === endLocation) {
+      //       continue;
+      //     }
+      //     const path = getDirections(mappedLocations, startLocation.name, endLocation.name);
+      //     if (!path) {
+      //       throw new Error(`Can't get from ${startLocation.name} to ${endLocation.name}`);
+      //     } else {
+      //       console.log(`"${startLocation.name}" -> "${endLocation.name}" √`);
+      //     }
+      //   }
+      // }
+    } catch (e) {
+      // try again
+      valid = false;
+    }
   } while (!valid);
 
   // for (const [name, links] of theMap.entries()) {

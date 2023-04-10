@@ -1,14 +1,18 @@
 import { downButton, leftButton, rightButton, upButton } from './elements.js';
-import { generateEncounter } from './encounters.js';
+import { generateEncounter, showEncounter } from './encounters.js';
 import { getUrlParam } from './getUrlParam.js';
+import { roll } from './random.js';
 import { showImage } from './showImage.js';
+import { showTide } from './showState.js';
 import { showText } from './showText.js';
-import { getState, resetAll, resetLocation, setState } from './state.js';
+import { getState, getTide, resetAll, resetLocation, setState, setTide } from './state.js';
 import { trackDirection, trackLocation } from './tracker.js';
 
 const travelTime = parseInt(getUrlParam('travelTime'), 10) || 30;
+const showTides = getUrlParam('tides') === 'true';
 
 let location;
+let tide = 'low';
 
 export async function goToLocation(locations, encounters, name, fromPageLoad) {
   location = locations.find(location => location.name === name);
@@ -17,6 +21,8 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
       alert(`Couldn't find location "${name}"`);
       return;
   }
+
+  window.showEncounter = showEncounter.bind(null, encounters, location);
 
   trackLocation(location, fromPageLoad);
 
@@ -50,8 +56,18 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
   if (description) {
       await showText(description);
   }
+
+  if (showTides) {
+    const newTide = location.tide ?? getTide();
+    if (newTide !== tide) {
+      tide = newTide;
+      showTide(tide);
+      await showEncounter(encounters, location, `${tide.charAt(0).toUpperCase()}${tide.substring(1)} tide`);
+    }
+  }
+
   if (!fromPageLoad || forcedEncounter) {
-    await generateEncounter(encounters, location);
+    await generateEncounter(encounters, { tide, ...location });
   }
 }
 
@@ -80,8 +96,11 @@ export function onNavigate(locations, encounters, event) {
         state[key][1] = duration;
       }
     }
-  })
+  });
   setState(state);
+  if (showTides) {
+    setTide(roll(2) === 2 ? 'high' : 'low');
+  }
   goToLocation(locations, encounters, location[direction]);
 }
 
