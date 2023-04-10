@@ -16,6 +16,7 @@ export async function showText(text) {
     dialog.addEventListener('close', closeDialog);
     dialogInput.style.display = 'none';
     dialogContent.innerText = text;
+    dialog.close();
     dialog.showModal();
   });
 }
@@ -42,6 +43,7 @@ export async function getPlayerRoll(text) {
     dialogInput.style.display = '';
     dialogInput.value = '';
     dialogContent.innerText = text;
+    dialog.close();
     dialog.showModal();
   });
 }
