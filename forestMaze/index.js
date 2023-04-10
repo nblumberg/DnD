@@ -5,10 +5,10 @@ import { getLocation, setState } from './state.js';
 
 (async function IIFE() {
     const here = new URL(window.location.href);
-    const path = getUrlParam('path') ?? 'vermeillon';
+    const path = getUrlParam('path') ?? './vermeillon';
     const [{ locations }, { encounters }] = await Promise.all([
-        import(`./${path}/locations.js`),
-        import(`./${path}/encounters.js`),
+        import(`${path}/locations.js`),
+        import(`${path}/encounters.js`),
     ]);
 
     // Attach event handlers

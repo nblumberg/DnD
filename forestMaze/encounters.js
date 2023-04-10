@@ -1,3 +1,4 @@
+import { disableDirections, enableDirections } from './elements.js';
 import { getUrlParam } from './getUrlParam.js';
 import { randomFrom, roll } from './random.js';
 import { showImage } from './showImage.js';
@@ -39,6 +40,7 @@ export class Encounter {
   }
 
   async show(location) {
+    disableDirections();
     trackEncounter(this);
     const { image } = this;
     if (image) {
@@ -48,6 +50,7 @@ export class Encounter {
     if (image) {
         showImage(location.src, location.rotate);
     }
+    enableDirections();
   }
 
   async resolve() {
@@ -108,6 +111,10 @@ function validEncounters(encounters, location) {
   return encounters.filter(encounter => encounter.valid(location));
 }
 
+function findEncounter(encounters, name, location, ignoreValid = false) {
+  return encounters.find((encounter) => encounter.name === name && (ignoreValid || encounter.valid(location)));
+}
+
 function randomEncounter(encounters, location) {
   if (roll(20) < randomEncounterChance) {
     return;
@@ -133,11 +140,20 @@ export async function generateEncounter(encounters, location) {
 
   let encounter;
   if (forcedEncounter) {
-      encounter = encounters.find((encounter) => encounter.name === forcedEncounter && encounter.valid(location));
+      encounter = findEncounter(encounters, forcedEncounter, location);
   } else {
     encounter = randomEncounter(encounters, location);
   }
   if (encounter) {
     await encounter.show(location);
   }
+}
+
+export function showEncounter(encounters, location, name) {
+  const encounter = findEncounter(encounters, name, location, true);
+  if (!encounter) {
+    console.warn(`Can't find encounter ${name}`);
+    return;
+  }
+  encounter.show(location);
 }
