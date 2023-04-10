@@ -1,7 +1,32 @@
 import { getHistory, setHistory, setLocation } from './state.js';
 
-export function trackLocation({ name }, fromPageLoad) {
+export function logHistory() {
+  const history = getHistory();
+  history.forEach(([location, direction, encounter]) => {
+    logLocation(location);
+    if (encounter) {
+      logEncounter(encounter);
+    }
+    if (direction) {
+      logDirection(direction);
+    }
+  });
+}
+
+function logLocation(name) {
   console.log(`Visited ${name}`);
+}
+
+function logEncounter(name) {
+  console.log(`Encountered ${name}`);
+}
+
+function logDirection(name) {
+  console.log(`Went ${name}`);
+}
+
+export function trackLocation({ name }, fromPageLoad) {
+  logLocation(name);
   const history = getHistory();
   if (fromPageLoad && history.length) {
     return;
@@ -12,7 +37,7 @@ export function trackLocation({ name }, fromPageLoad) {
 }
 
 export function trackDirection(direction) {
-  console.log(`Went ${direction}`);
+  logDirection(direction);
   const history = getHistory();
   const entry = history[history.length - 1];
   if (entry.length === 1) {
@@ -25,7 +50,7 @@ export function trackDirection(direction) {
 
 export function trackEncounter(encounter) {
   const name = encounter.getName();
-  console.log(`Encountered ${name}`);
+  logEncounter(name);
   const history = getHistory();
   const entry = history[history.length - 1];
   if (entry.length !== 2) {
