@@ -1,4 +1,4 @@
-import { downButton, leftButton, rightButton, upButton } from './elements.js';
+import { hideButtons, showButtons } from './elements.js';
 import { generateEncounter, showEncounter } from './encounters.js';
 import { getUrlParam } from './getUrlParam.js';
 import { roll } from './random.js';
@@ -29,30 +29,12 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
   const {
       src: backgroundImage,
       rotate = 0,
-      up,
-      right,
-      down,
-      left,
       description,
       forcedEncounter = false,
   } = location;
-  upButton.classList.add('hidden');
-  rightButton.classList.add('hidden');
-  downButton.classList.add('hidden');
-  leftButton.classList.add('hidden');
+  hideButtons();
   await showImage(backgroundImage, rotate);
-  if (up) {
-      upButton.classList.remove('hidden');
-  }
-  if (right) {
-      rightButton.classList.remove('hidden');
-  }
-  if (down) {
-      downButton.classList.remove('hidden');
-  }
-  if (left) {
-      leftButton.classList.remove('hidden');
-  }
+  showButtons(location);
   if (description) {
       await showText(description);
   }

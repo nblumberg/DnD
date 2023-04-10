@@ -10,31 +10,51 @@ export const dialog = document.getElementById('dialog');
 export const dialogContent = document.getElementById('dialogContent');
 export const dialogInput = document.getElementById('dialogInput');
 
-const buttonDisplays = {};
+const buttons = [upButton, rightButton, downButton, leftButton];
+
+export function hideButtons() {
+  buttons.forEach((button) => {
+    button.classList.add('hidden');
+  });
+}
+
+export function showButtons({ up, right, down, left }) {
+  if (up) {
+    upButton.classList.remove('hidden');
+  }
+  if (right) {
+    rightButton.classList.remove('hidden');
+  }
+  if (down) {
+    downButton.classList.remove('hidden');
+  }
+  if (left) {
+    leftButton.classList.remove('hidden');
+  }
+}
+
+const buttonsHidden = [false, false, false, false];
 let buttonsDisabled = false;
+
 export function disableDirections() {
   if (buttonsDisabled) {
     return;
   }
   buttonsDisabled = true;
-  buttonDisplays.up = upButton.style.display;
-  buttonDisplays.right = rightButton.style.display;
-  buttonDisplays.down = downButton.style.display;
-  buttonDisplays.left = leftButton.style.display;
-
-  upButton.style.display = 'none';
-  rightButton.style.display = 'none';
-  downButton.style.display = 'none';
-  leftButton.style.display = 'none';
+  buttons.forEach((button, i) => {
+    buttonsHidden[i] = button.classList.contains('hidden');
+  });
+  hideButtons();
 }
 
 export function enableDirections() {
   if (!buttonsDisabled) {
     return;
   }
-  upButton.style.display = buttonDisplays.up;
-  rightButton.style.display = buttonDisplays.right;
-  downButton.style.display = buttonDisplays.down;
-  leftButton.style.display = buttonDisplays.left;
+  buttons.forEach((button, i) => {
+    if (!buttonsHidden[i]) {
+      button.classList.remove('hidden');
+    }
+  });
   buttonsDisabled = false;
 }
