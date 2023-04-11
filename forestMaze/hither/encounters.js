@@ -1,8 +1,49 @@
 import { Encounter, ForcedEncounter, makeSavingThrow } from '../encounters.js';
 import { getUrlParam } from '../getUrlParam.js';
+import { registerGoToLocationCallback } from '../navigate.js';
 import { randomFrom, roll } from '../random.js';
 import { showTide } from '../showState.js';
-import { setTide } from '../state.js';
+import { getTide, setTide } from '../state.js';
+
+let currentTideLevel = 'low';
+
+class HitherEncounter extends Encounter {
+  valid(location) {
+    return super.valid(location) && (!location.stream || !!this.stream);
+  }
+
+  validCombat() {
+    this.onlyOnce = true;
+    const { valid: wrappedValid } = this;
+    this.valid = (location) => wrappedValid.call(this, location) && location.battleMap === true;
+    return this;
+  }
+
+  validOwell() {
+    const { valid: wrappedValid } = this;
+    this.valid = (location) => wrappedValid.call(this, location) && location.owell === true;
+    return this;
+  }
+
+  validGushing() {
+    this.validOwell();
+    const { valid: wrappedValid } = this;
+    this.valid = (location) => wrappedValid.call(this, location) && location.gushing === true;
+    return this;
+  }
+
+  validStream() {
+    this.stream = true;
+    this.onlyOnce = true;
+    return this;
+  }
+
+  validTide(tide) {
+    const { valid: wrappedValid } = this;
+    this.valid = (location) => wrappedValid.call(this, location) && currentTideLevel === tide;
+    return this;
+  }
+}
 
 class MarshGasEncounter extends Encounter {
     constructor(status, failureText) {
@@ -32,54 +73,77 @@ class MarshGasEncounter extends Encounter {
     }
 }
 
-class StreamVisionEncounter extends Encounter {
-    constructor(vision, image) {
-        super({
-            name: `Stream from Downfall: ${vision.substr(0, 10)}`,
-            description: `You chance upon a 10-foot-wide stream, and looking into it, see a vision in the reflections: ${vision}`,
-            image,
-            onlyOnce: true,
-        });
-    }
-
-    valid(location) {
-        return super.valid(location) && !!location.stream;
-    }
-}
-
-class GushingOWellEncounter extends Encounter {
-    valid(location) {
-        return super.valid(location) && !!location.owell;
-    }
-}
-
-class CombatEncounter extends Encounter {
-    constructor(params) {
-        super({
-            onlyOnce: true,
-            ...params,
-        });
-    }
-
-    valid(location) {
-        return super.valid(location) && !!location.battleMap;
-    }
-}
-
-class TideEncounter extends Encounter {
-  constructor(params) {
-    super(params);
-    this.tide = params.tide;
-    this.onlyOnce = getUrlParam('tideEncounters') !== 'true';
-  }
-  valid(location) {
-      return super.valid(location) && location.tide === this.tide;
+class StreamVisionEncounter extends HitherEncounter {
+  constructor(vision, image) {
+    super({
+      name: `Stream from Downfall: ${vision.substr(0, 10)}`,
+      description: `You chance upon a 10-foot-wide stream, and looking into it, see a vision in the reflections:
+      ${vision}`,
+      image,
+    });
+    this.validStream();
   }
 }
 
-const mudTrapSuccess = {
-  description: `You manage to claw your way to safety`,
-};
+// Support tides
+class TideEncounter extends HitherEncounter {
+  constructor({ tide, description, image }) {
+
+    super({
+      name: `${tide.charAt(0).toUpperCase()}${tide.substr(1)} tide`,
+      description,
+      image,
+      onlyOnce: getUrlParam('tides') !== 'true',
+    });
+    this.tide = tide;
+    this.validTide(tide === 'low' ? 'high' : 'low');
+  }
+
+  async show(location) {
+    await super.show(location);
+    setTide(this.tide);
+    showTide(this.tide);
+  }
+}
+
+const highTide = new TideEncounter({
+    tide: 'high',
+    description: () => {
+        return `You hear the roar of rushing water and a wave of brown sludge thunders through the trees and washes around your ankles.
+        Within ${roll(10)} minutes the water is 5 feet deep and you're treading water.`
+    },
+    image: `https://i.giphy.com/media/KYWdVhA36WuRLyiy9H/giphy.webp`,
+});
+const lowTide = new TideEncounter({
+    tide: 'low',
+    description: () => {
+        return `You hear the roar of rushing water and you are swept away, banging against obstacles, as the floodwater drains rapidly.
+        Within ${roll(10)} minutes the water is gone completely and you're standing ankle-deep in mud.`;
+    },
+    image: `https://www.gizmodo.com.au/wp-content/uploads/sites/2/2014/08/01/qidj7fkfi3d1ryii9vng.gif`,
+});
+
+async function handleTides(_encounters, _locations, location, _fromPageLoad) {
+    if (location.tide) {
+        setTide(location.tide);
+    } else {
+        setTide(roll(2) === 2 ? 'high' : 'low');
+    }
+    const newTide = location.tide ?? getTide();
+    if (newTide === currentTideLevel) {
+        return;
+    }
+    currentTideLevel = newTide;
+    showTide(currentTideLevel);
+    const encounter = currentTideLevel === 'low' ? lowTide : highTide;
+    if (encounter.onlyOnce && encounter.resolved) {
+        return;
+    }
+    await encounter.show(location);
+}
+registerGoToLocationCallback(handleTides);
+
+
 const mudTrap = (priorDepth = 0) => {
   const depth = Math.min(10, priorDepth + roll(4));
   return {
@@ -87,12 +151,19 @@ const mudTrap = (priorDepth = 0) => {
     failure: makeSavingThrow(
       10 + depth,
       mudTrap.bind(null, depth),
-      () => mudTrapSuccess,
+      () => ({
+        description: `You manage to claw your way to safety`,
+      }),
     ),
   };
 };
 
 export const encounters = [
+    // Tide encounters
+    highTide,
+    lowTide,
+
+    // Forced encounters
     new ForcedEncounter({
         name: `Balloon Crash`,
         description: `In the distant sky, Eaton spots a great balloon made of patchwork material. It spins out of control as though punctured, causing the wicker basket that hangs from it to swing wildly. The balloon plunges out of sight, disappearing into the fog approximately a mile away.`,
@@ -122,25 +193,30 @@ export const encounters = [
         onlyOnce: true,
     }),
 
+    // Hazards
+    new HitherEncounter({
+        name: 'Mud pit',
+        description: `Marching across the swamp you blunder into swampy terrain that contains a pit of sucking mud. Make a group Wisdom (Survival) check.`,
+        image: `https://pbs.twimg.com/media/ByJxxasCQAIu7nS.jpg`,
+        failure: makeSavingThrow(
+            10,
+            mudTrap,
+            () => ({
+            description: `You spot and avoid the hazard.`,
+            })
+        ),
+    }).validTide('low'),
     new MarshGasEncounter('gibberish', 'whenever you speak, your words come out as gibberish that only you and others affected by the gas can understand. This effect does not impede the ability to cast spells that have verbal components.'),
     new MarshGasEncounter('hiccups', 'you experience a most annoying case of the hiccups. To cast a spell that has a verbal component, you must succeed on a DC 10 Constitution check. Also, you has disadvantage on Dexterity (Stealth) checks made to hide.'),
     new MarshGasEncounter('warts', 'hideous warts erupt across your body. The warts are unattractive but have no harmful effect.'),
     new MarshGasEncounter('slugs', 'a foul taste fills your mouth, and everything the character eats or drinks tastes awful. You feel a compulsion to eat slugs.'),
 
-    new TideEncounter({
-        name: 'Mud Mephits',
-        description: `Five slow, unctuous creatures of earth and water burst forth from the muck and in between droning complains threaten to attack you unless you can guess their favorite food.`,
-        image: `https://www.dndbeyond.com/avatars/thumbnails/18/297/1000/1000/636379807088272583.jpeg`,
-        onlyOnce: true,
-        tide: 'low',
-    }),
-
+    // Informational encounters
     new Encounter({
         name: 'Stilt walkers',
         description: `In a mist-veiled field of tall swamp grass dotted with clusters of cattails, you hear rustling in the vegetation ahead of you. The sound foreshadows the arrival of six humanoid creatures on stilts. The stilts allow these creatures to move more easily through the muck and to stay above the water. Their movement on stilts is seemingly not reduced by mud or water.`,
         image: `https://media.dndbeyond.com/compendium-images/twbtw/JtUXxjur9QWtb7E3/02-003.stilt-walker.png`,
     }),
-
     new StreamVisionEncounter(
         'A headless, child-sized scarecrow with metal lobster claws for hands tries on some new heads, including an upside-down wooden bucket and a withered head of cabbage. It decides on a large gourd.',
         'https://www.dndbeyond.com/avatars/thumbnails/20472/380/400/402/637677437801975332.png'
@@ -176,84 +252,56 @@ export const encounters = [
         'https://i0.wp.com/www.twdlocations.com/wp-content/uploads/2019/03/twdls09-2019-08-19-14h10m16s327.png'
     ),
 
-    new GushingOWellEncounter({
+    // O'-Well encounters
+    new HitherEncounter({
         name: `Gushing O'-Well`,
         description: () => `${randomFrom(['Harrow', 'John', 'Eaton', 'Throne'])} notices ${roll(4)} items bobbing at the top of the plume`,
-    }),
-    new GushingOWellEncounter({
+    }).validGushing(),
+    new HitherEncounter({
         name: 'Dretch of Envy and the Gem of Having That Which Was Denied',
         description: `A repulsive monstrosity capers around the gushing O'-Well, staring covetously at the peak of the water plume.
 
         On closer inspection you notice a gold-flecked purple jewel embedded in its chest, the gem's beauty in stark contrast to the rest of the beast.`,
         image: 'https://www.dndbeyond.com/avatars/thumbnails/30781/610/1000/1000/638061931201709292.png',
         onlyOnce: true,
-    }),
+    }).validGushing(),
 
-    new CombatEncounter({
+    // Combat encounters
+    new HitherEncounter({
+        name: 'Mud Mephits',
+        description: `Five slow, unctuous creatures of earth and water burst forth from the muck and in between droning complains threaten to attack you unless you can guess their favorite food.`,
+        image: `https://www.dndbeyond.com/avatars/thumbnails/18/297/1000/1000/636379807088272583.jpeg`,
+    }).validCombat().validTide('low'),
+    new HitherEncounter({
         name: 'Cranium rat swarm',
-        description: `You think you hear the wind rustling through the leaves until the sussuration is punctuated by squeeking telepathic thoughts like "They are here" and "We must find them." You recognize the pitter patter of many rat feet before a swarm of rodents with exposed brains erupts from the underbrush.`,
+        description: `You think you hear the wind rustling through the leaves until the susurration is punctuated by squeeking telepathic thoughts like "They are here" and "We must find them." You recognize the pitter patter of many rat feet before a swarm of rodents with exposed brains erupts from the underbrush.`,
         image: `https://www.dndbeyond.com/avatars/thumbnails/25746/698/1000/1000/637880558074808985.jpeg`,
-    }),
-    new CombatEncounter({
+    }).validCombat(),
+    new HitherEncounter({
         name: 'Intellect Devourer',
-        description: `The swamp water receeds and exposes a walking brain protected by a crusty covering and set on bestial clawed legs. Without words it communicates its hunger - for your mind.`,
+        description: `The swamp water recedes and exposes a walking brain protected by a crusty covering and set on bestial clawed legs. Without words it communicates its hunger - for your mind.`,
         image: `https://www.dndbeyond.com/avatars/thumbnails/30831/57/1000/1000/638063804285013333.png`,
-    }),
-    new CombatEncounter({
+    }).validCombat().validTide('low'),
+    new HitherEncounter({
         name: 'Dolgaunt and Dolgrims',
         description: `You hear the sound of marching feet and grumbles in Goblin ahead. As you turn a bend and come face to face with the goblins, you realize something is wrong with the squat, deformed things. Each is essentially two goblins crushed into one creature, their misshapen body boasting four arms and a pair of twisted mouths that gibber and slather at the front of a headless torso. The two mouths carry on demented conversations with one another.`,
         image: `https://www.dndbeyond.com/avatars/thumbnails/7725/608/1000/1000/637091619688542557.png`,
-    }),
-    new CombatEncounter({
+    }).validCombat().validTide('low'),
+    new HitherEncounter({
         name: 'Slithering Tracker',
         description: `A body floats in the muck. As you look closer, the rippling water forms into a pseudopod topped with a face that screams and lunges at you.`,
         image: `https://www.dndbeyond.com/avatars/thumbnails/25746/651/1000/1000/637880558006828597.jpeg`,
-    }),
-    new CombatEncounter({
+    }).validCombat(),
+    new HitherEncounter({
         name: 'Neh-thalggu',
         description: `At first you think the swamp gas is getting thicker, but soon realize something more sinister is making you dizzy.
         You spot an elf leaning against a tree up ahead wearing a glazed look before they jerk unnaturally and fall to the ground in a heap, leaving a spider-like crab attached to the tree and gobbling what looks like brains.`,
         image: `https://www.dndbeyond.com/avatars/thumbnails/28079/897/1000/1000/637961800886575218.jpeg`,
-    }),
-    new CombatEncounter({
+    }).validCombat().validTide('low'),
+    new HitherEncounter({
         name: 'Adult Oblex',
         description: `An elf steps from between two trees and notices you:
         "Thank the Lady, someone to help! Please come with me, my friends are trapped."`,
         image: `https://www.worldanvil.com/media/cache/apollo_preview/uploads/images/0ff8c3d73bb7eb00bb85de63e70056bc.jpg`,
-    }),
-    new TideEncounter({
-      name: 'Mud pit',
-      description: `Marching across the swamp you blunder into swampy terrain that contains a pit of sucking mud. Make a group Wisdom (Survival) check.`,
-      image: `https://pbs.twimg.com/media/ByJxxasCQAIu7nS.jpg`,
-      tide: 'low',
-      failure: makeSavingThrow(
-        10,
-        mudTrap,
-        () => ({
-          description: `You spot and avoid the hazard.`,
-        })
-      ),
-    }),
-    new TideEncounter({
-      name: 'High tide',
-      description: () => {
-        setTide('high');
-        showTide('high');
-        return `You hear the roar of rushing water and a wave of brown sludge thunders through the trees and washes around your ankles.
-        Within ${roll(10)} minutes the water is 5 feet deep and you're treading water.`
-      },
-      image: `https://i.giphy.com/media/KYWdVhA36WuRLyiy9H/giphy.webp`,
-      tide: 'low',
-    }),
-    new TideEncounter({
-      name: 'Low tide',
-      description: () => {
-        setTide('low');
-        showTide('low');
-        return `You hear the roar of rushing water and you are swept away, banging against obstacles, as the floodwater drains rapidly.
-        Within ${roll(10)} minutes the water is gone completely and you're standing ankle-deep in mud.`;
-      },
-      image: `https://www.gizmodo.com.au/wp-content/uploads/sites/2/2014/08/01/qidj7fkfi3d1ryii9vng.gif`,
-      tide: 'high',
-    }),
+    }).validCombat().validTide('low'),
 ];
