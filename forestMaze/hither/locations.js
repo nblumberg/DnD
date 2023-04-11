@@ -1,4 +1,7 @@
+import { setDirections } from '../directions.js';
 import { linkLocations, Location } from '../locations.js';
+
+setDirections(['Upsy-daisy', 'Hence', 'Plonk', 'Fro']);
 
 class HitherLocation extends Location {
     setTide(value = 'low') {

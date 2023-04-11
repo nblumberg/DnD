@@ -1,3 +1,4 @@
+import { translateDirection } from './directions.js';
 import { getHistory, setHistory, setLocation } from './state.js';
 
 export function logHistory() {
@@ -22,7 +23,7 @@ function logEncounter(name) {
 }
 
 function logDirection(name) {
-  console.log(`Went ${name}`);
+  console.log(`Went ${translateDirection(name)}`);
 }
 
 export function trackLocation({ name }, fromPageLoad) {

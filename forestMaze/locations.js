@@ -1,3 +1,4 @@
+import { defaultDirections, translateDirection } from './directions.js';
 import { randomFrom, roll } from './random.js';
 import { getLocation } from './state.js';
 
@@ -39,7 +40,7 @@ function mapLocation(unvisitedLocationNames, location, _i, array) {
   const exitCount = roll(4);
   const exits = new Set();
   while (exits.size < exitCount) {
-    exits.add(randomFrom(directions));
+    exits.add(randomFrom(defaultDirections));
   }
   const result = { ...location };
   for (const dir of exits.values()) {
@@ -57,15 +58,14 @@ function findLocation(locations, name, referrer) {
   return location;
 }
 
-const directions = ['up', 'right', 'down', 'left'];
 function followPaths(locations, location, reachable = new Map()) {
   if (reachable.has(location.name)) {
     return;
   }
   reachable.set(location.name, [, , ,]);
-  directions.forEach(direction => {
+  defaultDirections.forEach(direction => {
     if (location[direction]) {
-      reachable.get(location.name)[directions.indexOf(direction)] = location[direction];
+      reachable.get(location.name)[defaultDirections.indexOf(direction)] = location[direction];
       followPaths(locations, findLocation(locations, location[direction], location), reachable);
     }
   });
@@ -125,7 +125,7 @@ export function linkLocations(rawLocations) {
 function logPath(steps, turns) {
   let path = '';
   for (let i = 0; i < steps.length; i++) {
-    path += `${path ? '\n\t-> ' : ''}${steps[i]}${turns[i] ? ` [${turns[i]}]` : ''}`;
+    path += `${path ? '\n\t-> ' : ''}${steps[i]}${turns[i] ? ` [${translateDirection(turns[i])}]` : ''}`;
   }
   console.log(path);
 }
@@ -148,7 +148,7 @@ function getDirections(allLocations, startLocationName, targetLocationName) {
   let foundIt = false;
   while (!foundIt) {
     steps.push(currentLocation.name);
-    for (const direction of directions) {
+    for (const direction of defaultDirections) {
       const step = `${currentLocation.name} - ${direction}`;
       if (alreadyChecked.has(step)) {
         continue;
@@ -172,7 +172,7 @@ function getDirections(allLocations, startLocationName, targetLocationName) {
       turns.push(direction);
       break;
     }
-    if (steps[steps.length - 1] === currentLocation.name && directions.every(direction => alreadyChecked.has(`${currentLocation.name} - ${direction}`))) {
+    if (steps[steps.length - 1] === currentLocation.name && defaultDirections.every(direction => alreadyChecked.has(`${currentLocation.name} - ${direction}`))) {
       steps.pop(); // failed location
       turns.pop();
       const previousLocation = steps.pop();

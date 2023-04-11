@@ -1,8 +1,12 @@
 export const forest = document.getElementById('forest');
 export const upButton = document.getElementById('up');
+export const upLabel = document.getElementById('upLabel');
 export const rightButton = document.getElementById('right');
+export const rightLabel = document.getElementById('rightLabel');
 export const downButton = document.getElementById('down');
+export const downLabel = document.getElementById('downLabel');
 export const leftButton = document.getElementById('left');
+export const leftLabel = document.getElementById('leftLabel');
 export const restart = document.getElementById('restart');
 export const clear = document.getElementById('clear');
 export const status = document.getElementById('status');
