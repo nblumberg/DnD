@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>The Forest</title>
-        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-        <meta content="utf-8" http-equiv="encoding">
-        <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
-        <link rel="manifest" href="favicon_io/site.webmanifest">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div id="forest"></div>
-        <div class="rail">
-          <div id="buttonBar">
-            <button id="restart" title="Return to the beginning">⟳</button>
-            <button id="clear" title="Reset everything">🗑</button>
-          </div>
-          <div id="status"></div>
-        </div>
-        <div class="rail right">
-            <dialog id="dialog">
-                <div id="dialogContent"></div>
-                <input id="dialogInput" />
-            </dialog>
-        </div>
-        <div id="up" class="direction"><span id="upLabel" class="label"></span></div>
-        <div id="right" class="direction"><span id="rightLabel" class="label"></span></div> <!-- Widdershins -->
-        <div id="down" class="direction"><span id="downLabel" class="label"></span></div>
-        <div id="left" class="direction"><span id="leftLabel" class="label"></span></div> <!-- Deosil -->
-        <script src="index.js" type="module"></script>
-    </body>
+
+<head>
+  <title>The Forest</title>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="favicon_io/site.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="forest"></div>
+  <div class="rail">
+    <div id="buttonBar">
+      <button id="restart" title="Return to the beginning">⟳</button>
+      <button id="clear" title="Reset everything">🗑</button>
+    </div>
+    <div id="status"></div>
+  </div>
+  <div class="rail right">
+    <dialog id="dialog">
+      <div id="dialogContent"></div>
+      <input id="dialogInput" />
+    </dialog>
+  </div>
+  <div id="up" class="direction"><span id="upLabel" class="label"></span></div>
+  <div id="right" class="direction"><span id="rightLabel" class="label"></span></div> <!-- Widdershins -->
+  <div id="down" class="direction"><span id="downLabel" class="label"></span></div>
+  <div id="left" class="direction"><span id="leftLabel" class="label"></span></div> <!-- Deosil -->
+  <script src="index.js" type="module"></script>
+</body>
+
 </html>

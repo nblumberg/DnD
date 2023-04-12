@@ -1,5 +1,5 @@
+import { downLabel, leftLabel, rightLabel, upLabel } from './elements.js';
 import { getUrlParam } from './getUrlParam.js';
-import { upLabel, rightLabel, downLabel, leftLabel } from './elements.js';
 
 export const defaultDirections = ['up', 'right', 'down', 'left'];
 

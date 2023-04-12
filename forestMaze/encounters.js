@@ -44,11 +44,11 @@ export class Encounter {
     trackEncounter(this);
     const { image } = this;
     if (image) {
-        await showImage(image)
+      await showImage(image)
     }
     await this.resolve();
     if (image) {
-        showImage(location.src, location.rotate);
+      showImage(location.src, location.rotate);
     }
     enableDirections();
   }
@@ -180,7 +180,7 @@ export async function generateEncounter(encounters, location) {
 
   let encounter;
   if (forcedEncounter) {
-      encounter = findEncounter(encounters, forcedEncounter, location);
+    encounter = findEncounter(encounters, forcedEncounter, location);
   } else {
     encounter = randomEncounter(encounters, location);
   }

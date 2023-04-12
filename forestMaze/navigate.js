@@ -19,8 +19,8 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
   location = locations.find(location => location.name === name);
   // location = locations[0];
   if (!location) {
-      alert(`Couldn't find location "${name}"`);
-      return;
+    alert(`Couldn't find location "${name}"`);
+    return;
   }
 
   window.showEncounter = showEncounter.bind(null, encounters, location);
@@ -28,16 +28,16 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
   trackLocation(location, fromPageLoad);
 
   const {
-      src: backgroundImage,
-      rotate = 0,
-      description,
-      forcedEncounter = false,
+    src: backgroundImage,
+    rotate = 0,
+    description,
+    forcedEncounter = false,
   } = location;
   hideButtons();
   await showImage(backgroundImage, rotate);
   showButtons(location);
   if (description) {
-      await showText(description);
+    await showText(description);
   }
 
   for (const callback of goToLocationCallbacks) {
@@ -52,7 +52,7 @@ export async function goToLocation(locations, encounters, name, fromPageLoad) {
 export function onNavigate(locations, encounters, event) {
   const { id: direction } = event.target;
   if (!location || !location[direction]) {
-      return;
+    return;
   }
   trackDirection(direction);
   const state = getState();

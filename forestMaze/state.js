@@ -64,7 +64,7 @@ export function getState() {
 
 export function setState(state = getState()) {
   if (!Object.keys(state).length) {
-      return;
+    return;
   }
   showState(state);
   const str = JSON.stringify(state, null, '  ');
