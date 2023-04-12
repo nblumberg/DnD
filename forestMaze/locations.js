@@ -32,7 +32,6 @@ function generateDirection(location, allLocations, unvisitedLocationNames) {
 
 function mapLocation(unvisitedLocationNames, location, _i, array) {
   if (location.notRandom) {
-    delete location.notRandom;
     unvisitedLocationNames.delete(location.name);
     return location;
   }
@@ -43,8 +42,13 @@ function mapLocation(unvisitedLocationNames, location, _i, array) {
     exits.add(randomFrom(defaultDirections));
   }
   const result = { ...location };
+  const randomLocations = array.filter(({ notRandom }) => !notRandom);
   for (const dir of exits.values()) {
-    result[dir] = generateDirection(location, array, unvisitedLocationNames);
+    if (location[dir]) {
+      result[dir] = location[dir];
+    } else {
+      result[dir] = generateDirection(location, randomLocations, unvisitedLocationNames);
+    }
   }
   return result;
 }
