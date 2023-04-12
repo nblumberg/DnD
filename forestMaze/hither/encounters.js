@@ -192,6 +192,18 @@ export const encounters = [
     image: 'https://media.dndbeyond.com/compendium-images/twbtw/JtUXxjur9QWtb7E3/02-006.agdon-longscarf.png',
     onlyOnce: true,
   }),
+  new ForcedEncounter({
+    name: `Ufgunk`,
+    description: `Up ahead, through the morass and fog, you can make out the form of a humanoid-frog sitting on the edge of a river.`,
+    image: `https://res.cloudinary.com/teepublic/image/private/s--dxpAtAfS--/c_crop,x_10,y_10/c_fit,w_830/c_crop,g_north_west,h_1038,w_1038,x_-104,y_-168/l_upload:v1565806151:production:blanks:vdbwo35fw6qtflw9kezw/fl_layer_apply,g_north_west,x_-215,y_-279/b_rgb:0f7b47/c_limit,f_auto,h_630,q_90,w_630/v1626211540/production/designs/23054648_0.jpg`,
+    onlyOnce: true,
+  }),
+  new ForcedEncounter({
+    name: `Screaming Devilkin`,
+    description: `The cacophony of screams grow louder up ahead as you approach the shoreline of a large lake. If not for the discord, the landscape would be serene. The winged creatures appear to be the source of the raucous noise.`,
+    image: 'https://www.dndbeyond.com/avatars/thumbnails/8006/152/1000/1000/637115709679464710.jpeg',
+    onlyOnce: true,
+  }),
 
   // Hazards
   new HitherEncounter({

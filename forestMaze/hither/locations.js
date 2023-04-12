@@ -48,6 +48,7 @@ const rawLocations = [
     src: `https://rabailen.files.wordpress.com/2022/08/image-8.png`,
     forcedEncounter: `Giant crane flees`,
     notRandom: true,
+    up: `Queen's Way, top`,
     down: `Queen's Way Brigands`,
   }).setTide('low'),
   createLocation({
@@ -55,7 +56,7 @@ const rawLocations = [
     description: `Sticky mud squelches beneath your feet. Tangled mangroves grow out of pools of rippling water, half hidden by the thick fog, and purple mushrooms cling to rotting logs and stumps scattered throughout the marsh. Crickets that glow like fireflies chirp serenely before they're snatched out of the air by the tongues of hungry frogs.`,
     src: `https://cdn2.inkarnate.com/cdn-cgi/image/width=1800,height=1200/https://inkarnate-api-as-production.s3.amazonaws.com/FJBVqqB469DHyAx6imMhtv`,
     forcedEncounter: `Queen's Way Brigands`,
-    notRandom: true,
+    up: `Queen's Way, descent`,
     right: `Queen's Way bottom`,
   }).setBattleMap().setTide('low'),
   createLocation({
@@ -89,6 +90,21 @@ const rawLocations = [
     description: `A foggy marsh stretches out before you. Rickety causeways made of wooden planks form a wide, web-like structure above the bog. Three hundred feet away, many of these causeways converge on an enormous, ivy-covered tree stump that rises a good ten feet above the twenty-foot-high fog bank that enshrouds it.`,
     forcedEncounter: `Agdon Longscarf`,
     src: `https://i.redd.it/1mdat11476o81.png`,
+  }),
+  createLocation({
+    name: `Fishing Hole`,
+    description: `A distant sustained screeching can be heard above the din of insects.`,
+    forcedEncounter: `Ufgunk`,
+    src: `https://www.bostonmagazine.com/wp-content/uploads/sites/2/2019/06/urban-fishing-boston.jpg`,
+    down: `Watcher's Pool`,
+  }),
+  createLocation({
+    name: `Watcher's Pool`,
+    description: `You approach the shoreline of a large lake. The landscape is serene, with lush grass, crystalline water, and pinpricks of fireflies, noticeable even in the sunshine. Brightly-colored, elongated stones form a path towards the center of the lake, where a large rock formation rises above the water. A cave mouth is clearly visible, though it is too dark to see inside. Perched on precarious supports, a wooden hut balances haphazardly on the island.`,
+    forcedEncounter: `Screaming Devilkin`,
+    src: `https://drive.google.com/uc?id=1pLkqBU8lTD58k2LsGILOkAg1wkGaHPMM`,
+    notRandom: true,
+    up: `Fishing Hole`,
   }),
   createLocation({
     name: `Downfall`,
