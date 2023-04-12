@@ -77,7 +77,7 @@ const rawLocations = [
   }).encounterLess(),
   createLocation({
     name: `Slanty Tower`,
-    description: `A crumbling stone tower rises out of the swamp, leaning at such an angle that it threatens to keel over. Black brambles surround the base of the tower and cling to its lower half. Hanging from the crenellations on the lower side of the tower's peak is a large woven basket at the end of a tangle of ropes and tattered fabric. The basket dangles thirty feet above the surface of the swamp.`,
+    description: `A crumbling stone tower rises out of the swamp, leaning at such an angle that it threatens to keel over. Black brambles surround the base of the tower and cling to its lower half, though someone or something has cut them away from the moisture-warped door. From the pinnacle of the tower, in a tangle of ropes and tattered fabric, hangs a large woven basket. The basket dangles nearly fifty feet above the surface of the swamp, near a window at an upper floor.`,
     src: `https://i.redd.it/c1fg5haj0ni81.png`,
   }).encounterLess(),
   createLocation({
