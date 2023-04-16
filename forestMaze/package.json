@@ -1,0 +1,27 @@
+{
+  "name": "forestmaze",
+  "version": "1.0.0",
+  "description": "A web application that chains images together with directional buttons to create a Zelda-forest-maze style experience, complete with descriptive text, and encounters with images and text.",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc",
+    "compile-watch": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nblumberg/DnD.git#gh-pages"
+  },
+  "keywords": [
+    "DnD"
+  ],
+  "author": "Nathaniel Blumberg <nathanielblumberg@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nblumberg/DnD/issues"
+  },
+  "homepage": "https://github.com/nblumberg/DnD/tree/gh-pages#readme",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

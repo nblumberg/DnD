@@ -13,6 +13,7 @@ body {
   background-position: left top;
   background-size: 100% 200%;
   height: 100vh;
+  margin: 0;
   transition: all 2sec ease-in;
   width: 100%;
 }
