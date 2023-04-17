@@ -3,13 +3,13 @@
 
 <head>
   <title>The Forest</title>
-  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <meta content="utf-8" http-equiv="encoding">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
-  <link rel="manifest" href="favicon_io/site.webmanifest">
-  <link rel="stylesheet" href="style.css">
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+  <meta content="utf-8" http-equiv="encoding" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png" />
+  <link rel="manifest" href="favicon_io/site.webmanifest" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
@@ -18,21 +18,32 @@
       <label for="name">Who are you?</label>
     </div>
     <select id="name">
-      <option value="Eaton">Ser Eaton Dorito</option>
-      <option value="Harrow">Harrow Zinvaris</option>
-      <option value="John">John Rambo McClane</option>
-      <option value="Nacho">Nacho Chessier IV</option>
-      <option value="Rhiannon">Rhiannon Fray</option>
-      <option value="Throne">Throne</option>
-      <option value="DM">DM</option>
+      <option disabled>--</option>
     </select>
   </form>
   <script>
     const nameInput = document.getElementById('name');
+
+    fetch('/users').then(response => response.json()).then(users => {
+      Object.entries(users).forEach(([value, text]) => {
+        const option = document.createElement("option");
+        option.textContent = text;
+        option.value = value;
+        nameInput.appendChild(option);
+      });
+      nameInput.selectedIndex = 0;
+    });
+
     nameInput.addEventListener('change', async (event) => {
-      const name = nameInput.options[nameInput.selectedIndex].value;
-      await fetch('./login', { method: 'POST', body: name });
-      window.location = `index.html?name=${name}`;
+      const user = nameInput.options[nameInput.selectedIndex].value;
+      await fetch(
+        './login',
+        {
+          method: 'POST',
+          body: JSON.stringify({ user }),
+          headers: { "Content-Type": "application/json" }
+        });
+      window.location = `index.html?name=${user}`;
     });
   </script>
 </body>

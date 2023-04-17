@@ -21,3 +21,4 @@ story.iml
 equipmentCards/*.tsv
 equipmentCards/.gitBACKUP
 projector/*.json
+forestMaze/dist

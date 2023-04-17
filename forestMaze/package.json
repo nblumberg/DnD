@@ -4,8 +4,9 @@
   "description": "A web application that chains images together with directional buttons to create a Zelda-forest-maze style experience, complete with descriptive text, and encounters with images and text.",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsc && tsc --project tsconfig-server.json",
     "compile-watch": "tsc --watch",
+    "serve": "npm run compile && node ./start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +24,12 @@
   "homepage": "https://github.com/nblumberg/DnD/tree/gh-pages#readme",
   "devDependencies": {
     "express": "^4.18.2",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.11"
   }
 }
