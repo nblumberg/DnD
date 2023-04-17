@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/nblumberg/DnD/tree/gh-pages#readme",
   "devDependencies": {
+    "express": "^4.18.2",
     "typescript": "^5.0.4"
   }
 }
