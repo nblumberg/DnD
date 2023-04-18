@@ -94,7 +94,7 @@ dd {
   top: 0;
   left: 0;
   z-index: -1;
-  background-image: url('./Scrollwork\ arrow.png');
+  background-image: url('../img/arrow.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -125,7 +125,7 @@ dd {
   height: 50%;
 }
 #right:before {
-  background-image: url('./Scrollwork\ arrow\,\ right.png');
+  background-image: url('../img/arrow_right.png');
   background-position-x: right;
 }
 #right .label {
@@ -157,7 +157,7 @@ dd {
   height: 50%;
 }
 #left:before {
-  background-image: url('./Scrollwork\ arrow\,\ right.png');
+  background-image: url('../img/arrow_right.png');
   background-position-x: right;
   transform: rotate(180deg);
 }

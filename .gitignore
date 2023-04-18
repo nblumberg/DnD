@@ -22,3 +22,4 @@ equipmentCards/*.tsv
 equipmentCards/.gitBACKUP
 projector/*.json
 forestMaze/dist
+state.json

@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png" />
   <link rel="manifest" href="favicon_io/site.webmanifest" />
-  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 
 <body>
@@ -34,15 +34,8 @@
       nameInput.selectedIndex = 0;
     });
 
-    nameInput.addEventListener('change', async (event) => {
+    nameInput.addEventListener('change', (event) => {
       const user = nameInput.options[nameInput.selectedIndex].value;
-      await fetch(
-        './login',
-        {
-          method: 'POST',
-          body: JSON.stringify({ user }),
-          headers: { "Content-Type": "application/json" }
-        });
       window.location = `index.html?name=${user}`;
     });
   </script>

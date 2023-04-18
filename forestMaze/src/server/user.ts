@@ -1,5 +1,12 @@
-import { Request, Response } from 'express';
-import { errorResponse } from './error';
+import { WebSocket } from 'ws';
+import { BrowserToServerSocketMessage, ServerToBrowserSocketMessage } from '../dtos/socketTypes';
+import { registerWebSocketHandler, socketError, unregisterWebSocketHandler } from './serverSockets';
+
+interface UserChannel {
+  (response: ServerToBrowserSocketMessage): void;
+}
+
+export const DM = 'DM';
 
 const allUsers = {
   Eaton: 'Ser Eaton Dorito',
@@ -8,43 +15,53 @@ const allUsers = {
   Nacho: 'Nacho Chessier IV',
   Rhiannon: 'Rhiannon Fray',
   Throne: 'Throne',
-  DM: 'DM',
+  DM,
 };
 
-const activeUsers = new Set<string>();
+const activeUsers = new Map<string, UserChannel>();
 
-export function getUsers(req: Request, res: Response) {
-  if (req.query.active === 'true') {
-    getActiveUsers(req, res);
-  } else {
-    getAllUsers(req, res);
-  }
+function isValidUser(user: string): boolean {
+  return Object.prototype.hasOwnProperty.call(allUsers, user);
 }
 
-function getAllUsers(req: Request, res: Response) {
-  res.send(JSON.stringify(allUsers));
+function addUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
+  const { user } = data as any;
+  if (!isValidUser(user)) {
+    return socketError(ws, `${user} is not a recognized user`, 400);
+  }
+  const channel: UserChannel = (response: ServerToBrowserSocketMessage) => {
+    ws.send(JSON.stringify(response));
+  };
+  activeUsers.set(user, channel);
+  console.log(`${user} joined`);
+  setInterval(() => {
+    const callback = `${user}-${Date.now()}`;
+    let checkedIn = false;
+    registerWebSocketHandler(callback, () => {
+      checkedIn = true;
+    });
+    channel({ type: 'ping', callback, statusCode: 200 });
+    setTimeout(() => {
+      unregisterWebSocketHandler(callback);
+      if (!checkedIn) {
+        activeUsers.delete(user);
+        console.log(`${user} timed out`);
+      }
+    }, 3000);
+  }, 30000); // every 30 seconds, ping the user to make sure they're still active
 }
 
-function getActiveUsers(req: Request, res: Response) {
-  res.send(JSON.stringify(Array.from(activeUsers.values())));
+registerWebSocketHandler('addUser', addUser);
+
+export function getUsers() {
+  return allUsers;
 }
 
-export function addUser(req: Request, res: Response) {
-  const { user } = req.body;
-  if (!Object.prototype.hasOwnProperty.call(allUsers, user)) {
-    return errorResponse(res, 400, `${user} is not a recognized user`);
+export function sendToUser(user: string, data: ServerToBrowserSocketMessage) {
+  const channel = activeUsers.get(user);
+  if (!channel) {
+    // TODO: throw error?
+    return;
   }
-  activeUsers.add(user);
-  res.sendStatus(200);
-}
-
-export function removeUser(req: Request, res: Response) {
-  const { userId } = req.params;
-  if (!userId) {
-    return errorResponse(res, 400, 'No user was specified to remove');
-  }
-  if (activeUsers.has(userId)) {
-    activeUsers.delete(userId);
-  }
-  res.sendStatus(200);
+  channel(data);
 }
