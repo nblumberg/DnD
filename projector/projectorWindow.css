@@ -6,7 +6,7 @@ body {
     height: 100vh;
     left: 0;
     object-fit: contain;
-    object-position: left top;
+    /* object-position: left top; */
     position: absolute;
     top: 0;
     width: 100vw;
