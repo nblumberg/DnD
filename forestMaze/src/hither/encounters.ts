@@ -308,6 +308,11 @@ export const encounters = [
     image: `https://www.dndbeyond.com/avatars/thumbnails/7725/608/1000/1000/637091619688542557.png`,
   }).validCombat().validTide('low'),
   new HitherEncounter({
+    name: 'Shambling Mounds',
+    description: `A reek of rotting leaves shot through with ozone wafts across your nose moments before mounds of vegetation lurch to life and flail snaking vines at you like grasping tentacles.`,
+    image: `https://www.dndbeyond.com/avatars/thumbnails/30835/836/1000/1000/638063922372165925.png`,
+  }).validCombat().validTide('low'),
+  new HitherEncounter({
     name: 'Slithering Tracker',
     description: `A body floats in the muck. As you look closer, the rippling water forms into a pseudopod topped with a face that screams and lunges at you.`,
     image: `https://www.dndbeyond.com/avatars/thumbnails/25746/651/1000/1000/637880558006828597.jpeg`,
