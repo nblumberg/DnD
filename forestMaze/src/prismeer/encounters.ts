@@ -1,6 +1,6 @@
 import { Encounter, EncounterParams } from '../encounters.js';
 import { Location } from '../locations.js';
-import { randomFrom, roll } from '../random.js';
+import { randomFrom, roll } from '../shared/random.js';
 
 type DynamicString = string | (() => string);
 

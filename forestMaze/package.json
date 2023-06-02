@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc && tsc --project tsconfig-server.json",
+    "compile-watch-server": "tsc --project tsconfig-server.json --watch",
     "compile-watch": "tsc --watch",
     "serve": "npm run compile && node ./start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,5 +34,6 @@
     "ws": "^8.13.0"
   },
   "dependencies": {
+    "seedrandom": "^3.0.5"
   }
 }

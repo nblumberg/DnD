@@ -1,6 +1,6 @@
-import { DefaultDirection, defaultDirections, translateDirection } from './directions.js';
-import { randomFrom, roll } from './random.js';
-import { getLocation } from './state.js';
+import { DefaultDirection, defaultDirections, translateDirection } from './shared/directions.js';
+import { randomFrom, roll } from './shared/random.js';
+import { addStatePropertyListener } from './shared/state.js';
 
 export interface LocationParams {
   battleMap?: true;
@@ -57,6 +57,10 @@ export class Location {
     return this;
   }
 }
+
+let currentLocation = addStatePropertyListener('location', (newLocation: string) => {
+  currentLocation = newLocation;
+});
 
 function generateDirection(location: Location, allLocations: Location[], unvisitedLocationNames: Set<string>) {
   let destination;
@@ -172,19 +176,10 @@ export function linkLocations(rawLocations: Location[]) {
   //   console.log(name, links);
   // }
 
-  (window as any).howDoIGetTo = howDoIGetTo.bind(null, mappedLocations);
   return mappedLocations;
 }
 
-function logPath(steps: string[], turns: DefaultDirection[]): void {
-  let path = '';
-  for (let i = 0; i < steps.length; i++) {
-    path += `${path ? '\n\t-> ' : ''}${steps[i]}${turns[i] ? ` [${translateDirection(turns[i])}]` : ''}`;
-  }
-  console.log(path);
-}
-
-function getDirections(allLocations: Location[], startLocationName: string, targetLocationName: string): undefined | [string[], DefaultDirection[]] {
+export function getDirections(allLocations: Location[], startLocationName: string, targetLocationName: string): undefined | [string[], DefaultDirection[]] {
   const targetLocation = findLocation(allLocations, startLocationName, { name: 'howDoIGetTo' });
   if (!targetLocation) {
     console.error(`Yah can't get dere from here`);
@@ -246,19 +241,3 @@ function getDirections(allLocations: Location[], startLocationName: string, targ
   }
 }
 
-/**
- * Needs a non-recursive solution or else it may exceed the stack frame limit
- * @param {Location[]} allLocations
- * @param {string} targetLocationName
- */
-function howDoIGetTo(allLocations: Location[], targetLocationName: string): void {
-  const currentLocation = getLocation();
-  if (!currentLocation) {
-    throw new Error(`'I don't know where I am`);
-  }
-  const path = getDirections(allLocations, currentLocation, targetLocationName);
-  if (!path) {
-    return;
-  }
-  logPath(...path);
-}

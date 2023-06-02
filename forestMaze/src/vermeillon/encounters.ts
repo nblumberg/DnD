@@ -1,6 +1,6 @@
 import { Encounter, makeSavingThrow, takeDamage } from '../encounters.js';
 import { Location } from '../locations.js';
-import { randomFrom, roll } from '../random.js';
+import { randomFrom, roll } from '../shared/random.js';
 import { VermeillonLocation } from './locations.js';
 
 class ToxicWeirdEncounter extends Encounter {

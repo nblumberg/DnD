@@ -21,7 +21,9 @@
   <form id="form">
   </form>
   <button id="submit">Submit</button>
-  <script>
+  <script type="module">
+    import { getJson, postJson } from './lib/fetchJson.js';
+
     function createSelect(parentElement, key, values, value) {
       const select = document.createElement('select');
       select.id = key;
@@ -33,7 +35,7 @@
       values.forEach((subValue, i) => {
         option = document.createElement('option');
         option.innerText = `${subValue.charAt(0).toUpperCase()}${subValue.substr(1)}`;
-        option.value = `./${subValue}`;
+        option.value = `../${subValue}`;
         select.appendChild(option);
         if (value === option.value) {
           select.selectedIndex = i + 1;
@@ -88,13 +90,7 @@
         }
         state[key] = value;
       });
-      fetch(
-        './state',
-        {
-          method: 'POST',
-          body: JSON.stringify(state),
-          headers: { "Content-Type": "application/json" },
-        });
+      postJson('./state', state);
     }
 
     function init(state) {
@@ -125,7 +121,7 @@
       });
     }
 
-    fetch('./state').then(response => response.json()).then(init);
+    getJson('./state').then(init);
   </script>
 </body>
 

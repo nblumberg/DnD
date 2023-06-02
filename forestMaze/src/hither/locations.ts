@@ -1,9 +1,7 @@
-import { setDirections } from '../directions.js';
 import { linkLocations, Location, LocationParams } from '../locations.js';
+import { setState, Tide } from '../shared/state.js';
 
-setDirections(['Upsy-daisy', 'Hence', 'Plonk', 'Fro']);
-
-export type Tide = 'low' | 'high';
+setState({ directions: ['Upsy-daisy', 'Hence', 'Plonk', 'Fro'] });
 
 interface HitherLocationParams extends LocationParams {
   gushing?: true;

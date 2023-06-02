@@ -1,13 +1,21 @@
-import { Encounter, Failure, ForcedEncounter, makeSavingThrow } from '../encounters.js';
-import { getUrlParam } from '../getUrlParam.js';
-import { Location } from '../locations.js';
-import { registerGoToLocationCallback } from '../navigate.js';
-import { randomFrom, roll } from '../random.js';
-import { showTide } from '../showState.js';
-import { getTide, setTide } from '../state.js';
-import { HitherLocation, Tide } from './locations.js';
+import { Encounter, Failure, ForcedEncounter, makeSavingThrow } from '../encounters';
+import { Location } from '../locations';
+import { registerGoToLocationCallback } from '../server/serverNavigate';
+import { randomFrom, roll } from '../shared/random';
+import { HitherLocation } from './locations';
+import { addStatePropertyListener, setState, Tide } from '../shared/state';
 
-let currentTideLevel: Tide = 'low';
+let showTidesEveryTime = addStatePropertyListener('tides', (value: boolean) => {
+  showTidesEveryTime = value;
+});
+
+let currentTideLevel = addStatePropertyListener('tide', (newTide: Tide) => {
+  currentTideLevel = newTide;
+});
+
+function changeTide(tide: Tide): void {
+  setState({ tide });
+}
 
 class HitherEncounter extends Encounter {
   stream?: true;
@@ -100,7 +108,7 @@ class TideEncounter extends HitherEncounter {
       name: `${tide.charAt(0).toUpperCase()}${tide.substr(1)} tide`,
       description,
       image,
-      onlyOnce: getUrlParam('tides') !== 'true' || undefined,
+      onlyOnce: showTidesEveryTime || undefined,
     });
     this.tide = tide;
     this.validTide(tide === 'low' ? 'high' : 'low');
@@ -108,8 +116,7 @@ class TideEncounter extends HitherEncounter {
 
   async show(location: HitherLocation) {
     await super.show(location);
-    setTide(this.tide);
-    showTide(this.tide);
+    changeTide(this.tide);
   }
 }
 
@@ -130,19 +137,18 @@ const lowTide = new TideEncounter({
   image: `https://www.gizmodo.com.au/wp-content/uploads/sites/2/2014/08/01/qidj7fkfi3d1ryii9vng.gif`,
 });
 
-async function handleTides(_locations: Location[], _encounters: Encounter[], location: Location, _fromPageLoad?: boolean): Promise<void> {
+async function handleTides(location: Location, _initialLocation?: boolean): Promise<void> {
   const hitherLocation = location as HitherLocation;
   if (hitherLocation.tide) {
-    setTide(hitherLocation.tide);
+    changeTide(hitherLocation.tide);
   } else {
-    setTide(roll(2) === 2 ? 'high' : 'low');
+    changeTide(roll(2) === 2 ? 'high' : 'low');
   }
-  const newTide = hitherLocation.tide ?? getTide();
+  const newTide = hitherLocation.tide ?? currentTideLevel;
   if (newTide === currentTideLevel) {
     return;
   }
   currentTideLevel = newTide;
-  showTide(currentTideLevel);
   const encounter = currentTideLevel === 'low' ? lowTide : highTide;
   if (encounter.onlyOnce && encounter.resolved) {
     return;

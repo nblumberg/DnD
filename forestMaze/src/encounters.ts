@@ -1,11 +1,7 @@
-import { disableDirections, enableDirections } from './elements.js';
-import { getUrlParam } from './getUrlParam.js';
 import { Location } from './locations.js';
-import { randomFrom, roll } from './random.js';
-import { showImage } from './showImage.js';
-import { getPlayerRoll, showText } from './showText.js';
-import { getState, setState } from './state.js';
-import { hasEncountered, trackEncounter } from './tracker.js';
+import { randomFrom, roll } from './shared/random.js';
+import { hasEncountered } from './shared/history.js';
+import { addStatePropertyListener } from './shared/state.js';
 
 type dynamicString = string | (() => string);
 type Status = [string, number] | [string, string, number]; // type, damage, OR type, effect, duration
@@ -27,9 +23,23 @@ export interface EncounterParams {
   resolved?: true;
 }
 
-export class Encounter {
-  static count = 1;
+interface EncounterListener {
+  (encounter: Encounter): void;
+}
 
+const encounterListeners = new Set<EncounterListener>();
+
+export function registerEncounterListener(listener: EncounterListener): void {
+  encounterListeners.add(listener);
+}
+
+export function unregisterEncounterListener(listener: EncounterListener): void {
+  encounterListeners.delete(listener);
+}
+
+let count = 1;
+
+export class Encounter {
   name: dynamicString;
   description: dynamicString;
   failure?: Failure;
@@ -50,7 +60,7 @@ export class Encounter {
     this.image = params.image;
     Object.assign(this, allowedParams);
     if (!this.name) {
-      this.name = `Unknown Encounter ${Encounter.count++}`;
+      this.name = `Unknown Encounter ${count++}`;
     }
     if (!this.description) {
       this.description = '';
@@ -74,39 +84,10 @@ export class Encounter {
     return !this.onlyOnce || !this.resolved;
   }
 
-  async show(location: Location) {
-    disableDirections();
-    trackEncounter(this);
-    const { image } = this;
-    if (image) {
-      await showImage(image)
+  async show(_location: Location) {
+    for (const listener of encounterListeners.values()) {
+      listener(this);
     }
-    await this.resolve();
-    if (image) {
-      showImage(location.src, location.rotate);
-    }
-    enableDirections();
-  }
-
-  async resolve() {
-    let { failure } = this;
-    let description: string | undefined = this.getDescription();
-    let status;
-
-    while (failure) {
-      const savingThrow: number = await getPlayerRoll(description ?? '');
-      ({ failure, description, status } = failure(savingThrow) ?? {});
-      if (status) {
-        const [key, value, duration] = status;
-        const state = getState();
-        state[key] = typeof duration === 'number' ? [value as string, duration] : value as number;
-        setState(state);
-      }
-    }
-    if (description) {
-      await showText(description);
-    }
-    this.resolved = true;
   }
 }
 
@@ -153,7 +134,9 @@ export function takeDamage(
   };
 }
 
-const randomEncounterChance = parseInt(getUrlParam('encounter') ?? '', 10) || 13;
+let randomEncounterChance = addStatePropertyListener('encounter', (newRandomEncounterChance) => {
+  randomEncounterChance = newRandomEncounterChance;
+});
 
 function validEncounters(encounters: Encounter[], location: Location): Encounter[] {
   return encounters.filter(encounter => encounter.valid(location));
@@ -205,9 +188,9 @@ function randomEncounter(encounters: Encounter[], location: Location): Encounter
   }
 }
 
-export async function generateEncounter(encounters: Encounter[], location: Location): Promise<Encounter | void> {
+export function generateEncounter(encounters: Encounter[], location: Location): Encounter | void {
   if (!encounters || !encounters.length) {
-    alert(`No encounter data found!`);
+    // throw new Error(`No encounter data found!`);
     return;
   }
   const {
@@ -224,9 +207,7 @@ export async function generateEncounter(encounters: Encounter[], location: Locat
   } else {
     encounter = randomEncounter(encounters, location);
   }
-  if (encounter) {
-    await encounter.show(location);
-  }
+  return encounter;
 }
 
 export async function showEncounter(encounters: Encounter[], location: Location, name: string, ignoreValid = true): Promise<void> {

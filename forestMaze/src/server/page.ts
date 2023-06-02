@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { join } from 'path';
-import { parsePageQuery } from './state';
 import { fileRelativeToRoot } from './root';
 
 const htmlDirectory = fileRelativeToRoot('html');
@@ -13,7 +12,6 @@ export function mainPageView(req: Request, res: Response) {
     res.sendFile(loginPage);
     return;
   }
-  parsePageQuery(req.query);
   res.sendFile(mainPage);
 }
 

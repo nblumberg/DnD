@@ -1,6 +1,6 @@
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { Server as WebSocketServer, WebSocket } from 'ws';
-import { ServerSocketMessageHandler, ServerToBrowserSocketMessage } from '../dtos/socketTypes';
+import { ServerSocketMessageHandler, ServerToBrowserUserlessSocketMessage } from '../shared/socketTypes';
 
 const handlers = new Map<string, ServerSocketMessageHandler>();
 
@@ -17,7 +17,7 @@ export function unregisterWebSocketHandler(type: string) {
 
 export function socketError(ws: WebSocket, rawError: string | Error, statusCode = 400) {
   const error = typeof rawError === 'string' ? rawError : rawError.message;
-  const response: ServerToBrowserSocketMessage = {
+  const response: ServerToBrowserUserlessSocketMessage = {
     type: 'error',
     error,
     statusCode,

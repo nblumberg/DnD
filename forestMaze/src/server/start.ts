@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import { mainPageView, statePageView } from './page';
 import { addWebSockets } from './serverSockets';
-import { getState, setState } from './state';
+import { getStateEndpoint, setStateEndpoint } from './serverState';
 import { fileRelativeToRoot } from './root';
-import { getUsers } from './user';
+import { getAllUsers } from './user';
 
 const app = express();
 const port = 8000;
@@ -17,18 +17,18 @@ app.get('/index.html', mainPageView);
 
 // Serve static assets
 app.get('/state.html', statePageView);
-['css', 'img', 'lib'].forEach(folder => {
+['css', 'img', 'lib', 'src'].forEach(folder => {
   app.use(`/${folder}`, express.static(fileRelativeToRoot(folder)));
 });
 
 // Handle users
 app.get('/users', (req: Request, res: Response) => {
-  res.send(JSON.stringify(getUsers()));
+  res.send(JSON.stringify(getAllUsers()));
 });
 
 // Handle state
-app.get('/state', getState);
-app.post('/state', setState);
+app.get('/state', getStateEndpoint);
+app.post('/state', setStateEndpoint);
 
 // Start server
 const server = app.listen(port, () => {
