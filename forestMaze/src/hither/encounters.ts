@@ -13,7 +13,7 @@ class HitherEncounter extends Encounter {
   stream?: true;
 
   valid(location: HitherLocation) {
-    return super.valid(location) && (!location.stream || !!this.stream);
+    return super.valid(location) && (!this.stream || !!location.stream);
   }
 
   validCombat() {

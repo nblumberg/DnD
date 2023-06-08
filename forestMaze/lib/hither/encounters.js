@@ -8,7 +8,7 @@ let currentTideLevel = 'low';
 class HitherEncounter extends Encounter {
     stream;
     valid(location) {
-        return super.valid(location) && (!location.stream || !!this.stream);
+        return super.valid(location) && (!this.stream || !!location.stream);
     }
     validCombat() {
         this.onlyOnce = true;
