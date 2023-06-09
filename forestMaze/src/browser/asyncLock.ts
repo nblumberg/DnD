@@ -10,6 +10,5 @@ export function createAsyncLock(key: AsyncKey): () => Promise<void> {
       key.unlock = resolve;
     });
     lastPromise = promise;
-    return promise;
   });
 }

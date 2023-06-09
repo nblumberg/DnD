@@ -1,29 +1,39 @@
-import { registerWebSocketHandler } from './browserSockets.js';
-import { disableDirections, enableDirections } from './elements.js';
 import { Encounter, EncounterParams } from '../encounters.js';
 import { characterState, setCharacterState } from '../shared/characterState.js';
 import { ServerToBrowserSocketMessage } from '../shared/socketTypes.js';
-import { showImage } from './showImage.js';
-import { getPlayerRoll, showText } from './showText.js';
+import { addStatePropertyListener } from '../shared/state.js';
 import { AsyncKey, createAsyncLock } from './asyncLock.js';
+import { registerWebSocketHandler } from './browserSockets.js';
+import { disableDirections, enableDirections } from './elements.js';
+import { showImage } from './showImage.js';
 import { getLocation } from './showLocation.js';
+import { getPlayerRoll, showText } from './showText.js';
 
 interface EncountersSocketMessage extends ServerToBrowserSocketMessage {
   encounters: EncounterParams[];
 }
 
 const encounters: Encounter[] = [];
+let currentEncounter: Encounter | undefined;
 
 registerWebSocketHandler('encounters', (message) => {
   const { encounters: newEncounters } = message as EncountersSocketMessage;
   encounters.length = 0;
   newEncounters.forEach(params => encounters.push(new Encounter(params)));
+  currentEncounter = getEncounter(addStatePropertyListener('encounter', (encounterIdAndName: string) => {
+    currentEncounter = getEncounter(encounterIdAndName);
+    showEncounter(currentEncounter.id);
+  }));
+  if (currentEncounter) {
+    showEncounter(currentEncounter.id);
+  }
 });
 
-function getEncounter(name: string): Encounter {
-  const encounter = encounters.find(encounter => encounter.name === name);
+function getEncounter(idAndName: string): Encounter {
+  const id = `${parseInt(idAndName, 10)}`;
+  const encounter = encounters.find(encounter => encounter.id === id);
   if (!encounter) {
-    throw new Error(`Could not find encounter ${name}`);
+    throw new Error(`Could not find encounter ${id}`);
   }
   return encounter;
 }
@@ -34,10 +44,10 @@ const asyncLockKey: AsyncKey = {
 export const waitOnEncounterDisplay = createAsyncLock(asyncLockKey);
 
 
-async function showEncounter(encounterName: string): Promise<void> {
-  const encounter = getEncounter(encounterName);
+async function showEncounter(encounterIdAndName: string): Promise<void> {
+  const encounter = getEncounter(encounterIdAndName);
   if (!encounter) {
-    console.warn(`Can't find encounter ${encounterName}`);
+    console.warn(`Can't find encounter ${encounterIdAndName}`);
     return;
   }
 
@@ -67,8 +77,8 @@ async function handleEncounter(message?: ServerToBrowserSocketMessage): Promise<
     return;
   }
 
-  const { encounter: encounterName } = message as unknown as { encounter: string };
-  return showEncounter(encounterName);
+  const { encounter: encounterIdAndName } = message as unknown as { encounter: string };
+  return showEncounter(encounterIdAndName);
 }
 
 registerWebSocketHandler('encounter', handleEncounter);

@@ -4,7 +4,8 @@ export type Tide = 'low' | 'high';
 
 export interface State {
   directions: [string, string, string, string]; // names of the directions
-  encounter: number; // random Encounter on a roll of 13+
+  encounter: string; // random Encounter on a roll of 13+
+  encounterChance: number; // random Encounter on a roll of 13+
   hours: number;
   location: string; // current Location
   minutes: number;
@@ -18,7 +19,8 @@ export interface State {
 
 export const defaultState: State = {
   directions: ['up', 'right', 'down', 'left'], // names of the directions
-  encounter: 13, // random Encounter on a roll of 13+
+  encounter: '', // current Encounter
+  encounterChance: 13, // random Encounter on a roll of 13+
   hours: 0,
   location: '', // current Location
   minutes: 0,

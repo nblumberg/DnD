@@ -1,12 +1,12 @@
-import { registerWebSocketHandler } from './browserSockets.js';
-import { hideButtons, showButtons } from './elements.js';
 import { Location, LocationParams } from '../locations.js';
 import { ServerToBrowserSocketMessage } from '../shared/socketTypes.js';
 import { addStatePropertyListener } from '../shared/state.js';
+import { AsyncKey, createAsyncLock } from './asyncLock.js';
+import { registerWebSocketHandler } from './browserSockets.js';
+import { hideButtons, showButtons } from './elements.js';
+import { waitOnEncounterDisplay } from './showEncounter.js';
 import { getImage, showImage } from './showImage.js';
 import { showText } from './showText.js';
-import { AsyncKey, createAsyncLock } from './asyncLock.js';
-import { waitOnEncounterDisplay } from './showEncounter.js';
 
 const asyncLockKey: AsyncKey = {
   unlock: () => {}, // will be replaced by createAsyncLock()
@@ -17,12 +17,27 @@ interface LocationsSocketMessage extends ServerToBrowserSocketMessage {
   locations: LocationParams[];
 }
 
+let currentLocation: Location | undefined;
+
+export function getLocation(name?: string): Location | undefined {
+  if (name) {
+    return locations.find(location => location.name === name);
+  } else if (currentLocation) {
+    return currentLocation;
+  }
+  return locations[0];
+}
+
 const locations: Location[] = [];
 
 registerWebSocketHandler('locations', (message) => {
   const { locations: newLocations } = message as LocationsSocketMessage;
   locations.length = 0;
   newLocations.forEach(params => locations.push(new Location(params)));
+  currentLocation = getLocation(addStatePropertyListener('location', (locationName: string) => {
+    currentLocation = getLocation(locationName);
+    showLocation(currentLocation);
+  }));
   if (currentLocation) {
     showLocation(currentLocation);
   }
@@ -60,19 +75,4 @@ async function showLocation(location?: Location) {
   }
 
   asyncLockKey.unlock(); // resolves this execution on the queue
-}
-
-let currentLocation: Location | undefined;
-currentLocation = getLocation(addStatePropertyListener('location', (locationName: string) => {
-  currentLocation = getLocation(locationName);
-  showLocation(currentLocation);
-}));
-
-export function getLocation(name?: string): Location | undefined {
-  if (name) {
-    return locations.find(location => location.name === name);
-  } else if (currentLocation) {
-    return currentLocation;
-  }
-  return locations[0];
 }

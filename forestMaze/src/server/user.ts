@@ -1,12 +1,12 @@
 import { WebSocket } from 'ws';
+import { Encounter } from '../encounters';
+import { Location } from '../locations';
 import { BrowserToServerSocketMessage, ServerToBrowserUserlessSocketMessage } from '../shared/socketTypes';
+import { addEncountersListener, getEncounters } from './serverEncounters';
+import { getHistory } from './serverHistory';
+import { addLocationsListener, getLocations } from './serverLocations';
 import { registerWebSocketHandler, socketError, unregisterWebSocketHandler } from './serverSockets';
 import { getState } from './serverState';
-import { addLocationsListener, getLocations } from './serverLocations';
-import { Location } from '../locations';
-import { addEncountersListener, getEncounters } from './serverEncounters';
-import { Encounter } from '../encounters';
-import { getHistory } from './serverHistory';
 
 interface UserChannel {
   (response: ServerToBrowserUserlessSocketMessage): void;
@@ -52,8 +52,9 @@ function addUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
     id: userId,
     state: {},
   };
+  const alreadyJoined = activeUsers.has(userId);
   activeUsers.set(userId, user);
-  console.log(`${userId} joined`);
+  console.log(`${userId} ${alreadyJoined ? 're-' : ''}joined`);
   user.channel({ type: 'state', state: getState() });
   user.channel({ type: 'locations', locations: getLocations() });
   user.channel({ type: 'encounters', encounters: getEncounters() });

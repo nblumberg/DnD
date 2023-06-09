@@ -1,6 +1,6 @@
 import { Location } from './locations.js';
-import { randomFrom, roll } from './shared/random.js';
 import { hasEncountered } from './shared/history.js';
+import { randomFrom, roll } from './shared/random.js';
 import { addStatePropertyListener } from './shared/state.js';
 
 type dynamicString = string | (() => string);
@@ -40,6 +40,7 @@ export function unregisterEncounterListener(listener: EncounterListener): void {
 let count = 1;
 
 export class Encounter {
+  id: string;
   name: dynamicString;
   description: dynamicString;
   failure?: Failure;
@@ -55,12 +56,13 @@ export class Encounter {
       }
       return true;
     }));
+    this.id = `${count++}`;
     this.name = params.name;
     this.description = params.description;
     this.image = params.image;
     Object.assign(this, allowedParams);
     if (!this.name) {
-      this.name = `Unknown Encounter ${count++}`;
+      this.name = `Unknown Encounter ${count}`;
     }
     if (!this.description) {
       this.description = '';
@@ -134,7 +136,7 @@ export function takeDamage(
   };
 }
 
-let randomEncounterChance = addStatePropertyListener('encounter', (newRandomEncounterChance) => {
+let randomEncounterChance = addStatePropertyListener('encounterChance', (newRandomEncounterChance) => {
   randomEncounterChance = newRandomEncounterChance;
 });
 
