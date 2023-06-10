@@ -4,7 +4,7 @@ import { ServerToBrowserSocketMessage } from '../shared/socketTypes.js';
 import { addStatePropertyListener } from '../shared/state.js';
 import { registerWebSocketHandler } from './browserSockets.js';
 import { displayLock } from './displayLock.js';
-import { disableDirections, enableDirections } from './elements.js';
+import { disableDirections, enableDirections } from './showDirections.js';
 import { showImage } from './showImage.js';
 import { getLocation, showCurrentLocation } from './showLocation.js';
 import { getPlayerRoll, showText } from './showText.js';

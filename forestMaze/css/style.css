@@ -81,6 +81,10 @@ dd {
   z-index: 1;
 }
 
+.direction.correct {
+  color: green;
+}
+
 .direction:hover {
   opacity: 1;
   transition: cubic-bezier(0.075, 0.82, 0.165, 1);

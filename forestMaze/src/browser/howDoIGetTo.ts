@@ -1,5 +1,7 @@
 import { getDirections } from '../locations.js';
 import { DefaultDirection, translateDirection } from '../shared/directions.js';
+import { send } from './browserSockets.js';
+import { isDM } from './character.js';
 import { getLocation, getLocations } from './showLocation.js';
 
 function logPath(steps: string[], turns: DefaultDirection[]): void {
@@ -25,6 +27,9 @@ function howDoIGetTo(targetLocationName: string): void {
     return;
   }
   logPath(...path);
+  if (isDM()) {
+    send({ type: 'destination', destination: targetLocationName });
+  }
 }
 
 (window as any).howDoIGetTo = howDoIGetTo;

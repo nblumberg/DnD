@@ -1,23 +1,25 @@
-import { DefaultDirection, DirectionArray } from '../shared/directions.js';
+import { Location } from '../locations.js';
+import { DefaultDirection, DirectionArray, defaultDirections } from '../shared/directions.js';
 import { State, addStatePropertyListener } from '../shared/state.js';
-import { downLabel, downVotes, leftLabel, leftVotes, rightLabel, rightVotes, upLabel, upVotes } from './elements.js';
+import { getSupposedDirection } from './browserNavigate.js';
+import { downButton, downLabel, downVotes, leftButton, leftLabel, leftVotes, rightButton, rightLabel, rightVotes, upButton, upLabel, upVotes } from './elements.js';
 
-function showDirections(directions: DirectionArray) {
+const labels = [ upLabel, rightLabel, downLabel, leftLabel];
+function labelDirections(directions: DirectionArray) {
   if (!Array.isArray(directions) || directions.length !== 4 || !directions.every(entry => typeof entry === 'string')) {
     throw new Error(`Invalid directions: ${directions}`);
   }
-  upLabel.innerText = directions[0];
-  rightLabel.innerText = directions[1];
-  downLabel.innerText = directions[2];
-  leftLabel.innerText = directions[3];
+  labels.forEach((element, i) => {
+    element.innerText = directions[i];
+  });
 }
-addStatePropertyListener('directions', showDirections);
+addStatePropertyListener('directions', labelDirections);
 
+const voteLabels = [upVotes, rightVotes, downVotes, leftVotes];
 function showVotes(votes: State['votes']) {
-  upVotes.innerText = stringifyVotes(votes, 'up');
-  rightVotes.innerText = stringifyVotes(votes, 'right');
-  downVotes.innerText = stringifyVotes(votes, 'down');
-  leftVotes.innerText = stringifyVotes(votes, 'left');
+  voteLabels.forEach((element, i) => {
+    element.innerText = stringifyVotes(votes, defaultDirections[i]);
+  });
 }
 addStatePropertyListener('votes', showVotes);
 
@@ -32,4 +34,53 @@ export function clearVotes() {
     down: [],
     left: [],
   });
+}
+
+const buttons = [upButton, rightButton, downButton, leftButton];
+
+export function hideButtons(): void {
+  buttons.forEach((button) => {
+    button.classList.add('hidden');
+  });
+}
+
+export function showButtons(location: Location) {
+  defaultDirections.forEach((direction, i) => {
+    if (location[direction]) {
+      buttons[i].classList.remove('hidden');
+    }
+  });
+  const direction = getSupposedDirection(location);
+  buttons.forEach((element, i) => {
+    element.classList.remove('correct');
+    if (defaultDirections[i] === direction) {
+      element.classList.add('correct');
+    }
+  });
+}
+
+const buttonsHidden = [false, false, false, false];
+let buttonsDisabled = false;
+
+export function disableDirections(): void {
+  if (buttonsDisabled) {
+    return;
+  }
+  buttonsDisabled = true;
+  buttons.forEach((button, i) => {
+    buttonsHidden[i] = button.classList.contains('hidden');
+  });
+  hideButtons();
+}
+
+export function enableDirections(): void {
+  if (!buttonsDisabled) {
+    return;
+  }
+  buttons.forEach((button, i) => {
+    if (!buttonsHidden[i]) {
+      button.classList.remove('hidden');
+    }
+  });
+  buttonsDisabled = false;
 }

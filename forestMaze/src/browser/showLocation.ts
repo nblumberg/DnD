@@ -3,8 +3,7 @@ import { ServerToBrowserSocketMessage } from '../shared/socketTypes.js';
 import { addStatePropertyListener } from '../shared/state.js';
 import { registerWebSocketHandler } from './browserSockets.js';
 import { displayLock } from './displayLock.js';
-import { hideButtons, showButtons } from './elements.js';
-import { clearVotes } from './showDirections.js';
+import { clearVotes, hideButtons, showButtons } from './showDirections.js';
 import { showImage } from './showImage.js';
 import { showText } from './showText.js';
 

@@ -91,3 +91,9 @@ export function onReset(): void {
   resetHistory();
   setState({ tide: 'low' });
 }
+
+function setDestination(message: BrowserToServerSocketMessage): void {
+  const { destination } = message as unknown as { destination: string; };
+  setState({ destination });
+}
+registerWebSocketHandler('destination', setDestination);

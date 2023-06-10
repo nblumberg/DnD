@@ -1,4 +1,5 @@
-import { dialog, dialogContent, dialogInput, disableDirections, enableDirections } from './elements.js';
+import { dialog, dialogContent, dialogInput } from './elements.js';
+import { disableDirections, enableDirections } from './showDirections.js';
 
 export async function showText(text: string): Promise<void> {
   disableDirections();
