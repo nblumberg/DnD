@@ -73,4 +73,6 @@ export function openSocket(): Promise<void> {
   });
 }
 
-registerWebSocketHandler('characterState', setCharacterState);
+registerWebSocketHandler('characterState', (message) => {
+  setCharacterState(message.characterState);
+});

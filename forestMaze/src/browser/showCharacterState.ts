@@ -1,5 +1,5 @@
-import { status } from './elements.js';
 import { CharacterState, CharacterStateValue, addCharacterStateListener } from '../shared/characterState.js';
+import { status } from './elements.js';
 
 function showCharacterState(state: CharacterState) {
   status.innerHTML = '';

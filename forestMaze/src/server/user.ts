@@ -52,6 +52,7 @@ function addUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
   if (activeUsers.has(userId)) {
     refreshSocket(activeUsers.get(userId)!, ws);
   } else {
+    const { hours, minutes } = getState();
     const user: User = {
       ws,
       channel: (response) => {
@@ -59,7 +60,7 @@ function addUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
         user.ws.send(JSON.stringify(response));
       },
       id: userId,
-      state: {},
+      state: { hours, minutes },
       ping: {},
     };
     activeUsers.set(userId, user);
@@ -185,7 +186,7 @@ export function countdownStatusEffects(): void {
     });
     if (!userStatesEqual(oldState, newState)) {
       user.state = newState;
-      channel({ type: 'characterState', ...user.state });
+      channel({ type: 'characterState', characterState: user.state });
     }
   });
 }
