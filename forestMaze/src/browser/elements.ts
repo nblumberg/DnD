@@ -21,6 +21,7 @@ export const downVotes = getNonNullableElement('downVotes');
 export const leftButton = getNonNullableElement('left');
 export const leftLabel = getNonNullableElement('leftLabel');
 export const leftVotes = getNonNullableElement('leftVotes');
+export const buttonBar = getNonNullableElement('buttonBar');
 export const restart = getNonNullableElement('restart') as HTMLButtonElement;
 export const clear = getNonNullableElement('clear') as HTMLButtonElement;
 export const status = getNonNullableElement('status');
