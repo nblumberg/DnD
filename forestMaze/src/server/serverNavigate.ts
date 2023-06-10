@@ -26,7 +26,10 @@ export function registerGoToLocationCallback(callback: GoToLocationCallback): vo
 
 async function goToLocation(location: Location): Promise<void> {
   const initialLocation = !!getHistory().length;
-  setState({ location: location.name });
+  setState({
+    location: location.name,  // TODO: already done by trackLocation()?
+    votes: { up: [], right: [], down: [], left: [] }
+  });
 
   goToLocationCallbacks.forEach(callback => {
     callback(location, initialLocation);
