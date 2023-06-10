@@ -1,8 +1,8 @@
-import { clear, restart } from './elements.js';
 import { DefaultDirection } from '../shared/directions.js';
-import { getLocation } from './showLocation.js';
 import { send } from './browserSockets.js';
+import { clear, restart } from './elements.js';
 import { isDM } from './isDM.js';
+import { getLocation } from './showLocation.js';
 
 function onClickDirection(event: Event) {
   const direction = (event.target as HTMLElement)!.id as DefaultDirection;
@@ -11,7 +11,7 @@ function onClickDirection(event: Event) {
     if (!location || !location[direction]) {
       return;
     }
-    send({ type: 'navigate', location, direction });
+    send({ type: 'navigate', locationName: location.name, direction });
   } else {
     send({ type: 'voteDirection', direction });
   }
