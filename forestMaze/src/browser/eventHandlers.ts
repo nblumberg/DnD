@@ -1,7 +1,7 @@
 import { DefaultDirection } from '../shared/directions.js';
 import { send } from './browserSockets.js';
+import { isDM } from './character.js';
 import { clear, restart } from './elements.js';
-import { isDM } from './isDM.js';
 import { getLocation } from './showLocation.js';
 
 function onClickDirection(event: Event) {
