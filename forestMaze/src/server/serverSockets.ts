@@ -1,6 +1,6 @@
 import { IncomingMessage, Server, ServerResponse } from 'http';
-import { Server as WebSocketServer, WebSocket } from 'ws';
-import { ServerSocketMessageHandler, ServerToBrowserUserlessSocketMessage } from '../shared/socketTypes';
+import { WebSocket, Server as WebSocketServer } from 'ws';
+import { BrowserToServerSocketMessage, ServerSocketMessageHandler, ServerToBrowserUserlessSocketMessage } from '../shared/socketTypes';
 
 const handlers = new Map<string, ServerSocketMessageHandler>();
 
@@ -27,8 +27,13 @@ export function socketError(ws: WebSocket, rawError: string | Error, statusCode 
 
 function message(ws: WebSocket, message: string) {
   try {
-    const data = JSON.parse(message);
+    console.log(`Received socket message ${message}`);
+    const data = JSON.parse(message) as BrowserToServerSocketMessage;
     const { type } = data;
+    if (type !== 'addUser') {
+      // Reconnect the user if necessary
+      handlers.get('checkUser')!(data, ws);
+    }
     const handler = handlers.get(type);
     if (!handler) {
       return socketError(ws, `Unrecognized socket request type "${type}"`, 501);

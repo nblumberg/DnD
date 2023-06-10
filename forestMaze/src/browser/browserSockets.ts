@@ -1,6 +1,6 @@
+import { setCharacterState } from '../shared/characterState.js';
 import { BrowserSocketMessageHandler, BrowserToServerUserlessSocketMessage } from '../shared/socketTypes.js';
 import { getUrlParam } from './getUrlParam.js';
-import { setCharacterState } from '../shared/characterState.js';
 
 const user: string = getUrlParam('name')!; // required by server/page.ts
 
@@ -26,41 +26,50 @@ export function unregisterWebSocketHandler(type: string) {
   handlers.delete(type);
 }
 
-export function send(data: BrowserToServerUserlessSocketMessage) {
+export async function send(data: BrowserToServerUserlessSocketMessage) {
   data.user = user; // make it a fully qualified BrowserToServerSocketMessage
+  if (socket.readyState === WebSocket.CLOSED) {
+    await openSocket();
+  }
   socket.send(JSON.stringify(data));
 }
 
-export function addSocketListener() {
-  // Create WebSocket connection.
-  const here = new URL(window.location.href);
-  socket = new WebSocket(`ws://${here.hostname}${here.port ? `:${here.port}` : ''}`);
+export function openSocket(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // Create WebSocket connection.
+    const here = new URL(window.location.href);
+    socket = new WebSocket(`ws://${here.hostname}${here.port ? `:${here.port}` : ''}`);
 
-  // Connection opened
-  socket.addEventListener('open', () => {
-    send({ type: 'addUser', user });
-  });
+    // Connection opened
+    socket.addEventListener('open', () => {
+      send({ type: 'addUser', user });
+      resolve();
+    });
 
-  // Listen for messages
-  socket.addEventListener('message', (event) => {
-    const data = JSON.parse(event.data);
-    if (data.type === 'error') {
-      console.error(`Received ${data.type} socket message from the server`, data);
-    } else {
-      console.log(`Received ${data.type} socket message from the server`, data);
-    }
-    const handler = handlers.get(data.type);
-    if (!handler) {
-      return;
-    }
-    const promise = handler(data);
-    if (promise) {
-      promise.then(request => {
-        if (request) {
-          send(request);
-        }
-      });
-    }
+    // Connection closed
+    socket.addEventListener('close', openSocket);
+
+    // Listen for messages
+    socket.addEventListener('message', (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'error') {
+        console.error(`Received ${data.type} socket message from the server`, data);
+      } else {
+        console.log(`Received ${data.type} socket message from the server`, data);
+      }
+      const handler = handlers.get(data.type);
+      if (!handler) {
+        return;
+      }
+      const promise = handler(data);
+      if (promise) {
+        promise.then(request => {
+          if (request) {
+            send(request);
+          }
+        });
+      }
+    });
   });
 }
 

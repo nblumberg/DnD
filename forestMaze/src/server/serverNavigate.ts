@@ -2,13 +2,13 @@ import { generateEncounter } from '../encounters';
 import { Location } from '../locations';
 import { DefaultDirection } from '../shared/directions';
 import { BrowserToServerSocketMessage } from '../shared/socketTypes';
-import { setState } from '../shared/state';
+import { setState, state } from '../shared/state';
 import { getEncounters, resetEncounters } from './serverEncounters';
 import { getHistory, resetHistory, trackDirection, trackLocation } from './serverHistory';
 import { addLocationsListener, findLocation, getLocations } from './serverLocations';
 import { registerWebSocketHandler } from './serverSockets';
 import { addTravelTime } from './serverState';
-import { countdownStatusEffects, sendToAllUsers } from './user';
+import { countdownStatusEffects } from './user';
 
 function onChangeMap(locations: Location[]) {
   goToLocation(locations[0]);
@@ -63,7 +63,18 @@ export function voteDirection(message: BrowserToServerSocketMessage) {
   if (!user || !direction) {
     return;
   }
-  sendToAllUsers({ ...message, voter: user });
+  const { votes: { up, right, down, left } } = state;
+  function notVoter(character: string) {
+    return character !== user;
+  }
+  const votes = {
+    up: up.filter(notVoter),
+    right: right.filter(notVoter),
+    down: down.filter(notVoter),
+    left: left.filter(notVoter),
+  };
+  votes[direction].push(user);
+  setState({ votes });
 }
 registerWebSocketHandler('voteDirection', voteDirection);
 

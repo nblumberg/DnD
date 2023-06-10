@@ -3,6 +3,7 @@ import { createEventEmitter } from './eventEmitter.js';
 export type Tide = 'low' | 'high';
 
 export interface State {
+  destination: string;
   directions: [string, string, string, string]; // names of the directions
   encounter: string; // random Encounter on a roll of 13+
   encounterChance: number; // random Encounter on a roll of 13+
@@ -15,9 +16,16 @@ export interface State {
   tide: Tide; // the state of the tide
   transition: number; // milliseconds in image fades
   travelTime: number; // minutes between Locations
+  votes: {
+    up: string[];
+    right: string[];
+    down: string[];
+    left: string[];
+  };
 }
 
 export const defaultState: State = {
+  destination: '',
   directions: ['up', 'right', 'down', 'left'], // names of the directions
   encounter: '', // current Encounter
   encounterChance: 13, // random Encounter on a roll of 13+
@@ -30,6 +38,12 @@ export const defaultState: State = {
   tide: 'low', // the state of the tide
   transition: 2000, // milliseconds in image fades
   travelTime: 30, // minutes between Locations
+  votes: {
+    up: [],
+    right: [],
+    down: [],
+    left: [],
+  },
 };
 
 export const state: State = { ...defaultState };

@@ -99,8 +99,12 @@ dd {
   background-size: contain;
 }
 
-.direction .label {
+.direction .label, .direction .votes {
   position: absolute;
+}
+
+.direction .votes {
+  font-size: medium;
 }
 
 #up {
@@ -115,6 +119,10 @@ dd {
 }
 #up .label {
   left: 15%;
+  top: 0;
+}
+#up .votes {
+  right: 15%;
   top: 0;
 }
 
@@ -133,6 +141,11 @@ dd {
   transform: rotate(90deg);
   top: 15%;
 }
+#right .votes {
+  left: auto;
+  transform: rotate(90deg);
+  bottom: 15%;
+}
 
 #down {
   bottom: 0;
@@ -146,6 +159,11 @@ dd {
 }
 #down .label {
   right: 25%;
+  transform: rotate(180deg);
+  bottom: 0;
+}
+#down .votes {
+  left: 25%;
   transform: rotate(180deg);
   bottom: 0;
 }
@@ -165,6 +183,11 @@ dd {
   left: 0;
   transform: rotate(270deg);
   top: 15%;
+}
+#left .votes {
+  left: 0;
+  transform: rotate(270deg);
+  bottom: 15%;
 }
 
 .hidden {

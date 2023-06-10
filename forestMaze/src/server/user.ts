@@ -19,6 +19,10 @@ interface User {
   channel: UserChannel;
   id: string;
   state: CharacterState;
+  ping: {
+    intervalId?: ReturnType<typeof setInterval>;
+    timeoutId?: ReturnType<typeof setTimeout>;
+  };
 }
 
 export const DM = 'DM';
@@ -44,17 +48,35 @@ function addUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
   if (!isValidUser(userId)) {
     return socketError(ws, `${userId} is not a recognized user`, 400);
   }
-  const user: User = {
-    channel: (response) => {
-      response.user = userId; // add the user to make it a fully qualified ServerToBrowserSocketMessage
-      ws.send(JSON.stringify(response));
-    },
-    id: userId,
-    state: {},
-  };
-  const alreadyJoined = activeUsers.has(userId);
-  activeUsers.set(userId, user);
-  console.log(`${userId} ${alreadyJoined ? 're-' : ''}joined`);
+  if (activeUsers.has(userId)) {
+    const user = activeUsers.get(userId);
+    connectUser(user!, true);
+  } else {
+    const user: User = {
+      channel: (response) => {
+        response.user = userId; // add the user to make it a fully qualified ServerToBrowserSocketMessage
+        ws.send(JSON.stringify(response));
+      },
+      id: userId,
+      state: {},
+      ping: {},
+    };
+    activeUsers.set(userId, user);
+    connectUser(user);
+  }
+}
+registerWebSocketHandler('addUser', addUser);
+
+function checkUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
+  const { user: userId } = data as any as { user: string };
+  if (!isActiveUser(userId)) {
+    addUser(data, ws);
+  }
+}
+registerWebSocketHandler('checkUser', checkUser);
+
+function connectUser(user: User, rejoined = false) {
+  console.log(`${user.id} ${rejoined ? 're-' : ''}joined`);
   user.channel({ type: 'state', state: getState() });
   user.channel({ type: 'locations', locations: getLocations() });
   user.channel({ type: 'encounters', encounters: getEncounters() });
@@ -62,28 +84,44 @@ function addUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
   user.channel({ type: 'characterState', characterState: user.state });
   keepAlive(user);
 }
-registerWebSocketHandler('addUser', addUser);
+
+let pingCounter = 1;
+function incrementPingCounter(): number {
+  if (pingCounter === Number.MAX_SAFE_INTEGER) {
+    pingCounter = 1;
+  }
+  return pingCounter++;
+}
 
 /**
  * Every 30 seconds, ping the user to make sure they're still active
  */
 function keepAlive(user: User): void {
+  if (user.ping.intervalId) {
+    clearInterval(user.ping.intervalId);
+    delete user.ping.intervalId;
+  }
+  if (user.ping.timeoutId) {
+    clearTimeout(user.ping.timeoutId);
+    delete user.ping.timeoutId;
+  }
   const intervalId = setInterval(() => {
-    const callback = `${user.id}-${Date.now()}`;
-    let checkedIn = false;
+    const callback = `${user.id}-ping-${incrementPingCounter()}`;
+
+    const timeoutId = setTimeout(() => {
+      unregisterWebSocketHandler(callback);
+      activeUsers.delete(user.id);
+      console.log(`${user.id} timed out`);
+      clearInterval(intervalId);
+    }, 3000);
+    user.ping.timeoutId = timeoutId;
+
     registerWebSocketHandler(callback, () => {
-      checkedIn = true;
+      clearTimeout(timeoutId);
     });
     user.channel({ type: 'ping', callback });
-    setTimeout(() => {
-      unregisterWebSocketHandler(callback);
-      if (!checkedIn) {
-        activeUsers.delete(user.id);
-        console.log(`${user.id} timed out`);
-        clearInterval(intervalId);
-      }
-    }, 3000);
   }, 30000);
+  user.ping.intervalId = intervalId;
 }
 
 function updateLocations(locations: Location[]): void {
@@ -106,6 +144,10 @@ export function getAllUsers() {
 
 export function getActiveUsers() {
   return Array.from(activeUsers.keys());
+}
+
+export function isActiveUser(userId: string): boolean {
+  return activeUsers.has(userId);
 }
 
 export function countdownStatusEffects(): void {
