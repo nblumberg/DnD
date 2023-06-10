@@ -17,6 +17,7 @@ type CharacterState = Record<string, CharacterStateValue>;
 
 interface User {
   channel: UserChannel;
+  ws: WebSocket;
   id: string;
   state: CharacterState;
   ping: {
@@ -49,27 +50,37 @@ function addUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
     return socketError(ws, `${userId} is not a recognized user`, 400);
   }
   if (activeUsers.has(userId)) {
-    const user = activeUsers.get(userId);
-    connectUser(user!, true);
+    refreshSocket(activeUsers.get(userId)!, ws);
   } else {
     const user: User = {
+      ws,
       channel: (response) => {
         response.user = userId; // add the user to make it a fully qualified ServerToBrowserSocketMessage
-        ws.send(JSON.stringify(response));
+        user.ws.send(JSON.stringify(response));
       },
       id: userId,
       state: {},
       ping: {},
     };
     activeUsers.set(userId, user);
-    connectUser(user);
+    refreshSocket(user, ws, true);
   }
 }
 registerWebSocketHandler('addUser', addUser);
 
+function refreshSocket(user: User, ws: WebSocket, force = false): void {
+  if (user.ws !== ws || force) {
+    user.ws = ws;
+    clearPing(user);
+    connectUser(user, !force);
+  }
+}
+
 function checkUser(data: BrowserToServerSocketMessage, ws: WebSocket) {
   const { user: userId } = data as any as { user: string };
-  if (!isActiveUser(userId)) {
+  if (isActiveUser(userId)) {
+    refreshSocket(activeUsers.get(userId)!, ws);
+  } else {
     addUser(data, ws);
   }
 }
@@ -93,10 +104,7 @@ function incrementPingCounter(): number {
   return pingCounter++;
 }
 
-/**
- * Every 30 seconds, ping the user to make sure they're still active
- */
-function keepAlive(user: User): void {
+function clearPing(user: User): void {
   if (user.ping.intervalId) {
     clearInterval(user.ping.intervalId);
     delete user.ping.intervalId;
@@ -105,6 +113,13 @@ function keepAlive(user: User): void {
     clearTimeout(user.ping.timeoutId);
     delete user.ping.timeoutId;
   }
+}
+
+/**
+ * Every 30 seconds, ping the user to make sure they're still active
+ */
+function keepAlive(user: User): void {
+  clearPing(user);
   const intervalId = setInterval(() => {
     const callback = `${user.id}-ping-${incrementPingCounter()}`;
 
