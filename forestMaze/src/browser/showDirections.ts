@@ -2,6 +2,7 @@ import { Location } from '../locations.js';
 import { DefaultDirection, DirectionArray, defaultDirections } from '../shared/directions.js';
 import { State, addStatePropertyListener } from '../shared/state.js';
 import { getSupposedDirection } from './browserNavigate.js';
+import { isDM } from './character.js';
 import { downButton, downLabel, downVotes, leftButton, leftLabel, leftVotes, rightButton, rightLabel, rightVotes, upButton, upLabel, upVotes } from './elements.js';
 
 const labels = [ upLabel, rightLabel, downLabel, leftLabel];
@@ -53,7 +54,7 @@ export function showButtons(location: Location) {
   const direction = getSupposedDirection(location);
   buttons.forEach((element, i) => {
     element.classList.remove('correct');
-    if (defaultDirections[i] === direction) {
+    if (defaultDirections[i] === direction && !isDM()) {
       element.classList.add('correct');
     }
   });
