@@ -1,4 +1,4 @@
-import { state, State, setState, removeStateListener, addStatePropertyListener } from '../shared/state.js';
+import { state, State, setState, removeStateListener, addStatePropertyListener, defaultState } from '../shared/state.js';
 import { registerWebSocketHandler, send } from './browserSockets.js';
 import { BrowserToServerUserlessSocketMessage, ServerToBrowserSocketMessage } from '../shared/socketTypes.js';
 
@@ -7,6 +7,14 @@ function updateState(message: ServerToBrowserSocketMessage): void {
   setState(newState);
 }
 registerWebSocketHandler('state', updateState);
+
+Object.keys(defaultState).forEach(key => {
+  const property: keyof State = key as keyof State;
+  addStatePropertyListener(property, (value) => {
+    console.log(`State ${property} changed to ${value}`);
+  });
+});
+
 
 export function changeState(partialState: Partial<State>): void {
   const completeState: BrowserToServerUserlessSocketMessage = { type: 'state', state: { ...state, ...partialState } };
