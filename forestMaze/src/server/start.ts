@@ -4,6 +4,8 @@ import { addWebSockets } from './serverSockets';
 import { getStateEndpoint, setStateEndpoint } from './serverState';
 import { fileRelativeToRoot } from './root';
 import { getAllUsers } from './user';
+import { getEncounters } from './serverEncounters';
+import { getLocations } from './serverLocations';
 
 const app = express();
 const port = 8000;
@@ -29,6 +31,15 @@ app.get('/users', (req: Request, res: Response) => {
 // Handle state
 app.get('/state', getStateEndpoint);
 app.post('/state', setStateEndpoint);
+
+// Settings page
+app.get('/locations', (req, res) => {
+  res.send(getLocations());
+});
+app.get('/encounters', (req, res) => {
+  res.send(getEncounters());
+});
+
 
 // Start server
 const server = app.listen(port, () => {
