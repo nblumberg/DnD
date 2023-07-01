@@ -24,10 +24,16 @@ export function getLocation(name?: string): Location | undefined {
 
 const locations: Location[] = [];
 
+const listeners: Array<(locations: Location[]) => void> = [];
+export function addLocationsListener(listener: (locations: Location[]) => void) {
+  listeners.push(listener);
+}
+
 registerWebSocketHandler('locations', (message) => {
   const { locations: newLocations } = message as LocationsSocketMessage;
   locations.length = 0;
   newLocations.forEach(params => locations.push(new Location(params)));
+  listeners.forEach(listener => listener(locations));
 
   function locationUpdate(locationName: string) {
     const newLocation = getLocation(locationName);
@@ -67,6 +73,7 @@ async function showLocation(location?: Location, hasSeenText = false) {
   hideButtons();
   await showImage(backgroundImage, rotate);
   showButtons(location);
+
   if (description && !hasSeenText) {
     await showText(description);
   }

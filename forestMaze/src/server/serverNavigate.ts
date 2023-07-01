@@ -8,7 +8,7 @@ import { getHistory, resetHistory, trackDirection, trackLocation } from './serve
 import { addLocationsListener, findLocation, getLocations } from './serverLocations';
 import { registerWebSocketHandler } from './serverSockets';
 import { addTravelTime } from './serverState';
-import { countdownStatusEffects } from './user';
+import { countdownStatusEffects, getActiveUsers } from './user';
 
 function onChangeMap(locations: Location[]) {
   goToLocation(locations[0]);
@@ -37,8 +37,28 @@ async function goToLocation(location: Location): Promise<void> {
 
   const encounter = await generateEncounter(getEncounters(), location);
   if (encounter) {
-    setState({ encounter: `${encounter.id} ${encounter.getName()}` });
-    // resolveEncounter(encounter);
+    const idName = `${encounter.id} ${encounter.getName()}`;
+    setState({ encounter: idName });
+    console.log(`Starting Encounter ${idName}`);
+    return new Promise((resolve) => {
+      const resolvedUsers = new Set<string>();
+      registerWebSocketHandler('resolveEncounter', message => {
+        const { encounter: resolvedEncounter, user } = message;
+        if (resolvedEncounter !== encounter.id) {
+          return;
+        }
+        resolvedUsers.add(user);
+        console.log(`${user} resolved Encounter ${idName}`);
+        if (getActiveUsers().every(activeUser => resolvedUsers.has(activeUser))) {
+          encounter.resolved = true;
+          setState({ encounter: '' });
+          console.log(`Resolved Encounter ${idName}`);
+          resolve();
+        }
+      });
+    });
+  } else {
+    setState({ encounter: '' });
   }
 }
 

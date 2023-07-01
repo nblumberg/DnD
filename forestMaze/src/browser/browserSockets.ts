@@ -1,4 +1,4 @@
-import { setCharacterState } from '../shared/characterState.js';
+import { addCharacterStateListener, setCharacterState } from '../shared/characterState.js';
 import { BrowserSocketMessageHandler, BrowserToServerUserlessSocketMessage } from '../shared/socketTypes.js';
 import { getUrlParam } from './getUrlParam.js';
 
@@ -75,4 +75,8 @@ export function openSocket(): Promise<void> {
 
 registerWebSocketHandler('characterState', (message) => {
   setCharacterState(message.characterState);
+});
+
+addCharacterStateListener(characterState => {
+  send({ type: 'characterState', characterState });
 });

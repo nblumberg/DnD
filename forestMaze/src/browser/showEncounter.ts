@@ -2,7 +2,7 @@ import { Encounter, EncounterParams } from '../encounters.js';
 import { characterState, setCharacterState } from '../shared/characterState.js';
 import { ServerToBrowserSocketMessage } from '../shared/socketTypes.js';
 import { addStatePropertyListener } from '../shared/state.js';
-import { registerWebSocketHandler } from './browserSockets.js';
+import { registerWebSocketHandler, send } from './browserSockets.js';
 import { displayLock } from './displayLock.js';
 import { disableDirections, enableDirections } from './showDirections.js';
 import { showImage } from './showImage.js';
@@ -98,6 +98,8 @@ async function resolveEncounter(encounter: Encounter) {
     await showText(description);
   }
   encounter.resolved = true;
+  // TODO: send resolution to server
+  send({ type: 'resolveEncounter', encounter: encounter.id });
 }
 
 export async function showCurrentEncounter() {
