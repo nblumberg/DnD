@@ -2,6 +2,7 @@ import { WebSocket } from 'ws';
 import { Encounter } from '../encounters';
 import { Location } from '../locations';
 import { BrowserToServerSocketMessage, ServerToBrowserUserlessSocketMessage } from '../shared/socketTypes';
+import { addStatePropertyListener } from '../shared/state';
 import { addEncountersListener, getEncounters } from './serverEncounters';
 import { getHistory } from './serverHistory';
 import { addLocationsListener, getLocations } from './serverLocations';
@@ -205,3 +206,14 @@ export function sendToAllUsers(data: ServerToBrowserUserlessSocketMessage) {
     user.channel(data);
   }
 }
+
+addStatePropertyListener('hours', (newHours: number) => {
+  for (const user of activeUsers.values()) {
+    user.channel({ type: 'characterState', characterState: { ...user.state, hours: newHours } });
+  }
+});
+addStatePropertyListener('minutes', (newMinutes: number) => {
+  for (const user of activeUsers.values()) {
+    user.channel({ type: 'characterState', characterState: { ...user.state, minutes: newMinutes } });
+  }
+});
