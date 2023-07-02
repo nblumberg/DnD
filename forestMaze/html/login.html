@@ -26,6 +26,9 @@
 
     fetch('/users').then(response => response.json()).then(users => {
       Object.entries(users).forEach(([value, text]) => {
+        if (value === 'DM') {
+          return;
+        }
         const option = document.createElement("option");
         option.textContent = text;
         option.value = value;
