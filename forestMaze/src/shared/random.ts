@@ -2,7 +2,12 @@ import { addStatePropertyListener } from './state.js';
 
 function setRandomSeed(seed: string) {
   if (seed) {
-    (Math as any).seedrandom(seed);
+    if (require) {
+      const seedrandom = require('seedrandom');
+      seedrandom(seed, { global: true });
+    } else {
+      (Math as any).seedrandom(seed);
+    }
   }
 }
 setRandomSeed(addStatePropertyListener('seed', setRandomSeed));
