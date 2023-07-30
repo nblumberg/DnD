@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { mainPageView, statePageView } from './page';
+import { mainPageView, mazePageView, statePageView } from './page';
 import { addWebSockets } from './serverSockets';
 import { getStateEndpoint, setStateEndpoint } from './serverState';
 import { fileRelativeToRoot } from './root';
@@ -19,6 +19,7 @@ app.get('/index.html', mainPageView);
 
 // Serve static assets
 app.get('/state.html', statePageView);
+app.get('/maze.html', mazePageView);
 ['css', 'img', 'lib', 'src'].forEach(folder => {
   app.use(`/${folder}`, express.static(fileRelativeToRoot(folder)));
 });
