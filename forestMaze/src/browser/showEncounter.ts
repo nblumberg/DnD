@@ -7,7 +7,7 @@ import { displayLock } from './displayLock.js';
 import { disableDirections, enableDirections } from './showDirections.js';
 import { showImage } from './showImage.js';
 import { getLocation, showCurrentLocation } from './showLocation.js';
-import { getPlayerRoll, showText } from './showText.js';
+import { getPlayerFeedback, getPlayerRoll, showText } from './showText.js';
 
 interface EncountersSocketMessage extends ServerToBrowserSocketMessage {
   encounters: EncounterParams[];
@@ -80,13 +80,23 @@ async function showEncounter(arg: Encounter | string): Promise<void> {
 (window as any).showEncounter = showEncounter;
 
 async function resolveEncounter(encounter: Encounter) {
-  let { failure } = encounter;
+  let { failure, feedback } = encounter;
   let description: string | undefined = encounter.getDescription();
   let status;
 
   while (failure) {
-    const savingThrow: number = await getPlayerRoll(description ?? '');
+    const savingThrow = await getPlayerRoll(description ?? '');
     ({ failure, description, status } = failure(savingThrow) ?? {});
+    if (status) {
+      const [key, value, duration] = status;
+      const state = { ...characterState };
+      state[key] = typeof duration === 'number' ? [value as string, duration] : value as number;
+      setCharacterState(state);
+    }
+  }
+  while (feedback) {
+    const answer = await getPlayerFeedback(description ?? '');
+    ({ feedback, description, status } = feedback(answer) ?? {});
     if (status) {
       const [key, value, duration] = status;
       const state = { ...characterState };

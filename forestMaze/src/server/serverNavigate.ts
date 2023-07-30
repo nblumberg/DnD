@@ -6,7 +6,7 @@ import { setState, state } from '../shared/state';
 import { getEncounters, resetEncounters } from './serverEncounters';
 import { getHistory, resetHistory, trackDirection, trackLocation } from './serverHistory';
 import { addLocationsListener, findLocation, getLocations } from './serverLocations';
-import { registerWebSocketHandler } from './serverSockets';
+import { registerWebSocketHandler, unregisterWebSocketHandler } from './serverSockets';
 import { addTravelTime } from './serverState';
 import { countdownStatusEffects, getActiveUsers } from './user';
 
@@ -53,6 +53,7 @@ async function goToLocation(location: Location): Promise<void> {
           encounter.resolved = true;
           setState({ encounter: '' });
           console.log(`Resolved Encounter ${idName}`);
+          unregisterWebSocketHandler('resolveEncounter');
           resolve();
         }
       });

@@ -22,7 +22,7 @@ export async function showText(text: string): Promise<void> {
   });
 }
 
-export async function getPlayerRoll(text: string): Promise<number> {
+export async function getPlayerFeedback(text: string): Promise<string> {
   disableDirections();
   return new Promise((resolve) => {
     function closeDialog(event: Event) {
@@ -30,7 +30,7 @@ export async function getPlayerRoll(text: string): Promise<number> {
         event.preventDefault();
         return;
       }
-      const value = parseInt(dialogInput.value, 10);
+      const value = dialogInput.value;
       dialog.close();
       dialogInput.removeEventListener('keyup', closeDialog);
       dialog.removeEventListener('close', closeDialog);
@@ -47,4 +47,10 @@ export async function getPlayerRoll(text: string): Promise<number> {
     dialog.close();
     dialog.showModal();
   });
+
+}
+
+export async function getPlayerRoll(text: string): Promise<number> {
+  const value = await getPlayerFeedback(text);
+  return parseInt(value, 10);
 }

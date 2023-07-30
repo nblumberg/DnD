@@ -5,19 +5,23 @@ import { addStatePropertyListener } from './shared/state.js';
 
 type dynamicString = string | (() => string);
 type Status = [string, number] | [string, string, number]; // type, damage, OR type, effect, duration
-interface EncounterResult {
-  failure?: Failure;
-  description?: string;
-  status?: Status;
-}
 export interface Failure {
   (savingThrow: number): EncounterResult | undefined;
 }
-
+export interface Feedback {
+  (feedback: string): EncounterResult | undefined;
+}
+interface EncounterResult {
+  failure?: Failure;
+  feedback?: Feedback;
+  description?: string;
+  status?: Status;
+}
 export interface EncounterParams {
   name: dynamicString;
   description: dynamicString;
   failure?: Failure;
+  feedback?: Feedback;
   image?: string;
   onlyOnce?: true;
   resolved?: true;
@@ -44,6 +48,7 @@ export class Encounter {
   name: dynamicString;
   description: dynamicString;
   failure?: Failure;
+  feedback?: Feedback;
   image?: string;
   onlyOnce?: true;
   resolved?: true;
