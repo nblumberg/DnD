@@ -33,8 +33,10 @@ html {
   content: "\1F6AA";
 }
 #maze div div.nubbin::after {
-  content: "\1F33C";
+  /* content: "\1F33C"; */
+  content: "🍄";
 }
+/*
 #maze div.nubbin:nth-of-type(3n)::after {
   content: "\1F344";
 }
@@ -47,6 +49,7 @@ html {
 #maze div.nubbin:nth-of-type(13n)::after {
   content: "\1F381";
 }
+*/
 #maze div.hero::after {
   content: "\1F6B6" !important;
 }
@@ -65,13 +68,26 @@ html {
   background: transparent;
 }
 #maze div div.sentinel.wall::after {
-  content: "\1F40A";
+  /* mosquito 🦟 spider 🕷️ rat 🐀 snake 🐍 wolf 🐺 gator 🐊 bear 🐻 ghost 👻 skeleton 💀 zombie 🧟‍♂️ fairy 🧚‍♀️ dragon 🐉 imp 👿 ogre 👹 goblin 👺 troll 🧌 fire 🔥 */
+  /* content: "\1F40A"; */
+  content: "🐍";
+}
+#maze div.sentinel.wall:nth-of-type(2n)::after {
+  content: "🐊";
 }
 #maze div.sentinel.wall:nth-of-type(3n)::after {
-  content: "\1F40D";
+  /* content: "\1F40D"; */
+  content: "🐻";
+}
+#maze div.sentinel.wall:nth-of-type(4n)::after {
+  content: "👻";
+}
+#maze div.sentinel.wall:nth-of-type(5n)::after {
+  content: "🧌";
 }
 #maze div div.key::after {
-  content: "\1F511";
+  /* content: "\1F511"; */
+  content: "🔑";
 }
 
 #maze div div:nth-child(odd) {
@@ -106,7 +122,7 @@ html {
   display: flex;
   margin: 0.5em auto;
 }
-#maze_score, #maze_message {
+#maze_score, #maze_message, #maze_inventory {
   font-family: fantasy;
   font-weight: bold;
   font-size: 1em;

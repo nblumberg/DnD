@@ -18,6 +18,7 @@ class Mazing {
   mazeContainer: HTMLElement;
   mazeScore: HTMLDivElement;
   mazeMessage: HTMLDivElement;
+  mazeInventory: HTMLDivElement;
   heroScore: number;
   maze: Map<string, HTMLElement>;
   heroPos: Position;
@@ -44,6 +45,9 @@ class Mazing {
     this.mazeMessage = document.createElement("div");
     this.mazeMessage.id = "maze_message";
 
+    this.mazeInventory = document.createElement("div");
+    this.mazeInventory.id = "maze_inventory";
+
     this.heroScore = parseInt(this.mazeContainer.getAttribute("data-steps")!, 10) - 2;
 
     this.maze = new Map<string, HTMLElement>();
@@ -69,6 +73,7 @@ class Mazing {
     mazeOutputDiv.id = "maze_output";
 
     mazeOutputDiv.appendChild(this.mazeScore);
+    mazeOutputDiv.appendChild(this.mazeInventory);
     mazeOutputDiv.appendChild(this.mazeMessage);
 
     mazeOutputDiv.style.width = this.mazeContainer.scrollWidth + "px";
@@ -102,6 +107,10 @@ class Mazing {
 
   }
 
+  addInventory(item: string) {
+    this.mazeInventory.innerText += `${item} `;
+  }
+
   getHeroPositionElement(): HTMLElement {
     const el = this.maze.get(this.heroPos.toString());
     if (!el) {
@@ -111,12 +120,14 @@ class Mazing {
   }
 
   heroTakeTreasure() {
+    this.addInventory("🍄");
     this.getHeroPositionElement().classList.remove("nubbin");
     this.heroScore += 10;
     this.setMessage("yay, treasure!");
   }
 
   heroTakeKey() {
+    this.addInventory("🔑");
     this.getHeroPositionElement().classList.remove("key");
     this.heroHasKey = true;
     this.heroScore += 20;
