@@ -1,9 +1,8 @@
-import { Encounter, Failure, ForcedEncounter, makeSavingThrow } from '../encounters';
-import { Location } from '../locations';
-import { registerGoToLocationCallback } from '../server/serverNavigate';
-import { randomFrom, roll } from '../shared/random';
-import { HitherLocation } from './locations';
-import { addStatePropertyListener, setState, Tide } from '../shared/state';
+import { Encounter, Failure, ForcedEncounter, makeSavingThrow } from '../encounters.js';
+import { Location } from '../locations.js';
+import { randomFrom, roll } from '../shared/random.js';
+import { Tide, addStatePropertyListener, setState } from '../shared/state.js';
+import { HitherLocation } from './locations.js';
 
 let showTidesEveryTime = addStatePropertyListener('tides', (value: boolean) => {
   showTidesEveryTime = value;
@@ -155,7 +154,12 @@ async function handleTides(location: Location, _initialLocation?: boolean): Prom
   }
   await encounter.show(hitherLocation);
 }
-registerGoToLocationCallback(handleTides);
+
+if (typeof window === 'undefined') {
+  import('../server/serverNavigate').then(({ registerGoToLocationCallback }) => {
+    registerGoToLocationCallback(handleTides);
+  });
+}
 
 
 const mudTrap: Failure = (priorDepth = 0) => {
@@ -173,77 +177,92 @@ const mudTrap: Failure = (priorDepth = 0) => {
 };
 
 class RiddleEncounter extends HitherEncounter {
-  constructor(riddle: string, answer: string) {
-    function feedback(guess: string) {
-      if (guess.toLowerCase().includes(answer.toLowerCase().trim())) {
+  constructor(riddle: string, answer: string | string[]) {
+    const quizzer = randomFrom(['boggle', 'satyr', 'blink dog', 'pixie', 'quickling', 'redcap', 'dryad', 'darkling', 'grig']);
+    const images: Record<string, string> = {
+      'boggle': 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/08/Boggle-5e-Cropped.jpg?q=50&fit=crop&w=750&dpr=1.5',
+      'satyr': 'https://cdn.inprnt.com/thumbs/29/e0/29e047df5e2c0f5365dd4914ea9c9c30@2x.jpg',
+      'blink dog': 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/08/blink-dog-Cropped.jpg?q=50&fit=crop&w=750&dpr=1.5',
+      'pixie': 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2022/07/Pixie-DnD.jpg?q=50&fit=crop&w=750&dpr=1.5',
+      'quickling': 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/08/quickling-Cropped.jpg?q=50&fit=crop&w=750&dpr=1.5',
+      'redcap': 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/08/Redcap-5e-Cropped.jpg?q=50&fit=crop&w=750&dpr=1.5',
+      'dryad': 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/08/Dryad-Cropped.jpg?q=50&fit=crop&w=750&dpr=1.5',
+      'darkling': 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2022/07/Darkling-DnD.jpg?q=50&fit=crop&w=750&dpr=1.5',
+      'grig': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlNIevPEXaTmiwGJWwozpIzgQ8V2o_a3mX1kddVBTybDSHC3j62ardqjeQAaglY1O2CdM&usqp=CAU',
+    };
+
+    const feedback = (guess: string) => {
+      if (Array.isArray(answer) ? answer.some(a => guess.toLowerCase().includes(a)) : guess.toLowerCase().includes(answer.toLowerCase().trim())) {
+        this.onlyOnce = true;
         return {
-          description: 'Correct!',
+          description: `"Correct!" says the ${quizzer} before pointing the way forward.`,
         };
       } else {
         return {
-          description: 'Wrong!',
+          description: `"Wrong!" says the ${quizzer} before disappearing laughing into the woods.`,
         };
       }
-    }
+    };
 
     super({
       name:`${answer} Riddle`,
-      description: riddle,
+      description: `A ${quizzer} approaches and offers to point the way to your destination, if you can answer their riddle: ${riddle}`,
       feedback,
-      onlyOnce: true,
+      image: images[quizzer],
     });
   }
 }
 
 const riddleEncounters = [
-[`It has a golden head. It has a golden tail. It has no body.`, `A gold coin`],
-[`It wears a leather coat to keep its skins in working order. Escorts you to other realms, without a magic portal.`, `Book`],
-[`It dampens as it dries.`, `Towel`],
-[`What has two hands on its face but no arms?`, `A clock`],
-[`What kind of coat is always wet when you put it on?`, `A coat of paint`],
-[`Many have heard me, yet nobody has seen me. I won't speak back unless spoken to. What am I?`, `An echo`],
-[`What five long word become shorter when you add two letters?`, `Short`],
-[`What is not alive but grows, does not breaths but needs air.`, `Fire`],
-[`Better old than young; the healthier it is, the smaller it will be.`, `A Wound`],
-[`This fire is smothered best not by water or sand but by words.`, `Desire`],
-[`Two friends stand and travel together, one nearly useless without the other.`, `Boots`],
-[`Feed me and I will live, give me a drink and I will die.`, `Fire`],
-[`A curved stick and a straight twig means red sap and a snapped trunk.`, `Death by arrow`],
-[`No warning of Timber could have stopped the dropping petals.`, `Death by axe`],
-[`A fitting cravat for a poorly chosen suit.`, `Death by hanging`],
+[`It has a golden head. It has a golden tail. It has no body. What is it?`, `Coin`],
+[`It wears a leather coat to keep its skins in working order. Escorts you to other realms, without a magic portal. What is it?`, `Book`],
+[`It dampens as it dries. What is it?`, `Towel`],
+[`What has no arms between its hands and its face?`, `Clock`],
+[`What kind of coat is always wet when you put it on?`, `Paint`],
+[`Many have heard me, yet nobody has seen me. I won't speak back unless spoken to. What am I?`, `Echo`],
+[`What word become shorter when you add two letters?`, `Short`],
+[`What is not alive but grows, does not breaths but needs air?`, `Fire`],
+[`Better old than young; the healthier it is, the smaller it will be.`, `Wound`],
+[`This fire is smothered best not by water or sand but by words. What is it?`, `Desire`],
+[`Two friends travel together in step, one nearly useless without the other.`, `Boots`],
+[`Feed me and I will live, give me a drink and I will die. What am I?`, `Fire`],
+[`A curved stick and a straight twig means red sap and a snapped trunk. What happened?`, `Arrow`],
+// [`No warning of Timber could have stopped the dropping petals.`, `Death by axe`],
+[`A fitting cravat for one's final suit. What happened?`, `Hang`],
 [`I build castles, yet tear down mountains, make some men blind, and others see. What am I?`, `Sand`],
-[`As I was going to St Ives I met a man with 7 wives. Each wife had 7 kids. Each kid had 7 cats. Each cat had 7 kittens. How many were going to St Ives?`, `1`],
-[`What do banana, grammar and assess all have in common?`, `if you take the first letter and put it on the end of the word, reading it backwards they spell the same word`],
+[`As I was going to St Ives I met a man with 7 wives. Each wife had 7 kids. Each kid had 7 cats. Each cat had 7 kittens. How many were going to St Ives?`, [`1`, `One`]],
+// [`What do banana, grammar and assess all have in common?`, `if you take the first letter and put it on the end of the word, reading it backwards they spell the same word`],
 [`Twelve men walking by, twelve pears hanging high. Each took a pear and left eleven hanging there. How did it happen?`, `Each is someone's name`],
 [`River bridge crossing, look out for the guards. Can you spell that without any 'R's?`, `THAT`],
-[`What is it that you keep when you need it not, but throw out when you do need it?`, `An anchor`],
+[`What is it that you carry when you need it not, but throw out when you do need it?`, `Anchor`],
 [`The foolish man wastes me, The average man spends me, And wise man invests me, Yet all men succumb to me. What am I?`, `Time`],
-[`What is something that dawns on you even when it shouldn't?`, `The obvious`],
-[`When you come to the end of all you know, I am there. Who am I? HINTS: I start out wonderful, but then begin worse.`, `The letter W`],
-[`What has four legs in the morning, two legs in the afternoon and three legs in the evening?`, `A Man. when he was a child he crawled on all four, when he was older, he walked on two legs and when he was old aged, he used a cane`],
-[`I'm made out of five letters, And I'm made out of seven letters; I have keys but I don't have locks, I'm concerned with time, but not with clocks.`, `A Piano`],
-[`Forty white horses on a red hill. They champ, they stamp, and then stand still.`, `Teeth`],
-[`I can fly like a bird not in the sky, which can always swim and can always dry. I say goodbye at night and morning hi. I'm part of you what am I. I follow and lead as you pass, dress yourself in black my darkness lasts. I flee the light but without the sun, Your view of me would be gone.`, `A shadow`],
-[`I am what men love more than life, fear more than death or mortal strife, what dead men have and rich require. I'm what contented men desire.`, `Nothing`],
-[`Two men drink poisoned Iced Tea. One man drinks his fast and lives. The other man drinks his slow and dies. How is this possible?`, `The poison is in the ice not the tea. The ice melts in the slower drinker's tea`],
-[`Towns without houses, forests without trees, mountains without boulders and waterless seas.`, `A Map`],
-[`Two bodies in one, the longer I stand, the faster I run.`, `Hourglass`],
-[`Men desire me in public, but fear me in private.`, `Truth`],
+[`What is something that dawns on you even when it shouldn't?`, `Obvious`],
+[`When you come to the end of all you know, I am there. Who am I? A hint: I start out wonderful, but end in sorrow.`, `W`],
+[`What has four legs in the morning, two legs in the afternoon and three legs in the evening?`, [`Man`, `Human`]], // `A Man. when he was a child he crawled on all four, when he was older, he walked on two legs and when he was old aged, he used a cane`],
+[`I'm made out of five letters, And I'm made out of seven letters; I have keys but I don't have locks, I'm concerned with time, but not with clocks. What am I?`, `Piano`],
+[`Forty white horses on a red hill. They champ, they stamp, and then stand still. What are they?`, `Teeth`],
+[`I can fly like a bird not in the sky, which can always swim and can always dry. I say goodbye at night and morning hi. I'm part of you, what am I? I follow and lead as you pass, dress yourself in black my darkness lasts. I flee the light but without the sun, Your view of me would be gone.`, `Shadow`],
+[`I am what men love more than life, fear more than death or mortal strife, what dead men have and rich require. I'm what contented men desire. What am I?`, `Nothing`],
+[`Two men drink poisoned iced tea. One man drinks his fast and lives. The other man drinks his slow and dies. How is this possible?`, `Ice`], //`The poison is in the ice not the tea. The ice melts in the slower drinker's tea`],
+[`Towns without houses, forests without trees, mountains without boulders and waterless seas. What am I?`, `Map`],
+[`Two bodies in one, the longer I stand, the faster I run. What am I?`, `Hourglass`],
+[`Men desire me in public, but fear me in private. What is it?`, `Truth`],
 [`What is so fragile, even speaking its name will break it?`, `Silence`],
-[`What must you first give to me in order to keep it?`, `Your word`],
-[`Though I'm tender, I'm not to be eaten, Nor -- though, mint fresh -- your breath to sweeten.`, `Money. Legal tender; minted coins`],
-[`You never see it, but it's almost always there, and most people quickly notice when it's absent.`, `Oxygen/Breathable Air`],
-[`An untiring servant it is, carrying loads across muddy earth. But one thing that cannot be forced, is a return to the place of its birth.`, `River`],
-[`Blessed are the first. Slow are the second. Playful are the third. Bold are the fourth. Brave are the fifth. Answer:`, `Blade`],
-[`Brought to the table. Cut and served. Never eaten.`, `Cards`],
-[`It can pierce the best armor, And make swords crumble with a rub. Yet for all its power, It can't harm a club.`, `Rust`],
-[`It is a journey whose path depends, on an other's vision of where it ends.`, `Book`],
-[`Men seize it from its home, tear apart its flesh, drink the sweet blood, then cast its skin aside.`, `Orange`],
+[`What must you first give to me in order to keep it?`, `Word`], // `Your Word`
+[`Though I'm tender, I'm not to be eaten, Nor -- though, mint fresh -- your breath to sweeten. What am I?`, [`Money`, `Coin`]], // `Legal tender; minted coins`
+[`You never see it, but it's almost always there, and most people quickly notice when it's absent.`, [`Air`, `Oxygen`]], // `Oxygen/Breathable Air`
+[`An untiring servant it is, carrying loads across muddy earth. But one thing that cannot be forced, is a return to the place of its birth. What is it?`, `River`],
+[`The first is blessed. The second is slow. Playful is the third. Bold is the fourth. Brave is the fifth. What is it?`, `Blade`],
+[`Brought to the table. Cut and served. Never eaten. What are they?`, `Cards`],
+[`It can pierce the best armor, and make swords crumble with a rub. Yet for all its power, it can't harm a club. What is it?`, `Rust`],
+[`It is a journey whose path depends, on an other's vision of where it ends. What is it?`, [`Story`, `Book`, `Play`]],
+[`Men seize it from its home, tear apart its flesh, drink the sweet blood, then cast its skin aside. What is it?`, `Orange`],
 [`Names give power, Magic to control. But what is broken, by naming it?`, `Silence`],
-[`Passed from father to son, And shared between brothers. Its importance is unquestioned, Though it is used more by others.`, `Name`],
-[`Today he is there to trip you up, And he will torture you tomorrow. Yet he is also there to ease the pain, When you are lost in grief and sorrow.`, `Alcohol`],
+[`Passed from father to son, And shared between brothers. Its importance is unquestioned, Though it is used more by others. What is it?`, `Name`],
+[`Today he is there to trip you up, And he will torture you tomorrow. Yet he is also there to ease the pain, When you are lost in grief and sorrow. What is he?`, `Alcohol`],
 [`In the form of fork or sheet, I hit the ground. And if you wait a heartbeat, You can hear my roaring sound.`, `Lightning`],
-[`I have no tears but I perspire, I stretch but cannot respire, I can jump, walk, run and dance, Though I have no mind. I'll take a stance. What am I?`, `A leg`],
+[`I have no tears but I perspire, I stretch but cannot respire, I can jump, walk, run and dance, Though I have no mind. I'll take a stance. What am I?`, `Leg`],
+// TODO: review below:
 [`The beast of the plains, it goes through the ground, constantly on the search for its next meal. While it hates the taste of dwarves and elves, it loves the taste of halfling.`, `Bulette`],
 [`This thing can stay completely hidden in even the broadest of daylight. In halls and rooms that monster waits to ambush its next victim. Watch out from below, because it is the floor that this thing waits.`, `Rug of smothering`],
 [`In the world below, almost everything below has a heart as dark as their surroundings. This thing is the one exception, giving a light glow in the world of the Underdark.`, `Flumph`],
@@ -296,7 +315,7 @@ const riddleEncounters = [
 [`When one does not know what it is, then it is something. When one knows what it is, then it is nothing.`, `A riddle`],
 [`It is the beginning of eternity, the end of time and space, the beginning of the end and the end of every space. What is it?`, `The letter E`],
 [`What tastes better than it smells?`, `A tongue`],
-].map(([riddle, answer]) => new RiddleEncounter(riddle, answer));
+].map(([riddle, answer]) => new RiddleEncounter(riddle as string, answer));
 
 export const encounters = [
   ...riddleEncounters,

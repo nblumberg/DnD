@@ -16,20 +16,41 @@ interface EncountersSocketMessage extends ServerToBrowserSocketMessage {
 const encounters: Encounter[] = [];
 let currentEncounter: Encounter | undefined;
 
-registerWebSocketHandler('encounters', (message) => {
-  const { encounters: newEncounters } = message as EncountersSocketMessage;
-  encounters.length = 0;
-  newEncounters.forEach(params => encounters.push(new Encounter(params)));
+// registerWebSocketHandler('encounters', (message) => {
+//   const { encounters: newEncounters } = message as EncountersSocketMessage;
+//   encounters.length = 0;
+//   newEncounters.forEach(params => encounters.push(new Encounter(params)));
+//   currentEncounter = getEncounter(addStatePropertyListener('encounter', (encounterIdAndName: string) => {
+//     currentEncounter = getEncounter(encounterIdAndName);
+//     showEncounter(currentEncounter);
+//   }));
+//   if (currentEncounter) {
+//     showEncounter(currentEncounter);
+//   }
+// });
+
+async function updateEncounters(path: string) {
+  const qualifiedPath = `${path}/encounters.js`;
+  const { encounters: newEncounters } = await import(qualifiedPath);
+  encounters.push(...newEncounters);
+  console.log(`Initialized ${encounters.length} encounters`);
   currentEncounter = getEncounter(addStatePropertyListener('encounter', (encounterIdAndName: string) => {
     currentEncounter = getEncounter(encounterIdAndName);
-    showEncounter(currentEncounter);
+    if (currentEncounter) {
+      showEncounter(currentEncounter);
+    }
   }));
   if (currentEncounter) {
     showEncounter(currentEncounter);
   }
-});
+}
+updateEncounters(addStatePropertyListener('path', updateEncounters));
 
-function getEncounter(idAndName: string): Encounter {
+
+function getEncounter(idAndName: string): Encounter | undefined {
+  if (!idAndName) {
+    return;
+  }
   const id = `${parseInt(idAndName, 10)}`;
   const encounter = encounters.find(encounter => encounter.id === id);
   if (!encounter) {
