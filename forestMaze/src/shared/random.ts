@@ -1,8 +1,8 @@
 import { addStatePropertyListener } from './state.js';
 
-function setRandomSeed(seed: string) {
+export function setRandomSeed(seed: string) {
   if (seed) {
-    if (require) {
+    if (typeof process !== 'undefined') {
       const seedrandom = require('seedrandom');
       seedrandom(seed, { global: true });
     } else {
