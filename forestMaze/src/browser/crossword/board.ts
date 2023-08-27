@@ -1,6 +1,6 @@
 import { randomFrom } from '../../shared/random.js';
 import { clearCrossWordDisplay, createCell, createRow, numberClues } from './dom.js';
-import { ACROSS, DOWN, Position, WordObj, addPotentialCrosses, findCrosses, prepareBoard } from './words.js';
+import { ACROSS, DOWN, Position, WordObj, addPotentialCrosses, findCrosses, getWords } from './words.js';
 
 export interface ActiveWord extends WordObj, Position {
   num: number;
@@ -42,7 +42,7 @@ export function initializeBoard(): void {
 }
 
 export function populateBoard() {
-  const wordBank = prepareBoard();
+  const wordBank = getWords();
   initializeBoard();
 
   let isOk = true;

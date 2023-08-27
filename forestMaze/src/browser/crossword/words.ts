@@ -50,7 +50,7 @@ export function addWord(word: string, clue: string): void {
   wordsAndClues.set(word, clue);
 }
 
-export function prepareBoard() {
+export function getWords() {
   const wordBank = Array.from(wordsAndClues.entries()).map(([word, clue]) => new WordObj(word, clue));
   console.log(wordBank.map(x => `${x.word}: ${x.clue}`).join(', '));
 
