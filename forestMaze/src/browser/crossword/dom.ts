@@ -1,5 +1,60 @@
 import { addWord, clearWords } from './words.js';
 
+interface ButtonEventListener {
+  (event: MouseEvent): void;
+}
+
+function createButton(label: string, parent: HTMLElement, clickHandler: ButtonEventListener): void {
+  const button = document.createElement('button');
+  button.classList.add('btn');
+  button.innerText = label;
+  parent.appendChild(button);
+  button.addEventListener('click', clickHandler, false);
+}
+
+export function addButtons(createCrossWord: ButtonEventListener, unnumberClues: ButtonEventListener, playCrossWord: ButtonEventListener): void {
+  const crossword = document.getElementById('crossword');
+  if (!crossword) {
+    throw new Error(`Can't find #crossword`);
+  }
+  crossword.addEventListener('focus', () => false);
+
+  const buttonBar = document.getElementById('buttons');
+  if (!buttonBar) {
+    throw new Error(`Can't find #buttons`);
+  }
+
+  createButton('Create', buttonBar, createCrossWord);
+  createButton('Add more', buttonBar, unnumberClues);
+  createButton('Play', buttonBar, playCrossWord);
+}
+
+function getWordInput(event: Event): HTMLInputElement | undefined {
+  const element = event.target as HTMLElement;
+  if (element.classList.contains('word')) {
+    return element as HTMLInputElement;
+  }
+}
+
+function forceUpperCaseWords(event: KeyboardEvent): void {
+  const input = getWordInput(event);
+  if (input) {
+    input.value = input.value.toUpperCase();
+  }
+}
+document.addEventListener('keyup', forceUpperCaseWords, false);
+
+function addNewWordInputWhenAllAreFull(event: Event): void {
+  const input = getWordInput(event);
+  if (!input) {
+    return;
+  }
+  if ((Array.from(document.querySelectorAll('word')) as HTMLInputElement[]).every(input => !!input.value.trim())) {
+    createWordInput();
+  }
+}
+document.addEventListener('change', addNewWordInputWhenAllAreFull, false);
+
 export function createWordInput(word = '', clue = ''): void {
   const parentElement = document.getElementById('words') as HTMLDivElement;
   if (!parentElement) {
@@ -26,13 +81,6 @@ export function createWordInput(word = '', clue = ''): void {
   clueInput.classList.add('clue');
   clueInput.value = clue;
   wordAndClue.appendChild(clueInput);
-
-  wordInput.addEventListener('keyUp', () => {
-    wordInput.value = wordInput.value.toUpperCase();
-  });
-  if (!(word && clue)) {
-    wordInput.addEventListener('change', addNewWord);
-  }
 }
 
 export function getWordsFromInputs() {
@@ -46,47 +94,6 @@ export function getWordsFromInputs() {
       console.log(word, clue);
     }
   });
-}
-
-export function toggleWordInputs(editing: boolean) {
-  const wordInputs = document.getElementsByClassName('word');
-  const clueInputs = document.getElementsByClassName('clue');
-
-  for (let i = 0; i < wordInputs.length; i++) {
-    if (editing) {
-      wordInputs[i].classList.remove('hide');
-      clueInputs[i].classList.remove('clueReadOnly');
-      clueInputs[i].removeAttribute('disabled');
-    } else {
-      wordInputs[i].classList.add('hide');
-      clueInputs[i].classList.add('clueReadOnly');
-      clueInputs[i].setAttribute('disabled', 'readonly');
-    }
-  }
-}
-
-interface ButtonEventListener {
-  (event: MouseEvent): void;
-}
-
-export function addButtonListeners(createCrossWord: ButtonEventListener, playCrossWord: ButtonEventListener): void {
-  const crossword = document.getElementById('crossword');
-  if (!crossword) {
-    throw new Error(`Can't find #crossword`);
-  }
-  crossword.addEventListener('focus', () => false);
-
-  const create = document.getElementById('create');
-  if (!create) {
-    throw new Error(`Can't find #create`);
-  }
-  create.addEventListener('click', createCrossWord, false);
-
-  const play = document.getElementById('play');
-  if (!play) {
-    throw new Error(`Can't find #play`);
-  }
-  play.addEventListener('click', playCrossWord, false);
 }
 
 export function createLetterInputs(): void {
@@ -123,6 +130,14 @@ function getCrossword(): HTMLDivElement {
     throw new Error(`Can't find #${id}`);
   }
   return crossword;
+}
+
+function getWordsParent(): HTMLDivElement {
+  const wordsParentElement = document.getElementById('words') as HTMLDivElement;
+  if (!wordsParentElement) {
+    throw new Error(`Could not find #words element`);
+  }
+  return wordsParentElement;
 }
 
 export function render(html: string): void {
@@ -166,7 +181,7 @@ export function numberClues(acrossWords: string[], downWords: string[]): void {
   const wordInputs = Array.from(document.querySelectorAll('.word')) as HTMLInputElement[];
   const acrossElements = acrossWords.map(word => wordInputs.find(input => input.value === word)).filter(input => !!input).map(input => input!.parentElement!);
   const downElements = downWords.map(word => wordInputs.find(input => input.value === word)).filter(input => !!input).map(input => input!.parentElement!);
-  const wordsParentElement = document.getElementById('words')!;
+  const wordsParentElement = getWordsParent();
   wordsParentElement.innerHTML = '';
   const acrossParentElement = document.createElement('div');
   wordsParentElement.appendChild(acrossParentElement);
@@ -192,11 +207,18 @@ export function numberClues(acrossWords: string[], downWords: string[]): void {
   });
 }
 
+export function unnumberClues(): void {
+  const wordInputs = Array.from(document.querySelectorAll('.line')) as HTMLLIElement[];
+  const wordsParentElement = getWordsParent();
+  wordsParentElement.innerHTML = '';
+  wordInputs.forEach(element => {
+    wordsParentElement.appendChild(element);
+  });
+  createWordInput();
+}
+
 export function createClues({ across, down }: { across: string[], down: string[] }): void {
-  const wordsParentElement = document.getElementById('words')!;
-  if (!wordsParentElement) {
-    throw new Error(`Could not find #words element`);
-  }
+  const wordsParentElement = getWordsParent();
   wordsParentElement.innerHTML = '';
   const acrossParentElement = document.createElement('div');
   wordsParentElement.appendChild(acrossParentElement);

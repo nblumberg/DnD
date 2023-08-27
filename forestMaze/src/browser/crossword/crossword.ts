@@ -1,6 +1,6 @@
 import { setRandomSeed } from '../../shared/random.js';
 import { Cell, boardToHtml, populateBoard } from './board.js';
-import { addButtonListeners, createClues, createLetterInputs, createWordInput, getWordsFromInputs, render } from './dom.js';
+import { addButtons, createClues, createLetterInputs, createWordInput, getWordsFromInputs, render, unnumberClues } from './dom.js';
 import { startPlaying } from './mode.js';
 import { boardToQueryString, isPlaying, queryStringToBoard, queryStringToClues } from './queryStringUtils.js';
 
@@ -44,6 +44,6 @@ if (isPlaying()) {
   defaultWords.forEach(([word, clue]) => createWordInput(word, clue));
   createWordInput();
   setRandomSeed('something');
-  addButtonListeners(createCrossWord, playCrossWord);
+  addButtons(createCrossWord, unnumberClues, playCrossWord);
 }
 
