@@ -15,6 +15,10 @@ body {
   user-select: none;
 }
 
+body.play .btn {
+  display: none;
+}
+
 .container {
   position: absolute;
   bottom: 0; top: 0; left: 0; right: 0;
@@ -43,6 +47,10 @@ body {
 
 #words .direction, #words ol {
   margin: 0 auto;
+}
+
+#words ol {
+  text-align: left;
 }
 
 .word, .clue {

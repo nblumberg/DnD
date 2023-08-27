@@ -1,49 +1,26 @@
 import { setRandomSeed } from '../../shared/random.js';
-import { ActiveWord, Cell, boardToHtml, populateBoard } from './board.js';
-import { addButtonListeners, clearCrossWordDisplay, createLetterInputs, createWordInput, getWordsFromInputs, render, toggleWordInputs } from './dom.js';
-import { isPlaying, startPlaying, stopPlaying } from './mode.js';
-import { ACROSS, DOWN } from './words.js';
+import { Cell, boardToHtml, populateBoard } from './board.js';
+import { addButtonListeners, createClues, createLetterInputs, createWordInput, getWordsFromInputs, render } from './dom.js';
+import { startPlaying } from './mode.js';
+import { boardToQueryString, isPlaying, queryStringToBoard, queryStringToClues } from './queryStringUtils.js';
 
 let board: Cell[][];
-let words: ActiveWord[];
 
 export function playCrossWord() {
   const url = new URL(window.location.href);
-  const data = {
-    board: board.filter(row => !row.every(({ value }) => !value)).map(row => row.map(cell => {
-      const value = cell.value ?? 0;
-      if (cell.word && cell.wordIndex === 0) {
-        return [value, cell.word.dir, cell.word.num];
-      }
-      return [value];
-    })),
-    clues: {
-      across: words.filter(({ dir }) => dir === ACROSS).map(({ clue }) => clue),
-      down: words.filter(({ dir }) => dir === DOWN).map(({ clue }) => clue),
-    }
-  };
-  url.search = `data=${JSON.stringify(data)}`;
+  url.search = boardToQueryString(board);
   window.open(url.toString(), 'playableCrossword');
-  createLetterInputs();
-  startPlaying();
-  toggleWordInputs(false);
 }
 
 export function createCrossWord() {
-  if (isPlaying()) {
-    toggleWordInputs(true);
-    clearCrossWordDisplay();
-    stopPlaying();
-  } else {
     getWordsFromInputs();
 
     let isSuccess = false;
     for (let i = 0; i < 10 && !isSuccess; i++) {
-      ({ isOk: isSuccess, board, words } = populateBoard());
+      ({ isOk: isSuccess, board } = populateBoard());
     }
 
-    isSuccess ? boardToHtml() : render('Could not cross all the words.');
-  }
+    isSuccess ? boardToHtml(board) : render('Could not cross all the words.');
 }
 
 const defaultWords = [
@@ -57,8 +34,16 @@ const defaultWords = [
   ['Longscarf', "The Brigand Prince's accoutrement"],
 ];
 
-defaultWords.forEach(([word, clue]) => createWordInput(word, clue));
-createWordInput();
-setRandomSeed('something');
-addButtonListeners(createCrossWord, playCrossWord);
+if (isPlaying()) {
+  board = queryStringToBoard();
+  boardToHtml(board);
+  createLetterInputs();
+  createClues(queryStringToClues());
+  startPlaying();
+} else {
+  defaultWords.forEach(([word, clue]) => createWordInput(word, clue));
+  createWordInput();
+  setRandomSeed('something');
+  addButtonListeners(createCrossWord, playCrossWord);
+}
 

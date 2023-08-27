@@ -8,8 +8,9 @@ export interface ActiveWord extends WordObj, Position {
 
 export interface Cell {
   value: null | string;
-  word?: ActiveWord;
-  wordIndex?: number;
+  words?: ActiveWord[];
+  wordIndices?: number[];
+  cellNumbers?: { ACROSS?: number; DOWN?: number; }
 };
 
 const board: Cell[][] = [];
@@ -79,16 +80,28 @@ function addWordToBoard(wordBank: WordObj[]) {
   word.dir = matchData.dir;
   word.num = 0;
 
-  word.characters.forEach((character, i) => {
+  word.characters.forEach((value, i) => {
     let { x: xIndex, y: yIndex } = matchData;
     if (matchData.dir === ACROSS) {
       xIndex += i;
-      board[xIndex][yIndex] = { value: character, word, wordIndex: i };
     } else {
       yIndex += i;
-      board[xIndex][yIndex] = { value: character, word, wordIndex: i };
     }
-  });
+    let cell = board[xIndex][yIndex];
+    if (!cell) {
+      board[xIndex][yIndex] = { value, words: [word], wordIndices: [i] };
+    } else {
+      cell.value = value;
+      if (!cell.words) {
+        cell.words = [];
+      }
+      cell.words.push(word);
+      if (!cell.wordIndices) {
+        cell.wordIndices = [];
+      }
+      cell.wordIndices.push(i);
+    }
+});
 
   return true;
 }
@@ -277,10 +290,10 @@ function notAnEmptyCell(cell: Cell): boolean {
 }
 
 function notAnEmptyRow(row: Cell[]): boolean {
-  return row.some(notAnEmptyCell);
+  return !!row?.some(notAnEmptyCell);
 }
 
-export function boardToHtml(): void {
+export function boardToHtml(board: Cell[][]): void {
   const left = board.findIndex(notAnEmptyRow);
   const right = (board as unknown as { findLastIndex: typeof findLastIndex }).findLastIndex(notAnEmptyRow);
   let top = Infinity;
@@ -301,17 +314,20 @@ export function boardToHtml(): void {
     const rowId = `${y}`;
     createRow(rowId);
     for (let x = left - 1; x < right + 2; x++) {
-      const words = activeWords.filter(activeWord => activeWord.x === x && activeWord.y === y);
-      const cellNumbers: { ACROSS?: number; DOWN?: number; } = {};
-      const acrossWord = words.find(({ dir }) => dir === ACROSS);
-      if (acrossWord) {
-        cellNumbers.ACROSS = acrossWord.num = numberCounts.ACROSS++;
+      const cell = board[x]?.[y];
+      const cellNumbers = cell?.cellNumbers ?? {};
+      if (!cell?.cellNumbers) {
+        const words = activeWords.filter(activeWord => activeWord.x === x && activeWord.y === y);
+        const acrossWord = words.find(({ dir }) => dir === ACROSS);
+        if (acrossWord) {
+          cellNumbers.ACROSS = acrossWord.num = numberCounts.ACROSS++;
+        }
+        const downWord = words.find(({ dir }) => dir === DOWN);
+        if (downWord) {
+          cellNumbers.DOWN = downWord.num = numberCounts.DOWN++;
+        }
       }
-      const downWord = words.find(({ dir }) => dir === DOWN);
-      if (downWord) {
-        cellNumbers.DOWN = downWord.num = numberCounts.DOWN++;
-      }
-      createCell(rowId, board[x][y]?.value ?? '', cellNumbers);
+      createCell(rowId, cell?.value ?? '', cellNumbers);
     }
   }
   numberClues(

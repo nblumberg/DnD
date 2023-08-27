@@ -191,3 +191,41 @@ export function numberClues(acrossWords: string[], downWords: string[]): void {
     downList.appendChild(element);
   });
 }
+
+export function createClues({ across, down }: { across: string[], down: string[] }): void {
+  const wordsParentElement = document.getElementById('words')!;
+  if (!wordsParentElement) {
+    throw new Error(`Could not find #words element`);
+  }
+  wordsParentElement.innerHTML = '';
+  const acrossParentElement = document.createElement('div');
+  wordsParentElement.appendChild(acrossParentElement);
+  acrossParentElement.classList.add('direction');
+  const acrossTitle = document.createElement('h1');
+  acrossTitle.innerText = 'Across';
+  acrossParentElement.appendChild(acrossTitle);
+  const acrossList = document.createElement('ol');
+  acrossParentElement.appendChild(acrossList);
+  across.forEach(clue => {
+    const li = document.createElement('li');
+    li.innerText = clue;
+    acrossList.appendChild(li);
+  });
+  const downParentElement = document.createElement('div');
+  wordsParentElement.appendChild(downParentElement);
+  downParentElement.classList.add('direction');
+  const downTitle = document.createElement('h1');
+  downTitle.innerText = 'Down';
+  downParentElement.appendChild(downTitle);
+  const downList = document.createElement('ol');
+  downParentElement.appendChild(downList);
+  down.forEach(clue => {
+    const li = document.createElement('li');
+    li.innerText = clue;
+    downList.appendChild(li);
+  });
+}
+
+export function markPlaying(playing = true): void {
+  document.body.classList[playing ? 'add' : 'remove']('play');
+}
