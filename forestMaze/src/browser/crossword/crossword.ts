@@ -1,26 +1,28 @@
 import { setRandomSeed } from '../../shared/random.js';
 import { Cell, boardToHtml, populateBoard } from './board.js';
-import { addButtons, createClues, createLetterInputs, createWordInput, getWordsFromInputs, render, unnumberClues } from './dom.js';
+import { addButtons, createClues, createLetterInputs, createWordInput, getPlayableLink, getWordsFromInputs, render, unnumberClues, updatePlayableLink } from './dom.js';
 import { startPlaying } from './mode.js';
-import { boardToQueryString, isPlaying, queryStringToBoard, queryStringToClues } from './queryStringUtils.js';
-
-let board: Cell[][];
+import { isPlaying, queryStringToBoard, queryStringToClues } from './queryStringUtils.js';
 
 export function playCrossWord() {
-  const url = new URL(window.location.href);
-  url.search = boardToQueryString(board);
-  window.open(url.toString(), 'playableCrossword');
+  window.open(getPlayableLink(), 'playableCrossword');
 }
 
 export function createCrossWord() {
     getWordsFromInputs();
 
     let isSuccess = false;
+    let board: Cell[][] | undefined;
     for (let i = 0; i < 10 && !isSuccess; i++) {
       ({ isOk: isSuccess, board } = populateBoard());
     }
 
-    isSuccess ? boardToHtml(board) : render('Could not cross all the words.');
+    if (isSuccess && board) {
+      boardToHtml(board);
+      updatePlayableLink(board);
+    } else {
+      render('Could not cross all the words.');
+    }
 }
 
 const defaultWords = [
@@ -35,8 +37,7 @@ const defaultWords = [
 ];
 
 if (isPlaying()) {
-  board = queryStringToBoard();
-  boardToHtml(board);
+  boardToHtml(queryStringToBoard());
   createLetterInputs();
   createClues(queryStringToClues());
   startPlaying();
