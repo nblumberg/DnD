@@ -1,8 +1,8 @@
-import { ACROSS, DOWN } from './words.js';
-import { populateBoard, boardToHtml, Cell, ActiveWord } from './board.js';
-import { addButtonListeners, getWordsFromInputs, toggleWordInputs, createLetterInputs, render, createWordInput, clearBoard } from './dom.js';
-import { isPlaying, startPlaying, stopPlaying } from './mode.js';
 import { setRandomSeed } from '../../shared/random.js';
+import { ActiveWord, Cell, boardToHtml, populateBoard } from './board.js';
+import { addButtonListeners, clearCrossWordDisplay, createLetterInputs, createWordInput, getWordsFromInputs, render, toggleWordInputs } from './dom.js';
+import { isPlaying, startPlaying, stopPlaying } from './mode.js';
+import { ACROSS, DOWN } from './words.js';
 
 let board: Cell[][];
 let words: ActiveWord[];
@@ -32,7 +32,7 @@ export function playCrossWord() {
 export function createCrossWord() {
   if (isPlaying()) {
     toggleWordInputs(true);
-    clearBoard();
+    clearCrossWordDisplay();
     stopPlaying();
   } else {
     getWordsFromInputs();

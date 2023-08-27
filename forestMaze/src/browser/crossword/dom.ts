@@ -129,7 +129,7 @@ export function render(html: string): void {
   getCrossword().innerHTML = html;
 }
 
-export function clearBoard(): void {
+export function clearCrossWordDisplay(): void {
   render('');
 }
 

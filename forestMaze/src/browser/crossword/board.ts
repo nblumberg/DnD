@@ -1,6 +1,6 @@
 import { randomFrom } from '../../shared/random.js';
-import { createCell, createRow, numberClues } from './dom.js';
-import { ACROSS, addPotentialCrosses, DOWN, findCrosses, Position, prepareBoard, WordObj } from './words.js';
+import { clearCrossWordDisplay, createCell, createRow, numberClues } from './dom.js';
+import { ACROSS, DOWN, Position, WordObj, addPotentialCrosses, findCrosses, prepareBoard } from './words.js';
 
 export interface ActiveWord extends WordObj, Position {
   num: number;
@@ -10,27 +10,6 @@ export interface Cell {
   value: null | string;
   word?: ActiveWord;
   wordIndex?: number;
-};
-
-const Bounds = {
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-
-  update(x: number, y: number): void {
-    this.top = Math.min(y, this.top);
-    this.right = Math.max(x, this.right);
-    this.bottom = Math.max(y, this.bottom);
-    this.left = Math.min(x, this.left);
-  },
-
-  clean(): void {
-    this.top = 999;
-    this.right = 0;
-    this.bottom = 0;
-    this.left = 999;
-  }
 };
 
 const board: Cell[][] = [];
@@ -49,8 +28,6 @@ const SIZE = 32;
 };
 
 export function initializeBoard(): void {
-  Bounds.clean();
-
   activeWords.length = 0;
 
   // Create a SIZExSIZE 2D Array filled with null
@@ -107,13 +84,10 @@ function addWordToBoard(wordBank: WordObj[]) {
     if (matchData.dir === ACROSS) {
       xIndex += i;
       board[xIndex][yIndex] = { value: character, word, wordIndex: i };
-    }
-    else{
+    } else {
       yIndex += i;
       board[xIndex][yIndex] = { value: character, word, wordIndex: i };
     }
-
-    Bounds.update(xIndex, yIndex);
   });
 
   return true;
@@ -283,15 +257,50 @@ function willFit(wordToAdd: WordObj, position: Position, wordToAddOriginalCrossL
   return true;
 }
 
+function findLastIndex<T extends any>(this: any, fromIndex: (element: T, index: number, array: T[]) => boolean, thisArg?: any): number {
+  for (let i = this.length; i >= 0; i--) {
+    if (fromIndex.call(thisArg ?? null, this[i], i, this)) {
+      return i;
+    }
+  }
+  return -1;
+}
+if (!(Array.prototype as any).findLastIndex) {
+  /**
+   * Polyfill for https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findLastIndex
+   */
+  (Array.prototype as any).findLastIndex = findLastIndex;
+}
+
+function notAnEmptyCell(cell: Cell): boolean {
+  return !!cell?.value;
+}
+
+function notAnEmptyRow(row: Cell[]): boolean {
+  return row.some(notAnEmptyCell);
+}
+
 export function boardToHtml(): void {
+  const left = board.findIndex(notAnEmptyRow);
+  const right = (board as unknown as { findLastIndex: typeof findLastIndex }).findLastIndex(notAnEmptyRow);
+  let top = Infinity;
+  let bottom = Number.NEGATIVE_INFINITY;
+  for (let column = left; column <= right; column++) {
+    const firstCharInColumn = board[column].findIndex(notAnEmptyCell);
+    const lastCharInColumn = (board[column] as unknown as { findLastIndex: typeof findLastIndex }).findLastIndex(notAnEmptyCell);
+    top = Math.min(top, firstCharInColumn);
+    bottom = Math.max(bottom, lastCharInColumn);
+  }
+
+  clearCrossWordDisplay();
   const numberCounts = {
     ACROSS: 1,
     DOWN: 1,
   };
-  for (let y = Bounds.top - 1; y < Bounds.bottom + 2; y++) {
+  for (let y = top - 1; y < bottom + 2; y++) {
     const rowId = `${y}`;
     createRow(rowId);
-    for (let x = Bounds.left - 1; x < Bounds.right + 2; x++) {
+    for (let x = left - 1; x < right + 2; x++) {
       const words = activeWords.filter(activeWord => activeWord.x === x && activeWord.y === y);
       const cellNumbers: { ACROSS?: number; DOWN?: number; } = {};
       const acrossWord = words.find(({ dir }) => dir === ACROSS);
