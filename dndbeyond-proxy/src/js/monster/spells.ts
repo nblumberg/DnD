@@ -6,12 +6,12 @@ interface PreparedSpellsByLevel {
   slots: number | "∞";
   spells: string[];
 }
-type InnateSpells = Record<string, number>;
+type InnateSpells = Record<string, number | "∞">;
 export type Spells = Record<SpellLevel, PreparedSpellsByLevel> & {
   innate: InnateSpells;
 };
 
-const castPerDayRegExp = /(?<perDay>\d+)\/day/;
+const castPerDayRegExp = /^(?<perDay>\d+|At will)(\/day)?/;
 const spellLevelRegExp =
   /(?<level>\d|C)(st level|nd level|rd level|th level|antrips)\s+\((?<slots>\d+\s+slots?|at will)\):/;
 
@@ -44,7 +44,11 @@ export function getSpells(parentElement: HTMLElement): Spells | undefined {
       true
     );
     if (perDay) {
-      innate[spellName] = parseInt(perDay, 10);
+      if (perDay === "At will") {
+        innate[spellName] = "∞";
+      } else {
+        innate[spellName] = parseInt(perDay, 10);
+      }
     } else {
       const { level: levelText, slots: slotsText } = parseRegExpGroups(
         "spellLevelRegExp",

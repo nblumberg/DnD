@@ -45,5 +45,19 @@ export function getAttributes(parentElement: HTMLElement): {
         break;
     }
   }
+
+  if (!ac) {
+    throw new Error("Failed to parse Armor Class");
+  }
+  if (!hp) {
+    throw new Error("Failed to parse Hit Points");
+  }
+  if (!hd) {
+    throw new Error("Failed to parse Hit Dice");
+  }
+  if (!speeds) {
+    throw new Error("Failed to parse speeds");
+  }
+
   return { ac, hp, hd, speeds };
 }

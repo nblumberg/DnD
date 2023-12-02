@@ -1,26 +1,18 @@
 import { JSDOM } from "jsdom";
 
-import { addAuthHeader } from "./auth";
+import { ajax } from "./ajax";
 import { getElementText } from "./dom";
 import { findEntries as findMonsters } from "./monsters";
 
 type PathParam = "items" | "monsters" | "magic-items" | "spells";
 
 async function getPage(pathParam: PathParam, page: number): Promise<JSDOM> {
-  const response = await fetch(
+  const rawHtml = await ajax(
     `https://www.dndbeyond.com/${pathParam}${page > 1 ? `?page=${page}` : ""}`,
-    addAuthHeader()
+    undefined,
+    `Page ${page}`
   );
-  if (response.status !== 200) {
-    console.error(
-      `Page ${page} request received a ${response.status} ${response.statusText} response`
-    );
-    throw new Error(`Failed to get page ${page}`);
-  } else {
-    console.log(`${pathParam} page 1`);
-  }
-  const rawHtml = await response.text();
-  // console.log("Doc", rawHtml);
+  console.log(`${pathParam} page ${page}`);
   const dom = new JSDOM(rawHtml);
   return dom;
 }
@@ -59,6 +51,7 @@ async function findEntries(
   pathParam: PathParam,
   dom: JSDOM
 ): Promise<string[]> {
+  // console.log("findEntries");
   if (pathParam === "monsters") {
     const names = await findMonsters(dom);
     return names;
@@ -66,23 +59,26 @@ async function findEntries(
   return [];
 }
 
-export async function listEntries(pathParam: PathParam) {
+export async function listEntries(pathParam: PathParam, startingPage = 1) {
   const entries: string[] = [];
-  let page = 1;
+  let page = startingPage;
 
   let dom = await getPage(pathParam, page);
+  if (!dom) {
+    console.error("Missing DOM");
+    return;
+  }
   const totalPages = findTotalPages(dom);
 
   try {
     const names = await findEntries(pathParam, dom);
-    console.log(page, names);
     entries.push(...names);
   } catch (e) {
     console.error(`Error parsing entries on page ${page}`, e);
     throw e;
   }
 
-  for (let page = 2; page <= totalPages; page++) {
+  for (++page; page <= totalPages; page++) {
     dom = await getPage(pathParam, page);
 
     try {

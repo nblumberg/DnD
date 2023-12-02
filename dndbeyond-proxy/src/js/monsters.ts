@@ -1,4 +1,4 @@
-import { writeFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 
 import axios from "axios";
@@ -9,9 +9,11 @@ import { getElementText } from "./dom";
 import { getAbility } from "./monster/abilities";
 import { getActions } from "./monster/actions";
 import { getAttributes } from "./monster/attributes";
+import { getImage } from "./monster/image";
 import { getMeta } from "./monster/meta";
-import { Spells, getSpells } from "./monster/spells";
+import { getSpells, Spells } from "./monster/spells";
 import { getTidbits } from "./monster/tidbits";
+import { parseRegExpGroups } from "./utils";
 
 const baseUrl = "https://www.dndbeyond.com";
 
@@ -31,27 +33,79 @@ const monsterHeaders = {
   "User-Agent": `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36`,
 };
 
-function handleError(error: string): void {
-  console.error(`\t${error}`);
-  throw new Error(error);
+const baseFilePath = join(__dirname, "..", "..", "data", "monsters");
+
+class MonsterError extends Error {
+  constructor(message: string, props?: Record<string, any>) {
+    super(message);
+    console.error(`\t${message}`);
+    if (props) {
+      Object.assign(this, props);
+    }
+  }
 }
 
+class FatalMonsterError extends MonsterError {
+  constructor(message: string, props: Record<string, any> = {}) {
+    super(message, { ...props, fatal: true });
+  }
+}
+
+class NotPurchasedError extends MonsterError {
+  constructor(name: string) {
+    super(`${name} has not been purchased`, { purchased: false });
+  }
+}
+
+function handleError(error: string): void {
+  console.error(`\t${error}`);
+  throw new MonsterError(error);
+}
+
+const cacheResponse = true;
+
 export async function readMonster(name: string, href: string): Promise<void> {
+  // console.log(`readMonster(${name}, ${href})`);
   const url = href.startsWith(baseUrl) ? href : `${baseUrl}${href}`;
-  const response = await axios.get(url, {
-    headers: addAuthHeader(monsterHeaders),
-  });
+  let response: axios.AxiosResponse;
+  try {
+    response = await axios.get(url, {
+      headers: addAuthHeader(monsterHeaders),
+    });
+  } catch (e) {
+    console.error(`Monster ${name} request failed: ${e}`);
+    throw e;
+  }
   // const response = await fetch(url, addAuthHeader(monsterHeaders));
   if (response.status !== 200) {
-    handleError(
+    throw new FatalMonsterError(
       `Monster ${name} request received a ${response.status} ${response.statusText} response`
     );
-    throw new Error(`Failed to get monster ${name}`);
   } else {
     console.log(`Monster ${name}`);
   }
   const rawHTML = response.data as string;
   // const rawHTML = await response.text();
+
+  if (cacheResponse) {
+    const filePath = join(baseFilePath, "html", `${name}.html`);
+    const data = { name, url };
+    writeFileSync(
+      filePath,
+      `${rawHTML}\n<!-- ORIGINAL_REQUEST_DATA: ${JSON.stringify(
+        data,
+        null,
+        2
+      )} -->`,
+      "utf8"
+    );
+    console.log(`\tWrote ${filePath}`);
+  } else {
+    parseMonsterHTML(rawHTML, name, url);
+  }
+}
+
+function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
   const {
     window: { document },
   } = new JSDOM(rawHTML);
@@ -60,22 +114,18 @@ export async function readMonster(name: string, href: string): Promise<void> {
   );
   if (!monsterDetails) {
     if (document.querySelector(".marketplace-button--add-to-cart")) {
-      handleError(`${name} has not been purchased`);
+      throw new NotPurchasedError(name);
     }
-    handleError(`Could not find ${name} monster details`);
+    throw new MonsterError(`Could not find ${name} monster details`);
   }
 
-  const image = (
-    monsterDetails.querySelector(
-      ".details-aside .image img.monster-image"
-    ) as HTMLImageElement
-  )?.src;
+  const image = getImage(monsterDetails);
 
   const statBlock: HTMLElement = monsterDetails.querySelector(
     ".detail-content .mon-stat-block"
   );
   if (!statBlock) {
-    handleError(`Could not find ${name} monster stat block`);
+    throw new MonsterError(`Could not find ${name} monster stat block`);
   }
 
   try {
@@ -86,7 +136,7 @@ export async function readMonster(name: string, href: string): Promise<void> {
     const abilitiesParent: HTMLElement =
       statBlock.querySelector(".ability-block");
     if (!abilitiesParent) {
-      handleError(`Could not find ${name} abilities`);
+      throw new MonsterError(`Could not find ${name} abilities`);
     }
     const str = getAbility(abilitiesParent, "str");
     const dex = getAbility(abilitiesParent, "dex");
@@ -97,7 +147,8 @@ export async function readMonster(name: string, href: string): Promise<void> {
 
     const { saves, skills, senses, languages, cr, proficiency } = getTidbits(
       name,
-      statBlock
+      statBlock,
+      hd
     );
 
     let description: string;
@@ -131,6 +182,7 @@ export async function readMonster(name: string, href: string): Promise<void> {
 
     const creature = {
       name,
+      url,
       image,
       size,
       type,
@@ -160,18 +212,11 @@ export async function readMonster(name: string, href: string): Promise<void> {
       spells,
     };
 
-    const filePath = join(
-      __dirname,
-      "..",
-      "..",
-      "data",
-      "monsters",
-      `${name}.json`
-    );
+    const filePath = join(baseFilePath, `${name}.json`);
     writeFileSync(filePath, JSON.stringify(creature, null, 2), "utf8");
     console.log(`\tWrote ${filePath}`);
   } catch (e) {
-    handleError(e.toString());
+    throw new MonsterError(e.stack);
   }
 }
 
@@ -206,6 +251,54 @@ export async function findEntries({
     entries[name] = href;
     return readMonster(name, href);
   });
-  await Promise.allSettled(promises);
+  const outcomes = await Promise.allSettled(promises);
+  const authFailure = outcomes.find(
+    (outcome) =>
+      outcome.status === "rejected" &&
+      (outcome.reason as axios.AxiosError)?.response?.status === 403
+  );
+  if (authFailure) {
+    throw new Error("Auth failed");
+  }
   return Object.keys(entries);
+}
+
+const originalRequestRegExp =
+  /<!-- ORIGINAL_REQUEST_DATA: (?<data>[^}]+}) -->$/m;
+
+export function readMonsters(names?: string[], startAfter?: string): void {
+  const htmlPath = join(baseFilePath, "html");
+  const files = names?.map((name) => `${name}.html`) ?? readdirSync(htmlPath);
+  let skip = startAfter && !names;
+  files.forEach((filename) => {
+    if (skip) {
+      if (filename.endsWith(`${startAfter}.html`)) {
+        skip = false;
+      }
+      return;
+    }
+    if (
+      !names &&
+      existsSync(join(baseFilePath, filename.replace(".html", ".json")))
+    ) {
+      return;
+    }
+    try {
+      const rawHtml = readFileSync(join(htmlPath, filename), "utf8");
+      const { data } = parseRegExpGroups(
+        "originalRequestRegExp",
+        originalRequestRegExp,
+        rawHtml
+      );
+      const { name, url } = JSON.parse(data);
+      console.log(name);
+      parseMonsterHTML(rawHtml, name, url);
+    } catch (e) {
+      // ignore errors
+      if (e.purchased === false) {
+        return;
+      }
+      throw e;
+    }
+  });
 }

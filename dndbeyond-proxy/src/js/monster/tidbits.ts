@@ -8,7 +8,8 @@ import { getSkills } from "./skills";
 
 export function getTidbits(
   name: string,
-  parentElement: HTMLElement
+  parentElement: HTMLElement,
+  hd: string
 ): {
   saves?: Record<string, number>;
   skills?: Record<string, number>;
@@ -57,8 +58,16 @@ export function getTidbits(
       case "Proficiency Bonus":
         proficiency = getProficiencyBonus(data);
         break;
-      // TODO: Senses, Languages
     }
+  }
+
+  if (!senses) {
+    throw new Error("Failed to parse senses");
+  }
+  if (!proficiency) {
+    console.warn("Proficiency bonus missing, calculated it from Hit Dice");
+    const level = parseInt(hd, 10);
+    proficiency = Math.floor((level - 1) / 4) + 2;
   }
 
   return { saves, skills, senses, languages, cr, proficiency };

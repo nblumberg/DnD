@@ -5,15 +5,21 @@ import { Action, DamageType } from "./types";
 const attackTypeRegExp =
   /(?<attackMode>Melee or Ranged|Melee|Ranged)\s+(?<attackMethod>Weapon|Spell)?\s*Attack/;
 
+const toHitRegExp =
+  /((?<modifier>\d+)\s+to\s+hit)|(?<automaticHit>automatic\s+hit)/;
+
 // to hit, reach 5 ft., one target.
 // to hit, reach 10 ft. one target.
 // to hit, reach 5 ft. or range 30/120 ft., one target.
 // to hit, reach 5 ft. or range 20/60 ft., one target.
 // to hit, reach 5 ft. or range 120 ft., one target.
 // to hit, range 60 ft., one target.
-const reachRegExp = /reach\s+(?<reach>\d+)\s+ft/;
-const rangeRegExp = /range\s+(?<nearRange>\d+)(\s*\/\s*(?<farRange>\d+))\s+ft/;
-const targetRegExp = /,\s+(?<target>[^.]+)\.\s*$/;
+const reachRegExp = /reach\s+(?<reach>\d+)\s*f(ee)?t/;
+const rangeRegExp =
+  /ranged?\s+(?<nearRange>\d+)(\s*\/\s*(?<farRange>\d+))?\s+f(ee)?t/;
+const mistakeRangeRegExp =
+  /reach\s+(?<nearRange>\d+)(\s*\/\s*(?<farRange>\d+))?\s+f(ee)?t/;
+const targetRegExp = /,\s+(?<target>[^.]+)\.\s+/;
 const attackHitRegExp =
   /^\s*to\s+hit,\s+reach\s+(?<nearReach>\d+)\s*\/?\s*(?<farReach>\d+)?\s+ft\.,?\s+(?<target>.+).:$/;
 
@@ -48,18 +54,72 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
   if (!attackMode || !attackMethod) {
     return;
   }
-  const toHit = entry.querySelector('[data-rolltype="to hit"]');
-  const modifier = parseInt(getElementText(toHit), 10);
 
-  const toHitText = toHit.nextSibling.textContent.trim();
+  let type: Action["attack"]["type"];
+  switch (attackMode) {
+    case "Melee":
+    case "Ranged":
+    case "Melee or Ranged":
+      type = attackMode.toLowerCase() as Action["attack"]["type"];
+      break;
+    default:
+      throw new Error(`Failed to determine attack type from ${attackMode}`);
+  }
 
-  const { reach: reachText } = reachRegExp.exec(toHitText)?.groups ?? {};
-  const reach = reachText ? parseInt(reachText, 10) : undefined;
-  const { nearRange: nearRangeText, farRange: farRangeText } =
-    rangeRegExp.exec(toHitText)?.groups ?? {};
+  const toHit =
+    entry.querySelector('[data-rolltype="to hit"]') ??
+    entry.querySelector('[data-rolltype="spell"]'); // See Bavlorna Blightstraw Withering Ray attack
+
+  let modifier: number | "∞";
+  let [toHitText] = entry.textContent.split("Hit:");
+  if (toHit) {
+    modifier = parseInt(getElementText(toHit), 10);
+    // toHitText = toHit.nextSibling.textContent.trim();
+    // toHitText = getRemainingText(toHit);
+  } else {
+    // Fall back to RegExp
+    const { modifier: modifierText, automaticHit } = parseRegExpGroups(
+      "toHitRegExp",
+      toHitRegExp,
+      toHitText
+    );
+    modifier = automaticHit ? "∞" : parseInt(modifierText, 10);
+    [, toHitText] = toHitText.split(modifierText || "automatic hit");
+  }
+
+  const { reach: reachText } = parseRegExpGroups(
+    "reachRegExp",
+    reachRegExp,
+    toHitText,
+    true
+  );
+  let reach: number | "∞" = reachText ? parseInt(reachText, 10) : undefined;
+  let { nearRange: nearRangeText, farRange: farRangeText } = parseRegExpGroups(
+    "rangeRegExp",
+    rangeRegExp,
+    toHitText,
+    true
+  );
+  if (!nearRangeText && type === "ranged") {
+    const name = nameElement.textContent.trim();
+    if (name === "Drop." || name === "Dropped Rock.") {
+      // See Piercer, https://www.dndbeyond.com/monsters/17191-piercer Drop, Winged Kobold, https://www.dndbeyond.com/monsters/17210-winged-kobold, Dropped Rock
+      reach = "∞";
+    } else {
+      // See Storm Giant Skeleton, https://www.dndbeyond.com/monsters/1528984-storm-giant-skeleton, Rock
+      ({ nearRange: nearRangeText, farRange: farRangeText } = parseRegExpGroups(
+        "mistakeRangeRegExp",
+        mistakeRangeRegExp,
+        toHitText
+      ));
+    }
+  }
   const nearRange = nearRangeText ? parseInt(nearRangeText, 10) : undefined;
   const farRange = farRangeText ? parseInt(farRangeText, 10) : undefined;
-  const { target } = targetRegExp.exec(toHitText)?.groups ?? {};
+  if (!reach && !nearRange) {
+    throw new Error(`Monster attack lacks a reach or a range`);
+  }
+  const { target } = parseRegExpGroups("targetRegExp", targetRegExp, toHitText);
 
   // This is more reliable than regexp because sometimes the punctuation is off
   // const { nearReach, farReach, target } =
@@ -99,17 +159,6 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
     if (effect) {
       onHit.effect = effect;
     }
-  }
-
-  let type: Action["attack"]["type"];
-  switch (attackMode) {
-    case "Melee":
-    case "Ranged":
-    case "Melee or Ranged":
-      type = attackMode.toLowerCase() as Action["attack"]["type"];
-      break;
-    default:
-      throw new Error(`Failed to determine attack type from ${attackMode}`);
   }
 
   const attack: Action["attack"] = {

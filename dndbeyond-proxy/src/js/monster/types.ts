@@ -17,9 +17,9 @@ export interface Action {
     type: "melee" | "ranged" | "melee or ranged";
     weapon?: true;
     toHit: {
-      modifier: number;
+      modifier: number | "∞";
       target?: string;
-      reach?: number;
+      reach?: number | "∞";
       range?: number | [number, number];
     };
     onHit?: {
