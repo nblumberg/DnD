@@ -1,3 +1,4 @@
+dist/
 initiative.json
 src/main/static/*.json
 .settings/
@@ -16,3 +17,15 @@ equipmentCards/.gitBACKUP
 .vscode
 equipmentCards/*.tsv
 projector/*.json
+.idea
+.com.apple.timemachine.supported
+main.iml
+test.iml
+story.iml
+.vscode
+equipmentCards/*.tsv
+equipmentCards/.gitBACKUP
+forestMaze/dist
+state.json
+forestMaze/lib
+dndbeyond-proxy/data/

@@ -1,0 +1,532 @@
+html {
+    background-color: black;
+    color: white;
+    font-size: 18px;
+}
+img {
+    cursor: url("http://cursors1.totallyfreecursors.com/thumbnails/magnifyingglass.gif"), move;
+}
+img, .slides {
+    margin: 12px;
+    margin: 1em;
+    margin: 1rem;
+    max-width: 33%;
+}
+.slides {
+    width: 33%;
+}
+.slides img {
+    margin: 0;
+    max-width: 100%;
+    width: 100%;
+}
+.slides .hide {
+    display: none;
+}
+.toc ul {
+    list-style: none;
+}
+section, article {
+    clear: both;
+}
+article {
+    border-top: 3px solid purple;
+}
+h1, h2, h3 {
+    cursor: pointer;
+}
+h1 {
+    color: #BB2255;
+}
+h2 {
+    color: #DD5599;
+}
+h3 {
+    color: #DD7799;
+}
+h4 {
+    color: #DD789A;
+}
+h5 {
+    color: #DD88AA;
+}
+blockquote {
+    color: #DD9900;
+    font-style: italic;
+}
+dfn,
+dt {
+    color: #00CCFF;
+    display: inline;
+    font-style: inherit;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+dt:before {
+    content: "";
+    display: block;
+}
+dd {
+    display: inline;
+    font-style: italic;
+    margin: 0;
+    padding: 0;
+}
+dfn.place {
+    color: #AAFFAA;
+}
+dfn.person {
+    color: #AAAAFF;
+    cursor: pointer;
+}
+dfn.group {
+    color: #FFAAAA;
+}
+dfn a {
+    color: inherit;
+    text-decoration: none;
+}
+.future {
+    color: grey;
+    font-style: italic;
+}
+.future:before {
+    content: "[";
+}
+.future:after {
+    content: "]";
+}
+.clearfix {
+    clear:both;
+}
+.left {
+    float: left;
+    clear: left;
+}
+.right {
+    float: right;
+    clear: right;
+}
+.full {
+    margin: 0;
+    max-width: none;
+    width: 100%;
+}
+
+.legend {
+    background: black;
+    font-size: 0.75rem;
+    padding: 0 1rem 1rem 0.5rem;
+    position: fixed;
+    max-height: 10%;
+    max-width: 10%;
+    overflow-y: hidden;
+    right: 0;
+    text-align: right;
+    top: 0;
+}
+
+.bios .bio,
+.places .guide {
+	background: black;
+    border: 3px inset white;
+    display: none;
+    padding: 1rem;
+    position: absolute;
+    width: 50%;
+}
+.bios .bio:after,
+.places .guide:after {
+	border: 7px solid transparent;
+    border-top: 7px solid white;
+    top: 100%;
+    content: "";
+    left: 50%;
+    position: absolute;
+}
+.bios .bio.left:after,
+.places .guide.left:after {
+	left: 5%;
+}
+.bios .bio.right:after,
+.places .guide.right:after {
+	left: 90%;
+}
+.bios .portrait,
+.places .snapshot {
+	float: left;
+    margin-right: 1rem;
+    max-height: 300px;
+}
+.bios .description,
+.places .description {
+	text-align: left;
+}
+.world {
+    position: relative;
+}
+.popover .world {
+    float: left;
+}
+.world .map {
+    float: left;
+    margin: 0;
+    max-width: none;
+    width: 100%;
+}
+.popover .world .map {
+    margin: 1rem;
+    max-width: 33%;
+    width: 33%;
+}
+.world .pin {
+    position: absolute;
+}
+.popover .fullpage {
+	display: none;
+}
+img.kidnappee {
+    clear:none;
+    max-height: 100px;
+    margin-right: 0;
+}
+
+#placeNav li {
+	float: left;
+	list-style: none;
+	margin-left: 10px;
+}
+
+.world .akma_ad {
+    top: 58%;
+    left: 2%;
+}
+.popover .world .akma_ad {
+    top: 0%;
+    left: 0%;
+}
+
+.world .astrazalian {
+    top: 63.5%;
+    left: 94%;
+}
+.popover .world .astrazalian {
+    top: 0%;
+    left: 0%;
+}
+
+.world .blackfens_swamp {
+    top: 38%;
+    left: 36%;
+}
+.popover .world .blackfens_swamp {
+    top: 0%;
+    left: 0%;
+}
+
+.world .bordrin_s_watch {
+    top: 37%;
+    left: 12%;
+}
+.popover .world .bordrin_s_watch {
+    top: 0%;
+    left: 0%;
+}
+
+.world .brindol {
+    top: 44.5%;
+    left: 46.5%;
+}
+.popover .world .brindol {
+    top: 28%;
+    left: 14%;
+}
+
+.world .castle_rivenroar {
+    top: 37%;
+    left: 44%;
+}
+.popover .world .castle_rivenroar {
+    top: 0%;
+    left: 0%;
+}
+
+.world .dauth {
+    top: 52%;
+    left: 45%;
+}
+.popover .world .dauth {
+    top: 0%;
+    left: 0%;
+}
+
+.world .dawn_way {
+    top: 44.25%;
+    left: 44.5%;
+}
+.popover .world .dawn_way {
+    top: 0%;
+    left: 0%;
+}
+
+.world .dennovar {
+    top: 49.5%;
+    left: 57.25%;
+}
+.popover .world .dennovar {
+    top: 0%;
+    left: 0%;
+}
+
+.world .dornaithos {
+    top: 63%;
+    left: 88%;
+}
+.popover .world .dornaithos {
+    top: 0%;
+    left: 0%;
+}
+
+.world .drellin_s_ferry {
+    top: 50.5%;
+    left: 34%;
+}
+.popover .world .drellin_s_ferry {
+    top: 0%;
+    left: 0%;
+}
+
+.world .dunesend {
+    top: 72.5%;
+    left: 10.5%;
+}
+.popover .world .dunesend {
+    top: 0%;
+    left: 0%;
+}
+
+.world .endless_plains {
+    top: 21%;
+    left: 21%;
+}
+.popover .world .endless_plains {
+    top: 0%;
+    left: 0%;
+}
+
+.world .fane_of_tiamat {
+    top: 43%;
+    left: 24.5%;
+}
+.popover .world .fane_of_tiamat {
+    top: 0%;
+    left: 0%;
+}
+
+.world .fortress_graystone {
+    top: 33%;
+    left: 55.75%;
+}
+.popover .world .fortress_graystone {
+    top: 0%;
+    left: 0%;
+}
+
+.world .giantshield_mountains {
+    top: 33%;
+    left: 62%;
+}
+.popover .world .giantshield_mountains {
+    top: 0%;
+    left: 0%;
+}
+
+.world .golden_plains {
+    top: 49%;
+    left: 73%;
+}
+.popover .world .golden_plains {
+    top: 0%;
+    left: 0%;
+}
+
+.world .harg_kulkor {
+    top: 45%;
+    left: 26%;
+}
+.popover .world .harg_kulkor {
+    top: 0%;
+    left: 0%;
+}
+
+.world .karak_lode {
+    top: 78%;
+    left: 6%;
+}
+.popover .world .karak_lode {
+    top: 0%;
+    left: 0%;
+}
+
+.world .lake_ern {
+    top: 34%;
+    left: 34%;
+}
+.popover .world .lake_ern {
+    top: 0%;
+    left: 0%;
+}
+
+.world .monastery_of_the_sundered_chain {
+    top: 39%;
+    left: 12.5%;
+}
+.popover .world .monastery_of_the_sundered_chain {
+    top: 0%;
+    left: 0%;
+}
+
+.world .overlook {
+    top: 37%;
+    left: 14.75%;
+}
+.popover .world .overlook {
+    top: 23%;
+    left: 5%;
+}
+
+.world .prosser {
+    top: 49%;
+    left: 49%;
+}
+.popover .world .prosser {
+    top: 0%;
+    left: 0%;
+}
+
+.world .prosser {
+    top: 49%;
+    left: 49%;
+}
+.popover .world .prosser {
+    top: 0%;
+    left: 0%;
+}
+
+.world .red_rock {
+    top: 39%;
+    left: 48.5%;
+}
+.popover .world .red_rock {
+    top: 0%;
+    left: 0%;
+}
+
+.world .rhest {
+    top: 31%;
+    left: 38.5%;
+}
+.popover .world .rhest {
+    top: 0%;
+    left: 0%;
+}
+
+.world .sayre {
+    top: 56%;
+    left: 4.5%;
+}
+.popover .world .sayre {
+    top: 0%;
+    left: 0%;
+}
+
+.world .sherrbyr {
+    top: 6%;
+    left: 54%;
+}
+.popover .world .sherrbyr {
+    top: 0%;
+    left: 0%;
+}
+
+.world .skull_gorge {
+    top: 45.5%;
+    left: 32.25%;
+}
+.popover .world .skull_gorge {
+    top: 0%;
+    left: 0%;
+}
+
+.world .stonehome_mountains {
+    top: 42%;
+    left: 11%;
+}
+.popover .world .stonehome_mountains {
+    top: 0%;
+    left: 0%;
+}
+
+.world .talar {
+    top: 45%;
+    left: 42.5%;
+}
+.popover .world .talar {
+    top: 0%;
+    left: 0%;
+}
+
+.world .terrelton {
+    top: 49.5%;
+    left: 37.75%;
+}
+.popover .world .terrelton {
+    top: 0%;
+    left: 0%;
+}
+
+.world .the_vents {
+    top: 41%;
+    left: 14.5%;
+}
+.popover .world .the_vents {
+    top: 0%;
+    left: 0%;
+}
+
+.world .vraath_keep {
+    top: 48.5%;
+    left: 32.5%;
+}
+.popover .world .vraath_keep {
+    top: 0%;
+    left: 0%;
+}
+
+.world .witchwood {
+    top: 44%;
+    left: 37%;
+}
+.popover .world .witchwood {
+    top: 0%;
+    left: 0%;
+}
+
+.world .wyrmsmoke_mountains {
+    top: 45%;
+    left: 26%;
+}
+.popover .world .wyrmsmoke_mountains {
+    top: 0%;
+    left: 0%;
+}
+
+.world .wyvernwatch_mountains {
+    top: 67%;
+    left: 49%;
+}
+.popover .world .wyvernwatch_mountains {
+    top: 0%;
+    left: 0%;
+}

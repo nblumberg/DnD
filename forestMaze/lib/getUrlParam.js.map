@@ -1,0 +1,1 @@
+{"version":3,"file":"getUrlParam.js","sourceRoot":"","sources":["../src/getUrlParam.ts"],"names":[],"mappings":"AAAA,MAAM,eAAe,GAAG,IAAI,eAAe,CAAC,MAAM,CAAC,QAAQ,CAAC,MAAM,CAAC,CAAC;AAEpE,MAAM,UAAU,WAAW,CAAC,IAAY;IACtC,OAAO,eAAe,CAAC,GAAG,CAAC,IAAI,CAAC,CAAC;AACnC,CAAC"}

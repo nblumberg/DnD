@@ -1,0 +1,20 @@
+{
+  "name": "Scales_of_War_story",
+  "version": "0.0.1",
+  "description": "D&D Campaign backstory",
+  "main": "index.html",
+  "keywords": [
+    "D&D",
+    "Scales of War"
+  ],
+  "author": "Nathaniel Blumberg",
+  "devDependencies": {
+    "grunt": "1.0.1",
+    "grunt-contrib-watch": "1.0.0",
+    "grunt-contrib-clean": "1.0.0",
+    "grunt-contrib-concat": "1.0.1",
+    "grunt-contrib-connect": "1.0.2",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-includes": "1.0.0"
+  }
+}

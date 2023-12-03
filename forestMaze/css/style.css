@@ -1,0 +1,209 @@
+/* Colors */
+body, dialog {
+  background-color: black;
+  color: white;
+  text-shadow: 2px 2px black;
+}
+
+body {
+  background: linear-gradient(to top, mediumaquamarine 50%, black 50%);
+  /* background-image: url('https://i.giphy.com/media/KYWdVhA36WuRLyiy9H/giphy.webp');
+  background-size: cover; */
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 100% 200%;
+  height: 100vh;
+  margin: 0;
+  transition: all 2sec ease-in;
+  width: 100%;
+}
+
+body.highTide {
+  background-position: left 50%;
+}
+
+/* Dialog */
+dialog {
+  margin-right: 0;
+  margin-top: 0;
+  max-width: 25%;
+}
+
+dialog input {
+  width: 100%;
+}
+
+/* Layout */
+
+.rail {
+  position: fixed;
+  height: 100%;
+  max-width: 25%;
+  z-index: 1;
+}
+
+.rail.right {
+  right: 0;
+}
+
+/* Buttons */
+#buttonBar {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+}
+#buttonBar button {
+  font-size: xx-large;
+}
+
+/* Status */
+dd {
+  white-space: nowrap;
+}
+
+#forest {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.direction {
+  font-size: xxx-large;
+  opacity: 0.5;
+  position: absolute;
+  text-align: center;
+  z-index: 1;
+}
+
+.direction.correct {
+  color: green;
+}
+
+.direction:hover {
+  opacity: 1;
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.direction:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background-image: url('../img/arrow.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.direction .label, .direction .votes {
+  position: absolute;
+}
+
+.direction .votes {
+  font-size: medium;
+}
+
+#up {
+  top: 0;
+  left: 25%;
+  width: 50%;
+  height: 10%;
+}
+#up:before {
+  left: 50%;
+  transform: translate(-25%, 0);
+}
+#up .label {
+  left: 15%;
+  top: 0;
+}
+#up .votes {
+  right: 15%;
+  top: 0;
+}
+
+#right {
+  top: 25%;
+  right: 0;
+  width: 10%;
+  height: 50%;
+}
+#right:before {
+  background-image: url('../img/arrow_right.png');
+  background-position-x: right;
+}
+#right .label {
+  left: auto;
+  transform: rotate(90deg);
+  top: 15%;
+}
+#right .votes {
+  left: auto;
+  transform: rotate(90deg);
+  bottom: 15%;
+}
+
+#down {
+  bottom: 0;
+  left: 25%;
+  width: 50%;
+  height: 10%;
+}
+#down:before {
+  left: -50%;
+  transform: rotate(180deg) translate(-25%);
+}
+#down .label {
+  right: 25%;
+  transform: rotate(180deg);
+  bottom: 0;
+}
+#down .votes {
+  left: 25%;
+  transform: rotate(180deg);
+  bottom: 0;
+}
+
+#left {
+  top: 25%;
+  left: 0;
+  width: 10%;
+  height: 50%;
+}
+#left:before {
+  background-image: url('../img/arrow_right.png');
+  background-position-x: right;
+  transform: rotate(180deg);
+}
+#left .label {
+  left: 0;
+  transform: rotate(270deg);
+  top: 15%;
+}
+#left .votes {
+  left: 0;
+  transform: rotate(270deg);
+  bottom: 15%;
+}
+
+.hidden {
+  display: none;
+}
+
+.navigateOut {
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+.navigateIn {
+  opacity: 1;
+  transition: visibility 0s 2s, opacity 2s linear;
+}

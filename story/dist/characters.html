@@ -1,0 +1,941 @@
+<!-- Site built using grunt includes! -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="../index.css" />
+</head>
+<body>
+
+<div class="legend">
+  <div>
+    <dfn class="place">Places</dfn>
+  </div>
+  <div>
+    <dfn class="person">People</dfn>
+  </div>
+  <div>
+    <dfn class="group">Groups</dfn>
+  </div>
+  <div>
+    <dfn class="future">Information not<br/> revealed until later</dfn>
+  </div>
+</div>
+
+<div class="bios">
+    <div id="Barases" class="bio">
+        <img src="../pcs/Barases.png" class="portrait" />
+        <span class="description">
+            Son of the late satyr demigod Papposilenus and a druid upholding his father's ideals, Barases searches for his brother Petraynus - heir to his father's godhead.
+            His father's domain has grown increasingly strained and twisted after his passing, rot settling into the heart of the wood. Dutiful and loyal, Barases has ventured
+            far from the comfort of the Feywild in search of the prodigal son in hopes of restoring balance.
+        </span>
+    </div>
+    <div id="Bin" class="bio">
+        <img src="../pcs/Bin.png" class="portrait" />
+        <span class="description">
+            An amensiac doppelganger with a talent for manipulating energies, she awoke with no memory in Nine Bells in Overlook.
+            There she was revived, named ("bin" means "empty cup" in Dwarven), and given purpose by the local priestess Aelys, putting her powers of disguise to work infiltrating
+            the evil forces working against Elsir Vale. While infiltrating the Wicked Fang tribe she was captured and subjected to
+            Fangren's corrupt rituals manipulating enemies from the Elemental Chaos. Rescued before being sacrificed, Bin now continues
+            her mission alongside the Dusk Wardens, imbued with the power of the elements by Fangren's rituals.
+        </span>
+    </div>
+    <div id="Camulos" class="bio">
+        <img src="../pcs/Camulos.png" class="portrait" />
+        <span class="description">
+            A mercenary and a lumbering giant, Camulos defies expectations by having a heart of gold and a nimbleness that belies his size.
+            In service to Sarshan he objected too loudly to his employer's unethical practices and was imprisoned for it. Rescued by the
+            Dusk Wardens, he now travels alongside them, lending his hammer and shield in their defense.
+        </span>
+    </div>
+    <div id="Festivus" class="bio">
+        <img src="../pcs/Festivus.png" class="portrait" />
+        <span class="description">
+            The child of a rigid, devout sorceress of Sherbyrr and a society-defying free-spirited itinerant artisan, Festivus rejected
+            all the confining restrictions of her childhood when she came of age: her mother's expectations, the conservativeness and
+            propriety of her Dragonborn culture - even her gender (she is physically male). Blessed (or cursed) with her father's wanderlust
+            she left home to train as a bard where her flamboyant rebellion, cross-dressing fashion sense, and acerbic wit found an
+            appreciative audience. She has a talent for appealing to the rebels in restrictive cultures and has plied it with success among
+            the dwarves of Elsir Vale. She searches for a way to truly break free of her bonds and fully realize her feminine self.
+        </span>
+    </div>
+    <div id="Kallista" class="bio">
+        <img src="../pcs/Kallista.png" class="portrait" />
+        <span class="description">
+            Second child of Thrand U'Squiel (ranger of the Stagrunner elves) and a tiefling warlock, Kallista found little acceptance among her father's family as a tielfing. That and
+            the general aloofness of the elves made her father distant, and in reaction to that pain she rejected the calming influence of her father's nature and
+            gave into the evil pull of her infernal heritage - resorting to alcohol, drugs, and eventually crime. Her vices have spiraled on multiple occasions,
+            encouraged by her friend Festivus' flamboyance and tempered by her sister Karrion's redemptive nature.
+        </span>
+    </div>
+    <div id="Karrion" class="bio">
+        <img src="../pcs/Karrion.png" class="portrait" />
+        <span class="description">
+            First child of Thrand U'Squiel (ranger of the Stagrunner elves) and a tiefling warlock, Karrion found little acceptance among her father's family as a tielfing. That and
+            the general aloofness of the elves made her father distant, and in reaction Karrion strives to emulate her absent father, craving acceptance.
+            She became a ranger who guards the sanctity of nature, a vegetarian and champion of animals. As a protector of the weak and the voiceless,
+            Karrion constantly struggles against her infernal heritage, channeling that power to do good. Redeeming her evil nature has led her to use that
+            energy to redeem others, most often her rebellious sister Kallista.
+        </span>
+    </div>
+    <div id="Kitara" class="bio">
+        <img src="../pcs/Kitara.png" class="portrait" />
+        <span class="description">
+            Kitara was stolen from her Shadar-kai parents - members of the Winter Court - as a child by the forces of the Fomorian lord Cachlain (The Stone-Skinned King).
+            Drafted into the Fomori legion, she was raised to be an elite warrior and an arcane assassin. At puberty she was taken by the coven of Howling Hags in service
+            to Cachlain and multilated in perverse Fomori rituals - they took her eye and part of her soul but grafted a new eye and part of new soul in its place. The
+            ritual twisted her, but also granted her greater powers. Feeling betrayed by this violation Kitara fled Cachlain's service and ended up working as a mercenary
+            under Sarshan before leaving his service as well in disgust. Now she acts against her former masters in a mission of revenge.
+        </span>
+    </div>
+    <div id="Lechonero" class="bio">
+        <img src="../pcs/Lechonero.png" class="portrait" />
+        <span class="description">
+            Child of the prestigious Stagrunner clan of the elves of Endless Plains, Lechonero was trained in the ways of the wild by Thrand U'Squiel to
+            help guard the borders against the orc hordes to the south. When Thrand travelled to Elsir Vale as a member of the Dawn Wardens Lechonero made
+            frequent visits to his mentor. Taking advantage of his frequent trips along the Dawn Way, Lechonero's clan elder Caliandra used him as a trading
+            envoy to the eastern city of Dornaithos, the first trading post of Astrazalian fully in the world. When Thrand returned to the Stagrunners he
+            charged Lechonero with looking after his daughters Kallista and Karrion. Recently in Dornaithos, Lechonero had an affair with
+            Brandowen ("Brandi") Entromiel - the master of that mercantile settlement and as aggressive a lover as she was a saleswoman. In a heated moment
+            that ended their affair Lechonero inadvertently absconded with her bonded bear companion from the Feywild and he has been avoiding her ever since.
+        </span>
+    </div>
+    <div id="Melvin" class="bio">
+        <img src="../pcs/Melvin.png" class="portrait" />
+        <span class="description">
+            Melvin was born into the minotaur tribes of the hills south of the Wyvernwatch Mountains. As a child he was part of a raid on the Hammerfist Holds where his
+            family were killed and he was left behind. Marduk Goldbludgeon was one of the Holds' defenders and took pity on the young minotaur. Raised in his new
+            adoptive father's monastic and moral tradition Melvin grew to be a selfless defender of the people of Elsir Vale. Even when his Marduk disappeared Melvin
+            upheld his values. When Tusk attacked Melvin was among the first to volunteer to serve.
+        </span>
+    </div>
+    <div id="Richard D'Eversholt" class="bio">
+        <img src="../pcs/Richard D'Eversholt.png" class="portrait" />
+        <span class="description">
+            Richard D'Eversholt is a paladin of Bahamut. A holy vision told him to join the Dusk Wardens on their quest but once he rescued Jalissa from Sinruth
+            they settled down together in Brindol. Richard retired to raise their child, assist Sertanian in running the Hall of Great Valor, and found a proper
+            temple to Bahamut in Brindol.
+        </span>
+    </div>
+    <div id="Ringo" class="bio">
+        <img src="../pcs/Ringo.png" class="portrait" />
+        <span class="description">
+            Formerly a pet in Sarshan's gardens in Umbraforge, Lechonero and Barases coaxed the Tangler Beetle into their service.
+        </span>
+    </div>
+    <div id="Smudge" class="bio">
+        <img src="../pcs/Smudge.png" class="portrait" />
+        <span class="description">
+            Formerly a pet of General Zithiruun's mercenaries in Mountainroot Temple. Lechonero tamed the Redspawn Firebelcher and coaxed it into his service.
+        </span>
+    </div>
+    <div id="Oomoroo" class="bio">
+        <img src="../pcs/Oomoroo.png" class="portrait" />
+        <span class="description">
+            This young owlbear is a fae pet of Barases' from his home in the Feywild. Using his primal powers he has formed a close bond with the creature.
+        </span>
+    </div>
+
+    <div id="Azarr Kul" class="bio">
+        <img src="../npcs/Azarr Kul.png" class="portrait" />
+        <span class="description">
+            Azarr Kul was a half-dragon hobgoblin warrior and a child of the blue dragon Tyrgarun.
+            Azarr Kul discovered the Thane of Tiamat (an abandonned temple deep in the Wyrmsmoke Mountains) and converted from worshipping
+            Maglubiyet to Tiamat. He united the goblinoid tribes of the Wyrmsmoke Mountains and dubbed them the Kulkor Zhul and adopted the
+            standard of the Red Hand (an ancient symbol of Tiamat's cult). Conquering the Wyrmsmoke Mountains he named his kingdom Harg
+            Kulkor - "Land of the Dragon." Crowning himself High Wyrmlord he marched his army to conquer an unsuspecting Elsir Vale. The
+            adventuring party the Dawn Wardens encountered the army early by happenstance and stymied its advance by collapsing the ancient
+            dwarven bridge at Skull Gorge. In the interim they rallied the people of the vale to defend against the Red Hand and ultimately
+            assassinated Azarr Kul. Without his leadership his fractuous army split and turned on itself, leading to its defeat by the
+            peoples of the Vale.
+        </span>
+    </div>
+    <div id="Aziff" class="bio">
+        <img src="../npcs/Aziff.png" class="portrait" />
+        <span class="description">
+            One of the leaders of the Githzerai of Sayre. She urges patience and caution.
+            She has lived in Sayre for many years, and the recent
+            change in public opinion about the city's githzerai
+            citizens had distressed her a great deal (although she
+            didn't reveal anything but a stoic demeanor openly).
+            Aziff had the backing of the other local githzerai and Amyria.
+        </span>
+    </div>
+    <div id="Chend" class="bio">
+        <img src="../npcs/Chend.png" class="portrait" />
+        <span class="description">
+            Chend is a local leader of the Sayre githzerai. He is an elder githzerai and an isolationist in favor of abandonning humans and the plane to the war with the githyanki.
+        </span>
+    </div>
+    <div id="Dorion Light-Step" class="bio">
+        <img src="../npcs/Dorian Light-Step.png" class="portrait" />
+        <span class="description">
+            Dorion is an elven ranger from the woodlands near Brindol,
+            venturing out in the world and seeking to make a
+            name for himself. He was a contestant in the Brindol race to
+            see whether he's truly capable in character and ability
+            of taking up the life of an adventurer.
+            Dorion isn't a cheater. He has a strong moral sense
+            that may even lead him to help people who get into
+            serious trouble near him.
+        </span>
+    </div>
+    <div id="Filth King" class="bio">
+        <img src="../npcs/Filth King.jpg" class="portrait" />
+        <span class="description">
+            The Filth King is a priest of Tiamat and leader of the beggars
+            in Sayre.
+        </span>
+    </div>
+    <div id="Gal'ott" class="bio">
+        <img src="../npcs/Gal'ott.png" class="portrait" />
+        <span class="description">
+            Gal'ott is a local leader of the Sayre githzerai.
+            An atypically fiery githzerai, he urges action. Young and angry,
+            he wants to take the fight to the streets, organizing
+            what amounts to a githzerai gang. Gal'ott and several
+            other githzerai are refugees from cities and monasteries
+            from elsewhere in the world. Many have traveled
+            several hundred miles to get to Sayre after seeing
+            githyanki destroy their homes, and they're appalled
+            that nothing is being done here to combat the threat.
+            These githzerai wear red armbands and never travel
+            alone, only adding to the local residents' fears of
+            exactly what Gal'ott was asking his fellows to do.
+        </span>
+    </div>
+    <div id="Garth Cooper" class="bio">
+        <img src="../npcs/Garth Cooper.png" class="portrait" />
+        <span class="description">
+            Garth is a member of the Brindol watch, young and arrogant
+            and was looking to win the Brindol race in order to bump himself up the ranks
+            and to impress a girl he likes very much. He was determined
+            to win and to show off, taking risks throughout the race. Being a
+            local, Garth knew how to push the rules to their absolute
+            limit and did not hesitate to do so.
+            He wasn't above a little sabotage, either, including spilling
+            a bag of marbles behind him to make life difficult for
+            those following him, not to mention the public.
+        </span>
+    </div>
+    <div id="Adronsius" class="bio">
+        <img src="../npcs/Adronsius.png" class="portrait" />
+        <span class="description">
+            Adronsius the alchemist is a dwarf that was kidnapped by Sinruth.
+            Thanks to the hobgoblins' hatred for dwarves he received daily beatings
+            the have left him slightly disfigured since his rescue.
+        </span>
+    </div>
+    <div id="Aerun" class="bio">
+        <img src="../npcs/Captain Aerun.png" class="portrait" />
+        <span class="description">
+            Captain Aerun was a dwarf captain of the City Watch in Overlook tasked with overseeing the bolstering
+            of the city's defenses in the aftermath of Tusk's invasion and Sarshan's initial plots. Being in such
+            a strategic position the invaders under General Zithiruun kidnapped Captain Aerun and destroyed
+            his mind with a complex psychic ritual that allowed his body to be possessed by a githyanki. From his
+            position of power the githyanki could sabotage any city defenses - old or new - in preparation for their
+            upcoming invasion. When our heroes discovered their plot, the possessed Captain Aerun attacked them and
+            was destroyed.
+        </span>
+    </div>
+    <div id="Alys" class="bio">
+        <img src="../npcs/Alys.png" class="portrait" />
+        <span class="description">
+            Alys was a bar maid at the Antler and Thistle in Brindol until Sinruth's troops attacked. The Dusk Wardens'
+            heroism inspired her to leave in search of adventure and has been working as a courier ever since. When she
+            brought word of Amyria's awakening in Brindol's Hall of Great Valor she was kidnapped by the Lost Ones until the
+            Dusk Wardens rescued her.
+        </span>
+    </div>
+    <div id="Amyria" class="bio">
+        <img src="../npcs/Amyria.png" class="portrait" />
+        <span class="description">
+            Amyria is a mysterious deva dedicated to Bahamut that sprang from a ceremonial platinum
+            longsword kept in Brindol's Hall of Great Valor. The longsword was stolen by Sinruth and
+            recovered by our heroes. Richard D'Eversholt, a paladin of Bahamut, left the party after
+            recovering the sword and became castellan of the Hall of Great Valor. One day the sword
+            spoke, summoning the heroes and asking them to stop the gnoll Fangren's dark ritual
+            manipulating planar energies and put them to a different purpose: releasing Amyria from the
+            sword. Once back in her own body Amyria had no memory and brought our heroes back to
+            Overlook where she prayed for guidance before disappearing during the githyanki siege.
+            Now our heroes have rediscovered her in Sayre, trying to form a coalition of neighboring
+            groups and kindgoms to fight the githyanki invasion.
+        </span>
+    </div>
+    <div id="Bram Ironfell" class="bio">
+        <img src="../npcs/Bram Ironfell.png" class="portrait" />
+        <span class="description">
+            Bram Ironfell is wealthy dwarf, a member of the Elsir Consortium, and a scion
+            of Clan Ironfell. He is a well-dressed dwarf wearing
+            the rich robes of a successful merchant, his golden
+            beard braided with silver bands.
+            In the aftermath of Umbraforge Bram approached the Dusk Wardens
+            with documents recovered from Sarshan's operation indicating the location of Clan
+            Ironfell's long lost mine the Karak Lode. He hired them to find and secure the mine
+            so that it's income could help fund Overlook's defense.
+            <br/>
+            <br/>
+            When the Dusk Wardens returned from the Karak Mines Bram agreed to shutter the mines
+            rather than risk the danger it presents. He began an affair with Festivus, but has been
+            away from Overlook on business for months, straining their relationship.
+        </span>
+    </div>
+    <div id="Brandowen" class="bio">
+        <img src="../npcs/Brandowen.png" class="portrait" />
+        <span class="description">
+            The female gnome Brandowen Entromiel ruled over the mercantile settlement
+            of Dornaithos, which trades both fine craftwork
+            (including goods from the Feywild) and everyday
+            items.
+            A former lover of Lechonero's during his smuggling days,
+            they suffered a hostile break up and Lechonero made off with her
+            pet bear Balugh.
+            She had dealings with the Elsir Consortium,
+            a group of merchants from the Elsir Vale, and with
+            traders in every major settlement across this corner of
+            the mortal world. Gregarious and shrewd, Brandowen
+            was well known for her business acumen and efficiency.
+            It was rumored she was not afraid to resort to bribery if
+            doing so would get a project or deal finished quickly.
+            Brandowen wanted Dornaithos's fortunes to continue
+            and thought running the alliance was a way to make
+            herself more prominent and secure better deals for
+            Dornaithos to provide war material.
+        </span>
+    </div>
+    <div id="Cadrick" class="bio">
+        <img src="../npcs/Elder Cadrick.png" class="portrait" />
+        <span class="description">
+            Elder Cadrick is one of the five members of the Council of Overlook, and currently the youngest member. He serves as spokesperson for the Council.
+        </span>
+    </div>
+    <div id="Caliandra" class="bio">
+        <img src="../npcs/Caliandra.png" class="portrait" />
+        <span class="description">
+            Caliandra of the Stagrunners was an ancient elf
+            who could trace her descendants back to elves who migrated
+            from the Feywild almost eleven of her generations
+            ago. She lead not only her own tribe, the Stagrunners (of which Lechonero is a part),
+            but had also been named the voice of all the
+            tribes that live in the wild reaches to the north and
+            west of Elsir Vale. All told, she spoke for a group of
+            twenty-five tribes.
+            Fierce, wild, and haughty, she was stubborn and
+            opinionated, and wasn't afraid to engage in a protracted
+            argument about aspects of history that most
+            people had long forgotten. She held influence
+            with many gnome, elf, and eladrin leaders, much
+            as a respected grandmother and advisor might.
+            She leaned toward solutions that provided the
+            most safety for the most people. She seemed to expect
+            subservience, making her nearly intolerable
+            to deal with.
+            One of the naysayers of the Gatekeepers, Caliandra
+            automatically assumed her age and experience made
+            her the voice everyone else should listen to. She talked
+            loudly, fiercely, and often, but she didn't mince
+            words. She got to her point quickly. She favored action
+            of some sort, but was like a ship in need of a pilot. If
+            given a course that she could approve of - something
+            that will let her lead her people to glorious battle
+            against the invaders who have killed so many of her
+            people - she would fight honorably and without hesitation.
+            But she demanded respect, and was fond of rejecting
+            someone else's idea out of hand, only to bring it back
+            up minutes later as a concept all her own.
+        </span>
+    </div>
+    <div id="Divian Torrance" class="bio">
+        <img src="../npcs/Lord Divian Torrance.png" class="portrait" />
+        <span class="description">
+            Lord Divian Torrance was the ruler of Sayre,
+            elected by a fellowship of scholars and merchants.
+            He was married to Lady Catherine Torrance.
+            He was a potent and skilled politician. His goal, first and
+            foremost, was to see that his city came out ahead in
+            the war. He wasn't willing to side with the githyanki
+            invaders, but his goal was to lead the alliance so that
+            his small city was given due representation. He knew
+            that Sayre's leadership wouldn't have been consulted
+            if not for the good fortune of hosting the first meeting
+            and the absence of a representative from Nefelus.
+        </span>
+    </div>
+    <div id="Durkik" class="bio">
+        <img src="../npcs/High Ancestor Durkik.png" class="portrait" />
+        <span class="description">
+            High Ancestor Durkik Forgeheart is the high priest of Moradin in Overlook. During Zithiruun's invasion he was
+            kidnapped and held captive while he was replaced by a doppelganger. He was kept alive but tortured
+            for information to make the doppelganger's ongoing impression convincing. After being freed by our
+            heroes, Durkik resumed his role as head of the church and sent our heroes to the Mountainroot Temple
+            to defeat Zithiruun's forces and recover the Incunabulum Primeval.
+        </span>
+    </div>
+    <div id="Fangren" class="bio">
+        <img src="../npcs/Fangren.png" class="portrait" />
+        <span class="description">
+            Fangren was a demonic gnoll and chief of the Wicked Fang tribe who plagued the lands around
+            the Giantshield Mountains. Receiving aid (in the form of weapons and advisors) from Sarshan,
+            Fangren took up residence in the abandoned monastery, Fortress Graystone.
+            He attempted to use the planar energies of the Elemental Chaos woven into the place by its
+            githzerai creators to perform a ritual that would turn him into an exarc of the demon lord
+            Yeenoghu. Our heroes killed Fangren's followers and shadar-kai allies before halting the
+            Fangren's ritual sacrifice of Bin and instead channeled the ritual's energies into a ritual
+            of their own that released Amyria from her sword. Melvin mysteriously disappeared while exploring
+            Fortress Graystone, only to reappear months later fighting the githyanki. Among Sarshan's gifts
+            to Fangren was the magical blade called Wicked Fang in honor of his tribe.
+        </span>
+    </div>
+    <div id="Fariex" class="bio">
+        <img src="../npcs/Fariex.png" class="portrait" />
+        <span class="description">
+            Fariex the Scalehammer was a tall, richly dressed man with a burnished dark complexion.
+            He was a powerful merchant with interests
+            in various cities. Fariex did not represent a city
+            or other political body, but was invited to the Gatekeepers because of his
+            connections to many far-reaching settlements, townships,
+            and ports, and the wealth and military might
+            they represent.
+            He was light-hearted by nature, and knew more jokes
+            than most jesters. Far from a buffoon, however,
+            he expected respect.
+            He was slow to weigh the facts of a problem instead of quickly
+            making up his mind.
+            Generally quiet, Fariex would occasionally interject a pointed question,
+            especially if the topic of conversation touched on his
+            area of expertise (namely, money and its movement
+            through business affairs). He openly tried to
+            catch others in duplicity or engage in some word play
+            over a statement he perceived as absurd.
+        </span>
+    </div>
+    <div id="Gilgathorn" class="bio">
+        <img src="../npcs/Gilgathorn.png" class="portrait" />
+        <span class="description">
+            Gilgathorn was an accomplished elven bounty hunter from the Golden Plains operating out of
+            Dornaithos. When Sarshan posted a price on our heroes' heads he attempted to collect. He
+            realized the threat the party represented and took time to study them -
+            monitoring them when they fought other enemies. He waited until they were sufficiently
+            worn down by these encounters and his own traps before attacking, pretending to help them
+            against other enemies if it looked like someone else might successfully collect the bounty.
+            In the end he ambushed them in the aftermath of their confrontation with Fangren but they
+            were still too much for him.
+        </span>
+    </div>
+    <div id="Grovald" class="bio">
+        <img src="../npcs/Grovald.png" class="portrait" />
+        <span class="description">
+            Grovald is a priest of Zehir (an evil god of darkness and poison) who was hired by General Zithiruun
+            to kill Haelyn and impersonate a priest of Erathis in her place during the githyanki invasion of
+            Overlook. The Dusk Wardens exposed his crimes and he was arrested by the Overlook city watch.
+        </span>
+    </div>
+    <div id="Inogo" class="bio">
+        <img src="../npcs/Inogo Dravitch.png" class="portrait" />
+        <span class="description">
+            Inogo Dravitch was a dragonborn priest of Erathis. Inogo hailed
+            from the distant city of Sherrbyr (Festivus' home). This city lies far
+            to the northeast, beyond Elsir Vale by at least three
+            weeks' travel. Inogo was the current leader of this city of
+            temples. A theocratic city state, Sherrbyr also boasted
+            a massive college of divinity, where worshipers of
+            nearly any deity could openly practice their faith.
+            As a result of its varied populace, the city's leadership
+            was formed of a council of priests of the most
+            worshiped deities in the city. The council changed as
+            the population changed. Some deities fell out of favor
+            while others rose. But Erathis's worshipers had been
+            a power in the city for years, and Inogo was the most
+            recent in a long series of Erathis-worshiping council
+            leaders known as Deacons.
+            Sherrbyr was a city accustomed to nearly endless
+            debate, thanks to efforts to accommodate every faith
+            represented on the ruling council. As someone long
+            schooled in this approach to government, Deacon
+            Dravitch was well out of his league in a group that needs
+            to make decisions quickly and decisively. He represented
+            a powerful city, however, in terms of both its
+            military and divine might. Sherrbyr could field a veritable
+            army of healers, as well as a mounted corps of
+            paladins. Inogo was mostly quiet in the meetings,
+            speaking up only when a plan of action is proposed.
+        </span>
+    </div>
+    <div id="Iranda" class="bio">
+        <img src="../npcs/Iranda.png" class="portrait" />
+        <span class="description">
+            Iranda was a shadar-kai witch and a minion of Modra's sent to assist Tusk and Myrissa with their invasion of Elsir Vale.
+            She personally killed Jen of the Farstriders but shortly thereafter met her own end at the hands of the Dusk Wardens.
+            When Modra fled Sarshan and was trapped in the world he sought out Iranda's portal key (then in the Kitara's possession)
+            in order to return to sabotage Sarshan's operations in Umbraforge.
+        </span>
+    </div>
+    <div id="Jalissa" class="bio">
+        <img src="../npcs/Jalissa.png" class="portrait" />
+        <span class="description">
+            Jalissa is a pretty acolyte of Ioun and an alchemist in Brindol who was kidnapped by Sinruth.
+            Traumatized by the experience, she bonded instantly with her rescuer: Richard D'Eversholt.
+            They quickly grew close, married, and convinced Richard to retire from adventuring. Last time
+            the Dusk Wardens saw her she was pregnant with Richard's child.
+        </span>
+    </div>
+    <div id="Jen" class="bio">
+        <img src="../npcs/Jen.png" class="portrait" />
+        <span class="description">
+            Jen was a half-elven warlock and a member of the Farstriders who fell at Iranda's hand - but not before using a Sending
+            Stone to whisper her last words to her sister Reniss, a name the Farstriders tripped across before they were cut down: "Modra..."
+        </span>
+    </div>
+    <div id="Kalad" class="bio">
+        <img src="../npcs/Kalad.png" class="portrait" />
+        <span class="description">
+            Kalad the Paladin was rescued by the Dusk Wardens from the Tusk's troops occupying the Monastery of the Sundered Chain.
+            After leading them to defeat Tusk and Myrissa at the Nexus of the Vents Kalad returned to Overlook and took up a position
+            as a sergeant in the watch.
+            Now this heavily muscled dwarven paladin no longer looks quite as haunted as he did in the tunnels of Bordrin's Watch. He is gruff
+            but friendly, and a staunch ally of the Dusk Wardens. His seemingly blind willingness to support his allies makes him look
+            intractable and foolish to the more politically savvy.
+        </span>
+    </div>
+    <div id="Karros" class="bio">
+        <img src="../npcs/Ancestor Karros.png" class="portrait" />
+        <span class="description">
+            Ancestor Karros is a priest of Moradin in Overlook and a close associate of High Ancestor Durkik.
+            A champion of peace, he has often come (non-violently) to our heroes' defense.
+        </span>
+    </div>
+    <div id="Kartenix" class="bio">
+        <img src="../npcs/Kartenix.png" class="portrait" />
+        <span class="description">
+            Kartenix was the captain of the Brindol city guard, father of Thurann. As officiant of the Brindol race
+            he and his son were highly visible when Sinruth's troops attacked and both he and his son were kidnapped.
+            As the captain of the guard Kartenix felt responsible for his fellow captives and attempted a jailbreak
+            that cost him his life.
+        </span>
+    </div>
+    <div id="Kyrion" class="bio">
+        <img src="../npcs/Kyrion.png" class="portrait" />
+        <span class="description">
+            Kyrion was a lieutenant and weapons master of Sarshan's sent to train the Wicked Fang tribe of
+            gnolls to use shadar-kai weapons, including the custom-made Wicked Fang blade. Despite his orders
+            not to fight on behalf of Fangren, Kyrion was overconfident in his ability to dispatch our heroes
+            - leading to his demise.
+        </span>
+    </div>
+    <div id="Lavinya" class="bio">
+        <img src="../npcs/Lavinya.png" class="portrait" />
+        <span class="description">
+            Lavinya is a priestess of Erathis in the Divine Knot in Overlook. A close friend to Haelyn, she asked
+            our heroes to look into her friend's disappearance and the peculiar behavior of the other priests of
+            Overlook when they had been possessed or replaced prior to Zithiruun's invasion.
+        </span>
+    </div>
+    <div id="Leena" class="bio">
+        <img src="../npcs/Leena.png" class="portrait" />
+        <span class="description">
+            Leena, a shadar-kai war witch worked to train
+            combat casters in the mercenary camps of Umbraforge. She was a follower
+            of Sarshan and a former ally of Modra, but her
+            sense of honor caused her to break with the dark
+            creeper when he decided to work behind Sarshan's
+            back.
+            The shadar-kai witch wears a black cloak edged with
+            adamantine beads, and she keeps her long hair plaited to
+            hang down her back. Gold piercings line her ears and lower
+            lip, and a black starburst tattoo encloses her right eye.
+            When in Umbraforge, Leena sought out the Dusk Wardens to help
+            them track down Modra. She felt that honor decreed Modra
+            should die, but that Sarshan would make her former ally's
+            death slow and painful while the Dusk Wardens would make it quick.
+        </span>
+    </div>
+    <div id="Marduk Goldbludgeon" class="bio">
+        <img src="../npcs/Marduk Goldbludgeon.png" class="portrait" />
+        <span class="description">
+            Marduk Goldbludgeon is an accomplished dwarven monk trained in the monastic traditions of
+            the githzerai House of Reprisal. A former member of the Dawn Wardens, Marduk retired with his
+            wife to Hammerfist Holds. He defended the Holds from a raid by a minotaur tribe from the hills to
+            the south  of the Wyvernwatch Mountains. The raid left a child minotaur orphaned in its wake: Melvin.
+            Marduk showed compassion to Melvin and raised him as an adopted son. Just before Tusk's invasion of
+            Elsir Vale Marduk was called to the aid of his githzerai masters - under attack by the githyanki.
+        </span>
+    </div>
+    <div id="Mirtala" class="bio">
+        <img src="../npcs/Mirtala.png" class="portrait" />
+        <span class="description">
+            The cook Mirtala was kindapped by Sinruth and has been
+            very quiet and deathly afraid of rats ever since.
+        </span>
+    </div>
+    <div id="Modra" class="bio">
+        <img src="../npcs/Modra.png" class="portrait" />
+        <span class="description">
+            A lieutenant of the black market arms dealer Sarshan, Modra went rogue and sold aid and arms to Tusk and the Orog invasion
+            against orders for a personal profit. At odds with his former employer, Modra tried to destroy Sarshan before he could hunt him
+            down. Sarshan stumbled across the Dusk Wardens following Modra and encouraged them to do his dirty work for him.
+        </span>
+    </div>
+    <div id="Morgoff" class="bio">
+        <img src="../npcs/Elder Morgoff.png" class="portrait" />
+        <span class="description">
+            Great Elder Morgoff Stonefirst is one of the five members of the Council of Overlook, and currently the senior member. He serves as head of the Council.
+        </span>
+    </div>
+    <div id="Morrik" class="bio">
+        <img src="../npcs/Morrik.png" class="portrait" />
+        <span class="description">
+            A hobgoblin in service to Sinruth, Morrik was captured during the raid on Brindol.
+            When questioned he gave up the location of Sinruth's hideout in the Rivenroar Castle ruins.
+            He is currently serving a life-sentence in Brindol's prison.
+        </span>
+    </div>
+    <div id="Myrissa" class="bio">
+        <img src="../npcs/Tusk and Myrissa.png" class="portrait" />
+        <span class="description">
+            Myrissa was a shadar-kai witch and occasional lover and advisor
+            to Tusk. She served as a go-between for Tusk and Modra in negotiating
+            the arms and aid for Tusk's invasion of Elsir Vale.
+        </span>
+    </div>
+    <div id="Nerislove Stoneheart" class="bio">
+        <img src="../npcs/Nerislove Stoneheart.png" class="portrait" />
+        <span class="description">
+            Nerislove Stoneheart is the proprieter of the Pig and Bucket Tavern in Overlook.
+        </span>
+    </div>
+    <div id="Odos" class="bio">
+        <img src="../npcs/Odos.png" class="portrait" />
+        <span class="description">
+            Most Exalted Odos from the House of Reprisal was the last
+            remaining principal elder of the githzerai on the mortal world. He lead the ragged band of
+            survivors from the githyanki assaults. Gruff and dour, Odos acted aloof in all matters not
+            related to the defense of his people, where he was decisive and vicious.
+        </span>
+    </div>
+    <div id="Reniss" class="bio">
+        <img src="../npcs/Reniss.png" class="portrait" />
+        <span class="description">
+            Reniss is a half-elf ranger and sister to Jen of the Farstriders. She wears brown leather
+            beneath a green cloak, and a longbow slung across her chest.
+            When Jen was killed Reniss came to Overlook to investigate her murder. She helped put the
+            Dusk Wardens on Modra's trail.
+        </span>
+    </div>
+    <div id="Sarshan" class="bio">
+        <img src="../npcs/Sarshan.png" class="portrait" />
+        <img src="../npcs/Sarshan (in disguise).png" class="portrait" />
+        <span class="description">
+            Sarshan was an opportunistic shadar-kai arms dealer. For years, he had built an invisible mercantile
+            empire around the sale and brokering of weapons,
+            armor, mercenaries, and intelligence from his domain
+            of Umbraforge in the Shadowfell.
+            <br/>
+            <br/>
+            Sarshan was hired by the githyanki to provide a mercenary army and materiel for their attack
+            on Overlook and the Elsir Vale. His plans were prematurely exposed when his lieutenant Modra went rogue and sold aid and arms to Tusk and the Orog invasion
+            for a personal profit against Sarshan's orders. When the Dusk Wardens took care of Modra for him, Sarshan tried to hire them, but his plans to attack the world
+            caused them to turn against him and flee when Modra's sabotage distracted him.
+            <br/>
+            <br/>
+            Following the breaking of the siege of Overlook, the githyanki turned on Sarshan. His base broken, cut off by his former employers, and pursued by agents of
+            Overlook, Sarshan turned to a desperate gambit: flooding Elsir Vale with Blood Chaos to eliminate his enemies. The Dusk Wardens tracked the Blooad Chaos back
+            to Sarshan at his hideout in the Tower of Djamela in the Elemental Chaos - finally putting the shadar-kai down.
+        </span>
+    </div>
+    <div id="Sertanian" class="bio">
+        <img src="../npcs/Sertanian.png" class="portrait" />
+        <span class="description">
+            Sertanian is the castellan of the Hall of Great Valor
+            in Brindol and was kidnapped by Sinruth. Sertanian
+            weathered his captivity with dignity, and when rescued,
+            he brushed off questions about his captivity as "Just
+            a few hard days, nothing more." Sertanian has a past - he served
+            as a soldier during the great "Red Hand" invasion
+            years ago. He has an utter hatred of hobgoblins.
+            Sertanian has been responsible for the
+            treasures from the Hall of Great Valor for years.
+            After his rescue, he took Richard D'Eversholt on as an apprentice
+            castellan.
+        </span>
+    </div>
+    <div id="Sinruth" class="bio">
+        <img src="../npcs/Sinruth.png" class="portrait" />
+        <span class="description">
+            Sinruth was a hobgoblin with greater aspirations than
+            a life spent preying on the fringes of civilization. He
+            listened closely at the campfires when his fathers
+            and uncles told tales of the Red Hand of Doom, a
+            mighty army that ran across the land like a scythe.
+            And when he became an adult and a leader of his
+            own band of hobgoblins, he found a cache of tunics
+            and weapons left behind by that army. Sinruth felt
+            his destiny calling. He declared himself the new
+            Warlord of Sinruth's Hand (as he named the group),
+            emblazoned every possible surface with a crudely
+            painted, downward thrusting red hand insignia, and
+            set about recruiting the massive army that he felt was
+            his birthright.
+            <br/>
+            <br/>
+            But starting an army wasn't as easy as those campfire
+            tales led Sinruth to believe. Years passed with
+            Sinruth's band eking out a meager existence in the
+            wilderness. But slowly, he started to gain allies. A
+            temporary bargain with some sinister, mischievous
+            gnomes blossomed into a lasting friendship. The Red
+            Hand's exploration of the mountains unearthed some
+            undisturbed catacombs beneath the long-ruined
+            Castle Rivenroar. Sinruth struck another bargain,
+            and the undead guardians let the Red Hand move
+            in, in exchange for periodic payment of kidnapped
+            prisoners.
+            <br/>
+            <br/>
+            Sinruth and the reconstituted Red Hand had a
+            base and a growing reputation, but they were far from
+            a mighty army. An "Emissary" from another remnant of
+            the Red Hand offered to join forces under Sinruth's
+            banner and more than double Sinruth's fifty soldiers
+            under arms. All Sinruth had to do was attack Brindol,
+            steal some relics from the original Red Hand invasion,
+            and take enough prisoners to keep the undead
+            guardians of Rivenroar satisfied.
+            <br/>
+            <br/>
+            Sinruth personally led the assault on Brindol, sacking
+            Brindol's Hall of Great Valor, stealing back
+            many of the museum pieces on display there. Sinruth
+            brought back seven prisoners, despite the fact that the
+            new Red Hand lost half its number in the attack.
+            <br/>
+            <br/>
+            Sinruth died at the hands of the Dusk Wardens when they
+            came to rescue the prisoners and retrieve the relics.
+        </span>
+    </div>
+    <div id="Thannu" class="bio">
+        <img src="../npcs/Thannu.png" class="portrait" />
+        <span class="description">
+            Thannu was Sarshan's grizzled shadar-kai captain. He had ritual scars standing
+            out on his cheeks and two umbral panthers as pets. At first he captured the
+            Dusk Wardens and presented them to his boss who offered them a job, but when
+            Sarshan left Thannu turned on them sensing their imminent betrayal.
+        </span>
+    </div>
+    <div id="Thurann" class="bio">
+        <img src="../npcs/Thurann.png" class="portrait" />
+        <span class="description">
+            The 8-year-old son of Kartenix the
+            guard captain of Brindol, Thurann was kidnapped by Sinruth. Thurann
+            is a brave, observant boy. Outwardly, he handled his
+            ordeal better than many of the adults. He even stole
+            food for Jalissa and himself.
+            Thurann has some skills you wouldn't expect the
+            son of a watch captain to have. Despite his small size,
+            he is very athletic with a skill at thievery. And while he
+            can't really fight, he's brave when it comes to climbing
+            or handling other hazards.
+        </span>
+    </div>
+    <div id="Tiamat" class="bio">
+        <img src="../npcs/Tiamat.png" class="portrait" />
+        <span class="description">
+            Tiamat is the evil goddess of wealth, greed, and envy. She is the patron of chromatic dragons and those whose lust for wealth overrides any other goal or concern. She commands her followers to:
+            <ul>
+                <li>Hoard wealth, acquiring much and spending little. Wealth is its own reward.</li>
+                <li>Forgive no slight and leave no wrong unpunished.</li>
+                <li>Take what you desire from others. Those who lack the strength to defend their possessions are not worthy to own them.</li>
+            </ul>
+            Her immortal enemy is the god Bahamut.
+        </span>
+    </div>
+    <div id="Tusk" class="bio">
+        <img src="../npcs/Tusk and Myrissa.png" class="portrait" />
+        <span class="description">
+            Tusk was an orc leader is an overlarge warrior and chieftain. Not a true orc, he has the blood of
+            ogres in his veins, which made him larger, tougher,
+            and eminently more dangerous. Having slaughtered
+            half a dozen orc chieftains, he drew together the
+            unruly tribes to mount an offensive against Bordrin's
+            Watch to lay claim to the soft lands beyond its walls.
+            Tusk knew the history of the Stonehome Mountains
+            well, knowing that unless he could find some way to
+            bypass the fortress in the mountains, it wouldn't matter
+            how many warriors he commanded since he would fail.
+            What Tusk needed was a way around the fortress.
+            Ever resourceful and with numerous contacts and
+            allies, Tusk turned to his occasional lover and advisor,
+            a shadar-kai witch named Myrissa. He sent her back
+            to the Shadowfell to recruit allies to help his cause,
+            and a short time later she returned with a small army
+            of dark ones, led by a mysterious and sinister dark
+            creeper, known as the Emissary (Modra). This leader offered
+            to assist Tusk in exchange for an exclusive arrangement
+            in which they would supply Tusk's armies with
+            weaponry for whatever price Modra asked, and in exchange, the dark creepers
+            would find a way through the mountains. Tusk readily
+            agreed and paid the exorbitant price, gaining a
+            fine arsenal, and also, he hoped, the key to victory.
+            <br/>
+            <br/>
+            Not long after, the dark creepers returned and
+            revealed a number of tunnels burrowed beneath the
+            mountain. They showed the chieftain the locations of
+            each, explaining how the passages connected one side
+            of the mountains to the other. No tunnel was large
+            enough to accommodate his entire army, so, Tusk
+            gave his horde their marching orders, sending them
+            to climb the mountain slopes, while his scouts moved
+            ahead to secure the tunnels and prepare the way for
+            Tusk and his elite warriors to strike the fortress from
+            below.
+        </span>
+    </div>
+    <div id="Two-Teeth" class="bio">
+        <img src="../npcs/Two-Teeth.png" class="portrait" />
+        <span class="description">
+            Two-Teeth, named after the teeth he lost after being
+            kicked by a wild horse, is a half-orc barbarian who was
+            traveling through Brindol at the time of the race.
+            Spying an opportunity for profit and being accustomed
+            to long-distance running since childhood, he
+            saw it as a chance for some easy money to pay his
+            way across the land.
+            Two-Teeth is a stereotypical brute. If he thinks he
+            can get away with it, he would have no compunction about
+            tackling, beating, knocking out, or otherwise interfering
+            with another runner in order to get ahead.
+        </span>
+    </div>
+    <div id="Tyrgarun" class="bio">
+        <img src="../npcs/Tyrgarun.png" class="portrait" />
+        <span class="description">
+            Tyrgarun was an adult blue dragon and father of the the half-dragon hobgoblin warrior Azarr Kul who united the tribes of the
+            Wyrmsmoke Mountains and formed the Red Hand.
+        </span>
+    </div>
+    <div id="Zerriska" class="bio">
+        <img src="../npcs/Zerriska.png" class="portrait" />
+        <span class="description">
+            Everyone in Brindol thinks that the crone Zerriksa is a witch,
+            but she's really just an accomplished herbalist. She's a naturally cranky
+            70-year-old woman who was kidnapped by Sinruth. She played rumours of her "dark powers"
+            to her advantage while captive.
+        </span>
+    </div>
+    <div id="Zithiruun" class="bio">
+        <img src="../npcs/General Zithiruun.png" class="portrait" />
+        <span class="description">
+            <p>
+                Once, he reigned supreme.
+            </p>
+            <p>
+                General Zithiruun was a great hero - one of the
+                most respected military leaders of a militant race.
+                From the great city of Tu'narath, he led armies of the
+                githyanki on raids across the Astral Sea, and into a
+                dozen different regions and kingdoms of the mortal
+                realm. From the deck of the astral galleon Siun'kara
+                or the back of Rathoraiax, his great red dragon steed,
+                Zithiruun proved an unstoppable force - a champion
+                among a race of champions. Even Vlaakith, the
+                fearsome githyanki lich queen, acknowledged his
+                greatness, heaped great praise upon him.
+                And then the great General Zithiruun took on a
+                foe beyond even his own prowess.
+            </p>
+            <p>
+                That it was a dragon, a dragon far greater than
+                Rathoraiax, everyone knows, but tales of the confrontation
+                differ as to whether it was a black wyrm,
+                one of the fearsome scourge dragons, or something
+                else entirely. But while not everyone knows precisely
+                what it was Zithiruun faced, everyone knows what
+                happened as a result.
+            </p>
+            <p>
+                A hideous burst of something - acid, perhaps, or
+                pure necrotic energy - ripped the life from the red
+                dragon Rathoraiax, shredding flesh and obliterating
+                entire portions of the beast. And it was this attack
+                that felled Zithiruun as well. It stripped the strength
+                from his limbs, rotted bits of flesh and even weakened
+                bone. Any lesser warrior would have died in that hideous
+                moment, but the general clung to life through
+                sheer force of stubborn, malignant will.
+            </p>
+            <p>
+                It took years for Zithiruun to retrain and reinvigorate
+                his broken body. Even by the time he encountered our heroes, he was a shadow of
+                what he once was - weaker in body, far less sound in
+                mind. His own people had all but turned their backs
+                on him; though his great achievements prevented them
+                from executing or exiling him utterly, they scorn his
+                weakness and hold him in contempt for allowing himself
+                and his mount to be so soundly defeated. By the siege of Overlook,
+                Zithiruun served as a lowly operative of Tu'narath's
+                forces and he led only lesser warriors into battle
+                while answering to and obeying githyanki who would
+                once have feared even to speak in his presence.
+            </p>
+            <p>
+                Zithiruun's native powers had mutated through
+                his years of effort as he attempted to reinvigorate
+                his body at the expense of his mental prowess. The
+                ambition all githyanki share had been subsumed by
+                a burning need to prove himself and to regain the
+                position and the respect that were once his by right -
+                even as he nursed a resentful hatred of the very people
+                whose adulation he so desperately craved.
+            </p>
+            <p>
+                Zithiruun had been large for a githyanki, but since the
+                destruction and atrophy of much of his musculature,
+                he appeared almost impossibly tall and gaunt.
+                Mixed with and attached to the traditional leathers of
+                his people, he wore a contraption of braces and harnesses,
+                constructed of leather straps and iron joints.
+            </p>
+            <p>
+                These braces, supported at his shoulders and by a strap
+                across his chest, ran the length of his left arm and left
+                leg, as well as a portion of his right leg. It is the straps
+                that gave those limbs rigidity; without them, they could
+                scarcely move, and not support his weight. This harness
+                also granted him full mobility; charged with both
+                magic and psychic energy, it permited him motion and
+                granted him strength he would otherwise lack.
+            </p>
+            <p>
+                His flesh clung tightly to his skeleton and puckered
+                away from old wounds, exposing muscle and even
+                charred bone. His left cheek gaped open, revealing
+                a bit of metal plate that replaced a fragment of skull.
+                A leather strap held the left side of his jaw in place,
+                replacing obliterated muscle.
+            </p>
+            <p>
+                He appeared weak indeed, and in some ways he
+                truly was. Yet Zithiruun wielded his great silver saber
+                with an astonishing, impossible precision, and his
+                eyes burned with loathing and ambition to shame even
+                the other githyanki.
+            </p>
+            <p>
+                Despite his drive, General Zithiruun met his end at the
+                hands of our heroes when he laid siege to Overlook with
+                his mercenary army.
+            </p>
+        </span>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="../dist/characters.js"></script>
+<script type="text/javascript" src="../dist/groups.js"></script>
+<script type="text/javascript" src="../dist/places.js"></script>
+<script type="text/javascript" src="../index.js"></script>
+</body>
+</html>

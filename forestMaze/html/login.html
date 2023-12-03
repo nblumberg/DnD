@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>The Forest</title>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+  <meta content="utf-8" http-equiv="encoding" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png" />
+  <link rel="manifest" href="favicon_io/site.webmanifest" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+
+<body>
+  <form>
+    <div>
+      <label for="name">Who are you?</label>
+    </div>
+    <select id="name">
+      <option disabled>--</option>
+    </select>
+  </form>
+  <script>
+    const nameInput = document.getElementById('name');
+
+    fetch('/users').then(response => response.json()).then(users => {
+      Object.entries(users).forEach(([value, text]) => {
+        if (value === 'DM') {
+          return;
+        }
+        const option = document.createElement("option");
+        option.textContent = text;
+        option.value = value;
+        nameInput.appendChild(option);
+      });
+      nameInput.selectedIndex = 0;
+    });
+
+    nameInput.addEventListener('change', (event) => {
+      const user = nameInput.options[nameInput.selectedIndex].value;
+      window.location = `index.html?name=${user}`;
+    });
+  </script>
+</body>
+
+</html>
