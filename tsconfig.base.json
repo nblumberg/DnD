@@ -1,0 +1,63 @@
+{
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true,
+
+    "allowArbitraryExtensions": true,
+    "allowImportingTsExtensions": false,
+    "allowUmdGlobalAccess": false,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": false,
+
+    "declaration": true,
+    "declarationMap": true,
+    "downlevelIteration": true,
+    "noEmitOnError": false,
+    "outDir": "dist",
+    "removeComments": false,
+    "sourceMap": true,
+
+    "allowJs": true,
+    "checkJs": true,
+
+    "plugins": [
+      { "name": "typescript-styled-plugin" },
+      { "name": "typescript-eslint-language-service" }
+    ],
+
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": false,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+
+    "jsx": "react-jsx",
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+
+    "composite": true,
+    "incremental": true
+  },
+  "references": [
+    { "path": "./packages/creature" },
+    { "path": "./packages/compendium-server" },
+    { "path": "./packages/combat-tracker" },
+    { "path": "./packages/roll" },
+    { "path": "./packages/serializable" }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.browser.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "lib": ["ESNext", "DOM"]
+  },
+  "files": ["src/js/index.ts"],
+  "include": ["src/js/**/*"]
+}
