@@ -3,7 +3,8 @@ import { readMonsters } from "./monsters";
 
 initAuth().then(async () => {
   // listEntries("monsters", 1);
-  readMonsters(undefined, "Winged Kobold");
+  readMonsters();
+  // readMonsters(undefined, "Winged Kobold");
   // readMonster("Arakocra", "https://www.dndbeyond.com/monsters/17100-aarakocra");
   // readMonster("Aboleth", "https://www.dndbeyond.com/monsters/16762-aboleth");
   // readMonster(

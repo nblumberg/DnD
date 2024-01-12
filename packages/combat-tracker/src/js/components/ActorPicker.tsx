@@ -220,10 +220,13 @@ function findOrThrow<T extends { id: string }>(
 function getSelectedIds(event: SyntheticEvent): string[] {
   const select = event.target as HTMLSelectElement;
   const ids = Array.prototype.map.call(
-    select.selectedOptions,
+    select.selectedOptions ?? [],
     ({ value }: HTMLOptionElement) => value
   ) as string[];
-  select.selectedIndex = -1;
+  // Wait slightly to deselect to allow double-click to work
+  setTimeout(() => {
+    select.selectedIndex = -1;
+  }, 100);
   return ids;
 }
 

@@ -10,7 +10,7 @@ export interface RollHistory {
 }
 
 export type RollParams =
-  | [string]
+  | [string | Roll]
   | [
       {
         dieCount: number;
@@ -242,7 +242,7 @@ export class Roll extends Serializable {
 }
 
 const diceSyntaxRegExp =
-  /^(?<dieCount>\d+)d(?<dieSides>\d+)(?<extra>[+-]\d+)?$/;
+  /^(?<dieCount>\d+)d(?<dieSides>\d+)\s*(?<extra>[+-]\s*\d+)?$/;
 
 function parseString(str: string): {
   dieCount: number;

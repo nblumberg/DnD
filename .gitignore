@@ -29,3 +29,4 @@ forestMaze/dist
 state.json
 forestMaze/lib
 dndbeyond-proxy/data/
+packages/dndbeyond-proxy/data

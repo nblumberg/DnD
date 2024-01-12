@@ -42,6 +42,29 @@ class Check extends Roll {
   }
 }
 
+export enum Condition {
+  BLINDED = "blinded",
+  CHARMED = "charmed",
+  DEAD = "dead",
+  DEAFENED = "deafened",
+  EXHAUSTION_1 = "exhaustion level 1",
+  EXHAUSTION_2 = "exhaustion level 2",
+  EXHAUSTION_3 = "exhaustion level 3",
+  EXHAUSTION_4 = "exhaustion level 4",
+  EXHAUSTION_5 = "exhaustion level 5",
+  FRIGHTENED = "frightened",
+  GRAPPLED = "grappled",
+  INCAPACITATED = "incapacitated",
+  INVISIBLE = "invisible",
+  PARALYZED = "paralyzed",
+  PETRIFIED = "petrified",
+  POISONED = "poisoned",
+  PRONE = "prone",
+  RESTRAINED = "restrained",
+  STUNNED = "stunned",
+  UNCONSCIOUS = "unconscious",
+}
+
 export interface CreatureParams extends Abilities {
   name: string;
   url: string;
@@ -49,24 +72,31 @@ export interface CreatureParams extends Abilities {
   size: Size;
   type: string;
   subtype?: string;
-  alignment: AlignmentParam;
+  alignment: AlignmentParam | string;
   ac: number;
   hp: number;
-  hd: number;
+  hpCurrent?: number;
+  hpTemp?: number;
+  hd: string;
   initiative?: number;
   speeds: Speeds;
   saves?: Partial<Abilities>;
-  skills?: SkillsParams;
+  skills?: Partial<SkillsParams>;
   senses: Senses;
   languages?: string[];
   cr?: number;
   proficiency: number;
   description: string;
-  environment: string;
+  environment: string[];
   source: string;
   features?: ActionParams[];
   actions?: Record<string, ActionParams[]>;
   spells?: Spells;
+  damageVulnerabilities?: string[];
+  damageResistances?: string[];
+  damageImmunities?: string[];
+  conditionImmunities?: string[];
+  conditions?: Condition[];
 }
 
 export class Creature extends Serializable {
@@ -83,7 +113,9 @@ export class Creature extends Serializable {
 
   ac: number;
   hp: number;
-  hd: number;
+  hpCurrent: number;
+  hpTemp: number;
+  hd: Roll;
   speeds: Speeds;
 
   str: Ability;
@@ -97,6 +129,13 @@ export class Creature extends Serializable {
 
   saves: Abilities;
 
+  damageVulnerabilities: string[];
+  damageResistances: string[];
+  damageImmunities: string[];
+  conditionImmunities: string[];
+
+  conditions: Condition[];
+
   skills: Skills;
 
   senses: Senses;
@@ -104,7 +143,7 @@ export class Creature extends Serializable {
   cr: number;
   proficiency: number;
 
-  environment?: string;
+  environment?: string[];
   source?: string;
 
   features: ActionParams[];
@@ -132,12 +171,14 @@ export class Creature extends Serializable {
 
     this.ac = params.ac;
     this.hp = params.hp;
-    this.hd = params.hd;
+    this.hpCurrent = params.hpCurrent ?? params.hp;
+    this.hpTemp = params.hpTemp ?? 0;
+    this.hd = new Roll(params.hd);
     this.speeds = params.speeds;
 
     this.senses = { ...params.senses };
     this.languages = [...(params.languages ?? [])];
-    this.cr = params.cr ?? this.hd;
+    this.cr = params.cr ?? this.hd.dieCount;
     this.proficiency = params.proficiency;
 
     this.environment = params.environment;
@@ -199,6 +240,13 @@ export class Creature extends Serializable {
 
       this.skills = createSkills(abilityModifiers, params.skills);
     }
+
+    this.damageVulnerabilities = params.damageVulnerabilities ?? [];
+    this.damageResistances = params.damageResistances ?? [];
+    this.damageImmunities = params.damageImmunities ?? [];
+    this.conditionImmunities = params.conditionImmunities ?? [];
+
+    this.conditions = params.conditions ?? [];
 
     this.initiative = new Check(
       params.initiative instanceof Check

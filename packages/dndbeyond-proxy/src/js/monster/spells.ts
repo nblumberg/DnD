@@ -26,7 +26,7 @@ export function getSpells(parentElement: HTMLElement): Spells | undefined {
   spellElements.forEach((spellElement) => {
     const spellName = getElementText(spellElement);
 
-    let element = spellElement;
+    let element: Element | null = spellElement;
     while (element && element.tagName.toLowerCase() !== "p") {
       element = element.parentElement;
     }

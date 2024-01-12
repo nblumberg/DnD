@@ -4,6 +4,7 @@ import { join } from "path";
 import axios from "axios";
 import { JSDOM } from "jsdom";
 
+import { AlignmentParam, CreatureParams } from "creature";
 import { addAuthHeader } from "./auth";
 import { getElementText } from "./dom";
 import { getAbility } from "./monster/abilities";
@@ -57,10 +58,10 @@ class NotPurchasedError extends MonsterError {
   }
 }
 
-function handleError(error: string): void {
-  console.error(`\t${error}`);
-  throw new MonsterError(error);
-}
+// function handleError(error: string): void {
+//   console.error(`\t${error}`);
+//   throw new MonsterError(error);
+// }
 
 const cacheResponse = true;
 
@@ -109,7 +110,7 @@ function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
   const {
     window: { document },
   } = new JSDOM(rawHTML);
-  const monsterDetails: HTMLElement = document.querySelector(
+  const monsterDetails: HTMLElement | null = document.querySelector(
     ".monster-details .details-more-info"
   );
   if (!monsterDetails) {
@@ -121,7 +122,7 @@ function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
 
   const image = getImage(monsterDetails);
 
-  const statBlock: HTMLElement = monsterDetails.querySelector(
+  const statBlock: HTMLElement | null = monsterDetails.querySelector(
     ".detail-content .mon-stat-block"
   );
   if (!statBlock) {
@@ -133,7 +134,7 @@ function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
 
     const { ac, hp, hd, speeds } = getAttributes(statBlock);
 
-    const abilitiesParent: HTMLElement =
+    const abilitiesParent: HTMLElement | null =
       statBlock.querySelector(".ability-block");
     if (!abilitiesParent) {
       throw new MonsterError(`Could not find ${name} abilities`);
@@ -145,49 +146,56 @@ function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
     const wis = getAbility(abilitiesParent, "wis");
     const cha = getAbility(abilitiesParent, "cha");
 
-    const { saves, skills, senses, languages, cr, proficiency } = getTidbits(
-      name,
-      statBlock,
-      hd
-    );
+    const {
+      saves,
+      skills,
+      senses,
+      languages,
+      cr,
+      proficiency,
+      damageVulnerabilities,
+      damageResistances,
+      damageImmunities,
+      conditionImmunities,
+    } = getTidbits(name, statBlock, hd);
 
-    let description: string;
-    const monsterDescription: HTMLElement = monsterDetails.querySelector(
+    let description = "";
+    const monsterDescription: HTMLElement | null = monsterDetails.querySelector(
       ".mon-details__description-block-content"
     );
     if (monsterDescription) {
       description = monsterDescription.innerHTML.trim();
     }
 
-    let environment: string[];
-    const environmentTagElements: Element[] = Array.from(
+    let environment: string[] = [];
+    const environmentTagElements = Array.from(
       monsterDetails.querySelectorAll(".environment-tag")
     );
     if (environmentTagElements.length) {
-      environment = environmentTagElements.map((element) =>
-        element.textContent.trim()
+      environment = environmentTagElements.map(
+        (element) => element.textContent?.trim() ?? ""
       );
     }
 
-    let source: string;
-    const sourceElement: HTMLElement =
+    let source = "";
+    const sourceElement: HTMLElement | null =
       monsterDetails.querySelector(".monster-source");
     if (sourceElement) {
-      source = sourceElement.textContent.trim();
+      source = sourceElement.textContent?.trim() ?? "";
     }
 
     const { features, ...actions } = getActions(monsterDetails);
 
     const spells: Spells | undefined = getSpells(monsterDetails);
 
-    const creature = {
+    const creature: CreatureParams = {
       name,
       url,
-      image,
+      image: image ?? "",
       size,
       type,
       subtype,
-      alignment,
+      alignment: alignment ?? AlignmentParam.ANY,
       ac,
       hp,
       hd,
@@ -199,6 +207,10 @@ function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
       wis,
       cha,
       saves,
+      damageVulnerabilities,
+      damageResistances,
+      damageImmunities,
+      conditionImmunities,
       skills,
       senses,
       languages,
@@ -216,7 +228,7 @@ function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
     writeFileSync(filePath, JSON.stringify(creature, null, 2), "utf8");
     console.log(`\tWrote ${filePath}`);
   } catch (e) {
-    throw new MonsterError(e.stack);
+    throw new MonsterError((e as Error).stack ?? "[missing stack]");
   }
 }
 
@@ -237,9 +249,12 @@ export async function findEntries({
   // console.log("Entries", entries.length);
   const entries: Record<string, string> = {};
   const promises = rows.map((row) => {
-    const nameCell: HTMLAnchorElement = row.querySelector(
+    const nameCell: HTMLAnchorElement | null = row.querySelector(
       ".monster-name .name .link"
     );
+    if (!nameCell) {
+      throw new Error("Couldn't find name element");
+    }
     // console.log(
     //   `${nameCell.tagName}${nameCell.id ? `#${nameCell.id}` : ""}.${
     //     nameCell.classList.value
@@ -283,6 +298,8 @@ export function readMonsters(names?: string[], startAfter?: string): void {
     ) {
       return;
     }
+    const { heapUsed, heapTotal } = process.memoryUsage();
+    console.log(`Memory ${(heapUsed / heapTotal) * 100}%`);
     try {
       const rawHtml = readFileSync(join(htmlPath, filename), "utf8");
       const { data } = parseRegExpGroups(
@@ -295,7 +312,7 @@ export function readMonsters(names?: string[], startAfter?: string): void {
       parseMonsterHTML(rawHtml, name, url);
     } catch (e) {
       // ignore errors
-      if (e.purchased === false) {
+      if ((e as any).purchased === false) {
         return;
       }
       throw e;

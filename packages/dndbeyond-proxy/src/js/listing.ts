@@ -39,6 +39,9 @@ function findTotalPages({ window: { document } }: JSDOM): number {
     // console.log(lastPageParent.outerHTML);
     const lastPage: HTMLElement | null =
       lastPageParent.querySelector(".b-pagination-item");
+    if (!lastPage) {
+      throw new Error("Couldn't find last page element");
+    }
     const totalPages = parseInt(getElementText(lastPage), 10);
     return totalPages;
   } catch (e) {

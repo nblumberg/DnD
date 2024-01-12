@@ -7,7 +7,7 @@ export function getAttributes(parentElement: HTMLElement): {
   hd: string;
   speeds: Speeds;
 } {
-  const attributesParent: HTMLElement = parentElement.querySelector(
+  const attributesParent: HTMLElement | null = parentElement.querySelector(
     ".mon-stat-block__attributes"
   );
   if (!attributesParent) {
@@ -17,20 +17,19 @@ export function getAttributes(parentElement: HTMLElement): {
   const attributes = Array.from(
     attributesParent.querySelectorAll(".mon-stat-block__attribute")
   );
-  let ac: number;
-  let hp: number;
-  let hd: string;
-  let speeds: Speeds;
+  let ac: number | undefined;
+  let hp: number | undefined;
+  let hd: string | undefined;
+  let speeds: Speeds | undefined;
   for (const attribute of attributes) {
-    const label = getElementText(
-      attribute.querySelector(".mon-stat-block__attribute-label")
+    let element: Element | null = attribute.querySelector(
+      ".mon-stat-block__attribute-label"
     );
-    const value = getElementText(
-      attribute.querySelector(".mon-stat-block__attribute-data-value")
-    );
-    const extra = getElementText(
-      attribute.querySelector(".mon-stat-block__attribute-data-extra")
-    );
+    const label = element ? getElementText(element) : "";
+    element = attribute.querySelector(".mon-stat-block__attribute-data-value");
+    const value = element ? getElementText(element) : "";
+    element = attribute.querySelector(".mon-stat-block__attribute-data-extra");
+    const extra = element ? getElementText(element) : "";
     switch (label) {
       case "Armor Class":
         ac = parseInt(value, 10);

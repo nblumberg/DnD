@@ -3,8 +3,8 @@ export function parseRegExpGroups(
   regexp: RegExp,
   text: string,
   allowNoMatch: boolean = false
-): ReturnType<typeof RegExp.prototype.exec>["groups"] {
-  let groups: ReturnType<typeof RegExp.prototype.exec>["groups"];
+): { [key: string]: string } {
+  let groups: { [key: string]: string };
   try {
     const result = regexp.exec(text);
     if (!result) {
@@ -13,7 +13,7 @@ export function parseRegExpGroups(
       }
       throw new Error(`${name} RegExp found no match in "${text}"`);
     }
-    ({ groups } = regexp.exec(text));
+    groups = result?.groups ?? {};
   } catch (e) {
     throw new Error(`${name} RegExp failed to parse groups from ${text}`);
   }

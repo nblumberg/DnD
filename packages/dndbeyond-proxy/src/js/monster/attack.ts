@@ -1,6 +1,6 @@
 import { getElementText, getRemainingText } from "../dom";
 import { parseRegExpGroups } from "../utils";
-import { Action, DamageType } from "./types";
+import { Action, AttackType, DamageType, OnHit } from "./types";
 
 const attackTypeRegExp =
   /(?<attackMode>Melee or Ranged|Melee|Ranged)\s+(?<attackMethod>Weapon|Spell)?\s*Attack/;
@@ -20,8 +20,8 @@ const rangeRegExp =
 const mistakeRangeRegExp =
   /reach\s+(?<nearRange>\d+)(\s*\/\s*(?<farRange>\d+))?\s+f(ee)?t/;
 const targetRegExp = /,\s+(?<target>[^.]+)\.\s+/;
-const attackHitRegExp =
-  /^\s*to\s+hit,\s+reach\s+(?<nearReach>\d+)\s*\/?\s*(?<farReach>\d+)?\s+ft\.,?\s+(?<target>.+).:$/;
+// const attackHitRegExp =
+//   /^\s*to\s+hit,\s+reach\s+(?<nearReach>\d+)\s*\/?\s*(?<farReach>\d+)?\s+ft\.,?\s+(?<target>.+).:$/;
 
 export function getAttack(entry: Element): Action["attack"] | undefined {
   const header = entry.querySelector("em") || entry.querySelector("strong");
@@ -55,12 +55,12 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
     return;
   }
 
-  let type: Action["attack"]["type"];
+  let type: AttackType;
   switch (attackMode) {
     case "Melee":
     case "Ranged":
     case "Melee or Ranged":
-      type = attackMode.toLowerCase() as Action["attack"]["type"];
+      type = attackMode.toLowerCase() as AttackType;
       break;
     default:
       throw new Error(`Failed to determine attack type from ${attackMode}`);
@@ -71,7 +71,7 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
     entry.querySelector('[data-rolltype="spell"]'); // See Bavlorna Blightstraw Withering Ray attack
 
   let modifier: number | "∞";
-  let [toHitText] = entry.textContent.split("Hit:");
+  let [toHitText] = entry.textContent?.split("Hit:") ?? [""];
   if (toHit) {
     modifier = parseInt(getElementText(toHit), 10);
     // toHitText = toHit.nextSibling.textContent.trim();
@@ -93,7 +93,9 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
     toHitText,
     true
   );
-  let reach: number | "∞" = reachText ? parseInt(reachText, 10) : undefined;
+  let reach: number | "∞" | undefined = reachText
+    ? parseInt(reachText, 10)
+    : undefined;
   let { nearRange: nearRangeText, farRange: farRangeText } = parseRegExpGroups(
     "rangeRegExp",
     rangeRegExp,
@@ -101,7 +103,7 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
     true
   );
   if (!nearRangeText && type === "ranged") {
-    const name = nameElement.textContent.trim();
+    const name = nameElement.textContent?.trim() ?? "";
     if (name === "Drop." || name === "Dropped Rock.") {
       // See Piercer, https://www.dndbeyond.com/monsters/17191-piercer Drop, Winged Kobold, https://www.dndbeyond.com/monsters/17210-winged-kobold, Dropped Rock
       reach = "∞";
@@ -142,10 +144,10 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
   // // Trim trailing period
   // target = target.substring(0, target.length - 1);
 
-  let onHit: Action["attack"]["onHit"];
+  let onHit: OnHit | undefined;
   const damageElement = entry.querySelector('[data-rolltype="damage"]');
   if (damageElement) {
-    const amount = damageElement.getAttribute("data-dicenotation");
+    const amount = damageElement.getAttribute("data-dicenotation") || "";
     const damageType = damageElement.getAttribute("data-rolldamagetype");
 
     onHit = {
@@ -176,7 +178,7 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
     attack.toHit.reach = reach;
   }
   if (farRange) {
-    attack.toHit.range = [nearRange, farRange];
+    attack.toHit.range = [nearRange!, farRange];
   } else {
     attack.toHit.range = nearRange;
   }

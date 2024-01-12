@@ -8,7 +8,8 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc --build --force --verbose",
+    "build": "rm -rf dist && webpack",
+    "build-tsc": "rm -rf dist && tsc --build --force --verbose",
     "test": "jest",
     "testWatch": "jest --watch"
   },

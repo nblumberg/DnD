@@ -17,6 +17,10 @@ export function getTidbits(
   languages?: string[];
   cr?: number;
   proficiency: number;
+  damageVulnerabilities?: string[];
+  damageResistances?: string[];
+  damageImmunities?: string[];
+  conditionImmunities?: string[];
 } {
   const tidbits = parentElement.querySelectorAll(
     ".mon-stat-block__tidbits .mon-stat-block__tidbit"
@@ -25,20 +29,29 @@ export function getTidbits(
     throw new Error(`Could not find ${name} tidbits`);
   }
 
-  let saves: Record<string, number>;
-  let skills: Record<string, number>;
-  let senses: Senses;
-  let languages: string[];
-  let cr: number;
+  let saves: Record<string, number> | undefined;
+  let skills: Record<string, number> | undefined;
+  let senses: Senses | undefined;
+  let languages: string[] | undefined;
+  let cr: number | undefined;
   let proficiency = 0;
+  let damageVulnerabilities: string[] | undefined;
+  let damageResistances: string[] | undefined;
+  let damageImmunities: string[] | undefined;
+  let conditionImmunities: string[] | undefined;
   for (let i = 0; i < tidbits.length; i++) {
     const tidbit = tidbits[i];
-    const label = getElementText(
-      tidbit.querySelector(".mon-stat-block__tidbit-label")
-    );
-    const data: HTMLElement = tidbit.querySelector(
+    const element = tidbit.querySelector(".mon-stat-block__tidbit-label");
+    if (!element) {
+      throw new Error("Couldn't find tidbit label element");
+    }
+    const label = getElementText(element);
+    const data: HTMLElement | null = tidbit.querySelector(
       ".mon-stat-block__tidbit-data"
     );
+    if (!data) {
+      throw new Error("Couldn't find tidbit data element");
+    }
     switch (label) {
       case "Saving Throws":
         saves = getSavingThrows(data);
@@ -58,6 +71,18 @@ export function getTidbits(
       case "Proficiency Bonus":
         proficiency = getProficiencyBonus(data);
         break;
+      case "Damage Vulnerabilities":
+        damageVulnerabilities = getElementText(data).split(/\s*,\s*/);
+        break;
+      case "Damage Resistances":
+        damageResistances = getElementText(data).split(/\s*,\s*/);
+        break;
+      case "Damage Immunities":
+        damageImmunities = getElementText(data).split(/\s*,\s*/);
+        break;
+      case "Condition Immunities":
+        conditionImmunities = getElementText(data).split(/\s*,\s*/);
+        break;
     }
   }
 
@@ -70,5 +95,16 @@ export function getTidbits(
     proficiency = Math.floor((level - 1) / 4) + 2;
   }
 
-  return { saves, skills, senses, languages, cr, proficiency };
+  return {
+    saves,
+    skills,
+    senses,
+    languages,
+    cr,
+    proficiency,
+    damageVulnerabilities,
+    damageResistances,
+    damageImmunities,
+    conditionImmunities,
+  };
 }

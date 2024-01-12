@@ -24,7 +24,7 @@ export function getElementTextNodesOnly(elements: Node | Node[]): string {
       // Node.TEXT_NODE
       continue;
     }
-    value += child.textContent.trim();
+    value += child.textContent?.trim() ?? "";
   }
   return value;
 }

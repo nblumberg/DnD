@@ -83,7 +83,7 @@ function rawArray(array: any[], nodes?: any[]): any[] | undefined {
   return r;
 }
 
-const HTMLElementConstructor = global.HTMLElement ?? class NeverMatch {};
+const HTMLElementConstructor = globalThis.HTMLElement ?? class NeverMatch {};
 
 function isSerializable(name: string, obj: any): boolean {
   return (

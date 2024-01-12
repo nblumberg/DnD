@@ -1,22 +1,16 @@
-export type AlignmentParam =
-  | "Lawful Good"
-  | "lg"
-  | "Neutral Good"
-  | "ng"
-  | "Chaotic Good"
-  | "cg"
-  | "Lawful Neutral"
-  | "ln"
-  | "Neutral"
-  | "n"
-  | "Chaotic Neutral"
-  | "cn"
-  | "Lawful Evil"
-  | "le"
-  | "Neutral Evil"
-  | "ne"
-  | "Chaotic Evil"
-  | "ce";
+export enum AlignmentParam {
+  LG = "Lawful Good",
+  NG = "Neutral Good",
+  CG = "Chaotic Good",
+  LN = "Lawful Neutral",
+  N = "Neutral",
+  CN = "Chaotic Neutral",
+  LE = "Lawful Evil",
+  NE = "Neutral Evil",
+  CE = "Chaotic Evil",
+  ANY = "Any Alignment",
+  U = "Unaligned",
+}
 
 type TriValue = true | undefined | false;
 
@@ -26,7 +20,7 @@ export class Alignment {
   shortName: string;
   longName: string;
   constructor(
-    ...args: [AlignmentParam] | [TriValue, TriValue, string, string]
+    ...args: [AlignmentParam | string] | [TriValue, TriValue, string, string]
   ) {
     if (typeof args[0] === "boolean" || typeof args[0] === "undefined") {
       this.lawChaos = args[0];
@@ -42,37 +36,28 @@ export class Alignment {
         .replace("Usually ", "")
         .replace("Typically ", "") as AlignmentParam;
       switch (text) {
-        case "Lawful Good":
-        case "lg":
+        case AlignmentParam.LG:
           return LawfulGood;
-        case "Neutral Good":
-        case "ng":
+        case AlignmentParam.NG:
           return NeutralGood;
-        case "Chaotic Good":
-        case "cg":
+        case AlignmentParam.CG:
           return ChaoticGood;
-        case "Lawful Neutral":
-        case "ln":
+        case AlignmentParam.LN:
           return LawfulNeutral;
-        case "Neutral":
-        case "n":
+        case AlignmentParam.N:
           return Neutral;
-        case "Chaotic Neutral":
-        case "cn":
+        case AlignmentParam.CN:
           return ChaoticNeutral;
-        case "Lawful Evil":
-        case "le":
+        case AlignmentParam.LE:
           return LawfulEvil;
-        case "Neutral Evil":
-        case "ne":
+        case AlignmentParam.NE:
           return NeutralEvil;
-        case "Chaotic Evil":
-        case "ce":
+        case AlignmentParam.CE:
           return ChaoticEvil;
-        case "Any Alignment":
+        case AlignmentParam.ANY:
           console.warn("Treating Any Alignment as Neutral");
           return Neutral;
-        case "Unaligned":
+        case AlignmentParam.U:
           console.warn("Treating Unaligned as Neutral");
           return Neutral;
         default:

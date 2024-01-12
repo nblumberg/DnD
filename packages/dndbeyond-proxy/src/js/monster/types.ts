@@ -10,11 +10,19 @@ export type DamageType =
   | "radiant"
   | "thunder";
 
+export type AttackType = "melee" | "ranged" | "melee or ranged";
+
+export interface OnHit {
+  amount: string;
+  type: DamageType;
+  effect?: string;
+}
+
 export interface Action {
   name: string;
   description?: string;
   attack?: {
-    type: "melee" | "ranged" | "melee or ranged";
+    type: AttackType;
     weapon?: true;
     toHit: {
       modifier: number | "∞";
@@ -22,11 +30,7 @@ export interface Action {
       reach?: number | "∞";
       range?: number | [number, number];
     };
-    onHit?: {
-      amount: string;
-      type: DamageType;
-      effect?: string;
-    };
+    onHit?: OnHit;
   };
   cost?: string;
 }

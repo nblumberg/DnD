@@ -1,6 +1,9 @@
 import { SyntheticEvent, useState } from "react";
 import styled from "styled-components";
 import { CastMember } from "../data/castMembers";
+import { ArmorClassShield } from "./ArmorClassShield";
+import { ConditionOverlay } from "./ConditionOverlay";
+import { HitPointBar } from "./HitPointsBar";
 
 const Panel = styled.div`
   align-items: stretch;
@@ -10,14 +13,25 @@ const Panel = styled.div`
   position: relative;
 `;
 const Initiative = styled.div`
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  color: black;
+  font-size: 1em;
+  height: 2em;
+  left: 0.5em;
+  line-height: 2em;
   position: absolute;
-  top: 1em;
-  left: 1em;
+  text-align: center;
+  top: 0.5em;
+  vertical-align: middle;
+  width: 2em;
 `;
 const PortraitFrame = styled.div`
   flex-grow: 100;
   max-height: 33vh;
   max-width: 20vw;
+  position: relative;
   text-align: center;
 `;
 const Portrait = styled.img`
@@ -57,8 +71,12 @@ export function CastMemberCard({ castMember }: { castMember: CastMember }) {
   };
   return (
     <Panel>
+      <HitPointBar castMember={castMember} />
       <PortraitFrame>
         <Portrait src={castMember.image}></Portrait>
+        <ConditionOverlay castMember={castMember} />
+        <Initiative>{castMember.initiativeOrder}</Initiative>
+        <ArmorClassShield castMember={castMember} />
       </PortraitFrame>
       {editing ? (
         <NameField
@@ -71,7 +89,6 @@ export function CastMemberCard({ castMember }: { castMember: CastMember }) {
       ) : (
         <NamePlate onClick={editName}>{name}</NamePlate>
       )}
-      <Initiative>{castMember.initiativeOrder}</Initiative>
     </Panel>
   );
 }

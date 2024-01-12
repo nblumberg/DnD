@@ -1,3 +1,4 @@
+import { Size } from "creature";
 import { getElementText } from "../dom";
 import { parseRegExpGroups } from "../utils";
 
@@ -5,12 +6,17 @@ const metaRegExp =
   /^(?<size>\w+)\s+(?<type>[^(,]+)(\s+\((?<subtype>[^\(\)]+)\))?(,\s+(?<alignment>.+))?$/;
 
 export function getMeta(statBlock: HTMLElement): {
-  size: string;
+  size: Size;
   type: string;
   subtype?: string;
   alignment?: string;
 } {
-  const meta: HTMLElement = statBlock.querySelector(".mon-stat-block__meta");
+  const meta: HTMLElement | null = statBlock.querySelector(
+    ".mon-stat-block__meta"
+  );
+  if (!meta) {
+    throw new Error("Couldn't find meta block");
+  }
   const metaText = getElementText(meta);
   const { size, type, subtype, alignment } = parseRegExpGroups(
     "metaRegExp",
@@ -20,8 +26,11 @@ export function getMeta(statBlock: HTMLElement): {
   if (!size) {
     throw new Error("Failed to parse size");
   }
+  if (!Object.values(Size as any).includes(size)) {
+    throw new Error(`${size} is not a recognized Size`);
+  }
   if (!type) {
     throw new Error("Failed to parse type");
   }
-  return { size, type, subtype, alignment };
+  return { size: size as Size, type, subtype, alignment };
 }

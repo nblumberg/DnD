@@ -79,7 +79,7 @@ export interface Skills extends Record<string, Skill> {
 
 export function createSkills(
   abilities: Abilities,
-  params?: SkillsParams
+  params?: Partial<SkillsParams>
 ): Skills {
   const skills: Skills = {} as Skills;
   // Create default skills
@@ -120,7 +120,7 @@ export function createSkills(
       }
       if (typeof args === "number") {
         skills[name] = new Skill(name, args);
-      } else {
+      } else if (args) {
         const {
           modifier,
           proficient = false,

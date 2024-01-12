@@ -37,7 +37,8 @@ app.use(express.json());
 // });
 
 // Start server
-const server = app.listen(port, () => {
+// const server =
+app.listen(port, () => {
   console.log(`Forest maze app listening on port ${port}`);
 });
 

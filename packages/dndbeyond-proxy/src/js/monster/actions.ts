@@ -1,6 +1,7 @@
 import { ActionParams } from "creature";
 import { getElementText, getRemainingText } from "../dom";
 import { parseRegExpGroups } from "../utils";
+import { parseCost } from "./action-cost";
 import { getAttack } from "./attack";
 
 const costRegExp = /(?<name>.+)\s+\((?<cost>.+)\)/;
@@ -27,12 +28,12 @@ class ContinuedDescription extends Error {
   }
 }
 
-function getAction(entry: Element, defaultName?: string): ActionParams {
-  let name: string;
+function getAction(entry: Element, type: string, defaultName?: string): ActionParams {
+  let name = "unknown name";
   try {
     const header = entry.querySelector("em") || entry.querySelector("strong");
 
-    let cost: string;
+    let cost: string | undefined;
     if (!header) {
       if (defaultName) {
         name = defaultName;
@@ -55,9 +56,9 @@ function getAction(entry: Element, defaultName?: string): ActionParams {
         (entry.firstChild as HTMLElement)?.classList?.contains("spell-tooltip")
       ) {
         // See Priest of Osybus (Deathly), https://www.dndbeyond.com/monsters/1680937-priest-of-osybus-deathly Circle of Death
-        name = entry.firstChild.textContent.trim();
+        name = entry.firstChild?.textContent?.trim() ?? "";
       } else {
-        name = (header.querySelector("strong") || header).textContent.trim();
+        name = (header.querySelector("strong") || header).textContent?.trim() ?? "";
       }
     }
 
@@ -70,12 +71,22 @@ function getAction(entry: Element, defaultName?: string): ActionParams {
       ({ name, cost } = parseRegExpGroups("costRegExp", costRegExp, name));
     }
 
+    let parsedCost: ReturnType<typeof parseCost> | undefined;
+    if (cost || type === "Legendary Actions" || type === "Mythic Actions") {
+      parsedCost = parseCost(cost ?? "", type);
+      if ("nameSuffix" in parsedCost!) {
+        // Wasn't a cost
+        name += parsedCost.nameSuffix;
+        parsedCost = undefined;
+      }
+    }
+
     const action: ActionParams = {
       name,
     };
 
-    if (cost) {
-      action.cost = cost;
+    if (parsedCost && name !== type) { // ignore Legendary Actions and Mythic Actions headers
+      action.cost = parsedCost as ActionParams["cost"];
     }
 
     const attack: ActionParams["attack"] | undefined = getAttack(entry);
@@ -92,11 +103,11 @@ function getAction(entry: Element, defaultName?: string): ActionParams {
 
     return action;
   } catch (e) {
-    if (e.continuedDescription) {
+    if ((e as any).continuedDescription) {
       // (e instanceof ContinuedDescription) { // instanceof Error doesn't work in Babel?
       throw e;
     }
-    console.error(`Failed to parse monster action ${name}`, e);
+    console.error(`Failed to parse monster action ${name ?? "unknown name"}`, e);
     throw e;
   }
 }
@@ -113,9 +124,13 @@ export function getActions(
       )
     );
     for (const category of categories) {
+      const heading = category.querySelector(".mon-stat-block__description-block-heading");
+      if (!heading) {
+        throw new Error("Couldn't find heading");
+      }
       const type =
         getElementText(
-          category.querySelector(".mon-stat-block__description-block-heading")
+          heading
         ).trim() || "features";
       const actionsArray = actions[type]
         ? actions[type]
@@ -128,16 +143,16 @@ export function getActions(
       for (const entry of entries) {
         try {
           actionsArray.push(
-            getAction(entry, !actionsArray.length ? type : undefined)
+            getAction(entry, type, !actionsArray.length ? type : undefined)
           );
         } catch (e) {
-          if (e.continuedDescription) {
+          if ((e as any).continuedDescription) {
             // instanceof Error doesn't seem to work with Babel?
             // Combine paragraph with prior action
             if (actionsArray.length) {
               appendContinuedDescription(
                 actionsArray[actionsArray.length - 1],
-                entry.textContent.trim()
+                entry.textContent?.trim() ?? ""
               );
             } else {
               throw new Error("No action to append continued description to");
@@ -149,6 +164,6 @@ export function getActions(
 
     return actions;
   } catch (e) {
-    throw new Error(`Failed to get actions: ${e.toString()}`);
+    throw new Error(`Failed to get actions: ${(e as Error).toString()}`);
   }
 }

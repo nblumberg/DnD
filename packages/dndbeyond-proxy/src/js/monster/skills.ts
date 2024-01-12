@@ -3,7 +3,7 @@ export function getSkills(parentElement: HTMLElement): Record<string, number> {
   let skill: string;
   Array.from(parentElement.childNodes).forEach((child: Node) => {
     let { textContent: text } = child;
-    text = text.trim();
+    text = text?.trim() ?? "";
     if (!text) {
       return;
     }

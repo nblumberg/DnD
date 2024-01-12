@@ -1,12 +1,10 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react-jsx",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "noImplicitAny": true,
-    "target": "es5"
+    "lib": ["ESNext", "DOM"],
+    "outDir": "dist",
+    "rootDir": "src"
   },
   "files": ["src/js/index.ts"],
   "include": ["src/js/**/*"]

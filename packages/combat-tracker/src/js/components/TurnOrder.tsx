@@ -1,7 +1,14 @@
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { selectCastMembers } from "../features/castMember/castMembers";
 import { CastMemberCard } from "./CastMemberCard";
 import { EmptyState } from "./EmptyState";
+
+const TurnOrderGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+`;
 
 export function TurnOrder() {
   const castMembers = useSelector(selectCastMembers);
@@ -14,14 +21,6 @@ export function TurnOrder() {
   return !initiativeOrder.length ? (
     <EmptyState></EmptyState>
   ) : (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "flex-start",
-        flexWrap: "wrap",
-      }}
-    >
-      {cards}
-    </div>
+    <TurnOrderGrid>{cards}</TurnOrderGrid>
   );
 }
