@@ -1,10 +1,11 @@
-import { Roll } from "roll";
-import { Serializable } from "serializable";
-import { Abilities, Ability } from "./ability";
-import { ActionParams } from "./action";
-import { Alignment, AlignmentParam } from "./alignment";
+import { Roll, RollRaw } from "roll";
+import { ClassMembers, Serializable } from "serializable";
+import { Abilities, Ability, AbilityRaw } from "./ability";
+import { ActionParams, DamageType } from "./action";
+import { Alignment, AlignmentParam, AlignmentRaw } from "./alignment";
+import { Condition } from "./condition";
 import { Size } from "./size";
-import { Skill, Skills, SkillsParams, createSkills } from "./skill";
+import { Skill, Skills, SkillsParams, SkillsRaw, createSkills } from "./skill";
 import { Spells } from "./spell";
 
 type Speeds = Record<string, number | { rate: number; precision: string }>;
@@ -27,43 +28,6 @@ const defaultImages: Record<string, string> = {
   plant: "659/plant.jpg",
   undead: "660/undead.jpg",
 };
-
-class Check extends Roll {
-  modifier: number;
-
-  constructor(extra: number, crits?: number) {
-    super({
-      dieCount: 1,
-      dieSides: 20,
-      extra,
-      crits,
-    });
-    this.modifier = extra;
-  }
-}
-
-export enum Condition {
-  BLINDED = "blinded",
-  CHARMED = "charmed",
-  DEAD = "dead",
-  DEAFENED = "deafened",
-  EXHAUSTION_1 = "exhaustion level 1",
-  EXHAUSTION_2 = "exhaustion level 2",
-  EXHAUSTION_3 = "exhaustion level 3",
-  EXHAUSTION_4 = "exhaustion level 4",
-  EXHAUSTION_5 = "exhaustion level 5",
-  FRIGHTENED = "frightened",
-  GRAPPLED = "grappled",
-  INCAPACITATED = "incapacitated",
-  INVISIBLE = "invisible",
-  PARALYZED = "paralyzed",
-  PETRIFIED = "petrified",
-  POISONED = "poisoned",
-  PRONE = "prone",
-  RESTRAINED = "restrained",
-  STUNNED = "stunned",
-  UNCONSCIOUS = "unconscious",
-}
 
 export interface CreatureParams extends Abilities {
   name: string;
@@ -92,11 +56,10 @@ export interface CreatureParams extends Abilities {
   features?: ActionParams[];
   actions?: Record<string, ActionParams[]>;
   spells?: Spells;
-  damageVulnerabilities?: string[];
-  damageResistances?: string[];
-  damageImmunities?: string[];
-  conditionImmunities?: string[];
-  conditions?: Condition[];
+  damageVulnerabilities?: DamageType[];
+  damageResistances?: DamageType[];
+  damageImmunities?: DamageType[];
+  conditionImmunities?: Condition[];
 }
 
 export class Creature extends Serializable {
@@ -113,8 +76,6 @@ export class Creature extends Serializable {
 
   ac: number;
   hp: number;
-  hpCurrent: number;
-  hpTemp: number;
   hd: Roll;
   speeds: Speeds;
 
@@ -125,16 +86,14 @@ export class Creature extends Serializable {
   wis: Ability;
   cha: Ability;
 
-  initiative: Check;
+  initiativeModifier: number;
 
   saves: Abilities;
 
-  damageVulnerabilities: string[];
-  damageResistances: string[];
-  damageImmunities: string[];
-  conditionImmunities: string[];
-
-  conditions: Condition[];
+  damageVulnerabilities: DamageType[];
+  damageResistances: DamageType[];
+  damageImmunities: DamageType[];
+  conditionImmunities: Condition[];
 
   skills: Skills;
 
@@ -150,7 +109,7 @@ export class Creature extends Serializable {
   actions: Record<string, ActionParams[]>;
   spells?: Spells;
 
-  constructor(params: CreatureParams | Creature) {
+  constructor(params: CreatureParams | CreatureRaw) {
     super();
     this.name = params.name;
     this.description = params.description;
@@ -171,9 +130,13 @@ export class Creature extends Serializable {
 
     this.ac = params.ac;
     this.hp = params.hp;
-    this.hpCurrent = params.hpCurrent ?? params.hp;
-    this.hpTemp = params.hpTemp ?? 0;
-    this.hd = new Roll(params.hd);
+    if (typeof params.hd === "string") {
+      this.hd = new Roll(params.hd);
+    } else if (typeof params.hd === "object") {
+      this.hd = new Roll(params.hd);
+    } else {
+      throw new Error(`Invalid hd: ${params.hd}`);
+    }
     this.speeds = params.speeds;
 
     this.senses = { ...params.senses };
@@ -190,68 +153,84 @@ export class Creature extends Serializable {
       this.spells = { ...params.spells };
     }
 
-    if (params instanceof Creature) {
-      this.alignment = params.alignment;
+    this.alignment = new Alignment(
+      typeof params.alignment === "string"
+        ? params.alignment
+        : params.alignment.longName
+    );
 
-      this.str = new Ability(params.str.modifier);
-      this.dex = new Ability(params.dex.modifier);
-      this.con = new Ability(params.con.modifier);
-      this.int = new Ability(params.int.modifier);
-      this.wis = new Ability(params.wis.modifier);
-      this.cha = new Ability(params.cha.modifier);
+    function initAbility(property: keyof Abilities): Ability {
+      const ability = params[property];
+      const modifier: number =
+        typeof ability === "number" ? ability : ability.modifier;
+      return new Ability(modifier);
+    }
+    this.str = initAbility("str");
+    this.dex = initAbility("dex");
+    this.con = initAbility("con");
+    this.int = initAbility("int");
+    this.wis = initAbility("wis");
+    this.cha = initAbility("cha");
 
-      this.saves = {
-        ...params.saves,
-      };
+    const abilityModifiers = {
+      str: this.str.modifier,
+      dex: this.dex.modifier,
+      con: this.con.modifier,
+      int: this.int.modifier,
+      wis: this.wis.modifier,
+      cha: this.cha.modifier,
+    };
 
-      this.skills = {} as Skills;
-      Object.entries(params.skills).forEach(([name, skill]) => {
-        this.skills[name] = new Skill(
-          skill.name,
-          skill.modifier,
-          skill.ability,
-          skill.proficient,
-          skill.expertise,
-          skill.jackOfAllTrades
-        );
-      });
+    this.saves = {
+      ...abilityModifiers,
+      ...params.saves,
+    };
+
+    if (
+      Object.values(params.skills as Record<string, any>).find(
+        (skill) => typeof skill === "number"
+      )
+    ) {
+      // SkillsParams case
+      this.skills = createSkills(
+        abilityModifiers,
+        params.skills as SkillsParams
+      );
     } else {
-      this.alignment = new Alignment(params.alignment);
+      // Skills or SkillsRaw case
+      this.skills = {} as Skills;
+      Object.entries(params.skills as SkillsRaw).forEach(([name, skill]) => {
+        this.skills[name] = new Skill(skill);
+      });
+    }
 
-      this.str = new Ability(params.str);
-      this.dex = new Ability(params.dex);
-      this.con = new Ability(params.con);
-      this.int = new Ability(params.int);
-      this.wis = new Ability(params.wis);
-      this.cha = new Ability(params.cha);
-
-      const abilityModifiers = {
-        str: this.str.modifier,
-        dex: this.dex.modifier,
-        con: this.con.modifier,
-        int: this.int.modifier,
-        wis: this.wis.modifier,
-        cha: this.cha.modifier,
-      };
-      this.saves = {
-        ...abilityModifiers,
-        ...params.saves,
-      };
-
-      this.skills = createSkills(abilityModifiers, params.skills);
+    if ("initiativeModifier" in params) {
+      this.initiativeModifier = params.initiativeModifier;
+    } else {
+      this.initiativeModifier = params.initiative ?? this.dex.modifier;
     }
 
     this.damageVulnerabilities = params.damageVulnerabilities ?? [];
     this.damageResistances = params.damageResistances ?? [];
     this.damageImmunities = params.damageImmunities ?? [];
     this.conditionImmunities = params.conditionImmunities ?? [];
-
-    this.conditions = params.conditions ?? [];
-
-    this.initiative = new Check(
-      params.initiative instanceof Check
-        ? params.initiative.modifier
-        : params.initiative ?? this.dex.modifier
-    );
   }
 }
+
+type BaseCreatureRaw = Omit<
+  ClassMembers<Creature>,
+  keyof Abilities | "alignment" | "hd" | "skills"
+>;
+
+export type CreatureRaw = BaseCreatureRaw & {
+  str: AbilityRaw;
+  dex: AbilityRaw;
+  con: AbilityRaw;
+  int: AbilityRaw;
+  wis: AbilityRaw;
+  cha: AbilityRaw;
+
+  alignment: AlignmentRaw;
+  hd: RollRaw;
+  skills: SkillsRaw;
+};

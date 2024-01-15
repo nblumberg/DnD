@@ -44,6 +44,11 @@ export class Serializable {
   }
 }
 
+/** Create a new type from a class that just has it's members and not its methods */
+export type ClassMembers<C> = {
+  [K in keyof C as C[K] extends Function ? never : K]: C[K];
+};
+
 function rawObj(obj: object, nodes?: any[]): object | undefined {
   if (!nodes) {
     nodes = [];

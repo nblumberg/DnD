@@ -57,3 +57,5 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
   );
   return <Panel>{icons}</Panel>;
 }
+
+// Condition - onClick = creature remove condition

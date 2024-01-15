@@ -1,21 +1,25 @@
+import { Roll } from "roll";
+import { ClassMembers } from "serializable";
 import { Abilities, AbilityParam } from "./ability";
 
-export class Skill {
+export class Skill extends Roll {
   name: string;
   modifier: number;
   ability?: AbilityParam;
-  proficient?: true;
-  expertise?: true;
-  jackOfAllTrades?: true;
+  proficient: boolean;
+  expertise: boolean;
+  jackOfAllTrades: boolean;
 
-  constructor(
-    name: string,
-    modifier: number,
-    ability?: AbilityParam,
-    proficient = false,
-    expertise = false,
-    jackOfAllTrades = false
-  ) {
+  constructor(params: Partial<SkillRaw> & { name: string; modifier: number }) {
+    super({ dieCount: 1, dieSides: 20, extra: params.modifier });
+    const {
+      name,
+      modifier,
+      ability,
+      proficient = false,
+      expertise = false,
+      jackOfAllTrades = false,
+    } = params;
     this.name = name;
     this.modifier = modifier;
     if (ability) {
@@ -23,17 +27,13 @@ export class Skill {
     } else {
       this.ability = abilityMap[name];
     }
-    if (proficient) {
-      this.proficient = true;
-    }
-    if (expertise) {
-      this.expertise = true;
-    }
-    if (jackOfAllTrades) {
-      this.jackOfAllTrades = true;
-    }
+    this.proficient = proficient;
+    this.expertise = expertise;
+    this.jackOfAllTrades = jackOfAllTrades;
   }
 }
+
+export type SkillRaw = Omit<ClassMembers<Skill>, keyof ClassMembers<Roll>>;
 
 export interface SkillsParams extends Record<string, number | Skill> {
   Acrobatics: number;
@@ -56,26 +56,13 @@ export interface SkillsParams extends Record<string, number | Skill> {
   Survival: number;
 }
 
-export interface Skills extends Record<string, Skill> {
-  Acrobatics: Skill;
-  AnimalHandling: Skill;
-  Arcana: Skill;
-  Athletics: Skill;
-  Deception: Skill;
-  History: Skill;
-  Insight: Skill;
-  Intimidation: Skill;
-  Investigation: Skill;
-  Medicine: Skill;
-  Nature: Skill;
-  Perception: Skill;
-  Performance: Skill;
-  Persuasion: Skill;
-  Religion: Skill;
-  SleightOfHand: Skill;
-  Stealth: Skill;
-  Survival: Skill;
-}
+type ToSkill<T> = { [K in keyof T]: Skill };
+
+export type Skills = Record<string, Skill> & ToSkill<SkillsParams>;
+
+type ToSkillRaw<T> = { [K in keyof T]: SkillRaw };
+
+export type SkillsRaw = Record<string, SkillRaw> & ToSkillRaw<Skills>;
 
 export function createSkills(
   abilities: Abilities,
@@ -102,14 +89,14 @@ export function createSkills(
       } = entry);
     }
 
-    skills[name] = new Skill(
+    skills[name] = new Skill({
       name,
       modifier,
-      passedAbility ?? ability,
+      ability: passedAbility ?? ability,
       proficient,
       expertise,
-      jackOfAllTrades
-    );
+      jackOfAllTrades,
+    });
   }
 
   // Create custom skills
@@ -119,7 +106,7 @@ export function createSkills(
         continue;
       }
       if (typeof args === "number") {
-        skills[name] = new Skill(name, args);
+        skills[name] = new Skill({ name, modifier: args });
       } else if (args) {
         const {
           modifier,
@@ -128,14 +115,14 @@ export function createSkills(
           expertise = false,
           jackOfAllTrades = false,
         } = args;
-        skills[name] = new Skill(
+        skills[name] = new Skill({
           name,
           modifier,
           ability,
           proficient,
           expertise,
-          jackOfAllTrades
-        );
+          jackOfAllTrades,
+        });
       }
     }
   }

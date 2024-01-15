@@ -1,4 +1,4 @@
-import { Serializable } from "serializable";
+import { ClassMembers, Serializable } from "serializable";
 
 export interface RollHistory {
   dice: number[];
@@ -9,14 +9,14 @@ export interface RollHistory {
   breakdown?: string;
 }
 
+export type RollRaw = ClassMembers<Roll>;
+
 export type RollParams =
-  | [string | Roll]
+  | [string]
   | [
-      {
+      Partial<RollRaw> & {
         dieCount: number;
         dieSides: number;
-        extra?: number;
-        crits?: number;
       },
     ]
   | [number, number]

@@ -1,3 +1,5 @@
+import { ClassMembers } from "serializable";
+
 export enum AlignmentParam {
   LG = "Lawful Good",
   NG = "Neutral Good",
@@ -14,11 +16,12 @@ export enum AlignmentParam {
 
 type TriValue = true | undefined | false;
 
-export class Alignment {
+export class Alignment implements AlignmentRaw {
   lawChaos: TriValue;
   goodEvil: TriValue;
   shortName: string;
   longName: string;
+
   constructor(
     ...args: [AlignmentParam | string] | [TriValue, TriValue, string, string]
   ) {
@@ -70,6 +73,8 @@ export class Alignment {
     return longFormat ? this.longName : this.shortName;
   }
 }
+
+export type AlignmentRaw = ClassMembers<Alignment>;
 
 export const LawfulGood = new Alignment(true, true, "LG", "Lawful Good");
 export const NeutralGood = new Alignment(undefined, true, "NG", "Neutral Good");

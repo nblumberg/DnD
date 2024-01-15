@@ -1,7 +1,7 @@
 {
-  "name": "compendium-service",
+  "name": "combat-service",
   "version": "1.0.0",
-  "description": "List and fetch d20 system creatures",
+  "description": "Manage d20 system combat state",
   "main": "./dist/js/index.js",
   "exports": "./src/js/index.ts",
   "scripts": {
@@ -20,13 +20,14 @@
     "@jest/globals": "^29.7.0",
     "@types/cors": "^2.8.17",
     "babel-jest": "^29.7.0",
-    "creature": "*",
     "jest": "^29.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "creature": "*",
     "cors": "^2.8.5",
+    "event-emitter": "*",
     "express": "^4.18.2"
   }
 }
