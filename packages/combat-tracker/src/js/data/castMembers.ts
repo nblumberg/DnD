@@ -7,6 +7,14 @@ setLog(() => {});
 
 let cachedCastMembers: CastMember[] = [];
 
+const io = getSocket();
+io.on("castMembers", (castMembersRaw: CastMemberRaw[]) => {
+  console.log("Cast members changed");
+  cachedCastMembers = castMembersRaw.map(
+    (castMemberRaw) => new CastMember(castMemberRaw)
+  );
+});
+
 export function useCastMembers(): CastMember[] {
   const [castMembers, setCastMembers] = useState<CastMember[]>([
     ...cachedCastMembers,
@@ -14,11 +22,10 @@ export function useCastMembers(): CastMember[] {
   useEffect(() => {
     const io = getSocket();
     io.on("castMembers", (castMembersRaw: CastMemberRaw[]) => {
-      console.log("Cast members changed");
-      cachedCastMembers = castMembersRaw.map(
+      const newCastMembers = castMembersRaw.map(
         (castMemberRaw) => new CastMember(castMemberRaw)
       );
-      setCastMembers([...cachedCastMembers]);
+      setCastMembers(newCastMembers);
     });
     () => {
       io.off("castMembers");

@@ -1,46 +1,50 @@
-export class Serializable {
+export class Serializable<C> {
   /** Clone this object, stripping out functions, circular references, and private-style-named members */
-  raw(nodes?: any[]): any | undefined {
-    if (!nodes) {
-      nodes = [];
-    }
-    if (nodes.indexOf(this) !== -1) {
-      // skip circular references
-      return;
-    }
-    nodes.push(this);
-    const r: Record<string, any> = {};
-    for (const p in this) {
-      const value: any = this[p];
-      if (
-        Object.prototype.hasOwnProperty.call(this, p) &&
-        isSerializable(p, value)
-      ) {
-        if (value === null) {
-          r[p] = null;
-        } else if (
-          typeof value === "object" &&
-          typeof value?.raw === "function"
-        ) {
-          // has complex properties with .raw()
-          r[p] = value.raw(nodes);
-        } else if (Array.isArray(value)) {
-          r[p] = rawArray(value, nodes);
-        } else {
-          r[p] = rawObj(value, nodes);
-        }
-      }
-    }
-    nodes.pop();
-    return r;
+  raw(nodes?: WeakSet<any>): C {
+    const json = this.asJSON(nodes);
+    return JSON.parse(json);
   }
 
-  toJSON(): string {
-    return JSON.stringify(this.raw(), null, "  ");
+  /**
+   * NOTE: "toJSON" seems to be called by JSON.stringify, causing infinite recursion, though I can't find any documentation on it.
+   */
+  asJSON(nodes?: WeakSet<any>): string {
+    if (!nodes) {
+      nodes = new WeakSet();
+    }
+    nodes?.add(this);
+    const json = JSON.stringify(
+      this,
+      (key, value) => {
+        if (key === "" && value === this) {
+          return this;
+        }
+        if (typeof value === "function") {
+          return undefined;
+        }
+        if (nodes?.has(value)) {
+          return undefined;
+        }
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+          if ("raw" in value && typeof value.raw === "function") {
+            return value.raw(nodes);
+          }
+          const proto = Object.getPrototypeOf(value);
+          if (proto !== Object.prototype && proto !== Date.prototype) {
+            // TODO: other built-in types?
+            console.warn(`Encountered unserializeable object ${key}`);
+          }
+        }
+        return value;
+      },
+      "  "
+    );
+    nodes.delete(this);
+    return json;
   }
 
   toString(): string {
-    return this.toJSON();
+    return this.asJSON();
   }
 }
 
@@ -49,54 +53,34 @@ export type ClassMembers<C> = {
   [K in keyof C as C[K] extends Function ? never : K]: C[K];
 };
 
-function rawObj(obj: any, nodes?: any[]): object | undefined {
-  if (!nodes) {
-    nodes = [];
-  }
-  if (
-    typeof obj === "undefined" ||
-    obj === null ||
-    typeof obj === "function" ||
-    nodes.includes(obj)
-  ) {
-    // skip undefined, null, Function, or circular references
-    return;
-  } else if (typeof obj === "object") {
-    if (typeof (obj as any)?.raw === "function") {
-      return (obj as Serializable).raw(nodes);
-    } else if (Array.isArray(obj)) {
-      return rawArray(obj, nodes);
-    } else {
-      return Serializable.prototype.raw.call(obj, nodes);
-    }
-  } else {
-    return obj; // obj is a String or raw data type
-  }
-}
+// type Acyclical<C> = {
+//   [K in keyof C]: C[K] extends C ? never : C[K];
+// };
 
-function rawArray(array: any[], nodes?: any[]): any[] | undefined {
-  if (!nodes) {
-    nodes = [];
-  }
-  if (!Array.isArray(array) || nodes.indexOf(array) !== -1) {
-    // TODO: don't stop nesting equivalent Arrays or multiple instances of [ 1, 2, 3 ] can't occur
-    return;
-  }
-  nodes.push(array); // TODO: don't filter out empty Arrays
-  const r = [...array.map((entry) => rawObj(entry))];
-  nodes.pop();
-  return r;
-}
+// type ToPOJO<C> = {
+//   [K in keyof C]: C[K] extends AnyClass ? ToPOJO<C[K]> : C[K];
+// };
 
-const HTMLElementConstructor = globalThis.HTMLElement ?? class NeverMatch {};
+// type Raw<C> = ClassMembers<ToPOJO<Acyclical<C>>>;
 
-function isSerializable(name: string, obj: any): boolean {
-  return (
-    typeof obj !== "function" &&
-    !(obj instanceof HTMLElementConstructor) &&
-    // !(obj instanceof jQuery) &&
-    name.indexOf("$") !== 0 &&
-    name.indexOf("$") !== 1 &&
-    name.indexOf("__") !== 0
-  );
-}
+// class TestChild {
+//   array: number[] = [1, 2, 3];
+//   b = true;
+//   child = { test: true };
+//   num = 666;
+//   self = this;
+//   test(): void {}
+// }
+
+// class Test {
+//   array: number[] = [1, 2, 3];
+//   b = true;
+//   child = { test: true };
+//   complex = new TestChild();
+//   cycle = new Test();
+//   num = 666;
+//   self = this;
+//   test(): void {}
+// }
+
+// type TestRaw = ClassMembers<Test>;

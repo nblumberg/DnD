@@ -9,8 +9,8 @@
     "build": "yarn build-webpack",
     "build-tsc": "yarn clean && tsc --build --force --verbose",
     "build-webpack": "yarn clean && webpack ",
-    "start": "node ./dist/js/index.js",
-    "main": "yarn build && yarn start",
+    "start": "node --expose-gc ./dist/js/index.js",
+    "main": "yarn build-tsc && yarn start",
     "main-old": "ts-node ./src/js/index.ts"
   },
   "author": "nathanielblumberg@gmail.com",

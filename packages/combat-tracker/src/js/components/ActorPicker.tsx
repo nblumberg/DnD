@@ -4,7 +4,6 @@ import styled, { css } from "styled-components";
 import { Character } from "../data/Character";
 import { useActors } from "../data/actors";
 import { useCastMembers } from "../data/castMembers";
-import { findUniqueId } from "../features/castMember/castMembers";
 import { getSocket } from "../services/sockets";
 
 const colorScheme = `
@@ -126,80 +125,6 @@ function auditionerToOption({
   );
 }
 
-// async function changeSelection(
-//   add: boolean,
-//   actors: Actor[],
-//   castMembers: Record<string, CastMember>,
-//   selected: CastMember[],
-//   event: SyntheticEvent
-// ): Promise<{ unselectedActors: Actor[]; selectedActors: CastMember[] }> {
-//   if (!event.target) {
-//     return { unselectedActors: actors, selectedActors: selected };
-//   }
-//   const select = event.target as HTMLSelectElement;
-//   const ids = Array.prototype.map.call(
-//     select.selectedOptions,
-//     ({ value }: HTMLOptionElement) => value
-//   ) as string[];
-//   if (!ids.length) {
-//     return { unselectedActors: actors, selectedActors: selected };
-//   }
-//   const targetActors: Actor[] = ids.map((id) => {
-//     const match = actors.find((actor) => actor.id === id);
-//     if (!match) {
-//       throw new Error(`Couldn't find Actor ${id}`);
-//     }
-//     return match;
-//   });
-//   if (add) {
-//     await castActors(targetActors);
-//   } else {
-//     fireActors(targetActors);
-//   }
-
-//   const unselectedActors: Set<Actor> = new Set([...actors]);
-//   const selectedCastMembers: Set<CastMember> = new Set([...selected]);
-
-//   for (const id of ids) {
-//     if (add) {
-//       const actor = actors.find(({ id: target }) => target === id);
-//       if (!actor) {
-//         throw new Error(`Failed to find Actor ${id}`);
-//       }
-//       if (actor.unique) {
-//         const castMembers = checkCast(actor);
-//         if (castMembers.length) {
-//           selectedCastMembers.add(castMembers[0]);
-//         } else {
-//           selectedCastMembers.add(await castActor(actor));
-//         }
-//         unselectedActors.delete(actor);
-//       } else {
-//         // Non-unique creatures stay in the unselected list and produce copies on subsequent selections
-//         selectedCastMembers.add(await castActor(actor));
-//       }
-//     } else {
-//       const castMember = getCastMember(id);
-//       if (castMember) {
-//         fireCastMember(id);
-//         selectedCastMembers.delete(castMember);
-//       } else {
-//         throw new Error(`Failed to find CastMember ${id}`);
-//       }
-//     }
-//   }
-//   for (const castMember of selectedCastMembers.values()) {
-//     if (castMember.actor.unique) {
-//       unselectedActors.delete(castMember.actor);
-//     }
-//   }
-
-//   return {
-//     unselectedActors: Array.from(unselectedActors.values()).sort(sortActors),
-//     selectedActors: Array.from(selectedCastMembers.values()).sort(sortActors),
-//   };
-// }
-
 function findOrThrow<T extends { id: string }>(
   id: string,
   array: T[],
@@ -210,6 +135,23 @@ function findOrThrow<T extends { id: string }>(
     throw new Error(`Failed to find ${itemType} with id ${id}`);
   }
   return match;
+}
+
+function findUniqueId(
+  id: string,
+  castMembers: Record<string, { id: string }>
+): string {
+  if (id && !castMembers[id]) {
+    return id;
+  }
+
+  const originalId = id;
+  let nextId = originalId;
+  let i = 2;
+  while (castMembers[id]) {
+    nextId = `${originalId}_${i++}`;
+  }
+  return nextId;
 }
 
 function getSelectedIds(event: SyntheticEvent): string[] {
@@ -235,7 +177,7 @@ function audition(
   );
   const newAuditioners: Array<CastMember | Auditioner> = [...auditioners];
   actors.forEach((actor) => {
-    const { id } = findUniqueId(actor.id, map);
+    const id = findUniqueId(actor.id, map);
     const auditioner: Auditioner = {
       ...actor,
       id,
@@ -247,9 +189,12 @@ function audition(
   return newAuditioners.sort(sortAuditioners);
 }
 
-function sortAuditioners(a: Actor | Auditioner, b: Actor | Auditioner): number {
-  const actorA = "actor" in a && a.actor ? a.actor : (a as Actor);
-  const actorB = "actor" in b && b.actor ? b.actor : (b as Actor);
+function sortAuditioners(
+  a: CastMember | Auditioner,
+  b: CastMember | Auditioner
+): number {
+  const actorA = "actor" in a && a.actor ? a.actor : (a as CastMember);
+  const actorB = "actor" in b && b.actor ? b.actor : (b as CastMember);
   if (actorA.unique && !actorB.unique) {
     return -1;
   } else if (!actorA.unique && actorB.unique) {
@@ -263,13 +208,9 @@ function sortAuditioners(a: Actor | Auditioner, b: Actor | Auditioner): number {
 }
 
 export function ActorPicker({ onClose }: { onClose: () => void }) {
-  // const dispatch = useDispatch();
-  // const { getState } = useStore();
-
   const actors = useActors();
   const castMembers = useCastMembers();
 
-  // const castMembers = useSelector(selectCastMembers);
   const [auditioners, setAuditioners] = useState<
     Array<CastMember | Auditioner>
   >(Object.values(castMembers));
@@ -299,19 +240,6 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     setSearchTerm(value);
   };
 
-  // const addOrRemove = async (add: boolean, event: SyntheticEvent) => {
-  //   const { unselectedActors, selectedActors } = await changeSelection(
-  //     add,
-  //     actors,
-  //     castMembers,
-  //     auditioners,
-  //     event
-  //   );
-  //   (event.target as HTMLSelectElement).selectedIndex = -1;
-  //   setHeadShots(filterActors(searchTerm, unselectedActors));
-  //   // setSelected(selectedActors);
-  // };
-
   const add = (event: SyntheticEvent) => {
     const actorIds = getSelectedIds(event);
     const selectedHeadshots: Actor[] = actorIds.map((id) =>
@@ -332,20 +260,17 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     const toBeCast = auditioners.filter(
       (auditioner) => !(auditioner instanceof CastMember)
     ) as Auditioner[];
-    // .map((auditioner) => auditioner.actor ?? (auditioner as Actor));
     const toBeFired = Object.values(castMembers).filter(
       (castMember) => !auditioners.includes(castMember)
     );
     if (toBeCast.length) {
       getSocket().emit("castActors", toBeCast);
-      // castActors(toBeCast)(dispatch, getState);
     }
     if (toBeFired.length) {
       getSocket().emit(
         "fireActors",
         toBeFired.map(({ id }) => id)
       );
-      // toBeFired.forEach((castMember) => dispatch(removeCastMember(castMember)));
     }
     onClose();
   };

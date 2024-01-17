@@ -5,7 +5,7 @@ export type {
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
-} from "../sockets/types";
+} from "../sockets/socketTypes";
 
 const baseUrl = "http://localhost:6677/v1/";
 

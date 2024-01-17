@@ -1,13 +1,18 @@
 import { CastMember } from "creature";
 import { SyntheticEvent, useState } from "react";
 import styled from "styled-components";
+import { isDM } from "../auth";
+import { useTurn } from "../data/turn";
 import { ArmorClassShield } from "./ArmorClassShield";
 import { ConditionOverlay } from "./ConditionOverlay";
 import { HitPointBar } from "./HitPointsBar";
 
-const Panel = styled.div`
+const Panel = styled.div<{ $myTurn: boolean }>`
   align-items: stretch;
-  border: 1px solid black;
+  ${({ $myTurn }) =>
+    $myTurn
+      ? "background-color: lightgreen; border: 3px solid green;"
+      : "border: 1px solid black;"}
   display: flex;
   flex-direction: column;
   position: relative;
@@ -51,14 +56,25 @@ const NameField = styled.input`
 `;
 
 export function CastMemberCard({ castMember }: { castMember: CastMember }) {
+  const dm = isDM();
+
+  const turn = useTurn();
+  const itsMyTurn = turn === castMember.id;
+
   const [name, setName] = useState<string>(
-    castMember.nickname ?? castMember.name
+    castMember.nickname ?? (dm ? castMember.name : "unknown")
   );
   const [editing, setEditing] = useState<boolean>(false);
   const editName = () => {
+    if (!dm) {
+      return;
+    }
     setEditing(true);
   };
   const updateName = (event: SyntheticEvent) => {
+    if (!dm) {
+      return;
+    }
     castMember.nickname = (event.target as HTMLInputElement).value;
     setName(castMember.nickname);
     if ((event as unknown as KeyboardEvent).key === "Enter") {
@@ -66,11 +82,14 @@ export function CastMemberCard({ castMember }: { castMember: CastMember }) {
     }
   };
   const changeName = (event: SyntheticEvent) => {
+    if (!dm) {
+      return;
+    }
     updateName(event);
     setEditing(false);
   };
   return (
-    <Panel>
+    <Panel $myTurn={itsMyTurn}>
       <HitPointBar castMember={castMember} />
       <PortraitFrame>
         <Portrait src={castMember.image}></Portrait>

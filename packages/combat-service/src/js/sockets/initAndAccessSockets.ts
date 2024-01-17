@@ -2,12 +2,13 @@ import { Express } from "express";
 import http, { Server as HttpServer } from "http";
 import { Server as SocketIOServer, Socket as SocketIOSocket } from "socket.io";
 import { attachCastMemberSockets } from "./castMemberSockets";
+import { attachInitiativeSockets } from "./initiativeSockets";
 import {
   ClientToServerEvents,
   InterServerEvents,
   ServerToClientEvents,
   SocketData,
-} from "./types";
+} from "./socketTypes";
 
 export type SocketServer = SocketIOServer<
   ClientToServerEvents,
@@ -51,4 +52,5 @@ export function getSocketIO(): Promise<SocketServer> {
 
 getSocketIO().then((io) => {
   attachCastMemberSockets(io);
+  attachInitiativeSockets(io);
 });

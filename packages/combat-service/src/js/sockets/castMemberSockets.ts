@@ -47,7 +47,15 @@ export function attachCastMemberSockets(io: SocketServer) {
 
 const castMemberMessage = (): CastMemberRaw[] => {
   const castMembers = getTurnOrder();
-  const result = castMembers.map((castMember) => castMember.raw());
+  const result: CastMemberRaw[] = [];
+  for (const castMember of castMembers) {
+    try {
+      result.push(castMember.raw());
+    } catch (e) {
+      console.error(`Failed to serialize ${castMember.id}`, e);
+      throw e;
+    }
+  }
   return result;
 };
 

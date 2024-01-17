@@ -1,6 +1,7 @@
-import { CastMember, Condition } from "creature";
+import { CastMember, Condition, DamageType, Effect } from "creature";
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { isDM } from "../auth";
 import { getSocket } from "../services/sockets";
 
 const Dialog = styled.dialog`
@@ -24,7 +25,7 @@ const ConditionIcon = styled.div`
   flex-grow: 1;
 `;
 
-const Icons = {
+const Icons: Record<Condition | DamageType | Effect, string> = {
   acid: "🧪",
   blinded: "🙈",
   bleeding: "🩸",
@@ -33,6 +34,11 @@ const Icons = {
   cold: "❄️",
   dead: "💀",
   deafened: "🙉",
+  "exhaustion level 1": "😴1",
+  "exhaustion level 2": "😴2",
+  "exhaustion level 3": "😴3",
+  "exhaustion level 4": "😴4",
+  "exhaustion level 5": "😴5",
   fire: "🔥",
   force: "🔮", // TODO
   frightened: "😱",
@@ -87,6 +93,8 @@ function ChooseCondition({ castMember }: { castMember: CastMember }) {
 }
 
 export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
+  const dm = isDM();
+
   const [chooseConditionOpen, setChooseConditionOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -123,15 +131,17 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
       {Icons[condition as unknown as keyof typeof Icons]}
     </ConditionIcon>
   ));
-  icons.unshift(
-    <ConditionIcon
-      key="conditions"
-      title="Conditions"
-      onClick={chooseCondition}
-    >
-      ⏳️
-    </ConditionIcon>
-  );
+  if (dm) {
+    icons.unshift(
+      <ConditionIcon
+        key="conditions"
+        title="Conditions"
+        onClick={chooseCondition}
+      >
+        ⏳️
+      </ConditionIcon>
+    );
+  }
   return (
     <Panel $dialog={false}>
       {icons}

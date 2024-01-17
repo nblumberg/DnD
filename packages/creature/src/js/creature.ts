@@ -1,5 +1,5 @@
 import { Roll, RollRaw } from "roll";
-import { ClassMembers, Serializable } from "serializable";
+import { Serializable } from "serializable";
 import { Abilities, Ability, AbilityRaw } from "./ability";
 import { ActionParams } from "./action";
 import { Alignment, AlignmentParam, AlignmentRaw } from "./alignment";
@@ -63,7 +63,55 @@ export interface CreatureParams extends Abilities {
   conditionImmunities?: Condition[];
 }
 
-export class Creature extends Serializable {
+export interface CreatureRaw {
+  name: string;
+  description?: string;
+
+  url: string;
+  image: string;
+
+  size: Size;
+  type: string;
+  subtype?: string;
+  alignment: AlignmentRaw;
+
+  ac: number;
+  hp: number;
+  hd: RollRaw;
+  speeds: Speeds;
+
+  str: AbilityRaw;
+  dex: AbilityRaw;
+  con: AbilityRaw;
+  int: AbilityRaw;
+  wis: AbilityRaw;
+  cha: AbilityRaw;
+
+  initiativeModifier: number;
+
+  saves: Abilities;
+
+  damageVulnerabilities: DamageType[];
+  damageResistances: DamageType[];
+  damageImmunities: DamageType[];
+  conditionImmunities: Condition[];
+
+  skills: SkillsRaw;
+
+  senses: Senses;
+  languages: string[];
+  cr: number;
+  proficiency: number;
+
+  environment?: string[];
+  source?: string;
+
+  features: ActionParams[];
+  actions: Record<string, ActionParams[]>;
+  spells?: Spells;
+}
+
+export class Creature extends Serializable<CreatureRaw> implements CreatureRaw {
   name: string;
   description?: string;
 
@@ -220,20 +268,17 @@ export class Creature extends Serializable {
   }
 }
 
-type BaseCreatureRaw = Omit<
-  ClassMembers<Creature>,
-  keyof Abilities | "alignment" | "hd" | "skills"
->;
+// export type CreatureRaw = ClassMembers<
+//   Omit<Creature, keyof Abilities | "alignment" | "hd" | "skills">
+// > & {
+//   str: AbilityRaw;
+//   dex: AbilityRaw;
+//   con: AbilityRaw;
+//   int: AbilityRaw;
+//   wis: AbilityRaw;
+//   cha: AbilityRaw;
 
-export type CreatureRaw = BaseCreatureRaw & {
-  str: AbilityRaw;
-  dex: AbilityRaw;
-  con: AbilityRaw;
-  int: AbilityRaw;
-  wis: AbilityRaw;
-  cha: AbilityRaw;
-
-  alignment: AlignmentRaw;
-  hd: RollRaw;
-  skills: SkillsRaw;
-};
+//   alignment: AlignmentRaw;
+//   hd: RollRaw;
+//   skills: SkillsRaw;
+// };

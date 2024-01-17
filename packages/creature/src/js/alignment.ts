@@ -1,4 +1,4 @@
-import { ClassMembers } from "serializable";
+import { ClassMembers, Serializable } from "serializable";
 
 export enum AlignmentParam {
   LG = "Lawful Good",
@@ -16,7 +16,10 @@ export enum AlignmentParam {
 
 type TriValue = true | undefined | false;
 
-export class Alignment implements AlignmentRaw {
+export class Alignment
+  extends Serializable<AlignmentRaw>
+  implements AlignmentRaw
+{
   lawChaos: TriValue;
   goodEvil: TriValue;
   shortName: string;
@@ -25,6 +28,7 @@ export class Alignment implements AlignmentRaw {
   constructor(
     ...args: [AlignmentParam | string] | [TriValue, TriValue, string, string]
   ) {
+    super();
     if (typeof args[0] === "boolean" || typeof args[0] === "undefined") {
       this.lawChaos = args[0];
       this.goodEvil = args[1];
@@ -69,7 +73,7 @@ export class Alignment implements AlignmentRaw {
     }
   }
 
-  toString(longFormat: boolean = true): string {
+  override toString(longFormat: boolean = true): string {
     return longFormat ? this.longName : this.shortName;
   }
 }

@@ -6,6 +6,7 @@ export const DamageTypes = [
   "piercing",
   "slashing",
   "acid",
+  "cold",
   "fire",
   "force",
   "lightning",
@@ -13,6 +14,9 @@ export const DamageTypes = [
   "radiant",
   "thunder",
 ] as const;
+
+export const Effects = ["bleeding", "hasted", "slowed"] as const;
+export type Effect = (typeof Effects)[number];
 
 export type DamageType = (typeof DamageTypes)[number];
 

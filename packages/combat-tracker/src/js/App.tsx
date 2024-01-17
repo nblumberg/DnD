@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Provider } from "react-redux";
+import { IdentityContext, getIdentity } from "./auth";
 import { ActorPicker } from "./components/ActorPicker";
 import { Header } from "./components/Header";
 import { TurnOrder } from "./components/TurnOrder";
-import { store } from "./store";
 
 export function App() {
   const [actorPickerOpen, setActorPickerOpen] = useState<boolean>(false);
@@ -18,12 +17,12 @@ export function App() {
   }
 
   return (
-    <Provider store={store}>
+    <IdentityContext.Provider value={getIdentity()}>
       <Header pickActors={pickActors}></Header>
       <TurnOrder></TurnOrder>
       {actorPickerOpen && (
         <ActorPicker onClose={closeActorPicker}></ActorPicker>
       )}
-    </Provider>
+    </IdentityContext.Provider>
   );
 }

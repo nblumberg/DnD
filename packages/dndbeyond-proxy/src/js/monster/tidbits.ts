@@ -119,15 +119,15 @@ export function getTidbits(
 }
 
 function textToDamageType(text: string[]): DamageType[] {
-  const matches = text.filter((item) =>
-    DamageTypes.includes(item as DamageType)
-  );
+  const matches = text
+    .map((item) => item.trim().toLowerCase())
+    .filter((item) => DamageTypes.includes(item as DamageType));
   return matches as DamageType[];
 }
 
 function textToCondition(text: string[]): Condition[] {
-  const matches = text.filter((item) =>
-    Object.values(Condition).includes(item as Condition)
-  );
+  const matches = text
+    .map((item) => item.trim().toLowerCase())
+    .filter((item) => Object.values(Condition).includes(item as Condition));
   return matches as Condition[];
 }

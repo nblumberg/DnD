@@ -1,13 +1,17 @@
-import { ClassMembers } from "packages/serializable/dist/js";
+import { ClassMembers, Serializable } from "serializable";
 
 export type ActorParams = Partial<Actor> & { name: string };
 
-export class Actor implements ActorParams, ActorRaw {
+export class Actor
+  extends Serializable<ActorRaw>
+  implements ActorParams, ActorRaw
+{
   name: string;
   id: string;
   unique: boolean;
 
   constructor(params: ActorParams) {
+    super();
     Object.assign(this, params);
     this.name = params.name;
     this.unique = params.unique ?? false;

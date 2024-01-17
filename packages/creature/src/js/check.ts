@@ -37,6 +37,8 @@ export type CheckRaw = Omit<ClassMembers<Check>, "dieCount" | "dieSides">;
 export class AbilityCheck extends Check implements Ability {
   score: number;
 
+  declare raw: () => AbilityCheckRaw & CheckRaw;
+
   constructor(score: number, owner: CastMember) {
     const { modifier } = new Ability(score);
     super({ extra: modifier }, owner);

@@ -23,7 +23,7 @@ export type RollParams =
   | [number, number, number]
   | [number, number, number, number];
 
-export class Roll extends Serializable {
+export class Roll extends Serializable<RollRaw> {
   dieCount: number;
   dieSides: number;
   extra = 0;

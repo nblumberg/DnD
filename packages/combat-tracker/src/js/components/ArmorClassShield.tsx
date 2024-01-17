@@ -1,5 +1,6 @@
 import { CastMember } from "creature";
 import styled from "styled-components";
+import { isDM } from "../auth";
 
 const Shield = styled.div`
   background-color: gray;
@@ -21,5 +22,7 @@ export function ArmorClassShield({
 }: {
   castMember: CastMember;
 }) {
-  return <Shield>{ac}</Shield>;
+  const dm = isDM();
+  const displayAC = dm ? ac : `>1`;
+  return <Shield>{displayAC}</Shield>;
 }

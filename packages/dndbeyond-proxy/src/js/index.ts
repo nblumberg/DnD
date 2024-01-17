@@ -3,7 +3,10 @@ import { readMonsters } from "./monsters";
 
 initAuth().then(async () => {
   // listEntries("monsters", 1);
+  // trimHtml("Two-Headed Crocodile.html");
   readMonsters();
+  //  readMonsters(undefined, "Sahuagin Hatchling Swarm");
+  // repairOriginalRequestData();
   // readMonsters(undefined, "Winged Kobold");
   // readMonster("Arakocra", "https://www.dndbeyond.com/monsters/17100-aarakocra");
   // readMonster("Aboleth", "https://www.dndbeyond.com/monsters/16762-aboleth");

@@ -30,3 +30,5 @@ state.json
 forestMaze/lib
 dndbeyond-proxy/data/
 packages/dndbeyond-proxy/data
+tsconfig.tsbuildinfo
+DnD.code-workspace

@@ -11,7 +11,7 @@ export interface Abilities {
 
 export type AbilityParam = "str" | "dex" | "con" | "int" | "wis" | "cha";
 
-export class Ability extends Serializable {
+export class Ability extends Serializable<AbilityRaw> {
   score: number;
   modifier: number;
 

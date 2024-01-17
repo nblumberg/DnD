@@ -1,3 +1,5 @@
+import { JSDOM } from "jsdom";
+
 export function getElementText(element?: HTMLElement | Node): string {
   if (!element) {
     return "";
@@ -41,4 +43,12 @@ export function getRemainingText(previousSibling: ChildNode): string {
     .join("")
     .trim();
   return text;
+}
+
+export function stripScripts(dom: JSDOM): string {
+  const scripts = dom.window.document.querySelectorAll("script");
+  for (const script of scripts) {
+    script.remove();
+  }
+  return dom.window.document.documentElement.outerHTML;
 }

@@ -1,22 +1,18 @@
 import { setLog } from "roll";
-import { ClassMembers } from "serializable";
-import { AbilityRaw } from "./ability";
+import { Serializable } from "serializable";
+import { Abilities, AbilityRaw } from "./ability";
 import { Actor, ActorRaw, toId } from "./actor";
 import { DamageType } from "./attack";
-import { AbilityCheck, AbilityCheckRaw, Check } from "./check";
-import { Condition } from "./condition";
+import { AbilityCheck, AbilityCheckRaw, Check, CheckRaw } from "./check";
+import {
+  ActiveCondition,
+  ActiveConditionParam,
+  ActiveConditionRaw,
+  Condition,
+} from "./condition";
 import { Creature, CreatureParams, CreatureRaw } from "./creature";
 
 setLog(() => {});
-
-interface ActiveConditionParam {
-  condition: Condition;
-  onSave?: boolean;
-  duration?: number;
-  onTurnStart?: CastMember;
-  onTurnEnd?: CastMember;
-  source?: CastMember;
-}
 
 export interface CastMemberParams extends CreatureParams {
   actor: ActorRaw;
@@ -30,77 +26,34 @@ export interface CastMemberParams extends CreatureParams {
   delayInitiative?: boolean;
 }
 
-class ActiveCondition implements ActiveConditionParam {
-  private owner: CastMember;
-  condition: Condition;
-  onSave?: boolean;
-  duration?: number;
-  onTurnStart?: CastMember;
-  onTurnEnd?: CastMember;
-  source?: CastMember;
+export type CastMemberRaw = Omit<CreatureRaw, keyof Abilities> & {
+  actor: ActorRaw;
+  id: string;
+  unique: boolean;
+  initiativeOrder: number;
+  nickname?: string;
 
-  constructor({
-    owner,
-    condition,
-    onSave,
-    onTurnStart,
-    onTurnEnd,
-    duration = onTurnStart || onTurnEnd ? 1 : Infinity,
-    source,
-  }: {
-    owner: CastMember;
-    condition: Condition;
-    onSave?: boolean;
-    duration?: number;
-    onTurnStart?: CastMember;
-    onTurnEnd?: CastMember;
-    source?: CastMember;
-  }) {
-    this.owner = owner;
-    this.condition = condition;
-    this.onSave = onSave;
-    this.duration = duration;
-    this.onTurnStart = onTurnStart;
-    this.onTurnEnd = onTurnEnd;
-    this.source = source;
+  str: AbilityCheckRaw;
+  dex: AbilityCheckRaw;
+  con: AbilityCheckRaw;
+  int: AbilityCheckRaw;
+  wis: AbilityCheckRaw;
+  cha: AbilityCheckRaw;
 
-    this.owner.doSomething(`starts being ${this.condition}`);
-  }
+  initiative: CheckRaw;
+  delayInitiative: boolean;
 
-  expire(): void {
-    this.owner.conditions = this.owner.conditions.filter(
-      (condition) => condition !== this
-    );
-    this.owner.doSomething(`stops being ${this.condition}`);
-  }
+  conditions: ActiveConditionRaw[];
+  hpCurrent: number;
+  hpTemp: number;
+};
 
-  private tick(): void {
-    if (this.duration) {
-      this.duration--;
-      if (this.duration <= 0) {
-        this.expire();
-      }
-    }
-  }
+export class CastMember
+  extends Creature
+  implements CastMemberRaw, Serializable<CastMemberRaw>
+{
+  declare raw: () => CastMemberRaw;
 
-  startTurn(castMember: CastMember): void {
-    if (this.onTurnStart === castMember) {
-      this.tick();
-    } else if (this.source === castMember) {
-      this.tick();
-    }
-  }
-
-  endTurn(castMember: CastMember): void {
-    if (this.onTurnEnd === castMember) {
-      this.tick();
-    } else if (this.source === castMember) {
-      this.tick();
-    }
-  }
-}
-
-export class CastMember extends Creature {
   actor: Actor;
   id: string;
   unique: boolean;
@@ -222,6 +175,3 @@ export class CastMember extends Creature {
     }
   }
 }
-
-export type CastMemberRaw = Omit<ClassMembers<CastMember>, keyof Creature> &
-  CreatureRaw;

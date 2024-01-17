@@ -1,5 +1,6 @@
 import { CastMember } from "creature";
 import styled from "styled-components";
+import { isDM } from "../auth";
 
 const Container = styled.div`
   height: 2em;
@@ -31,17 +32,22 @@ export function HitPointBar({
 }: {
   castMember: CastMember;
 }) {
+  const dm = isDM();
+  const currentHp = dm ? hpCurrent : `>${hp - hpCurrent}`;
+  const totalHp = dm ? hp : `>${hp - hpCurrent + 1}`;
+  const tempHp = dm ? hpTemp : `>1`;
+
   return (
     <Container>
       <ColorBar $color="darkred" $width={(hp / (hpTemp + hp)) * 100}>
+        <HitPointText>{totalHp}</HitPointText>
         <ColorBar $color="red" $width={(hpCurrent / hp) * 100}>
-          <HitPointText>{hpCurrent}</HitPointText>
+          <HitPointText>{currentHp}</HitPointText>
         </ColorBar>
-        <HitPointText>{hp}</HitPointText>
       </ColorBar>
       {hpTemp > 0 && (
         <ColorBar $color="green" $width={(hpTemp / (hpTemp + hp)) * 100}>
-          <HitPointText>{hpTemp}</HitPointText>
+          <HitPointText>{tempHp}</HitPointText>
         </ColorBar>
       )}
     </Container>

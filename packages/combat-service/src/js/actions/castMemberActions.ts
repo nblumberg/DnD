@@ -72,6 +72,28 @@ export function changeInitiativeOrder(
     return;
   }
   castMember.initiative.add(initiativeOrder);
+  return initiativeChange(castMember, initiativeOrder);
+}
+
+export function rollInitiative(
+  id: string,
+  manuallyRolledInitiative?: number
+): CastMember | undefined {
+  if (manuallyRolledInitiative) {
+    return changeInitiativeOrder(id, manuallyRolledInitiative);
+  }
+  const castMember = getCastMember(id);
+  if (!castMember) {
+    return;
+  }
+  const initiativeOrder = castMember.initiative.roll();
+  return initiativeChange(castMember, initiativeOrder);
+}
+
+function initiativeChange(
+  castMember: CastMember,
+  initiativeOrder: number
+): CastMember {
   setCastMemberState(castMember.id, "initiativeOrder", initiativeOrder);
   setState(
     "turnOrder",
@@ -82,7 +104,11 @@ export function changeInitiativeOrder(
 
 export function addConditionToCastMember(
   id: string,
-  condition: Condition
+  condition: Condition,
+  onSave = false,
+  source?: CastMember,
+  onTurnStart?: CastMember,
+  onTurnEnd?: CastMember
 ): void {
   const castMember = getCastMember(id);
   if (!castMember) {
@@ -101,7 +127,14 @@ export function addConditionToCastMember(
     );
     return;
   }
-  castMember.addCondition({ condition });
+  castMember.addCondition({
+    condition,
+    owner: castMember,
+    onSave,
+    source: source?.id,
+    onTurnStart: onTurnStart?.id,
+    onTurnEnd: onTurnEnd?.id,
+  });
   setCastMemberState(id, "conditions", castMember.conditions);
 }
 

@@ -28,7 +28,11 @@ class ContinuedDescription extends Error {
   }
 }
 
-function getAction(entry: Element, type: string, defaultName?: string): ActionParams {
+function getAction(
+  entry: Element,
+  type: string,
+  defaultName?: string
+): ActionParams {
   let name = "unknown name";
   try {
     const header = entry.querySelector("em") || entry.querySelector("strong");
@@ -58,7 +62,8 @@ function getAction(entry: Element, type: string, defaultName?: string): ActionPa
         // See Priest of Osybus (Deathly), https://www.dndbeyond.com/monsters/1680937-priest-of-osybus-deathly Circle of Death
         name = entry.firstChild?.textContent?.trim() ?? "";
       } else {
-        name = (header.querySelector("strong") || header).textContent?.trim() ?? "";
+        name =
+          (header.querySelector("strong") || header).textContent?.trim() ?? "";
       }
     }
 
@@ -85,7 +90,8 @@ function getAction(entry: Element, type: string, defaultName?: string): ActionPa
       name,
     };
 
-    if (parsedCost && name !== type) { // ignore Legendary Actions and Mythic Actions headers
+    if (parsedCost && name !== type) {
+      // ignore Legendary Actions and Mythic Actions headers
       action.cost = parsedCost as ActionParams["cost"];
     }
 
@@ -107,7 +113,10 @@ function getAction(entry: Element, type: string, defaultName?: string): ActionPa
       // (e instanceof ContinuedDescription) { // instanceof Error doesn't work in Babel?
       throw e;
     }
-    console.error(`Failed to parse monster action ${name ?? "unknown name"}`, e);
+    console.error(
+      `Failed to parse monster action ${name ?? "unknown name"}`,
+      e
+    );
     throw e;
   }
 }
@@ -124,14 +133,15 @@ export function getActions(
       )
     );
     for (const category of categories) {
-      const heading = category.querySelector(".mon-stat-block__description-block-heading");
-      if (!heading) {
-        throw new Error("Couldn't find heading");
+      const heading = category.querySelector(
+        ".mon-stat-block__description-block-heading"
+      );
+      let type = "features";
+      if (heading) {
+        // throw new Error("Couldn't find heading");
+        type = getElementText(heading).trim() || "features";
       }
-      const type =
-        getElementText(
-          heading
-        ).trim() || "features";
+
       const actionsArray = actions[type]
         ? actions[type]
         : (actions[type] = [] as ActionParams[]);

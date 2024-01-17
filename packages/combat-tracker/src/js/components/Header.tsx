@@ -1,6 +1,6 @@
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { rollInitiative } from "../features/castMember/castMembers";
+import { isDM } from "../auth";
+import { getSocket } from "../services/sockets";
 
 const ButtonBar = styled.div`
   background: #cccccc;
@@ -17,16 +17,19 @@ const Button = styled.button`
 `;
 
 export function Header({ pickActors }: { pickActors: () => void }) {
-  const dispatch = useDispatch();
   const onClick = () => {
-    dispatch(rollInitiative());
+    getSocket().emit("rollInitiative", {});
   };
+
+  const dm = isDM();
 
   return (
     <ButtonBar>
-      <Button title="Add actor" onClick={pickActors}>
-        🎭
-      </Button>
+      {dm && (
+        <Button title="Add actor" onClick={pickActors}>
+          🎭
+        </Button>
+      )}
       <Button title="Roll initiative" onClick={onClick}>
         🕐
       </Button>

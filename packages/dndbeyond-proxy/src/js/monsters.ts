@@ -1,4 +1,10 @@
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "fs";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from "fs";
 import { join } from "path";
 
 import axios from "axios";
@@ -6,7 +12,7 @@ import { JSDOM } from "jsdom";
 
 import { AlignmentParam, CreatureParams } from "creature";
 import { addAuthHeader } from "./auth";
-import { getElementText } from "./dom";
+import { getElementText, stripScripts } from "./dom";
 import { getAbility } from "./monster/abilities";
 import { getActions } from "./monster/actions";
 import { getAttributes } from "./monster/attributes";
@@ -86,14 +92,14 @@ export async function readMonster(name: string, href: string): Promise<void> {
     console.log(`Monster ${name}`);
   }
   const rawHTML = response.data as string;
-  // const rawHTML = await response.text();
 
   if (cacheResponse) {
+    const trimmedHTML = stripScripts(new JSDOM(rawHTML));
     const filePath = join(baseFilePath, "html", `${name}.html`);
     const data = { name, url };
     writeFileSync(
       filePath,
-      `${rawHTML}\n<!-- ORIGINAL_REQUEST_DATA: ${JSON.stringify(
+      `${trimmedHTML}\n<!-- ORIGINAL_REQUEST_DATA: ${JSON.stringify(
         data,
         null,
         2
@@ -281,25 +287,29 @@ export async function findEntries({
 const originalRequestRegExp =
   /<!-- ORIGINAL_REQUEST_DATA: (?<data>[^}]+}) -->$/m;
 
+const bookmarkFile = join(baseFilePath, ".last-written");
+
 export function readMonsters(names?: string[], startAfter?: string): void {
   const htmlPath = join(baseFilePath, "html");
   const files = names?.map((name) => `${name}.html`) ?? readdirSync(htmlPath);
+  if (!startAfter && existsSync(bookmarkFile)) {
+    startAfter = readFileSync(bookmarkFile, "utf8");
+  }
   let skip = startAfter && !names;
-  files.forEach((filename) => {
+  for (const filename of files) {
     if (skip) {
       if (filename.endsWith(`${startAfter}.html`)) {
         skip = false;
       }
-      return;
+      continue;
     }
     if (
       !names &&
       existsSync(join(baseFilePath, filename.replace(".html", ".json")))
     ) {
-      return;
+      continue;
     }
-    const { heapUsed, heapTotal } = process.memoryUsage();
-    console.log(`Memory ${(heapUsed / heapTotal) * 100}%`);
+    // checkMemoryUsage();
     try {
       const rawHtml = readFileSync(join(htmlPath, filename), "utf8");
       const { data } = parseRegExpGroups(
@@ -310,12 +320,16 @@ export function readMonsters(names?: string[], startAfter?: string): void {
       const { name, url } = JSON.parse(data);
       console.log(name);
       parseMonsterHTML(rawHtml, name, url);
+      writeFileSync(bookmarkFile, name, "utf8");
     } catch (e) {
       // ignore errors
       if ((e as any).purchased === false) {
-        return;
+        continue;
       }
       throw e;
     }
-  });
+  }
+  if (!names) {
+    unlinkSync(bookmarkFile);
+  }
 }

@@ -28,7 +28,6 @@
     "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^9.0.4",
     "roll": "*",
     "styled-components": "^6.1.3"
   },
