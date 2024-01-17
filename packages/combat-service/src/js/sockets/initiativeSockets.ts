@@ -15,7 +15,7 @@ export function attachInitiativeSockets(io: SocketServer) {
   io.of("/dm").on("connection", (socket) => {
     syncInitiative(socket);
 
-    socket.on("rollInitiative", (initiative: Record<string, number>) => {
+    socket.on("rollInitiative", (initiative?: Record<string, number>) => {
       rollInitiative(initiative);
     });
     socket.on("turn", (id: string) => {

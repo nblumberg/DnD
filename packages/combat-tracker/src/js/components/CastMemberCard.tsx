@@ -62,7 +62,8 @@ export function CastMemberCard({ castMember }: { castMember: CastMember }) {
   const itsMyTurn = turn === castMember.id;
 
   const [name, setName] = useState<string>(
-    castMember.nickname ?? (dm ? castMember.name : "unknown")
+    castMember.nickname ??
+      (dm || castMember.character ? castMember.name : "unknown")
   );
   const [editing, setEditing] = useState<boolean>(false);
   const editName = () => {

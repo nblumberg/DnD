@@ -32,16 +32,27 @@ export function startTurn(id: string): string | undefined {
   return castMembers[state.turnIndex].id;
 }
 
+/**
+ * If initiative is not provided, roll initiative for all cast members.
+ * If initiative is provided, only update the intiative order for the passed cast members.
+ * If a cast member's initiative value <=0, it will be rolled.
+ */
 export function rollInitiative(
-  initiative: Record<string, number>
+  initiative?: Record<string, number>
 ): CastMember[] {
   let castMembers = Object.values(state.castMembers);
   castMembers.forEach((castMember) => {
-    const manuallyRolledInitiative = initiative[castMember.id];
-    if (manuallyRolledInitiative) {
-      changeInitiativeOrder(castMember.id, manuallyRolledInitiative);
-    } else {
+    if (!initiative) {
       castMemberRollInitiative(castMember.id);
+    } else {
+      const manuallyRolledInitiative = initiative[castMember.id];
+      if (manuallyRolledInitiative !== undefined) {
+        if (manuallyRolledInitiative <= 0) {
+          castMemberRollInitiative(castMember.id);
+        } else {
+          changeInitiativeOrder(castMember.id, manuallyRolledInitiative);
+        }
+      }
     }
   });
   castMembers = getTurnOrder();

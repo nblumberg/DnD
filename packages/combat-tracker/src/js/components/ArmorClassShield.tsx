@@ -18,11 +18,11 @@ const Shield = styled.div`
 `;
 
 export function ArmorClassShield({
-  castMember: { ac },
+  castMember: { character, ac },
 }: {
   castMember: CastMember;
 }) {
   const dm = isDM();
-  const displayAC = dm ? ac : `>1`;
+  const displayAC = dm || character ? ac : `>1`;
   return <Shield>{displayAC}</Shield>;
 }

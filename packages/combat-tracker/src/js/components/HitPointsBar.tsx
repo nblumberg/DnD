@@ -28,14 +28,16 @@ const HitPointText = styled.div`
 `;
 
 export function HitPointBar({
-  castMember: { hp, hpCurrent, hpTemp = 0 },
+  castMember: { character, hp, hpCurrent, hpTemp = 0 },
 }: {
   castMember: CastMember;
 }) {
   const dm = isDM();
-  const currentHp = dm ? hpCurrent : `>${hp - hpCurrent}`;
-  const totalHp = dm ? hp : `>${hp - hpCurrent + 1}`;
-  const tempHp = dm ? hpTemp : `>1`;
+
+  const showFull = dm || character;
+  const currentHp = showFull ? hpCurrent : `>${hp - hpCurrent}`;
+  const totalHp = showFull ? hp : `>${hp - hpCurrent + 1}`;
+  const tempHp = showFull ? hpTemp : `>1`;
 
   return (
     <Container>
