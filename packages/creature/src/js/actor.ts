@@ -1,6 +1,8 @@
-type ActorParams = Partial<Actor> & { name: string };
+import { ClassMembers } from "packages/serializable/dist/js";
 
-export class Actor {
+export type ActorParams = Partial<Actor> & { name: string };
+
+export class Actor implements ActorParams, ActorRaw {
   name: string;
   id: string;
   unique: boolean;
@@ -12,6 +14,8 @@ export class Actor {
     this.id = params.id ?? toId(params.name);
   }
 }
+
+export type ActorRaw = ClassMembers<Actor>;
 
 export function toId(str: string): string {
   return str.replace(/\W/g, "_");

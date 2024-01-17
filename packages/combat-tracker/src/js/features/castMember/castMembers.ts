@@ -5,10 +5,8 @@ import {
   UnknownAction,
   createSlice,
 } from "@reduxjs/toolkit";
-import { Creature } from "creature";
-import { Actor } from "../../data/Actor";
+import { Actor, CastMember, Creature } from "creature";
 import { Character } from "../../data/Character";
-import { CastMember } from "../../data/castMembers";
 import { getCharacter, getMonster } from "../../services/compendium";
 import {
   RelativeRootState as CreaturesRelativeRootState,
@@ -56,7 +54,7 @@ const initiative: FullCastAction = (state) => {
   const castMembers = Object.values(state);
   castMembers.forEach((castMember) => {
     state[castMember.id] = new CastMember(castMember as CastMember);
-    state[castMember.id].rollInitiative();
+    state[castMember.id].initiative.roll();
   });
 };
 
@@ -107,15 +105,20 @@ export function castActors(actors: Actor[]) {
       if (!existingCastMember) {
         const creatures = selectCreatures(state);
         if (creatures[actor.name]) {
-          creature = creatures[actor.name];
+          creature = creatures[actor.name].raw();
         } else if (actor instanceof Character) {
-          creature = await getCharacter(actor.name);
+          creature = new Creature(await getCharacter(actor.name));
         } else {
-          creature = await getMonster(actor.name);
+          creature = new Creature(await getMonster(actor.name));
         }
       }
       dispatch(addCreature(creature));
-      const castMember = new CastMember(creature, actor, id, unique);
+      const castMember = new CastMember({
+        ...creature.raw(),
+        actor,
+        id,
+        unique,
+      });
       dispatch(addCastMember(castMember));
     }
   };

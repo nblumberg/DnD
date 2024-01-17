@@ -1,9 +1,8 @@
 {
-  "extends": "../../tsconfig.browser.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
-    "lib": ["ESNext", "DOM"]
+    "rootDir": "src"
   },
   "files": ["src/js/index.ts"],
   "include": ["src/js/**/*"]

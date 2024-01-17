@@ -1,20 +1,20 @@
+import { Actor } from "creature";
 import { useEffect, useState } from "react";
 import { listCharacters, listMonsters } from "../services/compendium";
-import { Actor, toId } from "./Actor";
 import { Character } from "./Character";
 
+let cachedActors: Actor[] = [];
+
 export function useActors(): Actor[] {
-  const [actors, setActors] = useState<Actor[]>([]);
+  const [actors, setActors] = useState<Actor[]>([...cachedActors]);
   useEffect(() => {
     Promise.all([listCharacters(), listMonsters()]).then(
       ([characters, monsters]) => {
-        const newActors: Actor[] = [
-          ...characters
-            .map((name) => new Character(name, toId(name)))
-            .sort(sortActors),
+        cachedActors = [
+          ...characters.map((name) => new Character(name)).sort(sortActors),
           ...monsters.map((name) => new Actor({ name })).sort(sortActors),
         ];
-        setActors(newActors);
+        setActors([...cachedActors]);
       }
     );
   }, [setActors]);

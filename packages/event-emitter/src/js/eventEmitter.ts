@@ -1,8 +1,8 @@
-interface DataChangeHandler<T> {
+export interface DataChangeHandler<T> {
   (data: T): void;
 }
 
-interface PropertyChangeHandler<T, P extends keyof T> {
+export interface PropertyChangeHandler<T, P extends keyof T> {
   (value: T[P]): void;
 }
 
@@ -10,24 +10,25 @@ type PropertyListeners<T> = {
   [P in keyof T]?: Set<PropertyChangeHandler<T, P>>;
 };
 
-interface AddListener<T> {
+export interface AddListener<T> {
   (handler: DataChangeHandler<T>): T;
 }
 
-interface AddPropertyListener<T> {
+export interface AddPropertyListener<T> {
   <P extends keyof T>(property: P, handler: PropertyChangeHandler<T, P>): T[P];
 }
 
-interface RemoveListener<T> {
+export interface RemoveListener<T> {
   <P extends keyof T>(
     ...args:
+      | []
       | [DataChangeHandler<T>]
       | [PropertyChangeHandler<T, P>, P]
       | [undefined, P]
   ): void;
 }
 
-interface SetData<T> {
+export interface SetData<T> {
   (data: Partial<T>, deleteUndefined?: boolean): void;
 }
 
@@ -39,6 +40,7 @@ export function createEventEmitter<T>(data: T): {
 } {
   const allDataListeners: Set<DataChangeHandler<T>> = new Set();
 
+  // TODO: WeakMap?
   const propertyChangeListeners: PropertyListeners<T> = {};
 
   function addHandler<P extends keyof T>(
@@ -67,7 +69,13 @@ export function createEventEmitter<T>(data: T): {
 
     removeListener(...args) {
       const [handler, property] = args;
-      if (!property) {
+      if (args.length === 0) {
+        // Remove all listeners
+        allDataListeners.clear();
+        Object.keys(propertyChangeListeners).forEach((key) => {
+          delete propertyChangeListeners[key as keyof T];
+        });
+      } else if (!property) {
         allDataListeners.delete(handler as DataChangeHandler<T>);
       } else {
         if (

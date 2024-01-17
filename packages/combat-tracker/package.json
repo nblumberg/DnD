@@ -9,7 +9,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode=production --node-env=production",
+    "clean": "rm -rf dist",
+    "build": "yarn build-webpack",
+    "build-tsc": "yarn clean && tsc",
+    "build-webpack": "yarn clean && webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
@@ -20,6 +23,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.3",
+    "combat-service": "*",
     "creature": "*",
     "express": "^4.18.2",
     "react": "^18.2.0",
@@ -39,6 +43,7 @@
     "prettier": "^3.0.2",
     "sass": "^1.66.1",
     "sass-loader": "^13.3.2",
+    "socket.io-client": "^4.7.4",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.4",
     "typescript": "^5.2.2",

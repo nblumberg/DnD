@@ -49,7 +49,7 @@ export type ClassMembers<C> = {
   [K in keyof C as C[K] extends Function ? never : K]: C[K];
 };
 
-function rawObj(obj: object, nodes?: any[]): object | undefined {
+function rawObj(obj: any, nodes?: any[]): object | undefined {
   if (!nodes) {
     nodes = [];
   }

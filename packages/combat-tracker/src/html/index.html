@@ -4,23 +4,24 @@
     <meta charset="utf-8" />
     <title>D&D</title>
   </head>
-  <body></body>
-
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("service-worker.js")
-          .then((registration) => {
-            console.log("Service Worker registered: ", registration);
-          })
-          .catch((registrationError) => {
-            console.error(
-              "Service Worker registration failed: ",
-              registrationError
-            );
-          });
-      });
-    }
-  </script>
+  <body>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("service-worker.js")
+            .then((registration) => {
+              console.log("Service Worker registered: ", registration);
+            })
+            .catch((registrationError) => {
+              console.error(
+                "Service Worker registration failed: ",
+                registrationError
+              );
+            });
+        });
+      }
+    </script>
+    <script src="http://localhost:6677/socket.io/socket.io.js"></script>
+  </body>
 </html>

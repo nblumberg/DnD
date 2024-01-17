@@ -1,6 +1,7 @@
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { selectCastMembers } from "../features/castMember/castMembers";
+// import { selectCastMembers } from "../features/castMember/castMembers";
+import { useCastMembers } from "../data/castMembers";
 import { CastMemberCard } from "./CastMemberCard";
 import { EmptyState } from "./EmptyState";
 
@@ -11,7 +12,8 @@ const TurnOrderGrid = styled.div`
 `;
 
 export function TurnOrder() {
-  const castMembers = useSelector(selectCastMembers);
+  const castMembers = useCastMembers();
+  // const castMembers = useSelector(selectCastMembers);
   const initiativeOrder = Object.values(castMembers).sort(
     (a, b) => b.initiativeOrder - a.initiativeOrder
   );

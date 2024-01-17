@@ -3,8 +3,6 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext"
-  },
-  "include": ["./packages/**/*"]
+    "lib": ["ESNext", "DOM"]
+  }
 }

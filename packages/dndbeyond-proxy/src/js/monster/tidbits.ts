@@ -1,3 +1,4 @@
+import { Condition, DamageType, DamageTypes } from "creature";
 import { getElementText } from "../dom";
 import { getChallengeRating } from "./cr";
 import { getLanguages } from "./languages";
@@ -17,10 +18,10 @@ export function getTidbits(
   languages?: string[];
   cr?: number;
   proficiency: number;
-  damageVulnerabilities?: string[];
-  damageResistances?: string[];
-  damageImmunities?: string[];
-  conditionImmunities?: string[];
+  damageVulnerabilities?: DamageType[];
+  damageResistances?: DamageType[];
+  damageImmunities?: DamageType[];
+  conditionImmunities?: Condition[];
 } {
   const tidbits = parentElement.querySelectorAll(
     ".mon-stat-block__tidbits .mon-stat-block__tidbit"
@@ -35,10 +36,10 @@ export function getTidbits(
   let languages: string[] | undefined;
   let cr: number | undefined;
   let proficiency = 0;
-  let damageVulnerabilities: string[] | undefined;
-  let damageResistances: string[] | undefined;
-  let damageImmunities: string[] | undefined;
-  let conditionImmunities: string[] | undefined;
+  let damageVulnerabilities: DamageType[] | undefined;
+  let damageResistances: DamageType[] | undefined;
+  let damageImmunities: DamageType[] | undefined;
+  let conditionImmunities: Condition[] | undefined;
   for (let i = 0; i < tidbits.length; i++) {
     const tidbit = tidbits[i];
     const element = tidbit.querySelector(".mon-stat-block__tidbit-label");
@@ -72,16 +73,24 @@ export function getTidbits(
         proficiency = getProficiencyBonus(data);
         break;
       case "Damage Vulnerabilities":
-        damageVulnerabilities = getElementText(data).split(/\s*,\s*/);
+        damageVulnerabilities = textToDamageType(
+          getElementText(data).split(/\s*,\s*/)
+        );
         break;
       case "Damage Resistances":
-        damageResistances = getElementText(data).split(/\s*,\s*/);
+        damageResistances = textToDamageType(
+          getElementText(data).split(/\s*,\s*/)
+        );
         break;
       case "Damage Immunities":
-        damageImmunities = getElementText(data).split(/\s*,\s*/);
+        damageImmunities = textToDamageType(
+          getElementText(data).split(/\s*,\s*/)
+        );
         break;
       case "Condition Immunities":
-        conditionImmunities = getElementText(data).split(/\s*,\s*/);
+        conditionImmunities = textToCondition(
+          getElementText(data).split(/\s*,\s*/)
+        );
         break;
     }
   }
@@ -107,4 +116,18 @@ export function getTidbits(
     damageImmunities,
     conditionImmunities,
   };
+}
+
+function textToDamageType(text: string[]): DamageType[] {
+  const matches = text.filter((item) =>
+    DamageTypes.includes(item as DamageType)
+  );
+  return matches as DamageType[];
+}
+
+function textToCondition(text: string[]): Condition[] {
+  const matches = text.filter((item) =>
+    Object.values(Condition).includes(item as Condition)
+  );
+  return matches as Condition[];
 }

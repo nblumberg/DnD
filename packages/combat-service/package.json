@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "Manage d20 system combat state",
   "main": "./dist/js/index.js",
-  "exports": "./src/js/index.ts",
+  "exports": {
+    ".": "./dist/js/index.js",
+    "./client": "./dist/js/client/index.js"
+  },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn clean && tsc",
+    "build": "yarn build-tsc",
+    "build-tsc": "yarn clean && tsc --build --force --verbose",
     "test": "jest",
     "testWatch": "jest --watch",
-    "serve": "yarn build && node dist/src/js/index.js"
+    "start": "node --input-type=module dist/js/index.js",
+    "serve": "yarn build && yarn start"
   },
   "author": "nathanielblumberg@gmail.com",
   "license": "ISC",
@@ -25,9 +30,11 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "creature": "*",
+    "compendium-service": "*",
     "cors": "^2.8.5",
+    "creature": "*",
     "event-emitter": "*",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "socket.io": "^4.7.4"
   }
 }

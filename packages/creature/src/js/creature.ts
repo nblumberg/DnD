@@ -1,8 +1,9 @@
 import { Roll, RollRaw } from "roll";
 import { ClassMembers, Serializable } from "serializable";
 import { Abilities, Ability, AbilityRaw } from "./ability";
-import { ActionParams, DamageType } from "./action";
+import { ActionParams } from "./action";
 import { Alignment, AlignmentParam, AlignmentRaw } from "./alignment";
+import { DamageType } from "./attack";
 import { Condition } from "./condition";
 import { Size } from "./size";
 import { Skill, Skills, SkillsParams, SkillsRaw, createSkills } from "./skill";
@@ -187,7 +188,7 @@ export class Creature extends Serializable {
     };
 
     if (
-      Object.values(params.skills as Record<string, any>).find(
+      Object.values((params.skills ?? {}) as Record<string, any>).find(
         (skill) => typeof skill === "number"
       )
     ) {
@@ -199,9 +200,11 @@ export class Creature extends Serializable {
     } else {
       // Skills or SkillsRaw case
       this.skills = {} as Skills;
-      Object.entries(params.skills as SkillsRaw).forEach(([name, skill]) => {
-        this.skills[name] = new Skill(skill);
-      });
+      Object.entries((params.skills ?? {}) as SkillsRaw).forEach(
+        ([name, skill]) => {
+          this.skills[name] = new Skill(skill);
+        }
+      );
     }
 
     if ("initiativeModifier" in params) {

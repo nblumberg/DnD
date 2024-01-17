@@ -15,7 +15,8 @@
   ],
   "scripts": {
     "build": "lerna run build",
-    "roll": "lerna run roll:build",
+    "build-tsc": "lerna run build-tsc",
+    "build-webpack": "lerna run build-webpack",
     "test": "lerna run test",
     "testWatch": "lerna run testWatch"
   }

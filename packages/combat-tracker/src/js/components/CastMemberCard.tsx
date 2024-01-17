@@ -1,6 +1,6 @@
+import { CastMember } from "creature";
 import { SyntheticEvent, useState } from "react";
 import styled from "styled-components";
-import { CastMember } from "../data/castMembers";
 import { ArmorClassShield } from "./ArmorClassShield";
 import { ConditionOverlay } from "./ConditionOverlay";
 import { HitPointBar } from "./HitPointsBar";

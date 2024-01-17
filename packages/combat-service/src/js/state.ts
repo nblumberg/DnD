@@ -1,35 +1,62 @@
-import { CastMember, CastMemberParams, CastMemberRaw } from "creature";
+import { CastMember, CastMemberRaw } from "creature";
 import { createEventEmitter } from "event-emitter";
 import * as fs from "fs";
 import * as path from "path";
+import { initializeCastMembersState } from "./state/castMemberState";
 
 const stateFile = path.join(__dirname, "..", "..", "state.json");
 
-interface State {
+export interface State {
   castMembers: Record<string, CastMember>;
   turnOrder: string[];
   turnIndex: number;
 }
 
-export const state: State = {
+const defaultState: State = {
   castMembers: {},
-  turnIndex: Infinity,
+  turnIndex: Number.MAX_SAFE_INTEGER,
   turnOrder: [],
-  ...JSON.parse(fs.readFileSync(stateFile, "utf8")),
 };
-for (const [id, castMember] of Object.entries(state.castMembers)) {
-  state.castMembers[id] = new CastMember(castMember);
+let tmp: State = {
+  ...defaultState,
+};
+try {
+  const json = fs.readFileSync(stateFile, "utf8");
+  tmp = JSON.parse(json);
+} catch (e) {
+  if (e && typeof e === "object" && "code" in e && e?.code !== "ENOENT") {
+    throw e;
+  }
+  // Ignore the file not existing
 }
+export const state: State = {
+  ...defaultState,
+  ...tmp,
+};
 
-const { setData: updateState } = createEventEmitter(state);
-const { setData: updateCastMembers } = createEventEmitter(state.castMembers);
-const updateCastMember: Record<
-  string,
-  ReturnType<typeof createEventEmitter>["setData"]
-> = {};
+export const {
+  addListener: addStateChangeListener,
+  addPropertyListener: addStatePropertyListener,
+  setData: updateState,
+} = createEventEmitter(state);
 
-function onStateChange() {
-  fs.writeFileSync(stateFile, JSON.stringify(state, null, 2));
+export function onStateChange() {
+  fs.writeFileSync(
+    stateFile,
+    JSON.stringify(
+      {
+        ...state,
+        castMembers: Object.fromEntries(
+          Object.entries(state.castMembers).map(([id, castMember]) => [
+            id,
+            castMember.raw(),
+          ])
+        ),
+      },
+      null,
+      2
+    )
+  );
 }
 
 export function setState<P extends keyof State>(prop: P, value: State[P]) {
@@ -37,36 +64,8 @@ export function setState<P extends keyof State>(prop: P, value: State[P]) {
   onStateChange();
 }
 
-export function addCastMember(rawCastMember: CastMemberParams): CastMember {
-  const castMember = new CastMember(rawCastMember);
-  const { setData: updateMe } = createEventEmitter(castMember);
-  updateCastMember[castMember.id] = updateMe;
-  updateCastMembers({ [castMember.id]: castMember });
-  updateState({ castMembers: state.castMembers });
-  onStateChange();
-  return castMember;
-}
+initializeCastMembersState(
+  state as State & { castMembers: Record<string, CastMemberRaw> }
+);
 
-export function removeCastMember(id: string) {
-  delete updateCastMember[id];
-  updateCastMembers(
-    Object.fromEntries(
-      Object.entries(state.castMembers).filter(([key]) => key !== id)
-    )
-  );
-  updateState({ castMembers: state.castMembers });
-  onStateChange();
-}
-
-export function setCastMemberState<P extends keyof CastMemberRaw>(
-  id: string,
-  prop: P,
-  value: CastMemberRaw[P]
-) {
-  const updateMe = updateCastMember[id];
-  updateMe({ [prop]: value });
-  const castMember = state.castMembers[id];
-  updateCastMembers({ [castMember.id]: castMember });
-  updateState({ castMembers: state.castMembers });
-  onStateChange();
-}
+onStateChange();

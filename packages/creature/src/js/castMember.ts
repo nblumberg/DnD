@@ -1,8 +1,8 @@
 import { setLog } from "roll";
 import { ClassMembers } from "serializable";
 import { AbilityRaw } from "./ability";
-import { DamageType } from "./action";
-import { Actor, toId } from "./actor";
+import { Actor, ActorRaw, toId } from "./actor";
+import { DamageType } from "./attack";
 import { AbilityCheck, AbilityCheckRaw, Check } from "./check";
 import { Condition } from "./condition";
 import { Creature, CreatureParams, CreatureRaw } from "./creature";
@@ -19,7 +19,7 @@ interface ActiveConditionParam {
 }
 
 export interface CastMemberParams extends CreatureParams {
-  actor: Actor;
+  actor: ActorRaw;
   id?: string;
   unique?: boolean;
   initiativeOrder?: number;
@@ -126,7 +126,7 @@ export class CastMember extends Creature {
     if (!params.actor) {
       throw new Error(`Actor required for CastMember ${this.name}`);
     }
-    this.actor = params.actor;
+    this.actor = new Actor(params.actor);
     this.unique = !!params.unique;
     this.id = params.id ?? toId(this.name);
     this.nickname = params.nickname;

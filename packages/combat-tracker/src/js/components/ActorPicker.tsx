@@ -1,15 +1,11 @@
+import { Actor, Auditioner, CastMember } from "creature";
 import { SyntheticEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector, useStore } from "react-redux";
 import styled, { css } from "styled-components";
-import { Actor } from "../data/Actor";
+import { Character } from "../data/Character";
 import { useActors } from "../data/actors";
-import { CastMember } from "../data/castMembers";
-import {
-  castActors,
-  findUniqueId,
-  removeCastMember,
-  selectCastMembers,
-} from "../features/castMember/castMembers";
+import { useCastMembers } from "../data/castMembers";
+import { findUniqueId } from "../features/castMember/castMembers";
+import { getSocket } from "../services/sockets";
 
 const colorScheme = `
   background: black;
@@ -100,14 +96,13 @@ function actorToOption({ name, id, unique: pc }: Actor) {
   );
 }
 
-interface Auditioner extends Actor {
-  id: string;
-  name: string;
-  nickname?: string;
-  actor?: Actor;
-}
-
-function auditionerToOption({ nickname, name, id, unique, actor }: Auditioner) {
+function auditionerToOption({
+  nickname,
+  name,
+  id,
+  unique,
+  actor,
+}: CastMember | Auditioner) {
   const attributes: {
     key: string;
     value: string;
@@ -230,15 +225,23 @@ function getSelectedIds(event: SyntheticEvent): string[] {
   return ids;
 }
 
-function audition(auditioners: Auditioner[], actors: Actor[]): Auditioner[] {
+function audition(
+  auditioners: Array<CastMember | Auditioner>,
+  actors: Actor[]
+): Array<CastMember | Auditioner> {
   const map = auditioners.reduce(
     (map, auditioner) => ({ ...map, [auditioner.id]: auditioner }),
-    {} as Record<string, Auditioner>
+    {} as Record<string, CastMember | Auditioner>
   );
-  const newAuditioners: Auditioner[] = [...auditioners];
+  const newAuditioners: Array<CastMember | Auditioner> = [...auditioners];
   actors.forEach((actor) => {
     const { id } = findUniqueId(actor.id, map);
-    const auditioner: Auditioner = { ...actor, id, actor };
+    const auditioner: Auditioner = {
+      ...actor,
+      id,
+      actor,
+      character: actor instanceof Character,
+    };
     newAuditioners.push(auditioner);
   });
   return newAuditioners.sort(sortAuditioners);
@@ -260,15 +263,20 @@ function sortAuditioners(a: Actor | Auditioner, b: Actor | Auditioner): number {
 }
 
 export function ActorPicker({ onClose }: { onClose: () => void }) {
-  const dispatch = useDispatch();
-  const { getState } = useStore();
+  // const dispatch = useDispatch();
+  // const { getState } = useStore();
 
   const actors = useActors();
+  const castMembers = useCastMembers();
 
-  const castMembers = useSelector(selectCastMembers);
-  const [auditioners, setAuditioners] = useState<Auditioner[]>(
-    Object.values(castMembers)
-  );
+  // const castMembers = useSelector(selectCastMembers);
+  const [auditioners, setAuditioners] = useState<
+    Array<CastMember | Auditioner>
+  >(Object.values(castMembers));
+
+  useEffect(() => {
+    setAuditioners(Object.values(castMembers));
+  }, [castMembers]);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -321,17 +329,23 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
   };
 
   const submit = async () => {
-    const toBeCast = auditioners
-      .filter((auditioner) => !(auditioner instanceof CastMember))
-      .map((auditioner) => auditioner.actor ?? (auditioner as Actor));
+    const toBeCast = auditioners.filter(
+      (auditioner) => !(auditioner instanceof CastMember)
+    ) as Auditioner[];
+    // .map((auditioner) => auditioner.actor ?? (auditioner as Actor));
     const toBeFired = Object.values(castMembers).filter(
       (castMember) => !auditioners.includes(castMember)
     );
     if (toBeCast.length) {
-      castActors(toBeCast)(dispatch, getState);
+      getSocket().emit("castActors", toBeCast);
+      // castActors(toBeCast)(dispatch, getState);
     }
     if (toBeFired.length) {
-      toBeFired.forEach((castMember) => dispatch(removeCastMember(castMember)));
+      getSocket().emit(
+        "fireActors",
+        toBeFired.map(({ id }) => id)
+      );
+      // toBeFired.forEach((castMember) => dispatch(removeCastMember(castMember)));
     }
     onClose();
   };

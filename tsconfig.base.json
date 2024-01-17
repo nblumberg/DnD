@@ -1,8 +1,10 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
+    "baseUrl": ".",
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
@@ -22,11 +24,12 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "resolveJsonModule": false,
+    "rootDir": "",
 
     "declaration": true,
     "declarationMap": true,
     "downlevelIteration": true,
-    "noEmitOnError": false,
+    "noEmitOnError": true,
     "outDir": "dist",
     "removeComments": false,
     "sourceMap": true,
@@ -39,8 +42,8 @@
       { "name": "typescript-eslint-language-service" }
     ],
 
-    "allowSyntheticDefaultImports": false,
-    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": false,
@@ -51,13 +54,32 @@
     "useDefineForClassFields": true,
 
     "composite": true,
-    "incremental": true
+    "incremental": true,
+    "importHelpers": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+
+    "paths": {
+      "@demo-ts/api-utils": ["libs/api-utils/src/index.mts"],
+      "@demo-ts/data-processing": ["libs/data-processing/src/index.mts"],
+      "@demo-ts/utilities": ["libs/utilities/src/index.mts"]
+    }
   },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "packages/*/dist",
+    "packages/*/node_modules"
+  ],
+  "include": ["packages/**/*"],
   "references": [
+    { "path": "./packages/serializable" },
+    { "path": "./packages/roll" },
+    { "path": "./packages/event-emitter" },
     { "path": "./packages/creature" },
+    { "path": "./packages/dndbeyond-proxy" },
     { "path": "./packages/compendium-server" },
     { "path": "./packages/combat-tracker" },
-    { "path": "./packages/roll" },
-    { "path": "./packages/serializable" }
+    { "path": "./packages/event-emitter" }
   ]
 }

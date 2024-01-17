@@ -6,6 +6,7 @@ export const dataPath = join(
   "..",
   "..",
   "..",
+  "packages",
   "dndbeyond-proxy",
   "data"
 );

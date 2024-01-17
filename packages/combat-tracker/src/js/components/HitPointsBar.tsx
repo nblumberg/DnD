@@ -1,5 +1,5 @@
+import { CastMember } from "creature";
 import styled from "styled-components";
-import { CastMember } from "../data/castMembers";
 
 const Container = styled.div`
   height: 2em;

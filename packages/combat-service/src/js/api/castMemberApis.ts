@@ -1,32 +1,29 @@
-import { CastMember, CastMemberParams } from "creature";
+import { Auditioner, CastMember } from "creature";
 import { Express, Request, Response } from "express";
 import {
-  addCastMember as _addCastMember,
-  setCastMemberState,
-  setState,
-  state,
-} from "./state";
-import { getTurnOrder } from "./turnOrder";
-
-export const castMembers = new Map<string, CastMember>();
+  castActor as castActorAction,
+  changeInitiativeOrder as changeInitiativeOrderAction,
+  delayInitiative as delayInitiativeAction,
+  getCastMember as getCastMemberAction,
+} from "../actions/castMemberActions";
+import { getTurnOrder } from "../actions/initiativeActions";
 
 function listCastMembers(_req: Request, res: Response): void {
   const result = getTurnOrder().map((castMember) => castMember.raw());
   res.json(result);
 }
 
-function addCastMember(req: Request, res: Response): void {
-  const castMemberRaw = JSON.parse(req.body) as CastMemberParams;
-  const castMember = _addCastMember(castMemberRaw);
+async function castActor(req: Request, res: Response): Promise<void> {
+  const auditioner = JSON.parse(req.body) as Auditioner;
+  const castMember = await castActorAction(auditioner);
   res.json(castMember.raw());
 }
 
 function lookUpCastMember(req: Request, res: Response): CastMember | undefined {
   const { id } = req.params;
-  const castMember = state.castMembers[id];
+  const castMember = getCastMemberAction(id);
   if (!castMember) {
-    res.status(404);
-    res.json({ error: `CastMember ${id} not found` });
+    res.status(404).json({ error: `CastMember ${id} not found` });
     return;
   }
   return castMember;
@@ -41,43 +38,40 @@ function getCastMember(req: Request, res: Response): void {
 }
 
 function delayInitiative(req: Request, res: Response): void {
-  const castMember = lookUpCastMember(req, res);
+  let castMember = lookUpCastMember(req, res);
   if (!castMember) {
     return;
   }
-  setCastMemberState(castMember.id, "delayInitiative", true);
+  castMember = delayInitiativeAction(castMember.id);
+  if (!castMember) {
+    return;
+  }
   res.json(castMember.raw());
 }
 
 function changeInitiativeOrder(req: Request, res: Response): void {
-  const castMember = lookUpCastMember(req, res);
+  let castMember = lookUpCastMember(req, res);
   if (!castMember) {
     return;
   }
-  const initiativeOrder = parseInt(req.params.initiativeOrder, 10);
+  const initiativeOrder = parseInt(req.body, 10);
   if (isNaN(initiativeOrder) || initiativeOrder < 1) {
-    res.status(400);
-    res.json({
+    res.status(400).json({
       error: `Invalid initiativeOrder ${req.params.initiativeOrder}, must be >= 1`,
     });
+    return;
   }
-  castMember.initiative.add(initiativeOrder);
-  setCastMemberState(castMember.id, "initiativeOrder", initiativeOrder);
-  setState(
-    "turnOrder",
-    getTurnOrder().map(({ id }) => id)
-  );
+  castMember = changeInitiativeOrderAction(castMember.id, initiativeOrder);
+  if (!castMember) {
+    return;
+  }
   res.json(castMember.raw());
 }
 
 export function attachCastMemberEndpoints(app: Express): void {
   app.get("/v1/cast", listCastMembers);
   app.get("/v1/cast/:id", getCastMember);
-  app.post("/v1/cast", addCastMember);
-
+  app.post("/v1/cast", castActor);
   app.patch("/v1/cast/:id/delay", delayInitiative);
-  app.patch(
-    "/v1/cast/:id/initiativeOrder/:initiativeOrder",
-    changeInitiativeOrder
-  );
+  app.patch("/v1/cast/:id/initiativeOrder", changeInitiativeOrder);
 }

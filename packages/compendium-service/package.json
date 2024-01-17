@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "List and fetch d20 system creatures",
   "main": "./dist/js/index.js",
-  "exports": "./src/js/index.ts",
+  "exports": {
+    ".": "./dist/js/index.js",
+    "./client": "./dist/js/client/index.js"
+  },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn clean && tsc",
+    "build": "yarn build-tsc",
+    "build-tsc": "yarn clean && tsc --build --force --verbose",
     "test": "jest",
     "testWatch": "jest --watch",
-    "serve": "yarn build && node dist/src/js/index.js"
+    "start": "node dist/js/index.js",
+    "serve": "yarn build && yarn start"
   },
   "author": "nathanielblumberg@gmail.com",
   "license": "ISC",

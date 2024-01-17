@@ -1,7 +1,6 @@
 {
-  "extends": "../../tsconfig.browser.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmitOnError": true,
     "outDir": "dist",
     "rootDir": "src"
   },
