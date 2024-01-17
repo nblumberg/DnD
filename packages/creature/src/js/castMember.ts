@@ -18,6 +18,7 @@ export interface CastMemberParams extends CreatureParams {
   actor: ActorRaw;
   id?: string;
   unique?: boolean;
+  character?: boolean;
   initiativeOrder?: number;
   nickname?: string;
   conditions?: ActiveConditionParam[];
@@ -30,6 +31,7 @@ export type CastMemberRaw = Omit<CreatureRaw, keyof Abilities> & {
   actor: ActorRaw;
   id: string;
   unique: boolean;
+  character: boolean;
   initiativeOrder: number;
   nickname?: string;
 
@@ -57,6 +59,7 @@ export class CastMember
   actor: Actor;
   id: string;
   unique: boolean;
+  character: boolean;
   initiativeOrder: number;
   nickname?: string;
 
@@ -81,6 +84,7 @@ export class CastMember
     }
     this.actor = new Actor(params.actor);
     this.unique = !!params.unique;
+    this.character = !!params.character;
     this.id = params.id ?? toId(this.name);
     this.nickname = params.nickname;
 
