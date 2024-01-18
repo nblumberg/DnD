@@ -30,6 +30,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@socket.io/admin-ui": "^0.5.1",
     "compendium-service": "*",
     "cors": "^2.8.5",
     "creature": "*",

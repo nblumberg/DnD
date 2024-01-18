@@ -9,6 +9,7 @@ import {
   ServerToClientEvents,
   SocketData,
 } from "./socketTypes";
+const { instrument } = require("@socket.io/admin-ui");
 
 export type SocketServer = SocketIOServer<
   ClientToServerEvents,
@@ -34,6 +35,7 @@ export function initializeSockets(app: Express): HttpServer {
       credentials: true,
     },
   });
+  instrument(io, { auth: false, mode: "development" });
   resolvePromise(io);
   io.on("connection", (socket) => {
     console.log(`Player socket connected from ${socket.handshake.address}`);
