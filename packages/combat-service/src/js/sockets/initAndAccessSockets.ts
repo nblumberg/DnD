@@ -1,5 +1,6 @@
 import { Express } from "express";
 import http, { Server as HttpServer } from "http";
+import { hostname } from "os";
 import { Server as SocketIOServer, Socket as SocketIOSocket } from "socket.io";
 import { attachCastMemberSockets } from "./castMemberSockets";
 import { attachInitiativeSockets } from "./initiativeSockets";
@@ -35,7 +36,11 @@ export function initializeSockets(app: Express): HttpServer {
       credentials: true,
     },
   });
-  instrument(io, { auth: false, mode: "development" });
+  instrument(io, {
+    auth: false,
+    mode: "development",
+    serverId: `combat-service ${hostname()}#${process.pid}`,
+  });
   resolvePromise(io);
   io.on("connection", (socket) => {
     console.log(`Player socket connected from ${socket.handshake.address}`);
