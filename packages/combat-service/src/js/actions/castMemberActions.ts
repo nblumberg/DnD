@@ -153,7 +153,7 @@ export function removeConditionFromCastMember(
     }`
   );
 
-  if (castMember.conditions.find(({ condition: c }) => c === condition)) {
+  if (!castMember.conditions.find(({ condition: c }) => c === condition)) {
     console.warn(
       `${castMember.nickname ?? castMember.name} lacks condition ${condition}`
     );

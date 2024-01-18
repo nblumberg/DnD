@@ -34,11 +34,11 @@ const Icons: Record<Condition | DamageType | Effect, string> = {
   cold: "❄️",
   dead: "💀",
   deafened: "🙉",
-  "exhaustion level 1": "😴1",
-  "exhaustion level 2": "😴2",
-  "exhaustion level 3": "😴3",
-  "exhaustion level 4": "😴4",
-  "exhaustion level 5": "😴5",
+  "exhaustion level 1": "🥱1",
+  "exhaustion level 2": "🥱2",
+  "exhaustion level 3": "🥱3",
+  "exhaustion level 4": "🥱4",
+  "exhaustion level 5": "🥱5",
   fire: "🔥",
   force: "🔮", // TODO
   frightened: "😱",
@@ -70,7 +70,7 @@ function ChooseCondition({ castMember }: { castMember: CastMember }) {
 
   const addCondition = (event: SyntheticEvent) => {
     const { target } = event;
-    const condition = (target as HTMLElement).title as Condition;
+    const condition = (target as HTMLElement).title.toLowerCase() as Condition;
     getSocket().emit("addCondition", castMember.id, condition);
   };
 
@@ -122,11 +122,19 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
     console.log("chooseCondition");
   };
 
+  const removeCondition = (event: SyntheticEvent) => {
+    const { target } = event;
+    const condition = (target as HTMLElement).title.toLowerCase() as Condition;
+    getSocket().emit("removeCondition", castMember.id, condition);
+  };
+
   const { conditions } = castMember;
   const icons = conditions.map(({ condition }) => (
     <ConditionIcon
       key={condition}
       title={`${condition.charAt(0).toUpperCase()}${condition.substring(1)}`}
+      onClick={removeCondition}
+      style={{ cursor: "not-allowed" }}
     >
       {Icons[condition as unknown as keyof typeof Icons]}
     </ConditionIcon>
@@ -137,6 +145,7 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
         key="conditions"
         title="Conditions"
         onClick={chooseCondition}
+        style={{ cursor: "cell" }}
       >
         ⏳️
       </ConditionIcon>
