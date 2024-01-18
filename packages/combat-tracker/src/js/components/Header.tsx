@@ -37,10 +37,15 @@ const buttonParams: Array<{
   },
   { label: "🕐", title: "Roll initiative", handlerName: "rollInitiative" },
   { dmOnly: true, label: "⏩", title: "Next turn", handlerName: "nextTurn" },
+  { playerOnly: true, label: "🎬", title: "Actions", handlerName: "actions" },
   { playerOnly: true, label: "🏁", title: "End turn", handlerName: "endTurn" },
 ];
 
-export function Header({ pickActors }: { pickActors: () => void }) {
+export function Header({
+  pickActors,
+}: {
+  pickActors: (event: SyntheticEvent) => void;
+}) {
   const id = getIdentity();
   const dm = isDM();
   const castMembers = useCastMembers();
@@ -75,7 +80,7 @@ export function Header({ pickActors }: { pickActors: () => void }) {
     }
   };
 
-  const handlers: Record<string, () => void> = {
+  const handlers: Record<string, (event: SyntheticEvent) => void> = {
     pickActors,
     previousTurn: () => {
       if (!dm) {

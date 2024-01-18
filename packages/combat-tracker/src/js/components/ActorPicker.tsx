@@ -5,6 +5,7 @@ import { Character } from "../data/Character";
 import { useActors } from "../data/actors";
 import { useCastMembers } from "../data/castMembers";
 import { getSocket } from "../services/sockets";
+import { Dialog, DialogButton } from "./Dialog";
 
 const colorScheme = `
   background: black;
@@ -12,33 +13,33 @@ const colorScheme = `
   color: white;
 `;
 
-const Dialog = styled.dialog`
-  ${colorScheme}
-  border-radius: 5px;
-  border-style: solid;
-  border-width: 2px;
-  bottom: 0;
-  height: 90vh;
-  left: 20vw;
-  position: fixed;
-  right: 20vw;
-  width: 60vw;
-  top: 0;
-`;
+// const Dialog = styled.dialog`
+//   ${colorScheme}
+//   border-radius: 5px;
+//   border-style: solid;
+//   border-width: 2px;
+//   bottom: 0;
+//   height: 90vh;
+//   left: 20vw;
+//   position: fixed;
+//   right: 20vw;
+//   width: 60vw;
+//   top: 0;
+// `;
 
-const DialogContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
-`;
+// const DialogContent = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+//   justify-content: space-between;
+// `;
 
-const DialogBody = styled.form`
-  align-items: stretch;
-  display: flex;
-  flex-grow: 100;
-  justify-content: space-between;
-`;
+// const DialogBody = styled.form`
+//   align-items: stretch;
+//   display: flex;
+//   flex-grow: 100;
+//   justify-content: space-between;
+// `;
 
 const ActorPanel = styled.div`
   align-items: stretch;
@@ -72,20 +73,20 @@ const Option = styled.option<{ $unique?: boolean }>`
     `}
 `;
 
-const DialogFooter = styled.footer`
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  margin-top: 1em;
-`;
+// const DialogFooter = styled.footer`
+//   display: flex;
+//   align-items: flex-end;
+//   justify-content: flex-end;
+//   margin-top: 1em;
+// `;
 
-const Button = styled.button`
-  background: blue;
-  border-radius: 3px;
-  border: 2px solid gray;
-  color: white;
-  padding: 0.25em 1em;
-`;
+// const Button = styled.button`
+//   background: blue;
+//   border-radius: 3px;
+//   border: 2px solid gray;
+//   color: white;
+//   padding: 0.25em 1em;
+// `;
 
 function actorToOption({ name, id, unique: pc }: Actor) {
   return (
@@ -148,7 +149,7 @@ function findUniqueId(
   const originalId = id;
   let nextId = originalId;
   let i = 2;
-  while (castMembers[id]) {
+  while (castMembers[nextId]) {
     nextId = `${originalId}_${i++}`;
   }
   return nextId;
@@ -282,9 +283,7 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      } else if (event.key === "Enter") {
+      if (event.key === "Enter") {
         submit();
       }
     };
@@ -295,34 +294,49 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
   }, [auditioners]);
 
   return (
-    <Dialog open>
-      <DialogContent>
-        <DialogBody method="dialog">
-          <ActorPanel>
-            <SearchBar
-              placeholder="Search"
-              onKeyDown={onSearch}
-              onChange={onSearch}
-              value={searchTerm}
-            ></SearchBar>
-            <ActorList multiple onChange={add} onDoubleClick={addAndSubmit}>
-              {headshotOptions}
-            </ActorList>
-          </ActorPanel>
-          <CastList multiple onChange={remove}>
-            {auditionerOptions}
-          </CastList>
-        </DialogBody>
-        <DialogFooter>
-          <Button onClick={submit}>
+    <Dialog
+      title="Add actors"
+      onClose={onClose}
+      buttons={
+        <>
+          <DialogButton onClick={submit}>
             Update active characters and creatures
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+          </DialogButton>
+        </>
+      }
+    >
+      <>
+        <ActorPanel>
+          <SearchBar
+            placeholder="Search"
+            onKeyDown={onSearch}
+            onChange={onSearch}
+            value={searchTerm}
+          ></SearchBar>
+          <ActorList multiple onChange={add} onDoubleClick={addAndSubmit}>
+            {headshotOptions}
+          </ActorList>
+        </ActorPanel>
+        <CastList multiple onChange={remove}>
+          {auditionerOptions}
+        </CastList>
+      </>
     </Dialog>
   );
 }
 
-export function ActorPickerButton({ addActors }: { addActors: () => void }) {
-  return <button onClick={addActors}>Add characters and creatures</button>;
+export function ActorPickerButton({
+  addActors,
+  label = "Add characters and creatures",
+  title = "Add characters and creatures",
+}: {
+  addActors: () => void;
+  label?: string;
+  title?: string;
+}) {
+  return (
+    <button title={title} onClick={addActors}>
+      {label}
+    </button>
+  );
 }
