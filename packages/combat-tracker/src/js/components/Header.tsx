@@ -115,6 +115,10 @@ const buttonParams: Array<{
   { playerOnly: true, label: "🏁", title: "End turn", handlerName: "endTurn" },
 ];
 
+function stopInnerClicksFromDismissingMenu(event: SyntheticEvent) {
+  event.stopPropagation();
+}
+
 function Menu({
   dm,
   user,
@@ -218,7 +222,11 @@ function Menu({
           Menu
         </Button>
       </ButtonBar>
-      {menuOpen && <DropDown>{options}</DropDown>}
+      {menuOpen && (
+        <DropDown onClick={stopInnerClicksFromDismissingMenu}>
+          {options}
+        </DropDown>
+      )}
     </MenuBar>
   );
 }
@@ -308,6 +316,9 @@ export function Header({
           roll={myCharacter?.initiative ?? new Roll("1d20")}
           onRoll={(result: number) => {
             rollInitiative(undefined, result);
+          }}
+          onCancel={() => {
+            setRollOpen(false);
           }}
         />
       )}

@@ -33,10 +33,12 @@ export function InteractiveRoll({
   title,
   roll,
   onRoll,
+  onCancel,
 }: {
   title: string;
   roll: Roll;
   onRoll: (result: number) => void;
+  onCancel?: () => void;
 }) {
   const [result, setResult] = useState<number | undefined>();
 
@@ -66,7 +68,7 @@ export function InteractiveRoll({
   return (
     <Dialog
       title={title}
-      onClose={submit}
+      onClose={onCancel}
       buttons={
         <>
           <DialogButton onClick={autoRoll}>Roll for me 🎲</DialogButton>

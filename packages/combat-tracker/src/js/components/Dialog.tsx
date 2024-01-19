@@ -1,14 +1,8 @@
 import { SyntheticEvent, useEffect } from "react";
 import styled from "styled-components";
-
-const colorScheme = `
-  // background: black;
-  // border-color: gray;
-  // color: white;
-`;
+import { media } from "./breakpoints";
 
 const OuterDialog = styled.dialog`
-  ${colorScheme}
   border-radius: 5px;
   border-style: solid;
   border-width: 2px;
@@ -21,6 +15,14 @@ const OuterDialog = styled.dialog`
   width: 60vw;
   top: 0;
   z-index: 1;
+
+  ${media.md`
+    height: unset;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: unset;
+  `}
 `;
 
 const DialogContent = styled.div`
@@ -28,6 +30,10 @@ const DialogContent = styled.div`
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
+
+  ${media.md`
+    height: unset;
+  `}
 `;
 
 const DialogHeader = styled.header`
@@ -56,7 +62,7 @@ const DialogClose = styled.button`
 const DialogBody = styled.form`
   align-items: stretch;
   display: flex;
-  flex-grow: 100;
+  flex-grow: 1;
   justify-content: space-between;
   padding: 1em;
 `;
@@ -73,7 +79,6 @@ const DialogFooter = styled.footer`
 
 export const DialogButton = styled.button`
   border-radius: 3px;
-  // border: 2px solid black;
   font-size: 1em;
   margin: 0.25em 1em;
   padding: 0.25em 1em;
@@ -92,9 +97,12 @@ export function Dialog({
   children: React.ReactNode;
   title?: string;
   buttons?: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }) {
   useEffect(() => {
+    if (!onClose) {
+      return;
+    }
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
@@ -115,7 +123,7 @@ export function Dialog({
       <DialogContent>
         <DialogHeader>
           {title && <DialogHeading>{title}</DialogHeading>}
-          <DialogClose onClick={onClose}>X</DialogClose>
+          {onClose && <DialogClose onClick={onClose}>X</DialogClose>}
         </DialogHeader>
         <DialogBody method="dialog">{children}</DialogBody>
         {buttons && <DialogFooter>{buttons}</DialogFooter>}
