@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useIsDM } from "../auth";
 import { useTurn } from "../data/turn";
 import { ArmorClassShield } from "./ArmorClassShield";
-import { ConditionOverlay } from "./ConditionOverlay";
+import { ConditionMenu, ConditionOverlay } from "./ConditionOverlay";
 import { HitPointBar } from "./HitPointsBar";
 
 const Panel = styled.div<{ $myTurn: boolean }>`
@@ -16,6 +16,11 @@ const Panel = styled.div<{ $myTurn: boolean }>`
   display: flex;
   flex-direction: column;
   position: relative;
+  user-select: none;
+
+  &:hover ${ConditionMenu} {
+    display: inline;
+  }
 `;
 const Initiative = styled.div`
   background-color: white;

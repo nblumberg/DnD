@@ -21,8 +21,13 @@ const Panel = styled.div<{ $dialog: boolean }>`
   width: 100%;
 `;
 const ConditionIcon = styled.span`
+  cursor: "not-allowed";
   font-size: 3em;
   flex-grow: 0;
+`;
+export const ConditionMenu = styled(ConditionIcon)`
+  cursor: "cell";
+  display: none;
 `;
 
 const Icons: Record<Condition | DamageType | Effect, string> = {
@@ -138,21 +143,19 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
       key={condition}
       title={`${condition.charAt(0).toUpperCase()}${condition.substring(1)}`}
       onClick={removeCondition}
-      style={{ cursor: "not-allowed" }}
     >
       {Icons[condition as unknown as keyof typeof Icons]}
     </ConditionIcon>
   ));
   if (dm) {
     icons.unshift(
-      <ConditionIcon
+      <ConditionMenu
         key="conditions"
         title="Conditions"
         onClick={chooseCondition}
-        style={{ cursor: "cell" }}
       >
         ⏳️
-      </ConditionIcon>
+      </ConditionMenu>
     );
   }
   return (
