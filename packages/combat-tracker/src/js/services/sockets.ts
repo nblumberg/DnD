@@ -5,15 +5,10 @@ import type {
 import { useEffect, useState } from "react";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
-import { awaitLogin, emailToCharacter } from "../auth";
+import { awaitLogin, emailToCharacters } from "../auth";
 
 type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
-// const { io } = window as unknown as {
-//   io: { connect: (uri: string) => MySocket };
-// };
-
-// alert(`socket.io is ${io ? "defined" : "undefined"}`);
 let socket: MySocket | undefined;
 
 export async function awaitSocket(): Promise<MySocket> {
@@ -21,16 +16,19 @@ export async function awaitSocket(): Promise<MySocket> {
     return socket;
   }
   const profile = await awaitLogin();
-  const user = emailToCharacter(profile.email);
-  if (!user) {
+  const users = emailToCharacters(profile.email);
+  if (!users) {
     throw new Error("Unknown user, cannot connect to socket");
   }
   let path = "";
-  if (user === "dm") {
+  if (users.includes("dm")) {
     path = "/dm";
   }
-  socket = io(`:6677${path}`);
-  // socket = io.connect(`:6677${path}`);
+  socket = io(`:6677${path}`, {
+    query: {
+      users,
+    },
+  });
   socket.onAny((event, ...args) => {
     console.log("Socket event", event, args);
   });

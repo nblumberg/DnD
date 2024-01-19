@@ -20,6 +20,7 @@ export function getTurnOrder(): CastMember[] {
 }
 
 export function startTurn(id: string): string | undefined {
+  const oldTurnIndex = state.turnIndex;
   const castMembers = getTurnOrder();
   const newTurnIndex = castMembers.findIndex(
     ({ id: castMemberId }) => castMemberId === id
@@ -29,6 +30,14 @@ export function startTurn(id: string): string | undefined {
     return;
   }
   setState("turnIndex", newTurnIndex);
+
+  castMembers.forEach((castMember) => {
+    castMember.conditions.forEach((condition) => {
+      condition.endTurn(castMembers[oldTurnIndex]);
+      condition.startTurn(castMembers[newTurnIndex]);
+    });
+  });
+
   return castMembers[state.turnIndex].id;
 }
 

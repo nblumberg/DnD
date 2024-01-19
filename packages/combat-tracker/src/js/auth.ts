@@ -92,14 +92,14 @@ const knownUsers = [
   "willhonley@gmail.com",
 ] as const;
 
-const userToCharacter: Record<(typeof knownUsers)[number], string> = {
-  "nathanielblumberg@gmail.com": "dm",
-  "aryooki@gmail.com": "Harrow_Zinvaris",
-  "aweditandwrite@gmail.com": "Harrow_Zinvaris",
-  "april.maguire@gmail.com": "Rhiannon_Frey",
-  "joaquinmercardo@gmail.com": "Throne",
-  "TMustacchio@gmail.com": "Nacho_Chessier",
-  "willhonley@gmail.com": "John_Rambo_McClane",
+const userToCharacter: Record<(typeof knownUsers)[number], string[]> = {
+  "nathanielblumberg@gmail.com": ["dm"],
+  "aryooki@gmail.com": ["Harrow_Zinvaris"],
+  "aweditandwrite@gmail.com": ["Harrow_Zinvaris"],
+  "april.maguire@gmail.com": ["Rhiannon_Frey"],
+  "joaquinmercardo@gmail.com": ["Throne"],
+  "TMustacchio@gmail.com": ["Nacho_Chessier"],
+  "willhonley@gmail.com": ["John_Rambo_McClane"],
 } as const;
 
 export const IdentityContext = createContext<Profile>({
@@ -113,15 +113,15 @@ export const IdentityContext = createContext<Profile>({
   verified_email: false,
 });
 
-export function emailToCharacter(email: string): string {
-  return userToCharacter[email as keyof typeof userToCharacter];
+export function emailToCharacters(email: string): string[] {
+  return userToCharacter[email as keyof typeof userToCharacter] ?? [];
 }
 
-export function useCharacter(): string {
+export function useCharacters(): string[] {
   const { email } = useContext(IdentityContext);
-  return emailToCharacter(email);
+  return emailToCharacters(email);
 }
 
 export function useIsDM(): boolean {
-  return useCharacter() === "dm";
+  return useCharacters().includes("dm");
 }

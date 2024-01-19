@@ -1,7 +1,6 @@
 import { SyntheticEvent, useContext, useState } from "react";
-import { Roll } from "roll";
 import styled, { createGlobalStyle } from "styled-components";
-import { IdentityContext, logout, useCharacter, useIsDM } from "../auth";
+import { IdentityContext, logout, useCharacters, useIsDM } from "../auth";
 import { useCastMembers } from "../data/castMembers";
 import { useTurn } from "../data/turn";
 import { useSocket } from "../services/sockets";
@@ -90,7 +89,7 @@ function HeaderButtons({ options }: { options: MenuOption[] }) {
 export function Header() {
   // React state
   const user = useContext(IdentityContext);
-  const id = useCharacter();
+  const ids = useCharacters();
   const dm = useIsDM();
   const castMembers = useCastMembers();
   const turn = useTurn();
@@ -99,9 +98,17 @@ export function Header() {
   const io = useSocket();
 
   // Derivative state
-  const myCharacter = castMembers.find(({ id: memberId }) => memberId === id);
-  const isMyTurn = !dm && turn === id;
+  const myCharacters = castMembers.filter(
+    ({ id, character }) => ids.includes(id) || (dm && !character)
+  );
+  const isMyTurn = !dm && ids.includes(turn ?? "");
   const currentTurnIndex = castMembers.findIndex(({ id }) => id === turn) ?? 0;
+  const initiativeRolls = myCharacters.map(
+    ({ nickname, name, initiative }) => ({
+      roll: initiative,
+      label: myCharacters.length > 1 ? nickname ?? name : undefined,
+    })
+  );
 
   if (!io) {
     return null;
@@ -113,24 +120,18 @@ export function Header() {
     (document.activeElement as HTMLElement)?.blur();
   }
 
-  const rollInitiative = (_event?: SyntheticEvent, roll?: number) => {
-    if (dm) {
-      const initiativeMap = castMembers.reduce(
-        (initiativeMap, castMember) => {
-          if (castMember.character) {
-            return initiativeMap;
-          } else {
-            return {
-              ...initiativeMap,
-              [castMember.id]: -1,
-            };
-          }
+  const rollInitiative = (_event?: SyntheticEvent, rolls?: number[]) => {
+    if (rolls) {
+      const initiativeMap = myCharacters.reduce(
+        (initiativeMap, castMember, i) => {
+          return {
+            ...initiativeMap,
+            [castMember.id]: rolls[i],
+          };
         },
         {} as Record<string, number>
       );
       io.emit("rollInitiative", initiativeMap);
-    } else if (roll) {
-      io.emit("rollInitiative", { [id]: roll });
       setRollOpen(false);
     } else {
       setRollOpen(true);
@@ -211,8 +212,8 @@ export function Header() {
       {rollOpen && (
         <InteractiveRoll
           title="What's your initiative roll?"
-          roll={myCharacter?.initiative ?? new Roll("1d20")}
-          onRoll={(result: number) => {
+          rolls={initiativeRolls}
+          onRoll={(result: number[]) => {
             rollInitiative(undefined, result);
           }}
           onCancel={() => {

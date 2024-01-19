@@ -59,9 +59,10 @@ const DialogClose = styled.button`
   font-weight: bold;
 `;
 
-const DialogBody = styled.form`
+const DialogBody = styled.form<{ $direction: "column" | "row" }>`
   align-items: stretch;
   display: flex;
+  flex-direction: ${({ $direction }) => $direction};
   flex-grow: 1;
   justify-content: space-between;
   padding: 1em;
@@ -93,11 +94,13 @@ export function Dialog({
   title,
   buttons,
   onClose,
+  bodyDirection = "column",
 }: {
   children: React.ReactNode;
   title?: string;
   buttons?: React.ReactNode;
   onClose?: () => void;
+  bodyDirection?: "column" | "row";
 }) {
   useEffect(() => {
     if (!onClose) {
@@ -125,7 +128,9 @@ export function Dialog({
           {title && <DialogHeading>{title}</DialogHeading>}
           {onClose && <DialogClose onClick={onClose}>X</DialogClose>}
         </DialogHeader>
-        <DialogBody method="dialog">{children}</DialogBody>
+        <DialogBody $direction={bodyDirection} method="dialog">
+          {children}
+        </DialogBody>
         {buttons && <DialogFooter>{buttons}</DialogFooter>}
       </DialogContent>
     </OuterDialog>

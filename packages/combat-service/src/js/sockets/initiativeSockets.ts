@@ -5,7 +5,7 @@ import {
   startTurn,
 } from "../actions/initiativeActions";
 import { addStatePropertyListener, state } from "../state";
-import { SocketServer } from "./initAndAccessSockets";
+import { SocketServer, serializeSocketUsers } from "./initAndAccessSockets";
 
 export function attachInitiativeSockets(io: SocketServer) {
   io.on("connection", (socket) => {
@@ -13,14 +13,7 @@ export function attachInitiativeSockets(io: SocketServer) {
   });
 
   io.of("/dm").on("connection", (socket) => {
-    syncInitiative(socket);
-
-    socket.on("rollInitiative", (initiative?: Record<string, number>) => {
-      rollInitiative(initiative);
-    });
-    socket.on("turn", (id: string) => {
-      startTurn(id);
-    });
+    syncInitiative(socket, true);
   });
 }
 
@@ -34,10 +27,9 @@ function turnMessage(): string | undefined {
   return currentTurn;
 }
 
-function syncInitiative(socket: Socket): void {
-  const playerDM = Array.from(socket.rooms.values()).toString();
-  const userId = socket.handshake.address;
-  console.log(`${playerDM} initiative logic connected from ${userId}`);
+function syncInitiative(socket: Socket, isDM = false): void {
+  const users = serializeSocketUsers(socket);
+  console.log(`Initiative logic connected for ${users}`);
 
   const message = turnMessage();
   if (message) {
@@ -45,10 +37,34 @@ function syncInitiative(socket: Socket): void {
   }
 
   addStatePropertyListener("turnIndex", () => {
-    console.log(`${playerDM} ${userId} detected turn change`);
+    console.log(`${users} detected turn change`);
     const message = turnMessage();
     if (message) {
       socket.emit("turn", message);
     }
+  });
+
+  socket.on("rollInitiative", (initiative?: Record<string, number>) => {
+    if (!isDM) {
+      const notMyIds = Object.keys(initiative || {}).filter(
+        (id) => !users.includes(id)
+      );
+      if (notMyIds.length) {
+        console.warn(
+          `${users} tried to roll initiative for ${notMyIds.join(", ")}`
+        );
+        return;
+      }
+    }
+    rollInitiative(initiative);
+  });
+  socket.on("turn", (id: string) => {
+    if (!isDM) {
+      if (!users.includes(getTurnOrder()[state.turnIndex]?.id)) {
+        console.warn(`${users} tried to end turn for ${id}`);
+        return;
+      }
+    }
+    startTurn(id);
   });
 }

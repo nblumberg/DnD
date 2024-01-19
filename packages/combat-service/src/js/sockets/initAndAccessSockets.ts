@@ -61,3 +61,21 @@ getSocketIO().then((io) => {
   attachCastMemberSockets(io);
   attachInitiativeSockets(io);
 });
+
+export function getSocketUsers(socket: Socket): string[] {
+  if (!socket.handshake.query.users) {
+    return [];
+  }
+  if (Array.isArray(socket.handshake.query.users)) {
+    return socket.handshake.query.users;
+  }
+  return [socket.handshake.query.users];
+}
+
+export function serializeSocketUsers(socket: Socket): string {
+  const users = getSocketUsers(socket);
+  if (!users.length) {
+    return "unknown";
+  }
+  return users.join("/");
+}

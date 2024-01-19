@@ -8,7 +8,7 @@ import {
 } from "../actions/castMemberActions";
 import { getTurnOrder } from "../actions/initiativeActions";
 import { addCastMembersListener } from "../state/castMemberState";
-import { SocketServer } from "./initAndAccessSockets";
+import { SocketServer, serializeSocketUsers } from "./initAndAccessSockets";
 
 export function attachCastMemberSockets(io: SocketServer) {
   io.on("connection", (socket) => {
@@ -60,14 +60,13 @@ const castMemberMessage = (): CastMemberRaw[] => {
 };
 
 function syncCastMembers(socket: Socket): void {
-  const playerDM = Array.from(socket.rooms.values()).toString();
-  const userId = socket.handshake.address;
-  console.log(`${playerDM} cast member logic connected from ${userId}`);
+  const users: string = serializeSocketUsers(socket);
+  console.log(`Cast member logic connected for ${users}`);
 
   socket.emit("castMembers", castMemberMessage());
 
   addCastMembersListener(() => {
-    console.log(`${playerDM} ${userId} detected cast members change`);
+    console.log(`${users} detected cast members change`);
     socket.emit("castMembers", castMemberMessage());
   });
 }

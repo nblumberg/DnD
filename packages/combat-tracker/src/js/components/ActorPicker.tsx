@@ -303,6 +303,7 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     <Dialog
       title="Add actors"
       onClose={onClose}
+      bodyDirection="row"
       buttons={
         <>
           <DialogButton onClick={submit}>
