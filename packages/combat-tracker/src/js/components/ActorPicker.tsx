@@ -217,6 +217,9 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
   >(Object.values(castMembers));
 
   const io = useSocket();
+  if (!io) {
+    return null;
+  }
 
   useEffect(() => {
     setAuditioners(Object.values(castMembers));

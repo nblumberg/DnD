@@ -1,19 +1,23 @@
-// import { useSelector } from "react-redux";
 import styled from "styled-components";
-// import { selectCastMembers } from "../features/castMember/castMembers";
 import { useCastMembers } from "../data/castMembers";
 import { CastMemberCard } from "./CastMemberCard";
 import { EmptyState } from "./EmptyState";
+import { media } from "./breakpoints";
 
-const TurnOrderGrid = styled.div`
+const TurnOrderGrid = styled.main`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+
+  ${media.md`
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  `}
 `;
 
 export function TurnOrder() {
   const castMembers = useCastMembers();
-  // const castMembers = useSelector(selectCastMembers);
   const initiativeOrder = Object.values(castMembers).sort(
     (a, b) => b.initiativeOrder - a.initiativeOrder
   );
@@ -21,8 +25,8 @@ export function TurnOrder() {
     <CastMemberCard key={castMember.id} castMember={castMember} />
   ));
   return !initiativeOrder.length ? (
-    <EmptyState></EmptyState>
+    <EmptyState data-turn-order></EmptyState>
   ) : (
-    <TurnOrderGrid>{cards}</TurnOrderGrid>
+    <TurnOrderGrid data-turn-order>{cards}</TurnOrderGrid>
   );
 }

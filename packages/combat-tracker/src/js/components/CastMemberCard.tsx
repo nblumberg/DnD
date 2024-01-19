@@ -6,8 +6,10 @@ import { useTurn } from "../data/turn";
 import { ArmorClassShield } from "./ArmorClassShield";
 import { ConditionMenu, ConditionOverlay } from "./ConditionOverlay";
 import { HitPointBar } from "./HitPointsBar";
+import { media } from "./breakpoints";
 
 const Panel = styled.div<{ $myTurn: boolean }>`
+  align-content: stretch;
   align-items: stretch;
   ${({ $myTurn }) =>
     $myTurn
@@ -17,6 +19,11 @@ const Panel = styled.div<{ $myTurn: boolean }>`
   flex-direction: column;
   position: relative;
   user-select: none;
+
+  ${media.md`
+      align-items: center;
+      width: 100%;
+  `}
 
   &:hover ${ConditionMenu} {
     display: inline;
@@ -43,12 +50,23 @@ const PortraitFrame = styled.div`
   max-width: 20vw;
   position: relative;
   text-align: center;
+
+  ${media.md`
+    max-height: 100%;
+    max-width: 100%;
+    width: 100%;
+  `}
 `;
 const Portrait = styled.img`
   height: auto;
   max-height: 100%;
   max-width: 100%;
   width: auto;
+
+  ${media.md`
+    max-height: 100%;
+    width: 100%;
+  `}
 `;
 const NamePlate = styled.div`
   flex-grow: 0;
@@ -97,8 +115,8 @@ export function CastMemberCard({ castMember }: { castMember: CastMember }) {
   return (
     <Panel $myTurn={itsMyTurn}>
       <HitPointBar castMember={castMember} />
-      <PortraitFrame>
-        <Portrait src={castMember.image}></Portrait>
+      <PortraitFrame data-portrait-frame>
+        <Portrait src={castMember.image} data-portrait></Portrait>
         <ConditionOverlay castMember={castMember} />
         <Initiative>{castMember.initiativeOrder}</Initiative>
         <ArmorClassShield castMember={castMember} />

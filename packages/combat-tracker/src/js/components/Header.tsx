@@ -1,6 +1,6 @@
 import { SyntheticEvent, useContext, useState } from "react";
 import { Roll } from "roll";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { IdentityContext, logout, useCharacter, useIsDM } from "../auth";
 import { useCastMembers } from "../data/castMembers";
 import { useTurn } from "../data/turn";
@@ -13,8 +13,15 @@ const MenuBar = styled.header`
   border: 2px solid black;
   display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
-  padding-right: 0.5em;
+  justify-content: space-around;
+  left: 0;
+  height: 3em;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 1;
 `;
 const ButtonBar = styled.div`
   display: flex;
@@ -39,6 +46,12 @@ const Avatar = styled.img`
   margin: 0 auto;
   height: 100%;
   width: auto;
+`;
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    padding-top: 3em;
+  }
 `;
 
 const buttonParams: Array<{
@@ -67,6 +80,9 @@ export function Header({
   pickActors: (event: SyntheticEvent) => void;
 }) {
   const io = useSocket();
+  if (!io) {
+    return null;
+  }
   const user = useContext(IdentityContext);
   const id = useCharacter();
   const dm = useIsDM();
@@ -150,6 +166,7 @@ export function Header({
 
   return (
     <>
+      <GlobalStyle data-global-style />
       <MenuBar>
         <ButtonBar>{buttons}</ButtonBar>
         <AvatarCrop>

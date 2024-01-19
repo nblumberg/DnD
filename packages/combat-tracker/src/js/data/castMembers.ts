@@ -22,6 +22,9 @@ export function useCastMembers(): CastMember[] {
   ]);
   const io = useSocket();
   useEffect(() => {
+    if (!io) {
+      return;
+    }
     io.on("castMembers", (castMembersRaw: CastMemberRaw[]) => {
       const newCastMembers = castMembersRaw.map(
         (castMemberRaw) => new CastMember(castMemberRaw)
@@ -31,6 +34,6 @@ export function useCastMembers(): CastMember[] {
     () => {
       io.off("castMembers");
     };
-  }, [setCastMembers]);
+  }, [setCastMembers, io]);
   return castMembers;
 }

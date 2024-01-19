@@ -4,6 +4,7 @@ import { IdentityContext, useLogin } from "./auth";
 import { ActorPicker } from "./components/ActorPicker";
 import { Header } from "./components/Header";
 import { TurnOrder } from "./components/TurnOrder";
+import { useSocket } from "./services/sockets";
 
 export function App() {
   const { login, user } = useLogin();
@@ -21,6 +22,10 @@ export function App() {
 
   if (!user) {
     return <Login login={login} />;
+  }
+
+  if (!useSocket()) {
+    return <div>Loading...</div>;
   }
 
   return (

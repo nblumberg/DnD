@@ -2,31 +2,19 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from "combat-service/client";
+import { useEffect, useState } from "react";
 import type { Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 import { awaitLogin, emailToCharacter } from "../auth";
 
 type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
-const { io } = window as unknown as {
-  io: { connect: (uri: string) => MySocket };
-};
-let socket: MySocket | undefined;
+// const { io } = window as unknown as {
+//   io: { connect: (uri: string) => MySocket };
+// };
 
-awaitLogin().then((profile) => {
-  const user = emailToCharacter(profile.email);
-  if (!user) {
-    console.error("Unknown user, cannot connect to socket");
-    return;
-  }
-  let path = "";
-  if (user === "dm") {
-    path = "/dm";
-  }
-  socket = io.connect(`:6677${path}`);
-  socket.onAny((event, ...args) => {
-    console.log("Socket event", event, args);
-  });
-});
+// alert(`socket.io is ${io ? "defined" : "undefined"}`);
+let socket: MySocket | undefined;
 
 export async function awaitSocket(): Promise<MySocket> {
   if (socket) {
@@ -41,7 +29,8 @@ export async function awaitSocket(): Promise<MySocket> {
   if (user === "dm") {
     path = "/dm";
   }
-  socket = io.connect(`:6677${path}`);
+  socket = io(`:6677${path}`);
+  // socket = io.connect(`:6677${path}`);
   socket.onAny((event, ...args) => {
     console.log("Socket event", event, args);
   });
@@ -50,9 +39,13 @@ export async function awaitSocket(): Promise<MySocket> {
 
 awaitSocket();
 
-export function useSocket(): MySocket {
-  if (!socket) {
-    throw new Error("Socket not initialized");
-  }
-  return socket;
+export function useSocket(): MySocket | undefined {
+  const [s, setSocket] = useState(socket);
+  useEffect(() => {
+    if (s) {
+      return;
+    }
+    awaitSocket().then((newSocket) => setSocket(newSocket));
+  }, [s, setSocket]);
+  return s;
 }

@@ -14,12 +14,15 @@ export function useTurn(): string | undefined {
   const io = useSocket();
   const [turn, setTurn] = useState<string | undefined>(cachedTurn);
   useEffect(() => {
+    if (!io) {
+      return;
+    }
     io.on("turn", (id: string) => {
       setTurn(id);
     });
     () => {
       io.off("turn");
     };
-  }, [setTurn]);
+  }, [setTurn, io]);
   return turn;
 }

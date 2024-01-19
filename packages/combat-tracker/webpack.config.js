@@ -16,7 +16,8 @@ const config = {
   },
   devServer: {
     open: true,
-    host: "localhost",
+    host: "0.0.0.0",
+    allowedHosts: "all",
   },
   devtool: "source-map",
   plugins: [

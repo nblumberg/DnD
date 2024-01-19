@@ -74,6 +74,9 @@ function ChooseCondition({ castMember }: { castMember: CastMember }) {
   );
 
   const io = useSocket();
+  if (!io) {
+    return null;
+  }
 
   const addCondition = (event: SyntheticEvent) => {
     const { target } = event;
@@ -106,6 +109,9 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
   const ref = useRef<HTMLDivElement>(null);
 
   const io = useSocket();
+  if (!io) {
+    return null;
+  }
 
   useEffect(() => {
     if (!chooseConditionOpen || !ref.current) {
