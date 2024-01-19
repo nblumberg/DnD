@@ -6,7 +6,7 @@ type Credentials = Omit<
   TokenResponse,
   "error" | "error_description" | "error_uri"
 >;
-interface Profile {
+export interface Profile {
   email: string;
   family_name: string;
   given_name: string;

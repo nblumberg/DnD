@@ -3,51 +3,51 @@
 import { css } from "styled-components";
 
 interface Size {
-  xs: string;
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
-  xxl: string;
+  xs: number;
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+  xxl: number;
 }
 
-const device: Size = {
-  xs: "400px", // for small screen mobile
-  sm: "600px", // for mobile screen
-  md: "900px", // for tablets
-  lg: "1280px", // for laptops
-  xl: "1440px", // for desktop / monitors
-  xxl: "1920px", // for big screens
+export const device: Size = {
+  xs: 400, // for small screen mobile
+  sm: 600, // for mobile screen
+  md: 900, // for tablets
+  lg: 1280, // for laptops
+  xl: 1440, // for desktop / monitors
+  xxl: 1920, // for big screens
 };
 
 export const media = {
   xs: (strings: TemplateStringsArray, ...args: any[]) => css`
-    @media (max-width: ${device.xs}) {
+    @media (max-width: ${device.xs}px) {
       ${css(strings, ...args)};
     }
   `,
   sm: (strings: TemplateStringsArray, ...args: any[]) => css`
-    @media (max-width: ${device.sm}) {
+    @media (max-width: ${device.sm}px) {
       ${css(strings, ...args)};
     }
   `,
   md: (strings: TemplateStringsArray, ...args: any[]) => css`
-    @media (max-width: ${device.md}) {
+    @media (max-width: ${device.md}px) {
       ${css(strings, ...args)};
     }
   `,
   lg: (strings: TemplateStringsArray, ...args: any[]) => css`
-    @media (max-width: ${device.lg}) {
+    @media (max-width: ${device.lg}px) {
       ${css(strings, ...args)};
     }
   `,
   xl: (strings: TemplateStringsArray, ...args: any[]) => css`
-    @media (max-width: ${device.xl}) {
+    @media (max-width: ${device.xl}px) {
       ${css(strings, ...args)};
     }
   `,
   xxl: (strings: TemplateStringsArray, ...args: any[]) => css`
-    @media (max-width: ${device.xxl}) {
+    @media (max-width: ${device.xxl}px) {
       ${css(strings, ...args)};
     }
   `,
