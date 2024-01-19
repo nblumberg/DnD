@@ -1,7 +1,7 @@
 import { CastMember } from "creature";
 import { SyntheticEvent, useState } from "react";
 import styled from "styled-components";
-import { isDM } from "../auth";
+import { useIsDM } from "../auth";
 import { useTurn } from "../data/turn";
 import { ArmorClassShield } from "./ArmorClassShield";
 import { ConditionOverlay } from "./ConditionOverlay";
@@ -56,7 +56,7 @@ const NameField = styled.input`
 `;
 
 export function CastMemberCard({ castMember }: { castMember: CastMember }) {
-  const dm = isDM();
+  const dm = useIsDM();
 
   const turn = useTurn();
   const itsMyTurn = turn === castMember.id;

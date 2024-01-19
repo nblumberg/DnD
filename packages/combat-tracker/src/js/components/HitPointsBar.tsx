@@ -1,6 +1,6 @@
 import { CastMember } from "creature";
 import styled from "styled-components";
-import { isDM } from "../auth";
+import { useIsDM } from "../auth";
 
 const Container = styled.div`
   height: 2em;
@@ -32,7 +32,7 @@ export function HitPointBar({
 }: {
   castMember: CastMember;
 }) {
-  const dm = isDM();
+  const dm = useIsDM();
 
   const showFull = dm || character;
   const currentHp = showFull ? hpCurrent : `>${hp - hpCurrent}`;

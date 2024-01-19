@@ -1,8 +1,8 @@
 import { CastMember, Condition, DamageType, Effect } from "creature";
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { isDM } from "../auth";
-import { getSocket } from "../services/sockets";
+import { useIsDM } from "../auth";
+import { useSocket } from "../services/sockets";
 
 const Dialog = styled.dialog`
   background: white;
@@ -20,9 +20,9 @@ const Panel = styled.div<{ $dialog: boolean }>`
   text-align: left;
   width: 100%;
 `;
-const ConditionIcon = styled.div`
+const ConditionIcon = styled.span`
   font-size: 3em;
-  flex-grow: 1;
+  flex-grow: 0;
 `;
 
 const Icons: Record<Condition | DamageType | Effect, string> = {
@@ -68,10 +68,12 @@ function ChooseCondition({ castMember }: { castMember: CastMember }) {
     ({ condition }) => condition as keyof typeof Icons
   );
 
+  const io = useSocket();
+
   const addCondition = (event: SyntheticEvent) => {
     const { target } = event;
     const condition = (target as HTMLElement).title.toLowerCase() as Condition;
-    getSocket().emit("addCondition", castMember.id, condition);
+    io.emit("addCondition", castMember.id, condition);
   };
 
   const allConditions = (Object.keys(Icons) as Array<keyof typeof Icons>)
@@ -93,10 +95,12 @@ function ChooseCondition({ castMember }: { castMember: CastMember }) {
 }
 
 export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
-  const dm = isDM();
+  const dm = useIsDM();
 
   const [chooseConditionOpen, setChooseConditionOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const io = useSocket();
 
   useEffect(() => {
     if (!chooseConditionOpen || !ref.current) {
@@ -125,7 +129,7 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
   const removeCondition = (event: SyntheticEvent) => {
     const { target } = event;
     const condition = (target as HTMLElement).title.toLowerCase() as Condition;
-    getSocket().emit("removeCondition", castMember.id, condition);
+    io.emit("removeCondition", castMember.id, condition);
   };
 
   const { conditions } = castMember;

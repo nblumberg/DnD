@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import { Character } from "../data/Character";
 import { useActors } from "../data/actors";
 import { useCastMembers } from "../data/castMembers";
-import { getSocket } from "../services/sockets";
+import { useSocket } from "../services/sockets";
 import { Dialog, DialogButton } from "./Dialog";
 
 const colorScheme = `
@@ -216,6 +216,8 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     Array<CastMember | Auditioner>
   >(Object.values(castMembers));
 
+  const io = useSocket();
+
   useEffect(() => {
     setAuditioners(Object.values(castMembers));
   }, [castMembers]);
@@ -265,10 +267,10 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
       (castMember) => !auditioners.includes(castMember)
     );
     if (toBeCast.length) {
-      getSocket().emit("castActors", toBeCast);
+      io.emit("castActors", toBeCast);
     }
     if (toBeFired.length) {
-      getSocket().emit(
+      io.emit(
         "fireActors",
         toBeFired.map(({ id }) => id)
       );

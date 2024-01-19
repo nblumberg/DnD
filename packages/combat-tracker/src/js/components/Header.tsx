@@ -1,15 +1,22 @@
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useContext, useState } from "react";
 import { Roll } from "roll";
 import styled from "styled-components";
-import { getIdentity, isDM } from "../auth";
+import { IdentityContext, logout, useCharacter, useIsDM } from "../auth";
 import { useCastMembers } from "../data/castMembers";
 import { useTurn } from "../data/turn";
-import { getSocket } from "../services/sockets";
+import { useSocket } from "../services/sockets";
 import { InteractiveRoll } from "./InteractiveRoll";
 
-const ButtonBar = styled.div`
+const MenuBar = styled.header`
+  align-items: center;
   background: #cccccc;
   border: 2px solid black;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding-right: 0.5em;
+`;
+const ButtonBar = styled.div`
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-start;
@@ -19,6 +26,19 @@ const Button = styled.button`
   flex-wrap: nowrap;
   justify-content: space-around;
   margin: 1em;
+`;
+const AvatarCrop = styled.div`
+  border-radius: 50%;
+  height: 2em;
+  overflow: hidden;
+  position: relative;
+  width: 2em;
+`;
+const Avatar = styled.img`
+  display: inline;
+  margin: 0 auto;
+  height: 100%;
+  width: auto;
 `;
 
 const buttonParams: Array<{
@@ -46,8 +66,10 @@ export function Header({
 }: {
   pickActors: (event: SyntheticEvent) => void;
 }) {
-  const id = getIdentity();
-  const dm = isDM();
+  const io = useSocket();
+  const user = useContext(IdentityContext);
+  const id = useCharacter();
+  const dm = useIsDM();
   const castMembers = useCastMembers();
   const myCharacter = castMembers.find(({ id: memberId }) => memberId === id);
   const turn = useTurn();
@@ -71,9 +93,9 @@ export function Header({
         },
         {} as Record<string, number>
       );
-      getSocket().emit("rollInitiative", initiativeMap);
+      io.emit("rollInitiative", initiativeMap);
     } else if (roll) {
-      getSocket().emit("rollInitiative", { [id]: roll });
+      io.emit("rollInitiative", { [id]: roll });
       setRollOpen(false);
     } else {
       setRollOpen(true);
@@ -91,7 +113,7 @@ export function Header({
         currentTurnIndex - 1 < 0
           ? castMembers.length - 1
           : currentTurnIndex - 1;
-      getSocket().emit("turn", castMembers[previousIndex].id);
+      io.emit("turn", castMembers[previousIndex].id);
     },
     rollInitiative,
     nextTurn: () => {
@@ -99,14 +121,14 @@ export function Header({
         return;
       }
       const nextIndex = (currentTurnIndex + 1) % castMembers.length;
-      getSocket().emit("turn", castMembers[nextIndex].id);
+      io.emit("turn", castMembers[nextIndex].id);
     },
     endTurn: () => {
       if (dm || !isMyTurn) {
         return;
       }
       const nextIndex = (currentTurnIndex + 1) % castMembers.length;
-      getSocket().emit("turn", castMembers[nextIndex].id);
+      io.emit("turn", castMembers[nextIndex].id);
     },
   };
 
@@ -127,8 +149,13 @@ export function Header({
   );
 
   return (
-    <header>
-      <ButtonBar>{buttons}</ButtonBar>
+    <>
+      <MenuBar>
+        <ButtonBar>{buttons}</ButtonBar>
+        <AvatarCrop>
+          <Avatar src={user.picture} alt={user.name} onClick={logout} />
+        </AvatarCrop>
+      </MenuBar>
       {rollOpen && (
         <InteractiveRoll
           title="What's your initiative roll?"
@@ -138,6 +165,6 @@ export function Header({
           }}
         />
       )}
-    </header>
+    </>
   );
 }
