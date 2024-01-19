@@ -8,13 +8,15 @@ const stateFile = path.join(__dirname, "..", "..", "state.json");
 
 export interface State {
   castMembers: Record<string, CastMember>;
+  round: number;
   turnOrder: string[];
-  turnIndex: number;
+  currentTurn?: string;
 }
 
 const defaultState: State = {
   castMembers: {},
-  turnIndex: Number.MAX_SAFE_INTEGER,
+  round: 0,
+  currentTurn: undefined,
   turnOrder: [],
 };
 let tmp: State = {

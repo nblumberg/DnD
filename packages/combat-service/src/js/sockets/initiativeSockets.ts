@@ -1,9 +1,5 @@
 import { Socket } from "socket.io";
-import {
-  getTurnOrder,
-  rollInitiative,
-  startTurn,
-} from "../actions/initiativeActions";
+import { rollInitiative, startTurn } from "../actions/initiativeActions";
 import { addStatePropertyListener, state } from "../state";
 import { SocketServer, serializeSocketUsers } from "./initAndAccessSockets";
 
@@ -18,10 +14,13 @@ export function attachInitiativeSockets(io: SocketServer) {
 }
 
 function turnMessage(): string | undefined {
-  const castMembers = getTurnOrder();
-  const currentTurn = castMembers[state.turnIndex]?.id;
+  const { castMembers, currentTurn } = state;
   if (!currentTurn) {
-    console.warn(`Couldn't find cast member for turn ${state.turnIndex}`);
+    return;
+  }
+  const currentTurnCastMember = castMembers[currentTurn];
+  if (!currentTurnCastMember) {
+    console.warn(`Couldn't find cast member for turn ${currentTurn}`);
     return;
   }
   return currentTurn;
@@ -36,7 +35,7 @@ function syncInitiative(socket: Socket, isDM = false): void {
     socket.emit("turn", message);
   }
 
-  addStatePropertyListener("turnIndex", () => {
+  addStatePropertyListener("currentTurn", () => {
     console.log(`${users} detected turn change`);
     const message = turnMessage();
     if (message) {
@@ -60,7 +59,7 @@ function syncInitiative(socket: Socket, isDM = false): void {
   });
   socket.on("turn", (id: string) => {
     if (!isDM) {
-      if (!users.includes(getTurnOrder()[state.turnIndex]?.id)) {
+      if (!users.includes(state.currentTurn ?? "")) {
         console.warn(`${users} tried to end turn for ${id}`);
         return;
       }

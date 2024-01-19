@@ -20,25 +20,33 @@ export function getTurnOrder(): CastMember[] {
 }
 
 export function startTurn(id: string): string | undefined {
-  const oldTurnIndex = state.turnIndex;
-  const castMembers = getTurnOrder();
-  const newTurnIndex = castMembers.findIndex(
-    ({ id: castMemberId }) => castMemberId === id
-  );
-  if (newTurnIndex === -1) {
+  const { castMembers, turnOrder, currentTurn } = state;
+  const oldTurnCastMember = currentTurn ? castMembers[currentTurn] : undefined;
+  const oldTurnIndex = currentTurn ? turnOrder.indexOf(currentTurn) : -1;
+  const newTurnCastMember = castMembers[id];
+  const newTurnIndex = turnOrder.indexOf(id);
+  if (!newTurnCastMember || newTurnIndex === -1) {
     console.warn(`Couldn't find cast member ${id} in turn order`);
     return;
   }
-  setState("turnIndex", newTurnIndex);
+  setState("currentTurn", id);
 
-  castMembers.forEach((castMember) => {
-    castMember.conditions.forEach((condition) => {
-      condition.endTurn(castMembers[oldTurnIndex]);
-      condition.startTurn(castMembers[newTurnIndex]);
+  if (newTurnIndex === (oldTurnIndex + 1) % turnOrder.length) {
+    // Normal turn transition
+    Object.values(castMembers).forEach((castMember) => {
+      castMember.conditions.forEach((condition) => {
+        if (oldTurnCastMember) {
+          condition.endTurn(oldTurnCastMember);
+        }
+        condition.startTurn(newTurnCastMember);
+      });
     });
-  });
+    if (newTurnIndex < oldTurnIndex) {
+      setState("round", state.round + 1);
+    }
+  }
 
-  return castMembers[state.turnIndex].id;
+  return newTurnCastMember.id;
 }
 
 /**
@@ -65,6 +73,6 @@ export function rollInitiative(
     }
   });
   castMembers = getTurnOrder();
-  setState("turnIndex", 0);
+  setState("currentTurn", castMembers[0]?.id);
   return castMembers;
 }
