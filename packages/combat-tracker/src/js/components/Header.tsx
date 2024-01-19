@@ -1,17 +1,12 @@
-import { SyntheticEvent, useContext, useEffect, useState } from "react";
+import { SyntheticEvent, useContext, useState } from "react";
 import { Roll } from "roll";
 import styled, { createGlobalStyle } from "styled-components";
-import {
-  IdentityContext,
-  Profile,
-  logout,
-  useCharacter,
-  useIsDM,
-} from "../auth";
+import { IdentityContext, logout, useCharacter, useIsDM } from "../auth";
 import { useCastMembers } from "../data/castMembers";
 import { useTurn } from "../data/turn";
 import { useSocket } from "../services/sockets";
 import { InteractiveRoll } from "./InteractiveRoll";
+import { ButtonBar, Menu, MenuButton, MenuOption } from "./Menu";
 import { device, media } from "./breakpoints";
 
 const MenuBar = styled.header`
@@ -34,22 +29,6 @@ const MenuBar = styled.header`
     justify-content: flex-start;
   `}
 `;
-const ButtonBar = styled.div`
-  display: flex;
-  flex-grow: 1;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-`;
-const Button = styled.button`
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-  margin: 1em;
-  ${media.md`
-    flex-grow: 1;
-    font-size: 1em;
-  `}
-`;
 const AvatarCrop = styled.div`
   border-radius: 50%;
   display: inline-block;
@@ -69,25 +48,6 @@ const Avatar = styled.img`
   height: 100%;
   width: auto;
 `;
-const DropDown = styled.nav`
-  align-items: stretch;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 3em;
-  z-index: 2;
-`;
-const DropDownOption = styled.a`
-  border: 1px solid black;
-  font-size: 2em;
-  padding: 0.5em;
-  text-align: left;
-  width: 100%;
-`;
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -95,140 +55,35 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const buttonParams: Array<{
+const optionParams: Array<{
   dmOnly?: true;
   playerOnly?: true;
-  label: string;
-  title: string;
+  icon: string;
+  text: string;
   handlerName: string;
 }> = [
-  { dmOnly: true, label: "🎭", title: "Add actor", handlerName: "pickActors" },
+  { dmOnly: true, icon: "🎭", text: "Add actor", handlerName: "pickActors" },
   {
     dmOnly: true,
-    label: "⏪",
-    title: "Previous turn",
+    icon: "⏪",
+    text: "Previous turn",
     handlerName: "previousTurn",
   },
-  { label: "🕐", title: "Roll initiative", handlerName: "rollInitiative" },
-  { dmOnly: true, label: "⏩", title: "Next turn", handlerName: "nextTurn" },
-  { playerOnly: true, label: "🎬", title: "Actions", handlerName: "actions" },
-  { playerOnly: true, label: "🏁", title: "End turn", handlerName: "endTurn" },
+  { icon: "🕐", text: "Roll initiative", handlerName: "rollInitiative" },
+  { dmOnly: true, icon: "⏩", text: "Next turn", handlerName: "nextTurn" },
+  { playerOnly: true, icon: "🎬", text: "Actions", handlerName: "actions" },
+  { playerOnly: true, icon: "🏁", text: "End turn", handlerName: "endTurn" },
 ];
 
-function stopInnerClicksFromDismissingMenu(event: SyntheticEvent) {
-  event.stopPropagation();
-}
-
-function Menu({
-  dm,
-  user,
-  handlers,
-  logout,
-}: {
-  dm: boolean;
-  user: Profile;
-  handlers: Record<string, (event: SyntheticEvent) => void>;
-  logout: () => void;
-}) {
-  const useButtons = window.screen.width > device.md;
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    if (!menuOpen) {
-      return;
-    }
-    const onClose = () => {
-      setMenuOpen(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-    setTimeout(() => {
-      window.document.addEventListener("click", onClose);
-      window.addEventListener("keydown", onKeyDown);
-    }, 250);
-    return () => {
-      window.document.removeEventListener("click", onClose);
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [menuOpen, setMenuOpen]);
-
-  const avatar = (
-    <AvatarCrop>
-      <Avatar src={user.picture} alt={user.name} onClick={logout} />
-    </AvatarCrop>
-  );
-  if (useButtons) {
-    const buttons = buttonParams.map(
-      ({ dmOnly, playerOnly, label, title, handlerName }) => {
-        if (dmOnly && !dm) {
-          return null;
-        }
-        if (playerOnly && dm) {
-          return null;
-        }
-        return (
-          <Button key={title} title={title} onClick={handlers[handlerName]}>
-            {label}
-          </Button>
-        );
-      }
-    );
-
+function HeaderButtons({ options }: { options: MenuOption[] }) {
+  const buttons = options.map(({ icon, text, onClick }) => {
     return (
-      <MenuBar>
-        <ButtonBar>{buttons}</ButtonBar>
-        {avatar}
-      </MenuBar>
+      <MenuButton key={text} title={text} onClick={onClick}>
+        {icon ?? text}
+      </MenuButton>
     );
-  }
-
-  const options = buttonParams.map(
-    ({ dmOnly, playerOnly, label, title, handlerName }) => {
-      if (dmOnly && !dm) {
-        return null;
-      }
-      if (playerOnly && dm) {
-        return null;
-      }
-      const handleAndCloseMenu = (event: SyntheticEvent) => {
-        handlers[handlerName](event);
-        setMenuOpen(false);
-      };
-      return (
-        <DropDownOption key={title} onClick={handleAndCloseMenu}>
-          {label} {title}
-        </DropDownOption>
-      );
-    }
-  );
-  options.push(
-    <DropDownOption key="logout" onClick={logout}>
-      {avatar} Logout
-    </DropDownOption>
-  );
-
-  return (
-    <MenuBar>
-      <ButtonBar>
-        <Button
-          title="Options"
-          onClick={() => {
-            setMenuOpen(!menuOpen);
-          }}
-        >
-          Menu
-        </Button>
-      </ButtonBar>
-      {menuOpen && (
-        <DropDown onClick={stopInnerClicksFromDismissingMenu}>
-          {options}
-        </DropDown>
-      )}
-    </MenuBar>
-  );
+  });
+  return <ButtonBar>{buttons}</ButtonBar>;
 }
 
 export function Header({
@@ -251,6 +106,12 @@ export function Header({
   if (!io) {
     return null;
   }
+
+  const avatar = (
+    <AvatarCrop>
+      <Avatar src={user.picture} alt={user.name} onClick={logout} />
+    </AvatarCrop>
+  );
 
   const rollInitiative = (_event?: SyntheticEvent, roll?: number) => {
     if (dm) {
@@ -306,10 +167,33 @@ export function Header({
     },
   };
 
+  const options: MenuOption[] = optionParams
+    .filter(({ dmOnly, playerOnly }) => !(dmOnly && !dm) && !(playerOnly && dm))
+    .map(({ icon, text, handlerName }) => ({
+      icon,
+      text,
+      onClick: handlers[handlerName],
+    }));
+
+  const useButtons = window.screen.width > device.md;
+
+  if (!useButtons) {
+    options.push({ icon: avatar, text: user.name, onClick: logout });
+  }
+
   return (
     <>
       <GlobalStyle data-global-style />
-      <Menu dm={dm} user={user} handlers={handlers} logout={logout} />
+      {useButtons ? (
+        <MenuBar>
+          <HeaderButtons options={options} />
+          {avatar}
+        </MenuBar>
+      ) : (
+        <MenuBar>
+          <Menu options={options} />
+        </MenuBar>
+      )}
       {rollOpen && (
         <InteractiveRoll
           title="What's your initiative roll?"
