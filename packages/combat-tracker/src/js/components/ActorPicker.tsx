@@ -216,11 +216,6 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     Array<CastMember | Auditioner>
   >(Object.values(castMembers));
 
-  const io = useSocket();
-  if (!io) {
-    return null;
-  }
-
   useEffect(() => {
     setAuditioners(Object.values(castMembers));
   }, [castMembers]);
@@ -262,6 +257,8 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     setAuditioners(newAuditioners);
   };
 
+  const io = useSocket();
+
   const submit = async () => {
     const toBeCast = auditioners.filter(
       (auditioner) => !(auditioner instanceof CastMember)
@@ -270,10 +267,10 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
       (castMember) => !auditioners.includes(castMember)
     );
     if (toBeCast.length) {
-      io.emit("castActors", toBeCast);
+      io?.emit("castActors", toBeCast);
     }
     if (toBeFired.length) {
-      io.emit(
+      io?.emit(
         "fireActors",
         toBeFired.map(({ id }) => id)
       );
@@ -297,6 +294,10 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [auditioners]);
+
+  if (!io) {
+    return null;
+  }
 
   return (
     <Dialog

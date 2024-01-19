@@ -228,10 +228,6 @@ export function Header({
 }: {
   pickActors: (event: SyntheticEvent) => void;
 }) {
-  const io = useSocket();
-  if (!io) {
-    return null;
-  }
   const user = useContext(IdentityContext);
   const id = useCharacter();
   const dm = useIsDM();
@@ -242,6 +238,11 @@ export function Header({
   const currentTurnIndex = castMembers.findIndex(({ id }) => id === turn) ?? 0;
 
   const [rollOpen, setRollOpen] = useState(false);
+
+  const io = useSocket();
+  if (!io) {
+    return null;
+  }
 
   const rollInitiative = (_event?: SyntheticEvent, roll?: number) => {
     if (dm) {
@@ -297,32 +298,10 @@ export function Header({
     },
   };
 
-  // const buttons = buttonParams.map(
-  //   ({ dmOnly, playerOnly, label, title, handlerName }) => {
-  //     if (dmOnly && !dm) {
-  //       return null;
-  //     }
-  //     if (playerOnly && dm) {
-  //       return null;
-  //     }
-  //     return (
-  //       <Button key={title} title={title} onClick={handlers[handlerName]}>
-  //         {label}
-  //       </Button>
-  //     );
-  //   }
-  // );
-
   return (
     <>
       <GlobalStyle data-global-style />
       <Menu dm={dm} user={user} handlers={handlers} logout={logout} />
-      {/* <MenuBar>
-        <ButtonBar>{buttons}</ButtonBar>
-        <AvatarCrop>
-          <Avatar src={user.picture} alt={user.name} onClick={logout} />
-        </AvatarCrop>
-      </MenuBar> */}
       {rollOpen && (
         <InteractiveRoll
           title="What's your initiative roll?"

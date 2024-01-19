@@ -109,9 +109,6 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
   const ref = useRef<HTMLDivElement>(null);
 
   const io = useSocket();
-  if (!io) {
-    return null;
-  }
 
   useEffect(() => {
     if (!chooseConditionOpen || !ref.current) {
@@ -131,6 +128,10 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
       window.document.removeEventListener("click", handler);
     };
   }, [chooseConditionOpen, setChooseConditionOpen, ref]);
+
+  if (!io) {
+    return null;
+  }
 
   const chooseCondition = () => {
     setChooseConditionOpen(true);
