@@ -17,6 +17,7 @@ import {
   StateRemove,
   getHistoryHandle,
   getObjectState,
+  undoStateChange,
 } from "../src/js/stateChange";
 import { endTurn, startTurn, tickCondition } from "../src/js/tickCondition";
 import { beforeOnce } from "./beforeOnce";
@@ -82,33 +83,34 @@ export const testCastMember: CastMember = {
   languages: [],
 };
 
+const originalCastMember = testCastMember;
+
+const originalConditionTickExpire: ActiveCondition = {
+  id: `condition_${Condition.BLINDED}`,
+  condition: Condition.BLINDED,
+  duration: 2,
+};
+const originalConditionTickTick: ActiveCondition = {
+  id: `condition_${Condition.DEAFENED}`,
+  condition: Condition.DEAFENED,
+  duration: 2,
+};
+const originalConditionStartTurn: ActiveCondition = {
+  id: `condition_${Condition.INVISIBLE}`,
+  condition: Condition.INVISIBLE,
+  duration: 2,
+  onTurnStart: testCastMember.id,
+};
+const originalConditionEndTurn: ActiveCondition = {
+  id: `condition_${Condition.FRIGHTENED}`,
+  condition: Condition.FRIGHTENED,
+  duration: 2,
+  onTurnEnd: testCastMember.id,
+};
+
 describe("When", () => {
   let target: ReturnType<typeof getHistoryHandle<CastMember>>;
-  const originalCastMember = testCastMember;
   let currentCastMember: CastMember;
-
-  const originalConditionTickExpire: ActiveCondition = {
-    id: `condition_${Condition.BLINDED}`,
-    condition: Condition.BLINDED,
-    duration: 2,
-  };
-  const originalConditionTickTick: ActiveCondition = {
-    id: `condition_${Condition.DEAFENED}`,
-    condition: Condition.DEAFENED,
-    duration: 2,
-  };
-  const originalConditionStartTurn: ActiveCondition = {
-    id: `condition_${Condition.INVISIBLE}`,
-    condition: Condition.INVISIBLE,
-    duration: 2,
-    onTurnStart: testCastMember.id,
-  };
-  const originalConditionEndTurn: ActiveCondition = {
-    id: `condition_${Condition.FRIGHTENED}`,
-    condition: Condition.FRIGHTENED,
-    duration: 2,
-    onTurnEnd: testCastMember.id,
-  };
 
   let i = 0;
   type Changes =
@@ -181,7 +183,7 @@ describe("When", () => {
     {
       changes: {
         id: `${i++}`,
-        type: "c",
+        type: "c+",
         object: originalCastMember.id,
         action: "adds a condition (early exit)",
         property: "conditions",
@@ -199,6 +201,12 @@ describe("When", () => {
         object: originalCastMember.id,
         action: "passes time on a condition (early exit)",
         property: "conditions",
+        oldValue: {
+          [originalConditionTickExpire.id]: {
+            ...originalConditionTickExpire,
+            duration: originalConditionTickExpire.duration,
+          },
+        },
         newValue: {
           [originalConditionTickExpire.id]: {
             ...originalConditionTickExpire,
@@ -212,7 +220,7 @@ describe("When", () => {
     {
       changes: {
         id: `${i++}`,
-        type: "c",
+        type: "c-",
         object: originalCastMember.id,
         action: "expires a condition (early exit)",
         property: "conditions",
@@ -222,7 +230,6 @@ describe("When", () => {
             duration: originalConditionTickExpire.duration! - 1,
           },
         },
-        newValue: {},
       },
       makeChange: (castMember) =>
         expireCondition(castMember, originalConditionTickExpire),
@@ -231,7 +238,7 @@ describe("When", () => {
     {
       changes: {
         id: `${i++}`,
-        type: "c",
+        type: "c+",
         object: originalCastMember.id,
         action: "adds a condition (natural expire)",
         property: "conditions",
@@ -249,6 +256,12 @@ describe("When", () => {
         object: originalCastMember.id,
         action: "passes time on a condition (natural expire)",
         property: "conditions",
+        oldValue: {
+          [originalConditionTickTick.id]: {
+            ...originalConditionTickTick,
+            duration: originalConditionTickTick.duration,
+          },
+        },
         newValue: {
           [originalConditionTickTick.id]: {
             ...originalConditionTickTick,
@@ -262,7 +275,7 @@ describe("When", () => {
     {
       changes: {
         id: `${i++}`,
-        type: "c",
+        type: "c-",
         object: originalCastMember.id,
         action: "passes all time on a condition (natural expire)",
         property: "conditions",
@@ -272,7 +285,6 @@ describe("When", () => {
             duration: originalConditionTickTick.duration! - 1,
           },
         },
-        newValue: {},
       },
       makeChange: (castMember) =>
         tickCondition(castMember, originalConditionTickTick),
@@ -281,7 +293,7 @@ describe("When", () => {
     {
       changes: {
         id: `${i++}`,
-        type: "c",
+        type: "c+",
         object: originalCastMember.id,
         action: "adds a condition (start turn)",
         property: "conditions",
@@ -299,6 +311,12 @@ describe("When", () => {
         object: originalCastMember.id,
         action: "passes time on a condition (start turn)",
         property: "conditions",
+        oldValue: {
+          [originalConditionStartTurn.id]: {
+            ...originalConditionStartTurn,
+            duration: originalConditionStartTurn.duration,
+          },
+        },
         newValue: {
           [originalConditionStartTurn.id]: {
             ...originalConditionStartTurn,
@@ -312,7 +330,7 @@ describe("When", () => {
     {
       changes: {
         id: `${i++}`,
-        type: "c",
+        type: "c-",
         object: originalCastMember.id,
         action: "passes all time on a condition (start turn)",
         property: "conditions",
@@ -322,7 +340,6 @@ describe("When", () => {
             duration: originalConditionStartTurn.duration! - 1,
           },
         },
-        newValue: {},
       },
       makeChange: (castMember) =>
         startTurn(castMember, originalConditionStartTurn),
@@ -331,7 +348,7 @@ describe("When", () => {
     {
       changes: {
         id: `${i++}`,
-        type: "c",
+        type: "c+",
         object: originalCastMember.id,
         action: "adds a condition (end turn)",
         property: "conditions",
@@ -349,6 +366,12 @@ describe("When", () => {
         object: originalCastMember.id,
         action: "passes time on a condition (end turn)",
         property: "conditions",
+        oldValue: {
+          [originalConditionEndTurn.id]: {
+            ...originalConditionEndTurn,
+            duration: originalConditionEndTurn.duration,
+          },
+        },
         newValue: {
           [originalConditionEndTurn.id]: {
             ...originalConditionEndTurn,
@@ -361,7 +384,7 @@ describe("When", () => {
     {
       changes: {
         id: `${i++}`,
-        type: "c",
+        type: "c-",
         object: originalCastMember.id,
         action: "passes all time on a condition (end turn)",
         property: "conditions",
@@ -371,7 +394,6 @@ describe("When", () => {
             duration: originalConditionEndTurn.duration! - 1,
           },
         },
-        newValue: {},
       },
       makeChange: (castMember) => endTurn(castMember, originalConditionEndTurn),
     },
@@ -462,6 +484,109 @@ describe("When", () => {
     },
   ];
 
+  function testChange(testEntry: (typeof tests)[number]) {
+    const { changes: tmp, makeChange } = testEntry;
+    const changes = Array.isArray(tmp) ? tmp : [tmp];
+    const isNotAChange = !!changes.find(
+      ({ type }) => type === "+" || type === "-"
+    );
+    const action = changes.map(({ action }) => action).join(" and ");
+    let priorHistoryLength: number;
+    let beforeChangeCastMember: CastMember;
+
+    describe(`a cast member ${action}`, () => {
+      beforeOnce(() => {
+        target = getHistoryHandle("CastMember");
+        target.setHistory([]);
+
+        currentCastMember = originalCastMember;
+        const index = tests.indexOf(testEntry);
+        for (let i = 0; i < index; i++) {
+          const { makeChange } = tests[i];
+          currentCastMember = makeChange(currentCastMember);
+        }
+        priorHistoryLength = target.getHistory().length;
+        beforeChangeCastMember = currentCastMember;
+        currentCastMember = makeChange(beforeChangeCastMember);
+      });
+      test("it should return the new CastMember and it should be a different object", () => {
+        expect(currentCastMember).toBeDefined();
+        expect(currentCastMember).not.toBe(beforeChangeCastMember);
+        expect(currentCastMember).not.toBe(originalCastMember);
+      });
+      test("it should track the change in history", () => {
+        expect(target.getHistory().length).toEqual(
+          priorHistoryLength + changes.length
+        );
+      });
+      changes.forEach((change) => {
+        if (!change.property) {
+          return;
+        }
+        test(`it should have set ${change.property} on the new CastMember object and not on the old CastMember object`, () => {
+          if (typeof (change.newValue ?? change.oldValue) === "object") {
+            expect(originalCastMember[change.property]).not.toBe(
+              currentCastMember[change.property]
+            );
+            expect(beforeChangeCastMember[change.property]).not.toBe(
+              currentCastMember[change.property]
+            );
+            if (change.type.includes("-")) {
+              Object.entries(change.oldValue).forEach(([key]) => {
+                expect(
+                  currentCastMember[change.property].hasOwnProperty(key)
+                ).toBe(false);
+              });
+            } else {
+              Object.entries(change.newValue).forEach(([key, value]) => {
+                expect(
+                  currentCastMember[change.property].hasOwnProperty(key)
+                ).toBe(true);
+                expect(currentCastMember[change.property][key]).toEqual(value);
+              });
+            }
+          } else {
+            if (
+              beforeChangeCastMember[change.property] ===
+              originalCastMember[change.property]
+            ) {
+              // Conditional check is necessary in case we're setting it back to the original state
+              expect(originalCastMember[change.property]).toEqual(
+                change.oldValue
+              );
+            }
+            expect(beforeChangeCastMember[change.property]).toEqual(
+              change.oldValue
+            );
+            expect(currentCastMember[change.property]).toEqual(change.newValue);
+          }
+        });
+      });
+      if (!isNotAChange) {
+        test("it should be reversible, but return a different CastMember object", () => {
+          let undoneCastMember = currentCastMember;
+          [...changes].reverse().forEach((change) => {
+            undoneCastMember = undoStateChange(
+              change as StateChange<CastMember, keyof CastMember>,
+              undoneCastMember
+            );
+          });
+          expect(undoneCastMember).not.toBe(currentCastMember);
+          expect(undoneCastMember).not.toBe(beforeChangeCastMember);
+          expect(undoneCastMember).toEqual(beforeChangeCastMember);
+        });
+      }
+      test("it should be able to reconstruct the updated item from history", () => {
+        const removal = !!changes.find(({ type }) => type === "-");
+        expect(
+          getObjectState(originalCastMember.id, target.getHistory())
+        ).toEqual(removal ? undefined : currentCastMember);
+      });
+    });
+  }
+
+  tests.forEach((testEntry) => testChange(testEntry));
+
   function testNoChange(
     makeChange: ChangeState<CastMember>,
     setup?: () => CastMember
@@ -507,90 +632,4 @@ describe("When", () => {
       () => giveCastMemberTemporaryHitPoints(originalCastMember, 3)
     );
   });
-
-  function testChange(testEntry: (typeof tests)[number]) {
-    const { changes: tmp, makeChange } = testEntry;
-    const changes = Array.isArray(tmp) ? tmp : [tmp];
-    const action = changes.map(({ action }) => action).join(" and ");
-    let priorHistoryLength: number;
-    let beforeChangeCastMember: CastMember;
-
-    describe(`a cast member ${action}`, () => {
-      beforeOnce(() => {
-        target = getHistoryHandle("CastMember");
-        target.setHistory([]);
-
-        currentCastMember = originalCastMember;
-        const index = tests.indexOf(testEntry);
-        for (let i = 0; i < index; i++) {
-          const { makeChange } = tests[i];
-          currentCastMember = makeChange(currentCastMember);
-        }
-        priorHistoryLength = target.getHistory().length;
-        beforeChangeCastMember = currentCastMember;
-        currentCastMember = makeChange(beforeChangeCastMember);
-      });
-      test("it should return the new CastMember and it should be a different object", () => {
-        expect(currentCastMember).toBeDefined();
-        expect(currentCastMember).not.toBe(beforeChangeCastMember);
-        expect(currentCastMember).not.toBe(originalCastMember);
-      });
-      test("it should track the change in history", () => {
-        expect(target.getHistory().length).toEqual(
-          priorHistoryLength + changes.length
-        );
-      });
-      changes.forEach((change) => {
-        if (!change.property) {
-          return;
-        }
-        test(`it should have set ${change.property} on the new CastMember object and not on the old CastMember object`, () => {
-          if (typeof change.newValue === "object") {
-            expect(originalCastMember[change.property]).not.toBe(
-              currentCastMember[change.property]
-            );
-            expect(beforeChangeCastMember[change.property]).not.toBe(
-              currentCastMember[change.property]
-            );
-            if (change.type.includes("-")) {
-              Object.entries(change.oldValue).forEach(([key]) => {
-                expect(
-                  currentCastMember[change.property].hasOwnProperty(key)
-                ).toBe(false);
-              });
-            } else {
-              Object.entries(change.newValue).forEach(([key, value]) => {
-                expect(
-                  currentCastMember[change.property].hasOwnProperty(key)
-                ).toBe(true);
-                expect(currentCastMember[change.property][key]).toEqual(value);
-              });
-            }
-          } else {
-            if (
-              beforeChangeCastMember[change.property] ===
-              originalCastMember[change.property]
-            ) {
-              // Conditional check is necessary in case we're setting it back to the original state
-              expect(originalCastMember[change.property]).toEqual(
-                change.oldValue
-              );
-            }
-            expect(beforeChangeCastMember[change.property]).toEqual(
-              change.oldValue
-            );
-            expect(currentCastMember[change.property]).toEqual(change.newValue);
-          }
-        });
-      });
-      test("it should be able to reconstruct the updated item from history", () => {
-        const removal = !!changes.find(({ type }) => type === "-");
-        expect(
-          getObjectState(originalCastMember.id, target.getHistory())
-        ).toEqual(removal ? undefined : currentCastMember);
-      });
-    });
-  }
-
-  tests.forEach((testEntry) => testChange(testEntry));
 });

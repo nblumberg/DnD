@@ -1,8 +1,7 @@
 import { CastMember, castMemberDoSomething } from "creature";
-import { ChangeState, UndoStateChange, getHistoryHandle } from "./stateChange";
+import { ChangeState, getHistoryHandle } from "./stateChange";
 
-const { pushStateChange, popStateHistory } =
-  getHistoryHandle<CastMember>("CastMember");
+const { pushStateChange } = getHistoryHandle<CastMember>("CastMember");
 
 export const giveCastMemberTemporaryHitPoints: ChangeState<CastMember> = (
   castMember,
@@ -26,16 +25,5 @@ export const giveCastMemberTemporaryHitPoints: ChangeState<CastMember> = (
   return {
     ...castMember,
     hpTemp: amount,
-  };
-};
-
-export const undo_giveCastMemberTemporaryHitPoints: UndoStateChange<
-  CastMember,
-  "hpTemp"
-> = (change, castMember) => {
-  popStateHistory(change);
-  return {
-    ...castMember,
-    hpTemp: change.oldValue ?? 0,
   };
 };

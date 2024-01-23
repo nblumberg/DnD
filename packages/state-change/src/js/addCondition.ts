@@ -1,13 +1,12 @@
 import { ActiveCondition, CastMember, castMemberDoSomething } from "creature";
 import {
   ChangeState,
-  UndoStateChange,
+  StateChange,
   applyStateChange,
   getHistoryHandle,
 } from "./stateChange";
 
-const { pushStateChange, popStateHistory } =
-  getHistoryHandle<CastMember>("CastMember");
+const { pushStateHistory } = getHistoryHandle<CastMember>("CastMember");
 
 let nextConditionId = 1;
 
@@ -32,28 +31,15 @@ export const addCondition: ChangeState<CastMember> = (
   }
   const fullCondition: ActiveCondition = { ...condition, id };
   castMemberDoSomething(castMember, `starts being ${condition.condition}`);
-  const change = pushStateChange(
-    castMember,
-    "addCondition",
-    "conditions",
-    undefined,
-    { [id]: fullCondition }
+  const change = pushStateHistory({
+    type: "c+",
+    action: "addCondition",
+    object: castMember.id,
+    property: "conditions",
+    newValue: { [id]: fullCondition },
+  });
+  return applyStateChange(
+    change as StateChange<CastMember, "conditions">,
+    castMember
   );
-  return applyStateChange(change, castMember);
-};
-
-export const undo_addCondition: UndoStateChange<CastMember, "conditions"> = (
-  change,
-  castMember
-) => {
-  popStateHistory(change);
-  const [[id]] = Object.entries(change.newValue!);
-  return {
-    ...castMember,
-    conditions: Object.fromEntries(
-      Object.entries(castMember.conditions).filter(
-        ([conditionId]) => conditionId !== id
-      )
-    ),
-  };
 };

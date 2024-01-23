@@ -81,6 +81,11 @@ function toggleStateChange<T extends Unique, P extends keyof T>(
     case "string":
     case "symbol":
     case "undefined":
+      if (value === undefined) {
+        return Object.fromEntries(
+          Object.entries(object).filter(([key]) => key !== property)
+        ) as T;
+      }
       return {
         ...object,
         [property]: value,
@@ -92,13 +97,16 @@ function toggleStateChange<T extends Unique, P extends keyof T>(
           [property]: value,
         };
       } else if (!value) {
-        if (change.type === "c-") {
+        if (change.type === "c+" || change.type === "c-") {
           return {
             ...object,
             [property]: Object.fromEntries(
               Object.entries(object[property]).filter(
                 ([key]) =>
-                  !Object.prototype.hasOwnProperty.call(change.oldValue, key)
+                  !Object.prototype.hasOwnProperty.call(
+                    change.oldValue ?? change.newValue,
+                    key
+                  )
               )
             ),
           };

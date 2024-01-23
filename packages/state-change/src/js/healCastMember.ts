@@ -1,8 +1,7 @@
 import { CastMember, castMemberDoSomething } from "creature";
-import { ChangeState, UndoStateChange, getHistoryHandle } from "./stateChange";
+import { ChangeState, getHistoryHandle } from "./stateChange";
 
-const { pushStateChange, popStateHistory } =
-  getHistoryHandle<CastMember>("CastMember");
+const { pushStateChange } = getHistoryHandle<CastMember>("CastMember");
 
 export const healCastMember: ChangeState<CastMember> = (
   castMember,
@@ -22,16 +21,5 @@ export const healCastMember: ChangeState<CastMember> = (
   return {
     ...castMember,
     hpCurrent,
-  };
-};
-
-export const undo_healCastMember: UndoStateChange<CastMember, "hpCurrent"> = (
-  change,
-  castMember
-) => {
-  popStateHistory(change);
-  return {
-    ...castMember,
-    hpCurrent: change.oldValue!,
   };
 };

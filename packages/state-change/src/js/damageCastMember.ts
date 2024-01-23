@@ -1,8 +1,7 @@
 import { CastMember, DamageType, castMemberDoSomething } from "creature";
-import { ChangeState, UndoStateChange, getHistoryHandle } from "./stateChange";
+import { ChangeState, getHistoryHandle } from "./stateChange";
 
-const { pushStateChange, popStateHistory } =
-  getHistoryHandle<CastMember>("CastMember");
+const { pushStateChange } = getHistoryHandle<CastMember>("CastMember");
 
 function damageToRelativeDamage(
   castMember: CastMember,
@@ -54,18 +53,6 @@ export const damageCastMemberTempHp: ChangeState<CastMember> = (
   };
 };
 
-export const undo_damageCastMemberTempHp: UndoStateChange<
-  CastMember,
-  "hpTemp"
-> = (change, castMember) => {
-  popStateHistory(change);
-
-  return {
-    ...castMember,
-    hpTemp: change.oldValue ?? 0,
-  };
-};
-
 /**
  * Potentially push a StateChange of hpTemp first, then hpCurrent.
  */
@@ -94,21 +81,5 @@ export const damageCastMember: ChangeState<CastMember> = (
   return {
     ...tmpState,
     hpCurrent,
-  };
-};
-
-/**
- * Since StateChanges are undone in reverse order according to actions in history,
- * don't try to undo hpTemp here, undo_damageCastMemberTempHp will be called separately afterward.
- */
-export const undo_damageCastMember: UndoStateChange<CastMember, "hpCurrent"> = (
-  change,
-  castMember
-) => {
-  popStateHistory(change);
-
-  return {
-    ...castMember,
-    hpCurrent: change.oldValue!,
   };
 };

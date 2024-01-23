@@ -1,9 +1,8 @@
 import { ActiveCondition, CastMember } from "creature";
 import { expireCondition, findCondition } from "./expireCondition";
-import { ChangeState, UndoStateChange, getHistoryHandle } from "./stateChange";
+import { ChangeState, getHistoryHandle } from "./stateChange";
 
-const { pushStateChange, popStateHistory } =
-  getHistoryHandle<CastMember>("CastMember");
+const { pushStateChange } = getHistoryHandle<CastMember>("CastMember");
 
 export const tickCondition: ChangeState<CastMember> = (
   castMember,
@@ -31,25 +30,6 @@ export const tickCondition: ChangeState<CastMember> = (
         id === actualCondition.id ? [id, { ...c, duration }] : [id, c]
       )
     ),
-  };
-};
-
-export const undo_tickCondition: UndoStateChange<CastMember, "conditions"> = (
-  change,
-  castMember
-) => {
-  const [[id, condition]] = Object.entries(change.oldValue!);
-  if (!id || !condition) {
-    throw new Error("Condition not found in change");
-  }
-  const actualCondition = findCondition(castMember, condition);
-  popStateHistory(change);
-  return {
-    ...castMember,
-    conditions: {
-      ...castMember.conditions,
-      [actualCondition.id]: actualCondition,
-    },
   };
 };
 

@@ -1,8 +1,7 @@
 import { CastMember } from "creature";
-import { ChangeState, UndoStateChange, getHistoryHandle } from "./stateChange";
+import { ChangeState, getHistoryHandle } from "./stateChange";
 
-const { pushStateChange, popStateHistory } =
-  getHistoryHandle<CastMember>("CastMember");
+const { pushStateChange } = getHistoryHandle<CastMember>("CastMember");
 
 export const delayInitiative: ChangeState<CastMember> = (
   castMember,
@@ -18,16 +17,5 @@ export const delayInitiative: ChangeState<CastMember> = (
   return {
     ...castMember,
     delayInitiative,
-  };
-};
-
-export const undo_delayInitiative: UndoStateChange<
-  CastMember,
-  "delayInitiative"
-> = (change, castMember) => {
-  popStateHistory(change);
-  return {
-    ...castMember,
-    delayInitiative: change.oldValue ?? false,
   };
 };
