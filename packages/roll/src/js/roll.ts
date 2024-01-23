@@ -28,7 +28,7 @@ export class Roll extends Serializable<RollRaw> {
   dieSides: number;
   extra = 0;
   crits: number = Infinity;
-  private history: RollHistory[] = [];
+  protected history: RollHistory[] = [];
 
   constructor(...args: RollParams) {
     super();

@@ -1,5 +1,5 @@
-import { ClassMembers } from "serializable";
 import { Action, ActionParams } from ".";
+import { actionParamsToAction } from "./action";
 
 export const DamageTypes = [
   "bludgeoning",
@@ -22,7 +22,7 @@ export type DamageType = (typeof DamageTypes)[number];
 
 export type AttackType = "melee" | "ranged" | "melee or ranged";
 
-export class Attack extends Action {
+export interface Attack extends Action {
   type: AttackType;
   weapon?: true;
   toHit: {
@@ -36,24 +36,23 @@ export class Attack extends Action {
     type: DamageType;
     effect?: string;
   };
-
-  constructor(params: ActionParams) {
-    super(params);
-    const { attack } = params;
-    if (!attack) {
-      throw new Error(
-        `ActionParams for ${this.name} do not describe an Attack`
-      );
-    }
-    this.type = attack.type;
-    if (attack.weapon) {
-      this.weapon = true;
-    }
-    this.toHit = { ...attack.toHit };
-    if (attack.onHit) {
-      this.onHit = { ...attack.onHit };
-    }
-  }
 }
 
-export type AttackRaw = ClassMembers<Attack>;
+export function actionParamsToAttack(params: ActionParams): Attack {
+  const action = actionParamsToAction(params) as Attack;
+  const { attack } = params;
+  if (!attack) {
+    throw new Error(
+      `ActionParams for ${action.name} do not describe an Attack`
+    );
+  }
+  action.type = attack.type;
+  if (attack.weapon) {
+    action.weapon = true;
+  }
+  action.toHit = { ...attack.toHit };
+  if (attack.onHit) {
+    action.onHit = { ...attack.onHit };
+  }
+  return action;
+}

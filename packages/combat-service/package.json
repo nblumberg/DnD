@@ -36,6 +36,7 @@
     "creature": "*",
     "event-emitter": "*",
     "express": "^4.18.2",
-    "socket.io": "^4.7.4"
+    "socket.io": "^4.7.4",
+    "state-change": "*"
   }
 }

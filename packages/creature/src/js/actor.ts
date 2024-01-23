@@ -1,25 +1,18 @@
-import { ClassMembers, Serializable } from "serializable";
-
-export type ActorParams = Partial<Actor> & { name: string };
-
-export class Actor
-  extends Serializable<ActorRaw>
-  implements ActorParams, ActorRaw
-{
+export interface Actor {
   name: string;
   id: string;
   unique: boolean;
-
-  constructor(params: ActorParams) {
-    super();
-    Object.assign(this, params);
-    this.name = params.name;
-    this.unique = params.unique ?? false;
-    this.id = params.id ?? toId(params.name);
-  }
 }
 
-export type ActorRaw = ClassMembers<Actor>;
+export type ActorParams = Partial<Actor> & { name: string };
+
+export function actorParamsToActor(params: ActorParams): Actor {
+  return {
+    ...params,
+    id: params.id ?? toId(params.name),
+    unique: params.unique ?? false,
+  };
+}
 
 export function toId(str: string): string {
   return str.replace(/\W/g, "_");

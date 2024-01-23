@@ -1,7 +1,7 @@
-import { ActorRaw } from "./actor";
+import { Actor } from "./actor";
 
-export interface Auditioner extends ActorRaw {
+export interface Auditioner extends Actor {
   nickname?: string;
-  actor: ActorRaw;
+  actor: Actor;
   character: boolean;
 }

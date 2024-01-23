@@ -1,49 +1,34 @@
 import { Roll } from "roll";
-import { ClassMembers } from "serializable";
-import { CastMember } from ".";
-import { Ability } from "./ability";
+import { AbilityType, getAbilityModifier } from "./ability";
+import { CastMember } from "./castMember";
 
-export class Check extends Roll {
-  modifier: number;
-  private owner: CastMember;
-
-  constructor(
-    params: Partial<CheckRaw> & { extra: number },
-    owner: CastMember
-  ) {
-    super({
-      ...params,
-      dieCount: 1,
-      dieSides: 20,
-    });
-    this.modifier = params.extra;
-    this.owner = owner;
-  }
-
-  override roll(): number {
-    const result = super.roll();
-    console.log(
-      `${this.owner.nickname ?? this.owner.name} rolled ${result} for ${
-        Object.entries(this.owner).find(([, value]) => value === this)?.[0] ??
-        "unknown"
-      } check ${this.constructor.name} (${this.breakdown()})`
-    );
-    return result;
-  }
+export function makeCheck(
+  extra: number,
+  crits?: number
+): { result: number; roll: Roll } {
+  const roll = new Roll({ dieCount: 1, dieSides: 20, extra, crits });
+  const result = roll.roll();
+  return { result, roll };
 }
 
-export type CheckRaw = Omit<ClassMembers<Check>, "dieCount" | "dieSides">;
-
-export class AbilityCheck extends Check implements Ability {
-  score: number;
-
-  declare raw: () => AbilityCheckRaw & CheckRaw;
-
-  constructor(score: number, owner: CastMember) {
-    const { modifier } = new Ability(score);
-    super({ extra: modifier }, owner);
-    this.score = score;
+export function makeAbilityCheck(
+  params: CastMember | number,
+  ability?: AbilityType
+): ReturnType<typeof makeCheck> {
+  if (typeof params !== "number" && !ability) {
+    throw new Error("Ability check requires an ability");
   }
+  const score = typeof params === "number" ? params : params[ability!];
+  const modifier = getAbilityModifier(score);
+  return makeCheck(modifier);
 }
 
-export type AbilityCheckRaw = ClassMembers<AbilityCheck>;
+export function makeSkillCheck(
+  castMember: CastMember,
+  skill: string
+): ReturnType<typeof makeCheck> {
+  if (castMember.skills[skill] === undefined) {
+    throw new Error(`Cast member ${castMember.id} has no skill ${skill}`);
+  }
+  return makeCheck(castMember.skills[skill].modifier);
+}

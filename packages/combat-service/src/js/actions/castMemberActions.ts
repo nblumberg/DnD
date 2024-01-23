@@ -1,34 +1,7 @@
-import { getCharacter, getMonster } from "compendium-service/client";
-import {
-  Auditioner,
-  CastMember,
-  CastMemberParams,
-  Condition,
-  CreatureParams,
-} from "creature";
+import { CastMember, Condition } from "creature";
 import { setState, state } from "../state";
-import {
-  addCastMember,
-  removeCastMember,
-  setCastMemberState,
-} from "../state/castMemberState";
+import { removeCastMember, setCastMemberState } from "../state/castMemberState";
 import { getTurnOrder } from "./initiativeActions";
-
-export async function castActor(auditioner: Auditioner): Promise<CastMember> {
-  console.log(`Casting ${auditioner.name}`);
-
-  let creatureParams: CreatureParams;
-  if (auditioner.character) {
-    creatureParams = await getCharacter(auditioner.name);
-  } else {
-    creatureParams = await getMonster(auditioner.name);
-  }
-  const castMemberParams: CastMemberParams = {
-    ...creatureParams,
-    ...auditioner,
-  };
-  return addCastMember(castMemberParams);
-}
 
 export function getCastMember(id: string): CastMember | undefined {
   const castMember = state.castMembers[id];

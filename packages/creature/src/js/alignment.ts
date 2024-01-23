@@ -1,5 +1,3 @@
-import { ClassMembers, Serializable } from "serializable";
-
 export enum AlignmentParam {
   LG = "Lawful Good",
   NG = "Neutral Good",
@@ -16,91 +14,85 @@ export enum AlignmentParam {
 
 type TriValue = true | undefined | false;
 
-export class Alignment
-  extends Serializable<AlignmentRaw>
-  implements AlignmentRaw
-{
+export interface Alignment {
   lawChaos: TriValue;
   goodEvil: TriValue;
   shortName: string;
   longName: string;
+}
 
-  constructor(
-    ...args: [AlignmentParam | string] | [TriValue, TriValue, string, string]
-  ) {
-    super();
-    if (typeof args[0] === "boolean" || typeof args[0] === "undefined") {
-      this.lawChaos = args[0];
-      this.goodEvil = args[1];
-      this.shortName = args[2];
-      this.longName = args[3];
-    } else {
-      this.shortName = "temporary";
-      this.longName = "temporary";
-      // return a different object from the constructor
-      let text = args[0] as string;
-      text = text
-        .replace("Usually ", "")
-        .replace("Typically ", "") as AlignmentParam;
-      switch (text) {
-        case AlignmentParam.LG:
-          return LawfulGood;
-        case AlignmentParam.NG:
-          return NeutralGood;
-        case AlignmentParam.CG:
-          return ChaoticGood;
-        case AlignmentParam.LN:
-          return LawfulNeutral;
-        case AlignmentParam.N:
-          return Neutral;
-        case AlignmentParam.CN:
-          return ChaoticNeutral;
-        case AlignmentParam.LE:
-          return LawfulEvil;
-        case AlignmentParam.NE:
-          return NeutralEvil;
-        case AlignmentParam.CE:
-          return ChaoticEvil;
-        case AlignmentParam.ANY:
-          console.warn("Treating Any Alignment as Neutral");
-          return Neutral;
-        case AlignmentParam.U:
-          console.warn("Treating Unaligned as Neutral");
-          return Neutral;
-        default:
-          throw new Error(`Unrecognized Alignment value ${args[0]}`);
-      }
-    }
-  }
-
-  override toString(longFormat: boolean = true): string {
-    return longFormat ? this.longName : this.shortName;
+export function alignmentParamToAlignment(
+  params: string | AlignmentParam
+): Alignment {
+  let text = params as string;
+  text = text
+    .replace("Usually ", "")
+    .replace("Typically ", "") as AlignmentParam;
+  switch (text) {
+    case AlignmentParam.LG:
+      return LawfulGood;
+    case AlignmentParam.NG:
+      return NeutralGood;
+    case AlignmentParam.CG:
+      return ChaoticGood;
+    case AlignmentParam.LN:
+      return LawfulNeutral;
+    case AlignmentParam.N:
+      return Neutral;
+    case AlignmentParam.CN:
+      return ChaoticNeutral;
+    case AlignmentParam.LE:
+      return LawfulEvil;
+    case AlignmentParam.NE:
+      return NeutralEvil;
+    case AlignmentParam.CE:
+      return ChaoticEvil;
+    case AlignmentParam.ANY:
+      console.warn("Treating Any Alignment as Neutral");
+      return Neutral;
+    case AlignmentParam.U:
+      console.warn("Treating Unaligned as Neutral");
+      return Neutral;
+    default:
+      throw new Error(`Unrecognized Alignment value ${params}`);
   }
 }
 
-export type AlignmentRaw = ClassMembers<Alignment>;
+function baseAlignment(
+  lawChaos: TriValue,
+  goodEvil: TriValue,
+  shortName: string,
+  longName: string
+): Alignment {
+  return {
+    lawChaos,
+    goodEvil,
+    shortName,
+    longName,
+  };
+}
 
-export const LawfulGood = new Alignment(true, true, "LG", "Lawful Good");
-export const NeutralGood = new Alignment(undefined, true, "NG", "Neutral Good");
-export const ChaoticGood = new Alignment(false, true, "CG", "Chaotic Good");
-export const LawfulNeutral = new Alignment(
+export const LawfulGood = baseAlignment(true, true, "LG", "Lawful Good");
+export const NeutralGood = baseAlignment(undefined, true, "NG", "Neutral Good");
+export const ChaoticGood = baseAlignment(false, true, "CG", "Chaotic Good");
+export const LawfulNeutral = baseAlignment(
   true,
   undefined,
   "LN",
   "Lawful Neutral"
 );
-export const Neutral = new Alignment(undefined, undefined, "N", "Neutral");
-export const ChaoticNeutral = new Alignment(
+export const Neutral = baseAlignment(undefined, undefined, "N", "Neutral");
+export const ChaoticNeutral = baseAlignment(
   false,
   undefined,
   "CN",
   "Chaotic Neutral"
 );
-export const LawfulEvil = new Alignment(true, false, "LE", "Lawful Evil");
-export const NeutralEvil = new Alignment(
+export const LawfulEvil = baseAlignment(true, false, "LE", "Lawful Evil");
+export const NeutralEvil = baseAlignment(
   undefined,
   false,
   "NE",
   "Neutral Evil"
 );
-export const ChaoticEvil = new Alignment(false, false, "CE", "Chaotic Evil");
+export const ChaoticEvil = baseAlignment(false, false, "CE", "Chaotic Evil");

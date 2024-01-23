@@ -1,135 +1,29 @@
-import { Roll } from "roll";
-import { ClassMembers } from "serializable";
-import { Abilities, AbilityParam } from "./ability";
+import { Abilities, AbilityType } from "./ability";
 
-export class Skill extends Roll {
-  name: string;
-  modifier: number;
-  ability?: AbilityParam;
-  proficient: boolean;
-  expertise: boolean;
-  jackOfAllTrades: boolean;
+const KnownSkills = [
+  "Acrobatics",
+  "AnimalHandling",
+  "Arcana",
+  "Athletics",
+  "Deception",
+  "History",
+  "Insight",
+  "Intimidation",
+  "Investigation",
+  "Medicine",
+  "Nature",
+  "Perception",
+  "Performance",
+  "Persuasion",
+  "Religion",
+  "SleightOfHand",
+  "Stealth",
+  "Survival",
+] as const;
 
-  constructor(params: Partial<SkillRaw> & { name: string; modifier: number }) {
-    super({ dieCount: 1, dieSides: 20, extra: params.modifier });
-    const {
-      name,
-      modifier,
-      ability,
-      proficient = false,
-      expertise = false,
-      jackOfAllTrades = false,
-    } = params;
-    this.name = name;
-    this.modifier = modifier;
-    if (ability) {
-      this.ability = ability;
-    } else {
-      this.ability = abilityMap[name];
-    }
-    this.proficient = proficient;
-    this.expertise = expertise;
-    this.jackOfAllTrades = jackOfAllTrades;
-  }
-}
+type KnownSkill = (typeof KnownSkills)[number];
 
-export type SkillRaw = Omit<ClassMembers<Skill>, keyof ClassMembers<Roll>>;
-
-export interface SkillsParams extends Record<string, number | Skill> {
-  Acrobatics: number;
-  AnimalHandling: number;
-  Arcana: number;
-  Athletics: number;
-  Deception: number;
-  History: number;
-  Insight: number;
-  Intimidation: number;
-  Investigation: number;
-  Medicine: number;
-  Nature: number;
-  Perception: number;
-  Performance: number;
-  Persuasion: number;
-  Religion: number;
-  SleightOfHand: number;
-  Stealth: number;
-  Survival: number;
-}
-
-type ToSkill<T> = { [K in keyof T]: Skill };
-
-export type Skills = Record<string, Skill> & ToSkill<SkillsParams>;
-
-type ToSkillRaw<T> = { [K in keyof T]: SkillRaw };
-
-export type SkillsRaw = Record<string, SkillRaw> & ToSkillRaw<Skills>;
-
-export function createSkills(
-  abilities: Abilities,
-  params?: Partial<SkillsParams>
-): Skills {
-  const skills: Skills = {} as Skills;
-  // Create default skills
-  for (const [name, ability] of Object.entries(abilityMap)) {
-    const entry = params?.[name];
-    let modifier: number = abilities[ability];
-    let proficient = false;
-    let passedAbility: AbilityParam | undefined;
-    let expertise = false;
-    let jackOfAllTrades = false;
-    if (typeof entry === "number") {
-      modifier = entry;
-    } else if (typeof entry?.modifier === "number") {
-      ({
-        modifier,
-        proficient = false,
-        ability: passedAbility,
-        expertise = false,
-        jackOfAllTrades = false,
-      } = entry);
-    }
-
-    skills[name] = new Skill({
-      name,
-      modifier,
-      ability: passedAbility ?? ability,
-      proficient,
-      expertise,
-      jackOfAllTrades,
-    });
-  }
-
-  // Create custom skills
-  if (params) {
-    for (const [name, args] of Object.entries(params)) {
-      if (Object.prototype.hasOwnProperty.call(abilityMap, name)) {
-        continue;
-      }
-      if (typeof args === "number") {
-        skills[name] = new Skill({ name, modifier: args });
-      } else if (args) {
-        const {
-          modifier,
-          proficient = false,
-          ability,
-          expertise = false,
-          jackOfAllTrades = false,
-        } = args;
-        skills[name] = new Skill({
-          name,
-          modifier,
-          ability,
-          proficient,
-          expertise,
-          jackOfAllTrades,
-        });
-      }
-    }
-  }
-  return skills;
-}
-
-const abilityMap: Record<keyof Skills, AbilityParam> = {
+const abilityMap: Record<KnownSkill, AbilityType> = {
   Acrobatics: "dex",
   AnimalHandling: "wis",
   Arcana: "int",
@@ -148,4 +42,108 @@ const abilityMap: Record<keyof Skills, AbilityParam> = {
   SleightOfHand: "dex",
   Stealth: "dex",
   Survival: "wis",
-};
+} as const;
+
+export interface Skill {
+  name: string;
+  modifier: number;
+  ability?: AbilityType;
+  proficient?: true;
+  expertise?: true;
+  jackOfAllTrades?: true;
+}
+
+export type Skills = Record<KnownSkill | string, Skill>;
+
+export type SkillsParams = Record<KnownSkill | string, number | Skill>;
+
+function createSkill(
+  name: string,
+  modifier: number,
+  ability?: AbilityType,
+  proficient = false,
+  expertise = false,
+  jackOfAllTrades = false
+): Skill {
+  const skill: Skill = {
+    name,
+    modifier,
+    ability,
+  };
+  if (proficient) {
+    skill.proficient = true;
+  }
+  if (expertise) {
+    skill.expertise = true;
+  }
+  if (jackOfAllTrades) {
+    skill.jackOfAllTrades = true;
+  }
+  return skill;
+}
+
+export function createSkills(
+  abilities: Abilities,
+  params?: SkillsParams
+): Skills {
+  const skills: Skills = {};
+  // Create default skills
+  for (const [name, ability] of Object.entries(abilityMap)) {
+    const entry = params?.[name];
+    let modifier: number = abilities[ability];
+    let proficient = false;
+    let passedAbility: AbilityType | undefined;
+    let expertise = false;
+    let jackOfAllTrades = false;
+    if (typeof entry === "number") {
+      modifier = entry;
+    } else if (typeof entry?.modifier === "number") {
+      ({
+        modifier,
+        proficient = false,
+        ability: passedAbility,
+        expertise = false,
+        jackOfAllTrades = false,
+      } = entry);
+    }
+
+    skills[name] = createSkill(
+      name,
+      modifier,
+      passedAbility ?? ability,
+      proficient,
+      expertise,
+      jackOfAllTrades
+    );
+  }
+
+  // Create custom skills
+  if (params) {
+    for (const [name, args] of Object.entries(params)) {
+      if (Object.prototype.hasOwnProperty.call(abilityMap, name)) {
+        continue;
+      }
+      if (typeof args === "number") {
+        skills[name] = { name, modifier: args };
+        skills[name] = createSkill(name, args);
+      } else if (args) {
+        const {
+          modifier,
+          proficient = false,
+          ability,
+          expertise = false,
+          jackOfAllTrades = false,
+        } = args;
+        skills[name] = createSkill(
+          name,
+          modifier,
+          ability,
+          proficient,
+          expertise,
+          jackOfAllTrades
+        );
+      }
+    }
+  }
+  return skills;
+}

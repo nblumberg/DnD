@@ -1,4 +1,9 @@
-import { CastMember, CastMemberParams, CastMemberRaw } from "creature";
+import {
+  Auditioner,
+  CastMember,
+  CastMemberParams,
+  CreatureParams,
+} from "creature";
 import {
   AddListener,
   AddPropertyListener,
@@ -6,6 +11,11 @@ import {
   SetData,
   createEventEmitter,
 } from "event-emitter";
+import {
+  getCharacter,
+  getMonster,
+} from "packages/compendium-service/dist/js/client";
+import { addCastMember } from "state-change";
 import { State, onStateChange, state, updateState } from "../state";
 
 export let addCastMembersListener: AddListener<Record<string, CastMember>>;
@@ -49,8 +59,22 @@ function _addCastMember(
   return castMember;
 }
 
-export function addCastMember(castMemberParams: CastMemberParams): CastMember {
+export function XaddCastMember(castMemberParams: CastMemberParams): CastMember {
   return _addCastMember(castMemberParams);
+}
+
+export async function castActor(auditioner: Auditioner): Promise<CastMember> {
+  let creatureParams: CreatureParams;
+  if (auditioner.character) {
+    creatureParams = await getCharacter(auditioner.name);
+  } else {
+    creatureParams = await getMonster(auditioner.name);
+  }
+  const castMemberParams: CastMemberParams = {
+    ...creatureParams,
+    ...auditioner,
+  };
+  return addCastMember(castMemberParams);
 }
 
 export function removeCastMember(id: string) {

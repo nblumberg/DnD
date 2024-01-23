@@ -1,5 +1,3 @@
-import { ClassMembers, Serializable } from "serializable";
-
 export interface Abilities {
   str: number;
   dex: number;
@@ -9,17 +7,17 @@ export interface Abilities {
   cha: number;
 }
 
-export type AbilityParam = "str" | "dex" | "con" | "int" | "wis" | "cha";
+export const AbilitiesList = [
+  "str",
+  "dex",
+  "con",
+  "int",
+  "wis",
+  "cha",
+] as const;
 
-export class Ability extends Serializable<AbilityRaw> {
-  score: number;
-  modifier: number;
+export type AbilityType = (typeof AbilitiesList)[number];
 
-  constructor(...args: [number] | [AbilityRaw]) {
-    super();
-    this.score = typeof args[0] === "number" ? args[0] : args[0].score;
-    this.modifier = Math.max(Math.floor((this.score - 10) / 2), -5);
-  }
+export function getAbilityModifier(score: number): number {
+  return Math.max(Math.floor((score - 10) / 2), -5);
 }
-
-export type AbilityRaw = ClassMembers<Ability>;
