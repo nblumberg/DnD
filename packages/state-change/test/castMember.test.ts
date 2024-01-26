@@ -1,15 +1,17 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, jest, test } from "@jest/globals";
 import { ActiveCondition, CastMember, Condition, Size } from "creature";
-import { addCastMember } from "../src/js/addCastMember";
-import { addCondition } from "../src/js/addCondition";
-import { damageCastMember } from "../src/js/damageCastMember";
-import { delayInitiative } from "../src/js/delayInitiative";
-import { expireCondition } from "../src/js/expireCondition";
-import { giveCastMemberTemporaryHitPoints } from "../src/js/giveCastMemberTemporaryHitPoints";
-import { healCastMember } from "../src/js/healCastMember";
-import { nameCastMember } from "../src/js/nameCastMember";
-import { removeCastMember } from "../src/js/removeCastMember";
-import { setInitiative } from "../src/js/setInitiative";
+import { addCastMember } from "../src/js/atomic/addCastMember";
+import { addCondition } from "../src/js/atomic/addCondition";
+import { damageCastMember } from "../src/js/atomic/damageCastMember";
+import { delayInitiative } from "../src/js/atomic/delayInitiative";
+import { endTurn } from "../src/js/atomic/endTurn";
+import { expireCondition } from "../src/js/atomic/expireCondition";
+import { giveCastMemberTemporaryHitPoints } from "../src/js/atomic/giveCastMemberTemporaryHitPoints";
+import { healCastMember } from "../src/js/atomic/healCastMember";
+import { nameCastMember } from "../src/js/atomic/nameCastMember";
+import { removeCastMember } from "../src/js/atomic/removeCastMember";
+import { setInitiative } from "../src/js/atomic/setInitiative";
+import { startTurn } from "../src/js/atomic/startTurn";
 import {
   ChangeState,
   StateAdd,
@@ -17,10 +19,24 @@ import {
   StateRemove,
   getHistoryHandle,
   getObjectState,
-  undoStateChange,
-} from "../src/js/stateChange";
-import { endTurn, startTurn, tickCondition } from "../src/js/tickCondition";
+  undoHistoryEntry,
+} from "../src/js/atomic/stateChange";
+import {
+  endTurnCondition,
+  startTurnCondition,
+  tickCondition,
+} from "../src/js/atomic/tickCondition";
+import { getUniqueId } from "../src/js/unique";
 import { beforeOnce } from "./beforeOnce";
+
+jest.mock("../src/js/unique", () => {
+  const { getUniqueId } =
+    jest.requireActual<typeof import("../src/js/unique")>("../src/js/unique");
+  return {
+    __esModule: true,
+    getUniqueId: jest.fn<() => string>(getUniqueId),
+  };
+});
 
 export const testCastMember: CastMember = {
   id: "castMember-1",
@@ -66,6 +82,7 @@ export const testCastMember: CastMember = {
 
   initiativeOrder: 1,
   initiative: 0,
+  myTurn: false,
   delayInitiative: false,
 
   senses: { "Passive Perception": 10 },
@@ -179,6 +196,30 @@ describe("When", () => {
       ],
       makeChange: (castMember) => setInitiative(castMember, 10),
     },
+    {
+      changes: {
+        id: `${i++}`,
+        type: "c",
+        object: originalCastMember.id,
+        action: "starts their turn",
+        property: "myTurn",
+        oldValue: false,
+        newValue: true,
+      },
+      makeChange: (castMember) => startTurn(castMember),
+    },
+    {
+      changes: {
+        id: `${i++}`,
+        type: "c",
+        object: originalCastMember.id,
+        action: "ends their turn",
+        property: "myTurn",
+        oldValue: true,
+        newValue: false,
+      },
+      makeChange: (castMember) => endTurn(castMember),
+    },
 
     {
       changes: {
@@ -191,8 +232,12 @@ describe("When", () => {
           [originalConditionTickExpire.id]: originalConditionTickExpire,
         },
       },
-      makeChange: (castMember) =>
-        addCondition(castMember, originalConditionTickExpire, true),
+      makeChange: (castMember) => {
+        (getUniqueId as jest.Mock<() => string>).mockImplementation(
+          () => originalConditionTickExpire.id
+        );
+        return addCondition(castMember, originalConditionTickExpire, true);
+      },
     },
     {
       changes: {
@@ -246,8 +291,12 @@ describe("When", () => {
           [originalConditionTickTick.id]: originalConditionTickTick,
         },
       },
-      makeChange: (castMember) =>
-        addCondition(castMember, originalConditionTickTick, true),
+      makeChange: (castMember) => {
+        (getUniqueId as jest.Mock<() => string>).mockImplementation(
+          () => originalConditionTickTick.id
+        );
+        return addCondition(castMember, originalConditionTickTick, true);
+      },
     },
     {
       changes: {
@@ -301,8 +350,12 @@ describe("When", () => {
           [originalConditionStartTurn.id]: originalConditionStartTurn,
         },
       },
-      makeChange: (castMember) =>
-        addCondition(castMember, originalConditionStartTurn, true),
+      makeChange: (castMember) => {
+        (getUniqueId as jest.Mock<() => string>).mockImplementation(
+          () => originalConditionStartTurn.id
+        );
+        return addCondition(castMember, originalConditionStartTurn, true);
+      },
     },
     {
       changes: {
@@ -325,7 +378,7 @@ describe("When", () => {
         },
       },
       makeChange: (castMember) =>
-        startTurn(castMember, originalConditionStartTurn),
+        startTurnCondition(castMember, originalConditionStartTurn),
     },
     {
       changes: {
@@ -342,7 +395,7 @@ describe("When", () => {
         },
       },
       makeChange: (castMember) =>
-        startTurn(castMember, originalConditionStartTurn),
+        startTurnCondition(castMember, originalConditionStartTurn),
     },
 
     {
@@ -356,8 +409,12 @@ describe("When", () => {
           [originalConditionEndTurn.id]: originalConditionEndTurn,
         },
       },
-      makeChange: (castMember) =>
-        addCondition(castMember, originalConditionEndTurn, true),
+      makeChange: (castMember) => {
+        (getUniqueId as jest.Mock<() => string>).mockImplementation(
+          () => originalConditionEndTurn.id
+        );
+        return addCondition(castMember, originalConditionEndTurn, true);
+      },
     },
     {
       changes: {
@@ -379,7 +436,8 @@ describe("When", () => {
           },
         },
       },
-      makeChange: (castMember) => endTurn(castMember, originalConditionEndTurn),
+      makeChange: (castMember) =>
+        endTurnCondition(castMember, originalConditionEndTurn),
     },
     {
       changes: {
@@ -395,7 +453,8 @@ describe("When", () => {
           },
         },
       },
-      makeChange: (castMember) => endTurn(castMember, originalConditionEndTurn),
+      makeChange: (castMember) =>
+        endTurnCondition(castMember, originalConditionEndTurn),
     },
 
     {
@@ -566,7 +625,7 @@ describe("When", () => {
         test("it should be reversible, but return a different CastMember object", () => {
           let undoneCastMember = currentCastMember;
           [...changes].reverse().forEach((change) => {
-            undoneCastMember = undoStateChange(
+            undoneCastMember = undoHistoryEntry(
               change as StateChange<CastMember, keyof CastMember>,
               undoneCastMember
             );

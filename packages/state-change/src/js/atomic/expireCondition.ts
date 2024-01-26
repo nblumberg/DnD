@@ -1,5 +1,11 @@
 import { ActiveCondition, CastMember, castMemberDoSomething } from "creature";
-import { ChangeState, getHistoryHandle } from "./stateChange";
+import {
+  ChangeState,
+  StateChange,
+  applyHistoryEntry,
+  createStateChange,
+  getHistoryHandle,
+} from "./stateChange";
 
 const { pushStateHistory } = getHistoryHandle<CastMember>("CastMember");
 
@@ -21,20 +27,23 @@ export const expireCondition: ChangeState<CastMember> = (
   condition: ActiveCondition
 ) => {
   const actualCondition = findCondition(castMember, condition);
-  pushStateHistory({
-    type: "c-",
-    action: "expireCondition",
-    object: castMember.id,
-    property: "conditions",
-    oldValue: { [actualCondition.id]: actualCondition },
-  });
+  const change = removeConditionChange(castMember, actualCondition);
+  pushStateHistory(change);
   castMemberDoSomething(castMember, `stops being ${actualCondition.condition}`);
-  return {
-    ...castMember,
-    conditions: Object.fromEntries(
-      Object.entries(castMember.conditions).filter(
-        ([id]) => id !== actualCondition.id
-      )
-    ),
-  };
+  return applyHistoryEntry(change, castMember);
 };
+
+export function removeConditionChange(
+  castMember: CastMember,
+  condition: ActiveCondition
+): StateChange<CastMember, "conditions"> {
+  const actualCondition = findCondition(castMember, condition);
+  return createStateChange(
+    castMember,
+    "removeCondition",
+    "conditions",
+    { [actualCondition.id]: actualCondition },
+    undefined,
+    "c-"
+  );
+}

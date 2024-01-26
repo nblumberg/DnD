@@ -1,8 +1,5 @@
-import { CastMember } from "packages/creature/dist/js";
-
-interface Unique extends Record<string, any> {
-  id: string;
-}
+import { CastMember } from "creature";
+import { Unique, getUniqueId } from "../unique";
 
 export interface StateAdd<T extends Unique> extends Unique {
   type: "+";
@@ -130,18 +127,66 @@ function toggleStateChange<T extends Unique, P extends keyof T>(
   }
 }
 
-export function applyStateChange<T extends Unique, P extends keyof T>(
-  change: StateChange<T, P>,
+export function applyHistoryEntry<T extends Unique, E extends StateAdd<T>>(
+  entry: E,
+  object?: T
+): T;
+export function applyHistoryEntry<T extends Unique, E extends StateRemove<T>>(
+  entry: E,
   object: T
-): T {
-  return toggleStateChange("apply", change, object);
+): undefined;
+export function applyHistoryEntry<
+  T extends Unique,
+  E extends StateChange<T, keyof T>,
+>(entry: E, object: T): T;
+export function applyHistoryEntry<
+  T extends Unique,
+  E extends StateChange<T, keyof T>,
+>(entry: E, object: T): T;
+export function applyHistoryEntry<T extends Unique, E extends HistoryEntry<T>>(
+  entry: E,
+  object?: T
+): T | undefined {
+  if (entry.type === "+") {
+    return entry.newValue!;
+  } else if (entry.type === "-") {
+    return undefined;
+  }
+  if (!object) {
+    throw new Error(
+      `Cannot apply state change ${entry.id} (${entry.object}) to missing object`
+    );
+  }
+  return toggleStateChange("apply", entry, object);
 }
 
-export function undoStateChange<T extends Unique, P extends keyof T>(
-  change: StateChange<T, P>,
+export function undoHistoryEntry<T extends Unique>(
+  entry: StateAdd<T>,
   object: T
-): T {
-  return toggleStateChange("undo", change, object);
+): undefined;
+export function undoHistoryEntry<T extends Unique>(
+  entry: StateRemove<T>,
+  object?: T
+): T;
+export function undoHistoryEntry<T extends Unique>(
+  entry: StateChange<T, keyof T>,
+  object: T
+): T;
+export function undoHistoryEntry<T extends Unique>(
+  entry: HistoryEntry<T>,
+  object?: T
+): T | undefined {
+  if (entry.type === "+") {
+    return undefined;
+  } else if (entry.type === "-") {
+    return entry.oldValue!;
+  }
+  if (!object) {
+    throw new Error(
+      `Cannot undo state change ${entry.id} (${entry.object}) from missing object`
+    );
+  }
+  return toggleStateChange("undo", entry, object);
 }
 
 export function undoStateRemove<T extends Unique>(
@@ -175,7 +220,7 @@ export function getObjectState<T extends Unique>(
       case "c":
       case "c+":
       case "c-":
-        object = applyStateChange(change, object);
+        object = applyHistoryEntry(change, object);
         break;
       case "-":
         return undefined;
@@ -200,11 +245,18 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
     return [..._getHistory()];
   }
 
-  function setHistory(newHistory: HistoryEntry<T>[]): void {
+  function setHistory(param: HistoryEntry<T>[] | string): void {
+    let newHistory: HistoryEntry<T>[] =
+      typeof param === "string"
+        ? (JSON.parse(param) as HistoryEntry<T>[])
+        : param;
     histories.set(type, newHistory);
   }
 
-  function pushStateHistory(param: HistoryEntryParam<T>): HistoryEntry<T> {
+  function pushStateHistory(
+    param: HistoryEntryParam<T>,
+    insertIndex?: number
+  ): HistoryEntry<T> {
     const history = _getHistory();
     const entry: HistoryEntry<T> = {
       type: param.type,
@@ -213,26 +265,44 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
       ...param,
       id: `${history.length}`,
     };
-    history.push(entry);
+    if (insertIndex === undefined || insertIndex === -1) {
+      history.push(entry);
+    } else {
+      history.splice(insertIndex, 0, entry);
+    }
     return entry;
   }
 
-  function pushStateAdd(object: T, action: string): StateAdd<T> {
-    return pushStateHistory({
-      type: "+",
-      action,
-      object: object.id,
-      newValue: object,
-    }) as StateAdd<T>;
+  function pushStateAdd(
+    object: T,
+    action: string,
+    insertIndex?: number
+  ): StateAdd<T> {
+    return pushStateHistory(
+      {
+        type: "+",
+        action,
+        object: object.id,
+        newValue: object,
+      },
+      insertIndex
+    ) as StateAdd<T>;
   }
 
-  function pushStateRemove(object: T, action: string): StateRemove<T> {
-    return pushStateHistory({
-      type: "-",
-      action,
-      object: object.id,
-      newValue: object,
-    }) as StateRemove<T>;
+  function pushStateRemove(
+    object: T,
+    action: string,
+    insertIndex?: number
+  ): StateRemove<T> {
+    return pushStateHistory(
+      {
+        type: "-",
+        action,
+        object: object.id,
+        newValue: object,
+      },
+      insertIndex
+    ) as StateRemove<T>;
   }
 
   function pushStateChange(
@@ -240,26 +310,43 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
     action: string,
     property: keyof T,
     oldValue?: T[keyof T],
-    newValue?: T[keyof T]
+    newValue?: T[keyof T],
+    insertIndex?: number
   ): StateChange<T, keyof T> {
-    return pushStateHistory({
-      type: "c",
-      action,
-      object: object.id,
-      property,
-      oldValue,
-      newValue,
-    }) as StateChange<T, keyof T>;
+    return pushStateHistory(
+      {
+        type: "c",
+        action,
+        object: object.id,
+        property,
+        oldValue,
+        newValue,
+      },
+      insertIndex
+    ) as StateChange<T, keyof T>;
   }
 
-  function popStateHistory(entry: HistoryEntry<T>): void {
-    const { id } = entry;
+  function findStateHistoryIndex(entry: HistoryEntry<T> | string): number {
+    const id = typeof entry === "string" ? entry : entry.id;
     const history = _getHistory();
-    const index = history.findIndex((change) => change.id === id);
-    if (index === -1) {
+    return history.findIndex((change) => change.id === id);
+  }
+
+  function popStateHistory(
+    entry: HistoryEntry<T> | string,
+    replacements?: HistoryEntry<T>[]
+  ): void {
+    const history = _getHistory();
+    const index = findStateHistoryIndex(entry);
+    if (replacements) {
+      if (index === -1) {
+        history.push(...replacements);
+      } else {
+        history.splice(index, 1, ...replacements);
+      }
+    } else if (index === -1) {
       return;
     }
-    history.splice(index, 1);
   }
 
   return {
@@ -270,5 +357,50 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
     pushStateRemove,
     pushStateChange,
     popStateHistory,
+  };
+}
+
+export function createStateAdd<T extends Unique>(
+  object: T,
+  action: string
+): StateAdd<T> {
+  return {
+    id: getUniqueId(),
+    type: "+",
+    action,
+    object: object.id,
+    newValue: object,
+  };
+}
+
+export function createStateRemove<T extends Unique>(
+  object: T,
+  action: string
+): StateRemove<T> {
+  return {
+    id: getUniqueId(),
+    type: "-",
+    action,
+    object: object.id,
+    oldValue: object,
+  };
+}
+
+export function createStateChange<T extends Unique, P extends keyof T>(
+  object: T,
+  action: string,
+  property: P,
+  oldValue?: T[P],
+  newValue?: T[P],
+  type: "c" | "c+" | "c-" = "c"
+): StateChange<T, P> {
+  return {
+    id: getUniqueId(),
+    type,
+    action,
+    object: object.id,
+    property,
+    oldValue,
+    newValue,
   };
 }

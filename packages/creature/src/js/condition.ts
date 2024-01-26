@@ -1,3 +1,5 @@
+import { SavingThrow } from "./savingThrow";
+
 export enum Condition {
   BLINDED = "blinded",
   CHARMED = "charmed",
@@ -24,7 +26,7 @@ export enum Condition {
 export interface ActiveCondition {
   id: string;
   condition: Condition;
-  onSave?: boolean;
+  onSave?: SavingThrow;
   duration?: number;
   onTurnStart?: string; // CastMember.id
   onTurnEnd?: string; // CastMember.id

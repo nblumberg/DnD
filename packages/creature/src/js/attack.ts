@@ -1,5 +1,6 @@
-import { Action, ActionParams } from ".";
+import { Action, ActionParams, ActiveCondition, Condition } from ".";
 import { actionParamsToAction } from "./action";
+import { SavingThrow } from "./savingThrow";
 
 export const DamageTypes = [
   "bludgeoning",
@@ -22,6 +23,20 @@ export type DamageType = (typeof DamageTypes)[number];
 
 export type AttackType = "melee" | "ranged" | "melee or ranged";
 
+export interface Damage {
+  amount: string;
+  type: DamageType;
+}
+
+export interface AttackEffect
+  extends Partial<SavingThrow>,
+    Partial<ActiveCondition> {
+  description: string;
+  condition?: Condition;
+  onTurnStart?: "attacker" | "defender";
+  onTurnEnd?: "attacker" | "defender";
+}
+
 export interface Attack extends Action {
   type: AttackType;
   weapon?: true;
@@ -32,9 +47,8 @@ export interface Attack extends Action {
     range?: number | [number, number];
   };
   onHit?: {
-    amount: string;
-    type: DamageType;
-    effect?: string;
+    damage: Damage[];
+    effects?: AttackEffect[];
   };
 }
 

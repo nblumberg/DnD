@@ -1,5 +1,10 @@
 import { CastMember, castMemberDoSomething } from "creature";
-import { AddToState, getHistoryHandle } from "./stateChange";
+import {
+  AddToState,
+  StateAdd,
+  createStateAdd,
+  getHistoryHandle,
+} from "./stateChange";
 
 const { pushStateAdd } = getHistoryHandle<CastMember>("CastMember");
 
@@ -8,3 +13,9 @@ export const addCastMember: AddToState<CastMember> = (castMember) => {
   pushStateAdd(castMember, "addCastMember");
   return { ...castMember };
 };
+
+export function addCastMemberChange(
+  castMember: CastMember
+): StateAdd<CastMember> {
+  return createStateAdd(castMember, "addCastMember");
+}

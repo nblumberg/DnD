@@ -11,6 +11,7 @@ interface CastMemberNonOptional {
   hpCurrent: number;
   hpTemp: number;
   initiativeOrder: number;
+  myTurn: boolean;
 }
 
 export interface CastMemberParams
@@ -39,6 +40,7 @@ export function castMemberParamsToCastMember(
     conditions: params.conditions ?? {},
     delayInitiative: !!params.delayInitiative,
     initiativeOrder: params.initiativeOrder ?? 1,
+    myTurn: !!params.myTurn,
     unique: !!params.unique,
   };
 }

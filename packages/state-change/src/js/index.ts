@@ -1,31 +1,31 @@
-import { CastMember } from "packages/creature/dist/js";
-import { addCastMember } from "./addCastMember";
-import { addCondition } from "./addCondition";
-import { damageCastMember, damageCastMemberTempHp } from "./damageCastMember";
-import { delayInitiative } from "./delayInitiative";
-import { expireCondition } from "./expireCondition";
-import { giveCastMemberTemporaryHitPoints } from "./giveCastMemberTemporaryHitPoints";
-import { healCastMember } from "./healCastMember";
-import { nameCastMember } from "./nameCastMember";
-import { removeCastMember } from "./removeCastMember";
-import { setInitiative } from "./setInitiative";
-import { AddToState, ChangeState, RemoveFromState } from "./stateChange";
-import { tickCondition } from "./tickCondition";
-
-export const stateChanges: Record<
-  string,
-  AddToState<CastMember> | RemoveFromState<CastMember> | ChangeState<CastMember>
-> = {
-  addCastMember,
-  addCondition,
+export { addCastMember } from "./atomic/addCastMember";
+export { addCondition } from "./atomic/addCondition";
+export {
   damageCastMember,
   damageCastMemberTempHp,
-  delayInitiative,
-  expireCondition,
-  giveCastMemberTemporaryHitPoints,
-  healCastMember,
-  nameCastMember,
-  removeCastMember,
-  setInitiative,
+} from "./atomic/damageCastMember";
+export { delayInitiative } from "./atomic/delayInitiative";
+export { endTurn } from "./atomic/endTurn";
+export { expireCondition } from "./atomic/expireCondition";
+export { giveCastMemberTemporaryHitPoints } from "./atomic/giveCastMemberTemporaryHitPoints";
+export { healCastMember } from "./atomic/healCastMember";
+export { nameCastMember } from "./atomic/nameCastMember";
+export { removeCastMember } from "./atomic/removeCastMember";
+export { setInitiative } from "./atomic/setInitiative";
+export { startTurn } from "./atomic/startTurn";
+export {
+  getHistoryHandle,
+  getObjectState,
+  undoHistoryEntry as undoStateChange,
+} from "./atomic/stateChange";
+export type {
+  HistoryEntry,
+  StateAdd,
+  StateChange,
+  StateRemove,
+} from "./atomic/stateChange";
+export {
+  endTurnCondition,
+  startTurnCondition,
   tickCondition,
-};
+} from "./atomic/tickCondition";

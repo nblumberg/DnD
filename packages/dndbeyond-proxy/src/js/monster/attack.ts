@@ -1,6 +1,6 @@
+import { Action, Attack, AttackType, DamageType } from "creature";
 import { getElementText, getRemainingText } from "../dom";
 import { parseRegExpGroups } from "../utils";
-import { Action, AttackType, DamageType, OnHit } from "./types";
 
 const attackTypeRegExp =
   /(?<attackMode>Melee or Ranged|Melee|Ranged)\s+(?<attackMethod>Weapon|Spell)?\s*Attack/;
@@ -144,26 +144,33 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
   // // Trim trailing period
   // target = target.substring(0, target.length - 1);
 
-  let onHit: OnHit | undefined;
-  const damageElement = entry.querySelector('[data-rolltype="damage"]');
-  if (damageElement) {
+  let onHit: Attack["onHit"] = {
+    damage: [],
+    effects: [],
+  };
+  const damageElements = entry.querySelectorAll('[data-rolltype="damage"]');
+  for (const damageElement of damageElements) {
     const amount = damageElement.getAttribute("data-dicenotation") || "";
     const damageType = damageElement.getAttribute("data-rolldamagetype");
 
-    onHit = {
+    onHit.damage.push({
       amount,
       type: damageType as DamageType,
-    };
+    });
 
     let effect = getRemainingText(damageElement);
     [, effect = ""] = effect.split(`${damageType} damage. `);
     effect = effect.trim();
     if (effect) {
-      onHit.effect = effect;
+      // TODO: parse conditions, duration, saving throws, etc.
+      onHit.effects!.push({
+        description: effect,
+      });
     }
   }
 
-  const attack: Action["attack"] = {
+  const attack: Attack = {
+    name: nameElement.textContent?.trim() ?? "",
     type,
     toHit: {
       modifier,

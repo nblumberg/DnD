@@ -2,7 +2,15 @@ export type { Action, ActionParams } from "./action";
 export type { Actor, ActorParams } from "./actor";
 export { AlignmentParam } from "./alignment";
 export { DamageTypes } from "./attack";
-export type { Attack, AttackType, DamageType, Effect, Effects } from "./attack";
+export type {
+  Attack,
+  AttackEffect,
+  AttackType,
+  Damage,
+  DamageType,
+  Effect,
+  Effects,
+} from "./attack";
 export type { Auditioner } from "./auditioner";
 export { castMemberDoSomething } from "./castMember";
 export type { CastMember, CastMemberParams } from "./castMember";

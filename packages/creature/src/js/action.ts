@@ -1,20 +1,4 @@
-import { AttackType, DamageType } from "./attack";
-
-interface Attack {
-  type: AttackType;
-  weapon?: true;
-  toHit: {
-    modifier: number | "∞";
-    target?: string;
-    reach?: number | "∞";
-    range?: number | [number, number];
-  };
-  onHit?: {
-    amount: string;
-    type: DamageType;
-    effect?: string;
-  };
-}
+import { Attack } from "./attack";
 
 interface Cost {
   available: boolean;

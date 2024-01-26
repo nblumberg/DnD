@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { getHistoryHandle, getObjectState } from "../src/js/stateChange";
+import { getHistoryHandle, getObjectState } from "../src/js/atomic/stateChange";
 import { beforeOnce } from "./beforeOnce";
 
 const originalObject = {

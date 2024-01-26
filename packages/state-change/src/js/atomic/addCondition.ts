@@ -1,19 +1,18 @@
 import { ActiveCondition, CastMember, castMemberDoSomething } from "creature";
+import { getUniqueId } from "../unique";
 import {
   ChangeState,
   StateChange,
-  applyStateChange,
+  applyHistoryEntry,
+  createStateChange,
   getHistoryHandle,
 } from "./stateChange";
 
 const { pushStateHistory } = getHistoryHandle<CastMember>("CastMember");
 
-let nextConditionId = 1;
-
 export const addCondition: ChangeState<CastMember> = (
   castMember,
-  condition: Omit<ActiveCondition, "id">,
-  testingForceId?: string
+  condition: Omit<ActiveCondition, "id">
 ) => {
   if (castMember.conditionImmunities.includes(condition.condition)) {
     castMemberDoSomething(
@@ -22,24 +21,28 @@ export const addCondition: ChangeState<CastMember> = (
     );
     return castMember;
   }
+  castMemberDoSomething(castMember, `starts being ${condition.condition}`);
+  const change = addConditionChange(castMember, condition);
+  pushStateHistory(change);
+  return applyHistoryEntry(change, castMember);
+};
+
+export function addConditionChange(
+  castMember: CastMember,
+  condition: Omit<ActiveCondition, "id">
+): StateChange<CastMember, "conditions"> {
   const existingConditions = Object.keys(castMember.conditions);
-  const id = testingForceId
-    ? (condition as ActiveCondition).id
-    : `condition_${condition.condition}_${nextConditionId++}`;
+  const id = getUniqueId();
   if (existingConditions.includes(id)) {
     throw new Error(`Condition ${id} already exists on ${castMember.id}`);
   }
   const fullCondition: ActiveCondition = { ...condition, id };
-  castMemberDoSomething(castMember, `starts being ${condition.condition}`);
-  const change = pushStateHistory({
-    type: "c+",
-    action: "addCondition",
-    object: castMember.id,
-    property: "conditions",
-    newValue: { [id]: fullCondition },
-  });
-  return applyStateChange(
-    change as StateChange<CastMember, "conditions">,
-    castMember
+  return createStateChange(
+    castMember,
+    "addCondition",
+    "conditions",
+    undefined,
+    { [id]: fullCondition },
+    "c+"
   );
-};
+}

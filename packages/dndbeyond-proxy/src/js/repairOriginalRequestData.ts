@@ -1,5 +1,5 @@
+import { CreatureParams } from "creature";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
-import { CreatureParams } from "packages/creature/dist/js";
 import { basename, join } from "path";
 import { checkMemoryUsage } from "./memory";
 

@@ -11,8 +11,12 @@ function appendContinuedDescription(
   priorAction: ActionParams,
   text: string
 ): void {
-  if (priorAction.attack?.onHit?.effect) {
-    priorAction.attack.onHit.effect = `${priorAction.attack.onHit.effect}\n${text}`;
+  if (priorAction.attack?.onHit?.effects?.length) {
+    const lastEffect =
+      priorAction.attack.onHit.effects[
+        priorAction.attack.onHit.effects.length - 1
+      ];
+    lastEffect.description = `${lastEffect.description}\n${text}`;
   } else {
     priorAction.description = `${priorAction.description ?? ""}\n${text}`;
   }
