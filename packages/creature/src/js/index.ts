@@ -16,5 +16,5 @@ export { castMemberDoSomething } from "./castMember";
 export type { CastMember, CastMemberParams } from "./castMember";
 export { Condition } from "./condition";
 export type { ActiveCondition } from "./condition";
-export type { Creature, CreatureParams } from "./creature";
+export type { Creature, CreatureParams, CreatureType } from "./creature";
 export { Size } from "./size";

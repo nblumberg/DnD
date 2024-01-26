@@ -9,6 +9,24 @@ import { Size } from "./size";
 import { Skills, SkillsParams, createSkills } from "./skill";
 import { Spells } from "./spell";
 
+const CreatureTypes = [
+  "aberration",
+  "beast",
+  "celestial",
+  "construct",
+  "dragon",
+  "elemental",
+  "fey",
+  "fiend",
+  "giant",
+  "humanoid",
+  "monstrosity",
+  "ooze",
+  "plant",
+  "undead",
+] as const;
+export type CreatureType = (typeof CreatureTypes)[number];
+
 type Speeds = Record<string, number | { rate: number; precision: string }>;
 
 interface Senses {
@@ -42,7 +60,8 @@ interface CreatureBase extends Abilities {
   speeds: Speeds;
   source: string;
   subtype?: string;
-  type: string;
+  swarm?: Size;
+  type: CreatureType;
   url: string;
 }
 

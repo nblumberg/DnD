@@ -136,7 +136,7 @@ function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
   }
 
   try {
-    const { size, type, subtype, alignment } = getMeta(statBlock);
+    const { size, type, subtype, alignment, swarm } = getMeta(statBlock);
 
     const { ac, hp, hd, speeds } = getAttributes(statBlock);
 
@@ -228,6 +228,7 @@ function parseMonsterHTML(rawHTML: string, name: string, url: string): void {
       features,
       actions,
       spells,
+      swarm,
     };
 
     const filePath = join(baseFilePath, `${name}.json`);
