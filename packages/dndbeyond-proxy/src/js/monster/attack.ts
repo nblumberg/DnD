@@ -102,7 +102,10 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
     toHitText,
     true
   );
-  if (!nearRangeText && type === "ranged") {
+  if (
+    (!reachText && type === "melee") ||
+    (!nearRangeText && type === "ranged")
+  ) {
     const name = nameElement.textContent?.trim() ?? "";
     if (name === "Drop." || name === "Dropped Rock.") {
       // See Piercer, https://www.dndbeyond.com/monsters/17191-piercer Drop, Winged Kobold, https://www.dndbeyond.com/monsters/17210-winged-kobold, Dropped Rock
@@ -118,7 +121,7 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
   }
   const nearRange = nearRangeText ? parseInt(nearRangeText, 10) : undefined;
   const farRange = farRangeText ? parseInt(farRangeText, 10) : undefined;
-  if (!reach && !nearRange) {
+  if (reach === undefined && !nearRange) {
     throw new Error(`Monster attack lacks a reach or a range`);
   }
   const { target } = parseRegExpGroups("targetRegExp", targetRegExp, toHitText);
@@ -144,7 +147,7 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
   // // Trim trailing period
   // target = target.substring(0, target.length - 1);
 
-  let onHit: Attack["onHit"] = {
+  const onHit: Attack["onHit"] = {
     damage: [],
     effects: [],
   };
@@ -181,7 +184,7 @@ export function getAttack(entry: Element): Action["attack"] | undefined {
   if (attackMethod === "Weapon") {
     attack.weapon = true;
   }
-  if (reach) {
+  if (reach !== undefined) {
     attack.toHit.reach = reach;
   }
   if (farRange) {
