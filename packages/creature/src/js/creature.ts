@@ -9,7 +9,7 @@ import { Size } from "./size";
 import { Skills, SkillsParams, createSkills } from "./skill";
 import { Spells } from "./spell";
 
-const CreatureTypes = [
+export const CreatureTypes = [
   "aberration",
   "beast",
   "celestial",

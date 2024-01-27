@@ -1,12 +1,12 @@
 {
   "name": "dndbeyond-proxy",
   "version": "1.0.0",
-  "description": "Proxy requests to dndbeyond",
+  "description": "Parse data from dndbeyond",
   "main": "./dist/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
-    "build": "yarn build-webpack",
+    "build": "yarn build-tsc ",
     "build-tsc": "yarn clean && tsc --build --force --verbose",
     "build-webpack": "yarn clean && webpack ",
     "start": "node --expose-gc ./dist/js/index.js",
@@ -21,11 +21,7 @@
     "canvas": "^2.11.2",
     "chrome-cookies-secure": "^2.1.1",
     "creature": "*",
-    "express": "^4.18.2",
     "jsdom": "^22.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "styled-components": "^6.1.0",
     "utf-8-validate": "^6.0.3",
     "webpack-node-externals": "^3.0.0"
   },
@@ -47,9 +43,6 @@
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
-    "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1",
     "workbox-webpack-plugin": "^7.0.0"
   }
 }
