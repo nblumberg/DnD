@@ -155,6 +155,7 @@ export interface Spell {
   description: string;
 
   damage?: Damage[];
+  cantripDamageIncrease?: Damage[];
   conditions?: SpellCondition[];
 
   unaffected?: Array<CreatureType | "object">[];

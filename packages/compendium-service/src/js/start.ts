@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import { attachCharacterEndpoints } from "./characters";
 import { attachMonsterEndpoints } from "./monsters";
+import { attachSpellEndpoints } from "./spells";
 
 const app = express();
 const port = 666;
@@ -13,6 +14,7 @@ app.use(cors());
 
 attachCharacterEndpoints(app);
 attachMonsterEndpoints(app);
+attachSpellEndpoints(app);
 
 // Start server
 app.listen(port, () => {

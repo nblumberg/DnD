@@ -31,6 +31,8 @@ function getField(spellDetails: HTMLElement, selector: string): string {
 const materialComponentsRegExp = /\((?<materials>[^)]+)\)/;
 const materialGPRegExp = /worth\s+at\s+least\s+(?<gp>[\d,]+)\s+gp/;
 const damageRegExp = /(?<amount>\d+d\d+([-+]\d+)?)\s+(?<type>\w+)\s+damage/g;
+const cantripDamageIncreaseRegExp =
+  /5th level \((?<lvl5>\d+d\d+([-+]\d+)?)\),\s+11th level \((?<lvl11>\d+d\d+([-+]\d+)?)\),\s+and\s+17th level \((?<lvl17>\d+d\d+([-+]\d+)?)\)/g;
 
 export function parseSpellHTML(
   rawHTML: string,
@@ -247,6 +249,22 @@ export function parseSpellHTML(
       });
     }
 
+    let cantripDamageIncrease: Spell["cantripDamageIncrease"];
+    if (
+      level === 0 &&
+      description.includes("This spell’s damage increases by")
+    ) {
+      const { lvl5, lvl11, lvl17 } = parseRegExpGroups(
+        "cantripDamageIncreaseRegExp",
+        cantripDamageIncreaseRegExp,
+        description
+      );
+      cantripDamageIncrease = [lvl5, lvl11, lvl17].map((amount) => ({
+        amount,
+        type: damage![0].type,
+      }));
+    }
+
     let conditions: Spell["conditions"];
     Object.values(Condition).forEach((condition) => {
       const element = spellDetails.querySelector(
@@ -333,6 +351,7 @@ export function parseSpellHTML(
       description,
 
       damage,
+      cantripDamageIncrease,
       unaffected,
 
       conditions,

@@ -4,7 +4,6 @@ import { parseHTML } from "./parseHtml";
 initAuth().then(async () => {
   initAuth();
   // listEntries("spells", 1);
-  // parseHTML("spells");
   parseHTML("spells");
   // trimHtml("Two-Headed Crocodile.html");
   // listAllFieldValues("type");
