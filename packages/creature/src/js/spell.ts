@@ -1,4 +1,4 @@
-import { CreatureType, Damage } from ".";
+import { AttackEffect, CreatureType, Damage } from ".";
 import { SavingThrow } from "./savingThrow";
 
 type SpellLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -117,6 +117,11 @@ export const SpellShapes = [
 ] as const;
 export type SpellShape = (typeof SpellShapes)[number];
 
+type SpellCondition = Omit<
+  AttackEffect,
+  keyof SavingThrow | "id" | "description" | "source"
+>;
+
 export interface Spell {
   id: string;
   name: string;
@@ -150,7 +155,11 @@ export interface Spell {
   description: string;
 
   damage?: Damage[];
+  conditions?: SpellCondition[];
+
   unaffected?: Array<CreatureType | "object">[];
+
+  atHigherLevels?: string;
 
   classes: SpellClass[];
   tags: string[];

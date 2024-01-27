@@ -28,6 +28,7 @@ export interface ActiveCondition {
   condition: Condition;
   onSave?: SavingThrow;
   duration?: number;
+  onDamage?: true;
   onTurnStart?: string; // CastMember.id
   onTurnEnd?: string; // CastMember.id
   source?: string; // CastMember.id

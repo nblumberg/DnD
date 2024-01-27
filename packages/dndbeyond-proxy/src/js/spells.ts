@@ -1,6 +1,7 @@
 import {
   AbilitiesList,
   AbilityType,
+  Condition,
   CreatureType,
   CreatureTypes,
   DamageType,
@@ -12,7 +13,7 @@ import {
 import { writeFileSync } from "fs";
 import { JSDOM } from "jsdom";
 import { join } from "path";
-import { getElementText } from "./dom";
+import { getElementText, getRemainingText } from "./dom";
 import { FatalParseError, NotPurchasedError, ParseError } from "./error";
 import { fileRelativeToData } from "./root";
 import { parseRegExpGroups } from "./utils";
@@ -192,9 +193,20 @@ export function parseSpellHTML(
       }
     }
 
+    let atHigherLevels: string | undefined;
+    const atHigherLevelsElement = Array.from(
+      spellDetails.querySelectorAll(".more-info-content strong")
+    ).find((element) =>
+      getElementText(element).trim().includes("At Higher Levels")
+    );
+    if (atHigherLevelsElement) {
+      atHigherLevels = getRemainingText(atHigherLevelsElement);
+    }
+
     const materialComponentsElement =
       spellDetails.querySelector(".components-blurb")?.outerHTML;
     const description = getField(spellDetails, ".more-info-content")
+      .replace(atHigherLevelsElement?.parentElement?.outerHTML ?? "", "")
       .replace(materialComponentsElement ?? "", "")
       .trim();
 
@@ -235,13 +247,54 @@ export function parseSpellHTML(
       });
     }
 
+    let conditions: Spell["conditions"];
+    Object.values(Condition).forEach((condition) => {
+      const element = spellDetails.querySelector(
+        ".more-info-content .condition-tooltip"
+      );
+      if (!element) {
+        return;
+      }
+      if (getElementText(element).trim() === condition) {
+        if (!conditions) {
+          conditions = [];
+        }
+        const text = getRemainingText(element).toLowerCase();
+        const entry: (typeof conditions)[number] = {
+          condition,
+        };
+        conditions.push(entry);
+        if (
+          (text.includes("until the spell ends") ||
+            text.includes("for the duration") ||
+            text.includes("for the spell's duration")) &&
+          typeof duration === "number"
+        ) {
+          entry.duration = duration;
+        }
+        if (text.includes("at the end of each of its turns")) {
+          entry.onTurnEnd = "defender";
+        }
+        if (
+          text.includes("harms the target") ||
+          text.includes("target is attacked")
+        ) {
+          entry.onDamage = true;
+        }
+        // TODO: see Antipathy/Sympathy for recurring saving throws
+      }
+    });
+
     let unaffected: Spell["unaffected"];
-    if (description.includes("aren’t affected")) {
+    const unaffectedPhrase = ["aren’t affected", "immune to this effect"].find(
+      (phrase) => description.includes(phrase)
+    );
+    if (unaffectedPhrase) {
       unaffected = [];
       // Get the start of the sentence
       const targets =
         description
-          .split("aren’t affected")[0]
+          .split(unaffectedPhrase)[0]
           .split(".")
           .pop()
           ?.toLowerCase() ?? "";
@@ -281,6 +334,10 @@ export function parseSpellHTML(
 
       damage,
       unaffected,
+
+      conditions,
+
+      atHigherLevels,
 
       classes,
       tags,
