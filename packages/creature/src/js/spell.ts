@@ -1,7 +1,7 @@
-import { AttackEffect, CreatureType, Damage } from ".";
+import { AbilityType, AttackEffect, CreatureType, Damage } from ".";
 import { SavingThrow } from "./savingThrow";
 
-type SpellLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type SpellLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 interface PreparedSpellsByLevel {
   slots: number | "∞";
   spells: string[];
@@ -9,7 +9,7 @@ interface PreparedSpellsByLevel {
 type InnateSpells = Record<string, number | "∞">;
 export type Spells = Record<SpellLevel, PreparedSpellsByLevel> & {
   innate: InnateSpells;
-};
+} & { casterLevel: number; ability: AbilityType; attack: number; dc: number };
 
 type SpellSchool =
   | "abjuration"

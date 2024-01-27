@@ -8,7 +8,7 @@ import { getActions } from "./monster/actions";
 import { getAttributes } from "./monster/attributes";
 import { getImage } from "./monster/image";
 import { getMeta } from "./monster/meta";
-import { Spells, getSpells } from "./monster/spells";
+import { getSpells } from "./monster/spells";
 import { getTidbits } from "./monster/tidbits";
 import { fileRelativeToData } from "./root";
 
@@ -103,7 +103,7 @@ export function parseMonsterHTML(
 
     const { features, ...actions } = getActions(monsterDetails);
 
-    const spells: Spells | undefined = getSpells(monsterDetails);
+    const spells = getSpells(monsterDetails, features, actions);
 
     const creature: CreatureParams = {
       name,

@@ -22,4 +22,11 @@ export { CreatureTypes } from "./creature";
 export type { Creature, CreatureParams, CreatureType } from "./creature";
 export { Size } from "./size";
 export { CastingTimes, SpellRanges, SpellShapes } from "./spell";
-export type { CastingTimePeriod, Spell, SpellRange, SpellShape } from "./spell";
+export type {
+  CastingTimePeriod,
+  Spell,
+  SpellLevel,
+  SpellRange,
+  SpellShape,
+  Spells,
+} from "./spell";

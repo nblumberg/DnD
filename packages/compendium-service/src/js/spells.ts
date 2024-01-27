@@ -1,6 +1,6 @@
 import { Spell } from "creature";
 import { Express, Request, Response } from "express";
-import { readFileSync, readdirSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import { basename, join } from "path";
 import { dataPath } from "./constants";
 
@@ -16,7 +16,20 @@ function listSpells(_req: Request, res: Response): void {
 
 function getSpell(req: Request, res: Response): void {
   const { name } = req.params;
-  const file = join(spellPath, `${name}.json`);
+  let file = join(spellPath, `${name}.json`);
+  if (!existsSync(file)) {
+    // Support case-insensitive requests
+    const files = readdirSync(spellPath);
+    [file] = files
+      .filter(
+        (file) =>
+          !file.startsWith(".") &&
+          file.endsWith(".json") &&
+          file.toLowerCase() === name.toLowerCase()
+      )
+      .map((file) => basename(file, ".json"));
+  }
+
   const content = readFileSync(file, "utf8");
   const spell: Spell = JSON.parse(content);
   res.send(spell);
