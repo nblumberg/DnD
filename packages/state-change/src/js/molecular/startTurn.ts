@@ -1,11 +1,16 @@
-import { CastMember } from "creature";
-import { StateChange } from "..";
+import { CastMember, idCastMember } from "creature";
 import { delayInitiativeChange } from "../atomic/delayInitiative";
 import { endTurnChange } from "../atomic/endTurn";
 import { setInitiativeChange } from "../atomic/setInitiative";
 import { startTurnChange } from "../atomic/startTurn";
+import { StateChange } from "../atomic/stateChange";
 import { tickConditionChange } from "../atomic/tickCondition";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import {
+  ChangeEvent,
+  IChangeEvent,
+  getCastMembers,
+  registerType,
+} from "./event";
 
 function makeChanges(
   action: string,
@@ -94,16 +99,17 @@ export class StartTurn extends ChangeEvent {
     CastMember,
     keyof CastMember
   >[] {
-    return makeChanges(
-      "start turn",
-      this.getCastMembers(),
-      this.getCastMember()
-    );
+    return makeChanges("start turn", getCastMembers(), this.getCastMember());
   }
 
   change(): CastMember | undefined {
     console.warn("Can't change start turn");
     return this.getCastMember();
+  }
+
+  override display(): string {
+    const castMember = this.getCastMember();
+    return `${idCastMember(castMember)} starts their turn`;
   }
 }
 
@@ -129,7 +135,7 @@ export class TriggerReadiedAction extends ChangeEvent {
   >[] {
     return makeChanges(
       "trigger readied action",
-      this.getCastMembers(),
+      getCastMembers(),
       this.getCastMember()
     );
   }
@@ -137,6 +143,13 @@ export class TriggerReadiedAction extends ChangeEvent {
   change(initiativeOrder: number): CastMember | undefined {
     this.initiativeOrder = initiativeOrder;
     return this.executeChanges();
+  }
+
+  override display(): string {
+    const castMember = this.getCastMember();
+    return `${idCastMember(
+      castMember
+    )} triggers their readied action and starts their turn`;
   }
 }
 
@@ -162,7 +175,7 @@ export class StopDelayedAction extends ChangeEvent {
   >[] {
     return makeChanges(
       "stop delayed action",
-      this.getCastMembers(),
+      getCastMembers(),
       this.getCastMember(),
       this.initiativeOrder
     );
@@ -171,6 +184,13 @@ export class StopDelayedAction extends ChangeEvent {
   change(initiativeOrder: number): CastMember | undefined {
     this.initiativeOrder = initiativeOrder;
     return this.executeChanges();
+  }
+
+  override display(): string {
+    const castMember = this.getCastMember();
+    return `${idCastMember(
+      castMember
+    )} stops delaying their action and starts their turn`;
   }
 }
 

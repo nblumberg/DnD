@@ -1,4 +1,4 @@
-import { CastMember, CastMemberRaw } from "creature";
+import { CastMember } from "creature";
 import { useEffect, useState } from "react";
 import { setLog } from "roll";
 import { awaitSocket, useSocket } from "../services/sockets";
@@ -8,11 +8,9 @@ setLog(() => {});
 let cachedCastMembers: CastMember[] = [];
 
 awaitSocket().then((io) => {
-  io.on("castMembers", (castMembersRaw: CastMemberRaw[]) => {
+  io.on("castMembers", (castMembers: CastMember[]) => {
     console.log("Cast members changed");
-    cachedCastMembers = castMembersRaw.map(
-      (castMemberRaw) => new CastMember(castMemberRaw)
-    );
+    cachedCastMembers = castMembers;
   });
 });
 
@@ -25,10 +23,7 @@ export function useCastMembers(): CastMember[] {
     if (!io) {
       return;
     }
-    io.on("castMembers", (castMembersRaw: CastMemberRaw[]) => {
-      const newCastMembers = castMembersRaw.map(
-        (castMemberRaw) => new CastMember(castMemberRaw)
-      );
+    io.on("castMembers", (newCastMembers: CastMember[]): void => {
       setCastMembers(newCastMembers);
     });
     () => {

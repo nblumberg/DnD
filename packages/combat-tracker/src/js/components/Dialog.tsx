@@ -65,6 +65,7 @@ const DialogBody = styled.form<{ $direction: "column" | "row" }>`
   flex-direction: ${({ $direction }) => $direction};
   flex-grow: 1;
   justify-content: space-between;
+  overflow-y: scroll;
   padding: 1em;
 `;
 

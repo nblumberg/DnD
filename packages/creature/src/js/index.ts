@@ -14,17 +14,23 @@ export type {
   Effects,
 } from "./attack";
 export type { Auditioner } from "./auditioner";
-export { castMemberDoSomething } from "./castMember";
+export {
+  castMemberDoSomething,
+  castMemberParamsToCastMember,
+  idCastMember,
+} from "./castMember";
 export type { CastMember, CastMemberParams } from "./castMember";
 export { Condition } from "./condition";
 export type { ActiveCondition } from "./condition";
 export { CreatureTypes } from "./creature";
 export type { Creature, CreatureParams, CreatureType } from "./creature";
+export type { SavingThrow } from "./savingThrow";
 export { Size } from "./size";
-export { CastingTimes, SpellRanges, SpellShapes } from "./spell";
+export { CastingTimes, SpellLevels, SpellRanges, SpellShapes } from "./spell";
 export type {
   CastingTimePeriod,
   Spell,
+  SpellEffect,
   SpellLevel,
   SpellRange,
   SpellShape,

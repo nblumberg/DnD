@@ -1,8 +1,9 @@
-import { CastMember } from "creature";
+import { CastMember, idCastMember } from "creature";
 import { Roll, RollHistory } from "roll";
-import { StateChange } from "..";
 import { delayInitiativeChange } from "../atomic/delayInitiative";
 import { setInitiativeChange } from "../atomic/setInitiative";
+import { StateChange } from "../atomic/stateChange";
+import { createChangeable } from "../util/changeable";
 import { ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class RollInitiative extends ChangeEvent {
@@ -45,6 +46,32 @@ export class RollInitiative extends ChangeEvent {
   change(roll: RollHistory): CastMember | undefined {
     this.roll = roll;
     return this.executeChanges();
+  }
+
+  override display(html = false): string {
+    const castMember = this.getCastMember();
+    const roll = new Roll({
+      dieCount: 1,
+      dieSides: 20,
+      extra: castMember.initiative,
+    });
+    roll.add(this.roll.total, this.roll.dice);
+    const prefix = `${idCastMember(castMember)} rolls `;
+    const suffix = ` for initiative`;
+    if (html) {
+      return `${prefix}${createChangeable({
+        attributes: {
+          "data-type": "Roll",
+          "data-roll": roll.toString(),
+          title: roll.breakdown(),
+        },
+        innerText: `${this.roll.total}`,
+      })}${suffix}`;
+    } else {
+      return `${idCastMember(castMember)} rolls ${
+        this.roll.total
+      } (${roll.breakdown()}) for initiative`;
+    }
   }
 }
 

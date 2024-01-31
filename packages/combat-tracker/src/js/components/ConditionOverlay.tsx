@@ -69,7 +69,7 @@ const Icons: Record<Condition | DamageType | Effect, string> = {
 
 function ChooseCondition({ castMember }: { castMember: CastMember }) {
   const { conditions } = castMember;
-  const active = conditions.map(
+  const active = Object.values(conditions).map(
     ({ condition }) => condition as keyof typeof Icons
   );
 
@@ -140,14 +140,15 @@ export function ConditionOverlay({ castMember }: { castMember: CastMember }) {
 
   const removeCondition = (event: SyntheticEvent) => {
     const { target } = event;
-    const condition = (target as HTMLElement).title.toLowerCase() as Condition;
+    const condition = (target as HTMLElement).id;
     io.emit("removeCondition", castMember.id, condition);
   };
 
   const { conditions } = castMember;
-  const icons = conditions.map(({ condition }) => (
+  const icons = Object.values(conditions).map(({ id, condition }) => (
     <ConditionIcon
-      key={condition}
+      key={id}
+      id={id}
       title={`${condition.charAt(0).toUpperCase()}${condition.substring(1)}`}
       onClick={removeCondition}
     >

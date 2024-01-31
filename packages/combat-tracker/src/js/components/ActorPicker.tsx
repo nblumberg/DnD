@@ -261,7 +261,8 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
 
   const submit = async () => {
     const toBeCast = auditioners.filter(
-      (auditioner) => !(auditioner instanceof CastMember)
+      (auditioner) =>
+        !Object.prototype.hasOwnProperty.call(auditioner, "hpCurrent")
     ) as Auditioner[];
     const toBeFired = Object.values(castMembers).filter(
       (castMember) => !auditioners.includes(castMember)

@@ -1,16 +1,12 @@
 import { CastMember } from "creature";
+import { RollHistory } from "roll";
+import { StartTurn } from "state-change";
 import { setState, state } from "../state";
-import {
-  rollInitiative as castMemberRollInitiative,
-  changeInitiativeOrder,
-} from "./castMemberActions";
+import { rollInitiative as castMemberRollInitiative } from "./castMemberActions";
 
 export function getTurnOrder(): CastMember[] {
   return Object.values(state.castMembers).sort(
-    (
-      { initiativeOrder: a, dex: { score: aDex } },
-      { initiativeOrder: b, dex: { score: bDex } }
-    ) => {
+    ({ initiativeOrder: a, dex: aDex }, { initiativeOrder: b, dex: bDex }) => {
       if (a === b) {
         return bDex - aDex;
       }
@@ -20,27 +16,23 @@ export function getTurnOrder(): CastMember[] {
 }
 
 export function startTurn(id: string): string | undefined {
-  const { castMembers, turnOrder, currentTurn } = state;
-  const oldTurnCastMember = currentTurn ? castMembers[currentTurn] : undefined;
-  const oldTurnIndex = currentTurn ? turnOrder.indexOf(currentTurn) : -1;
-  const newTurnCastMember = castMembers[id];
-  const newTurnIndex = turnOrder.indexOf(id);
+  const castMembers = getTurnOrder();
+  const oldTurnIndex = castMembers.findIndex((castMember) => castMember.myTurn);
+  const newTurnCastMember = state.castMembers[id];
+  const newTurnIndex = castMembers.findIndex(
+    ({ id: castMemberId }) => castMemberId === id
+  );
   if (!newTurnCastMember || newTurnIndex === -1) {
     console.warn(`Couldn't find cast member ${id} in turn order`);
     return;
   }
+
+  new StartTurn({ castMemberId: id });
+
   setState("currentTurn", id);
 
-  if (newTurnIndex === (oldTurnIndex + 1) % turnOrder.length) {
+  if (newTurnIndex === (oldTurnIndex + 1) % castMembers.length) {
     // Normal turn transition
-    Object.values(castMembers).forEach((castMember) => {
-      castMember.conditions.forEach((condition) => {
-        if (oldTurnCastMember) {
-          condition.endTurn(oldTurnCastMember);
-        }
-        condition.startTurn(newTurnCastMember);
-      });
-    });
     if (newTurnIndex < oldTurnIndex) {
       setState("round", state.round + 1);
     }
@@ -55,7 +47,7 @@ export function startTurn(id: string): string | undefined {
  * If a cast member's initiative value <=0, it will be rolled.
  */
 export function rollInitiative(
-  initiative?: Record<string, number>
+  initiative?: Record<string, RollHistory>
 ): CastMember[] {
   let castMembers = Object.values(state.castMembers);
   castMembers.forEach((castMember) => {
@@ -64,15 +56,15 @@ export function rollInitiative(
     } else {
       const manuallyRolledInitiative = initiative[castMember.id];
       if (manuallyRolledInitiative !== undefined) {
-        if (manuallyRolledInitiative <= 0) {
+        if (manuallyRolledInitiative.total <= 0) {
           castMemberRollInitiative(castMember.id);
         } else {
-          changeInitiativeOrder(castMember.id, manuallyRolledInitiative);
+          castMemberRollInitiative(castMember.id, manuallyRolledInitiative);
         }
       }
     }
   });
   castMembers = getTurnOrder();
-  setState("currentTurn", castMembers[0]?.id);
+  // setState("currentTurn", castMembers[0]?.id);
   return castMembers;
 }

@@ -1,21 +1,16 @@
-import { CastMember } from "creature";
+import { CastMember, idCastMember } from "creature";
 import { removeCastMemberChange } from "../atomic/removeCastMember";
 import { StateRemove } from "../atomic/stateChange";
 import { ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class RemoveCastMember extends ChangeEvent {
-  static type = "AddCastMember";
+  static type = "RemoveCastMember";
 
-  castMember: CastMember;
-
-  constructor(params: Partial<IChangeEvent> & { castMember: CastMember }) {
+  constructor(params: Partial<IChangeEvent>) {
     super({
       type: RemoveCastMember.type,
       ...params,
-      castMemberId: params.castMember.id,
     });
-
-    this.castMember = params.castMember;
 
     if (!this.changes.length) {
       this.apply();
@@ -23,12 +18,21 @@ export class RemoveCastMember extends ChangeEvent {
   }
 
   protected override makeChanges(): StateRemove<CastMember>[] {
-    return [removeCastMemberChange(this.castMember)];
+    const castMember = this.getCastMember();
+    if (!castMember) {
+      throw new Error(`Cast member ${this.castMemberId} not found`);
+    }
+    return [removeCastMemberChange(castMember)];
   }
 
-  change(castMember: CastMember): CastMember | undefined {
-    this.castMember = castMember;
+  change(castMemberId: string): CastMember | undefined {
+    this.castMemberId = castMemberId;
     return this.executeChanges();
+  }
+
+  override display(): string {
+    const castMember = this.getCastMember();
+    return `${idCastMember(castMember)} leaves the game`;
   }
 }
 

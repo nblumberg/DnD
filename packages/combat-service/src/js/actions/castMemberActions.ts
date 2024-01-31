@@ -1,9 +1,40 @@
-import { CastMember, Condition } from "creature";
-import { setState, state } from "../state";
-import { removeCastMember, setCastMemberState } from "../state/castMemberState";
+import { ActiveCondition, CastMember, Condition, idCastMember } from "creature";
+import { Roll, RollHistory } from "roll";
+import {
+  AddCondition,
+  DelayInitiative,
+  IChangeEvent,
+  ReadyAction,
+  RemoveCondition,
+  RollInitiative,
+  StopDelayedAction,
+  TriggerReadiedAction,
+  getHistoryHandle,
+} from "state-change";
+import { setState, state, updateState } from "../state";
+import { setCastMemberState } from "../state/castMemberState";
 import { getTurnOrder } from "./initiativeActions";
 
-export function getCastMember(id: string): CastMember | undefined {
+function emitChanges(event: IChangeEvent): CastMember | undefined {
+  updateState({ history: state.history, changes: state.changes });
+
+  const history = getHistoryHandle<CastMember>("CastMember").getHistory();
+  let castMember: CastMember | undefined;
+  event.changes.forEach((changeId) => {
+    const change = history.find(({ id }) => id === changeId);
+    if (!change) {
+      throw new Error(`Couldn't find change ${changeId}`);
+    }
+    castMember = setCastMemberState(
+      change.object,
+      change.property,
+      change.newValue
+    );
+  });
+  return castMember;
+}
+
+export function getCachedCastMember(id: string): CastMember | undefined {
   const castMember = state.castMembers[id];
   if (!castMember) {
     console.error(`CastMember ${id} not found`);
@@ -12,62 +43,92 @@ export function getCastMember(id: string): CastMember | undefined {
   return castMember;
 }
 
-export function fireActor(id: string): void {
-  const castMember = getCastMember(id);
+export function rollInitiative(
+  id: string,
+  manuallyRolledInitiative?: RollHistory
+): CastMember | undefined {
+  const castMember = getCachedCastMember(id);
   if (!castMember) {
     return;
   }
 
-  console.log(`Firing ${castMember.nickname ?? castMember.name}`);
-  removeCastMember(id);
+  let roll = manuallyRolledInitiative;
+  if (!roll) {
+    if (!castMember) {
+      throw new Error(`Can't roll initiative for missing cast member ${id}`);
+    }
+    const die = new Roll({
+      dieCount: 1,
+      dieSides: 20,
+      extra: castMember.initiative,
+    });
+    die.roll();
+    roll = die.getLastRoll();
+  }
+
+  return initiativeChange(new RollInitiative({ castMemberId: id, roll }));
 }
 
 export function delayInitiative(id: string): CastMember | undefined {
-  const castMember = getCastMember(id);
+  const castMember = getCachedCastMember(id);
+  if (!castMember) {
+    return;
+  }
+  console.log(`Cast member ${idCastMember(castMember)} is delaying initiative`);
+
+  return emitChanges(new DelayInitiative({ castMemberId: id }));
+}
+
+export function readyAction(id: string): CastMember | undefined {
+  const castMember = getCachedCastMember(id);
+  if (!castMember) {
+    return;
+  }
+  console.log(`Cast member ${idCastMember(castMember)} is readying an action`);
+
+  return emitChanges(new ReadyAction({ castMemberId: id }));
+}
+
+export function stopDelayedAction(
+  id: string,
+  initiativeOrder: number
+): CastMember | undefined {
+  let castMember = getCachedCastMember(id);
+  if (!castMember) {
+    return;
+  }
+  console.log(`Cast member ${idCastMember(castMember)} is delaying initiative`);
+
+  return initiativeChange(
+    new StopDelayedAction({
+      castMemberId: id,
+      initiativeOrder,
+    })
+  );
+}
+
+export function triggerReadiedAction(
+  id: string,
+  initiativeOrder: number
+): CastMember | undefined {
+  const castMember = getCachedCastMember(id);
   if (!castMember) {
     return;
   }
   console.log(
-    `Cast member ${
-      castMember.nickname ?? castMember.name
-    } is delaying initiative`
+    `Cast member ${idCastMember(castMember)} is triggering a readied action`
   );
-  setCastMemberState(castMember.id, "delayInitiative", true);
-  return castMember;
+
+  return initiativeChange(
+    new TriggerReadiedAction({
+      castMemberId: id,
+      initiativeOrder,
+    })
+  );
 }
 
-export function changeInitiativeOrder(
-  id: string,
-  initiativeOrder: number
-): CastMember | undefined {
-  const castMember = getCastMember(id);
-  if (!castMember) {
-    return;
-  }
-  castMember.initiative.add(initiativeOrder);
-  return initiativeChange(castMember, initiativeOrder);
-}
-
-export function rollInitiative(
-  id: string,
-  manuallyRolledInitiative?: number
-): CastMember | undefined {
-  if (manuallyRolledInitiative) {
-    return changeInitiativeOrder(id, manuallyRolledInitiative);
-  }
-  const castMember = getCastMember(id);
-  if (!castMember) {
-    return;
-  }
-  const initiativeOrder = castMember.initiative.roll();
-  return initiativeChange(castMember, initiativeOrder);
-}
-
-function initiativeChange(
-  castMember: CastMember,
-  initiativeOrder: number
-): CastMember {
-  setCastMemberState(castMember.id, "initiativeOrder", initiativeOrder);
+function initiativeChange(event: IChangeEvent): CastMember | undefined {
+  const castMember = emitChanges(event);
   setState(
     "turnOrder",
     getTurnOrder().map(({ id }) => id)
@@ -77,61 +138,45 @@ function initiativeChange(
 
 export function addConditionToCastMember(
   id: string,
-  condition: Condition,
-  onSave = false,
+  condition: Partial<ActiveCondition> & { condition: Condition },
   source?: CastMember,
   onTurnStart?: CastMember,
   onTurnEnd?: CastMember
-): void {
-  const castMember = getCastMember(id);
+): CastMember | undefined {
+  const castMember = getCachedCastMember(id);
   if (!castMember) {
     return;
   }
 
-  console.log(
-    `Adding condition ${condition} to ${castMember.nickname ?? castMember.name}`
-  );
+  console.log(`Adding condition ${condition} to ${idCastMember(castMember)}`);
 
-  if (castMember.conditions.find(({ condition: c }) => c === condition)) {
-    console.warn(
-      `${
-        castMember.nickname ?? castMember.name
-      } already has condition ${condition}`
-    );
-    return;
-  }
-  castMember.addCondition({
-    condition,
-    owner: castMember,
-    onSave,
-    source: source?.id,
+  const activeCondition: ActiveCondition = {
+    id: "tmp",
+    duration: Number.MAX_SAFE_INTEGER,
+    ...condition,
+    source: source?.id ?? "dm",
     onTurnStart: onTurnStart?.id,
-    onTurnEnd: onTurnEnd?.id,
-  });
-  setCastMemberState(id, "conditions", castMember.conditions);
+    onTurnEnd: onTurnEnd?.id ?? id,
+  };
+  return emitChanges(
+    new AddCondition({
+      castMemberId: id,
+      condition: activeCondition,
+    })
+  );
 }
 
 export function removeConditionFromCastMember(
   id: string,
-  condition: Condition
-): void {
-  const castMember = getCastMember(id);
+  condition: string
+): CastMember | undefined {
+  const castMember = getCachedCastMember(id);
   if (!castMember) {
     return;
   }
 
   console.log(
-    `Removing condition ${condition} from ${
-      castMember.nickname ?? castMember.name
-    }`
+    `Removing condition ${condition} from ${idCastMember(castMember)}`
   );
-
-  if (!castMember.conditions.find(({ condition: c }) => c === condition)) {
-    console.warn(
-      `${castMember.nickname ?? castMember.name} lacks condition ${condition}`
-    );
-    return;
-  }
-  castMember.removeCondition(condition);
-  setCastMemberState(id, "conditions", castMember.conditions);
+  return emitChanges(new RemoveCondition({ castMemberId: id, condition }));
 }

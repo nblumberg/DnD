@@ -1,34 +1,44 @@
-import { CastMember } from "creature";
+import { CastMember, idCastMember } from "creature";
 import { addCastMemberChange } from "../atomic/addCastMember";
 import { StateAdd } from "../atomic/stateChange";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import { ChangeEvent, IChangeEvent, addToHistory, registerType } from "./event";
 
 export class AddCastMember extends ChangeEvent {
   static type = "AddCastMember";
-
-  castMember: CastMember;
 
   constructor(params: Partial<IChangeEvent> & { castMember: CastMember }) {
     super({
       type: AddCastMember.type,
       ...params,
-      castMemberId: params.castMember.id,
     });
 
-    this.castMember = params.castMember;
+    // prevent serializable of castMember, only serialize it in the atomic change
 
     if (!this.changes.length) {
-      this.apply();
+      addToHistory(this);
+      if (!params.castMember) {
+        throw new Error("Cast member is undefined");
+      }
+      const changes = [addCastMemberChange(params.castMember)];
+      this.pushChanges(changes);
     }
   }
 
-  protected override makeChanges(): StateAdd<CastMember>[] {
-    return [addCastMemberChange(this.castMember)];
+  override apply(): CastMember {
+    throw new Error("Cannot apply AddCastMember");
   }
 
-  change(castMember: CastMember): CastMember | undefined {
-    this.castMember = castMember;
-    return this.executeChanges();
+  override display(): string {
+    const castMember = this.getCastMember();
+    return `${idCastMember(castMember)} joins the game`;
+  }
+
+  protected override makeChanges(): StateAdd<CastMember>[] {
+    throw new Error("AddCastMember only makes changes in constructor");
+  }
+
+  change(): CastMember | undefined {
+    throw new Error("Can't change adding a cast member");
   }
 }
 

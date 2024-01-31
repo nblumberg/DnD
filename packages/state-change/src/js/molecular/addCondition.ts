@@ -1,6 +1,11 @@
-import { ActiveCondition, CastMember, castMemberDoSomething } from "creature";
-import { StateChange } from "..";
+import {
+  ActiveCondition,
+  CastMember,
+  castMemberDoSomething,
+  idCastMember,
+} from "creature";
 import { addConditionChange } from "../atomic/addCondition";
+import { StateChange } from "../atomic/stateChange";
 import { ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class AddCondition extends ChangeEvent {
@@ -34,6 +39,13 @@ export class AddCondition extends ChangeEvent {
   change(condition: ActiveCondition): CastMember | undefined {
     this.condition = condition;
     return this.executeChanges();
+  }
+
+  override display(): string {
+    const castMember = this.getCastMember();
+    return `${idCastMember(castMember)} starts being ${
+      this.condition.condition
+    }`;
   }
 }
 

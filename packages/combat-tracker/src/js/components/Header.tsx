@@ -1,4 +1,6 @@
+import { idCastMember } from "creature";
 import { SyntheticEvent, useContext, useState } from "react";
+import { Roll, RollHistory } from "roll";
 import styled, { createGlobalStyle } from "styled-components";
 import { IdentityContext, logout, useCharacters, useIsDM } from "../auth";
 import { useCastMembers } from "../data/castMembers";
@@ -103,12 +105,10 @@ export function Header() {
   );
   const isMyTurn = !dm && ids.includes(turn ?? "");
   const currentTurnIndex = castMembers.findIndex(({ id }) => id === turn) ?? 0;
-  const initiativeRolls = myCharacters.map(
-    ({ nickname, name, initiative }) => ({
-      roll: initiative,
-      label: myCharacters.length > 1 ? nickname ?? name : undefined,
-    })
-  );
+  const initiativeRolls = myCharacters.map((castMember) => ({
+    roll: new Roll({ dieCount: 1, dieSides: 20, extra: castMember.initiative }),
+    label: myCharacters.length > 1 ? idCastMember(castMember) : undefined,
+  }));
 
   if (!io) {
     return null;
@@ -120,7 +120,7 @@ export function Header() {
     (document.activeElement as HTMLElement)?.blur();
   }
 
-  const rollInitiative = (_event?: SyntheticEvent, rolls?: number[]) => {
+  const rollInitiative = (_event?: SyntheticEvent, rolls?: RollHistory[]) => {
     if (rolls) {
       const initiativeMap = myCharacters.reduce(
         (initiativeMap, castMember, i) => {
@@ -129,7 +129,7 @@ export function Header() {
             [castMember.id]: rolls[i],
           };
         },
-        {} as Record<string, number>
+        {} as Record<string, RollHistory>
       );
       io.emit("rollInitiative", initiativeMap);
       setRollOpen(false);
@@ -213,7 +213,7 @@ export function Header() {
         <InteractiveRoll
           title="What's your initiative roll?"
           rolls={initiativeRolls}
-          onRoll={(result: number[]) => {
+          onRoll={(result: RollHistory[]) => {
             rollInitiative(undefined, result);
           }}
           onCancel={() => {

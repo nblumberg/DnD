@@ -3,6 +3,7 @@ import http, { Server as HttpServer } from "http";
 import { hostname } from "os";
 import { Server as SocketIOServer, Socket as SocketIOSocket } from "socket.io";
 import { attachCastMemberSockets } from "./castMemberSockets";
+import { attachHistorySockets } from "./historySockets";
 import { attachInitiativeSockets } from "./initiativeSockets";
 import {
   ClientToServerEvents,
@@ -60,6 +61,7 @@ export function getSocketIO(): Promise<SocketServer> {
 getSocketIO().then((io) => {
   attachCastMemberSockets(io);
   attachInitiativeSockets(io);
+  attachHistorySockets(io);
 });
 
 export function getSocketUsers(socket: Socket): string[] {

@@ -39,15 +39,19 @@ export function castMemberParamsToCastMember(
     character: !!params.character,
     conditions: params.conditions ?? {},
     delayInitiative: !!params.delayInitiative,
-    initiativeOrder: params.initiativeOrder ?? 1,
+    initiativeOrder: params.initiativeOrder ?? 0,
     myTurn: !!params.myTurn,
     unique: !!params.unique,
   };
+}
+
+export function idCastMember(castMember: CastMember): string {
+  return castMember.nickname ?? castMember.name;
 }
 
 export function castMemberDoSomething(
   castMember: CastMember,
   something: string
 ): void {
-  console.log(`${castMember.nickname ?? castMember.name} ${something}`);
+  console.log(`${idCastMember(castMember)} ${something}`);
 }

@@ -5,6 +5,18 @@ import { Character } from "./Character";
 
 let cachedActors: Actor[] = [];
 
+export class ActorInstance implements Actor {
+  name: string;
+  id: string;
+  unique: boolean;
+
+  constructor(name: string, unique = false) {
+    this.name = name;
+    this.id = name.replaceAll(/\W/g, "_");
+    this.unique = unique;
+  }
+}
+
 export function useActors(): Actor[] {
   const [actors, setActors] = useState<Actor[]>([...cachedActors]);
   useEffect(() => {
@@ -12,7 +24,7 @@ export function useActors(): Actor[] {
       ([characters, monsters]) => {
         cachedActors = [
           ...characters.map((name) => new Character(name)).sort(sortActors),
-          ...monsters.map((name) => new Actor({ name })).sort(sortActors),
+          ...monsters.map((name) => new ActorInstance(name)).sort(sortActors),
         ];
         setActors([...cachedActors]);
       }

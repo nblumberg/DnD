@@ -1,5 +1,5 @@
 import { ActiveCondition, CastMember, castMemberDoSomething } from "creature";
-import { getUniqueId } from "../unique";
+import { getUniqueId } from "../util/unique";
 import {
   ChangeState,
   StateChange,

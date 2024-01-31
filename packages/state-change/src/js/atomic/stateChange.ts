@@ -1,5 +1,5 @@
 import { CastMember } from "creature";
-import { Unique, getUniqueId } from "../unique";
+import { Unique, getUniqueId } from "../util/unique";
 
 export interface StateAdd<T extends Unique> extends Unique {
   type: "+";
@@ -204,17 +204,22 @@ export function undoStateRemove<T extends Unique>(
 
 export function getObjectState<T extends Unique>(
   id: string,
-  history: HistoryEntry<T>[]
+  history: HistoryEntry<T>[],
+  allowNeverAdded = false,
+  getLastStateBeforeRemove = false
 ): T | undefined {
   const objectHistory = history.filter(({ object }) => object === id);
   if (!objectHistory.length) {
+    if (allowNeverAdded) {
+      return undefined;
+    }
     throw new Error(`No history for object ${id}`);
   }
   const add = objectHistory.shift();
   if (add!.type !== "+") {
     throw new Error(`First history entry for object ${id} isn't an add`);
   }
-  let object = add!.newValue!;
+  let object = { ...add!.newValue! };
   for (const change of objectHistory) {
     switch (change.type) {
       case "c":
@@ -223,7 +228,9 @@ export function getObjectState<T extends Unique>(
         object = applyHistoryEntry(change, object);
         break;
       case "-":
-        return undefined;
+        if (!getLastStateBeforeRemove) {
+          return undefined;
+        }
     }
   }
   return object;
@@ -254,23 +261,27 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
   }
 
   function pushStateHistory(
-    param: HistoryEntryParam<T>,
+    params: HistoryEntryParam<T> | HistoryEntryParam<T>[],
     insertIndex?: number
-  ): HistoryEntry<T> {
+  ): HistoryEntry<T>[] {
     const history = _getHistory();
-    const entry: HistoryEntry<T> = {
-      type: param.type,
-      action: param.action,
-      object: param.object,
-      ...param,
-      id: `${history.length}`,
-    };
+    const entries = (Array.isArray(params) ? params : [params]).map(
+      (param, i): HistoryEntry<T> => ({
+        id: `${history.length + i}`,
+        type: param.type,
+        action: param.action,
+        object: param.object,
+        property: param.property,
+        oldValue: param.oldValue,
+        newValue: param.newValue,
+      })
+    );
     if (insertIndex === undefined || insertIndex === -1) {
-      history.push(entry);
+      history.push(...entries);
     } else {
-      history.splice(insertIndex, 0, entry);
+      history.splice(insertIndex, 0, ...entries);
     }
-    return entry;
+    return entries;
   }
 
   function pushStateAdd(
@@ -279,14 +290,16 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
     insertIndex?: number
   ): StateAdd<T> {
     return pushStateHistory(
-      {
-        type: "+",
-        action,
-        object: object.id,
-        newValue: object,
-      },
+      [
+        {
+          type: "+",
+          action,
+          object: object.id,
+          newValue: object,
+        },
+      ],
       insertIndex
-    ) as StateAdd<T>;
+    )[0] as StateAdd<T>;
   }
 
   function pushStateRemove(
@@ -295,14 +308,16 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
     insertIndex?: number
   ): StateRemove<T> {
     return pushStateHistory(
-      {
-        type: "-",
-        action,
-        object: object.id,
-        newValue: object,
-      },
+      [
+        {
+          type: "-",
+          action,
+          object: object.id,
+          newValue: object,
+        },
+      ],
       insertIndex
-    ) as StateRemove<T>;
+    )[0] as StateRemove<T>;
   }
 
   function pushStateChange(
@@ -314,16 +329,18 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
     insertIndex?: number
   ): StateChange<T, keyof T> {
     return pushStateHistory(
-      {
-        type: "c",
-        action,
-        object: object.id,
-        property,
-        oldValue,
-        newValue,
-      },
+      [
+        {
+          type: "c",
+          action,
+          object: object.id,
+          property,
+          oldValue,
+          newValue,
+        },
+      ],
       insertIndex
-    ) as StateChange<T, keyof T>;
+    )[0] as StateChange<T, keyof T>;
   }
 
   function findStateHistoryIndex(entry: HistoryEntry<T> | string): number {

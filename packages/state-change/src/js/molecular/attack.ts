@@ -3,21 +3,21 @@ import {
   Attack as AttackDescription,
   CastMember,
   castMemberDoSomething,
+  idCastMember,
 } from "creature";
-import { RollHistory } from "roll";
-import { StateChange } from "..";
-import { addConditionChange } from "../atomic/addCondition";
-import { damageCastMemberChange } from "../atomic/damageCastMember";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import { Roll, RollHistory } from "roll";
+import { StateChange } from "../atomic/stateChange";
+import { affectTarget } from "../util/affectTarget";
+import { attackTarget } from "../util/attackTarget";
+import { IChangeEvent, registerType } from "./event";
+import { HasTargets } from "./hasTargets";
 
-export class Attack extends ChangeEvent {
+export class Attack extends HasTargets {
   static type = "Attack";
 
   attack: string;
   toHit: RollHistory;
   damage: RollHistory[];
-  targets: string[];
-  targetSaves: RollHistory[];
 
   constructor(
     params: Partial<IChangeEvent> & {
@@ -33,12 +33,34 @@ export class Attack extends ChangeEvent {
     this.attack = params.attack;
     this.toHit = params.toHit;
     this.damage = params.damage;
-    this.targets = params.targets;
-    this.targetSaves = params.targetSaves ?? [];
 
     if (!this.changes.length) {
       this.apply();
     }
+  }
+
+  private validateAttack(attacker?: CastMember) {
+    if (!attacker) {
+      throw new Error(`Attacker ${this.castMemberId} not found`);
+    }
+    const attackerName = idCastMember(attacker);
+    const action: Action | undefined = Object.values(attacker?.actions ?? {})
+      .flat()
+      .find(({ name }) => name === this.attack);
+    if (!action) {
+      throw new Error(`Attack ${this.attack} not found on ${attackerName}`);
+    }
+    if (!("toHit" in action)) {
+      throw new Error(
+        `Action ${this.attack} on ${attackerName} is not an attack`
+      );
+    }
+    const attack = action as AttackDescription;
+    const onHit = attack.onHit;
+    if (!onHit) {
+      throw new Error(`Attack ${action.name} has no onHit`);
+    }
+    return { attacker, attack, onHit };
   }
 
   protected override makeChanges(): StateChange<
@@ -46,69 +68,26 @@ export class Attack extends ChangeEvent {
     keyof CastMember
   >[] {
     const changes: StateChange<CastMember, keyof CastMember>[] = [];
-    const castMembers = this.getCastMembers();
-    const attacker = castMembers.find(({ id }) => id === this.castMemberId);
-    if (!attacker) {
-      throw new Error(`Attacker ${this.castMemberId} not found`);
-    }
-    const targets = this.targets.map((targetId) => {
-      const target = castMembers.find(({ id }) => id === targetId);
-      if (!target) {
-        throw new Error(`Target ${targetId} not found`);
-      }
-      return target;
-    });
-
-    const action: Action | undefined = Object.values(attacker.actions)
-      .flat()
-      .find(({ name }) => name === this.attack);
-    if (!action) {
-      throw new Error(`Attack ${this.attack} not found on ${attacker.id}`);
-    }
-    if (!("toHit" in action)) {
-      throw new Error(
-        `Action ${this.attack} on ${attacker.id} is not an attack`
-      );
-    }
-    const attack = action as AttackDescription;
+    const { attacker, attack, onHit } = this.validateAttack(
+      this.getCastMember()
+    );
 
     const output = `'s ${attack.name} attack `;
 
-    targets.forEach((castMember) => {
-      if (this.toHit.total < castMember.ac) {
-        castMemberDoSomething(attacker, `${output}misses ${castMember.name}`);
+    const targets = this.getTargets();
+    targets.forEach((target) => {
+      const { hit, changes: damageChanges } = attackTarget(
+        attacker,
+        `${attack.name} attack`,
+        this.toHit,
+        this.damage,
+        onHit.damage,
+        target
+      );
+      changes.push(...damageChanges);
+      if (!hit) {
         return;
       }
-
-      const onHit = attack.onHit;
-      if (!onHit) {
-        throw new Error(`Attack ${attack.name} has no onHit`);
-      }
-
-      const damages = onHit.damage;
-
-      damages.forEach((damage, i) => {
-        const damageChanges = damageCastMemberChange(
-          castMember,
-          this.damage[i].total,
-          damage.type
-        );
-        changes.push(...damageChanges);
-        const tmpDamage =
-          damageChanges.length === 2
-            ? damageChanges[0]!.oldValue! - damageChanges[0]!.newValue!
-            : 0;
-        const damageIndex = damageChanges.length === 2 ? 1 : 0;
-        const realDamage =
-          damageChanges[damageIndex]!.oldValue! -
-          damageChanges[damageIndex]!.newValue!;
-        castMemberDoSomething(
-          attacker,
-          `${output}hits ${castMember.nickname ?? castMember.name} for ${
-            tmpDamage ? `${tmpDamage} temporary hit point damage and ` : ""
-          }${realDamage} ${damage.type} damage`
-        );
-      });
 
       const { effects } = onHit;
       if (!effects) {
@@ -116,60 +95,17 @@ export class Attack extends ChangeEvent {
       }
 
       effects.forEach((effect) => {
-        const { dc, dcType } = effect;
-        const onSave = dc && dcType ? { dc, dcType } : undefined;
-        if (onSave) {
-          if (
-            this.targetSaves[this.targets.indexOf(castMember.id)]?.total >= dc!
-          ) {
-            castMemberDoSomething(
-              attacker,
-              `${output}does not affect ${
-                castMember.nickname ?? castMember.name
-              } who saves against ${effect.condition}`
-            );
-            return;
-          }
-          castMemberDoSomething(
+        changes.push(
+          ...affectTarget(
             attacker,
-            `${output}affects ${
-              castMember.nickname ?? castMember.name
-            } who fails to save against ${effect.condition}`
-          );
-        } else {
-          castMemberDoSomething(
-            attacker,
-            `${output}affects ${castMember.nickname ?? castMember.name} with ${
-              effect.condition
-            }`
-          );
-        }
-        let onTurnStart: string | undefined;
-        if (effect.onTurnStart) {
-          if (effect.onTurnStart === "attacker") {
-            onTurnStart = attacker.id;
-          } else {
-            onTurnStart = castMember.id;
-          }
-        }
-        let onTurnEnd: string | undefined;
-        if (effect.onTurnEnd) {
-          if (effect.onTurnEnd === "attacker") {
-            onTurnStart = attacker.id;
-          } else {
-            onTurnStart = castMember.id;
-          }
-        }
-        const change = addConditionChange(castMember, {
-          condition: effect.condition,
-          onSave,
-          duration:
-            typeof effect.duration === "number" ? effect.duration : undefined,
-          onTurnStart,
-          onTurnEnd,
-          source: attacker.id,
-        });
-        changes.push(change);
+            target,
+            effect,
+            this.targetSaves[this.targets.indexOf(target.id)],
+            (message) => {
+              castMemberDoSomething(attacker, `${output}${message}`);
+            }
+          )
+        );
       });
     });
     return changes;
@@ -188,6 +124,30 @@ export class Attack extends ChangeEvent {
     this.targets = params.targets;
     this.targetSaves = params.targetSaves ?? [];
     return this.executeChanges();
+  }
+
+  override display(): string {
+    const { attacker, attack } = this.validateAttack(this.getCastMember());
+    const targets = this.getTargets();
+    const extra =
+      attack.toHit.modifier === "∞" ? Infinity : attack.toHit.modifier;
+    const toHitRoll = new Roll({ dieCount: 1, dieSides: 20, extra });
+    toHitRoll.add(this.toHit.total, this.toHit.dice);
+    const hits: CastMember[] = [];
+    const misses: CastMember[] = [];
+    targets.forEach((target) => {
+      if (this.toHit.total >= target.ac) {
+        hits.push(target);
+      } else {
+        misses.push(target);
+      }
+    });
+    const targeting = `${idCastMember(attacker)} makes ${
+      attack.name
+    } attack against ${targets.map(idCastMember)} (${toHitRoll.breakdown()})${
+      misses.length ? `, misses ${misses.map(idCastMember)}` : ""
+    }${hits.length ? `, hits ${hits.map(idCastMember)}` : ""}`;
+    return targeting;
   }
 }
 

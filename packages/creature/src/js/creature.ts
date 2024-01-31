@@ -121,7 +121,7 @@ export function creatureParamsToCreature(params: CreatureParams): Creature {
     hpCurrent: params.hpCurrent ?? params.hp,
     hpTemp: params.hpTemp ?? 0,
     image: defaultImage(params.type, params.image),
-    initiative: params.initiative ?? params.dex,
+    initiative: params.initiative ?? abilityModifiers.dex,
     languages: params.languages ?? [],
     saves: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
     skills: createSkills(abilityModifiers, params.skills),

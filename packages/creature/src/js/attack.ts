@@ -1,4 +1,4 @@
-import { Action, ActionParams, ActiveCondition, Condition } from ".";
+import { Action, ActionParams, ActiveCondition } from ".";
 import { actionParamsToAction } from "./action";
 import { SavingThrow } from "./savingThrow";
 
@@ -30,9 +30,8 @@ export interface Damage {
 
 export interface AttackEffect
   extends Partial<SavingThrow>,
-    Partial<ActiveCondition> {
+    Partial<Omit<ActiveCondition, "id" | "source">> {
   description: string;
-  condition?: Condition;
   onTurnStart?: "attacker" | "defender";
   onTurnEnd?: "attacker" | "defender";
 }

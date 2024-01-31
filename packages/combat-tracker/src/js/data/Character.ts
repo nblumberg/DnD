@@ -1,7 +1,7 @@
-import { Actor } from "creature";
+import { ActorInstance } from "./actors";
 
-export class Character extends Actor {
+export class Character extends ActorInstance {
   constructor(name: string) {
-    super({ name, unique: true });
+    super(name, true);
   }
 }

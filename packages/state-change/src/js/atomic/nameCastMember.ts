@@ -1,21 +1,32 @@
 import { CastMember } from "creature";
-import { ChangeState, getHistoryHandle } from "./stateChange";
+import {
+  ChangeState,
+  StateChange,
+  applyHistoryEntry,
+  createStateChange,
+  getHistoryHandle,
+} from "./stateChange";
 
-const { pushStateChange } = getHistoryHandle<CastMember>("CastMember");
+const { pushStateHistory } = getHistoryHandle<CastMember>("CastMember");
 
 export const nameCastMember: ChangeState<CastMember> = (
   castMember,
   nickname: string
 ) => {
-  pushStateChange(
+  const change = nameCastMemberChange(castMember, nickname);
+  pushStateHistory(change);
+  return applyHistoryEntry(change, castMember);
+};
+
+export function nameCastMemberChange(
+  castMember: CastMember,
+  nickname: string
+): StateChange<CastMember, "nickname"> {
+  return createStateChange(
     castMember,
     "nameCastMember",
     "nickname",
     castMember.nickname,
     nickname
   );
-  return {
-    ...castMember,
-    nickname,
-  };
-};
+}

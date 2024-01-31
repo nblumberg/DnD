@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Roll } from "roll";
+import { Roll, RollHistory } from "roll";
 import styled from "styled-components";
 import { Dialog, DialogButton } from "./Dialog";
 
@@ -20,10 +20,10 @@ export function InteractiveRoll({
 }: {
   title: string;
   rolls: Array<{ roll: Roll; label?: string }>;
-  onRoll: (result: number[]) => void;
+  onRoll: (result: RollHistory[]) => void;
   onCancel?: () => void;
 }) {
-  const [result, setResult] = useState<number[]>(new Array(rolls.length));
+  const [result, setResult] = useState<RollHistory[]>(new Array(rolls.length));
 
   const ref = useRef<HTMLInputElement>(null);
 
@@ -34,34 +34,35 @@ export function InteractiveRoll({
   }, [ref.current]);
 
   const autoRoll = () => {
-    const newResult = rolls.map(({ roll }) => roll.roll());
+    const newResult = rolls.map(({ roll }) => {
+      roll.roll();
+      return roll.getLastRoll();
+    });
     setResult(newResult);
   };
 
   const submit = () => {
-    if (
-      result.length === rolls.length ||
-      result.find((r) => typeof r !== "number")
-    ) {
+    if (result.length !== rolls.length || result.some((r) => !r)) {
       return;
     }
     onRoll(result);
   };
 
   const inputs = rolls.map(({ roll, label }, index) => (
-    <div>
+    <div key={index}>
       {label && <label>{label}</label>}
       <Input
         type="number"
         onChange={(event) => {
           const newResult = [...result];
-          newResult[index] = parseInt(event.target.value, 10);
+          const total = parseInt(event.target.value, 10);
+          rolls[index].roll.add(total);
+          newResult[index] = rolls[index].roll.getLastRoll();
           setResult(newResult);
         }}
         min={roll.min()}
         max={roll.max()}
-        value={result[index]}
-        key={index}
+        value={result[index]?.total ?? ""}
         ref={index === 0 ? ref : undefined}
       />
     </div>

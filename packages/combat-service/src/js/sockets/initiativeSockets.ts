@@ -1,3 +1,4 @@
+import { RollHistory } from "roll";
 import { Socket } from "socket.io";
 import { rollInitiative, startTurn } from "../actions/initiativeActions";
 import { addStatePropertyListener, state } from "../state";
@@ -43,7 +44,7 @@ function syncInitiative(socket: Socket, isDM = false): void {
     }
   });
 
-  socket.on("rollInitiative", (initiative?: Record<string, number>) => {
+  socket.on("rollInitiative", (initiative?: Record<string, RollHistory>) => {
     if (!isDM) {
       const notMyIds = Object.keys(initiative || {}).filter(
         (id) => !users.includes(id)

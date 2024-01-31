@@ -1,8 +1,11 @@
+import { getCharacter, getMonster } from "compendium-service/client";
 import {
   Auditioner,
   CastMember,
   CastMemberParams,
   CreatureParams,
+  castMemberParamsToCastMember,
+  idCastMember,
 } from "creature";
 import {
   AddListener,
@@ -12,10 +15,13 @@ import {
   createEventEmitter,
 } from "event-emitter";
 import {
-  getCharacter,
-  getMonster,
-} from "packages/compendium-service/dist/js/client";
-import { addCastMember } from "state-change";
+  AddCastMember,
+  HistoryEntry,
+  IChangeEvent,
+  RemoveCastMember,
+  getCastMembers,
+  getHistory,
+} from "state-change";
 import { State, onStateChange, state, updateState } from "../state";
 
 export let addCastMembersListener: AddListener<Record<string, CastMember>>;
@@ -31,36 +37,27 @@ const castMemberListeners: Record<
 > = {};
 
 export function initializeCastMembersState(
-  state: State & { castMembers: Record<string, CastMemberRaw> }
+  state: State & {
+    history: IChangeEvent[];
+    changes: HistoryEntry<CastMember>[];
+  }
 ) {
-  const castMembers: Record<string, CastMemberRaw> = state.castMembers;
-  state.castMembers = {};
+  const castMembers = getCastMembers();
+  state.castMembers = castMembers.reduce(
+    (acc, castMember) => ({ ...acc, [castMember.id]: castMember }),
+    {}
+  );
   const functions = createEventEmitter(state.castMembers);
   addCastMembersListener = functions.addListener;
   updateCastMembers = functions.setData;
-  for (const [, castMember] of Object.entries(castMembers)) {
-    _addCastMember(castMember);
-  }
+  Object.values(state.castMembers).forEach((castMember) => {
+    castMemberListeners[castMember.id] = createEventEmitter(castMember);
+  });
+  updateState({ castMembers: state.castMembers });
 }
 
 function getCastMember(id: string): CastMember | undefined {
   return state.castMembers[id];
-}
-
-function _addCastMember(
-  castMemberParamsOrRaw: CastMemberParams | CastMemberRaw
-): CastMember {
-  const { id } = findUniqueId(castMemberParamsOrRaw);
-  const castMember = new CastMember({ ...castMemberParamsOrRaw, id });
-  castMemberListeners[castMember.id] = createEventEmitter(castMember);
-  updateCastMembers({ [castMember.id]: castMember });
-  updateState({ castMembers: state.castMembers });
-  onStateChange();
-  return castMember;
-}
-
-export function XaddCastMember(castMemberParams: CastMemberParams): CastMember {
-  return _addCastMember(castMemberParams);
 }
 
 export async function castActor(auditioner: Auditioner): Promise<CastMember> {
@@ -74,17 +71,39 @@ export async function castActor(auditioner: Auditioner): Promise<CastMember> {
     ...creatureParams,
     ...auditioner,
   };
-  return addCastMember(castMemberParams);
+  const { id } = findUniqueId(castMemberParams);
+  const castMember = castMemberParamsToCastMember({
+    ...castMemberParams,
+    id,
+  });
+  console.log(`Adding ${idCastMember(castMember)}`);
+
+  const { history, changes } = state;
+
+  new AddCastMember({ castMemberId: id, castMember });
+
+  updateState({ history, changes });
+
+  castMemberListeners[castMember.id] = createEventEmitter(castMember);
+  updateCastMembers({ [castMember.id]: castMember });
+  updateState({ castMembers: state.castMembers });
+  onStateChange();
+  return castMember;
 }
 
-export function removeCastMember(id: string) {
-  if (castMemberListeners[id]) {
-    castMemberListeners[id].removeListener();
+export function fireCastMember(castMemberId: string) {
+  console.log(`Firing ${idCastMember(state.castMembers[castMemberId])}`);
+  new RemoveCastMember({ castMemberId });
+
+  updateState({ history: getHistory() });
+
+  if (castMemberListeners[castMemberId]) {
+    castMemberListeners[castMemberId].removeListener();
   }
-  delete castMemberListeners[id];
+  delete castMemberListeners[castMemberId];
   updateCastMembers(
     Object.fromEntries(
-      Object.entries(state.castMembers).filter(([key]) => key !== id)
+      Object.entries(state.castMembers).filter(([key]) => key !== castMemberId)
     ),
     true
   );
@@ -92,11 +111,21 @@ export function removeCastMember(id: string) {
   onStateChange();
 }
 
-export function setCastMemberState<P extends keyof CastMemberRaw>(
+export function replaceCastMember(castMember: CastMember) {
+  if (castMemberListeners[castMember.id]) {
+    castMemberListeners[castMember.id].removeListener();
+  }
+  castMemberListeners[castMember.id] = createEventEmitter(castMember);
+  updateCastMembers({ [castMember.id]: castMember });
+  updateState({ castMembers: state.castMembers });
+  onStateChange();
+}
+
+export function setCastMemberState<P extends keyof CastMember>(
   id: string,
   prop: P,
-  value: CastMemberRaw[P]
-) {
+  value: CastMember[P]
+): CastMember {
   const castMember = getCastMember(id);
   if (!castMember) {
     throw new Error(`No cast member ${id}`);
@@ -108,6 +137,7 @@ export function setCastMemberState<P extends keyof CastMemberRaw>(
   updateCastMembers({ [id]: castMember });
   updateState({ castMembers: state.castMembers });
   onStateChange();
+  return castMember;
 }
 
 export function addCastMemberStateListener(
@@ -131,7 +161,7 @@ export function addCastMemberStatePropertyListener<P extends keyof CastMember>(
   castMemberListeners[id].addPropertyListener(property, listener);
 }
 
-function findUniqueId(castMember: CastMemberParams | CastMemberRaw): {
+function findUniqueId(castMember: CastMemberParams): {
   id: string;
   existingCastMembers: CastMember[];
 } {

@@ -1,14 +1,14 @@
-import { ActiveCondition, CastMember, castMemberDoSomething } from "creature";
-import { StateChange } from "..";
+import { CastMember, castMemberDoSomething, idCastMember } from "creature";
 import { removeConditionChange } from "../atomic/expireCondition";
+import { StateChange } from "../atomic/stateChange";
 import { ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class RemoveCondition extends ChangeEvent {
   static type = "RemoveCondition";
 
-  condition: ActiveCondition;
+  condition: string;
 
-  constructor(params: Partial<IChangeEvent> & { condition: ActiveCondition }) {
+  constructor(params: Partial<IChangeEvent> & { condition: string }) {
     super({ type: RemoveCondition.type, ...params });
     this.condition = params.condition;
 
@@ -18,22 +18,46 @@ export class RemoveCondition extends ChangeEvent {
   }
 
   protected override makeChanges(): StateChange<CastMember, "conditions">[] {
-    let castMember = this.getCastMember();
+    const castMember = this.getCastMember();
     if (!castMember) {
       throw new Error("Can't remove condition for missing cast member");
     }
 
-    castMemberDoSomething(
-      castMember,
-      `stops being ${this.condition.condition}`
-    );
+    const condition = castMember.conditions[this.condition];
+    if (!condition) {
+      throw new Error(
+        `Can't find condition ${this.condition} on cast member ${idCastMember(
+          castMember
+        )}`
+      );
+    }
 
-    return [removeConditionChange(castMember, this.condition)];
+    castMemberDoSomething(castMember, `stops being ${condition.condition}`);
+
+    return [removeConditionChange(castMember, condition)];
   }
 
-  change(condition: ActiveCondition): CastMember | undefined {
+  change(condition: string): CastMember | undefined {
     this.condition = condition;
     return this.executeChanges();
+  }
+
+  override display(): string {
+    const castMember = this.getCastMember();
+    const changes = this.getChanges();
+    if (!changes.length) {
+      throw new Error("No changes to display");
+    }
+    const [change] = changes as StateChange<CastMember, "conditions">[];
+    if (!change.oldValue) {
+      throw new Error("Changes lacks old value");
+    }
+    const conditions = Object.values(change.oldValue);
+    const [condition] = conditions;
+    if (!condition) {
+      throw new Error("No conditions to display");
+    }
+    return `${idCastMember(castMember)} stops being ${condition.condition}`;
   }
 }
 

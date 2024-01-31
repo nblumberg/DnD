@@ -26,12 +26,13 @@ import {
   startTurnCondition,
   tickCondition,
 } from "../src/js/atomic/tickCondition";
-import { getUniqueId } from "../src/js/unique";
+import { getUniqueId } from "../src/js/util/unique";
 import { beforeOnce } from "./beforeOnce";
 
-jest.mock("../src/js/unique", () => {
-  const { getUniqueId } =
-    jest.requireActual<typeof import("../src/js/unique")>("../src/js/unique");
+jest.mock("../src/js/util/unique", () => {
+  const { getUniqueId } = jest.requireActual<
+    typeof import("../src/js/util/unique")
+  >("../src/js/util/unique");
   return {
     __esModule: true,
     getUniqueId: jest.fn<() => string>(getUniqueId),
@@ -45,7 +46,7 @@ export const testCastMember: CastMember = {
   source: "",
   url: "",
 
-  type: "Humanoid",
+  type: "humanoid",
   size: Size.MEDIUM,
   character: false,
   unique: false,
