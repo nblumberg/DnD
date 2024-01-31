@@ -1,9 +1,9 @@
 import { Actor, Auditioner, CastMember } from "creature";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useContext, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { Character } from "../data/Character";
 import { useActors } from "../data/actors";
-import { useCastMembers } from "../data/castMembers";
+import { CastMemberContext } from "../data/castMembers";
 import { useSocket } from "../services/sockets";
 import { Dialog, DialogButton } from "./Dialog";
 
@@ -210,7 +210,7 @@ function sortAuditioners(
 
 export function ActorPicker({ onClose }: { onClose: () => void }) {
   const actors = useActors();
-  const castMembers = useCastMembers();
+  const castMembers = useContext(CastMemberContext);
 
   const [auditioners, setAuditioners] = useState<
     Array<CastMember | Auditioner>

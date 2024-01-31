@@ -1,30 +1,15 @@
 import { ReactNode, SyntheticEvent, useEffect, useState } from "react";
 import styled from "styled-components";
-import { media } from "./breakpoints";
 
-export const ButtonBar = styled.nav`
-  display: flex;
-  flex-grow: 1;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-`;
-export const MenuButton = styled.button`
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-  margin: 1em;
-  ${media.md`
-    flex-grow: 1;
-    font-size: 1em;
-  `}
-`;
 const DropDown = styled.nav`
   align-items: stretch;
   background-color: white;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   left: 0;
+  overflow-y: scroll;
   position: fixed;
   right: 0;
   top: 3em;
@@ -36,6 +21,9 @@ const DropDownOption = styled.a`
   padding: 0.5em;
   text-align: left;
   width: 100%;
+  &:hover {
+    border: 2px solid blue;
+  }
 `;
 
 function stopInnerClicksFromDismissingMenu(event: SyntheticEvent) {
@@ -45,20 +33,34 @@ function stopInnerClicksFromDismissingMenu(event: SyntheticEvent) {
 export interface MenuOption {
   icon?: ReactNode;
   text: string;
-  onClick: (event: SyntheticEvent) => void;
+  onClick?: (event: SyntheticEvent) => void;
+  children?: MenuOption[];
 }
 
-export function Menu({ options }: { options: MenuOption[] }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+export function Menu({
+  options,
+  onClose,
+}: {
+  options: MenuOption[];
+  onClose: () => void;
+}) {
+  const [currentOptions, setCurrentOptions] = useState<MenuOption[]>(options);
+  const [priorOptions, setPriorOptions] = useState<MenuOption[][]>([]);
+
+  const backLevel = () => {
+    if (priorOptions.length) {
+      const newPriorOptions = [...priorOptions];
+      setCurrentOptions(newPriorOptions.pop()!);
+      setPriorOptions(newPriorOptions);
+    }
+  };
 
   useEffect(() => {
-    if (!menuOpen) {
-      return;
-    }
-    const onClose = () => {
-      setMenuOpen(false);
-    };
     const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        backLevel();
+        return;
+      }
       if (event.key === "Escape") {
         onClose();
       }
@@ -71,31 +73,50 @@ export function Menu({ options }: { options: MenuOption[] }) {
       window.document.removeEventListener("click", onClose);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [menuOpen, setMenuOpen]);
+  }, [onClose, priorOptions]);
 
-  const optionElements = options.map(({ icon, text, onClick }) => {
-    return (
-      <DropDownOption key={text} onClick={onClick}>
-        {icon} {text}
+  const optionElements = currentOptions.map(
+    ({ icon, text, onClick, children }) => {
+      if (children) {
+        return (
+          <DropDownOption
+            key={text}
+            onClick={() => {
+              setPriorOptions([...priorOptions, currentOptions]);
+              setCurrentOptions(children);
+            }}
+          >
+            {icon} {text} ↘️
+          </DropDownOption>
+        );
+      }
+      if (!onClick) {
+        throw new Error("Menu option must have an onClick handler");
+      }
+      return (
+        <DropDownOption
+          key={text}
+          onClick={(event) => {
+            onClick(event);
+            onClose();
+          }}
+        >
+          {icon} {text}
+        </DropDownOption>
+      );
+    }
+  );
+  if (priorOptions.length) {
+    optionElements.unshift(
+      <DropDownOption key="back" onClick={backLevel}>
+        🔙
       </DropDownOption>
     );
-  });
+  }
 
   return (
-    <ButtonBar>
-      <MenuButton
-        title="Options"
-        onClick={() => {
-          setMenuOpen(!menuOpen);
-        }}
-      >
-        Menu
-      </MenuButton>
-      {menuOpen && (
-        <DropDown onClick={stopInnerClicksFromDismissingMenu}>
-          {optionElements}
-        </DropDown>
-      )}
-    </ButtonBar>
+    <DropDown onClick={stopInnerClicksFromDismissingMenu}>
+      {optionElements}
+    </DropDown>
   );
 }

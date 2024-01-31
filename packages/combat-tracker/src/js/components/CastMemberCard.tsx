@@ -2,7 +2,6 @@ import { CastMember } from "creature";
 import { SyntheticEvent, useState } from "react";
 import styled from "styled-components";
 import { useIsDM } from "../auth";
-import { useTurn } from "../data/turn";
 import { ArmorClassShield } from "./ArmorClassShield";
 import { ConditionMenu, ConditionOverlay } from "./ConditionOverlay";
 import { HitPointBar } from "./HitPointsBar";
@@ -81,9 +80,6 @@ const NameField = styled.input`
 export function CastMemberCard({ castMember }: { castMember: CastMember }) {
   const dm = useIsDM();
 
-  const turn = useTurn();
-  const itsMyTurn = turn === castMember.id;
-
   const [name, setName] = useState<string>(
     castMember.nickname ??
       (dm || castMember.character ? castMember.name : "unknown")
@@ -113,7 +109,7 @@ export function CastMemberCard({ castMember }: { castMember: CastMember }) {
     setEditing(false);
   };
   return (
-    <Panel $myTurn={itsMyTurn}>
+    <Panel $myTurn={castMember.myTurn}>
       <HitPointBar castMember={castMember} />
       <PortraitFrame data-portrait-frame>
         <Portrait src={castMember.image} data-portrait></Portrait>

@@ -15,10 +15,14 @@ let cachedChanges: HistoryEntry<CastMember>[] = [];
 let cachedHistory: IChangeEvent[] = [];
 
 awaitSocket().then((io) => {
-  io.on("history", (history: IChangeEvent[]) => {
-    console.log("History changed");
-    cachedHistory = history;
-  });
+  io.on(
+    "history",
+    (history: IChangeEvent[], changes: HistoryEntry<CastMember>[]): void => {
+      cachedChanges = changes;
+      getHistoryHandle<CastMember>("CastMember").setHistory(cachedChanges);
+      cachedHistory = instantiateHistory(history);
+    }
+  );
 });
 
 export function useHistory(): IChangeEvent[] {

@@ -1,5 +1,5 @@
 import { CastMember } from "creature";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { setLog } from "roll";
 import { awaitSocket, useSocket } from "../services/sockets";
 
@@ -32,3 +32,5 @@ export function useCastMembers(): CastMember[] {
   }, [setCastMembers, io]);
   return castMembers;
 }
+
+export const CastMemberContext = createContext<CastMember[]>([]);

@@ -3,13 +3,22 @@ import { SyntheticEvent, useContext, useState } from "react";
 import { Roll, RollHistory } from "roll";
 import styled, { createGlobalStyle } from "styled-components";
 import { IdentityContext, logout, useCharacters, useIsDM } from "../auth";
-import { useCastMembers } from "../data/castMembers";
-import { useTurn } from "../data/turn";
+import { CastMemberContext } from "../data/castMembers";
+import { MobileContext } from "../data/mobile";
 import { useSocket } from "../services/sockets";
+import { ActionMenu } from "./ActionMenu";
 import { ActorPicker } from "./ActorPicker";
 import { InteractiveRoll } from "./InteractiveRoll";
-import { ButtonBar, Menu, MenuButton, MenuOption } from "./Menu";
-import { device, media } from "./breakpoints";
+import { MenuOption } from "./Menu";
+import { ButtonBar, MenuButton, MobileHeader } from "./MobileHeader";
+import { media } from "./breakpoints";
+import {
+  useEndTurn,
+  useNextTurn,
+  usePickActors,
+  usePreviousTurn,
+  useRollInitiative,
+} from "./handlers";
 
 const MenuBar = styled.header`
   align-items: center;
@@ -73,7 +82,7 @@ const optionParams: Array<{
   },
   { icon: "🕐", text: "Roll initiative", handlerName: "rollInitiative" },
   { dmOnly: true, icon: "⏩", text: "Next turn", handlerName: "nextTurn" },
-  { playerOnly: true, icon: "🎬", text: "Actions", handlerName: "actions" },
+  { icon: "🎬", text: "Actions", handlerName: "actions" },
   { playerOnly: true, icon: "🏁", text: "End turn", handlerName: "endTurn" },
 ];
 
@@ -93,18 +102,22 @@ export function Header() {
   const user = useContext(IdentityContext);
   const ids = useCharacters();
   const dm = useIsDM();
-  const castMembers = useCastMembers();
-  const turn = useTurn();
+  const castMembers = useContext(CastMemberContext);
   const [actorPickerOpen, setActorPickerOpen] = useState<boolean>(false);
+  const [actionMenuOpen, setActionMenuOpen] = useState<boolean>(false);
   const [rollOpen, setRollOpen] = useState<boolean>(false);
   const io = useSocket();
+  const useButtons = !useContext(MobileContext);
 
   // Derivative state
   const myCharacters = castMembers.filter(
     ({ id, character }) => ids.includes(id) || (dm && !character)
   );
-  const isMyTurn = !dm && ids.includes(turn ?? "");
-  const currentTurnIndex = castMembers.findIndex(({ id }) => id === turn) ?? 0;
+  const currentTurnCastMember = castMembers.find(({ myTurn }) => myTurn);
+  const isMyTurn = !dm && ids.includes(currentTurnCastMember?.id ?? "");
+  const currentTurnIndex = currentTurnCastMember
+    ? castMembers.indexOf(currentTurnCastMember)
+    : -1;
   const initiativeRolls = myCharacters.map((castMember) => ({
     roll: new Roll({ dieCount: 1, dieSides: 20, extra: castMember.initiative }),
     label: myCharacters.length > 1 ? idCastMember(castMember) : undefined,
@@ -120,64 +133,35 @@ export function Header() {
     (document.activeElement as HTMLElement)?.blur();
   }
 
-  const rollInitiative = (_event?: SyntheticEvent, rolls?: RollHistory[]) => {
-    if (rolls) {
-      const initiativeMap = myCharacters.reduce(
-        (initiativeMap, castMember, i) => {
-          return {
-            ...initiativeMap,
-            [castMember.id]: rolls[i],
-          };
-        },
-        {} as Record<string, RollHistory>
-      );
-      io.emit("rollInitiative", initiativeMap);
-      setRollOpen(false);
-    } else {
-      setRollOpen(true);
-    }
-  };
+  const rollInitiative = useRollInitiative(setRollOpen, io, myCharacters);
 
-  const handlers: Record<string, (event: SyntheticEvent) => void> = {
-    pickActors: (event: SyntheticEvent) => {
-      event.stopPropagation(); // don't let click that opens the dialog bubble up to the window and dismiss it
-      setActorPickerOpen(true);
-    },
-    previousTurn: () => {
-      if (!dm) {
-        // TODO: allow players to manually enter their initiative
-        return;
-      }
-      const previousIndex =
-        currentTurnIndex - 1 < 0
-          ? castMembers.length - 1
-          : currentTurnIndex - 1;
-      io.emit("turn", castMembers[previousIndex].id);
-    },
+  const handlers: Record<
+    string,
+    (event: SyntheticEvent, ...args: any[]) => void
+  > = {
+    pickActors: usePickActors(setActorPickerOpen),
+    previousTurn: usePreviousTurn(dm, castMembers, currentTurnIndex, io),
     rollInitiative,
-    nextTurn: () => {
-      if (!dm) {
-        return;
-      }
-      const nextIndex = (currentTurnIndex + 1) % castMembers.length;
-      io.emit("turn", castMembers[nextIndex].id);
-    },
-    endTurn: () => {
-      if (dm || !isMyTurn) {
-        return;
-      }
-      const nextIndex = (currentTurnIndex + 1) % castMembers.length;
-      io.emit("turn", castMembers[nextIndex].id);
+    nextTurn: useNextTurn(dm, castMembers, currentTurnIndex, io),
+    endTurn: useEndTurn(dm, isMyTurn, io, currentTurnIndex, castMembers),
+    actions: () => {
+      setActionMenuOpen(true);
     },
   };
 
   // JSX
-  const options: MenuOption[] = optionParams
+  const defaultMenuOptions: Array<
+    MenuOption & { dmOnly?: boolean; playerOnly?: boolean }
+  > = optionParams.map((params) => ({
+    ...params,
+    onClick: (event: SyntheticEvent) => handlers[params.handlerName](event),
+  }));
+  const options: MenuOption[] = defaultMenuOptions
     .filter(({ dmOnly, playerOnly }) => !(dmOnly && !dm) && !(playerOnly && dm))
-    .map(({ icon, text, handlerName }) => ({
+    .map(({ icon, text, onClick }) => ({
       icon,
       text,
-      onClick: handlers[handlerName],
+      onClick,
     }));
 
   const avatar = (
@@ -185,8 +169,6 @@ export function Header() {
       <Avatar src={user.picture} alt={user.name} onClick={logout} />
     </AvatarCrop>
   );
-
-  const useButtons = window.screen.width > device.md;
 
   if (!useButtons) {
     options.push({ icon: avatar, text: user.name, onClick: logout });
@@ -202,11 +184,17 @@ export function Header() {
         </MenuBar>
       ) : (
         <MenuBar>
-          <Menu options={options} />
+          <MobileHeader options={options} />
         </MenuBar>
       )}
       {actorPickerOpen && (
         <ActorPicker onClose={closeActorPicker}></ActorPicker>
+      )}
+      {currentTurnCastMember && actionMenuOpen && (
+        <ActionMenu
+          castMember={currentTurnCastMember}
+          onClose={() => setActionMenuOpen(false)}
+        />
       )}
 
       {rollOpen && (

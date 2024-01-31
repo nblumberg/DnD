@@ -64,45 +64,59 @@ export function History() {
     setRollOpen(false);
   };
 
-  const events = history.length ? (
-    <ol>
-      {history.map((entry) => {
-        let { literals, changeables } = parseChangeables(entry.display(true));
-        let content: JSX.Element[] = [];
-        let i = 0;
-        while (literals.length + changeables.length) {
-          if (i % 2 === 0) {
-            const literal = literals.shift();
-            if (literal) {
-              content.push(<span>{literal}</span>);
-            }
-          } else {
-            const changeable = changeables.shift();
-            if (changeable) {
-              const { attributes, innerText } = changeable;
-              content.push(
-                <a
-                  href="javascript:void(0)"
-                  data-changeable={entry.id}
-                  {...attributes}
-                >
-                  {innerText}
-                </a>
-              );
-            }
+  const rounds: IChangeEvent[][] = [[]];
+  let [currentRound] = rounds;
+  history.forEach((entry) => {
+    if (entry.type === "Round") {
+      currentRound = [];
+      rounds.push(currentRound);
+    } else {
+      currentRound.push(entry);
+    }
+  });
+  const roundContent = rounds.map((round, i) => {
+    const events = round.map((entry) => {
+      let { literals, changeables } = parseChangeables(entry.display(true));
+      let content: JSX.Element[] = [];
+      let i = 0;
+      while (literals.length + changeables.length) {
+        if (i % 2 === 0) {
+          const literal = literals.shift();
+          if (literal) {
+            content.push(<span>{literal}</span>);
           }
-          i++;
+        } else {
+          const changeable = changeables.shift();
+          if (changeable) {
+            const { attributes, innerText } = changeable;
+            content.push(
+              <a
+                href="javascript:void(0)"
+                data-changeable={entry.id}
+                {...attributes}
+              >
+                {innerText}
+              </a>
+            );
+          }
         }
-        return <li key={entry.id}>{content}</li>;
-      })}
-    </ol>
-  ) : (
-    <p>Nothing yet</p>
-  );
+        i++;
+      }
+      return <li key={entry.id}>{content}</li>;
+    });
+    const roundNumber = i + 1;
+    return (
+      <li key={roundNumber}>
+        <p>Round {roundNumber}</p>
+        <ol>{events}</ol>
+      </li>
+    );
+  });
+  const content = history.length ? <ol>{roundContent}</ol> : <p>Nothing yet</p>;
   return (
     <Panel>
       <h2>History</h2>
-      {events}
+      {content}
       {rollOpen && (
         <InteractiveRoll
           title="Change roll"

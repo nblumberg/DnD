@@ -1,5 +1,6 @@
+import { useContext } from "react";
 import styled from "styled-components";
-import { useCastMembers } from "../data/castMembers";
+import { CastMemberContext } from "../data/castMembers";
 import { CastMemberCard } from "./CastMemberCard";
 import { EmptyState } from "./EmptyState";
 import { media } from "./breakpoints";
@@ -17,7 +18,7 @@ const TurnOrderGrid = styled.main`
 `;
 
 export function TurnOrder() {
-  const castMembers = useCastMembers();
+  const castMembers = useContext(CastMemberContext);
   const initiativeOrder = Object.values(castMembers).sort(
     (a, b) => b.initiativeOrder - a.initiativeOrder
   );
