@@ -13,5 +13,5 @@ const defaultImages: Record<string, string> = {
 };
 
 export function defaultImage(type: string, src?: string): string {
-  return src ?? `${defaultImageBase}${defaultImages[type]}`;
+  return src || `${defaultImageBase}${defaultImages[type]}`;
 }

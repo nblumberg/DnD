@@ -95,3 +95,18 @@ export function useEndTurn(
     io.emit("turn", castMembers[nextIndex].id);
   };
 }
+
+export function useResetGame(
+  dm: boolean,
+  io: ReturnType<typeof useSocket>
+): () => void {
+  return () => {
+    if (!dm) {
+      return;
+    }
+    if (!io) {
+      throw new Error("Socket not initialized");
+    }
+    io.emit("resetGame");
+  };
+}

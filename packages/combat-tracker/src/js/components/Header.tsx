@@ -17,6 +17,7 @@ import {
   useNextTurn,
   usePickActors,
   usePreviousTurn,
+  useResetGame,
   useRollInitiative,
 } from "./handlers";
 
@@ -84,6 +85,7 @@ const optionParams: Array<{
   { dmOnly: true, icon: "⏩", text: "Next turn", handlerName: "nextTurn" },
   { icon: "🎬", text: "Actions", handlerName: "actions" },
   { playerOnly: true, icon: "🏁", text: "End turn", handlerName: "endTurn" },
+  { dmOnly: true, icon: "🗑", text: "Reset game", handlerName: "resetGame" },
 ];
 
 function HeaderButtons({ options }: { options: MenuOption[] }) {
@@ -147,6 +149,7 @@ export function Header() {
     actions: () => {
       setActionMenuOpen(true);
     },
+    resetGame: useResetGame(dm, io),
   };
 
   // JSX

@@ -56,6 +56,21 @@ export const {
   setData: updateState,
 } = createEventEmitter(state);
 
+export function resetGame(): void {
+  console.log("Resetting game");
+  const changes: HistoryEntry<CastMember>[] = [];
+  const history: IChangeEvent[] = [];
+  updateState({ ...defaultState, history, changes }, true);
+  getHistoryHandle<CastMember>("CastMember").setHistory(changes);
+  setHistory(history);
+  onHistoryChange();
+  onStateChange();
+}
+
+export function onHistoryChange(): void {
+  updateState({ history: [...state.history], changes: state.changes });
+}
+
 export function onStateChange() {
   const changes = getHistoryHandle<CastMember>("CastMember").getHistory();
   const history = getHistory();

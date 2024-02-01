@@ -5,6 +5,7 @@ import {
   removeConditionFromCastMember,
 } from "../actions/castMemberActions";
 import { getTurnOrder } from "../actions/initiativeActions";
+import { addStatePropertyListener } from "../state";
 import {
   addCastMembersListener,
   castActor,
@@ -53,8 +54,11 @@ function syncCastMembers(socket: Socket): void {
 
   socket.emit("castMembers", getTurnOrder());
 
-  addCastMembersListener(() => {
+  function castMemberChangeListener() {
     console.log(`${users} detected cast members change`);
     socket.emit("castMembers", getTurnOrder());
-  });
+  }
+
+  addStatePropertyListener("castMembers", castMemberChangeListener);
+  addCastMembersListener(castMemberChangeListener);
 }

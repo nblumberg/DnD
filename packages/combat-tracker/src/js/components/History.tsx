@@ -1,8 +1,9 @@
 import { ChangeEvent } from "packages/state-change/dist/js/molecular/event";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { Roll, RollHistory } from "roll";
 import { IChangeEvent, parseChangeables } from "state-change";
 import styled from "styled-components";
+import { useIsDM } from "../auth";
 import { useHistory } from "../data/history";
 import { useSocket } from "../services/sockets";
 import { InteractiveRoll } from "./InteractiveRoll";
@@ -10,14 +11,25 @@ import { InteractiveRoll } from "./InteractiveRoll";
 const Panel = styled.section`
   text-align: left;
 `;
+const Changeable = styled.a`
+  color: blue;
+  font-weight: bold;
+`;
 
 export function History() {
+  const history = useHistory();
+  const io = useSocket();
+  const dm = useIsDM();
   const [change, setChange] = useState<ChangeEvent | undefined>();
   const [rollOpen, setRollOpen] = useState(false);
   const [rolls, setRolls] = useState<Array<{ roll: Roll; label?: string }>>([]);
 
-  const history = useHistory();
-  const io = useSocket();
+  const changeableClick = (event: SyntheticEvent) => {
+    event.preventDefault();
+    if (!dm) {
+      alert((event.target as HTMLAnchorElement).title);
+    }
+  };
 
   useEffect(() => {
     if (!io) {
@@ -67,7 +79,7 @@ export function History() {
   const rounds: IChangeEvent[][] = [[]];
   let [currentRound] = rounds;
   history.forEach((entry) => {
-    if (entry.type === "Round") {
+    if (entry.type === "ChangeRound") {
       currentRound = [];
       rounds.push(currentRound);
     } else {
@@ -83,20 +95,22 @@ export function History() {
         if (i % 2 === 0) {
           const literal = literals.shift();
           if (literal) {
-            content.push(<span>{literal}</span>);
+            content.push(<span key={i}>{literal}</span>);
           }
         } else {
           const changeable = changeables.shift();
           if (changeable) {
             const { attributes, innerText } = changeable;
             content.push(
-              <a
-                href="javascript:void(0)"
+              <Changeable
+                key={i}
+                href=""
+                onClick={changeableClick}
                 data-changeable={entry.id}
                 {...attributes}
               >
                 {innerText}
-              </a>
+              </Changeable>
             );
           }
         }

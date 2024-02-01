@@ -4,6 +4,7 @@ export { AddCastMember } from "./molecular/addCastMember";
 export { AddCondition } from "./molecular/addCondition";
 export { Attack } from "./molecular/attack";
 export { CastSpell } from "./molecular/castSpell";
+export { ChangeRound } from "./molecular/changeRound";
 export { DelayInitiative, ReadyAction } from "./molecular/delayInitiative";
 export {
   getCastMember,

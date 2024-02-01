@@ -1,8 +1,11 @@
 import { CastMember } from "creature";
 import { RollHistory } from "roll";
-import { StartTurn } from "state-change";
-import { setState, state } from "../state";
-import { rollInitiative as castMemberRollInitiative } from "./castMemberActions";
+import { ChangeRound } from "state-change";
+import { onHistoryChange, setState, state } from "../state";
+import {
+  rollInitiative as castMemberRollInitiative,
+  startTurn as castMemberStartTurn,
+} from "./castMemberActions";
 
 export function getTurnOrder(): CastMember[] {
   return Object.values(state.castMembers).sort(
@@ -27,16 +30,21 @@ export function startTurn(id: string): string | undefined {
     return;
   }
 
-  new StartTurn({ castMemberId: id });
-
-  setState("currentTurn", id);
+  const castMember = castMemberStartTurn(id);
+  if (!castMember) {
+    throw new Error(`StartTurn ChangeEvent resulted in undefined CastMember`);
+  }
+  setState("currentTurn", castMember.id);
 
   if (newTurnIndex === (oldTurnIndex + 1) % castMembers.length) {
     // Normal turn transition
     if (newTurnIndex < oldTurnIndex) {
+      new ChangeRound({ round: state.round + 1 });
       setState("round", state.round + 1);
     }
   }
+
+  onHistoryChange();
 
   return newTurnCastMember.id;
 }

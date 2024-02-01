@@ -5,6 +5,7 @@ import { Server as SocketIOServer, Socket as SocketIOSocket } from "socket.io";
 import { attachCastMemberSockets } from "./castMemberSockets";
 import { attachHistorySockets } from "./historySockets";
 import { attachInitiativeSockets } from "./initiativeSockets";
+import { attachResetGameSockets } from "./resetGameSockets";
 import {
   ClientToServerEvents,
   InterServerEvents,
@@ -62,6 +63,7 @@ getSocketIO().then((io) => {
   attachCastMemberSockets(io);
   attachInitiativeSockets(io);
   attachHistorySockets(io);
+  attachResetGameSockets(io);
 });
 
 export function getSocketUsers(socket: Socket): string[] {

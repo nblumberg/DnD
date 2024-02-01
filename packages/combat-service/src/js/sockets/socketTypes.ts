@@ -21,6 +21,7 @@ export interface ClientToServerEvents {
   addCondition: (id: string, condition: Condition) => void;
   removeCondition: (id: string, condition: string) => void;
   changeHistory: (id: string, ...params: any[]) => void;
+  resetGame: () => void;
 }
 
 export interface InterServerEvents {

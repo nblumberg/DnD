@@ -7,16 +7,17 @@ import {
   ReadyAction,
   RemoveCondition,
   RollInitiative,
+  StartTurn,
   StopDelayedAction,
   TriggerReadiedAction,
   getHistoryHandle,
 } from "state-change";
-import { setState, state, updateState } from "../state";
+import { onHistoryChange, setState, state } from "../state";
 import { setCastMemberState } from "../state/castMemberState";
 import { getTurnOrder } from "./initiativeActions";
 
 function emitChanges(event: IChangeEvent): CastMember | undefined {
-  updateState({ history: state.history, changes: state.changes });
+  onHistoryChange();
 
   const history = getHistoryHandle<CastMember>("CastMember").getHistory();
   let castMember: CastMember | undefined;
@@ -87,6 +88,15 @@ export function readyAction(id: string): CastMember | undefined {
   console.log(`Cast member ${idCastMember(castMember)} is readying an action`);
 
   return emitChanges(new ReadyAction({ castMemberId: id }));
+}
+
+export function startTurn(id: string): CastMember | undefined {
+  const castMember = getCachedCastMember(id);
+  if (!castMember) {
+    return;
+  }
+  console.log(`Cast member ${idCastMember(castMember)} is starting their turn`);
+  return emitChanges(new StartTurn({ castMemberId: id }));
 }
 
 export function stopDelayedAction(

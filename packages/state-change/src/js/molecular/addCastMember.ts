@@ -1,4 +1,4 @@
-import { CastMember, idCastMember } from "creature";
+import { CastMember } from "creature";
 import { addCastMemberChange } from "../atomic/addCastMember";
 import { StateAdd } from "../atomic/stateChange";
 import { ChangeEvent, IChangeEvent, addToHistory, registerType } from "./event";
@@ -29,8 +29,12 @@ export class AddCastMember extends ChangeEvent {
   }
 
   override display(): string {
-    const castMember = this.getCastMember();
-    return `${idCastMember(castMember)} joins the game`;
+    const [
+      {
+        newValue: { name },
+      },
+    ] = this.getChanges();
+    return `${name} joins the game`;
   }
 
   protected override makeChanges(): StateAdd<CastMember>[] {
