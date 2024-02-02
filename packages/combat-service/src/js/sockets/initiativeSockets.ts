@@ -29,7 +29,7 @@ function turnMessage(): string | undefined {
 
 function syncInitiative(socket: Socket, isDM = false): void {
   const users = serializeSocketUsers(socket);
-  console.log(`Initiative logic connected for ${users}`);
+  // console.log(`Initiative logic connected for ${users}`);
 
   const message = turnMessage();
   if (message) {
@@ -37,7 +37,7 @@ function syncInitiative(socket: Socket, isDM = false): void {
   }
 
   addStatePropertyListener("currentTurn", () => {
-    console.log(`${users} detected turn change`);
+    // console.log(`${users} detected turn change`);
     const message = turnMessage();
     if (message) {
       socket.emit("turn", message);

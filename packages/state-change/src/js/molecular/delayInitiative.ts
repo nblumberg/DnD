@@ -1,7 +1,7 @@
 import { CastMember, idCastMember } from "creature";
 import { delayInitiativeChange } from "../atomic/delayInitiative";
 import { StateChange } from "../atomic/stateChange";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import { CastMembers, ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class DelayInitiative extends ChangeEvent {
   static type = "DelayInitiative";
@@ -21,9 +21,10 @@ export class DelayInitiative extends ChangeEvent {
     return [delayInitiativeChange(this.getCastMember()!, true)];
   }
 
-  change(): CastMember | undefined {
+  change(): CastMembers {
     console.warn("Can't change delaying initiative");
-    return this.getCastMember();
+    const castMember = this.getCastMember();
+    return { [castMember.id]: castMember };
   }
 
   override display(): string {
@@ -45,9 +46,10 @@ export class ReadyAction extends DelayInitiative {
     }
   }
 
-  override change(): CastMember | undefined {
+  override change(): CastMembers {
     console.warn("Can't change readying an action");
-    return this.getCastMember();
+    const castMember = this.getCastMember();
+    return { [castMember.id]: castMember };
   }
 
   override display(): string {

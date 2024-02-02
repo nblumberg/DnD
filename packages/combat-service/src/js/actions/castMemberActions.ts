@@ -3,6 +3,7 @@ import { Roll, RollHistory } from "roll";
 import {
   AddCondition,
   DelayInitiative,
+  HistoryEntry,
   IChangeEvent,
   ReadyAction,
   RemoveCondition,
@@ -10,29 +11,32 @@ import {
   StartTurn,
   StopDelayedAction,
   TriggerReadiedAction,
-  getHistoryHandle,
 } from "state-change";
-import { onHistoryChange, setState, state } from "../state";
+import { setState, state } from "../state";
 import { setCastMemberState } from "../state/castMemberState";
 import { getTurnOrder } from "./initiativeActions";
 
-function emitChanges(event: IChangeEvent): CastMember | undefined {
-  onHistoryChange();
-
-  const history = getHistoryHandle<CastMember>("CastMember").getHistory();
-  let castMember: CastMember | undefined;
-  event.changes.forEach((changeId) => {
-    const change = history.find(({ id }) => id === changeId);
-    if (!change) {
-      throw new Error(`Couldn't find change ${changeId}`);
+function emitChanges(event: IChangeEvent): Record<string, CastMember> {
+  const castMembers: Record<string, CastMember> = {};
+  event.getChanges().forEach((change: HistoryEntry<CastMember>) => {
+    if (change.type === "-") {
+      castMembers[change.object] = change.newValue;
+    } else if (
+      change.type === "c" ||
+      change.type === "c+" ||
+      change.type === "c-"
+    ) {
+      const castMember = setCastMemberState(
+        change.object,
+        change.property,
+        change.newValue as CastMember[keyof CastMember] | undefined
+      );
+      castMembers[castMember.id] = castMember;
+    } else {
+      delete castMembers[change.object];
     }
-    castMember = setCastMemberState(
-      change.object,
-      change.property,
-      change.newValue
-    );
   });
-  return castMember;
+  return castMembers;
 }
 
 export function getCachedCastMember(id: string): CastMember | undefined {
@@ -67,6 +71,8 @@ export function rollInitiative(
     roll = die.getLastRoll();
   }
 
+  console.log(`CastMember ${id} rolled ${roll.total} for initiative`);
+
   return initiativeChange(new RollInitiative({ castMemberId: id, roll }));
 }
 
@@ -77,7 +83,8 @@ export function delayInitiative(id: string): CastMember | undefined {
   }
   console.log(`Cast member ${idCastMember(castMember)} is delaying initiative`);
 
-  return emitChanges(new DelayInitiative({ castMemberId: id }));
+  const castMembers = emitChanges(new DelayInitiative({ castMemberId: id }));
+  return castMembers[id];
 }
 
 export function readyAction(id: string): CastMember | undefined {
@@ -87,7 +94,8 @@ export function readyAction(id: string): CastMember | undefined {
   }
   console.log(`Cast member ${idCastMember(castMember)} is readying an action`);
 
-  return emitChanges(new ReadyAction({ castMemberId: id }));
+  const castMembers = emitChanges(new ReadyAction({ castMemberId: id }));
+  return castMembers[id];
 }
 
 export function startTurn(id: string): CastMember | undefined {
@@ -96,7 +104,8 @@ export function startTurn(id: string): CastMember | undefined {
     return;
   }
   console.log(`Cast member ${idCastMember(castMember)} is starting their turn`);
-  return emitChanges(new StartTurn({ castMemberId: id }));
+  const castMembers = emitChanges(new StartTurn({ castMemberId: id }));
+  return castMembers[id];
 }
 
 export function stopDelayedAction(
@@ -138,12 +147,14 @@ export function triggerReadiedAction(
 }
 
 function initiativeChange(event: IChangeEvent): CastMember | undefined {
-  const castMember = emitChanges(event);
+  emitChanges(event);
+  const castMembers = getTurnOrder();
+  console.log("castMembers", state.castMembers);
   setState(
     "turnOrder",
-    getTurnOrder().map(({ id }) => id)
+    castMembers.map(({ id }) => id)
   );
-  return castMember;
+  return castMembers.find(({ id }) => event.castMemberId === id);
 }
 
 export function addConditionToCastMember(
@@ -168,12 +179,13 @@ export function addConditionToCastMember(
     onTurnStart: onTurnStart?.id,
     onTurnEnd: onTurnEnd?.id ?? id,
   };
-  return emitChanges(
+  const castMembers = emitChanges(
     new AddCondition({
       castMemberId: id,
       condition: activeCondition,
     })
   );
+  return castMembers[id];
 }
 
 export function removeConditionFromCastMember(
@@ -188,5 +200,8 @@ export function removeConditionFromCastMember(
   console.log(
     `Removing condition ${condition} from ${idCastMember(castMember)}`
   );
-  return emitChanges(new RemoveCondition({ castMemberId: id, condition }));
+  const castMembers = emitChanges(
+    new RemoveCondition({ castMemberId: id, condition })
+  );
+  return castMembers[id];
 }

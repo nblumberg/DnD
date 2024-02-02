@@ -9,7 +9,7 @@ import { Roll, RollHistory } from "roll";
 import { StateChange } from "../atomic/stateChange";
 import { affectTarget } from "../util/affectTarget";
 import { attackTarget } from "../util/attackTarget";
-import { IChangeEvent, registerType } from "./event";
+import { CastMembers, IChangeEvent, registerType } from "./event";
 import { HasTargets } from "./hasTargets";
 
 export class Attack extends HasTargets {
@@ -117,7 +117,7 @@ export class Attack extends HasTargets {
     damage: RollHistory[];
     targets: string[];
     targetSaves: RollHistory[];
-  }): CastMember | undefined {
+  }): CastMembers {
     this.attack = params.attack;
     this.toHit = params.toHit;
     this.damage = params.damage;

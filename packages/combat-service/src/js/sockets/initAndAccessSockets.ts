@@ -45,11 +45,11 @@ export function initializeSockets(app: Express): HttpServer {
   });
   resolvePromise(io);
   io.on("connection", (socket) => {
-    console.log(`Player socket connected from ${socket.handshake.address}`);
+    // console.log(`Player socket connected from ${socket.handshake.address}`);
     socket.join("players");
   });
   io.of("/dm").on("connection", (socket) => {
-    console.log(`DM socket connected from ${socket.handshake.address}`);
+    // console.log(`DM socket connected from ${socket.handshake.address}`);
     socket.join("dm");
   });
   return httpServer;

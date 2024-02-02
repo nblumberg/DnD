@@ -14,15 +14,8 @@ import {
   SetData,
   createEventEmitter,
 } from "event-emitter";
-import {
-  AddCastMember,
-  HistoryEntry,
-  IChangeEvent,
-  RemoveCastMember,
-  getCastMembers,
-  getHistory,
-} from "state-change";
-import { State, onStateChange, state, updateState } from "../state";
+import { AddCastMember, RemoveCastMember, getCastMembers } from "state-change";
+import { onStateChange, state, updateState } from "../state";
 
 export let addCastMembersListener: AddListener<Record<string, CastMember>>;
 let updateCastMembers: SetData<Record<string, CastMember>>;
@@ -36,27 +29,28 @@ const castMemberListeners: Record<
   }
 > = {};
 
-export function initializeCastMembersState(
-  state: State & {
-    history: IChangeEvent[];
-    changes: HistoryEntry<CastMember>[];
-  }
-) {
-  const castMembers = getCastMembers();
-  state.castMembers = castMembers.reduce(
+export function castMembersFromHistory(): CastMember[] {
+  Object.keys(state.castMembers).forEach((castMemberId) => {
+    if (castMemberListeners[castMemberId]) {
+      castMemberListeners[castMemberId].removeListener();
+    }
+  });
+  const castMemberList = getCastMembers();
+  const castMembers: Record<string, CastMember> = castMemberList.reduce(
     (acc, castMember) => ({ ...acc, [castMember.id]: castMember }),
     {}
   );
-  const functions = createEventEmitter(state.castMembers);
+  const functions = createEventEmitter(castMembers);
   addCastMembersListener = functions.addListener;
   updateCastMembers = functions.setData;
-  Object.values(state.castMembers).forEach((castMember) => {
+  Object.values(castMembers).forEach((castMember) => {
     castMemberListeners[castMember.id] = createEventEmitter(castMember);
   });
-  updateState({ castMembers: state.castMembers });
+  updateState({ castMembers });
+  return castMemberList;
 }
 
-function getCastMember(id: string): CastMember | undefined {
+function getCachedCastMember(id: string): CastMember | undefined {
   return state.castMembers[id];
 }
 
@@ -78,47 +72,19 @@ export async function castActor(auditioner: Auditioner): Promise<CastMember> {
   });
   console.log(`Adding ${idCastMember(castMember)}`);
 
-  const { history, changes } = state;
-
   new AddCastMember({ castMemberId: id, castMember });
 
-  updateState({ history, changes });
-
-  castMemberListeners[castMember.id] = createEventEmitter(castMember);
-  updateCastMembers({ [castMember.id]: castMember });
-  updateState({ castMembers: state.castMembers });
-  onStateChange();
   return castMember;
 }
 
 export function fireCastMember(castMemberId: string) {
+  if (!state.castMembers[castMemberId]) {
+    console.warn(`No cast member ${castMemberId}`);
+    return;
+  }
   console.log(`Firing ${idCastMember(state.castMembers[castMemberId])}`);
+
   new RemoveCastMember({ castMemberId });
-
-  updateState({ history: getHistory() });
-
-  if (castMemberListeners[castMemberId]) {
-    castMemberListeners[castMemberId].removeListener();
-  }
-  delete castMemberListeners[castMemberId];
-  updateCastMembers(
-    Object.fromEntries(
-      Object.entries(state.castMembers).filter(([key]) => key !== castMemberId)
-    ),
-    true
-  );
-  updateState({ castMembers: state.castMembers });
-  onStateChange();
-}
-
-export function replaceCastMember(castMember: CastMember) {
-  if (castMemberListeners[castMember.id]) {
-    castMemberListeners[castMember.id].removeListener();
-  }
-  castMemberListeners[castMember.id] = createEventEmitter(castMember);
-  updateCastMembers({ [castMember.id]: castMember });
-  updateState({ castMembers: state.castMembers });
-  onStateChange();
 }
 
 export function setCastMemberState<P extends keyof CastMember>(
@@ -126,7 +92,7 @@ export function setCastMemberState<P extends keyof CastMember>(
   prop: P,
   value: CastMember[P]
 ): CastMember {
-  const castMember = getCastMember(id);
+  const castMember = getCachedCastMember(id);
   if (!castMember) {
     throw new Error(`No cast member ${id}`);
   }
@@ -135,7 +101,6 @@ export function setCastMemberState<P extends keyof CastMember>(
   }
   castMemberListeners[id].setData({ [prop]: value });
   updateCastMembers({ [id]: castMember });
-  updateState({ castMembers: state.castMembers });
   onStateChange();
   return castMember;
 }

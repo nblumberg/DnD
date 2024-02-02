@@ -6,6 +6,7 @@ import { startTurnChange } from "../atomic/startTurn";
 import { StateChange } from "../atomic/stateChange";
 import { tickConditionChange } from "../atomic/tickCondition";
 import {
+  CastMembers,
   ChangeEvent,
   IChangeEvent,
   getCastMembers,
@@ -102,9 +103,10 @@ export class StartTurn extends ChangeEvent {
     return makeChanges("start turn", getCastMembers(), this.getCastMember());
   }
 
-  change(): CastMember | undefined {
+  change(): CastMembers {
     console.warn("Can't change start turn");
-    return this.getCastMember();
+    const castMember = this.getCastMember();
+    return { [castMember.id]: castMember };
   }
 
   override display(): string {
@@ -140,7 +142,7 @@ export class TriggerReadiedAction extends ChangeEvent {
     );
   }
 
-  change(initiativeOrder: number): CastMember | undefined {
+  change(initiativeOrder: number): CastMembers {
     this.initiativeOrder = initiativeOrder;
     return this.executeChanges();
   }
@@ -181,7 +183,7 @@ export class StopDelayedAction extends ChangeEvent {
     );
   }
 
-  change(initiativeOrder: number): CastMember | undefined {
+  change(initiativeOrder: number): CastMembers {
     this.initiativeOrder = initiativeOrder;
     return this.executeChanges();
   }

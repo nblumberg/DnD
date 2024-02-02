@@ -4,7 +4,7 @@ import { delayInitiativeChange } from "../atomic/delayInitiative";
 import { setInitiativeChange } from "../atomic/setInitiative";
 import { StateChange } from "../atomic/stateChange";
 import { createChangeable } from "../util/changeable";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import { CastMembers, ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class RollInitiative extends ChangeEvent {
   static type = "RollInitiative";
@@ -43,7 +43,7 @@ export class RollInitiative extends ChangeEvent {
     return changes;
   }
 
-  change(roll: RollHistory): CastMember | undefined {
+  change(roll: RollHistory): CastMembers {
     this.roll = roll;
     return this.executeChanges();
   }

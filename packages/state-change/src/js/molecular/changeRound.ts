@@ -1,6 +1,12 @@
 import { CastMember } from "creature";
 import { StateChange } from "../atomic/stateChange";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import {
+  CastMembers,
+  ChangeEvent,
+  IChangeEvent,
+  addToHistory,
+  registerType,
+} from "./event";
 
 export class ChangeRound extends ChangeEvent {
   static type = "ChangeRound";
@@ -11,6 +17,7 @@ export class ChangeRound extends ChangeEvent {
     super({ type: ChangeRound.type, ...params });
 
     this.round = params.round;
+    addToHistory(this);
   }
 
   protected override makeChanges(): StateChange<
@@ -20,9 +27,9 @@ export class ChangeRound extends ChangeEvent {
     return [];
   }
 
-  change(): CastMember | undefined {
+  change(): CastMembers {
     console.warn("Can't change delaying initiative");
-    return this.getCastMember();
+    return {};
   }
 
   override display(): string {

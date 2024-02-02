@@ -1,7 +1,7 @@
 import { CastMember } from "creature";
 import { nameCastMemberChange } from "../atomic/nameCastMember";
 import { StateChange } from "../atomic/stateChange";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import { CastMembers, ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class NameCastMember extends ChangeEvent {
   static type = "NameCastMember";
@@ -25,7 +25,7 @@ export class NameCastMember extends ChangeEvent {
     return [nameCastMemberChange(this.getCastMember()!, this.name)];
   }
 
-  change(name: string): CastMember | undefined {
+  change(name: string): CastMembers {
     this.name = name;
     return this.executeChanges();
   }

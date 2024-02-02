@@ -6,6 +6,7 @@ import { Header } from "./components/Header";
 import { History } from "./components/History";
 import { TurnOrder } from "./components/TurnOrder";
 import { CastMemberContext, useCastMembers } from "./data/castMembers";
+import { HistoryContext, useHistory } from "./data/history";
 import { MobileContext, useMobile } from "./data/mobile";
 import { View, ViewContext } from "./data/view";
 import { useSocket } from "./services/sockets";
@@ -20,11 +21,16 @@ const TurnOrderGrow = styled(TurnOrder)`
 const HistoryShrink = styled(History)`
   flex-grow: 0;
 `;
+
+let renderCount = 1;
+
 export function App() {
   const { login, user } = useLogin();
   const io = useSocket();
   const isMobile = useMobile();
-  const castMembers = useCastMembers();
+  const history = useHistory();
+  const castMembers = useCastMembers(history.changes);
+  console.log("App render", history, castMembers);
   const [view, setView] = useState<View>(isMobile ? "turnOrder" : "both");
 
   useEffect(() => {
@@ -48,15 +54,18 @@ export function App() {
   return (
     <IdentityContext.Provider value={user}>
       <MobileContext.Provider value={isMobile}>
-        <CastMemberContext.Provider value={castMembers}>
-          <ViewContext.Provider value={{ view, setView }}>
-            <Header />
-            <Body>
-              {view !== "history" ? <TurnOrderGrow></TurnOrderGrow> : null}
-              {view !== "turnOrder" ? <HistoryShrink></HistoryShrink> : null}
-            </Body>
-          </ViewContext.Provider>
-        </CastMemberContext.Provider>
+        <HistoryContext.Provider value={history}>
+          <CastMemberContext.Provider value={castMembers}>
+            <ViewContext.Provider value={{ view, setView }}>
+              <Header />
+              <div>{renderCount++}</div>
+              <Body>
+                {view !== "history" ? <TurnOrderGrow></TurnOrderGrow> : null}
+                {view !== "turnOrder" ? <HistoryShrink></HistoryShrink> : null}
+              </Body>
+            </ViewContext.Provider>
+          </CastMemberContext.Provider>
+        </HistoryContext.Provider>
       </MobileContext.Provider>
     </IdentityContext.Provider>
   );

@@ -11,7 +11,7 @@ import {
   castActor,
   fireCastMember,
 } from "../state/castMemberState";
-import { SocketServer, serializeSocketUsers } from "./initAndAccessSockets";
+import { SocketServer } from "./initAndAccessSockets";
 
 export function attachCastMemberSockets(io: SocketServer) {
   io.on("connection", (socket) => {
@@ -49,13 +49,13 @@ export function attachCastMemberSockets(io: SocketServer) {
 }
 
 function syncCastMembers(socket: Socket): void {
-  const users: string = serializeSocketUsers(socket);
-  console.log(`Cast member logic connected for ${users}`);
+  // const users: string = serializeSocketUsers(socket);
+  // console.log(`Cast member logic connected for ${users}`);
 
   socket.emit("castMembers", getTurnOrder());
 
   function castMemberChangeListener() {
-    console.log(`${users} detected cast members change`);
+    // console.log(`${users} detected cast members change`);
     socket.emit("castMembers", getTurnOrder());
   }
 

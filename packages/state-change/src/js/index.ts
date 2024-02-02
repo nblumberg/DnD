@@ -10,6 +10,8 @@ export {
   getCastMember,
   getCastMembers,
   getHistory,
+  instantiateHistory,
+  listenToHistory,
   setHistory,
 } from "./molecular/event";
 export type { IChangeEvent } from "./molecular/event";
@@ -22,3 +24,4 @@ export {
   TriggerReadiedAction,
 } from "./molecular/startTurn";
 export { createChangeable, parseChangeables } from "./util/changeable";
+export { getUniqueId, preExistingUniqueId } from "./util/unique";

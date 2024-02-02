@@ -1,9 +1,13 @@
 import { CastMember } from "creature";
 import { Socket } from "socket.io";
-import { getObjectState, HistoryEntry, IChangeEvent } from "state-change";
-import { addStatePropertyListener, state, updateState } from "../state";
-import { replaceCastMember } from "../state/castMemberState";
-import { serializeSocketUsers, SocketServer } from "./initAndAccessSockets";
+import {
+  getHistory,
+  getHistoryHandle,
+  getUniqueId,
+  listenToHistory,
+} from "state-change";
+import { state } from "../state";
+import { SocketServer } from "./initAndAccessSockets";
 
 export function attachHistorySockets(io: SocketServer) {
   io.on("connection", (socket) => {
@@ -21,41 +25,23 @@ export function attachHistorySockets(io: SocketServer) {
         return;
       }
       change.change(...params);
-      updateState({
-        history: state.history,
-        changes: state.changes,
-      });
-      const castMember = getObjectState<CastMember>(
-        change.castMemberId,
-        state.changes
-      );
-      if (!castMember) {
-        throw new Error(`Couldn't find cast member ${change.castMemberId}`);
-      }
-      replaceCastMember(castMember);
     });
   });
 }
 
-function historyMessage(): [IChangeEvent[], HistoryEntry<CastMember>[]] {
-  const { history = [], changes = [] } = state;
-  return [history, changes];
-}
-
 function syncHistory(socket: Socket, _isDM = false): void {
-  const users = serializeSocketUsers(socket);
-  console.log(`History logic connected for ${users}`);
+  // const users = serializeSocketUsers(socket);
+  // console.log(`History logic connected for ${users}`);
 
-  const message = historyMessage();
-  if (message) {
-    socket.emit("history", ...message);
-  }
+  socket.emit(
+    "fullHistory",
+    getUniqueId(),
+    getHistory(),
+    getHistoryHandle<CastMember>("CastMember").getHistory()
+  );
 
-  addStatePropertyListener("history", () => {
-    console.log(`${users} detected history change`);
-    const message = historyMessage();
-    if (message) {
-      socket.emit("history", ...message);
-    }
+  listenToHistory(({ type, history, changes }) => {
+    // console.log(`${users} detected history change`);
+    socket.emit("changeHistory", getUniqueId(), type, history, changes);
   });
 }

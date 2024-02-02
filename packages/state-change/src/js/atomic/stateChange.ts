@@ -1,5 +1,5 @@
 import { CastMember } from "creature";
-import { Unique, getUniqueId } from "../util/unique";
+import { Unique, getUniqueId, preExistingUniqueId } from "../util/unique";
 
 export interface StateAdd<T extends Unique> extends Unique {
   type: "+";
@@ -257,6 +257,9 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
       typeof param === "string"
         ? (JSON.parse(param) as HistoryEntry<T>[])
         : param;
+    newHistory.forEach((entry) => {
+      preExistingUniqueId(entry.id);
+    });
     histories.set(type, newHistory);
   }
 

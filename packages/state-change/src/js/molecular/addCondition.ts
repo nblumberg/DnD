@@ -6,7 +6,7 @@ import {
 } from "creature";
 import { addConditionChange } from "../atomic/addCondition";
 import { StateChange } from "../atomic/stateChange";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import { CastMembers, ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class AddCondition extends ChangeEvent {
   static type = "AddCondition";
@@ -36,7 +36,7 @@ export class AddCondition extends ChangeEvent {
     return [addConditionChange(castMember, this.condition)];
   }
 
-  change(condition: ActiveCondition): CastMember | undefined {
+  change(condition: ActiveCondition): CastMembers {
     this.condition = condition;
     return this.executeChanges();
   }

@@ -12,7 +12,7 @@ import { StateChange } from "../atomic/stateChange";
 import { affectTarget } from "../util/affectTarget";
 import { attackTarget } from "../util/attackTarget";
 import { damageTarget } from "../util/damageTarget";
-import { IChangeEvent, registerType } from "./event";
+import { CastMembers, IChangeEvent, registerType } from "./event";
 import { HasTargets } from "./hasTargets";
 
 export class CastSpell extends HasTargets {
@@ -240,7 +240,7 @@ export class CastSpell extends HasTargets {
     damage: RollHistory[];
     targets: string[];
     targetSaves?: RollHistory[];
-  }): CastMember | undefined {
+  }): CastMembers {
     this.spell = params.spell;
     this.toHit = params.toHit;
     this.damage = params.damage;

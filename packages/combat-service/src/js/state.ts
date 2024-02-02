@@ -7,9 +7,11 @@ import {
   IChangeEvent,
   getHistory,
   getHistoryHandle,
+  listenToHistory,
   setHistory,
 } from "state-change";
-import { initializeCastMembersState } from "./state/castMemberState";
+import { getTurnOrder } from "./actions/initiativeActions";
+import { castMembersFromHistory } from "./state/castMemberState";
 
 const stateFile = path.join(__dirname, "..", "..", "state.json");
 
@@ -56,19 +58,45 @@ export const {
   setData: updateState,
 } = createEventEmitter(state);
 
+/**
+ * Update cached derivative state
+ */
+function deriveState(): void {
+  const castMembersList = castMembersFromHistory();
+  state.turnOrder = getTurnOrder().map((castMember) => castMember.id);
+  state.round = state.history.filter(
+    ({ type }) => type === "ChangeRound"
+  ).length;
+  state.currentTurn = castMembersList.find(({ myTurn }) => myTurn)?.id;
+}
+deriveState();
+
+listenToHistory(() => {
+  deriveState();
+
+  // Persist state to disk
+  const changes = getHistoryHandle<CastMember>("CastMember").getHistory();
+  const history = getHistory();
+  fs.writeFileSync(
+    stateFile,
+    JSON.stringify(
+      {
+        changes,
+        history,
+      },
+      null,
+      2
+    )
+  );
+});
+
 export function resetGame(): void {
   console.log("Resetting game");
   const changes: HistoryEntry<CastMember>[] = [];
   const history: IChangeEvent[] = [];
   updateState({ ...defaultState, history, changes }, true);
-  getHistoryHandle<CastMember>("CastMember").setHistory(changes);
-  setHistory(history);
-  onHistoryChange();
-  onStateChange();
-}
-
-export function onHistoryChange(): void {
-  updateState({ history: [...state.history], changes: state.changes });
+  getHistoryHandle<CastMember>("CastMember").setHistory(state.changes);
+  setHistory(state.history);
 }
 
 export function onStateChange() {
@@ -94,6 +122,6 @@ export function setState<P extends keyof State>(prop: P, value: State[P]) {
   onStateChange();
 }
 
-initializeCastMembersState(state);
+castMembersFromHistory();
 
 onStateChange();

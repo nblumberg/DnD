@@ -1,7 +1,7 @@
 import { CastMember, castMemberDoSomething, idCastMember } from "creature";
 import { removeConditionChange } from "../atomic/expireCondition";
 import { StateChange } from "../atomic/stateChange";
-import { ChangeEvent, IChangeEvent, registerType } from "./event";
+import { CastMembers, ChangeEvent, IChangeEvent, registerType } from "./event";
 
 export class RemoveCondition extends ChangeEvent {
   static type = "RemoveCondition";
@@ -37,7 +37,7 @@ export class RemoveCondition extends ChangeEvent {
     return [removeConditionChange(castMember, condition)];
   }
 
-  change(condition: string): CastMember | undefined {
+  change(condition: string): CastMembers {
     this.condition = condition;
     return this.executeChanges();
   }

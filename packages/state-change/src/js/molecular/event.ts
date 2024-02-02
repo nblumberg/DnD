@@ -5,10 +5,14 @@ import {
   applyHistoryEntry,
   getHistoryHandle,
   getObjectState,
+  undoHistoryEntry,
 } from "../atomic/stateChange";
-import { Unique } from "../util/unique";
+import { Unique, getUniqueId, preExistingUniqueId } from "../util/unique";
 
-let changeEventHistory: IChangeEvent[] = [];
+const changeEvent = {
+  history: [] as IChangeEvent[],
+};
+
 const typeMap: { [key: string]: { new (...args: any[]): ChangeEvent } } = {};
 
 export function registerType(
@@ -18,15 +22,17 @@ export function registerType(
   typeMap[type] = constructor;
 }
 
+export type CastMembers = Record<string, CastMember>;
+
 export interface IChangeEvent extends Unique {
   type: string;
   castMemberId: string;
   changes: string[];
 
-  apply(): CastMember | undefined;
-  change(...args: any[]): CastMember | undefined;
+  apply(): CastMembers;
+  change(...args: any[]): CastMembers;
   display(html?: boolean): string;
-  undo(): CastMember | undefined;
+  undo(): CastMembers;
 }
 
 export abstract class ChangeEvent implements IChangeEvent {
@@ -41,31 +47,33 @@ export abstract class ChangeEvent implements IChangeEvent {
     }
     this.type = type;
     if (!castMemberId) {
-      throw new Error("ChangeEvent type is required");
+      throw new Error("ChangeEvent castMemberId is required");
     }
     this.castMemberId = castMemberId;
-    this.id = id ?? `${Date.now()}-${Math.random()}`;
+    this.id = id ?? getUniqueId();
     this.changes = changes ?? [];
   }
 
-  abstract change(...args: any[]): CastMember | undefined;
+  abstract change(...args: any[]): CastMembers;
 
   abstract display(html?: boolean): string;
 
   protected abstract makeChanges(): HistoryEntry<CastMember>[];
 
   apply() {
-    addToHistory(this);
     const changes = this.makeChanges();
-    return this.pushChanges(changes)!;
+    const castMembers = this.pushChanges(changes)!;
+    addToHistory(this);
+    return castMembers;
   }
 
   undo() {
+    const castMember = this.removeChanges()!;
     removeFromHistory(this);
-    return this.removeChanges()!;
+    return castMember;
   }
 
-  protected getChanges(): HistoryEntry<CastMember>[] {
+  getChanges(): HistoryEntry<CastMember>[] {
     const history = getHistoryHandle<CastMember>("CastMember").getHistory();
     return this.changes.map((id) => {
       const change = history.find(({ id: changeId }) => changeId === id);
@@ -76,12 +84,10 @@ export abstract class ChangeEvent implements IChangeEvent {
     });
   }
 
-  protected executeChanges(
-    changes = this.makeChanges()
-  ): CastMember | undefined {
-    const castMember = this.replaceChanges(changes);
+  protected executeChanges(changes = this.makeChanges()): CastMembers {
+    const castMembers = this.replaceChanges(changes);
     this.changes = changes.map(({ id }) => id);
-    return castMember;
+    return castMembers;
   }
 
   protected getHistoryBefore(): HistoryEntry<CastMember>[] {
@@ -97,6 +103,19 @@ export abstract class ChangeEvent implements IChangeEvent {
     return history.slice(0, index); // don't include any of my changes
   }
 
+  protected getHistoryAfter(): HistoryEntry<CastMember>[] {
+    const history = getHistoryHandle<CastMember>("CastMember").getHistory();
+    if (!this.changes.length) {
+      throw new Error("Couldn't find last change in history");
+    }
+    const lastChange = this.changes[this.changes.length - 1];
+    const index = history.findIndex(({ id }) => id === lastChange);
+    if (index === -1) {
+      throw new Error("Couldn't find first change in history");
+    }
+    return history.slice(0, index + 1); // include the last of my changes
+  }
+
   protected getCastMember(): CastMember {
     const history = this.getHistoryBefore();
     const castMember = getCastMember(this.castMemberId, history);
@@ -106,22 +125,20 @@ export abstract class ChangeEvent implements IChangeEvent {
     return castMember;
   }
 
-  protected applyChanges(
-    changes: HistoryEntry<CastMember>[]
-  ): CastMember | undefined {
-    let castMember: CastMember | undefined;
+  protected applyChanges(changes: HistoryEntry<CastMember>[]): CastMembers {
+    const castMembers: CastMembers = {};
     for (const change of changes) {
       if (change.type === "+") {
-        castMember = applyHistoryEntry<CastMember, StateAdd<CastMember>>(
+        const castMember = applyHistoryEntry<CastMember, StateAdd<CastMember>>(
           change
         );
+        castMembers[castMember.id] = castMember;
       } else {
-        castMember = this.getCastMember();
+        let castMember =
+          castMembers[change.object] ??
+          getCastMember(change.object, this.getHistoryBefore());
         if (change.type === "-") {
-          if (!castMember) {
-            return undefined;
-          }
-          castMember = applyHistoryEntry(change, castMember);
+          delete castMembers[change.object];
         } else {
           if (!castMember) {
             throw new Error(
@@ -129,58 +146,114 @@ export abstract class ChangeEvent implements IChangeEvent {
             );
           }
           castMember = applyHistoryEntry(change, castMember);
+          castMembers[castMember.id] = castMember;
         }
       }
     }
-    return castMember;
+    return castMembers;
   }
 
-  protected pushChanges(
-    newChanges: HistoryEntry<CastMember>[]
-  ): CastMember | undefined {
+  protected pushChanges(newChanges: HistoryEntry<CastMember>[]): CastMembers {
     const { pushStateHistory } = getHistoryHandle<CastMember>("CastMember");
     this.changes = pushStateHistory(newChanges).map(({ id }) => id);
     return this.applyChanges(newChanges);
   }
 
-  protected removeChanges(): CastMember | undefined {
+  protected removeChanges(): CastMembers {
     const { popStateHistory } = getHistoryHandle<CastMember>("CastMember");
-    this.changes.forEach((id) => popStateHistory(id));
+    const castMembers: CastMembers = {};
+    const relativeHistory = this.getHistoryAfter();
+    this.getChanges().forEach((entry) => {
+      let castMember = getCastMember(
+        entry.object,
+        relativeHistory,
+        false,
+        true
+      );
+      // TODO: why doesn't the overloading allow this?
+      // @ts-expect-error
+      castMember = undoHistoryEntry(entry, castMember) as
+        | CastMember
+        | undefined;
+      if (!castMember) {
+        delete castMembers[entry.object];
+      } else {
+        castMembers[castMember.id] = castMember;
+      }
+      popStateHistory(entry.id);
+    });
     this.changes = [];
-    return this.getCastMember();
+    return castMembers;
   }
 
   protected replaceChanges(
     newChanges: HistoryEntry<CastMember>[]
-  ): CastMember | undefined {
+  ): CastMembers {
+    const castMembers: CastMembers = {};
+    const affectedCastMembers = new Set<string>();
     const { popStateHistory } = getHistoryHandle<CastMember>("CastMember");
-    const oldChanges = this.changes;
-    this.changes = newChanges.map(({ id }) => id);
+    const oldChanges = this.getChanges();
+    this.changes = newChanges.map(({ id, object }) => {
+      affectedCastMembers.add(object);
+      return id;
+    });
     for (let i = 0; i < oldChanges.length; i++) {
+      affectedCastMembers.add(oldChanges[i].object);
       if (i !== oldChanges.length - 1) {
         popStateHistory(oldChanges[i]);
         continue;
       }
       popStateHistory(oldChanges[i], newChanges);
     }
-    return this.getCastMember();
+    const relativeHistory = this.getHistoryAfter();
+    affectedCastMembers.forEach((id) => {
+      const castMember = getCastMember(id, relativeHistory);
+      if (castMember) {
+        castMembers[castMember.id] = castMember;
+      }
+    });
+    listeners.forEach((listener) =>
+      listener({ type: "c", history: [this], changes: this.getChanges() })
+    );
+    return castMembers;
   }
 }
 
 export function addToHistory(event: IChangeEvent): void {
   // event.id = `${Date.now()}-${Math.random()}`;
-  changeEventHistory.push(event);
+  changeEvent.history.push(event);
+  listeners.forEach((listener) =>
+    listener({ type: "+", history: [event], changes: event.getChanges() })
+  );
 }
 
 function removeFromHistory(event: IChangeEvent): void {
-  changeEventHistory.splice(
-    changeEventHistory.findIndex(({ id }) => id === event.id),
+  listeners.forEach((listener) =>
+    listener({ type: "-", history: [event], changes: event.getChanges() })
+  );
+  changeEvent.history.splice(
+    changeEvent.history.findIndex(({ id }) => id === event.id),
     1
   );
 }
 
 export function getHistory(): IChangeEvent[] {
-  return [...changeEventHistory];
+  return [...changeEvent.history];
+}
+
+interface HistoryListenerEvent {
+  type: "=" | "+" | "-" | "c";
+  history: IChangeEvent[];
+  changes: HistoryEntry<CastMember>[];
+}
+interface HistoryListener {
+  (event: HistoryListenerEvent): void;
+}
+
+const listeners: HistoryListener[] = [];
+
+export function listenToHistory(callback: HistoryListener): void {
+  listeners.push(callback);
 }
 
 export function getCastMember(
@@ -209,14 +282,22 @@ export function getCastMembers(
   return castMembers;
 }
 
-export function setHistory(history: IChangeEvent[]): ChangeEvent[] {
-  const newHistory = history.map((item) => {
+export function instantiateHistory(history: IChangeEvent[]): ChangeEvent[] {
+  return history.map((item) => {
+    preExistingUniqueId(item.id);
     const constructor = typeMap[item.type];
     if (!constructor) {
       throw new Error(`No constructor for type ${item.type}`);
     }
     return new constructor(item);
   });
-  changeEventHistory = newHistory;
-  return newHistory;
+}
+
+export function setHistory(history: IChangeEvent[]): ChangeEvent[] {
+  const newHistory = instantiateHistory(history);
+  const changes = newHistory.flatMap((event) => event.getChanges());
+  history.splice(0, history.length, ...newHistory);
+  changeEvent.history = history;
+  listeners.forEach((listener) => listener({ type: "=", history, changes }));
+  return history as ChangeEvent[];
 }

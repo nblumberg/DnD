@@ -1,10 +1,10 @@
 import { ChangeEvent } from "packages/state-change/dist/js/molecular/event";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useContext, useEffect, useState } from "react";
 import { Roll, RollHistory } from "roll";
 import { IChangeEvent, parseChangeables } from "state-change";
 import styled from "styled-components";
 import { useIsDM } from "../auth";
-import { useHistory } from "../data/history";
+import { HistoryContext } from "../data/history";
 import { useSocket } from "../services/sockets";
 import { InteractiveRoll } from "./InteractiveRoll";
 
@@ -17,9 +17,10 @@ const Changeable = styled.a`
 `;
 
 export function History() {
-  const history = useHistory();
+  const { history } = useContext(HistoryContext);
   const io = useSocket();
   const dm = useIsDM();
+  const [roundsOpen, setRoundsOpen] = useState<boolean[]>([true]);
   const [change, setChange] = useState<ChangeEvent | undefined>();
   const [rollOpen, setRollOpen] = useState(false);
   const [rolls, setRolls] = useState<Array<{ roll: Roll; label?: string }>>([]);
@@ -86,43 +87,65 @@ export function History() {
       currentRound.push(entry);
     }
   });
+  if (roundsOpen.length !== rounds.length) {
+    const tmpRounds = new Array(rounds.length - 1);
+    tmpRounds.fill(false);
+    tmpRounds.push(true);
+    setRoundsOpen(tmpRounds);
+  }
+
+  const expandCollapse = (roundNumber: number) => {
+    setRoundsOpen(
+      roundsOpen.map((open, i) => (i === roundNumber ? !open : open))
+    );
+  };
+
   const roundContent = rounds.map((round, i) => {
-    const events = round.map((entry) => {
-      let { literals, changeables } = parseChangeables(entry.display(true));
-      let content: JSX.Element[] = [];
-      let i = 0;
-      while (literals.length + changeables.length) {
-        if (i % 2 === 0) {
-          const literal = literals.shift();
-          if (literal) {
-            content.push(<span key={i}>{literal}</span>);
-          }
-        } else {
-          const changeable = changeables.shift();
-          if (changeable) {
-            const { attributes, innerText } = changeable;
-            content.push(
-              <Changeable
-                key={i}
-                href=""
-                onClick={changeableClick}
-                data-changeable={entry.id}
-                {...attributes}
-              >
-                {innerText}
-              </Changeable>
-            );
-          }
-        }
-        i++;
-      }
-      return <li key={entry.id}>{content}</li>;
-    });
     const roundNumber = i + 1;
+    const isOpen = roundsOpen[i];
+
+    let events = null;
+    if (isOpen) {
+      events = round.map((entry) => {
+        let { literals, changeables } = parseChangeables(entry.display(true));
+        let content: JSX.Element[] = [];
+        let i = 0;
+        while (literals.length + changeables.length) {
+          if (i % 2 === 0) {
+            const literal = literals.shift();
+            if (literal) {
+              content.push(<span key={i}>{literal}</span>);
+            }
+          } else {
+            const changeable = changeables.shift();
+            if (changeable) {
+              const { attributes, innerText } = changeable;
+              content.push(
+                <Changeable
+                  key={i}
+                  href=""
+                  onClick={changeableClick}
+                  data-changeable={entry.id}
+                  {...attributes}
+                >
+                  {innerText}
+                </Changeable>
+              );
+            }
+          }
+          i++;
+        }
+        return <li key={entry.id}>{content}</li>;
+      });
+    }
+
     return (
       <li key={roundNumber}>
-        <p>Round {roundNumber}</p>
-        <ol>{events}</ol>
+        <p onClick={() => expandCollapse(i)}>
+          Round {roundNumber}&nbsp;
+          {!isOpen ? "↘️" : null}
+        </p>
+        {events ? <ol>{events}</ol> : null}
       </li>
     );
   });
