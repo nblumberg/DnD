@@ -2,6 +2,7 @@ import { ActiveCondition, CastMember, Condition, idCastMember } from "creature";
 import { Roll, RollHistory } from "roll";
 import {
   AddCondition,
+  Attack,
   DelayInitiative,
   HistoryEntry,
   IChangeEvent,
@@ -14,9 +15,11 @@ import {
 } from "state-change";
 import { setState, state } from "../state";
 import { setCastMemberState } from "../state/castMemberState";
+import { clearUndoneHistory } from "./historyActions";
 import { getTurnOrder } from "./initiativeActions";
 
 function emitChanges(event: IChangeEvent): Record<string, CastMember> {
+  clearUndoneHistory();
   const castMembers: Record<string, CastMember> = {};
   event.getChanges().forEach((change: HistoryEntry<CastMember>) => {
     if (change.type === "-") {
@@ -204,4 +207,56 @@ export function removeConditionFromCastMember(
     new RemoveCondition({ castMemberId: id, condition })
   );
   return castMembers[id];
+}
+
+export function attack({
+  id: attackerId,
+  attack: attackName,
+  toHit,
+  damage,
+  targets: targetIds,
+  targetSaves,
+}: {
+  id: string;
+  attack: string;
+  toHit: RollHistory;
+  damage: RollHistory[];
+  targets: string[];
+  targetSaves?: RollHistory[];
+}): void {
+  const attacker = getCachedCastMember(attackerId);
+  if (!attacker) {
+    console.warn(`Cast member ${attackerId} not found`);
+    return;
+  }
+  const possibleTargets = targetIds.map(getCachedCastMember);
+  const missing = possibleTargets
+    .filter((target) => !target)
+    .map((_target, i) => targetIds[i]);
+  if (missing.length) {
+    console.warn(
+      `Some targets not found for cast member ${idCastMember(
+        attacker
+      )}'s ${attackName} attack: $${missing.join(", ")}`
+    );
+    return;
+  }
+  const targets = possibleTargets as CastMember[];
+
+  console.log(
+    `Cast member ${idCastMember(attacker)} is attacking ${targets
+      .map(idCastMember)
+      .join(", ")} with it's ${attackName} attack, rolling ${
+      toHit.total
+    } to hit and ${damage.map(({ total }) => total).join(" + ")} damage`
+  );
+
+  new Attack({
+    castMemberId: attacker.id,
+    attack: attackName,
+    toHit,
+    damage,
+    targets: targetIds,
+    targetSaves,
+  });
 }

@@ -1,16 +1,77 @@
-import { useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { Roll, RollHistory } from "roll";
 import styled from "styled-components";
 import { Dialog, DialogButton } from "./Dialog";
 
+const InputField = styled.div`
+  align-items: center;
+  display: flex;
+`;
 const Input = styled.input<{ $error?: boolean }>`
   ${({ $error }) => ($error ? "border: 2px solid red;" : "")}
   display: block;
+  flex-grow: 100;
   font-size: 1.5em;
   height: 1.5em;
   margin: 1em auto;
-  width: 100%;
 `;
+
+export interface InteractiveRollAPI {
+  open: (
+    title: string,
+    rolls: Array<{ roll: Roll; label?: string }>,
+    onRoll: (result: RollHistory[]) => void,
+    onCancel?: () => void
+  ) => void;
+}
+
+export const InteractiveRollContext = createContext<InteractiveRollAPI>({
+  open: () => {},
+});
+
+export function useInteractiveRoll(): {
+  jsx: React.ReactNode;
+  context: InteractiveRollAPI;
+} {
+  const [open, setOpen] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("What's your roll?");
+  const [rolls, setRolls] = useState<Array<{ roll: Roll; label?: string }>>([]);
+  const [onRoll, setOnRoll] = useState<{ fn: (result: RollHistory[]) => void }>(
+    { fn: () => {} }
+  );
+  const [onCancel, setOnCancel] = useState<{ fn: () => void }>({
+    fn: () => {},
+  });
+
+  const context: InteractiveRollAPI = {
+    open: (title, rolls, onRoll, onCancel = () => setOpen(false)) => {
+      setTitle(title);
+      setRolls(rolls);
+      setOnRoll({
+        fn: (result: RollHistory[]) => {
+          setOpen(false);
+          onRoll(result);
+        },
+      });
+      setOnCancel({ fn: onCancel });
+      setOpen(true);
+    },
+  };
+
+  const jsx = open && (
+    <InteractiveRoll
+      title={title}
+      rolls={rolls}
+      onRoll={onRoll.fn}
+      onCancel={onCancel.fn}
+    />
+  );
+
+  return {
+    jsx,
+    context,
+  };
+}
 
 export function InteractiveRoll({
   title,
@@ -49,7 +110,7 @@ export function InteractiveRoll({
   };
 
   const inputs = rolls.map(({ roll, label }, index) => (
-    <div key={index}>
+    <InputField key={index}>
       {label && <label>{label}</label>}
       <Input
         type="number"
@@ -65,7 +126,7 @@ export function InteractiveRoll({
         value={result[index]?.total ?? ""}
         ref={index === 0 ? ref : undefined}
       />
-    </div>
+    </InputField>
   ));
 
   return (

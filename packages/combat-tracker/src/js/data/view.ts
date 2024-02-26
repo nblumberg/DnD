@@ -1,6 +1,6 @@
 import { createContext } from "react";
+import { View } from "../app/constants/view";
 
-export type View = "both" | "turnOrder" | "history";
 interface ViewContextValue {
   view: View;
   setView: (view: View) => void;

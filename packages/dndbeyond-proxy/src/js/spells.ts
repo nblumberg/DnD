@@ -265,7 +265,7 @@ export function parseSpellHTML(
       }));
     }
 
-    let conditions: Spell["conditions"];
+    let effects: Spell["effects"];
     Object.values(Condition).forEach((condition) => {
       const element = spellDetails.querySelector(
         ".more-info-content .condition-tooltip"
@@ -274,14 +274,15 @@ export function parseSpellHTML(
         return;
       }
       if (getElementText(element).trim() === condition) {
-        if (!conditions) {
-          conditions = [];
+        if (!effects) {
+          effects = [];
         }
         const text = getRemainingText(element).toLowerCase();
-        const entry: (typeof conditions)[number] = {
+        const entry: (typeof effects)[number] = {
           condition,
+          description: text,
         };
-        conditions.push(entry);
+        effects.push(entry);
         if (
           (text.includes("until the spell ends") ||
             text.includes("for the duration") ||
@@ -354,7 +355,7 @@ export function parseSpellHTML(
       cantripDamageIncrease,
       unaffected,
 
-      conditions,
+      effects,
 
       atHigherLevels,
 

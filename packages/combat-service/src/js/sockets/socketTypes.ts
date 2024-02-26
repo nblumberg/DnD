@@ -27,8 +27,18 @@ export interface ClientToServerEvents {
   turn: (id: string) => void;
   addCondition: (id: string, condition: Condition) => void;
   removeCondition: (id: string, condition: string) => void;
+  undoHistory: () => void;
+  redoHistory: () => void;
   changeHistory: (id: string, ...params: any[]) => void;
   resetGame: () => void;
+  attack: (attack: {
+    id: string;
+    attack: string;
+    toHit: RollHistory;
+    damage: RollHistory[];
+    targets: string[];
+    targetSaves?: RollHistory[];
+  }) => void;
 }
 
 export interface InterServerEvents {

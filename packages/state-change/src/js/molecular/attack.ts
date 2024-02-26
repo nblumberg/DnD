@@ -1,6 +1,5 @@
 import {
   Action,
-  Attack as AttackDescription,
   CastMember,
   castMemberDoSomething,
   idCastMember,
@@ -50,12 +49,15 @@ export class Attack extends HasTargets {
     if (!action) {
       throw new Error(`Attack ${this.attack} not found on ${attackerName}`);
     }
-    if (!("toHit" in action)) {
+    if (!("attack" in action) || !action.attack) {
       throw new Error(
         `Action ${this.attack} on ${attackerName} is not an attack`
       );
     }
-    const attack = action as AttackDescription;
+    const attack = action.attack!;
+    if (!("toHit" in attack)) {
+      throw new Error(`Attack ${this.attack} on ${attackerName} has no toHit`);
+    }
     const onHit = attack.onHit;
     if (!onHit) {
       throw new Error(`Attack ${action.name} has no onHit`);

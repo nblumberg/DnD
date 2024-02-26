@@ -1,15 +1,29 @@
-import { useEffect, useState } from "react";
+import { CastMember } from "creature";
+import { useEffect } from "react";
 import styled from "styled-components";
-import { Login } from "./Login";
-import { IdentityContext, useLogin } from "./auth";
+import { useSocket } from "./app/api/sockets";
+import { changeViewAction } from "./app/reducers";
+import { useAppState, useHistory, useLogin, useMobile } from "./app/store";
+import { CastMemberContext, useCastMembers } from "./app/store/castMembers";
+import {
+  ActionMenuAPI,
+  ActionMenuContext,
+  useActionMenu,
+} from "./components/ActionMenu";
 import { Header } from "./components/Header";
-import { History } from "./components/History";
-import { TurnOrder } from "./components/TurnOrder";
-import { CastMemberContext, useCastMembers } from "./data/castMembers";
-import { HistoryContext, useHistory } from "./data/history";
-import { MobileContext, useMobile } from "./data/mobile";
-import { View, ViewContext } from "./data/view";
-import { useSocket } from "./services/sockets";
+import {
+  InteractiveRollAPI,
+  InteractiveRollContext,
+  useInteractiveRoll,
+} from "./components/InteractiveRoll";
+import {
+  TargetSelectAPI,
+  TargetSelectContext,
+  useTargetSelect,
+} from "./components/TargetSelect";
+import { History } from "./history";
+import { Login } from "./login/pages/Login";
+import { TurnOrder } from "./turnOrder";
 
 const Body = styled.section`
   display: flex;
@@ -25,23 +39,26 @@ const HistoryShrink = styled(History)`
 let renderCount = 1;
 
 export function App() {
+  const [{ view }, dispatch] = useAppState();
   const { login, user } = useLogin();
   const io = useSocket();
   const isMobile = useMobile();
   const history = useHistory();
   const castMembers = useCastMembers(history.changes);
   console.log("App render", history, castMembers);
-  const [view, setView] = useState<View>(isMobile ? "turnOrder" : "both");
+  const interactiveRoll = useInteractiveRoll();
+  const actionMenu = useActionMenu();
+  const targetSelect = useTargetSelect();
 
   useEffect(() => {
     if (isMobile) {
       if (view === "both") {
-        setView("turnOrder");
+        changeViewAction(dispatch, "turnOrder");
       }
     } else if (view !== "both") {
-      setView("both");
+      changeViewAction(dispatch, "both");
     }
-  }, [isMobile, view, setView]);
+  }, [isMobile, view, dispatch]);
 
   if (!user) {
     return <Login login={login} />;
@@ -52,21 +69,49 @@ export function App() {
   }
 
   return (
-    <IdentityContext.Provider value={user}>
-      <MobileContext.Provider value={isMobile}>
-        <HistoryContext.Provider value={history}>
-          <CastMemberContext.Provider value={castMembers}>
-            <ViewContext.Provider value={{ view, setView }}>
-              <Header />
-              <div>{renderCount++}</div>
-              <Body>
-                {view !== "history" ? <TurnOrderGrow></TurnOrderGrow> : null}
-                {view !== "turnOrder" ? <HistoryShrink></HistoryShrink> : null}
-              </Body>
-            </ViewContext.Provider>
-          </CastMemberContext.Provider>
-        </HistoryContext.Provider>
-      </MobileContext.Provider>
-    </IdentityContext.Provider>
+    <ApplyContext
+      actionMenu={actionMenu.context}
+      castMembers={castMembers}
+      interactiveRoll={interactiveRoll.context}
+      targetSelect={targetSelect.context}
+    >
+      <Header />
+      <div>{renderCount++}</div>
+      <Body>
+        {view !== "history" ? <TurnOrderGrow></TurnOrderGrow> : null}
+        {view !== "turnOrder" ? <HistoryShrink></HistoryShrink> : null}
+      </Body>
+
+      {interactiveRoll.jsx}
+      {actionMenu.jsx}
+      {targetSelect.jsx}
+    </ApplyContext>
+  );
+}
+
+function ApplyContext({
+  children,
+  actionMenu,
+  castMembers,
+  interactiveRoll,
+  targetSelect,
+}: {
+  children: React.ReactNode;
+
+  actionMenu: ActionMenuAPI;
+  castMembers: CastMember[];
+  interactiveRoll: InteractiveRollAPI;
+  targetSelect: TargetSelectAPI;
+}) {
+  return (
+    <CastMemberContext.Provider value={castMembers}>
+      <InteractiveRollContext.Provider value={interactiveRoll}>
+        <ActionMenuContext.Provider value={actionMenu}>
+          <TargetSelectContext.Provider value={targetSelect}>
+            {children}
+          </TargetSelectContext.Provider>
+        </ActionMenuContext.Provider>
+      </InteractiveRollContext.Provider>
+    </CastMemberContext.Provider>
   );
 }

@@ -1,32 +1,56 @@
-import { CastMember } from "creature";
-import { SyntheticEvent } from "react";
-import { RollHistory } from "roll";
-import { useSocket } from "../services/sockets";
+import { CastMember, idCastMember } from "creature";
+import { SyntheticEvent, useContext } from "react";
+import { Roll, RollHistory } from "roll";
+import { useSocket } from "../app/api/sockets";
+import { useCharacters, useIsDM } from "../app/store";
+import { CastMemberContext } from "../app/store/castMembers";
+import { InteractiveRollContext } from "./InteractiveRoll";
 
-export function useRollInitiative(
-  setRollOpen: (value: boolean) => void,
-  io: ReturnType<typeof useSocket>,
-  myCharacters: CastMember[]
-): (event?: SyntheticEvent, rolls?: RollHistory[]) => void {
-  return (_event?: SyntheticEvent, rolls?: RollHistory[]) => {
-    if (rolls) {
-      const initiativeMap = myCharacters.reduce(
-        (initiativeMap, castMember, i) => {
-          return {
-            ...initiativeMap,
-            [castMember.id]: rolls[i],
-          };
-        },
-        {} as Record<string, RollHistory>
-      );
-      if (!io) {
-        throw new Error("Socket not initialized");
-      }
-      io.emit("rollInitiative", initiativeMap);
-      setRollOpen(false);
-    } else {
-      setRollOpen(true);
+export function useRollInitiative(): (
+  event?: SyntheticEvent,
+  rolls?: RollHistory[]
+) => void {
+  const castMembers = useContext(CastMemberContext);
+  const io = useSocket();
+  const interactiveRoll = useContext(InteractiveRollContext);
+  const ids = useCharacters();
+  const dm = useIsDM();
+
+  // Derivative state
+  const myCharacters = castMembers.filter(
+    ({ id, character }) => ids.includes(id) || (dm && !character)
+  );
+  const initiativeRolls = myCharacters.map((castMember) => ({
+    roll: new Roll({ dieCount: 1, dieSides: 20, extra: castMember.initiative }),
+    label: myCharacters.length > 1 ? idCastMember(castMember) : undefined,
+  }));
+
+  const onRoll = (rolls: RollHistory[]) => {
+    if (!rolls) {
+      // TODO: why is this being immediately invoked?
+      return;
     }
+    const initiativeMap = myCharacters.reduce(
+      (initiativeMap, castMember, i) => {
+        return {
+          ...initiativeMap,
+          [castMember.id]: rolls[i],
+        };
+      },
+      {} as Record<string, RollHistory>
+    );
+    if (!io) {
+      throw new Error("Socket not initialized");
+    }
+    io.emit("rollInitiative", initiativeMap);
+  };
+
+  return (_event?: SyntheticEvent) => {
+    interactiveRoll.open(
+      "What's your initiative roll?",
+      initiativeRolls,
+      onRoll
+    );
   };
 }
 

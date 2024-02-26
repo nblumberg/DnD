@@ -1,10 +1,16 @@
 import { Actor, Auditioner, CastMember } from "creature";
-import { SyntheticEvent, useContext, useEffect, useState } from "react";
+import {
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import styled, { css } from "styled-components";
-import { Character } from "../data/Character";
-import { useActors } from "../data/actors";
-import { CastMemberContext } from "../data/castMembers";
-import { useSocket } from "../services/sockets";
+import { castActors, fireActors } from "../app/api";
+import { CastMemberContext, useActors, useAppState } from "../app/store";
+import { Character } from "../app/types";
+import { getWindow } from "../app/utils/env";
 import { Dialog, DialogButton } from "./Dialog";
 
 const colorScheme = `
@@ -12,34 +18,6 @@ const colorScheme = `
   border-color: gray;
   color: white;
 `;
-
-// const Dialog = styled.dialog`
-//   ${colorScheme}
-//   border-radius: 5px;
-//   border-style: solid;
-//   border-width: 2px;
-//   bottom: 0;
-//   height: 90vh;
-//   left: 20vw;
-//   position: fixed;
-//   right: 20vw;
-//   width: 60vw;
-//   top: 0;
-// `;
-
-// const DialogContent = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   height: 100%;
-//   justify-content: space-between;
-// `;
-
-// const DialogBody = styled.form`
-//   align-items: stretch;
-//   display: flex;
-//   flex-grow: 100;
-//   justify-content: space-between;
-// `;
 
 const ActorPanel = styled.div`
   align-items: stretch;
@@ -72,21 +50,6 @@ const Option = styled.option<{ $unique?: boolean }>`
       color: green;
     `}
 `;
-
-// const DialogFooter = styled.footer`
-//   display: flex;
-//   align-items: flex-end;
-//   justify-content: flex-end;
-//   margin-top: 1em;
-// `;
-
-// const Button = styled.button`
-//   background: blue;
-//   border-radius: 3px;
-//   border: 2px solid gray;
-//   color: white;
-//   padding: 0.25em 1em;
-// `;
 
 function actorToOption({ name, id, unique: pc }: Actor) {
   return (
@@ -138,18 +101,15 @@ function findOrThrow<T extends { id: string }>(
   return match;
 }
 
-function findUniqueId(
-  id: string,
-  castMembers: Record<string, { id: string }>
-): string {
-  if (id && !castMembers[id]) {
+function findUniqueId(id: string, allCastMemberIdsEver: Set<string>): string {
+  if (id && !allCastMemberIdsEver.has(id)) {
     return id;
   }
 
   const originalId = id;
   let nextId = originalId;
   let i = 2;
-  while (castMembers[nextId]) {
+  while (allCastMemberIdsEver.has(nextId)) {
     nextId = `${originalId}_${i++}`;
   }
   return nextId;
@@ -170,15 +130,12 @@ function getSelectedIds(event: SyntheticEvent): string[] {
 
 function audition(
   auditioners: Array<CastMember | Auditioner>,
-  actors: Actor[]
+  actors: Actor[],
+  allCastMemberIdsEver: Set<string>
 ): Array<CastMember | Auditioner> {
-  const map = auditioners.reduce(
-    (map, auditioner) => ({ ...map, [auditioner.id]: auditioner }),
-    {} as Record<string, CastMember | Auditioner>
-  );
   const newAuditioners: Array<CastMember | Auditioner> = [...auditioners];
   actors.forEach((actor) => {
-    const id = findUniqueId(actor.id, map);
+    const id = findUniqueId(actor.id, allCastMemberIdsEver);
     const auditioner: Auditioner = {
       ...actor,
       id,
@@ -209,6 +166,17 @@ function sortAuditioners(
 }
 
 export function ActorPicker({ onClose }: { onClose: () => void }) {
+  const [{ history }] = useAppState();
+  const allCastMemberIdsEver = useMemo(
+    () =>
+      new Set(
+        history
+          .filter(({ type }) => type === "AddCastMember")
+          .map(({ castMemberId }) => castMemberId)
+      ),
+    [history]
+  );
+
   const actors = useActors();
   const castMembers = useContext(CastMemberContext);
 
@@ -246,7 +214,9 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     const selectedHeadshots: Actor[] = actorIds.map((id) =>
       findOrThrow(id, actors, "Actor")
     );
-    setAuditioners(audition(auditioners, selectedHeadshots));
+    setAuditioners(
+      audition(auditioners, selectedHeadshots, allCastMemberIdsEver)
+    );
   };
 
   const remove = (event: SyntheticEvent) => {
@@ -257,8 +227,6 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     setAuditioners(newAuditioners);
   };
 
-  const io = useSocket();
-
   const submit = async () => {
     const toBeCast = auditioners.filter(
       (auditioner) =>
@@ -267,15 +235,8 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
     const toBeFired = Object.values(castMembers).filter(
       (castMember) => !auditioners.includes(castMember)
     );
-    if (toBeCast.length) {
-      io?.emit("castActors", toBeCast);
-    }
-    if (toBeFired.length) {
-      io?.emit(
-        "fireActors",
-        toBeFired.map(({ id }) => id)
-      );
-    }
+    castActors(toBeCast);
+    fireActors(toBeFired);
     onClose();
   };
 
@@ -290,15 +251,11 @@ export function ActorPicker({ onClose }: { onClose: () => void }) {
         submit();
       }
     };
-    window.addEventListener("keydown", onKeyDown);
+    getWindow()?.addEventListener("keydown", onKeyDown);
     return () => {
-      window.removeEventListener("keydown", onKeyDown);
+      getWindow()?.removeEventListener("keydown", onKeyDown);
     };
   }, [auditioners]);
-
-  if (!io) {
-    return null;
-  }
 
   return (
     <Dialog

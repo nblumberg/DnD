@@ -1,6 +1,6 @@
 import { SyntheticEvent, useEffect } from "react";
 import styled from "styled-components";
-import { media } from "./breakpoints";
+import { media } from "../app/constants";
 
 const OuterDialog = styled.dialog`
   border-radius: 5px;
@@ -64,7 +64,7 @@ const DialogBody = styled.form<{ $direction: "column" | "row" }>`
   display: flex;
   flex-direction: ${({ $direction }) => $direction};
   flex-grow: 1;
-  justify-content: space-between;
+  justify-content: flex-start;
   overflow-y: scroll;
   padding: 1em;
 `;

@@ -354,18 +354,14 @@ export function getHistoryHandle<T extends Unique = CastMember>(type: string) {
 
   function popStateHistory(
     entry: HistoryEntry<T> | string,
-    replacements?: HistoryEntry<T>[]
+    replacements: HistoryEntry<T>[] = []
   ): void {
     const history = _getHistory();
     const index = findStateHistoryIndex(entry);
-    if (replacements) {
-      if (index === -1) {
-        history.push(...replacements);
-      } else {
-        history.splice(index, 1, ...replacements);
-      }
-    } else if (index === -1) {
-      return;
+    if (index === -1) {
+      history.push(...replacements);
+    } else {
+      history.splice(index, 1, ...replacements);
     }
   }
 

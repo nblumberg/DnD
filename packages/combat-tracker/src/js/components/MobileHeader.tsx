@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
+import { media } from "../app/constants";
 import { ViewContext } from "../data/view";
 import { Menu, MenuOption } from "./Menu";
-import { media } from "./breakpoints";
 
 export const ButtonBar = styled.nav`
   display: flex;

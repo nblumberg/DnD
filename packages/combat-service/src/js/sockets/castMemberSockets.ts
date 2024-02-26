@@ -1,7 +1,9 @@
 import { Auditioner, Condition } from "creature";
+import { RollHistory } from "packages/roll/dist/js";
 import { Socket } from "socket.io";
 import {
   addConditionToCastMember,
+  attack,
   removeConditionFromCastMember,
 } from "../actions/castMemberActions";
 import { getTurnOrder } from "../actions/initiativeActions";
@@ -61,4 +63,18 @@ function syncCastMembers(socket: Socket): void {
 
   addStatePropertyListener("castMembers", castMemberChangeListener);
   addCastMembersListener(castMemberChangeListener);
+
+  socket.on(
+    "attack",
+    (attackDescription: {
+      id: string;
+      attack: string;
+      toHit: RollHistory;
+      damage: RollHistory[];
+      targets: string[];
+      targetSaves?: RollHistory[];
+    }) => {
+      attack(attackDescription);
+    }
+  );
 }

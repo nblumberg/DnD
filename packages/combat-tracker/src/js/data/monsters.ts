@@ -1,5 +1,5 @@
+import { listMonsters } from "compendium-service/client";
 import { useEffect, useState } from "react";
-import { listMonsters } from "../services/compendium";
 
 export function useMonsters(): string[] {
   const [monsters, setMonsters] = useState<string[]>([]);

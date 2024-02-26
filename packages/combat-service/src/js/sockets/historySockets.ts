@@ -6,7 +6,11 @@ import {
   getUniqueId,
   listenToHistory,
 } from "state-change";
-import { state } from "../state";
+import {
+  changeHistory,
+  redoHistory,
+  undoHistory,
+} from "../actions/historyActions";
 import { SocketServer } from "./initAndAccessSockets";
 
 export function attachHistorySockets(io: SocketServer) {
@@ -17,15 +21,11 @@ export function attachHistorySockets(io: SocketServer) {
   io.of("/dm").on("connection", (socket) => {
     syncHistory(socket, true);
 
-    socket.on("changeHistory", (id: string, ...params: any[]) => {
-      console.log(`DM changeHistory ${id} ${params}`);
-      const change = state.history.find((entry) => entry.id === id);
-      if (!change) {
-        console.error(`Couldn't find change ${id}`);
-        return;
-      }
-      change.change(...params);
-    });
+    socket.on("undoHistory", undoHistory);
+
+    socket.on("redoHistory", redoHistory);
+
+    socket.on("changeHistory", changeHistory);
   });
 }
 

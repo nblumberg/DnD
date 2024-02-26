@@ -7,6 +7,9 @@ export { CastSpell } from "./molecular/castSpell";
 export { ChangeRound } from "./molecular/changeRound";
 export { DelayInitiative, ReadyAction } from "./molecular/delayInitiative";
 export {
+  ChangeEvent,
+  addToHistory,
+  changeEventToString,
   getCastMember,
   getCastMembers,
   getHistory,

@@ -68,8 +68,9 @@ export abstract class ChangeEvent implements IChangeEvent {
   }
 
   undo() {
-    const castMember = this.removeChanges()!;
-    removeFromHistory(this);
+    const changes = this.getChanges();
+    const castMember = this.removeChanges(changes)!;
+    removeFromHistory(this, changes);
     return castMember;
   }
 
@@ -78,10 +79,14 @@ export abstract class ChangeEvent implements IChangeEvent {
     return this.changes.map((id) => {
       const change = history.find(({ id: changeId }) => changeId === id);
       if (!change) {
-        throw new Error(`Couldn't find change ${id}`);
+        throw new Error(`${this.toString()} couldn't find change ${id}`);
       }
       return change;
     });
+  }
+
+  toString(): string {
+    return changeEventToString(this);
   }
 
   protected executeChanges(changes = this.makeChanges()): CastMembers {
@@ -98,20 +103,24 @@ export abstract class ChangeEvent implements IChangeEvent {
     const [firstChange] = this.changes;
     const index = history.findIndex(({ id }) => id === firstChange);
     if (index === -1) {
-      throw new Error("Couldn't find first change in history");
+      throw new Error(
+        `${this.toString()} couldn't find first change in history`
+      );
     }
     return history.slice(0, index); // don't include any of my changes
   }
 
-  protected getHistoryAfter(): HistoryEntry<CastMember>[] {
+  protected getHistoryIncludingMe(): HistoryEntry<CastMember>[] {
     const history = getHistoryHandle<CastMember>("CastMember").getHistory();
     if (!this.changes.length) {
-      throw new Error("Couldn't find last change in history");
+      throw new Error(`${this.toString()} lacks changes to find in history`);
     }
     const lastChange = this.changes[this.changes.length - 1];
     const index = history.findIndex(({ id }) => id === lastChange);
     if (index === -1) {
-      throw new Error("Couldn't find first change in history");
+      throw new Error(
+        `${this.toString()} couldn't find last change in history`
+      );
     }
     return history.slice(0, index + 1); // include the last of my changes
   }
@@ -120,7 +129,9 @@ export abstract class ChangeEvent implements IChangeEvent {
     const history = this.getHistoryBefore();
     const castMember = getCastMember(this.castMemberId, history);
     if (!castMember) {
-      throw new Error(`CastMember ${this.castMemberId} not found`);
+      throw new Error(
+        `${this.toString()} CastMember ${this.castMemberId} not found`
+      );
     }
     return castMember;
   }
@@ -142,7 +153,9 @@ export abstract class ChangeEvent implements IChangeEvent {
         } else {
           if (!castMember) {
             throw new Error(
-              `Can't apply change ${change.id} to missing castMember`
+              `${this.toString()} can't apply change ${
+                change.id
+              } to missing CastMember`
             );
           }
           castMember = applyHistoryEntry(change, castMember);
@@ -159,11 +172,11 @@ export abstract class ChangeEvent implements IChangeEvent {
     return this.applyChanges(newChanges);
   }
 
-  protected removeChanges(): CastMembers {
+  protected removeChanges(changes = this.getChanges()): CastMembers {
     const { popStateHistory } = getHistoryHandle<CastMember>("CastMember");
     const castMembers: CastMembers = {};
-    const relativeHistory = this.getHistoryAfter();
-    this.getChanges().forEach((entry) => {
+    const relativeHistory = this.getHistoryIncludingMe();
+    changes.forEach((entry) => {
       let castMember = getCastMember(
         entry.object,
         relativeHistory,
@@ -205,7 +218,7 @@ export abstract class ChangeEvent implements IChangeEvent {
       }
       popStateHistory(oldChanges[i], newChanges);
     }
-    const relativeHistory = this.getHistoryAfter();
+    const relativeHistory = this.getHistoryIncludingMe();
     affectedCastMembers.forEach((id) => {
       const castMember = getCastMember(id, relativeHistory);
       if (castMember) {
@@ -227,9 +240,12 @@ export function addToHistory(event: IChangeEvent): void {
   );
 }
 
-function removeFromHistory(event: IChangeEvent): void {
+function removeFromHistory(
+  event: IChangeEvent,
+  changes: HistoryEntry<CastMember>[]
+): void {
   listeners.forEach((listener) =>
-    listener({ type: "-", history: [event], changes: event.getChanges() })
+    listener({ type: "-", history: [event], changes })
   );
   changeEvent.history.splice(
     changeEvent.history.findIndex(({ id }) => id === event.id),
@@ -300,4 +316,10 @@ export function setHistory(history: IChangeEvent[]): ChangeEvent[] {
   changeEvent.history = history;
   listeners.forEach((listener) => listener({ type: "=", history, changes }));
   return history as ChangeEvent[];
+}
+
+export function changeEventToString(event: IChangeEvent): string {
+  return `${event.type}#${event.id}{${event.castMemberId}}[${event.changes.join(
+    ","
+  )}]`;
 }
