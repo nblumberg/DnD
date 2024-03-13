@@ -1,43 +1,56 @@
 import { CastMember } from "creature";
-import {
-  ChangeEvent,
-  HistoryEntry,
-  addToHistory,
-  getHistoryHandle,
-  instantiateHistory,
-} from "state-change";
-import { state } from "../state";
+import { ChangeHistoryEntry, History, cloneHistory } from "state-change";
+import { historyChange, state, updateState } from "../state";
 
-interface UndoHistory {
-  event: ChangeEvent;
-  changes: HistoryEntry<CastMember>[];
+const listeners: Array<(undoneHistory: History) => void> = [];
+
+export function listenToUndoneHistory(
+  listener: (undoneHistory: History) => void
+) {
+  listeners.push(listener);
 }
 
-const undoArray: UndoHistory[] = [];
+function dispatchUndoneHistory() {
+  const undoneHistory: History = { events: [], changes: [] };
+  state.undoArray.forEach(({ event, changes }) => {
+    undoneHistory.events.push(event);
+    undoneHistory.changes.push(...changes);
+  });
+  listeners.forEach((listener) => listener(undoneHistory));
+}
 
 export function clearUndoneHistory() {
-  undoArray.length = 0;
+  updateState({ undoArray: [] });
+  dispatchUndoneHistory();
 }
 
 export function undoHistory() {
-  if (!state.history.length) {
+  if (!state.events.length) {
     console.error("No history to undo");
     return;
   }
-  const event = state.history[state.history.length - 1] as ChangeEvent;
+  const event = state.events[state.events.length - 1];
   console.log(
     `DM undoHistory ${event.type}#${event.id}[${event.castMemberId}]`
   );
-  undoArray.push({ event, changes: event.getChanges() });
-  event.undo();
+  const history = cloneHistory(state);
+  // Set undoArray before calling undo, so that the event still has references to its changes
+  updateState({
+    undoArray: [
+      ...state.undoArray,
+      { event, changes: event.getChanges(history) },
+    ],
+  });
+  historyChange(event.undo(history));
+  dispatchUndoneHistory();
 }
 
 export function redoHistory() {
-  if (!undoArray.length) {
+  if (!state.undoArray.length) {
     console.error("No history to redo");
     return;
   }
-  const { event, changes } = undoArray.pop()!;
+  const { event, changes } = state.undoArray[state.undoArray.length - 1]!;
 
   if (findEvent(event.id)) {
     console.error(
@@ -47,7 +60,7 @@ export function redoHistory() {
   }
   const preExistingChanges = changes
     .map(({ id }) => findChange(id))
-    .filter((change) => !!change) as HistoryEntry<CastMember>[];
+    .filter((change) => !!change) as ChangeHistoryEntry<CastMember>[];
   if (preExistingChanges.length) {
     console.error(
       `Changes ${preExistingChanges
@@ -56,16 +69,18 @@ export function redoHistory() {
     );
     return;
   }
-  // Put the changes back in the history
-  getHistoryHandle<CastMember>("CastMember").pushStateHistory(changes);
   // ChangeEvent.undo() clears the changes member, so put them back
   event.changes = changes.map(({ id }) => id);
-  // Instantiate the ChangeEvent
-  const [classEvent] = instantiateHistory([event]);
-  if (!findEvent(event.id)) {
-    // If the constructor doesn't self-add to history, do it manually
-    addToHistory(classEvent);
-  }
+
+  // Put the changes back in the history
+  historyChange({
+    events: [...state.events, event],
+    changes: [...state.changes, ...changes],
+  });
+  updateState({
+    undoArray: state.undoArray.slice(0, -1),
+  });
+  dispatchUndoneHistory();
 }
 
 export function changeHistory(id: string, ...params: any[]) {
@@ -75,11 +90,12 @@ export function changeHistory(id: string, ...params: any[]) {
     console.error(`Couldn't find change ${id}`);
     return;
   }
-  change.change(...params);
+  const { events, changes } = change.change(state, ...params);
+  historyChange({ events, changes });
 }
 
 function findEvent(id: string) {
-  return state.history.find((entry) => entry.id === id);
+  return state.events.find((entry) => entry.id === id);
 }
 
 function findChange(id: string) {

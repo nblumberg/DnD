@@ -15,7 +15,7 @@ import {
   createEventEmitter,
 } from "event-emitter";
 import { AddCastMember, RemoveCastMember, getCastMembers } from "state-change";
-import { onStateChange, state, updateState } from "../state";
+import { historyChange, onStateChange, state, updateState } from "../state";
 
 export let addCastMembersListener: AddListener<Record<string, CastMember>>;
 let updateCastMembers: SetData<Record<string, CastMember>>;
@@ -35,7 +35,7 @@ export function castMembersFromHistory(): CastMember[] {
       castMemberListeners[castMemberId].removeListener();
     }
   });
-  const castMemberList = getCastMembers();
+  const castMemberList = getCastMembers(state);
   const castMembers: Record<string, CastMember> = castMemberList.reduce(
     (acc, castMember) => ({ ...acc, [castMember.id]: castMember }),
     {}
@@ -72,19 +72,29 @@ export async function castActor(auditioner: Auditioner): Promise<CastMember> {
   });
   console.log(`Adding ${idCastMember(castMember)}`);
 
-  new AddCastMember({ castMemberId: id, castMember });
+  new AddCastMember({
+    castMemberId: id,
+    castMember,
+    history: state,
+    historyChange: ({ events, changes }) => historyChange({ events, changes }),
+  });
 
   return castMember;
 }
 
 export function fireCastMember(castMemberId: string) {
-  if (!state.castMembers[castMemberId]) {
+  const { castMembers } = state;
+  if (!castMembers[castMemberId]) {
     console.warn(`No cast member ${castMemberId}`);
     return;
   }
   console.log(`Firing ${idCastMember(state.castMembers[castMemberId])}`);
 
-  new RemoveCastMember({ castMemberId });
+  new RemoveCastMember({
+    castMemberId,
+    history: state,
+    historyChange: ({ events, changes }) => historyChange({ events, changes }),
+  });
 }
 
 export function setCastMemberState<P extends keyof CastMember>(

@@ -1,6 +1,6 @@
 import { CastMember } from "creature";
 import { RollHistory } from "roll";
-import { ChangeRound } from "state-change";
+import { ChangeRound, cloneHistory } from "state-change";
 import { setState, state } from "../state";
 import {
   rollInitiative as castMemberRollInitiative,
@@ -36,6 +36,7 @@ export function startTurn(id: string): string | undefined {
       new ChangeRound({
         castMemberId: newTurnCastMember.id,
         round: state.round + 1,
+        history: cloneHistory(state),
       });
       setState("round", state.round + 1);
     }

@@ -3,9 +3,9 @@ import { Roll, RollHistory } from "roll";
 import {
   AddCondition,
   Attack,
+  ChangeEvent,
+  ChangeHistoryEntry,
   DelayInitiative,
-  HistoryEntry,
-  IChangeEvent,
   ReadyAction,
   RemoveCondition,
   RollInitiative,
@@ -13,15 +13,15 @@ import {
   StopDelayedAction,
   TriggerReadiedAction,
 } from "state-change";
-import { setState, state } from "../state";
+import { historyChange, setState, state } from "../state";
 import { setCastMemberState } from "../state/castMemberState";
 import { clearUndoneHistory } from "./historyActions";
 import { getTurnOrder } from "./initiativeActions";
 
-function emitChanges(event: IChangeEvent): Record<string, CastMember> {
+function emitChanges(event: ChangeEvent): Record<string, CastMember> {
   clearUndoneHistory();
   const castMembers: Record<string, CastMember> = {};
-  event.getChanges().forEach((change: HistoryEntry<CastMember>) => {
+  event.getChanges(state).forEach((change: ChangeHistoryEntry<CastMember>) => {
     if (change.type === "-") {
       castMembers[change.object] = change.newValue;
     } else if (
@@ -76,7 +76,14 @@ export function rollInitiative(
 
   console.log(`CastMember ${id} rolled ${roll.total} for initiative`);
 
-  return initiativeChange(new RollInitiative({ castMemberId: id, roll }));
+  return initiativeChange(
+    new RollInitiative({
+      castMemberId: id,
+      roll,
+      history: state,
+      historyChange,
+    })
+  );
 }
 
 export function delayInitiative(id: string): CastMember | undefined {
@@ -86,7 +93,9 @@ export function delayInitiative(id: string): CastMember | undefined {
   }
   console.log(`Cast member ${idCastMember(castMember)} is delaying initiative`);
 
-  const castMembers = emitChanges(new DelayInitiative({ castMemberId: id }));
+  const castMembers = emitChanges(
+    new DelayInitiative({ castMemberId: id, history: state, historyChange })
+  );
   return castMembers[id];
 }
 
@@ -97,7 +106,9 @@ export function readyAction(id: string): CastMember | undefined {
   }
   console.log(`Cast member ${idCastMember(castMember)} is readying an action`);
 
-  const castMembers = emitChanges(new ReadyAction({ castMemberId: id }));
+  const castMembers = emitChanges(
+    new ReadyAction({ castMemberId: id, history: state, historyChange })
+  );
   return castMembers[id];
 }
 
@@ -107,7 +118,9 @@ export function startTurn(id: string): CastMember | undefined {
     return;
   }
   console.log(`Cast member ${idCastMember(castMember)} is starting their turn`);
-  const castMembers = emitChanges(new StartTurn({ castMemberId: id }));
+  const castMembers = emitChanges(
+    new StartTurn({ castMemberId: id, history: state, historyChange })
+  );
   return castMembers[id];
 }
 
@@ -125,6 +138,8 @@ export function stopDelayedAction(
     new StopDelayedAction({
       castMemberId: id,
       initiativeOrder,
+      history: state,
+      historyChange,
     })
   );
 }
@@ -145,11 +160,13 @@ export function triggerReadiedAction(
     new TriggerReadiedAction({
       castMemberId: id,
       initiativeOrder,
+      history: state,
+      historyChange,
     })
   );
 }
 
-function initiativeChange(event: IChangeEvent): CastMember | undefined {
+function initiativeChange(event: ChangeEvent): CastMember | undefined {
   emitChanges(event);
   const castMembers = getTurnOrder();
   console.log("castMembers", state.castMembers);
@@ -186,6 +203,8 @@ export function addConditionToCastMember(
     new AddCondition({
       castMemberId: id,
       condition: activeCondition,
+      history: state,
+      historyChange,
     })
   );
   return castMembers[id];
@@ -204,7 +223,12 @@ export function removeConditionFromCastMember(
     `Removing condition ${condition} from ${idCastMember(castMember)}`
   );
   const castMembers = emitChanges(
-    new RemoveCondition({ castMemberId: id, condition })
+    new RemoveCondition({
+      castMemberId: id,
+      condition,
+      history: state,
+      historyChange,
+    })
   );
   return castMembers[id];
 }
@@ -258,5 +282,7 @@ export function attack({
     damage,
     targets: targetIds,
     targetSaves,
+    history: state,
+    historyChange,
   });
 }

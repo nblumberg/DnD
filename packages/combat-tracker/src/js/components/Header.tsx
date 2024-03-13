@@ -1,3 +1,4 @@
+import { CastMember } from "creature";
 import { SyntheticEvent, useContext, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { redoHistory, undoHistory } from "../app/api/history";
@@ -6,6 +7,7 @@ import { media } from "../app/constants";
 import { useCharacters, useIsDM, useLogout } from "../app/store";
 import { CastMemberContext } from "../app/store/castMembers";
 import { useAppState } from "../app/store/state";
+import { State } from "../app/types";
 import { ActionMenuContext } from "./ActionMenu";
 import { ActorPicker } from "./ActorPicker";
 import { MenuOption } from "./Menu";
@@ -65,12 +67,20 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+interface MenuOptionDisabledParams {
+  state: State;
+  isDM: boolean;
+  isMyTurn: boolean;
+  currentTurnCastMember?: CastMember;
+}
+
 const optionParams: Array<{
   dmOnly?: true;
   playerOnly?: true;
   icon: string;
   text: string;
   handlerName: string;
+  disabled?: (params: MenuOptionDisabledParams) => boolean;
 }> = [
   { dmOnly: true, icon: "🎭", text: "Add actor", handlerName: "pickActors" },
   {
@@ -78,20 +88,60 @@ const optionParams: Array<{
     icon: "⏪",
     text: "Previous turn",
     handlerName: "previousTurn",
+    disabled: ({ state, currentTurnCastMember }) => {
+      if (!currentTurnCastMember) {
+        return true;
+      }
+      const firstInRound = state.castMembers.every(
+        ({ initiativeOrder }) =>
+          initiativeOrder <= currentTurnCastMember?.initiativeOrder
+      );
+      if (!firstInRound) {
+        return false;
+      }
+      return !state.events.find(({ type }) => type === "ChangeRound");
+    },
   },
   { icon: "🕐", text: "Roll initiative", handlerName: "rollInitiative" },
   { dmOnly: true, icon: "⏩", text: "Next turn", handlerName: "nextTurn" },
-  { icon: "🎬", text: "Actions", handlerName: "actions" },
-  { playerOnly: true, icon: "🏁", text: "End turn", handlerName: "endTurn" },
-  { dmOnly: true, icon: "🔄", text: "Undo", handlerName: "undoHistory" },
-  { dmOnly: true, icon: "🔁", text: "Redo", handlerName: "redoHistory" },
+  {
+    icon: "🎬",
+    text: "Actions",
+    handlerName: "actions",
+    disabled: ({ isDM, isMyTurn }) => {
+      return !isDM && !isMyTurn;
+    },
+  },
+  {
+    playerOnly: true,
+    icon: "🏁",
+    text: "End turn",
+    handlerName: "endTurn",
+    disabled: ({ currentTurnCastMember }) => {
+      return !currentTurnCastMember;
+    },
+  },
+  {
+    dmOnly: true,
+    icon: "🔄",
+    text: "Undo",
+    handlerName: "undoHistory",
+    disabled: ({ state }) => state.events.length === 0,
+  },
+  {
+    dmOnly: true,
+    icon: "🔁",
+    text: "Redo",
+    handlerName: "redoHistory",
+    disabled: ({ state }) => !state.undoneHistory.events.length,
+  },
   { dmOnly: true, icon: "🗑", text: "Reset game", handlerName: "resetGame" },
 ];
 
 function HeaderButtons({ options }: { options: MenuOption[] }) {
-  const buttons = options.map(({ icon, text, onClick }) => {
+  const buttons = options.map(({ icon, text, onClick, disabled }) => {
     return (
-      <MenuButton key={text} title={text} onClick={onClick}>
+      <MenuButton key={text} title={text} onClick={onClick} disabled={disabled}>
         {icon ?? text}
       </MenuButton>
     );
@@ -101,9 +151,11 @@ function HeaderButtons({ options }: { options: MenuOption[] }) {
 
 export function Header() {
   // React state
-  const [{ isMobile, user }] = useAppState();
+  const [state] = useAppState();
+  const { isMobile, user, undoneHistory } = state;
+  console.log("undoneHistory", undoneHistory);
   const ids = useCharacters();
-  const dm = useIsDM();
+  const isDM = useIsDM();
   const castMembers = useContext(CastMemberContext);
   const [actorPickerOpen, setActorPickerOpen] = useState<boolean>(false);
   const io = useSocket();
@@ -113,7 +165,7 @@ export function Header() {
 
   // Derivative state
   const currentTurnCastMember = castMembers.find(({ myTurn }) => myTurn);
-  const isMyTurn = !dm && ids.includes(currentTurnCastMember?.id ?? "");
+  const isMyTurn = !isDM && ids.includes(currentTurnCastMember?.id ?? "");
   const currentTurnIndex = currentTurnCastMember
     ? castMembers.indexOf(currentTurnCastMember)
     : -1;
@@ -133,10 +185,10 @@ export function Header() {
     (event: SyntheticEvent, ...args: any[]) => void
   > = {
     pickActors: usePickActors(setActorPickerOpen),
-    previousTurn: usePreviousTurn(dm, castMembers, currentTurnIndex, io),
+    previousTurn: usePreviousTurn(isDM, castMembers, currentTurnIndex, io),
     rollInitiative: useRollInitiative(),
-    nextTurn: useNextTurn(dm, castMembers, currentTurnIndex, io),
-    endTurn: useEndTurn(dm, isMyTurn, io, currentTurnIndex, castMembers),
+    nextTurn: useNextTurn(isDM, castMembers, currentTurnIndex, io),
+    endTurn: useEndTurn(isDM, isMyTurn, io, currentTurnIndex, castMembers),
     actions: () => {
       if (!currentTurnCastMember) {
         alert("Actions need a cast member");
@@ -146,7 +198,7 @@ export function Header() {
     },
     undoHistory,
     redoHistory,
-    resetGame: useResetGame(dm, io),
+    resetGame: useResetGame(isDM, io),
   };
 
   // JSX
@@ -154,14 +206,25 @@ export function Header() {
     MenuOption & { dmOnly?: boolean; playerOnly?: boolean }
   > = optionParams.map((params) => ({
     ...params,
+    disabled: params.disabled
+      ? params.disabled({
+          state,
+          isDM,
+          isMyTurn,
+          currentTurnCastMember,
+        })
+      : false,
     onClick: (event: SyntheticEvent) => handlers[params.handlerName](event),
   }));
   const options: MenuOption[] = defaultMenuOptions
-    .filter(({ dmOnly, playerOnly }) => !(dmOnly && !dm) && !(playerOnly && dm))
-    .map(({ icon, text, onClick }) => ({
+    .filter(
+      ({ dmOnly, playerOnly }) => !(dmOnly && !isDM) && !(playerOnly && isDM)
+    )
+    .map(({ icon, text, onClick, disabled }) => ({
       icon,
       text,
       onClick,
+      disabled,
     }));
 
   const avatar = (

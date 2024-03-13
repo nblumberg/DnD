@@ -14,6 +14,6 @@ export const userToCharacter: Record<(typeof knownUsers)[number], string[]> = {
   "aweditandwrite@gmail.com": ["Harrow_Zinvaris"],
   "april.maguire@gmail.com": ["Rhiannon_Frey"],
   "joaquinmercardo@gmail.com": ["Throne"],
-  "TMustacchio@gmail.com": ["Nacho_Chessier"],
+  "TMustacchio@gmail.com": ["Nacho_Chessier", "Eaton_Dorito"],
   "willhonley@gmail.com": ["John_Rambo_McClane"],
 } as const;

@@ -1,51 +1,49 @@
 import { CastMember } from "creature";
 import { Dispatch } from "react";
 import {
-  HistoryEntry,
+  ChangeHistoryEntry,
   IChangeEvent,
   changeEventToString,
-  getHistoryHandle,
-  instantiateHistory,
+  instantiateEvents,
 } from "state-change";
-import { fullHistoryReducer } from ".";
 import { Action, State } from "../types";
+import { fullHistoryReducer } from "./fullHistory";
 import { registerReducer } from "./registerReducer";
 
 interface ChangeHistoryAction extends Action {
   type: "changeHistory";
   changeType: "=" | "+" | "-" | "c";
-  history: IChangeEvent[];
-  changes: HistoryEntry<CastMember>[];
+  events: IChangeEvent[];
+  changes: ChangeHistoryEntry<CastMember>[];
 }
 
 function addHistoryReducer(state: State, action: ChangeHistoryAction): State {
-  const newChanges = [...state.changes, ...action.changes];
-  getHistoryHandle<CastMember>("CastMember").setHistory(newChanges);
-  const newHistory = [...state.history];
-  const classes = instantiateHistory(action.history);
+  const newEvents = [...state.events];
+  const classes = instantiateEvents(action.events, state);
   classes.forEach((event) => {
-    if (!newHistory.includes(event)) {
+    if (!newEvents.includes(event)) {
       // Protect against ChangeEvents instantiated from prior state that auto-add themselves to history
-      newHistory.push(event);
+      newEvents.push(event);
     }
   });
-  return { ...state, history: newHistory, changes: newChanges };
+  return {
+    ...state,
+    events: newEvents,
+    changes: [...state.changes, ...action.changes],
+  };
 }
 
-/**
- * TODO: IChangeEvents self-remove
- */
 function removeHistoryReducer(
   state: State,
   action: ChangeHistoryAction
 ): State {
-  const newHistory = [...state.history];
-  const newChanges = state.changes.filter(
+  let newEvents = [...state.events];
+  let newChanges = state.changes.filter(
     (change) =>
       !action.changes.find((removedChange) => removedChange.id === change.id)
   );
-  const removals = action.history.map((event) => {
-    const removal = state.history.find((ev) => ev.id === event.id);
+  const removals = action.events.map((event) => {
+    const removal = state.events.find((ev) => ev.id === event.id);
     if (!removal) {
       throw new Error(
         `Couldn't find ChangeEvent ${changeEventToString(event)} to remove`
@@ -55,14 +53,12 @@ function removeHistoryReducer(
   });
   removals.forEach((event) => {
     try {
-      event.undo();
+      ({ events: newEvents, changes: newChanges } = event.undo(state));
     } catch (e) {
       console.error(`Failed to undo ${changeEventToString(event)}`, e);
     }
-    newHistory.splice(newHistory.indexOf(event), 1);
   });
-  getHistoryHandle<CastMember>("CastMember").setHistory(newChanges);
-  return { ...state, history: newHistory, changes: newChanges };
+  return { ...state, events: newEvents, changes: newChanges };
 }
 
 function changeHistoryReducer(
@@ -71,31 +67,32 @@ function changeHistoryReducer(
 ): State {
   console.log("changeHistoryReducer", action);
 
-  const { changeType: type, history, changes } = action;
+  const { changeType: type } = action;
   if (type === "=") {
-    return fullHistoryReducer(state, { type: "fullHistory", history, changes });
+    return fullHistoryReducer(state, { ...action, type: "fullHistory" });
   } else if (type === "+") {
     return addHistoryReducer(state, action);
   } else if (type === "-") {
     return removeHistoryReducer(state, action);
   }
 
-  const updatedChanges = [...state.changes];
-  const updatedHistory = [...state.history];
-  history.forEach((newEvent) => {
+  const { events: changedEvents, changes } = action;
+  const updatedHistory = {
+    events: [...state.events],
+    changes: [...state.changes],
+  };
+  instantiateEvents(changedEvents, state).forEach((newEvent) => {
     const { id, changes: newChangeIds } = newEvent;
-    const cachedEventIndex = state.history.findIndex(
-      (event) => event.id === id
-    );
+    const cachedEventIndex = state.events.findIndex((event) => event.id === id);
     if (cachedEventIndex === -1) {
       throw new Error(
         `Couldn't find ChangeEvent ${changeEventToString(newEvent)} to change`
       );
     }
-    const cachedEvent = state.history[cachedEventIndex];
-    updatedHistory.splice(cachedEventIndex, 1, newEvent);
+    const cachedEvent = state.events[cachedEventIndex];
+    updatedHistory.events.splice(cachedEventIndex, 1, newEvent);
 
-    const oldChanges = cachedEvent.getChanges();
+    const oldChanges = cachedEvent.getChanges(state);
     const newChanges = newChangeIds.map((id) => {
       const newChange = changes.find((change) => change.id === id);
       if (!newChange) {
@@ -107,14 +104,13 @@ function changeHistoryReducer(
       }
       return newChange;
     });
-    updatedChanges.splice(
-      updatedChanges.indexOf(oldChanges[0]),
+    updatedHistory.changes.splice(
+      updatedHistory.changes.indexOf(oldChanges[0]),
       oldChanges.length,
       ...newChanges
     );
   });
-  getHistoryHandle<CastMember>("CastMember").setHistory(updatedChanges);
-  return { ...state, history: updatedHistory, changes: updatedChanges };
+  return { ...state, ...updatedHistory };
 }
 
 registerReducer<ChangeHistoryAction>("changeHistory", changeHistoryReducer);
@@ -122,13 +118,13 @@ registerReducer<ChangeHistoryAction>("changeHistory", changeHistoryReducer);
 export function changeHistory(
   dispatch: Dispatch<Action>,
   changeType: "=" | "+" | "-" | "c",
-  history: IChangeEvent[],
-  changes: HistoryEntry<CastMember>[]
+  events: IChangeEvent[],
+  changes: ChangeHistoryEntry<CastMember>[]
 ): void {
   dispatch({
     type: "changeHistory",
     changeType,
-    history,
+    events,
     changes,
   } as ChangeHistoryAction);
 }

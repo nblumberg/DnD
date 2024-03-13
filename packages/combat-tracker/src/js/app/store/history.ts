@@ -1,51 +1,54 @@
-import { CastMember } from "creature";
 import { useEffect } from "react";
-import { HistoryEntry, IChangeEvent } from "state-change";
+import { History } from "state-change";
 import { useSocket } from "../api/sockets";
 import { changeHistory } from "../reducers/changeHistory";
 import { fullHistoryAction } from "../reducers/fullHistory";
+import { fullUndoneHistoryAction } from "../reducers/fullUndoneHistory";
 import { useAppState } from "./state";
 
 const receivedSockets = new Set<string>();
 
-interface HistoryContextValue {
-  history: IChangeEvent[];
-  changes: HistoryEntry<CastMember>[];
-}
-
-export function useHistory(): HistoryContextValue {
+export function useHistory(): History {
   const [state, dispatch] = useAppState();
 
-  const { history, changes } = state;
+  const { events, changes } = state;
 
   const io = useSocket();
   useEffect(() => {
     if (!io) {
       return;
     }
-    io.on("fullHistory", (id, history, changes): void => {
+    io.on("fullHistory", (id, events, changes): void => {
       if (receivedSockets.has(id)) {
         return;
       }
       receivedSockets.add(id);
 
-      fullHistoryAction(dispatch, history, changes);
+      fullHistoryAction(dispatch, events, changes);
     });
-    io.on("changeHistory", (id, type, history, changes): void => {
+    io.on("changeHistory", (id, type, events, changes): void => {
       if (receivedSockets.has(id)) {
         return;
       }
       receivedSockets.add(id);
 
-      console.log("dispatch changeHistory", id, type, history, changes);
+      console.log("dispatch changeHistory", id, type, events, changes);
 
-      changeHistory(dispatch, type, history, changes);
+      changeHistory(dispatch, type, events, changes);
+    });
+    io.on("fullUndoneHistory", (id, events, changes): void => {
+      if (receivedSockets.has(id)) {
+        return;
+      }
+      receivedSockets.add(id);
+      fullUndoneHistoryAction(dispatch, events, changes);
     });
     () => {
       io.off("fullHistory");
       io.off("changeHistory");
+      io.off("fullUndoneHistory");
     };
   }, [dispatch, io]);
 
-  return { history, changes };
+  return { events, changes };
 }

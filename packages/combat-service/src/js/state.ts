@@ -3,22 +3,27 @@ import { createEventEmitter } from "event-emitter";
 import * as fs from "fs";
 import * as path from "path";
 import {
-  HistoryEntry,
-  IChangeEvent,
-  getHistory,
-  getHistoryHandle,
+  ChangeEvent,
+  ChangeHistoryEntry,
+  History,
+  instantiateEvents,
   listenToHistory,
-  setHistory,
 } from "state-change";
 import { getTurnOrder } from "./actions/initiativeActions";
 import { castMembersFromHistory } from "./state/castMemberState";
 
 const stateFile = path.join(__dirname, "..", "..", "state.json");
 
+interface UndoHistory {
+  event: ChangeEvent;
+  changes: ChangeHistoryEntry<CastMember>[];
+}
+
 export interface State {
   castMembers: Record<string, CastMember>;
-  history: IChangeEvent[];
-  changes: HistoryEntry<CastMember>[];
+  events: ChangeEvent[];
+  changes: ChangeHistoryEntry<CastMember>[];
+  undoArray: UndoHistory[];
   round: number;
   turnOrder: string[];
   currentTurn?: string;
@@ -26,8 +31,9 @@ export interface State {
 
 const defaultState: State = {
   castMembers: {},
-  history: [],
+  events: [],
   changes: [],
+  undoArray: [],
   round: 0,
   currentTurn: undefined,
   turnOrder: [],
@@ -38,9 +44,7 @@ let tmp: State = {
 try {
   const json = fs.readFileSync(stateFile, "utf8");
   tmp = JSON.parse(json);
-
-  getHistoryHandle<CastMember>("CastMember").setHistory(tmp.changes);
-  tmp.history = setHistory(tmp.history);
+  tmp.events = instantiateEvents(tmp.events, tmp);
 } catch (e) {
   if (e && typeof e === "object" && "code" in e && e?.code !== "ENOENT") {
     throw e;
@@ -64,57 +68,39 @@ export const {
 function deriveState(): void {
   const castMembersList = castMembersFromHistory();
   state.turnOrder = getTurnOrder().map((castMember) => castMember.id);
-  state.round = state.history.filter(
+  state.round = state.events.filter(
     ({ type }) => type === "ChangeRound"
   ).length;
   state.currentTurn = castMembersList.find(({ myTurn }) => myTurn)?.id;
 }
 deriveState();
 
-listenToHistory(() => {
-  deriveState();
-
-  // Persist state to disk
-  const changes = getHistoryHandle<CastMember>("CastMember").getHistory();
-  const history = getHistory();
+export function onStateChange() {
+  const { events, changes, round } = state;
   fs.writeFileSync(
     stateFile,
     JSON.stringify(
       {
+        round,
+        events,
         changes,
-        history,
       },
       null,
       2
     )
   );
-});
+}
 
 export function resetGame(): void {
   console.log("Resetting game");
-  const changes: HistoryEntry<CastMember>[] = [];
-  const history: IChangeEvent[] = [];
-  updateState({ ...defaultState, history, changes }, true);
-  getHistoryHandle<CastMember>("CastMember").setHistory(state.changes);
-  setHistory(state.history);
+  const changes: ChangeHistoryEntry<CastMember>[] = [];
+  const events: ChangeEvent[] = [];
+  updateState({ ...defaultState, events, changes }, true);
 }
 
-export function onStateChange() {
-  const changes = getHistoryHandle<CastMember>("CastMember").getHistory();
-  const history = getHistory();
-  const { round } = state;
-  fs.writeFileSync(
-    stateFile,
-    JSON.stringify(
-      {
-        changes,
-        history,
-        round,
-      },
-      null,
-      2
-    )
-  );
+export function historyChange({ events, changes }: History) {
+  updateState({ events, changes });
+  onStateChange();
 }
 
 export function setState<P extends keyof State>(prop: P, value: State[P]) {
@@ -125,3 +111,11 @@ export function setState<P extends keyof State>(prop: P, value: State[P]) {
 castMembersFromHistory();
 
 onStateChange();
+
+// TODO: both historyChange and listenToHistory are notified of changes, pick one
+listenToHistory(() => {
+  deriveState();
+
+  // Persist state to disk
+  onStateChange();
+});

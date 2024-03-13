@@ -1,19 +1,24 @@
 import { Auditioner, CastMember, Condition } from "creature";
 import { RollHistory } from "roll";
-import { HistoryEntry, IChangeEvent } from "state-change";
+import { ChangeHistoryEntry, IChangeEvent } from "state-change";
 
 export interface ServerToClientEvents {
   castMembers: (castMembers: CastMember[]) => void;
   fullHistory: (
     id: string,
-    history: IChangeEvent[],
-    changes: HistoryEntry<CastMember>[]
+    events: IChangeEvent[],
+    changes: ChangeHistoryEntry<CastMember>[]
   ) => void;
   changeHistory: (
     id: string,
     type: "=" | "+" | "-" | "c",
-    history: IChangeEvent[],
-    changes: HistoryEntry<CastMember>[]
+    events: IChangeEvent[],
+    changes: ChangeHistoryEntry<CastMember>[]
+  ) => void;
+  fullUndoneHistory: (
+    id: string,
+    events: IChangeEvent[],
+    changes: ChangeHistoryEntry<CastMember>[]
   ) => void;
   turn: (id: string, castMemberId: string) => void;
 }

@@ -1,6 +1,6 @@
 import { CastMember } from "creature";
 import { useEffect } from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { useSocket } from "./app/api/sockets";
 import { changeViewAction } from "./app/reducers";
 import { useAppState, useHistory, useLogin, useMobile } from "./app/store";
@@ -25,7 +25,15 @@ import { History } from "./history";
 import { Login } from "./login/pages/Login";
 import { TurnOrder } from "./turnOrder";
 
+const GlobalStyle = createGlobalStyle`
+body {
+  background-color: black;
+  color: white;
+}
+`;
+
 const Body = styled.section`
+  color: white;
   display: flex;
   justify-content: space-between;
 `;
@@ -44,7 +52,7 @@ export function App() {
   const io = useSocket();
   const isMobile = useMobile();
   const history = useHistory();
-  const castMembers = useCastMembers(history.changes);
+  const castMembers = useCastMembers(history);
   console.log("App render", history, castMembers);
   const interactiveRoll = useInteractiveRoll();
   const actionMenu = useActionMenu();
@@ -75,6 +83,7 @@ export function App() {
       interactiveRoll={interactiveRoll.context}
       targetSelect={targetSelect.context}
     >
+      <GlobalStyle />
       <Header />
       <div>{renderCount++}</div>
       <Body>

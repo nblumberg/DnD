@@ -1,7 +1,6 @@
 import { CastMember, Damage, idCastMember } from "creature";
 import { Roll, RollHistory } from "roll";
-import { damageCastMemberChange } from "../atomic/damageCastMember";
-import { StateChange } from "../atomic/stateChange";
+import { StateChange, damageCastMember } from "../change";
 
 export function damageTarget(
   target: CastMember,
@@ -22,11 +21,7 @@ export function damageTarget(
     }
 
     const damageType = damageTypes[i].type;
-    const damageChanges = damageCastMemberChange(
-      target,
-      roll.total,
-      damageType
-    );
+    const damageChanges = damageCastMember(target, roll.total, damageType);
     changes.push(...damageChanges);
     const tmpDamage =
       damageChanges.length === 2

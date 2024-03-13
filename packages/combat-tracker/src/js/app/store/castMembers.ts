@@ -1,22 +1,20 @@
 import { CastMember } from "creature";
 import { createContext, useMemo } from "react";
 import { setLog } from "roll";
-import { HistoryEntry, getCastMembers } from "state-change";
+import { History, getCastMembers } from "state-change";
 
 setLog(() => {});
 
 let cachedCastMembers: CastMember[] = [];
 
-export function useCastMembers(
-  changes: HistoryEntry<CastMember>[]
-): CastMember[] {
-  console.log("useCastMembers", changes);
+export function useCastMembers(history: History): CastMember[] {
+  console.log("useCastMembers", history);
   const castMembers = useMemo(() => {
-    console.log("useCastMembers useMemo", changes);
-    cachedCastMembers = getCastMembers(changes).sort(getTurnOrder);
+    console.log("useCastMembers useMemo", history);
+    cachedCastMembers = getCastMembers(history).sort(getTurnOrder);
     console.log("castMembers", cachedCastMembers);
     return cachedCastMembers;
-  }, [changes]);
+  }, [history]);
   return castMembers;
   // return cachedCastMembers;
 }

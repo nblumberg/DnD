@@ -1,7 +1,6 @@
 import { AttackEffect, CastMember, SpellEffect, idCastMember } from "creature";
 import { RollHistory } from "roll";
-import { addConditionChange } from "../atomic/addCondition";
-import { StateChange } from "../atomic/stateChange";
+import { StateChange, addCondition } from "../change";
 
 export function affectTarget(
   attacker: CastMember,
@@ -9,7 +8,7 @@ export function affectTarget(
   effect: AttackEffect | SpellEffect,
   targetSave?: RollHistory,
   log?: (message: string) => void
-): StateChange<CastMember, keyof CastMember>[] {
+): StateChange<CastMember, "conditions">[] {
   const { condition, dc, dcType, description, duration } = {
     dc: Infinity,
     dcType: undefined,
@@ -57,7 +56,7 @@ export function affectTarget(
       onTurnStart = target.id;
     }
   }
-  const change = addConditionChange(target, {
+  const change = addCondition(target, {
     condition,
     onSave,
     duration,
@@ -65,5 +64,8 @@ export function affectTarget(
     onTurnEnd,
     source: attacker.id,
   });
-  return [change];
+  if (change) {
+    return [change];
+  }
+  return [];
 }

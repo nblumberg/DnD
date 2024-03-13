@@ -166,15 +166,15 @@ function sortAuditioners(
 }
 
 export function ActorPicker({ onClose }: { onClose: () => void }) {
-  const [{ history }] = useAppState();
+  const [{ events }] = useAppState();
   const allCastMemberIdsEver = useMemo(
     () =>
       new Set(
-        history
+        events
           .filter(({ type }) => type === "AddCastMember")
           .map(({ castMemberId }) => castMemberId)
       ),
-    [history]
+    [events]
   );
 
   const actors = useActors();

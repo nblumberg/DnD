@@ -13,7 +13,7 @@ const Panel = styled.div<{ $myTurn: boolean }>`
   ${({ $myTurn }) =>
     $myTurn
       ? "background-color: lightgreen; border: 3px solid green;"
-      : "border: 1px solid black;"}
+      : "border: 1px solid gray;"}
   display: flex;
   flex-direction: column;
   position: relative;

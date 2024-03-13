@@ -35,6 +35,7 @@ export interface MenuOption {
   text: string;
   onClick?: (event: SyntheticEvent) => void;
   children?: MenuOption[];
+  disabled?: boolean;
 }
 
 export function Menu({

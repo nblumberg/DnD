@@ -5,7 +5,7 @@ import {
   idCastMember,
 } from "creature";
 import { RollHistory } from "roll";
-import { StateChange } from "../atomic/stateChange";
+import { StateChange } from "../change";
 import { damageTarget } from "./damageTarget";
 
 export function attackTarget(

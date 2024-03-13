@@ -1,7 +1,6 @@
-import { ChangeEvent } from "packages/state-change/dist/js/molecular/event";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Roll, RollHistory } from "roll";
-import { IChangeEvent, parseChangeables } from "state-change";
+import { ChangeEvent, IChangeEvent, parseChangeables } from "state-change";
 import styled from "styled-components";
 import { useSocket } from "../app/api/sockets";
 import { useIsDM } from "../app/store";
@@ -17,13 +16,15 @@ const Changeable = styled.a`
 `;
 
 export function History() {
-  const [{ history }] = useAppState();
+  const [{ events, changes }] = useAppState();
   const io = useSocket();
   const dm = useIsDM();
   const [roundsOpen, setRoundsOpen] = useState<boolean[]>([true]);
   const [change, setChange] = useState<ChangeEvent | undefined>();
   const [rollOpen, setRollOpen] = useState(false);
   const [rolls, setRolls] = useState<Array<{ roll: Roll; label?: string }>>([]);
+
+  const history = { events, changes };
 
   const changeableClick = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -43,7 +44,7 @@ export function History() {
       }
       const id = target.dataset.changeable;
       const type: string | undefined = target.dataset.type;
-      const change: IChangeEvent | undefined = history.find(
+      const change: IChangeEvent | undefined = events.find(
         (entry) => entry.id === id
       );
       if (!change) {
@@ -60,7 +61,7 @@ export function History() {
     return () => {
       window.document.removeEventListener("click", handler);
     };
-  }, [history, io]);
+  }, [events, io]);
 
   const onRoll = (result: RollHistory[]) => {
     setRollOpen(false);
@@ -77,9 +78,9 @@ export function History() {
     setRollOpen(false);
   };
 
-  const rounds: IChangeEvent[][] = [[]];
+  const rounds: ChangeEvent[][] = [[]];
   let [currentRound] = rounds;
-  history.forEach((entry) => {
+  events.forEach((entry) => {
     if (entry.type === "ChangeRound") {
       currentRound = [];
       rounds.push(currentRound);
@@ -107,7 +108,9 @@ export function History() {
     let events = null;
     if (isOpen) {
       events = round.map((entry) => {
-        let { literals, changeables } = parseChangeables(entry.display(true));
+        let { literals, changeables } = parseChangeables(
+          entry.display(history, true)
+        );
         let content: JSX.Element[] = [];
         let i = 0;
         while (literals.length + changeables.length) {
@@ -149,7 +152,7 @@ export function History() {
       </li>
     );
   });
-  const content = history.length ? <ol>{roundContent}</ol> : <p>Nothing yet</p>;
+  const content = events.length ? <ol>{roundContent}</ol> : <p>Nothing yet</p>;
   return (
     <Panel>
       <h2>History</h2>

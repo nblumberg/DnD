@@ -1,32 +1,31 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { ActiveCondition, CastMember, Condition, Size } from "creature";
-import { addCastMember } from "../src/js/atomic/addCastMember";
-import { addCondition } from "../src/js/atomic/addCondition";
-import { damageCastMember } from "../src/js/atomic/damageCastMember";
-import { delayInitiative } from "../src/js/atomic/delayInitiative";
-import { endTurn } from "../src/js/atomic/endTurn";
-import { expireCondition } from "../src/js/atomic/expireCondition";
-import { giveCastMemberTemporaryHitPoints } from "../src/js/atomic/giveCastMemberTemporaryHitPoints";
-import { healCastMember } from "../src/js/atomic/healCastMember";
-import { nameCastMember } from "../src/js/atomic/nameCastMember";
-import { removeCastMember } from "../src/js/atomic/removeCastMember";
-import { setInitiative } from "../src/js/atomic/setInitiative";
-import { startTurn } from "../src/js/atomic/startTurn";
+import { getUniqueId } from "../src/js";
 import {
-  ChangeState,
+  ChangeHistory,
+  ChangeHistoryEntry,
   StateAdd,
   StateChange,
   StateRemove,
-  getHistoryHandle,
-  getObjectState,
-  undoHistoryEntry,
-} from "../src/js/atomic/stateChange";
-import {
+  addCastMember,
+  addCondition,
+  damageCastMember,
+  delayInitiative,
+  endTurn,
   endTurnCondition,
+  getObjectFromChanges,
+  giveCastMemberTemporaryHitPoints,
+  healCastMember,
+  nameCastMember,
+  removeCastMember,
+  removeCondition,
+  setInitiative,
+  startTurn,
   startTurnCondition,
   tickCondition,
-} from "../src/js/atomic/tickCondition";
-import { getUniqueId } from "../src/js/util/unique";
+  trackChanges,
+  undoHistoryEntry,
+} from "../src/js/change";
 import { beforeOnce } from "./beforeOnce";
 
 jest.mock("../src/js/util/unique", () => {
@@ -126,18 +125,26 @@ const originalConditionEndTurn: ActiveCondition = {
   onTurnEnd: testCastMember.id,
 };
 
+type MakeChange = (
+  castMember: CastMember
+) =>
+  | ChangeHistoryEntry<CastMember>
+  | ChangeHistoryEntry<CastMember>[]
+  | undefined;
+
 describe("When", () => {
-  let target: ReturnType<typeof getHistoryHandle<CastMember>>;
-  let currentCastMember: CastMember;
+  let history: ChangeHistory<CastMember> = { changes: [] };
+  let currentCastMember: CastMember | undefined;
+  let beforeChangeCastMember: CastMember | undefined;
 
   let i = 0;
-  type Changes =
+  type Change =
     | StateAdd<CastMember>
     | StateRemove<CastMember>
     | StateChange<CastMember, keyof CastMember>;
   const tests: Array<{
-    changes: Changes | Changes[];
-    makeChange: ChangeState<CastMember>;
+    changes: Change | Change[];
+    makeChange: MakeChange;
   }> = [
     {
       changes: {
@@ -237,7 +244,7 @@ describe("When", () => {
         (getUniqueId as jest.Mock<() => string>).mockImplementation(
           () => originalConditionTickExpire.id
         );
-        return addCondition(castMember, originalConditionTickExpire, true);
+        return addCondition(castMember, originalConditionTickExpire);
       },
     },
     {
@@ -278,7 +285,7 @@ describe("When", () => {
         },
       },
       makeChange: (castMember) =>
-        expireCondition(castMember, originalConditionTickExpire),
+        removeCondition(castMember, originalConditionTickExpire),
     },
 
     {
@@ -296,7 +303,7 @@ describe("When", () => {
         (getUniqueId as jest.Mock<() => string>).mockImplementation(
           () => originalConditionTickTick.id
         );
-        return addCondition(castMember, originalConditionTickTick, true);
+        return addCondition(castMember, originalConditionTickTick);
       },
     },
     {
@@ -355,7 +362,7 @@ describe("When", () => {
         (getUniqueId as jest.Mock<() => string>).mockImplementation(
           () => originalConditionStartTurn.id
         );
-        return addCondition(castMember, originalConditionStartTurn, true);
+        return addCondition(castMember, originalConditionStartTurn);
       },
     },
     {
@@ -414,7 +421,7 @@ describe("When", () => {
         (getUniqueId as jest.Mock<() => string>).mockImplementation(
           () => originalConditionEndTurn.id
         );
-        return addCondition(castMember, originalConditionEndTurn, true);
+        return addCondition(castMember, originalConditionEndTurn);
       },
     },
     {
@@ -552,30 +559,55 @@ describe("When", () => {
     );
     const action = changes.map(({ action }) => action).join(" and ");
     let priorHistoryLength: number;
-    let beforeChangeCastMember: CastMember;
 
     describe(`a cast member ${action}`, () => {
       beforeOnce(() => {
-        target = getHistoryHandle("CastMember");
-        target.setHistory([]);
+        history.changes = [];
 
         currentCastMember = originalCastMember;
         const index = tests.indexOf(testEntry);
         for (let i = 0; i < index; i++) {
-          const { makeChange } = tests[i];
-          currentCastMember = makeChange(currentCastMember);
+          if (!currentCastMember) {
+            throw new Error("Cast member not found in history");
+          }
+          history = trackChanges(
+            history,
+            tests[i].makeChange(currentCastMember)
+          );
+          currentCastMember = getObjectFromChanges<CastMember>(
+            originalCastMember.id,
+            history
+          );
         }
-        priorHistoryLength = target.getHistory().length;
-        beforeChangeCastMember = currentCastMember;
-        currentCastMember = makeChange(beforeChangeCastMember);
+        priorHistoryLength = history.changes.length;
+        if (history.changes.length) {
+          beforeChangeCastMember = getObjectFromChanges<CastMember>(
+            originalCastMember.id,
+            history
+          );
+        } else {
+          beforeChangeCastMember = undefined;
+        }
+        if (!currentCastMember) {
+          throw new Error("Cast member not found in history");
+        }
+        history = trackChanges(history, makeChange(currentCastMember));
+        currentCastMember = getObjectFromChanges<CastMember>(
+          originalCastMember.id,
+          history
+        );
       });
       test("it should return the new CastMember and it should be a different object", () => {
-        expect(currentCastMember).toBeDefined();
+        if (changes[0].type === "-") {
+          expect(currentCastMember).not.toBeDefined();
+        } else {
+          expect(currentCastMember).toBeDefined();
+        }
         expect(currentCastMember).not.toBe(beforeChangeCastMember);
         expect(currentCastMember).not.toBe(originalCastMember);
       });
       test("it should track the change in history", () => {
-        expect(target.getHistory().length).toEqual(
+        expect(history.changes.length).toEqual(
           priorHistoryLength + changes.length
         );
       });
@@ -586,28 +618,28 @@ describe("When", () => {
         test(`it should have set ${change.property} on the new CastMember object and not on the old CastMember object`, () => {
           if (typeof (change.newValue ?? change.oldValue) === "object") {
             expect(originalCastMember[change.property]).not.toBe(
-              currentCastMember[change.property]
+              currentCastMember![change.property]
             );
-            expect(beforeChangeCastMember[change.property]).not.toBe(
-              currentCastMember[change.property]
+            expect(beforeChangeCastMember![change.property]).not.toBe(
+              currentCastMember![change.property]
             );
             if (change.type.includes("-")) {
               Object.entries(change.oldValue).forEach(([key]) => {
                 expect(
-                  currentCastMember[change.property].hasOwnProperty(key)
+                  currentCastMember![change.property].hasOwnProperty(key)
                 ).toBe(false);
               });
             } else {
               Object.entries(change.newValue).forEach(([key, value]) => {
                 expect(
-                  currentCastMember[change.property].hasOwnProperty(key)
+                  currentCastMember![change.property].hasOwnProperty(key)
                 ).toBe(true);
-                expect(currentCastMember[change.property][key]).toEqual(value);
+                expect(currentCastMember![change.property][key]).toEqual(value);
               });
             }
           } else {
             if (
-              beforeChangeCastMember[change.property] ===
+              beforeChangeCastMember![change.property] ===
               originalCastMember[change.property]
             ) {
               // Conditional check is necessary in case we're setting it back to the original state
@@ -615,10 +647,12 @@ describe("When", () => {
                 change.oldValue
               );
             }
-            expect(beforeChangeCastMember[change.property]).toEqual(
+            expect(beforeChangeCastMember![change.property]).toEqual(
               change.oldValue
             );
-            expect(currentCastMember[change.property]).toEqual(change.newValue);
+            expect(currentCastMember![change.property]).toEqual(
+              change.newValue
+            );
           }
         });
       });
@@ -626,10 +660,7 @@ describe("When", () => {
         test("it should be reversible, but return a different CastMember object", () => {
           let undoneCastMember = currentCastMember;
           [...changes].reverse().forEach((change) => {
-            undoneCastMember = undoHistoryEntry(
-              change as StateChange<CastMember, keyof CastMember>,
-              undoneCastMember
-            );
+            undoneCastMember = undoHistoryEntry(change, undoneCastMember);
           });
           expect(undoneCastMember).not.toBe(currentCastMember);
           expect(undoneCastMember).not.toBe(beforeChangeCastMember);
@@ -638,49 +669,48 @@ describe("When", () => {
       }
       test("it should be able to reconstruct the updated item from history", () => {
         const removal = !!changes.find(({ type }) => type === "-");
-        expect(
-          getObjectState(originalCastMember.id, target.getHistory())
-        ).toEqual(removal ? undefined : currentCastMember);
+        expect(getObjectFromChanges(originalCastMember.id, history)).toEqual(
+          removal ? undefined : currentCastMember
+        );
       });
     });
   }
 
-  tests.forEach((testEntry) => testChange(testEntry));
+  tests.forEach(testChange);
 
-  function testNoChange(
-    makeChange: ChangeState<CastMember>,
-    setup?: () => CastMember
-  ) {
+  function testNoChange(makeChange: MakeChange, setup?: () => CastMember) {
     let priorHistoryLength: number;
-    let beforeChangeCastMember: CastMember;
     beforeOnce(() => {
-      target = getHistoryHandle("CastMember");
-      target.setHistory([]);
+      history.changes = [];
 
-      currentCastMember = originalCastMember;
+      history = trackChanges(history, addCastMember(originalCastMember));
+
+      currentCastMember = getObjectFromChanges(originalCastMember.id, history);
       if (setup) {
         currentCastMember = setup();
       }
 
-      priorHistoryLength = target.getHistory().length;
+      priorHistoryLength = history.changes.length;
       beforeChangeCastMember = currentCastMember;
-      currentCastMember = makeChange(currentCastMember);
-    });
-    test("it should return the same CastMember and it should be the same object", () => {
-      expect(currentCastMember).toBeDefined();
-      expect(currentCastMember).toBe(beforeChangeCastMember);
-      if (!setup) {
-        expect(currentCastMember).toBe(originalCastMember);
+      if (!currentCastMember) {
+        throw new Error("Cast member not found in history");
       }
+      history = trackChanges(history, makeChange(currentCastMember));
+      currentCastMember = getObjectFromChanges(currentCastMember.id, history);
+    });
+    test("it should return an equivalent CastMember", () => {
+      expect(currentCastMember).toBeDefined();
+      expect(currentCastMember).toEqual(beforeChangeCastMember);
+      0;
     });
     test("it should not track the change in history", () => {
-      expect(target.getHistory().length).toEqual(priorHistoryLength);
+      expect(history.changes.length).toEqual(priorHistoryLength);
     });
   }
 
   describe(`a cast member adds a condition it's immune to`, () => {
     testNoChange((castMember) =>
-      addCondition(castMember, { condition: Condition.CHARMED }, true)
+      addCondition(castMember, { condition: Condition.CHARMED })
     );
   });
   describe(`a cast member receives damage it's immune to`, () => {
@@ -689,7 +719,17 @@ describe("When", () => {
   describe(`a cast member gains less temporary hit points than it already has`, () => {
     testNoChange(
       (castMember) => giveCastMemberTemporaryHitPoints(castMember, 2),
-      () => giveCastMemberTemporaryHitPoints(originalCastMember, 3)
+      () => {
+        const changes = giveCastMemberTemporaryHitPoints(originalCastMember, 3);
+        if (changes) {
+          history = trackChanges(history, changes);
+        }
+        const castMember = getObjectFromChanges(originalCastMember.id, history);
+        if (!castMember) {
+          throw new Error("Cast member not found in history");
+        }
+        return castMember;
+      }
     );
   });
 });
