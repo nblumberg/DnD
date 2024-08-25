@@ -15,7 +15,8 @@ import {
   createEventEmitter,
 } from "event-emitter";
 import { AddCastMember, RemoveCastMember, getCastMembers } from "state-change";
-import { historyChange, onStateChange, state, updateState } from "../state";
+import { historyChange } from "../actions/historyActions";
+import { onStateChange, state, updateState } from "../state";
 
 export let addCastMembersListener: AddListener<Record<string, CastMember>>;
 let updateCastMembers: SetData<Record<string, CastMember>>;

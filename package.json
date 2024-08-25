@@ -16,6 +16,7 @@
   "scripts": {
     "build": "lerna run build",
     "build-tsc": "lerna run build-tsc",
+    "tsc-watch": "lerna run tsc-watch",
     "build-webpack": "lerna run build-webpack",
     "test": "lerna run test",
     "testWatch": "lerna run testWatch"

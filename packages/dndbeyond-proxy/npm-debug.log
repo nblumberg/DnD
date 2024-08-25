@@ -1,0 +1,2587 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-D',
+1 verbose cli   'tsx' ]
+2 info using npm@3.10.9
+3 info using node@v6.9.2
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData tsx
+8 silly fetchNamedPackageData tsx
+9 silly mapToRegistry name tsx
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry https://registry.npmjs.org/
+12 silly mapToRegistry data Result {
+12 silly mapToRegistry   raw: 'tsx',
+12 silly mapToRegistry   scope: null,
+12 silly mapToRegistry   escapedName: 'tsx',
+12 silly mapToRegistry   name: 'tsx',
+12 silly mapToRegistry   rawSpec: '',
+12 silly mapToRegistry   spec: 'latest',
+12 silly mapToRegistry   type: 'tag' }
+13 silly mapToRegistry uri https://registry.npmjs.org/tsx
+14 verbose request uri https://registry.npmjs.org/tsx
+15 verbose request no auth needed
+16 info attempt registry request try #1 at 11:50:18 PM
+17 verbose request id 4235956b1fad5e79
+18 http request GET https://registry.npmjs.org/tsx
+19 http 200 https://registry.npmjs.org/tsx
+20 verbose headers { date: 'Sun, 25 Aug 2024 03:50:18 GMT',
+20 verbose headers   'content-type': 'application/json',
+20 verbose headers   'transfer-encoding': 'chunked',
+20 verbose headers   connection: 'keep-alive',
+20 verbose headers   'cf-ray': '8b889dfeb8c39023-BOS',
+20 verbose headers   'cf-cache-status': 'HIT',
+20 verbose headers   'access-control-allow-origin': '*',
+20 verbose headers   age: '247',
+20 verbose headers   'cache-control': 'public, max-age=300',
+20 verbose headers   etag: 'W/"1dd191d2b5b2828e975ecfe722acaed0"',
+20 verbose headers   'last-modified': 'Sat, 24 Aug 2024 16:12:37 GMT',
+20 verbose headers   vary: 'accept-encoding, accept',
+20 verbose headers   server: 'cloudflare',
+20 verbose headers   'content-encoding': 'gzip' }
+21 silly get cb [ 200,
+21 silly get   { date: 'Sun, 25 Aug 2024 03:50:18 GMT',
+21 silly get     'content-type': 'application/json',
+21 silly get     'transfer-encoding': 'chunked',
+21 silly get     connection: 'keep-alive',
+21 silly get     'cf-ray': '8b889dfeb8c39023-BOS',
+21 silly get     'cf-cache-status': 'HIT',
+21 silly get     'access-control-allow-origin': '*',
+21 silly get     age: '247',
+21 silly get     'cache-control': 'public, max-age=300',
+21 silly get     etag: 'W/"1dd191d2b5b2828e975ecfe722acaed0"',
+21 silly get     'last-modified': 'Sat, 24 Aug 2024 16:12:37 GMT',
+21 silly get     vary: 'accept-encoding, accept',
+21 silly get     server: 'cloudflare',
+21 silly get     'content-encoding': 'gzip' } ]
+22 verbose get saving tsx to /Users/nathanielblumberg/.npm/registry.npmjs.org/tsx/.cache.json
+23 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+24 silly install normalizeTree
+25 silly loadCurrentTree Finishing
+26 silly loadIdealTree Starting
+27 silly install loadIdealTree
+28 silly cloneCurrentTree Starting
+29 silly install cloneCurrentTreeToIdealTree
+30 silly cloneCurrentTree Finishing
+31 silly loadShrinkwrap Starting
+32 silly install loadShrinkwrap
+33 silly loadShrinkwrap Finishing
+34 silly loadAllDepsIntoIdealTree Starting
+35 silly install loadAllDepsIntoIdealTree
+36 silly resolveWithNewModule tsx@4.18.0 checking installable status
+37 silly cache add args [ 'tsx', null ]
+38 verbose cache add spec tsx
+39 silly cache add parsed spec Result {
+39 silly cache add   raw: 'tsx',
+39 silly cache add   scope: null,
+39 silly cache add   escapedName: 'tsx',
+39 silly cache add   name: 'tsx',
+39 silly cache add   rawSpec: '',
+39 silly cache add   spec: 'latest',
+39 silly cache add   type: 'tag' }
+40 silly addNamed tsx@latest
+41 verbose addNamed "latest" is being treated as a dist-tag for tsx
+42 info addNameTag [ 'tsx', 'latest' ]
+43 silly mapToRegistry name tsx
+44 silly mapToRegistry using default registry
+45 silly mapToRegistry registry https://registry.npmjs.org/
+46 silly mapToRegistry data Result {
+46 silly mapToRegistry   raw: 'tsx',
+46 silly mapToRegistry   scope: null,
+46 silly mapToRegistry   escapedName: 'tsx',
+46 silly mapToRegistry   name: 'tsx',
+46 silly mapToRegistry   rawSpec: '',
+46 silly mapToRegistry   spec: 'latest',
+46 silly mapToRegistry   type: 'tag' }
+47 silly mapToRegistry uri https://registry.npmjs.org/tsx
+48 verbose addNameTag registry:https://registry.npmjs.org/tsx not in flight; fetching
+49 verbose get https://registry.npmjs.org/tsx not expired, no request
+50 silly addNameTag next cb for tsx with tag latest
+51 silly addNamed tsx@4.18.0
+52 verbose addNamed "4.18.0" is a plain semver version for tsx
+53 silly mapToRegistry name tsx
+54 silly mapToRegistry using default registry
+55 silly mapToRegistry registry https://registry.npmjs.org/
+56 silly mapToRegistry data Result {
+56 silly mapToRegistry   raw: 'tsx',
+56 silly mapToRegistry   scope: null,
+56 silly mapToRegistry   escapedName: 'tsx',
+56 silly mapToRegistry   name: 'tsx',
+56 silly mapToRegistry   rawSpec: '',
+56 silly mapToRegistry   spec: 'latest',
+56 silly mapToRegistry   type: 'tag' }
+57 silly mapToRegistry uri https://registry.npmjs.org/tsx
+58 verbose addRemoteTarball https://registry.npmjs.org/tsx/-/tsx-4.18.0.tgz not in flight; adding
+59 verbose addRemoteTarball [ 'https://registry.npmjs.org/tsx/-/tsx-4.18.0.tgz',
+59 verbose addRemoteTarball   'c5c6e8af9e7d162446ed22dc7b53dc4792bf920b' ]
+60 info retry fetch attempt 1 at 11:50:19 PM
+61 info attempt registry request try #1 at 11:50:19 PM
+62 http fetch GET https://registry.npmjs.org/tsx/-/tsx-4.18.0.tgz
+63 http fetch 200 https://registry.npmjs.org/tsx/-/tsx-4.18.0.tgz
+64 silly fetchAndShaCheck shasum c5c6e8af9e7d162446ed22dc7b53dc4792bf920b
+65 verbose addTmpTarball /var/folders/5v/227wn10d3vd2vrq4wfmssbfw0000gn/T/npm-17803-2e7314c3/registry.npmjs.org/tsx/-/tsx-4.18.0.tgz not in flight; adding
+66 verbose addTmpTarball already have metadata; skipping unpack for tsx@4.18.0
+67 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+68 silly cache afterAdd tsx@4.18.0
+69 verbose afterAdd /Users/nathanielblumberg/.npm/tsx/4.18.0/package/package.json not in flight; writing
+70 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+71 verbose afterAdd /Users/nathanielblumberg/.npm/tsx/4.18.0/package/package.json written
+72 silly fetchNamedPackageData esbuild
+73 silly mapToRegistry name esbuild
+74 silly mapToRegistry using default registry
+75 silly mapToRegistry registry https://registry.npmjs.org/
+76 silly mapToRegistry data Result {
+76 silly mapToRegistry   raw: 'esbuild',
+76 silly mapToRegistry   scope: null,
+76 silly mapToRegistry   escapedName: 'esbuild',
+76 silly mapToRegistry   name: 'esbuild',
+76 silly mapToRegistry   rawSpec: '',
+76 silly mapToRegistry   spec: 'latest',
+76 silly mapToRegistry   type: 'tag' }
+77 silly mapToRegistry uri https://registry.npmjs.org/esbuild
+78 silly fetchNamedPackageData get-tsconfig
+79 silly mapToRegistry name get-tsconfig
+80 silly mapToRegistry using default registry
+81 silly mapToRegistry registry https://registry.npmjs.org/
+82 silly mapToRegistry data Result {
+82 silly mapToRegistry   raw: 'get-tsconfig',
+82 silly mapToRegistry   scope: null,
+82 silly mapToRegistry   escapedName: 'get-tsconfig',
+82 silly mapToRegistry   name: 'get-tsconfig',
+82 silly mapToRegistry   rawSpec: '',
+82 silly mapToRegistry   spec: 'latest',
+82 silly mapToRegistry   type: 'tag' }
+83 silly mapToRegistry uri https://registry.npmjs.org/get-tsconfig
+84 silly fetchNamedPackageData fsevents
+85 silly mapToRegistry name fsevents
+86 silly mapToRegistry using default registry
+87 silly mapToRegistry registry https://registry.npmjs.org/
+88 silly mapToRegistry data Result {
+88 silly mapToRegistry   raw: 'fsevents',
+88 silly mapToRegistry   scope: null,
+88 silly mapToRegistry   escapedName: 'fsevents',
+88 silly mapToRegistry   name: 'fsevents',
+88 silly mapToRegistry   rawSpec: '',
+88 silly mapToRegistry   spec: 'latest',
+88 silly mapToRegistry   type: 'tag' }
+89 silly mapToRegistry uri https://registry.npmjs.org/fsevents
+90 verbose request uri https://registry.npmjs.org/esbuild
+91 verbose request no auth needed
+92 info attempt registry request try #1 at 11:50:19 PM
+93 http request GET https://registry.npmjs.org/esbuild
+94 verbose request uri https://registry.npmjs.org/get-tsconfig
+95 verbose request no auth needed
+96 info attempt registry request try #1 at 11:50:19 PM
+97 http request GET https://registry.npmjs.org/get-tsconfig
+98 verbose request uri https://registry.npmjs.org/fsevents
+99 verbose request no auth needed
+100 info attempt registry request try #1 at 11:50:19 PM
+101 verbose etag W/"897b89cb36d39b1e4f3706e4aaceba9b"
+102 verbose lastModified Fri, 05 Feb 2021 14:46:37 GMT
+103 http request GET https://registry.npmjs.org/fsevents
+104 http 200 https://registry.npmjs.org/esbuild
+105 verbose headers { date: 'Sun, 25 Aug 2024 03:50:19 GMT',
+105 verbose headers   'content-type': 'application/json',
+105 verbose headers   'transfer-encoding': 'chunked',
+105 verbose headers   connection: 'keep-alive',
+105 verbose headers   'cf-ray': '8b889e043bf39023-BOS',
+105 verbose headers   'cf-cache-status': 'HIT',
+105 verbose headers   'access-control-allow-origin': '*',
+105 verbose headers   age: '201',
+105 verbose headers   'cache-control': 'public, max-age=300',
+105 verbose headers   etag: 'W/"6a78f55bd2f12404555b1b02ad037e90"',
+105 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:14:10 GMT',
+105 verbose headers   vary: 'accept-encoding, accept',
+105 verbose headers   server: 'cloudflare',
+105 verbose headers   'content-encoding': 'gzip' }
+106 silly get cb [ 200,
+106 silly get   { date: 'Sun, 25 Aug 2024 03:50:19 GMT',
+106 silly get     'content-type': 'application/json',
+106 silly get     'transfer-encoding': 'chunked',
+106 silly get     connection: 'keep-alive',
+106 silly get     'cf-ray': '8b889e043bf39023-BOS',
+106 silly get     'cf-cache-status': 'HIT',
+106 silly get     'access-control-allow-origin': '*',
+106 silly get     age: '201',
+106 silly get     'cache-control': 'public, max-age=300',
+106 silly get     etag: 'W/"6a78f55bd2f12404555b1b02ad037e90"',
+106 silly get     'last-modified': 'Fri, 16 Aug 2024 22:14:10 GMT',
+106 silly get     vary: 'accept-encoding, accept',
+106 silly get     server: 'cloudflare',
+106 silly get     'content-encoding': 'gzip' } ]
+107 verbose get saving esbuild to /Users/nathanielblumberg/.npm/registry.npmjs.org/esbuild/.cache.json
+108 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+109 http 200 https://registry.npmjs.org/get-tsconfig
+110 verbose headers { date: 'Sun, 25 Aug 2024 03:50:19 GMT',
+110 verbose headers   'content-type': 'application/json',
+110 verbose headers   'transfer-encoding': 'chunked',
+110 verbose headers   connection: 'keep-alive',
+110 verbose headers   'cf-ray': '8b889e048ae58f90-BOS',
+110 verbose headers   'cf-cache-status': 'HIT',
+110 verbose headers   'access-control-allow-origin': '*',
+110 verbose headers   'cache-control': 'public, max-age=300',
+110 verbose headers   etag: 'W/"e227259b5d5e0e34b6e1c244ed2940d3"',
+110 verbose headers   'last-modified': 'Fri, 19 Jul 2024 02:17:35 GMT',
+110 verbose headers   vary: 'accept-encoding, accept',
+110 verbose headers   server: 'cloudflare',
+110 verbose headers   'content-encoding': 'gzip' }
+111 silly get cb [ 200,
+111 silly get   { date: 'Sun, 25 Aug 2024 03:50:19 GMT',
+111 silly get     'content-type': 'application/json',
+111 silly get     'transfer-encoding': 'chunked',
+111 silly get     connection: 'keep-alive',
+111 silly get     'cf-ray': '8b889e048ae58f90-BOS',
+111 silly get     'cf-cache-status': 'HIT',
+111 silly get     'access-control-allow-origin': '*',
+111 silly get     'cache-control': 'public, max-age=300',
+111 silly get     etag: 'W/"e227259b5d5e0e34b6e1c244ed2940d3"',
+111 silly get     'last-modified': 'Fri, 19 Jul 2024 02:17:35 GMT',
+111 silly get     vary: 'accept-encoding, accept',
+111 silly get     server: 'cloudflare',
+111 silly get     'content-encoding': 'gzip' } ]
+112 verbose get saving get-tsconfig to /Users/nathanielblumberg/.npm/registry.npmjs.org/get-tsconfig/.cache.json
+113 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+114 silly resolveWithNewModule esbuild@0.23.1 checking installable status
+115 silly cache add args [ 'esbuild@~0.23.0', null ]
+116 verbose cache add spec esbuild@~0.23.0
+117 silly cache add parsed spec Result {
+117 silly cache add   raw: 'esbuild@~0.23.0',
+117 silly cache add   scope: null,
+117 silly cache add   escapedName: 'esbuild',
+117 silly cache add   name: 'esbuild',
+117 silly cache add   rawSpec: '~0.23.0',
+117 silly cache add   spec: '>=0.23.0 <0.24.0',
+117 silly cache add   type: 'range' }
+118 silly addNamed esbuild@>=0.23.0 <0.24.0
+119 verbose addNamed ">=0.23.0 <0.24.0" is a valid semver range for esbuild
+120 silly addNameRange { name: 'esbuild', range: '>=0.23.0 <0.24.0', hasData: false }
+121 silly mapToRegistry name esbuild
+122 silly mapToRegistry using default registry
+123 silly mapToRegistry registry https://registry.npmjs.org/
+124 silly mapToRegistry data Result {
+124 silly mapToRegistry   raw: 'esbuild',
+124 silly mapToRegistry   scope: null,
+124 silly mapToRegistry   escapedName: 'esbuild',
+124 silly mapToRegistry   name: 'esbuild',
+124 silly mapToRegistry   rawSpec: '',
+124 silly mapToRegistry   spec: 'latest',
+124 silly mapToRegistry   type: 'tag' }
+125 silly mapToRegistry uri https://registry.npmjs.org/esbuild
+126 verbose addNameRange registry:https://registry.npmjs.org/esbuild not in flight; fetching
+127 http 200 https://registry.npmjs.org/fsevents
+128 verbose headers { date: 'Sun, 25 Aug 2024 03:50:19 GMT',
+128 verbose headers   'content-type': 'application/json',
+128 verbose headers   'transfer-encoding': 'chunked',
+128 verbose headers   connection: 'keep-alive',
+128 verbose headers   'cf-ray': '8b889e049ded304d-BOS',
+128 verbose headers   'cf-cache-status': 'HIT',
+128 verbose headers   'access-control-allow-origin': '*',
+128 verbose headers   'cache-control': 'public, max-age=300',
+128 verbose headers   etag: 'W/"f5138f87e80ddfba9e647e1f0c30f217"',
+128 verbose headers   'last-modified': 'Mon, 21 Aug 2023 16:24:25 GMT',
+128 verbose headers   vary: 'accept-encoding, accept',
+128 verbose headers   server: 'cloudflare',
+128 verbose headers   'content-encoding': 'gzip' }
+129 silly get cb [ 200,
+129 silly get   { date: 'Sun, 25 Aug 2024 03:50:19 GMT',
+129 silly get     'content-type': 'application/json',
+129 silly get     'transfer-encoding': 'chunked',
+129 silly get     connection: 'keep-alive',
+129 silly get     'cf-ray': '8b889e049ded304d-BOS',
+129 silly get     'cf-cache-status': 'HIT',
+129 silly get     'access-control-allow-origin': '*',
+129 silly get     'cache-control': 'public, max-age=300',
+129 silly get     etag: 'W/"f5138f87e80ddfba9e647e1f0c30f217"',
+129 silly get     'last-modified': 'Mon, 21 Aug 2023 16:24:25 GMT',
+129 silly get     vary: 'accept-encoding, accept',
+129 silly get     server: 'cloudflare',
+129 silly get     'content-encoding': 'gzip' } ]
+130 verbose get saving fsevents to /Users/nathanielblumberg/.npm/registry.npmjs.org/fsevents/.cache.json
+131 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+132 verbose get https://registry.npmjs.org/esbuild not expired, no request
+133 silly addNameRange number 2 { name: 'esbuild', range: '>=0.23.0 <0.24.0', hasData: true }
+134 silly addNameRange versions [ 'esbuild',
+134 silly addNameRange   [ '0.0.0',
+134 silly addNameRange     '0.0.11',
+134 silly addNameRange     '0.0.12',
+134 silly addNameRange     '0.0.13',
+134 silly addNameRange     '0.0.14',
+134 silly addNameRange     '0.0.4',
+134 silly addNameRange     '0.0.15',
+134 silly addNameRange     '0.0.16',
+134 silly addNameRange     '0.1.0',
+134 silly addNameRange     '0.1.1',
+134 silly addNameRange     '0.1.2',
+134 silly addNameRange     '0.1.3',
+134 silly addNameRange     '0.1.4',
+134 silly addNameRange     '0.1.5',
+134 silly addNameRange     '0.1.6',
+134 silly addNameRange     '0.1.7',
+134 silly addNameRange     '0.1.8',
+134 silly addNameRange     '0.1.9',
+134 silly addNameRange     '0.1.10',
+134 silly addNameRange     '0.1.11',
+134 silly addNameRange     '0.1.12',
+134 silly addNameRange     '0.1.13',
+134 silly addNameRange     '0.1.14',
+134 silly addNameRange     '0.1.15',
+134 silly addNameRange     '0.1.16',
+134 silly addNameRange     '0.1.17',
+134 silly addNameRange     '0.1.18',
+134 silly addNameRange     '0.1.19',
+134 silly addNameRange     '0.1.20',
+134 silly addNameRange     '0.1.21',
+134 silly addNameRange     '0.1.22',
+134 silly addNameRange     '0.1.23',
+134 silly addNameRange     '0.1.24',
+134 silly addNameRange     '0.1.25',
+134 silly addNameRange     '0.1.26',
+134 silly addNameRange     '0.2.0',
+134 silly addNameRange     '0.2.1',
+134 silly addNameRange     '0.2.2',
+134 silly addNameRange     '0.2.3',
+134 silly addNameRange     '0.2.4',
+134 silly addNameRange     '0.2.5',
+134 silly addNameRange     '0.2.6',
+134 silly addNameRange     '0.2.7',
+134 silly addNameRange     '0.2.8',
+134 silly addNameRange     '0.2.9',
+134 silly addNameRange     '0.2.10',
+134 silly addNameRange     '0.2.11',
+134 silly addNameRange     '0.2.12',
+134 silly addNameRange     '0.3.0',
+134 silly addNameRange     '0.3.1',
+134 silly addNameRange     '0.3.2',
+134 silly addNameRange     '0.3.3',
+134 silly addNameRange     '0.3.4',
+134 silly addNameRange     '0.3.5',
+134 silly addNameRange     '0.3.6',
+134 silly addNameRange     '0.3.7',
+134 silly addNameRange     '0.3.8',
+134 silly addNameRange     '0.3.9',
+134 silly addNameRange     '0.4.0',
+134 silly addNameRange     '0.4.1',
+134 silly addNameRange     '0.4.2',
+134 silly addNameRange     '0.4.3',
+134 silly addNameRange     '0.4.4',
+134 silly addNameRange     '0.4.5',
+134 silly addNameRange     '0.4.6',
+134 silly addNameRange     '0.4.7',
+134 silly addNameRange     '0.4.8',
+134 silly addNameRange     '0.4.9',
+134 silly addNameRange     '0.4.10',
+134 silly addNameRange     '0.4.11',
+134 silly addNameRange     '0.4.12',
+134 silly addNameRange     '0.4.13',
+134 silly addNameRange     '0.4.14',
+134 silly addNameRange     '0.5.0',
+134 silly addNameRange     '0.5.1',
+134 silly addNameRange     '0.5.2',
+134 silly addNameRange     '0.5.3',
+134 silly addNameRange     '0.5.4',
+134 silly addNameRange     '0.5.5',
+134 silly addNameRange     '0.5.6',
+134 silly addNameRange     '0.5.7',
+134 silly addNameRange     '0.5.8',
+134 silly addNameRange     '0.5.9',
+134 silly addNameRange     '0.5.10',
+134 silly addNameRange     '0.5.11',
+134 silly addNameRange     '0.5.12',
+134 silly addNameRange     '0.5.13',
+134 silly addNameRange     '0.5.14',
+134 silly addNameRange     '0.5.15',
+134 silly addNameRange     '0.5.16',
+134 silly addNameRange     '0.5.17',
+134 silly addNameRange     '0.5.18',
+134 silly addNameRange     '0.5.19',
+134 silly addNameRange     '0.5.20',
+134 silly addNameRange     '0.5.21',
+134 silly addNameRange     '0.5.22',
+134 silly addNameRange     '0.5.23',
+134 silly addNameRange     '0.5.24',
+134 silly addNameRange     '0.5.25',
+134 silly addNameRange     '0.5.26',
+134 silly addNameRange     ... 355 more items ] ]
+135 silly addNamed esbuild@0.23.1
+136 verbose addNamed "0.23.1" is a plain semver version for esbuild
+137 silly mapToRegistry name esbuild
+138 silly mapToRegistry using default registry
+139 silly mapToRegistry registry https://registry.npmjs.org/
+140 silly mapToRegistry data Result {
+140 silly mapToRegistry   raw: 'esbuild',
+140 silly mapToRegistry   scope: null,
+140 silly mapToRegistry   escapedName: 'esbuild',
+140 silly mapToRegistry   name: 'esbuild',
+140 silly mapToRegistry   rawSpec: '',
+140 silly mapToRegistry   spec: 'latest',
+140 silly mapToRegistry   type: 'tag' }
+141 silly mapToRegistry uri https://registry.npmjs.org/esbuild
+142 verbose addRemoteTarball https://registry.npmjs.org/esbuild/-/esbuild-0.23.1.tgz not in flight; adding
+143 verbose addRemoteTarball [ 'https://registry.npmjs.org/esbuild/-/esbuild-0.23.1.tgz',
+143 verbose addRemoteTarball   '40fdc3f9265ec0beae6f59824ade1bd3d3d2dab8' ]
+144 silly resolveWithNewModule get-tsconfig@4.7.6 checking installable status
+145 silly cache add args [ 'get-tsconfig@^4.7.5', null ]
+146 verbose cache add spec get-tsconfig@^4.7.5
+147 silly cache add parsed spec Result {
+147 silly cache add   raw: 'get-tsconfig@^4.7.5',
+147 silly cache add   scope: null,
+147 silly cache add   escapedName: 'get-tsconfig',
+147 silly cache add   name: 'get-tsconfig',
+147 silly cache add   rawSpec: '^4.7.5',
+147 silly cache add   spec: '>=4.7.5 <5.0.0',
+147 silly cache add   type: 'range' }
+148 silly addNamed get-tsconfig@>=4.7.5 <5.0.0
+149 verbose addNamed ">=4.7.5 <5.0.0" is a valid semver range for get-tsconfig
+150 silly addNameRange { name: 'get-tsconfig', range: '>=4.7.5 <5.0.0', hasData: false }
+151 silly mapToRegistry name get-tsconfig
+152 silly mapToRegistry using default registry
+153 silly mapToRegistry registry https://registry.npmjs.org/
+154 silly mapToRegistry data Result {
+154 silly mapToRegistry   raw: 'get-tsconfig',
+154 silly mapToRegistry   scope: null,
+154 silly mapToRegistry   escapedName: 'get-tsconfig',
+154 silly mapToRegistry   name: 'get-tsconfig',
+154 silly mapToRegistry   rawSpec: '',
+154 silly mapToRegistry   spec: 'latest',
+154 silly mapToRegistry   type: 'tag' }
+155 silly mapToRegistry uri https://registry.npmjs.org/get-tsconfig
+156 verbose addNameRange registry:https://registry.npmjs.org/get-tsconfig not in flight; fetching
+157 info retry fetch attempt 1 at 11:50:19 PM
+158 info attempt registry request try #1 at 11:50:19 PM
+159 http fetch GET https://registry.npmjs.org/esbuild/-/esbuild-0.23.1.tgz
+160 verbose get https://registry.npmjs.org/get-tsconfig not expired, no request
+161 silly addNameRange number 2 { name: 'get-tsconfig', range: '>=4.7.5 <5.0.0', hasData: true }
+162 silly addNameRange versions [ 'get-tsconfig',
+162 silly addNameRange   [ '1.0.1',
+162 silly addNameRange     '2.0.0',
+162 silly addNameRange     '3.0.0',
+162 silly addNameRange     '3.0.1',
+162 silly addNameRange     '3.1.0',
+162 silly addNameRange     '3.2.0',
+162 silly addNameRange     '4.0.0',
+162 silly addNameRange     '4.0.1',
+162 silly addNameRange     '4.0.2',
+162 silly addNameRange     '4.0.3',
+162 silly addNameRange     '4.0.4',
+162 silly addNameRange     '4.0.5',
+162 silly addNameRange     '4.0.6',
+162 silly addNameRange     '4.0.7',
+162 silly addNameRange     '4.1.0',
+162 silly addNameRange     '4.2.0',
+162 silly addNameRange     '4.3.0',
+162 silly addNameRange     '4.4.0',
+162 silly addNameRange     '4.5.0',
+162 silly addNameRange     '4.6.0',
+162 silly addNameRange     '4.6.1',
+162 silly addNameRange     '4.6.2',
+162 silly addNameRange     '4.7.0',
+162 silly addNameRange     '4.7.1',
+162 silly addNameRange     '4.7.2',
+162 silly addNameRange     '4.7.3',
+162 silly addNameRange     '4.7.4',
+162 silly addNameRange     '4.7.5',
+162 silly addNameRange     '4.7.6' ] ]
+163 silly addNamed get-tsconfig@4.7.6
+164 verbose addNamed "4.7.6" is a plain semver version for get-tsconfig
+165 silly mapToRegistry name get-tsconfig
+166 silly mapToRegistry using default registry
+167 silly mapToRegistry registry https://registry.npmjs.org/
+168 silly mapToRegistry data Result {
+168 silly mapToRegistry   raw: 'get-tsconfig',
+168 silly mapToRegistry   scope: null,
+168 silly mapToRegistry   escapedName: 'get-tsconfig',
+168 silly mapToRegistry   name: 'get-tsconfig',
+168 silly mapToRegistry   rawSpec: '',
+168 silly mapToRegistry   spec: 'latest',
+168 silly mapToRegistry   type: 'tag' }
+169 silly mapToRegistry uri https://registry.npmjs.org/get-tsconfig
+170 verbose addRemoteTarball https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.7.6.tgz not in flight; adding
+171 verbose addRemoteTarball [ 'https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.7.6.tgz',
+171 verbose addRemoteTarball   '118fd5b7b9bae234cc7705a00cd771d7eb65d62a' ]
+172 silly resolveWithNewModule fsevents@2.3.3 checking installable status
+173 silly cache add args [ 'fsevents@~2.3.3', null ]
+174 verbose cache add spec fsevents@~2.3.3
+175 silly cache add parsed spec Result {
+175 silly cache add   raw: 'fsevents@~2.3.3',
+175 silly cache add   scope: null,
+175 silly cache add   escapedName: 'fsevents',
+175 silly cache add   name: 'fsevents',
+175 silly cache add   rawSpec: '~2.3.3',
+175 silly cache add   spec: '>=2.3.3 <2.4.0',
+175 silly cache add   type: 'range' }
+176 silly addNamed fsevents@>=2.3.3 <2.4.0
+177 verbose addNamed ">=2.3.3 <2.4.0" is a valid semver range for fsevents
+178 silly addNameRange { name: 'fsevents', range: '>=2.3.3 <2.4.0', hasData: false }
+179 silly mapToRegistry name fsevents
+180 silly mapToRegistry using default registry
+181 silly mapToRegistry registry https://registry.npmjs.org/
+182 silly mapToRegistry data Result {
+182 silly mapToRegistry   raw: 'fsevents',
+182 silly mapToRegistry   scope: null,
+182 silly mapToRegistry   escapedName: 'fsevents',
+182 silly mapToRegistry   name: 'fsevents',
+182 silly mapToRegistry   rawSpec: '',
+182 silly mapToRegistry   spec: 'latest',
+182 silly mapToRegistry   type: 'tag' }
+183 silly mapToRegistry uri https://registry.npmjs.org/fsevents
+184 verbose addNameRange registry:https://registry.npmjs.org/fsevents not in flight; fetching
+185 info retry fetch attempt 1 at 11:50:19 PM
+186 info attempt registry request try #1 at 11:50:19 PM
+187 http fetch GET https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.7.6.tgz
+188 http fetch 200 https://registry.npmjs.org/esbuild/-/esbuild-0.23.1.tgz
+189 verbose get https://registry.npmjs.org/fsevents not expired, no request
+190 silly addNameRange number 2 { name: 'fsevents', range: '>=2.3.3 <2.4.0', hasData: true }
+191 silly addNameRange versions [ 'fsevents',
+191 silly addNameRange   [ '0.1.1',
+191 silly addNameRange     '0.1.3',
+191 silly addNameRange     '0.1.4',
+191 silly addNameRange     '0.1.5',
+191 silly addNameRange     '0.1.6',
+191 silly addNameRange     '0.2.0',
+191 silly addNameRange     '0.3.0',
+191 silly addNameRange     '0.3.1',
+191 silly addNameRange     '0.3.2',
+191 silly addNameRange     '0.3.3',
+191 silly addNameRange     '0.3.4',
+191 silly addNameRange     '0.3.5',
+191 silly addNameRange     '0.3.6',
+191 silly addNameRange     '0.3.7',
+191 silly addNameRange     '0.3.8',
+191 silly addNameRange     '1.0.0',
+191 silly addNameRange     '1.0.1',
+191 silly addNameRange     '1.0.2',
+191 silly addNameRange     '1.0.3',
+191 silly addNameRange     '1.0.4',
+191 silly addNameRange     '1.0.5',
+191 silly addNameRange     '1.0.6',
+191 silly addNameRange     '1.0.7',
+191 silly addNameRange     '1.0.8',
+191 silly addNameRange     '1.0.9',
+191 silly addNameRange     '1.0.10',
+191 silly addNameRange     '1.0.11',
+191 silly addNameRange     '1.0.12',
+191 silly addNameRange     '1.0.14',
+191 silly addNameRange     '1.0.15',
+191 silly addNameRange     '1.0.17',
+191 silly addNameRange     '1.0.18-0',
+191 silly addNameRange     '1.1.0',
+191 silly addNameRange     '1.1.1',
+191 silly addNameRange     '1.1.2',
+191 silly addNameRange     '1.1.3',
+191 silly addNameRange     '1.2.0',
+191 silly addNameRange     '1.2.2',
+191 silly addNameRange     '1.2.3',
+191 silly addNameRange     '1.2.4',
+191 silly addNameRange     '2.0.0',
+191 silly addNameRange     '2.0.1',
+191 silly addNameRange     '2.0.2-pre-1',
+191 silly addNameRange     '1.2.6',
+191 silly addNameRange     '1.2.7',
+191 silly addNameRange     '2.0.3',
+191 silly addNameRange     '2.0.4',
+191 silly addNameRange     '1.2.8',
+191 silly addNameRange     '2.0.5',
+191 silly addNameRange     '2.0.6',
+191 silly addNameRange     '1.2.9',
+191 silly addNameRange     '2.0.7',
+191 silly addNameRange     '2.1.0',
+191 silly addNameRange     '2.1.1',
+191 silly addNameRange     '2.1.2',
+191 silly addNameRange     '1.2.10',
+191 silly addNameRange     '1.2.11',
+191 silly addNameRange     '1.2.12',
+191 silly addNameRange     '2.1.3',
+191 silly addNameRange     '1.2.13',
+191 silly addNameRange     '2.2.0',
+191 silly addNameRange     '2.2.1',
+191 silly addNameRange     '2.2.2',
+191 silly addNameRange     '2.3.0',
+191 silly addNameRange     '2.3.1',
+191 silly addNameRange     '2.3.2',
+191 silly addNameRange     '2.3.3' ] ]
+192 silly addNamed fsevents@2.3.3
+193 verbose addNamed "2.3.3" is a plain semver version for fsevents
+194 silly mapToRegistry name fsevents
+195 silly mapToRegistry using default registry
+196 silly mapToRegistry registry https://registry.npmjs.org/
+197 silly mapToRegistry data Result {
+197 silly mapToRegistry   raw: 'fsevents',
+197 silly mapToRegistry   scope: null,
+197 silly mapToRegistry   escapedName: 'fsevents',
+197 silly mapToRegistry   name: 'fsevents',
+197 silly mapToRegistry   rawSpec: '',
+197 silly mapToRegistry   spec: 'latest',
+197 silly mapToRegistry   type: 'tag' }
+198 silly mapToRegistry uri https://registry.npmjs.org/fsevents
+199 verbose addRemoteTarball https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz not in flight; adding
+200 verbose addRemoteTarball [ 'https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz',
+200 verbose addRemoteTarball   'cac6407785d03675a2a5e1a5305c697b347d90d6' ]
+201 silly fetchAndShaCheck shasum 40fdc3f9265ec0beae6f59824ade1bd3d3d2dab8
+202 http fetch 200 https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.7.6.tgz
+203 info retry fetch attempt 1 at 11:50:19 PM
+204 info attempt registry request try #1 at 11:50:19 PM
+205 http fetch GET https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz
+206 verbose addTmpTarball /var/folders/5v/227wn10d3vd2vrq4wfmssbfw0000gn/T/npm-17803-2e7314c3/registry.npmjs.org/esbuild/-/esbuild-0.23.1.tgz not in flight; adding
+207 verbose addTmpTarball already have metadata; skipping unpack for esbuild@0.23.1
+208 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+209 silly fetchAndShaCheck shasum 118fd5b7b9bae234cc7705a00cd771d7eb65d62a
+210 verbose addTmpTarball /var/folders/5v/227wn10d3vd2vrq4wfmssbfw0000gn/T/npm-17803-2e7314c3/registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.7.6.tgz not in flight; adding
+211 verbose addTmpTarball already have metadata; skipping unpack for get-tsconfig@4.7.6
+212 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+213 silly cache afterAdd esbuild@0.23.1
+214 verbose afterAdd /Users/nathanielblumberg/.npm/esbuild/0.23.1/package/package.json not in flight; writing
+215 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+216 verbose afterAdd /Users/nathanielblumberg/.npm/esbuild/0.23.1/package/package.json written
+217 silly cache afterAdd get-tsconfig@4.7.6
+218 verbose afterAdd /Users/nathanielblumberg/.npm/get-tsconfig/4.7.6/package/package.json not in flight; writing
+219 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+220 http fetch 200 https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz
+221 verbose afterAdd /Users/nathanielblumberg/.npm/get-tsconfig/4.7.6/package/package.json written
+222 silly fetchAndShaCheck shasum cac6407785d03675a2a5e1a5305c697b347d90d6
+223 verbose addTmpTarball /var/folders/5v/227wn10d3vd2vrq4wfmssbfw0000gn/T/npm-17803-2e7314c3/registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz not in flight; adding
+224 verbose addTmpTarball already have metadata; skipping unpack for fsevents@2.3.3
+225 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+226 silly cache afterAdd fsevents@2.3.3
+227 verbose afterAdd /Users/nathanielblumberg/.npm/fsevents/2.3.3/package/package.json not in flight; writing
+228 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+229 verbose afterAdd /Users/nathanielblumberg/.npm/fsevents/2.3.3/package/package.json written
+230 silly fetchNamedPackageData @esbuild/aix-ppc64
+231 silly mapToRegistry name @esbuild/aix-ppc64
+232 silly mapToRegistry scope (from package name) @esbuild
+233 verbose mapToRegistry no registry URL found in name for scope @esbuild
+234 silly mapToRegistry using default registry
+235 silly mapToRegistry registry https://registry.npmjs.org/
+236 silly mapToRegistry data Result {
+236 silly mapToRegistry   raw: '@esbuild/aix-ppc64',
+236 silly mapToRegistry   scope: '@esbuild',
+236 silly mapToRegistry   escapedName: '@esbuild%2faix-ppc64',
+236 silly mapToRegistry   name: '@esbuild/aix-ppc64',
+236 silly mapToRegistry   rawSpec: '',
+236 silly mapToRegistry   spec: 'latest',
+236 silly mapToRegistry   type: 'tag' }
+237 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2faix-ppc64
+238 silly fetchNamedPackageData @esbuild/android-arm
+239 silly mapToRegistry name @esbuild/android-arm
+240 silly mapToRegistry scope (from package name) @esbuild
+241 verbose mapToRegistry no registry URL found in name for scope @esbuild
+242 silly mapToRegistry using default registry
+243 silly mapToRegistry registry https://registry.npmjs.org/
+244 silly mapToRegistry data Result {
+244 silly mapToRegistry   raw: '@esbuild/android-arm',
+244 silly mapToRegistry   scope: '@esbuild',
+244 silly mapToRegistry   escapedName: '@esbuild%2fandroid-arm',
+244 silly mapToRegistry   name: '@esbuild/android-arm',
+244 silly mapToRegistry   rawSpec: '',
+244 silly mapToRegistry   spec: 'latest',
+244 silly mapToRegistry   type: 'tag' }
+245 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fandroid-arm
+246 silly fetchNamedPackageData @esbuild/android-arm64
+247 silly mapToRegistry name @esbuild/android-arm64
+248 silly mapToRegistry scope (from package name) @esbuild
+249 verbose mapToRegistry no registry URL found in name for scope @esbuild
+250 silly mapToRegistry using default registry
+251 silly mapToRegistry registry https://registry.npmjs.org/
+252 silly mapToRegistry data Result {
+252 silly mapToRegistry   raw: '@esbuild/android-arm64',
+252 silly mapToRegistry   scope: '@esbuild',
+252 silly mapToRegistry   escapedName: '@esbuild%2fandroid-arm64',
+252 silly mapToRegistry   name: '@esbuild/android-arm64',
+252 silly mapToRegistry   rawSpec: '',
+252 silly mapToRegistry   spec: 'latest',
+252 silly mapToRegistry   type: 'tag' }
+253 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fandroid-arm64
+254 silly fetchNamedPackageData @esbuild/android-x64
+255 silly mapToRegistry name @esbuild/android-x64
+256 silly mapToRegistry scope (from package name) @esbuild
+257 verbose mapToRegistry no registry URL found in name for scope @esbuild
+258 silly mapToRegistry using default registry
+259 silly mapToRegistry registry https://registry.npmjs.org/
+260 silly mapToRegistry data Result {
+260 silly mapToRegistry   raw: '@esbuild/android-x64',
+260 silly mapToRegistry   scope: '@esbuild',
+260 silly mapToRegistry   escapedName: '@esbuild%2fandroid-x64',
+260 silly mapToRegistry   name: '@esbuild/android-x64',
+260 silly mapToRegistry   rawSpec: '',
+260 silly mapToRegistry   spec: 'latest',
+260 silly mapToRegistry   type: 'tag' }
+261 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fandroid-x64
+262 silly fetchNamedPackageData @esbuild/darwin-arm64
+263 silly mapToRegistry name @esbuild/darwin-arm64
+264 silly mapToRegistry scope (from package name) @esbuild
+265 verbose mapToRegistry no registry URL found in name for scope @esbuild
+266 silly mapToRegistry using default registry
+267 silly mapToRegistry registry https://registry.npmjs.org/
+268 silly mapToRegistry data Result {
+268 silly mapToRegistry   raw: '@esbuild/darwin-arm64',
+268 silly mapToRegistry   scope: '@esbuild',
+268 silly mapToRegistry   escapedName: '@esbuild%2fdarwin-arm64',
+268 silly mapToRegistry   name: '@esbuild/darwin-arm64',
+268 silly mapToRegistry   rawSpec: '',
+268 silly mapToRegistry   spec: 'latest',
+268 silly mapToRegistry   type: 'tag' }
+269 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fdarwin-arm64
+270 silly fetchNamedPackageData @esbuild/darwin-x64
+271 silly mapToRegistry name @esbuild/darwin-x64
+272 silly mapToRegistry scope (from package name) @esbuild
+273 verbose mapToRegistry no registry URL found in name for scope @esbuild
+274 silly mapToRegistry using default registry
+275 silly mapToRegistry registry https://registry.npmjs.org/
+276 silly mapToRegistry data Result {
+276 silly mapToRegistry   raw: '@esbuild/darwin-x64',
+276 silly mapToRegistry   scope: '@esbuild',
+276 silly mapToRegistry   escapedName: '@esbuild%2fdarwin-x64',
+276 silly mapToRegistry   name: '@esbuild/darwin-x64',
+276 silly mapToRegistry   rawSpec: '',
+276 silly mapToRegistry   spec: 'latest',
+276 silly mapToRegistry   type: 'tag' }
+277 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fdarwin-x64
+278 silly fetchNamedPackageData @esbuild/freebsd-arm64
+279 silly mapToRegistry name @esbuild/freebsd-arm64
+280 silly mapToRegistry scope (from package name) @esbuild
+281 verbose mapToRegistry no registry URL found in name for scope @esbuild
+282 silly mapToRegistry using default registry
+283 silly mapToRegistry registry https://registry.npmjs.org/
+284 silly mapToRegistry data Result {
+284 silly mapToRegistry   raw: '@esbuild/freebsd-arm64',
+284 silly mapToRegistry   scope: '@esbuild',
+284 silly mapToRegistry   escapedName: '@esbuild%2ffreebsd-arm64',
+284 silly mapToRegistry   name: '@esbuild/freebsd-arm64',
+284 silly mapToRegistry   rawSpec: '',
+284 silly mapToRegistry   spec: 'latest',
+284 silly mapToRegistry   type: 'tag' }
+285 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2ffreebsd-arm64
+286 silly fetchNamedPackageData @esbuild/freebsd-x64
+287 silly mapToRegistry name @esbuild/freebsd-x64
+288 silly mapToRegistry scope (from package name) @esbuild
+289 verbose mapToRegistry no registry URL found in name for scope @esbuild
+290 silly mapToRegistry using default registry
+291 silly mapToRegistry registry https://registry.npmjs.org/
+292 silly mapToRegistry data Result {
+292 silly mapToRegistry   raw: '@esbuild/freebsd-x64',
+292 silly mapToRegistry   scope: '@esbuild',
+292 silly mapToRegistry   escapedName: '@esbuild%2ffreebsd-x64',
+292 silly mapToRegistry   name: '@esbuild/freebsd-x64',
+292 silly mapToRegistry   rawSpec: '',
+292 silly mapToRegistry   spec: 'latest',
+292 silly mapToRegistry   type: 'tag' }
+293 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2ffreebsd-x64
+294 silly fetchNamedPackageData @esbuild/linux-arm
+295 silly mapToRegistry name @esbuild/linux-arm
+296 silly mapToRegistry scope (from package name) @esbuild
+297 verbose mapToRegistry no registry URL found in name for scope @esbuild
+298 silly mapToRegistry using default registry
+299 silly mapToRegistry registry https://registry.npmjs.org/
+300 silly mapToRegistry data Result {
+300 silly mapToRegistry   raw: '@esbuild/linux-arm',
+300 silly mapToRegistry   scope: '@esbuild',
+300 silly mapToRegistry   escapedName: '@esbuild%2flinux-arm',
+300 silly mapToRegistry   name: '@esbuild/linux-arm',
+300 silly mapToRegistry   rawSpec: '',
+300 silly mapToRegistry   spec: 'latest',
+300 silly mapToRegistry   type: 'tag' }
+301 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-arm
+302 silly fetchNamedPackageData @esbuild/linux-arm64
+303 silly mapToRegistry name @esbuild/linux-arm64
+304 silly mapToRegistry scope (from package name) @esbuild
+305 verbose mapToRegistry no registry URL found in name for scope @esbuild
+306 silly mapToRegistry using default registry
+307 silly mapToRegistry registry https://registry.npmjs.org/
+308 silly mapToRegistry data Result {
+308 silly mapToRegistry   raw: '@esbuild/linux-arm64',
+308 silly mapToRegistry   scope: '@esbuild',
+308 silly mapToRegistry   escapedName: '@esbuild%2flinux-arm64',
+308 silly mapToRegistry   name: '@esbuild/linux-arm64',
+308 silly mapToRegistry   rawSpec: '',
+308 silly mapToRegistry   spec: 'latest',
+308 silly mapToRegistry   type: 'tag' }
+309 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-arm64
+310 silly fetchNamedPackageData @esbuild/linux-ia32
+311 silly mapToRegistry name @esbuild/linux-ia32
+312 silly mapToRegistry scope (from package name) @esbuild
+313 verbose mapToRegistry no registry URL found in name for scope @esbuild
+314 silly mapToRegistry using default registry
+315 silly mapToRegistry registry https://registry.npmjs.org/
+316 silly mapToRegistry data Result {
+316 silly mapToRegistry   raw: '@esbuild/linux-ia32',
+316 silly mapToRegistry   scope: '@esbuild',
+316 silly mapToRegistry   escapedName: '@esbuild%2flinux-ia32',
+316 silly mapToRegistry   name: '@esbuild/linux-ia32',
+316 silly mapToRegistry   rawSpec: '',
+316 silly mapToRegistry   spec: 'latest',
+316 silly mapToRegistry   type: 'tag' }
+317 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-ia32
+318 silly fetchNamedPackageData @esbuild/linux-loong64
+319 silly mapToRegistry name @esbuild/linux-loong64
+320 silly mapToRegistry scope (from package name) @esbuild
+321 verbose mapToRegistry no registry URL found in name for scope @esbuild
+322 silly mapToRegistry using default registry
+323 silly mapToRegistry registry https://registry.npmjs.org/
+324 silly mapToRegistry data Result {
+324 silly mapToRegistry   raw: '@esbuild/linux-loong64',
+324 silly mapToRegistry   scope: '@esbuild',
+324 silly mapToRegistry   escapedName: '@esbuild%2flinux-loong64',
+324 silly mapToRegistry   name: '@esbuild/linux-loong64',
+324 silly mapToRegistry   rawSpec: '',
+324 silly mapToRegistry   spec: 'latest',
+324 silly mapToRegistry   type: 'tag' }
+325 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-loong64
+326 silly fetchNamedPackageData @esbuild/linux-mips64el
+327 silly mapToRegistry name @esbuild/linux-mips64el
+328 silly mapToRegistry scope (from package name) @esbuild
+329 verbose mapToRegistry no registry URL found in name for scope @esbuild
+330 silly mapToRegistry using default registry
+331 silly mapToRegistry registry https://registry.npmjs.org/
+332 silly mapToRegistry data Result {
+332 silly mapToRegistry   raw: '@esbuild/linux-mips64el',
+332 silly mapToRegistry   scope: '@esbuild',
+332 silly mapToRegistry   escapedName: '@esbuild%2flinux-mips64el',
+332 silly mapToRegistry   name: '@esbuild/linux-mips64el',
+332 silly mapToRegistry   rawSpec: '',
+332 silly mapToRegistry   spec: 'latest',
+332 silly mapToRegistry   type: 'tag' }
+333 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-mips64el
+334 silly fetchNamedPackageData @esbuild/linux-ppc64
+335 silly mapToRegistry name @esbuild/linux-ppc64
+336 silly mapToRegistry scope (from package name) @esbuild
+337 verbose mapToRegistry no registry URL found in name for scope @esbuild
+338 silly mapToRegistry using default registry
+339 silly mapToRegistry registry https://registry.npmjs.org/
+340 silly mapToRegistry data Result {
+340 silly mapToRegistry   raw: '@esbuild/linux-ppc64',
+340 silly mapToRegistry   scope: '@esbuild',
+340 silly mapToRegistry   escapedName: '@esbuild%2flinux-ppc64',
+340 silly mapToRegistry   name: '@esbuild/linux-ppc64',
+340 silly mapToRegistry   rawSpec: '',
+340 silly mapToRegistry   spec: 'latest',
+340 silly mapToRegistry   type: 'tag' }
+341 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-ppc64
+342 silly fetchNamedPackageData @esbuild/linux-riscv64
+343 silly mapToRegistry name @esbuild/linux-riscv64
+344 silly mapToRegistry scope (from package name) @esbuild
+345 verbose mapToRegistry no registry URL found in name for scope @esbuild
+346 silly mapToRegistry using default registry
+347 silly mapToRegistry registry https://registry.npmjs.org/
+348 silly mapToRegistry data Result {
+348 silly mapToRegistry   raw: '@esbuild/linux-riscv64',
+348 silly mapToRegistry   scope: '@esbuild',
+348 silly mapToRegistry   escapedName: '@esbuild%2flinux-riscv64',
+348 silly mapToRegistry   name: '@esbuild/linux-riscv64',
+348 silly mapToRegistry   rawSpec: '',
+348 silly mapToRegistry   spec: 'latest',
+348 silly mapToRegistry   type: 'tag' }
+349 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-riscv64
+350 silly fetchNamedPackageData @esbuild/linux-s390x
+351 silly mapToRegistry name @esbuild/linux-s390x
+352 silly mapToRegistry scope (from package name) @esbuild
+353 verbose mapToRegistry no registry URL found in name for scope @esbuild
+354 silly mapToRegistry using default registry
+355 silly mapToRegistry registry https://registry.npmjs.org/
+356 silly mapToRegistry data Result {
+356 silly mapToRegistry   raw: '@esbuild/linux-s390x',
+356 silly mapToRegistry   scope: '@esbuild',
+356 silly mapToRegistry   escapedName: '@esbuild%2flinux-s390x',
+356 silly mapToRegistry   name: '@esbuild/linux-s390x',
+356 silly mapToRegistry   rawSpec: '',
+356 silly mapToRegistry   spec: 'latest',
+356 silly mapToRegistry   type: 'tag' }
+357 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-s390x
+358 silly fetchNamedPackageData @esbuild/linux-x64
+359 silly mapToRegistry name @esbuild/linux-x64
+360 silly mapToRegistry scope (from package name) @esbuild
+361 verbose mapToRegistry no registry URL found in name for scope @esbuild
+362 silly mapToRegistry using default registry
+363 silly mapToRegistry registry https://registry.npmjs.org/
+364 silly mapToRegistry data Result {
+364 silly mapToRegistry   raw: '@esbuild/linux-x64',
+364 silly mapToRegistry   scope: '@esbuild',
+364 silly mapToRegistry   escapedName: '@esbuild%2flinux-x64',
+364 silly mapToRegistry   name: '@esbuild/linux-x64',
+364 silly mapToRegistry   rawSpec: '',
+364 silly mapToRegistry   spec: 'latest',
+364 silly mapToRegistry   type: 'tag' }
+365 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2flinux-x64
+366 silly fetchNamedPackageData @esbuild/netbsd-x64
+367 silly mapToRegistry name @esbuild/netbsd-x64
+368 silly mapToRegistry scope (from package name) @esbuild
+369 verbose mapToRegistry no registry URL found in name for scope @esbuild
+370 silly mapToRegistry using default registry
+371 silly mapToRegistry registry https://registry.npmjs.org/
+372 silly mapToRegistry data Result {
+372 silly mapToRegistry   raw: '@esbuild/netbsd-x64',
+372 silly mapToRegistry   scope: '@esbuild',
+372 silly mapToRegistry   escapedName: '@esbuild%2fnetbsd-x64',
+372 silly mapToRegistry   name: '@esbuild/netbsd-x64',
+372 silly mapToRegistry   rawSpec: '',
+372 silly mapToRegistry   spec: 'latest',
+372 silly mapToRegistry   type: 'tag' }
+373 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fnetbsd-x64
+374 silly fetchNamedPackageData @esbuild/openbsd-arm64
+375 silly mapToRegistry name @esbuild/openbsd-arm64
+376 silly mapToRegistry scope (from package name) @esbuild
+377 verbose mapToRegistry no registry URL found in name for scope @esbuild
+378 silly mapToRegistry using default registry
+379 silly mapToRegistry registry https://registry.npmjs.org/
+380 silly mapToRegistry data Result {
+380 silly mapToRegistry   raw: '@esbuild/openbsd-arm64',
+380 silly mapToRegistry   scope: '@esbuild',
+380 silly mapToRegistry   escapedName: '@esbuild%2fopenbsd-arm64',
+380 silly mapToRegistry   name: '@esbuild/openbsd-arm64',
+380 silly mapToRegistry   rawSpec: '',
+380 silly mapToRegistry   spec: 'latest',
+380 silly mapToRegistry   type: 'tag' }
+381 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fopenbsd-arm64
+382 silly fetchNamedPackageData @esbuild/openbsd-x64
+383 silly mapToRegistry name @esbuild/openbsd-x64
+384 silly mapToRegistry scope (from package name) @esbuild
+385 verbose mapToRegistry no registry URL found in name for scope @esbuild
+386 silly mapToRegistry using default registry
+387 silly mapToRegistry registry https://registry.npmjs.org/
+388 silly mapToRegistry data Result {
+388 silly mapToRegistry   raw: '@esbuild/openbsd-x64',
+388 silly mapToRegistry   scope: '@esbuild',
+388 silly mapToRegistry   escapedName: '@esbuild%2fopenbsd-x64',
+388 silly mapToRegistry   name: '@esbuild/openbsd-x64',
+388 silly mapToRegistry   rawSpec: '',
+388 silly mapToRegistry   spec: 'latest',
+388 silly mapToRegistry   type: 'tag' }
+389 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fopenbsd-x64
+390 silly fetchNamedPackageData @esbuild/sunos-x64
+391 silly mapToRegistry name @esbuild/sunos-x64
+392 silly mapToRegistry scope (from package name) @esbuild
+393 verbose mapToRegistry no registry URL found in name for scope @esbuild
+394 silly mapToRegistry using default registry
+395 silly mapToRegistry registry https://registry.npmjs.org/
+396 silly mapToRegistry data Result {
+396 silly mapToRegistry   raw: '@esbuild/sunos-x64',
+396 silly mapToRegistry   scope: '@esbuild',
+396 silly mapToRegistry   escapedName: '@esbuild%2fsunos-x64',
+396 silly mapToRegistry   name: '@esbuild/sunos-x64',
+396 silly mapToRegistry   rawSpec: '',
+396 silly mapToRegistry   spec: 'latest',
+396 silly mapToRegistry   type: 'tag' }
+397 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fsunos-x64
+398 silly fetchNamedPackageData @esbuild/win32-arm64
+399 silly mapToRegistry name @esbuild/win32-arm64
+400 silly mapToRegistry scope (from package name) @esbuild
+401 verbose mapToRegistry no registry URL found in name for scope @esbuild
+402 silly mapToRegistry using default registry
+403 silly mapToRegistry registry https://registry.npmjs.org/
+404 silly mapToRegistry data Result {
+404 silly mapToRegistry   raw: '@esbuild/win32-arm64',
+404 silly mapToRegistry   scope: '@esbuild',
+404 silly mapToRegistry   escapedName: '@esbuild%2fwin32-arm64',
+404 silly mapToRegistry   name: '@esbuild/win32-arm64',
+404 silly mapToRegistry   rawSpec: '',
+404 silly mapToRegistry   spec: 'latest',
+404 silly mapToRegistry   type: 'tag' }
+405 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fwin32-arm64
+406 silly fetchNamedPackageData @esbuild/win32-ia32
+407 silly mapToRegistry name @esbuild/win32-ia32
+408 silly mapToRegistry scope (from package name) @esbuild
+409 verbose mapToRegistry no registry URL found in name for scope @esbuild
+410 silly mapToRegistry using default registry
+411 silly mapToRegistry registry https://registry.npmjs.org/
+412 silly mapToRegistry data Result {
+412 silly mapToRegistry   raw: '@esbuild/win32-ia32',
+412 silly mapToRegistry   scope: '@esbuild',
+412 silly mapToRegistry   escapedName: '@esbuild%2fwin32-ia32',
+412 silly mapToRegistry   name: '@esbuild/win32-ia32',
+412 silly mapToRegistry   rawSpec: '',
+412 silly mapToRegistry   spec: 'latest',
+412 silly mapToRegistry   type: 'tag' }
+413 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fwin32-ia32
+414 silly fetchNamedPackageData @esbuild/win32-x64
+415 silly mapToRegistry name @esbuild/win32-x64
+416 silly mapToRegistry scope (from package name) @esbuild
+417 verbose mapToRegistry no registry URL found in name for scope @esbuild
+418 silly mapToRegistry using default registry
+419 silly mapToRegistry registry https://registry.npmjs.org/
+420 silly mapToRegistry data Result {
+420 silly mapToRegistry   raw: '@esbuild/win32-x64',
+420 silly mapToRegistry   scope: '@esbuild',
+420 silly mapToRegistry   escapedName: '@esbuild%2fwin32-x64',
+420 silly mapToRegistry   name: '@esbuild/win32-x64',
+420 silly mapToRegistry   rawSpec: '',
+420 silly mapToRegistry   spec: 'latest',
+420 silly mapToRegistry   type: 'tag' }
+421 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fwin32-x64
+422 verbose request uri https://registry.npmjs.org/@esbuild%2faix-ppc64
+423 verbose request no auth needed
+424 info attempt registry request try #1 at 11:50:20 PM
+425 http request GET https://registry.npmjs.org/@esbuild%2faix-ppc64
+426 verbose request uri https://registry.npmjs.org/@esbuild%2fandroid-arm
+427 verbose request no auth needed
+428 info attempt registry request try #1 at 11:50:20 PM
+429 http request GET https://registry.npmjs.org/@esbuild%2fandroid-arm
+430 verbose request uri https://registry.npmjs.org/@esbuild%2fandroid-arm64
+431 verbose request no auth needed
+432 info attempt registry request try #1 at 11:50:20 PM
+433 http request GET https://registry.npmjs.org/@esbuild%2fandroid-arm64
+434 verbose request uri https://registry.npmjs.org/@esbuild%2fandroid-x64
+435 verbose request no auth needed
+436 info attempt registry request try #1 at 11:50:20 PM
+437 http request GET https://registry.npmjs.org/@esbuild%2fandroid-x64
+438 verbose request uri https://registry.npmjs.org/@esbuild%2fdarwin-arm64
+439 verbose request no auth needed
+440 info attempt registry request try #1 at 11:50:20 PM
+441 http request GET https://registry.npmjs.org/@esbuild%2fdarwin-arm64
+442 verbose request uri https://registry.npmjs.org/@esbuild%2fdarwin-x64
+443 verbose request no auth needed
+444 info attempt registry request try #1 at 11:50:20 PM
+445 http request GET https://registry.npmjs.org/@esbuild%2fdarwin-x64
+446 verbose request uri https://registry.npmjs.org/@esbuild%2ffreebsd-arm64
+447 verbose request no auth needed
+448 info attempt registry request try #1 at 11:50:20 PM
+449 http request GET https://registry.npmjs.org/@esbuild%2ffreebsd-arm64
+450 verbose request uri https://registry.npmjs.org/@esbuild%2ffreebsd-x64
+451 verbose request no auth needed
+452 info attempt registry request try #1 at 11:50:20 PM
+453 http request GET https://registry.npmjs.org/@esbuild%2ffreebsd-x64
+454 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-arm
+455 verbose request no auth needed
+456 info attempt registry request try #1 at 11:50:20 PM
+457 http request GET https://registry.npmjs.org/@esbuild%2flinux-arm
+458 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-arm64
+459 verbose request no auth needed
+460 info attempt registry request try #1 at 11:50:20 PM
+461 http request GET https://registry.npmjs.org/@esbuild%2flinux-arm64
+462 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-ia32
+463 verbose request no auth needed
+464 info attempt registry request try #1 at 11:50:20 PM
+465 http request GET https://registry.npmjs.org/@esbuild%2flinux-ia32
+466 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-loong64
+467 verbose request no auth needed
+468 info attempt registry request try #1 at 11:50:20 PM
+469 http request GET https://registry.npmjs.org/@esbuild%2flinux-loong64
+470 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-mips64el
+471 verbose request no auth needed
+472 info attempt registry request try #1 at 11:50:20 PM
+473 http request GET https://registry.npmjs.org/@esbuild%2flinux-mips64el
+474 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-ppc64
+475 verbose request no auth needed
+476 info attempt registry request try #1 at 11:50:20 PM
+477 http request GET https://registry.npmjs.org/@esbuild%2flinux-ppc64
+478 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-riscv64
+479 verbose request no auth needed
+480 info attempt registry request try #1 at 11:50:20 PM
+481 http request GET https://registry.npmjs.org/@esbuild%2flinux-riscv64
+482 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-s390x
+483 verbose request no auth needed
+484 info attempt registry request try #1 at 11:50:20 PM
+485 http request GET https://registry.npmjs.org/@esbuild%2flinux-s390x
+486 verbose request uri https://registry.npmjs.org/@esbuild%2flinux-x64
+487 verbose request no auth needed
+488 info attempt registry request try #1 at 11:50:20 PM
+489 http request GET https://registry.npmjs.org/@esbuild%2flinux-x64
+490 verbose request uri https://registry.npmjs.org/@esbuild%2fnetbsd-x64
+491 verbose request no auth needed
+492 info attempt registry request try #1 at 11:50:20 PM
+493 http request GET https://registry.npmjs.org/@esbuild%2fnetbsd-x64
+494 verbose request uri https://registry.npmjs.org/@esbuild%2fopenbsd-arm64
+495 verbose request no auth needed
+496 info attempt registry request try #1 at 11:50:20 PM
+497 http request GET https://registry.npmjs.org/@esbuild%2fopenbsd-arm64
+498 verbose request uri https://registry.npmjs.org/@esbuild%2fopenbsd-x64
+499 verbose request no auth needed
+500 info attempt registry request try #1 at 11:50:20 PM
+501 http request GET https://registry.npmjs.org/@esbuild%2fopenbsd-x64
+502 verbose request uri https://registry.npmjs.org/@esbuild%2fsunos-x64
+503 verbose request no auth needed
+504 info attempt registry request try #1 at 11:50:20 PM
+505 http request GET https://registry.npmjs.org/@esbuild%2fsunos-x64
+506 verbose request uri https://registry.npmjs.org/@esbuild%2fwin32-arm64
+507 verbose request no auth needed
+508 info attempt registry request try #1 at 11:50:20 PM
+509 http request GET https://registry.npmjs.org/@esbuild%2fwin32-arm64
+510 verbose request uri https://registry.npmjs.org/@esbuild%2fwin32-ia32
+511 verbose request no auth needed
+512 info attempt registry request try #1 at 11:50:20 PM
+513 http request GET https://registry.npmjs.org/@esbuild%2fwin32-ia32
+514 verbose request uri https://registry.npmjs.org/@esbuild%2fwin32-x64
+515 verbose request no auth needed
+516 info attempt registry request try #1 at 11:50:20 PM
+517 http request GET https://registry.npmjs.org/@esbuild%2fwin32-x64
+518 http 200 https://registry.npmjs.org/@esbuild%2fandroid-arm
+519 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+519 verbose headers   'content-type': 'application/json',
+519 verbose headers   'transfer-encoding': 'chunked',
+519 verbose headers   connection: 'keep-alive',
+519 verbose headers   'cf-ray': '8b889e080d6c8f90-BOS',
+519 verbose headers   'cf-cache-status': 'HIT',
+519 verbose headers   'access-control-allow-origin': '*',
+519 verbose headers   age: '194',
+519 verbose headers   'cache-control': 'public, max-age=300',
+519 verbose headers   etag: 'W/"64fd9316cb64ac403f56d46783f54bbe"',
+519 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:25 GMT',
+519 verbose headers   vary: 'accept-encoding, accept',
+519 verbose headers   server: 'cloudflare',
+519 verbose headers   'content-encoding': 'gzip' }
+520 silly get cb [ 200,
+520 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+520 silly get     'content-type': 'application/json',
+520 silly get     'transfer-encoding': 'chunked',
+520 silly get     connection: 'keep-alive',
+520 silly get     'cf-ray': '8b889e080d6c8f90-BOS',
+520 silly get     'cf-cache-status': 'HIT',
+520 silly get     'access-control-allow-origin': '*',
+520 silly get     age: '194',
+520 silly get     'cache-control': 'public, max-age=300',
+520 silly get     etag: 'W/"64fd9316cb64ac403f56d46783f54bbe"',
+520 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:25 GMT',
+520 silly get     vary: 'accept-encoding, accept',
+520 silly get     server: 'cloudflare',
+520 silly get     'content-encoding': 'gzip' } ]
+521 verbose get saving @esbuild/android-arm to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fandroid-arm/.cache.json
+522 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+523 http 200 https://registry.npmjs.org/@esbuild%2faix-ppc64
+524 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+524 verbose headers   'content-type': 'application/json',
+524 verbose headers   'transfer-encoding': 'chunked',
+524 verbose headers   connection: 'keep-alive',
+524 verbose headers   'cf-ray': '8b889e080e5a9023-BOS',
+524 verbose headers   'cf-cache-status': 'HIT',
+524 verbose headers   'access-control-allow-origin': '*',
+524 verbose headers   age: '194',
+524 verbose headers   'cache-control': 'public, max-age=300',
+524 verbose headers   etag: 'W/"18c7c9557efde0dd8aa12b88588778a7"',
+524 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:55 GMT',
+524 verbose headers   vary: 'accept-encoding, accept',
+524 verbose headers   server: 'cloudflare',
+524 verbose headers   'content-encoding': 'gzip' }
+525 silly get cb [ 200,
+525 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+525 silly get     'content-type': 'application/json',
+525 silly get     'transfer-encoding': 'chunked',
+525 silly get     connection: 'keep-alive',
+525 silly get     'cf-ray': '8b889e080e5a9023-BOS',
+525 silly get     'cf-cache-status': 'HIT',
+525 silly get     'access-control-allow-origin': '*',
+525 silly get     age: '194',
+525 silly get     'cache-control': 'public, max-age=300',
+525 silly get     etag: 'W/"18c7c9557efde0dd8aa12b88588778a7"',
+525 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:55 GMT',
+525 silly get     vary: 'accept-encoding, accept',
+525 silly get     server: 'cloudflare',
+525 silly get     'content-encoding': 'gzip' } ]
+526 verbose get saving @esbuild/aix-ppc64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252faix-ppc64/.cache.json
+527 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+528 silly resolveWithNewModule @esbuild/android-arm@0.23.1 checking installable status
+529 silly resolveWithNewModule @esbuild/aix-ppc64@0.23.1 checking installable status
+530 http 200 https://registry.npmjs.org/@esbuild%2fandroid-arm64
+531 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+531 verbose headers   'content-type': 'application/json',
+531 verbose headers   'transfer-encoding': 'chunked',
+531 verbose headers   connection: 'keep-alive',
+531 verbose headers   'cf-ray': '8b889e080f30304d-BOS',
+531 verbose headers   'cf-cache-status': 'HIT',
+531 verbose headers   'access-control-allow-origin': '*',
+531 verbose headers   age: '194',
+531 verbose headers   'cache-control': 'public, max-age=300',
+531 verbose headers   etag: 'W/"4da04f7a8f72fa9992a0e922f0e4edaa"',
+531 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:22 GMT',
+531 verbose headers   vary: 'accept-encoding, accept',
+531 verbose headers   server: 'cloudflare',
+531 verbose headers   'content-encoding': 'gzip' }
+532 silly get cb [ 200,
+532 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+532 silly get     'content-type': 'application/json',
+532 silly get     'transfer-encoding': 'chunked',
+532 silly get     connection: 'keep-alive',
+532 silly get     'cf-ray': '8b889e080f30304d-BOS',
+532 silly get     'cf-cache-status': 'HIT',
+532 silly get     'access-control-allow-origin': '*',
+532 silly get     age: '194',
+532 silly get     'cache-control': 'public, max-age=300',
+532 silly get     etag: 'W/"4da04f7a8f72fa9992a0e922f0e4edaa"',
+532 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:22 GMT',
+532 silly get     vary: 'accept-encoding, accept',
+532 silly get     server: 'cloudflare',
+532 silly get     'content-encoding': 'gzip' } ]
+533 verbose get saving @esbuild/android-arm64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fandroid-arm64/.cache.json
+534 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+535 http 200 https://registry.npmjs.org/@esbuild%2fdarwin-x64
+536 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+536 verbose headers   'content-type': 'application/json',
+536 verbose headers   'transfer-encoding': 'chunked',
+536 verbose headers   connection: 'keep-alive',
+536 verbose headers   'cf-ray': '8b889e084b914cc2-BOS',
+536 verbose headers   'cf-cache-status': 'HIT',
+536 verbose headers   'access-control-allow-origin': '*',
+536 verbose headers   age: '194',
+536 verbose headers   'cache-control': 'public, max-age=300',
+536 verbose headers   etag: 'W/"9553969937e817a9bc4c78f191f21e26"',
+536 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:21 GMT',
+536 verbose headers   vary: 'accept-encoding, accept',
+536 verbose headers   server: 'cloudflare',
+536 verbose headers   'content-encoding': 'gzip' }
+537 silly get cb [ 200,
+537 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+537 silly get     'content-type': 'application/json',
+537 silly get     'transfer-encoding': 'chunked',
+537 silly get     connection: 'keep-alive',
+537 silly get     'cf-ray': '8b889e084b914cc2-BOS',
+537 silly get     'cf-cache-status': 'HIT',
+537 silly get     'access-control-allow-origin': '*',
+537 silly get     age: '194',
+537 silly get     'cache-control': 'public, max-age=300',
+537 silly get     etag: 'W/"9553969937e817a9bc4c78f191f21e26"',
+537 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:21 GMT',
+537 silly get     vary: 'accept-encoding, accept',
+537 silly get     server: 'cloudflare',
+537 silly get     'content-encoding': 'gzip' } ]
+538 verbose get saving @esbuild/darwin-x64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fdarwin-x64/.cache.json
+539 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+540 http 200 https://registry.npmjs.org/@esbuild%2flinux-x64
+541 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+541 verbose headers   'content-type': 'application/json',
+541 verbose headers   'transfer-encoding': 'chunked',
+541 verbose headers   connection: 'keep-alive',
+541 verbose headers   'cf-ray': '8b889e0848328fab-BOS',
+541 verbose headers   'cf-cache-status': 'HIT',
+541 verbose headers   'access-control-allow-origin': '*',
+541 verbose headers   age: '194',
+541 verbose headers   'cache-control': 'public, max-age=300',
+541 verbose headers   etag: 'W/"ced7b7062a429ac55d1b15508991ff12"',
+541 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:35 GMT',
+541 verbose headers   vary: 'accept-encoding, accept',
+541 verbose headers   server: 'cloudflare',
+541 verbose headers   'content-encoding': 'gzip' }
+542 silly get cb [ 200,
+542 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+542 silly get     'content-type': 'application/json',
+542 silly get     'transfer-encoding': 'chunked',
+542 silly get     connection: 'keep-alive',
+542 silly get     'cf-ray': '8b889e0848328fab-BOS',
+542 silly get     'cf-cache-status': 'HIT',
+542 silly get     'access-control-allow-origin': '*',
+542 silly get     age: '194',
+542 silly get     'cache-control': 'public, max-age=300',
+542 silly get     etag: 'W/"ced7b7062a429ac55d1b15508991ff12"',
+542 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:35 GMT',
+542 silly get     vary: 'accept-encoding, accept',
+542 silly get     server: 'cloudflare',
+542 silly get     'content-encoding': 'gzip' } ]
+543 verbose get saving @esbuild/linux-x64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-x64/.cache.json
+544 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+545 http 200 https://registry.npmjs.org/@esbuild%2flinux-arm
+546 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+546 verbose headers   'content-type': 'application/json',
+546 verbose headers   'transfer-encoding': 'chunked',
+546 verbose headers   connection: 'keep-alive',
+546 verbose headers   'cf-ray': '8b889e084f284d0c-BOS',
+546 verbose headers   'cf-cache-status': 'HIT',
+546 verbose headers   'access-control-allow-origin': '*',
+546 verbose headers   age: '195',
+546 verbose headers   'cache-control': 'public, max-age=300',
+546 verbose headers   etag: 'W/"ea3a5e489a5a20edc21d916ca22e987c"',
+546 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:34 GMT',
+546 verbose headers   vary: 'accept-encoding, accept',
+546 verbose headers   server: 'cloudflare',
+546 verbose headers   'content-encoding': 'gzip' }
+547 silly get cb [ 200,
+547 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+547 silly get     'content-type': 'application/json',
+547 silly get     'transfer-encoding': 'chunked',
+547 silly get     connection: 'keep-alive',
+547 silly get     'cf-ray': '8b889e084f284d0c-BOS',
+547 silly get     'cf-cache-status': 'HIT',
+547 silly get     'access-control-allow-origin': '*',
+547 silly get     age: '195',
+547 silly get     'cache-control': 'public, max-age=300',
+547 silly get     etag: 'W/"ea3a5e489a5a20edc21d916ca22e987c"',
+547 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:34 GMT',
+547 silly get     vary: 'accept-encoding, accept',
+547 silly get     server: 'cloudflare',
+547 silly get     'content-encoding': 'gzip' } ]
+548 verbose get saving @esbuild/linux-arm to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-arm/.cache.json
+549 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+550 http 200 https://registry.npmjs.org/@esbuild%2fwin32-x64
+551 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+551 verbose headers   'content-type': 'application/json',
+551 verbose headers   'transfer-encoding': 'chunked',
+551 verbose headers   connection: 'keep-alive',
+551 verbose headers   'cf-ray': '8b889e084d258f69-BOS',
+551 verbose headers   'cf-cache-status': 'HIT',
+551 verbose headers   'access-control-allow-origin': '*',
+551 verbose headers   age: '194',
+551 verbose headers   'cache-control': 'public, max-age=300',
+551 verbose headers   etag: 'W/"ec979381a105fd347658906d31a74be0"',
+551 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:00 GMT',
+551 verbose headers   vary: 'accept-encoding, accept',
+551 verbose headers   server: 'cloudflare',
+551 verbose headers   'content-encoding': 'gzip' }
+552 silly get cb [ 200,
+552 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+552 silly get     'content-type': 'application/json',
+552 silly get     'transfer-encoding': 'chunked',
+552 silly get     connection: 'keep-alive',
+552 silly get     'cf-ray': '8b889e084d258f69-BOS',
+552 silly get     'cf-cache-status': 'HIT',
+552 silly get     'access-control-allow-origin': '*',
+552 silly get     age: '194',
+552 silly get     'cache-control': 'public, max-age=300',
+552 silly get     etag: 'W/"ec979381a105fd347658906d31a74be0"',
+552 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:00 GMT',
+552 silly get     vary: 'accept-encoding, accept',
+552 silly get     server: 'cloudflare',
+552 silly get     'content-encoding': 'gzip' } ]
+553 verbose get saving @esbuild/win32-x64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fwin32-x64/.cache.json
+554 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+555 http 200 https://registry.npmjs.org/@esbuild%2ffreebsd-x64
+556 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+556 verbose headers   'content-type': 'application/json',
+556 verbose headers   'transfer-encoding': 'chunked',
+556 verbose headers   connection: 'keep-alive',
+556 verbose headers   'cf-ray': '8b889e084d988f90-BOS',
+556 verbose headers   'cf-cache-status': 'HIT',
+556 verbose headers   'access-control-allow-origin': '*',
+556 verbose headers   age: '194',
+556 verbose headers   'cache-control': 'public, max-age=300',
+556 verbose headers   etag: 'W/"c9b3814a4a30b8418f517d7e1335ac8b"',
+556 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:10 GMT',
+556 verbose headers   vary: 'accept-encoding, accept',
+556 verbose headers   server: 'cloudflare',
+556 verbose headers   'content-encoding': 'gzip' }
+557 silly get cb [ 200,
+557 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+557 silly get     'content-type': 'application/json',
+557 silly get     'transfer-encoding': 'chunked',
+557 silly get     connection: 'keep-alive',
+557 silly get     'cf-ray': '8b889e084d988f90-BOS',
+557 silly get     'cf-cache-status': 'HIT',
+557 silly get     'access-control-allow-origin': '*',
+557 silly get     age: '194',
+557 silly get     'cache-control': 'public, max-age=300',
+557 silly get     etag: 'W/"c9b3814a4a30b8418f517d7e1335ac8b"',
+557 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:10 GMT',
+557 silly get     vary: 'accept-encoding, accept',
+557 silly get     server: 'cloudflare',
+557 silly get     'content-encoding': 'gzip' } ]
+558 verbose get saving @esbuild/freebsd-x64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252ffreebsd-x64/.cache.json
+559 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+560 http 200 https://registry.npmjs.org/@esbuild%2flinux-riscv64
+561 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+561 verbose headers   'content-type': 'application/json',
+561 verbose headers   'transfer-encoding': 'chunked',
+561 verbose headers   connection: 'keep-alive',
+561 verbose headers   'cf-ray': '8b889e0849214cd8-BOS',
+561 verbose headers   'cf-cache-status': 'HIT',
+561 verbose headers   'access-control-allow-origin': '*',
+561 verbose headers   age: '194',
+561 verbose headers   'cache-control': 'public, max-age=300',
+561 verbose headers   etag: 'W/"7f5bf38feddb2a14007a73b999725e0c"',
+561 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:45 GMT',
+561 verbose headers   vary: 'accept-encoding, accept',
+561 verbose headers   server: 'cloudflare',
+561 verbose headers   'content-encoding': 'gzip' }
+562 silly get cb [ 200,
+562 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+562 silly get     'content-type': 'application/json',
+562 silly get     'transfer-encoding': 'chunked',
+562 silly get     connection: 'keep-alive',
+562 silly get     'cf-ray': '8b889e0849214cd8-BOS',
+562 silly get     'cf-cache-status': 'HIT',
+562 silly get     'access-control-allow-origin': '*',
+562 silly get     age: '194',
+562 silly get     'cache-control': 'public, max-age=300',
+562 silly get     etag: 'W/"7f5bf38feddb2a14007a73b999725e0c"',
+562 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:45 GMT',
+562 silly get     vary: 'accept-encoding, accept',
+562 silly get     server: 'cloudflare',
+562 silly get     'content-encoding': 'gzip' } ]
+563 verbose get saving @esbuild/linux-riscv64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-riscv64/.cache.json
+564 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+565 http 200 https://registry.npmjs.org/@esbuild%2ffreebsd-arm64
+566 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+566 verbose headers   'content-type': 'application/json',
+566 verbose headers   'transfer-encoding': 'chunked',
+566 verbose headers   connection: 'keep-alive',
+566 verbose headers   'cf-ray': '8b889e084f4f8ff3-BOS',
+566 verbose headers   'cf-cache-status': 'HIT',
+566 verbose headers   'access-control-allow-origin': '*',
+566 verbose headers   age: '194',
+566 verbose headers   'cache-control': 'public, max-age=300',
+566 verbose headers   etag: 'W/"d7f016929c482fa8b2adf17145439bb1"',
+566 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:10 GMT',
+566 verbose headers   vary: 'accept-encoding, accept',
+566 verbose headers   server: 'cloudflare',
+566 verbose headers   'content-encoding': 'gzip' }
+567 silly get cb [ 200,
+567 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+567 silly get     'content-type': 'application/json',
+567 silly get     'transfer-encoding': 'chunked',
+567 silly get     connection: 'keep-alive',
+567 silly get     'cf-ray': '8b889e084f4f8ff3-BOS',
+567 silly get     'cf-cache-status': 'HIT',
+567 silly get     'access-control-allow-origin': '*',
+567 silly get     age: '194',
+567 silly get     'cache-control': 'public, max-age=300',
+567 silly get     etag: 'W/"d7f016929c482fa8b2adf17145439bb1"',
+567 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:10 GMT',
+567 silly get     vary: 'accept-encoding, accept',
+567 silly get     server: 'cloudflare',
+567 silly get     'content-encoding': 'gzip' } ]
+568 verbose get saving @esbuild/freebsd-arm64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252ffreebsd-arm64/.cache.json
+569 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+570 http 200 https://registry.npmjs.org/@esbuild%2flinux-s390x
+571 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+571 verbose headers   'content-type': 'application/json',
+571 verbose headers   'transfer-encoding': 'chunked',
+571 verbose headers   connection: 'keep-alive',
+571 verbose headers   'cf-ray': '8b889e084adf4d10-BOS',
+571 verbose headers   'cf-cache-status': 'HIT',
+571 verbose headers   'access-control-allow-origin': '*',
+571 verbose headers   age: '194',
+571 verbose headers   'cache-control': 'public, max-age=300',
+571 verbose headers   etag: 'W/"2e58f2aec45094510641b5cb5daaecb5"',
+571 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:57 GMT',
+571 verbose headers   vary: 'accept-encoding, accept',
+571 verbose headers   server: 'cloudflare',
+571 verbose headers   'content-encoding': 'gzip' }
+572 silly get cb [ 200,
+572 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+572 silly get     'content-type': 'application/json',
+572 silly get     'transfer-encoding': 'chunked',
+572 silly get     connection: 'keep-alive',
+572 silly get     'cf-ray': '8b889e084adf4d10-BOS',
+572 silly get     'cf-cache-status': 'HIT',
+572 silly get     'access-control-allow-origin': '*',
+572 silly get     age: '194',
+572 silly get     'cache-control': 'public, max-age=300',
+572 silly get     etag: 'W/"2e58f2aec45094510641b5cb5daaecb5"',
+572 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:57 GMT',
+572 silly get     vary: 'accept-encoding, accept',
+572 silly get     server: 'cloudflare',
+572 silly get     'content-encoding': 'gzip' } ]
+573 verbose get saving @esbuild/linux-s390x to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-s390x/.cache.json
+574 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+575 silly resolveWithNewModule @esbuild/android-arm64@0.23.1 checking installable status
+576 http 200 https://registry.npmjs.org/@esbuild%2flinux-arm64
+577 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+577 verbose headers   'content-type': 'application/json',
+577 verbose headers   'transfer-encoding': 'chunked',
+577 verbose headers   connection: 'keep-alive',
+577 verbose headers   'cf-ray': '8b889e084e576ac7-BOS',
+577 verbose headers   'cf-cache-status': 'HIT',
+577 verbose headers   'access-control-allow-origin': '*',
+577 verbose headers   age: '194',
+577 verbose headers   'cache-control': 'public, max-age=300',
+577 verbose headers   etag: 'W/"a90fd8e8723fbd20000143c8a6636e9a"',
+577 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:45 GMT',
+577 verbose headers   vary: 'accept-encoding, accept',
+577 verbose headers   server: 'cloudflare',
+577 verbose headers   'content-encoding': 'gzip' }
+578 silly get cb [ 200,
+578 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+578 silly get     'content-type': 'application/json',
+578 silly get     'transfer-encoding': 'chunked',
+578 silly get     connection: 'keep-alive',
+578 silly get     'cf-ray': '8b889e084e576ac7-BOS',
+578 silly get     'cf-cache-status': 'HIT',
+578 silly get     'access-control-allow-origin': '*',
+578 silly get     age: '194',
+578 silly get     'cache-control': 'public, max-age=300',
+578 silly get     etag: 'W/"a90fd8e8723fbd20000143c8a6636e9a"',
+578 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:45 GMT',
+578 silly get     vary: 'accept-encoding, accept',
+578 silly get     server: 'cloudflare',
+578 silly get     'content-encoding': 'gzip' } ]
+579 verbose get saving @esbuild/linux-arm64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-arm64/.cache.json
+580 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+581 http 200 https://registry.npmjs.org/@esbuild%2flinux-mips64el
+582 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+582 verbose headers   'content-type': 'application/json',
+582 verbose headers   'transfer-encoding': 'chunked',
+582 verbose headers   connection: 'keep-alive',
+582 verbose headers   'cf-ray': '8b889e084cd94cfe-BOS',
+582 verbose headers   'cf-cache-status': 'HIT',
+582 verbose headers   'access-control-allow-origin': '*',
+582 verbose headers   age: '194',
+582 verbose headers   'cache-control': 'public, max-age=300',
+582 verbose headers   etag: 'W/"3f74cc985de91ffa67387d968795d2c4"',
+582 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:46 GMT',
+582 verbose headers   vary: 'accept-encoding, accept',
+582 verbose headers   server: 'cloudflare',
+582 verbose headers   'content-encoding': 'gzip' }
+583 silly get cb [ 200,
+583 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+583 silly get     'content-type': 'application/json',
+583 silly get     'transfer-encoding': 'chunked',
+583 silly get     connection: 'keep-alive',
+583 silly get     'cf-ray': '8b889e084cd94cfe-BOS',
+583 silly get     'cf-cache-status': 'HIT',
+583 silly get     'access-control-allow-origin': '*',
+583 silly get     age: '194',
+583 silly get     'cache-control': 'public, max-age=300',
+583 silly get     etag: 'W/"3f74cc985de91ffa67387d968795d2c4"',
+583 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:46 GMT',
+583 silly get     vary: 'accept-encoding, accept',
+583 silly get     server: 'cloudflare',
+583 silly get     'content-encoding': 'gzip' } ]
+584 verbose get saving @esbuild/linux-mips64el to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-mips64el/.cache.json
+585 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+586 http 200 https://registry.npmjs.org/@esbuild%2flinux-ia32
+587 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+587 verbose headers   'content-type': 'application/json',
+587 verbose headers   'transfer-encoding': 'chunked',
+587 verbose headers   connection: 'keep-alive',
+587 verbose headers   'cf-ray': '8b889e084b9a4cc2-BOS',
+587 verbose headers   'cf-cache-status': 'HIT',
+587 verbose headers   'access-control-allow-origin': '*',
+587 verbose headers   age: '194',
+587 verbose headers   'cache-control': 'public, max-age=300',
+587 verbose headers   etag: 'W/"c4bc9aa4b6ca780d0735b4ef06e529c6"',
+587 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:33 GMT',
+587 verbose headers   vary: 'accept-encoding, accept',
+587 verbose headers   server: 'cloudflare',
+587 verbose headers   'content-encoding': 'gzip' }
+588 silly get cb [ 200,
+588 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+588 silly get     'content-type': 'application/json',
+588 silly get     'transfer-encoding': 'chunked',
+588 silly get     connection: 'keep-alive',
+588 silly get     'cf-ray': '8b889e084b9a4cc2-BOS',
+588 silly get     'cf-cache-status': 'HIT',
+588 silly get     'access-control-allow-origin': '*',
+588 silly get     age: '194',
+588 silly get     'cache-control': 'public, max-age=300',
+588 silly get     etag: 'W/"c4bc9aa4b6ca780d0735b4ef06e529c6"',
+588 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:33 GMT',
+588 silly get     vary: 'accept-encoding, accept',
+588 silly get     server: 'cloudflare',
+588 silly get     'content-encoding': 'gzip' } ]
+589 verbose get saving @esbuild/linux-ia32 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-ia32/.cache.json
+590 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+591 http 200 https://registry.npmjs.org/@esbuild%2flinux-ppc64
+592 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+592 verbose headers   'content-type': 'application/json',
+592 verbose headers   'transfer-encoding': 'chunked',
+592 verbose headers   connection: 'keep-alive',
+592 verbose headers   'cf-ray': '8b889e084eb38d14-BOS',
+592 verbose headers   'cf-cache-status': 'HIT',
+592 verbose headers   'access-control-allow-origin': '*',
+592 verbose headers   age: '194',
+592 verbose headers   'cache-control': 'public, max-age=300',
+592 verbose headers   etag: 'W/"c0fdef8b5b5d174d71745e8432c14b56"',
+592 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:56 GMT',
+592 verbose headers   vary: 'accept-encoding, accept',
+592 verbose headers   server: 'cloudflare',
+592 verbose headers   'content-encoding': 'gzip' }
+593 silly get cb [ 200,
+593 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+593 silly get     'content-type': 'application/json',
+593 silly get     'transfer-encoding': 'chunked',
+593 silly get     connection: 'keep-alive',
+593 silly get     'cf-ray': '8b889e084eb38d14-BOS',
+593 silly get     'cf-cache-status': 'HIT',
+593 silly get     'access-control-allow-origin': '*',
+593 silly get     age: '194',
+593 silly get     'cache-control': 'public, max-age=300',
+593 silly get     etag: 'W/"c0fdef8b5b5d174d71745e8432c14b56"',
+593 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:56 GMT',
+593 silly get     vary: 'accept-encoding, accept',
+593 silly get     server: 'cloudflare',
+593 silly get     'content-encoding': 'gzip' } ]
+594 verbose get saving @esbuild/linux-ppc64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-ppc64/.cache.json
+595 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+596 http 200 https://registry.npmjs.org/@esbuild%2fsunos-x64
+597 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+597 verbose headers   'content-type': 'application/json',
+597 verbose headers   'transfer-encoding': 'chunked',
+597 verbose headers   connection: 'keep-alive',
+597 verbose headers   'cf-ray': '8b889e08599a4d06-BOS',
+597 verbose headers   'cf-cache-status': 'HIT',
+597 verbose headers   'access-control-allow-origin': '*',
+597 verbose headers   age: '194',
+597 verbose headers   'cache-control': 'public, max-age=300',
+597 verbose headers   etag: 'W/"c8986f9bd5409678c79de22ffa879312"',
+597 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:55 GMT',
+597 verbose headers   vary: 'accept-encoding, accept',
+597 verbose headers   server: 'cloudflare',
+597 verbose headers   'content-encoding': 'gzip' }
+598 silly get cb [ 200,
+598 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+598 silly get     'content-type': 'application/json',
+598 silly get     'transfer-encoding': 'chunked',
+598 silly get     connection: 'keep-alive',
+598 silly get     'cf-ray': '8b889e08599a4d06-BOS',
+598 silly get     'cf-cache-status': 'HIT',
+598 silly get     'access-control-allow-origin': '*',
+598 silly get     age: '194',
+598 silly get     'cache-control': 'public, max-age=300',
+598 silly get     etag: 'W/"c8986f9bd5409678c79de22ffa879312"',
+598 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:55 GMT',
+598 silly get     vary: 'accept-encoding, accept',
+598 silly get     server: 'cloudflare',
+598 silly get     'content-encoding': 'gzip' } ]
+599 verbose get saving @esbuild/sunos-x64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fsunos-x64/.cache.json
+600 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+601 silly resolveWithNewModule @esbuild/darwin-x64@0.23.1 checking installable status
+602 silly cache add args [ '@esbuild/darwin-x64@0.23.1', null ]
+603 verbose cache add spec @esbuild/darwin-x64@0.23.1
+604 silly cache add parsed spec Result {
+604 silly cache add   raw: '@esbuild/darwin-x64@0.23.1',
+604 silly cache add   scope: '@esbuild',
+604 silly cache add   escapedName: '@esbuild%2fdarwin-x64',
+604 silly cache add   name: '@esbuild/darwin-x64',
+604 silly cache add   rawSpec: '0.23.1',
+604 silly cache add   spec: '0.23.1',
+604 silly cache add   type: 'version' }
+605 silly addNamed @esbuild/darwin-x64@0.23.1
+606 verbose addNamed "0.23.1" is a plain semver version for @esbuild/darwin-x64
+607 silly mapToRegistry name @esbuild/darwin-x64
+608 silly mapToRegistry scope (from package name) @esbuild
+609 verbose mapToRegistry no registry URL found in name for scope @esbuild
+610 silly mapToRegistry using default registry
+611 silly mapToRegistry registry https://registry.npmjs.org/
+612 silly mapToRegistry data Result {
+612 silly mapToRegistry   raw: '@esbuild/darwin-x64',
+612 silly mapToRegistry   scope: '@esbuild',
+612 silly mapToRegistry   escapedName: '@esbuild%2fdarwin-x64',
+612 silly mapToRegistry   name: '@esbuild/darwin-x64',
+612 silly mapToRegistry   rawSpec: '',
+612 silly mapToRegistry   spec: 'latest',
+612 silly mapToRegistry   type: 'tag' }
+613 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fdarwin-x64
+614 verbose addNameVersion registry:https://registry.npmjs.org/@esbuild%2fdarwin-x64 not in flight; fetching
+615 silly resolveWithNewModule @esbuild/linux-x64@0.23.1 checking installable status
+616 silly resolveWithNewModule @esbuild/linux-arm@0.23.1 checking installable status
+617 silly resolveWithNewModule @esbuild/win32-x64@0.23.1 checking installable status
+618 silly resolveWithNewModule @esbuild/linux-riscv64@0.23.1 checking installable status
+619 silly resolveWithNewModule @esbuild/freebsd-x64@0.23.1 checking installable status
+620 silly resolveWithNewModule @esbuild/freebsd-arm64@0.23.1 checking installable status
+621 silly resolveWithNewModule @esbuild/linux-s390x@0.23.1 checking installable status
+622 verbose get https://registry.npmjs.org/@esbuild%2fdarwin-x64 not expired, no request
+623 silly mapToRegistry name @esbuild/darwin-x64
+624 silly mapToRegistry scope (from package name) @esbuild
+625 verbose mapToRegistry no registry URL found in name for scope @esbuild
+626 silly mapToRegistry using default registry
+627 silly mapToRegistry registry https://registry.npmjs.org/
+628 silly mapToRegistry data Result {
+628 silly mapToRegistry   raw: '@esbuild/darwin-x64',
+628 silly mapToRegistry   scope: '@esbuild',
+628 silly mapToRegistry   escapedName: '@esbuild%2fdarwin-x64',
+628 silly mapToRegistry   name: '@esbuild/darwin-x64',
+628 silly mapToRegistry   rawSpec: '',
+628 silly mapToRegistry   spec: 'latest',
+628 silly mapToRegistry   type: 'tag' }
+629 silly mapToRegistry uri https://registry.npmjs.org/@esbuild%2fdarwin-x64
+630 verbose addRemoteTarball https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.23.1.tgz not in flight; adding
+631 verbose addRemoteTarball [ 'https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.23.1.tgz',
+631 verbose addRemoteTarball   'c58353b982f4e04f0d022284b8ba2733f5ff0931' ]
+632 silly resolveWithNewModule @esbuild/linux-mips64el@0.23.1 checking installable status
+633 silly resolveWithNewModule @esbuild/linux-arm64@0.23.1 checking installable status
+634 silly resolveWithNewModule @esbuild/linux-ia32@0.23.1 checking installable status
+635 silly resolveWithNewModule @esbuild/sunos-x64@0.23.1 checking installable status
+636 silly resolveWithNewModule @esbuild/linux-ppc64@0.23.1 checking installable status
+637 http 200 https://registry.npmjs.org/@esbuild%2fandroid-x64
+638 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+638 verbose headers   'content-type': 'application/json',
+638 verbose headers   'transfer-encoding': 'chunked',
+638 verbose headers   connection: 'keep-alive',
+638 verbose headers   'cf-ray': '8b889e083dbd305d-BOS',
+638 verbose headers   'cf-cache-status': 'HIT',
+638 verbose headers   'access-control-allow-origin': '*',
+638 verbose headers   age: '194',
+638 verbose headers   'cache-control': 'public, max-age=300',
+638 verbose headers   etag: 'W/"c7e44872e18ae09f84c4502679bf341f"',
+638 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:24 GMT',
+638 verbose headers   vary: 'accept-encoding, accept',
+638 verbose headers   server: 'cloudflare',
+638 verbose headers   'content-encoding': 'gzip' }
+639 silly get cb [ 200,
+639 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+639 silly get     'content-type': 'application/json',
+639 silly get     'transfer-encoding': 'chunked',
+639 silly get     connection: 'keep-alive',
+639 silly get     'cf-ray': '8b889e083dbd305d-BOS',
+639 silly get     'cf-cache-status': 'HIT',
+639 silly get     'access-control-allow-origin': '*',
+639 silly get     age: '194',
+639 silly get     'cache-control': 'public, max-age=300',
+639 silly get     etag: 'W/"c7e44872e18ae09f84c4502679bf341f"',
+639 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:24 GMT',
+639 silly get     vary: 'accept-encoding, accept',
+639 silly get     server: 'cloudflare',
+639 silly get     'content-encoding': 'gzip' } ]
+640 verbose get saving @esbuild/android-x64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fandroid-x64/.cache.json
+641 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+642 http 200 https://registry.npmjs.org/@esbuild%2fwin32-arm64
+643 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+643 verbose headers   'content-type': 'application/json',
+643 verbose headers   'transfer-encoding': 'chunked',
+643 verbose headers   connection: 'keep-alive',
+643 verbose headers   'cf-ray': '8b889e084fff9033-BOS',
+643 verbose headers   'cf-cache-status': 'HIT',
+643 verbose headers   'access-control-allow-origin': '*',
+643 verbose headers   age: '194',
+643 verbose headers   'cache-control': 'public, max-age=300',
+643 verbose headers   etag: 'W/"51f6c43cf57804fcd67bbe03c5aa2265"',
+643 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:12:59 GMT',
+643 verbose headers   vary: 'accept-encoding, accept',
+643 verbose headers   server: 'cloudflare',
+643 verbose headers   'content-encoding': 'gzip' }
+644 silly get cb [ 200,
+644 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+644 silly get     'content-type': 'application/json',
+644 silly get     'transfer-encoding': 'chunked',
+644 silly get     connection: 'keep-alive',
+644 silly get     'cf-ray': '8b889e084fff9033-BOS',
+644 silly get     'cf-cache-status': 'HIT',
+644 silly get     'access-control-allow-origin': '*',
+644 silly get     age: '194',
+644 silly get     'cache-control': 'public, max-age=300',
+644 silly get     etag: 'W/"51f6c43cf57804fcd67bbe03c5aa2265"',
+644 silly get     'last-modified': 'Fri, 16 Aug 2024 22:12:59 GMT',
+644 silly get     vary: 'accept-encoding, accept',
+644 silly get     server: 'cloudflare',
+644 silly get     'content-encoding': 'gzip' } ]
+645 verbose get saving @esbuild/win32-arm64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fwin32-arm64/.cache.json
+646 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+647 info retry fetch attempt 1 at 11:50:20 PM
+648 info attempt registry request try #1 at 11:50:20 PM
+649 http fetch GET https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.23.1.tgz
+650 http 200 https://registry.npmjs.org/@esbuild%2fnetbsd-x64
+651 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+651 verbose headers   'content-type': 'application/json',
+651 verbose headers   'transfer-encoding': 'chunked',
+651 verbose headers   connection: 'keep-alive',
+651 verbose headers   'cf-ray': '8b889e084c553018-BOS',
+651 verbose headers   'cf-cache-status': 'HIT',
+651 verbose headers   'access-control-allow-origin': '*',
+651 verbose headers   age: '194',
+651 verbose headers   'cache-control': 'public, max-age=300',
+651 verbose headers   etag: 'W/"db82248f1a5fcfbf9573bc48c79bb1d9"',
+651 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:13 GMT',
+651 verbose headers   vary: 'accept-encoding, accept',
+651 verbose headers   server: 'cloudflare',
+651 verbose headers   'content-encoding': 'gzip' }
+652 silly get cb [ 200,
+652 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+652 silly get     'content-type': 'application/json',
+652 silly get     'transfer-encoding': 'chunked',
+652 silly get     connection: 'keep-alive',
+652 silly get     'cf-ray': '8b889e084c553018-BOS',
+652 silly get     'cf-cache-status': 'HIT',
+652 silly get     'access-control-allow-origin': '*',
+652 silly get     age: '194',
+652 silly get     'cache-control': 'public, max-age=300',
+652 silly get     etag: 'W/"db82248f1a5fcfbf9573bc48c79bb1d9"',
+652 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:13 GMT',
+652 silly get     vary: 'accept-encoding, accept',
+652 silly get     server: 'cloudflare',
+652 silly get     'content-encoding': 'gzip' } ]
+653 verbose get saving @esbuild/netbsd-x64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fnetbsd-x64/.cache.json
+654 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+655 http 200 https://registry.npmjs.org/@esbuild%2fopenbsd-arm64
+656 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+656 verbose headers   'content-type': 'application/json',
+656 verbose headers   'transfer-encoding': 'chunked',
+656 verbose headers   connection: 'keep-alive',
+656 verbose headers   'cf-ray': '8b889e085fdf4cd6-BOS',
+656 verbose headers   'cf-cache-status': 'HIT',
+656 verbose headers   'access-control-allow-origin': '*',
+656 verbose headers   age: '194',
+656 verbose headers   'cache-control': 'public, max-age=300',
+656 verbose headers   etag: 'W/"00a0a8480b2be0861961b4f3a8167fa4"',
+656 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:09 GMT',
+656 verbose headers   vary: 'accept-encoding, accept',
+656 verbose headers   server: 'cloudflare',
+656 verbose headers   'content-encoding': 'gzip' }
+657 silly get cb [ 200,
+657 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+657 silly get     'content-type': 'application/json',
+657 silly get     'transfer-encoding': 'chunked',
+657 silly get     connection: 'keep-alive',
+657 silly get     'cf-ray': '8b889e085fdf4cd6-BOS',
+657 silly get     'cf-cache-status': 'HIT',
+657 silly get     'access-control-allow-origin': '*',
+657 silly get     age: '194',
+657 silly get     'cache-control': 'public, max-age=300',
+657 silly get     etag: 'W/"00a0a8480b2be0861961b4f3a8167fa4"',
+657 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:09 GMT',
+657 silly get     vary: 'accept-encoding, accept',
+657 silly get     server: 'cloudflare',
+657 silly get     'content-encoding': 'gzip' } ]
+658 verbose get saving @esbuild/openbsd-arm64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fopenbsd-arm64/.cache.json
+659 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+660 silly resolveWithNewModule @esbuild/android-x64@0.23.1 checking installable status
+661 http 200 https://registry.npmjs.org/@esbuild%2fwin32-ia32
+662 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+662 verbose headers   'content-type': 'application/json',
+662 verbose headers   'transfer-encoding': 'chunked',
+662 verbose headers   connection: 'keep-alive',
+662 verbose headers   'cf-ray': '8b889e084ea18f68-BOS',
+662 verbose headers   'cf-cache-status': 'HIT',
+662 verbose headers   'access-control-allow-origin': '*',
+662 verbose headers   age: '194',
+662 verbose headers   'cache-control': 'public, max-age=300',
+662 verbose headers   etag: 'W/"6f4032bcd35b56665b021f6308de44ef"',
+662 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:12:59 GMT',
+662 verbose headers   vary: 'accept-encoding, accept',
+662 verbose headers   server: 'cloudflare',
+662 verbose headers   'content-encoding': 'gzip' }
+663 silly get cb [ 200,
+663 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+663 silly get     'content-type': 'application/json',
+663 silly get     'transfer-encoding': 'chunked',
+663 silly get     connection: 'keep-alive',
+663 silly get     'cf-ray': '8b889e084ea18f68-BOS',
+663 silly get     'cf-cache-status': 'HIT',
+663 silly get     'access-control-allow-origin': '*',
+663 silly get     age: '194',
+663 silly get     'cache-control': 'public, max-age=300',
+663 silly get     etag: 'W/"6f4032bcd35b56665b021f6308de44ef"',
+663 silly get     'last-modified': 'Fri, 16 Aug 2024 22:12:59 GMT',
+663 silly get     vary: 'accept-encoding, accept',
+663 silly get     server: 'cloudflare',
+663 silly get     'content-encoding': 'gzip' } ]
+664 verbose get saving @esbuild/win32-ia32 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fwin32-ia32/.cache.json
+665 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+666 silly resolveWithNewModule @esbuild/win32-arm64@0.23.1 checking installable status
+667 http 200 https://registry.npmjs.org/@esbuild%2flinux-loong64
+668 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+668 verbose headers   'content-type': 'application/json',
+668 verbose headers   'transfer-encoding': 'chunked',
+668 verbose headers   connection: 'keep-alive',
+668 verbose headers   'cf-ray': '8b889e08494a8fc7-BOS',
+668 verbose headers   'cf-cache-status': 'HIT',
+668 verbose headers   'access-control-allow-origin': '*',
+668 verbose headers   age: '194',
+668 verbose headers   'cache-control': 'public, max-age=300',
+668 verbose headers   etag: 'W/"e9dbfe1371518099132a74a8ff0b2fcc"',
+668 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:45 GMT',
+668 verbose headers   vary: 'accept-encoding, accept',
+668 verbose headers   server: 'cloudflare',
+668 verbose headers   'content-encoding': 'gzip' }
+669 silly get cb [ 200,
+669 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+669 silly get     'content-type': 'application/json',
+669 silly get     'transfer-encoding': 'chunked',
+669 silly get     connection: 'keep-alive',
+669 silly get     'cf-ray': '8b889e08494a8fc7-BOS',
+669 silly get     'cf-cache-status': 'HIT',
+669 silly get     'access-control-allow-origin': '*',
+669 silly get     age: '194',
+669 silly get     'cache-control': 'public, max-age=300',
+669 silly get     etag: 'W/"e9dbfe1371518099132a74a8ff0b2fcc"',
+669 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:45 GMT',
+669 silly get     vary: 'accept-encoding, accept',
+669 silly get     server: 'cloudflare',
+669 silly get     'content-encoding': 'gzip' } ]
+670 verbose get saving @esbuild/linux-loong64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252flinux-loong64/.cache.json
+671 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+672 silly resolveWithNewModule @esbuild/netbsd-x64@0.23.1 checking installable status
+673 silly resolveWithNewModule @esbuild/openbsd-arm64@0.23.1 checking installable status
+674 silly resolveWithNewModule @esbuild/win32-ia32@0.23.1 checking installable status
+675 silly resolveWithNewModule @esbuild/linux-loong64@0.23.1 checking installable status
+676 http 200 https://registry.npmjs.org/@esbuild%2fdarwin-arm64
+677 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+677 verbose headers   'content-type': 'application/json',
+677 verbose headers   'transfer-encoding': 'chunked',
+677 verbose headers   connection: 'keep-alive',
+677 verbose headers   'cf-ray': '8b889e0848208f65-BOS',
+677 verbose headers   'cf-cache-status': 'HIT',
+677 verbose headers   'access-control-allow-origin': '*',
+677 verbose headers   age: '194',
+677 verbose headers   'cache-control': 'public, max-age=300',
+677 verbose headers   etag: 'W/"19b7f741100d737393fa5682137f10f2"',
+677 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:35 GMT',
+677 verbose headers   vary: 'accept-encoding, accept',
+677 verbose headers   server: 'cloudflare',
+677 verbose headers   'content-encoding': 'gzip' }
+678 silly get cb [ 200,
+678 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+678 silly get     'content-type': 'application/json',
+678 silly get     'transfer-encoding': 'chunked',
+678 silly get     connection: 'keep-alive',
+678 silly get     'cf-ray': '8b889e0848208f65-BOS',
+678 silly get     'cf-cache-status': 'HIT',
+678 silly get     'access-control-allow-origin': '*',
+678 silly get     age: '194',
+678 silly get     'cache-control': 'public, max-age=300',
+678 silly get     etag: 'W/"19b7f741100d737393fa5682137f10f2"',
+678 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:35 GMT',
+678 silly get     vary: 'accept-encoding, accept',
+678 silly get     server: 'cloudflare',
+678 silly get     'content-encoding': 'gzip' } ]
+679 verbose get saving @esbuild/darwin-arm64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fdarwin-arm64/.cache.json
+680 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+681 silly resolveWithNewModule @esbuild/darwin-arm64@0.23.1 checking installable status
+682 http 200 https://registry.npmjs.org/@esbuild%2fopenbsd-x64
+683 verbose headers { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+683 verbose headers   'content-type': 'application/json',
+683 verbose headers   'transfer-encoding': 'chunked',
+683 verbose headers   connection: 'keep-alive',
+683 verbose headers   'cf-ray': '8b889e084f214d0c-BOS',
+683 verbose headers   'cf-cache-status': 'HIT',
+683 verbose headers   'access-control-allow-origin': '*',
+683 verbose headers   age: '194',
+683 verbose headers   'cache-control': 'public, max-age=300',
+683 verbose headers   etag: 'W/"891e753c43f08968db284f2ad4b049c2"',
+683 verbose headers   'last-modified': 'Fri, 16 Aug 2024 22:13:10 GMT',
+683 verbose headers   vary: 'accept-encoding, accept',
+683 verbose headers   server: 'cloudflare',
+683 verbose headers   'content-encoding': 'gzip' }
+684 silly get cb [ 200,
+684 silly get   { date: 'Sun, 25 Aug 2024 03:50:20 GMT',
+684 silly get     'content-type': 'application/json',
+684 silly get     'transfer-encoding': 'chunked',
+684 silly get     connection: 'keep-alive',
+684 silly get     'cf-ray': '8b889e084f214d0c-BOS',
+684 silly get     'cf-cache-status': 'HIT',
+684 silly get     'access-control-allow-origin': '*',
+684 silly get     age: '194',
+684 silly get     'cache-control': 'public, max-age=300',
+684 silly get     etag: 'W/"891e753c43f08968db284f2ad4b049c2"',
+684 silly get     'last-modified': 'Fri, 16 Aug 2024 22:13:10 GMT',
+684 silly get     vary: 'accept-encoding, accept',
+684 silly get     server: 'cloudflare',
+684 silly get     'content-encoding': 'gzip' } ]
+685 verbose get saving @esbuild/openbsd-x64 to /Users/nathanielblumberg/.npm/registry.npmjs.org/_40esbuild_252fopenbsd-x64/.cache.json
+686 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+687 silly resolveWithNewModule @esbuild/openbsd-x64@0.23.1 checking installable status
+688 http fetch 200 https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.23.1.tgz
+689 silly fetchAndShaCheck shasum c58353b982f4e04f0d022284b8ba2733f5ff0931
+690 verbose addTmpTarball /var/folders/5v/227wn10d3vd2vrq4wfmssbfw0000gn/T/npm-17803-2e7314c3/registry.npmjs.org/_40esbuild/darwin-x64/-/darwin-x64-0.23.1.tgz not in flight; adding
+691 verbose addTmpTarball already have metadata; skipping unpack for @esbuild/darwin-x64@0.23.1
+692 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+693 silly cache afterAdd @esbuild/darwin-x64@0.23.1
+694 verbose afterAdd /Users/nathanielblumberg/.npm/@esbuild/darwin-x64/0.23.1/package/package.json not in flight; writing
+695 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+696 verbose afterAdd /Users/nathanielblumberg/.npm/@esbuild/darwin-x64/0.23.1/package/package.json written
+697 silly fetchNamedPackageData resolve-pkg-maps
+698 silly mapToRegistry name resolve-pkg-maps
+699 silly mapToRegistry using default registry
+700 silly mapToRegistry registry https://registry.npmjs.org/
+701 silly mapToRegistry data Result {
+701 silly mapToRegistry   raw: 'resolve-pkg-maps',
+701 silly mapToRegistry   scope: null,
+701 silly mapToRegistry   escapedName: 'resolve-pkg-maps',
+701 silly mapToRegistry   name: 'resolve-pkg-maps',
+701 silly mapToRegistry   rawSpec: '',
+701 silly mapToRegistry   spec: 'latest',
+701 silly mapToRegistry   type: 'tag' }
+702 silly mapToRegistry uri https://registry.npmjs.org/resolve-pkg-maps
+703 verbose request uri https://registry.npmjs.org/resolve-pkg-maps
+704 verbose request no auth needed
+705 info attempt registry request try #1 at 11:50:20 PM
+706 http request GET https://registry.npmjs.org/resolve-pkg-maps
+707 http 200 https://registry.npmjs.org/resolve-pkg-maps
+708 verbose headers { date: 'Sun, 25 Aug 2024 03:50:21 GMT',
+708 verbose headers   'content-type': 'application/json',
+708 verbose headers   'transfer-encoding': 'chunked',
+708 verbose headers   connection: 'keep-alive',
+708 verbose headers   'cf-ray': '8b889e0d697f9023-BOS',
+708 verbose headers   'cf-cache-status': 'HIT',
+708 verbose headers   'access-control-allow-origin': '*',
+708 verbose headers   'cache-control': 'public, max-age=300',
+708 verbose headers   etag: 'W/"cd2140a1d0fa996ab242c56183387254"',
+708 verbose headers   'last-modified': 'Wed, 14 Dec 2022 15:37:49 GMT',
+708 verbose headers   vary: 'accept-encoding, accept',
+708 verbose headers   server: 'cloudflare',
+708 verbose headers   'content-encoding': 'gzip' }
+709 silly get cb [ 200,
+709 silly get   { date: 'Sun, 25 Aug 2024 03:50:21 GMT',
+709 silly get     'content-type': 'application/json',
+709 silly get     'transfer-encoding': 'chunked',
+709 silly get     connection: 'keep-alive',
+709 silly get     'cf-ray': '8b889e0d697f9023-BOS',
+709 silly get     'cf-cache-status': 'HIT',
+709 silly get     'access-control-allow-origin': '*',
+709 silly get     'cache-control': 'public, max-age=300',
+709 silly get     etag: 'W/"cd2140a1d0fa996ab242c56183387254"',
+709 silly get     'last-modified': 'Wed, 14 Dec 2022 15:37:49 GMT',
+709 silly get     vary: 'accept-encoding, accept',
+709 silly get     server: 'cloudflare',
+709 silly get     'content-encoding': 'gzip' } ]
+710 verbose get saving resolve-pkg-maps to /Users/nathanielblumberg/.npm/registry.npmjs.org/resolve-pkg-maps/.cache.json
+711 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+712 silly resolveWithNewModule resolve-pkg-maps@1.0.0 checking installable status
+713 silly cache add args [ 'resolve-pkg-maps@^1.0.0', null ]
+714 verbose cache add spec resolve-pkg-maps@^1.0.0
+715 silly cache add parsed spec Result {
+715 silly cache add   raw: 'resolve-pkg-maps@^1.0.0',
+715 silly cache add   scope: null,
+715 silly cache add   escapedName: 'resolve-pkg-maps',
+715 silly cache add   name: 'resolve-pkg-maps',
+715 silly cache add   rawSpec: '^1.0.0',
+715 silly cache add   spec: '>=1.0.0 <2.0.0',
+715 silly cache add   type: 'range' }
+716 silly addNamed resolve-pkg-maps@>=1.0.0 <2.0.0
+717 verbose addNamed ">=1.0.0 <2.0.0" is a valid semver range for resolve-pkg-maps
+718 silly addNameRange { name: 'resolve-pkg-maps',
+718 silly addNameRange   range: '>=1.0.0 <2.0.0',
+718 silly addNameRange   hasData: false }
+719 silly mapToRegistry name resolve-pkg-maps
+720 silly mapToRegistry using default registry
+721 silly mapToRegistry registry https://registry.npmjs.org/
+722 silly mapToRegistry data Result {
+722 silly mapToRegistry   raw: 'resolve-pkg-maps',
+722 silly mapToRegistry   scope: null,
+722 silly mapToRegistry   escapedName: 'resolve-pkg-maps',
+722 silly mapToRegistry   name: 'resolve-pkg-maps',
+722 silly mapToRegistry   rawSpec: '',
+722 silly mapToRegistry   spec: 'latest',
+722 silly mapToRegistry   type: 'tag' }
+723 silly mapToRegistry uri https://registry.npmjs.org/resolve-pkg-maps
+724 verbose addNameRange registry:https://registry.npmjs.org/resolve-pkg-maps not in flight; fetching
+725 verbose get https://registry.npmjs.org/resolve-pkg-maps not expired, no request
+726 silly addNameRange number 2 { name: 'resolve-pkg-maps',
+726 silly addNameRange   range: '>=1.0.0 <2.0.0',
+726 silly addNameRange   hasData: true }
+727 silly addNameRange versions [ 'resolve-pkg-maps', [ '1.0.0' ] ]
+728 silly addNamed resolve-pkg-maps@1.0.0
+729 verbose addNamed "1.0.0" is a plain semver version for resolve-pkg-maps
+730 silly mapToRegistry name resolve-pkg-maps
+731 silly mapToRegistry using default registry
+732 silly mapToRegistry registry https://registry.npmjs.org/
+733 silly mapToRegistry data Result {
+733 silly mapToRegistry   raw: 'resolve-pkg-maps',
+733 silly mapToRegistry   scope: null,
+733 silly mapToRegistry   escapedName: 'resolve-pkg-maps',
+733 silly mapToRegistry   name: 'resolve-pkg-maps',
+733 silly mapToRegistry   rawSpec: '',
+733 silly mapToRegistry   spec: 'latest',
+733 silly mapToRegistry   type: 'tag' }
+734 silly mapToRegistry uri https://registry.npmjs.org/resolve-pkg-maps
+735 verbose addRemoteTarball https://registry.npmjs.org/resolve-pkg-maps/-/resolve-pkg-maps-1.0.0.tgz not in flight; adding
+736 verbose addRemoteTarball [ 'https://registry.npmjs.org/resolve-pkg-maps/-/resolve-pkg-maps-1.0.0.tgz',
+736 verbose addRemoteTarball   '616b3dc2c57056b5588c31cdf4b3d64db133720f' ]
+737 info retry fetch attempt 1 at 11:50:21 PM
+738 info attempt registry request try #1 at 11:50:21 PM
+739 http fetch GET https://registry.npmjs.org/resolve-pkg-maps/-/resolve-pkg-maps-1.0.0.tgz
+740 http fetch 200 https://registry.npmjs.org/resolve-pkg-maps/-/resolve-pkg-maps-1.0.0.tgz
+741 silly fetchAndShaCheck shasum 616b3dc2c57056b5588c31cdf4b3d64db133720f
+742 verbose addTmpTarball /var/folders/5v/227wn10d3vd2vrq4wfmssbfw0000gn/T/npm-17803-2e7314c3/registry.npmjs.org/resolve-pkg-maps/-/resolve-pkg-maps-1.0.0.tgz not in flight; adding
+743 verbose addTmpTarball already have metadata; skipping unpack for resolve-pkg-maps@1.0.0
+744 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+745 silly cache afterAdd resolve-pkg-maps@1.0.0
+746 verbose afterAdd /Users/nathanielblumberg/.npm/resolve-pkg-maps/1.0.0/package/package.json not in flight; writing
+747 verbose correctMkdir /Users/nathanielblumberg/.npm correctMkdir not in flight; initializing
+748 verbose afterAdd /Users/nathanielblumberg/.npm/resolve-pkg-maps/1.0.0/package/package.json written
+749 silly loadAllDepsIntoIdealTree Finishing
+750 silly loadIdealTree Finishing
+751 silly currentTree dndbeyond-proxy@1.0.0
+752 silly idealTree dndbeyond-proxy@1.0.0
+752 silly idealTree ├── @esbuild/darwin-x64@0.23.1
+752 silly idealTree ├── esbuild@0.23.1
+752 silly idealTree ├── fsevents@2.3.3
+752 silly idealTree ├── get-tsconfig@4.7.6
+752 silly idealTree ├── resolve-pkg-maps@1.0.0
+752 silly idealTree └── tsx@4.18.0
+753 silly generateActionsToTake Starting
+754 silly install generateActionsToTake
+755 silly generateActionsToTake Finishing
+756 silly diffTrees action count 6
+757 silly diffTrees add @esbuild/darwin-x64@0.23.1
+758 silly diffTrees add resolve-pkg-maps@1.0.0
+759 silly diffTrees add esbuild@0.23.1
+760 silly diffTrees add fsevents@2.3.3
+761 silly diffTrees add get-tsconfig@4.7.6
+762 silly diffTrees add tsx@4.18.0
+763 silly decomposeActions action count 48
+764 silly decomposeActions fetch @esbuild/darwin-x64@0.23.1
+765 silly decomposeActions extract @esbuild/darwin-x64@0.23.1
+766 silly decomposeActions test @esbuild/darwin-x64@0.23.1
+767 silly decomposeActions preinstall @esbuild/darwin-x64@0.23.1
+768 silly decomposeActions build @esbuild/darwin-x64@0.23.1
+769 silly decomposeActions install @esbuild/darwin-x64@0.23.1
+770 silly decomposeActions postinstall @esbuild/darwin-x64@0.23.1
+771 silly decomposeActions finalize @esbuild/darwin-x64@0.23.1
+772 silly decomposeActions fetch resolve-pkg-maps@1.0.0
+773 silly decomposeActions extract resolve-pkg-maps@1.0.0
+774 silly decomposeActions test resolve-pkg-maps@1.0.0
+775 silly decomposeActions preinstall resolve-pkg-maps@1.0.0
+776 silly decomposeActions build resolve-pkg-maps@1.0.0
+777 silly decomposeActions install resolve-pkg-maps@1.0.0
+778 silly decomposeActions postinstall resolve-pkg-maps@1.0.0
+779 silly decomposeActions finalize resolve-pkg-maps@1.0.0
+780 silly decomposeActions fetch esbuild@0.23.1
+781 silly decomposeActions extract esbuild@0.23.1
+782 silly decomposeActions test esbuild@0.23.1
+783 silly decomposeActions preinstall esbuild@0.23.1
+784 silly decomposeActions build esbuild@0.23.1
+785 silly decomposeActions install esbuild@0.23.1
+786 silly decomposeActions postinstall esbuild@0.23.1
+787 silly decomposeActions finalize esbuild@0.23.1
+788 silly decomposeActions fetch fsevents@2.3.3
+789 silly decomposeActions extract fsevents@2.3.3
+790 silly decomposeActions test fsevents@2.3.3
+791 silly decomposeActions preinstall fsevents@2.3.3
+792 silly decomposeActions build fsevents@2.3.3
+793 silly decomposeActions install fsevents@2.3.3
+794 silly decomposeActions postinstall fsevents@2.3.3
+795 silly decomposeActions finalize fsevents@2.3.3
+796 silly decomposeActions fetch get-tsconfig@4.7.6
+797 silly decomposeActions extract get-tsconfig@4.7.6
+798 silly decomposeActions test get-tsconfig@4.7.6
+799 silly decomposeActions preinstall get-tsconfig@4.7.6
+800 silly decomposeActions build get-tsconfig@4.7.6
+801 silly decomposeActions install get-tsconfig@4.7.6
+802 silly decomposeActions postinstall get-tsconfig@4.7.6
+803 silly decomposeActions finalize get-tsconfig@4.7.6
+804 silly decomposeActions fetch tsx@4.18.0
+805 silly decomposeActions extract tsx@4.18.0
+806 silly decomposeActions test tsx@4.18.0
+807 silly decomposeActions preinstall tsx@4.18.0
+808 silly decomposeActions build tsx@4.18.0
+809 silly decomposeActions install tsx@4.18.0
+810 silly decomposeActions postinstall tsx@4.18.0
+811 silly decomposeActions finalize tsx@4.18.0
+812 silly runTopLevelLifecycles Starting
+813 silly executeActions Starting
+814 silly install executeActions
+815 silly doSerial global-install 0
+816 silly doParallel fetch 6
+817 verbose correctMkdir /Users/nathanielblumberg/.npm/_locks correctMkdir not in flight; initializing
+818 verbose lock using /Users/nathanielblumberg/.npm/_locks/staging-f56cee3140f5da0c.lock for /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging
+819 silly doParallel extract 6
+820 silly extract @esbuild/darwin-x64@0.23.1
+821 silly extract resolve-pkg-maps@1.0.0
+822 silly extract esbuild@0.23.1
+823 silly extract fsevents@2.3.3
+824 silly extract get-tsconfig@4.7.6
+825 silly extract tsx@4.18.0
+826 verbose unbuild node_modules/.staging/@esbuild/darwin-x64-9507e3a4
+827 verbose unbuild node_modules/.staging/resolve-pkg-maps-0fd4d1b5
+828 verbose unbuild node_modules/.staging/fsevents-d2905293
+829 verbose unbuild node_modules/.staging/get-tsconfig-b1f8f869
+830 verbose unbuild node_modules/.staging/esbuild-31da07fb
+831 verbose unbuild node_modules/.staging/tsx-d4d4bf39
+832 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4 is being purged from base /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy
+833 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4
+834 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5 is being purged from base /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy
+835 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5
+836 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293 is being purged from base /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy
+837 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293
+838 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869 is being purged from base /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy
+839 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869
+840 verbose tar unpack /Users/nathanielblumberg/.npm/@esbuild/darwin-x64/0.23.1/package.tgz
+841 verbose tar unpacking to /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4
+842 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4 is being purged
+843 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4
+844 verbose tar unpack /Users/nathanielblumberg/.npm/resolve-pkg-maps/1.0.0/package.tgz
+845 verbose tar unpacking to /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5
+846 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5 is being purged
+847 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5
+848 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb is being purged from base /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy
+849 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb
+850 verbose tar unpack /Users/nathanielblumberg/.npm/fsevents/2.3.3/package.tgz
+851 verbose tar unpacking to /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293
+852 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293 is being purged
+853 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293
+854 verbose tar unpack /Users/nathanielblumberg/.npm/get-tsconfig/4.7.6/package.tgz
+855 verbose tar unpacking to /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869
+856 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869 is being purged
+857 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869
+858 silly gunzTarPerm modes [ '755', '644' ]
+859 silly gunzTarPerm modes [ '755', '644' ]
+860 verbose tar unpack /Users/nathanielblumberg/.npm/esbuild/0.23.1/package.tgz
+861 verbose tar unpacking to /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb
+862 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb is being purged
+863 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb
+864 silly gunzTarPerm modes [ '755', '644' ]
+865 silly gunzTarPerm modes [ '755', '644' ]
+866 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39 is being purged from base /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy
+867 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39
+868 silly gunzTarPerm modes [ '755', '644' ]
+869 verbose tar unpack /Users/nathanielblumberg/.npm/tsx/4.18.0/package.tgz
+870 verbose tar unpacking to /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39
+871 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39 is being purged
+872 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39
+873 silly gunzTarPerm modes [ '755', '644' ]
+874 silly gunzTarPerm extractEntry bin/esbuild
+875 silly gunzTarPerm extractEntry LICENSE
+876 silly gunzTarPerm extractEntry LICENSE
+877 silly gunzTarPerm extractEntry LICENSE
+878 silly gunzTarPerm extractEntry bin/esbuild
+879 silly gunzTarPerm extractEntry LICENSE
+880 silly gunzTarPerm extractEntry dist/index.cjs
+881 silly gunzTarPerm extractEntry dist/index.d.cts
+882 silly gunzTarPerm extractEntry dist/index.cjs
+883 silly gunzTarPerm extractEntry fsevents.js
+884 silly gunzTarPerm extractEntry package.json
+885 silly gunzTarPerm extractEntry install.js
+886 silly gunzTarPerm extractEntry lib/main.js
+887 silly gunzTarPerm extractEntry dist/index.d.cts
+888 silly gunzTarPerm extractEntry package.json
+889 silly gunzTarPerm extractEntry README.md
+890 silly gunzTarPerm extractEntry dist/index.mjs
+891 silly gunzTarPerm extractEntry dist/index.d.mts
+892 silly gunzTarPerm extractEntry dist/cli.cjs
+893 silly gunzTarPerm extractEntry dist/client-D6NvIMSC.cjs
+894 silly gunzTarPerm extractEntry package.json
+895 silly gunzTarPerm extractEntry README.md
+896 silly gunzTarPerm extractEntry README.md
+897 silly gunzTarPerm extractEntry fsevents.node
+898 silly gunzTarPerm extractEntry dist/get-pipe-path-BoR10qr8.cjs
+899 silly gunzTarPerm extractEntry dist/index-BsW12Ot9.cjs
+900 silly gunzTarPerm extractEntry package.json
+901 silly gunzTarPerm extractEntry LICENSE.md
+902 silly gunzTarPerm extractEntry dist/cjs/api/index.cjs
+903 silly gunzTarPerm extractEntry dist/cjs/index.cjs
+904 silly gunzTarPerm extractEntry dist/esm/api/index.cjs
+905 silly gunzTarPerm extractEntry fsevents.d.ts
+906 silly gunzTarPerm extractEntry dist/index.mjs
+907 silly gunzTarPerm extractEntry README.md
+908 silly gunzTarPerm extractEntry lib/main.d.ts
+909 silly gunzTarPerm extractEntry dist/esm/index.cjs
+910 silly gunzTarPerm extractEntry dist/loader.cjs
+911 silly gunzTarPerm extractEntry dist/node-features-roYmp9jK.cjs
+912 silly gunzTarPerm extractEntry dist/index.d.mts
+913 silly gunzTarPerm extractEntry dist/package-DdlSEfAh.cjs
+914 silly gunzTarPerm extractEntry dist/patch-repl.cjs
+915 silly gunzTarPerm extractEntry dist/preflight.cjs
+916 silly gunzTarPerm extractEntry dist/register-Bf5X8VN9.cjs
+917 silly gunzTarPerm extractEntry dist/register-C1urN2EO.cjs
+918 silly gunzTarPerm extractEntry dist/repl.cjs
+919 silly gunzTarPerm extractEntry dist/require-CHoHrGcI.cjs
+920 silly gunzTarPerm extractEntry dist/suppress-warnings.cjs
+921 silly gunzTarPerm extractEntry dist/temporary-directory-B83uKxJF.cjs
+922 silly gunzTarPerm extractEntry dist/cjs/api/index.d.cts
+923 silly gunzTarPerm extractEntry dist/esm/api/index.d.cts
+924 silly gunzTarPerm extractEntry package.json
+925 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5/node_modules is being purged
+926 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5/node_modules
+927 silly gunzTarPerm extractEntry README.md
+928 silly gunzTarPerm extractEntry dist/cli.mjs
+929 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869/node_modules is being purged
+930 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869/node_modules
+931 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293/node_modules is being purged
+932 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293/node_modules
+933 silly gunzTarPerm extractEntry dist/client-BQVF1NaW.mjs
+934 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb/node_modules is being purged
+935 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb/node_modules
+936 silly gunzTarPerm extractEntry dist/get-pipe-path-BHW2eJdv.mjs
+937 silly gunzTarPerm extractEntry dist/index-DeKCL_WS.mjs
+938 silly gunzTarPerm extractEntry dist/cjs/api/index.mjs
+939 silly gunzTarPerm extractEntry dist/cjs/index.mjs
+940 silly gunzTarPerm extractEntry dist/esm/api/index.mjs
+941 silly gunzTarPerm extractEntry dist/esm/index.mjs
+942 silly gunzTarPerm extractEntry dist/loader.mjs
+943 silly gunzTarPerm extractEntry dist/node-features-_8ZFwP_x.mjs
+944 silly gunzTarPerm extractEntry dist/package-Bx1e9Vvg.mjs
+945 silly gunzTarPerm extractEntry dist/patch-repl.mjs
+946 silly gunzTarPerm extractEntry dist/preflight.mjs
+947 silly gunzTarPerm extractEntry dist/register-B_eFQvfc.mjs
+948 silly gunzTarPerm extractEntry dist/register-BArwRho-.mjs
+949 silly gunzTarPerm extractEntry dist/repl.mjs
+950 silly gunzTarPerm extractEntry dist/require-CB-6wn_y.mjs
+951 silly gunzTarPerm extractEntry dist/suppress-warnings.mjs
+952 silly gunzTarPerm extractEntry dist/temporary-directory-CwHp0_NW.mjs
+953 silly gunzTarPerm extractEntry dist/cjs/api/index.d.mts
+954 silly gunzTarPerm extractEntry dist/esm/api/index.d.mts
+955 silly gunzTarPerm extractEntry dist/types-Cxp8y2TL.d.ts
+956 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39/node_modules is being purged
+957 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39/node_modules
+958 silly gunzTarPerm extractEntry package.json
+959 silly gunzTarPerm extractEntry README.md
+960 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4/node_modules is being purged
+961 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4/node_modules
+962 silly doParallel preinstall 6
+963 silly preinstall @esbuild/darwin-x64@0.23.1 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4
+964 info lifecycle @esbuild/darwin-x64@0.23.1~preinstall: @esbuild/darwin-x64@0.23.1
+965 silly preinstall resolve-pkg-maps@1.0.0 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5
+966 info lifecycle resolve-pkg-maps@1.0.0~preinstall: resolve-pkg-maps@1.0.0
+967 silly preinstall esbuild@0.23.1 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb
+968 info lifecycle esbuild@0.23.1~preinstall: esbuild@0.23.1
+969 silly preinstall fsevents@2.3.3 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293
+970 info lifecycle fsevents@2.3.3~preinstall: fsevents@2.3.3
+971 silly preinstall get-tsconfig@4.7.6 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869
+972 info lifecycle get-tsconfig@4.7.6~preinstall: get-tsconfig@4.7.6
+973 silly preinstall tsx@4.18.0 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39
+974 info lifecycle tsx@4.18.0~preinstall: tsx@4.18.0
+975 silly lifecycle @esbuild/darwin-x64@0.23.1~preinstall: no script for preinstall, continuing
+976 silly lifecycle resolve-pkg-maps@1.0.0~preinstall: no script for preinstall, continuing
+977 silly lifecycle esbuild@0.23.1~preinstall: no script for preinstall, continuing
+978 silly lifecycle fsevents@2.3.3~preinstall: no script for preinstall, continuing
+979 silly lifecycle get-tsconfig@4.7.6~preinstall: no script for preinstall, continuing
+980 silly lifecycle tsx@4.18.0~preinstall: no script for preinstall, continuing
+981 silly doReverseSerial remove 0
+982 silly doSerial move 0
+983 silly doSerial finalize 6
+984 silly finalize /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/@esbuild/darwin-x64
+985 silly finalize /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/resolve-pkg-maps
+986 silly finalize /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/esbuild
+987 silly finalize /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/fsevents
+988 silly finalize /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/get-tsconfig
+989 silly finalize /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/tsx
+990 silly doSerial build 6
+991 silly build @esbuild/darwin-x64@0.23.1
+992 info linkStuff @esbuild/darwin-x64@0.23.1
+993 silly linkStuff @esbuild/darwin-x64@0.23.1 has /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules as its parent node_modules
+994 verbose linkBins @esbuild/darwin-x64@0.23.1
+995 verbose linkMans @esbuild/darwin-x64@0.23.1
+996 silly build resolve-pkg-maps@1.0.0
+997 info linkStuff resolve-pkg-maps@1.0.0
+998 silly linkStuff resolve-pkg-maps@1.0.0 has /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules as its parent node_modules
+999 verbose linkBins resolve-pkg-maps@1.0.0
+1000 verbose linkMans resolve-pkg-maps@1.0.0
+1001 silly build esbuild@0.23.1
+1002 info linkStuff esbuild@0.23.1
+1003 silly linkStuff esbuild@0.23.1 has /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules as its parent node_modules
+1004 verbose linkBins esbuild@0.23.1
+1005 verbose link bins [ { esbuild: 'bin/esbuild' },
+1005 verbose link bins   '/Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.bin',
+1005 verbose link bins   false ]
+1006 verbose linkMans esbuild@0.23.1
+1007 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.bin/esbuild is being purged
+1008 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.bin/esbuild
+1009 silly build fsevents@2.3.3
+1010 info linkStuff fsevents@2.3.3
+1011 silly linkStuff fsevents@2.3.3 has /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules as its parent node_modules
+1012 verbose linkBins fsevents@2.3.3
+1013 verbose linkMans fsevents@2.3.3
+1014 silly build get-tsconfig@4.7.6
+1015 info linkStuff get-tsconfig@4.7.6
+1016 silly linkStuff get-tsconfig@4.7.6 has /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules as its parent node_modules
+1017 verbose linkBins get-tsconfig@4.7.6
+1018 verbose linkMans get-tsconfig@4.7.6
+1019 silly build tsx@4.18.0
+1020 info linkStuff tsx@4.18.0
+1021 silly linkStuff tsx@4.18.0 has /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules as its parent node_modules
+1022 verbose linkBins tsx@4.18.0
+1023 verbose link bins [ { tsx: 'dist/cli.mjs' },
+1023 verbose link bins   '/Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.bin',
+1023 verbose link bins   false ]
+1024 verbose linkMans tsx@4.18.0
+1025 silly gentlyRm /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.bin/tsx is being purged
+1026 verbose gentlyRm don't care about contents; nuking /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.bin/tsx
+1027 silly doSerial global-link 0
+1028 silly doParallel update-linked 0
+1029 silly doSerial install 6
+1030 silly install @esbuild/darwin-x64@0.23.1 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4
+1031 info lifecycle @esbuild/darwin-x64@0.23.1~install: @esbuild/darwin-x64@0.23.1
+1032 silly lifecycle @esbuild/darwin-x64@0.23.1~install: no script for install, continuing
+1033 silly install resolve-pkg-maps@1.0.0 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5
+1034 info lifecycle resolve-pkg-maps@1.0.0~install: resolve-pkg-maps@1.0.0
+1035 silly lifecycle resolve-pkg-maps@1.0.0~install: no script for install, continuing
+1036 silly install esbuild@0.23.1 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb
+1037 info lifecycle esbuild@0.23.1~install: esbuild@0.23.1
+1038 silly lifecycle esbuild@0.23.1~install: no script for install, continuing
+1039 silly install fsevents@2.3.3 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/fsevents-d2905293
+1040 info lifecycle fsevents@2.3.3~install: fsevents@2.3.3
+1041 verbose lifecycle fsevents@2.3.3~install: unsafe-perm in lifecycle true
+1042 verbose lifecycle fsevents@2.3.3~install: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/fsevents/node_modules/.bin:/Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.bin:/Users/nathanielblumberg/Library/pnpm:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin
+1043 verbose lifecycle fsevents@2.3.3~install: CWD: /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/fsevents
+1044 silly lifecycle fsevents@2.3.3~install: Args: [ '-c', 'node-gyp rebuild' ]
+1045 silly lifecycle fsevents@2.3.3~install: Returned: code: 1  signal: null
+1046 info lifecycle fsevents@2.3.3~install: Failed to exec install script
+1047 silly install get-tsconfig@4.7.6 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/get-tsconfig-b1f8f869
+1048 info lifecycle get-tsconfig@4.7.6~install: get-tsconfig@4.7.6
+1049 silly lifecycle get-tsconfig@4.7.6~install: no script for install, continuing
+1050 silly install tsx@4.18.0 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/tsx-d4d4bf39
+1051 info lifecycle tsx@4.18.0~install: tsx@4.18.0
+1052 silly lifecycle tsx@4.18.0~install: no script for install, continuing
+1053 silly doSerial postinstall 6
+1054 silly postinstall @esbuild/darwin-x64@0.23.1 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/@esbuild/darwin-x64-9507e3a4
+1055 info lifecycle @esbuild/darwin-x64@0.23.1~postinstall: @esbuild/darwin-x64@0.23.1
+1056 silly lifecycle @esbuild/darwin-x64@0.23.1~postinstall: no script for postinstall, continuing
+1057 silly postinstall resolve-pkg-maps@1.0.0 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/resolve-pkg-maps-0fd4d1b5
+1058 info lifecycle resolve-pkg-maps@1.0.0~postinstall: resolve-pkg-maps@1.0.0
+1059 silly lifecycle resolve-pkg-maps@1.0.0~postinstall: no script for postinstall, continuing
+1060 silly postinstall esbuild@0.23.1 /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging/esbuild-31da07fb
+1061 info lifecycle esbuild@0.23.1~postinstall: esbuild@0.23.1
+1062 verbose lifecycle esbuild@0.23.1~postinstall: unsafe-perm in lifecycle true
+1063 verbose lifecycle esbuild@0.23.1~postinstall: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/esbuild/node_modules/.bin:/Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.bin:/Users/nathanielblumberg/Library/pnpm:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin
+1064 verbose lifecycle esbuild@0.23.1~postinstall: CWD: /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/esbuild
+1065 silly lifecycle esbuild@0.23.1~postinstall: Args: [ '-c', 'node install.js' ]
+1066 silly lifecycle esbuild@0.23.1~postinstall: Returned: code: 1  signal: null
+1067 info lifecycle esbuild@0.23.1~postinstall: Failed to exec postinstall script
+1068 verbose unlock done using /Users/nathanielblumberg/.npm/_locks/staging-f56cee3140f5da0c.lock for /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy/node_modules/.staging
+1069 silly rollbackFailedOptional Starting
+1070 silly rollbackFailedOptional Finishing
+1071 silly runTopLevelLifecycles Finishing
+1072 silly install printInstalled
+1073 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/android-arm@0.23.1 (node_modules/esbuild/node_modules/@esbuild/android-arm):
+1074 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/android-arm@0.23.1: wanted {"os":"android","arch":"arm"} (current: {"os":"darwin","arch":"x64"})
+1075 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    android
+1075 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  arm
+1075 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1075 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1076 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/aix-ppc64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/aix-ppc64):
+1077 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/aix-ppc64@0.23.1: wanted {"os":"aix","arch":"ppc64"} (current: {"os":"darwin","arch":"x64"})
+1078 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    aix
+1078 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  ppc64
+1078 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1078 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1079 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/android-arm64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/android-arm64):
+1080 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/android-arm64@0.23.1: wanted {"os":"android","arch":"arm64"} (current: {"os":"darwin","arch":"x64"})
+1081 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    android
+1081 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  arm64
+1081 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1081 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1082 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-x64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-x64):
+1083 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-x64@0.23.1: wanted {"os":"linux","arch":"x64"} (current: {"os":"darwin","arch":"x64"})
+1084 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1084 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  x64
+1084 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1084 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1085 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-arm@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-arm):
+1086 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-arm@0.23.1: wanted {"os":"linux","arch":"arm"} (current: {"os":"darwin","arch":"x64"})
+1087 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1087 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  arm
+1087 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1087 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1088 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/win32-x64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/win32-x64):
+1089 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/win32-x64@0.23.1: wanted {"os":"win32","arch":"x64"} (current: {"os":"darwin","arch":"x64"})
+1090 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    win32
+1090 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  x64
+1090 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1090 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1091 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-riscv64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-riscv64):
+1092 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-riscv64@0.23.1: wanted {"os":"linux","arch":"riscv64"} (current: {"os":"darwin","arch":"x64"})
+1093 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1093 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  riscv64
+1093 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1093 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1094 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/freebsd-x64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/freebsd-x64):
+1095 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/freebsd-x64@0.23.1: wanted {"os":"freebsd","arch":"x64"} (current: {"os":"darwin","arch":"x64"})
+1096 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    freebsd
+1096 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  x64
+1096 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1096 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1097 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/freebsd-arm64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/freebsd-arm64):
+1098 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/freebsd-arm64@0.23.1: wanted {"os":"freebsd","arch":"arm64"} (current: {"os":"darwin","arch":"x64"})
+1099 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    freebsd
+1099 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  arm64
+1099 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1099 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1100 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-s390x@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-s390x):
+1101 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-s390x@0.23.1: wanted {"os":"linux","arch":"s390x"} (current: {"os":"darwin","arch":"x64"})
+1102 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1102 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  s390x
+1102 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1102 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1103 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-mips64el@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-mips64el):
+1104 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-mips64el@0.23.1: wanted {"os":"linux","arch":"mips64el"} (current: {"os":"darwin","arch":"x64"})
+1105 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1105 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  mips64el
+1105 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1105 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1106 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-arm64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-arm64):
+1107 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-arm64@0.23.1: wanted {"os":"linux","arch":"arm64"} (current: {"os":"darwin","arch":"x64"})
+1108 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1108 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  arm64
+1108 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1108 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1109 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-ia32@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-ia32):
+1110 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-ia32@0.23.1: wanted {"os":"linux","arch":"ia32"} (current: {"os":"darwin","arch":"x64"})
+1111 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1111 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  ia32
+1111 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1111 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1112 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/sunos-x64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/sunos-x64):
+1113 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/sunos-x64@0.23.1: wanted {"os":"sunos","arch":"x64"} (current: {"os":"darwin","arch":"x64"})
+1114 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    sunos
+1114 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  x64
+1114 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1114 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1115 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-ppc64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-ppc64):
+1116 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-ppc64@0.23.1: wanted {"os":"linux","arch":"ppc64"} (current: {"os":"darwin","arch":"x64"})
+1117 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1117 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  ppc64
+1117 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1117 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1118 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/android-x64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/android-x64):
+1119 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/android-x64@0.23.1: wanted {"os":"android","arch":"x64"} (current: {"os":"darwin","arch":"x64"})
+1120 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    android
+1120 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  x64
+1120 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1120 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1121 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/win32-arm64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/win32-arm64):
+1122 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/win32-arm64@0.23.1: wanted {"os":"win32","arch":"arm64"} (current: {"os":"darwin","arch":"x64"})
+1123 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    win32
+1123 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  arm64
+1123 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1123 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1124 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/netbsd-x64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/netbsd-x64):
+1125 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/netbsd-x64@0.23.1: wanted {"os":"netbsd","arch":"x64"} (current: {"os":"darwin","arch":"x64"})
+1126 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    netbsd
+1126 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  x64
+1126 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1126 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1127 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/openbsd-arm64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/openbsd-arm64):
+1128 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/openbsd-arm64@0.23.1: wanted {"os":"openbsd","arch":"arm64"} (current: {"os":"darwin","arch":"x64"})
+1129 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    openbsd
+1129 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  arm64
+1129 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1129 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1130 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/win32-ia32@0.23.1 (node_modules/esbuild/node_modules/@esbuild/win32-ia32):
+1131 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/win32-ia32@0.23.1: wanted {"os":"win32","arch":"ia32"} (current: {"os":"darwin","arch":"x64"})
+1132 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    win32
+1132 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  ia32
+1132 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1132 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1133 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/linux-loong64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/linux-loong64):
+1134 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/linux-loong64@0.23.1: wanted {"os":"linux","arch":"loong64"} (current: {"os":"darwin","arch":"x64"})
+1135 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    linux
+1135 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  loong64
+1135 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1135 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1136 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/darwin-arm64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/darwin-arm64):
+1137 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/darwin-arm64@0.23.1: wanted {"os":"darwin","arch":"arm64"} (current: {"os":"darwin","arch":"x64"})
+1138 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    darwin
+1138 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  arm64
+1138 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1138 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1139 warn optional SKIPPING OPTIONAL DEPENDENCY: @esbuild/openbsd-x64@0.23.1 (node_modules/esbuild/node_modules/@esbuild/openbsd-x64):
+1140 warn notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for @esbuild/openbsd-x64@0.23.1: wanted {"os":"openbsd","arch":"x64"} (current: {"os":"darwin","arch":"x64"})
+1141 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid OS:    openbsd
+1141 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Valid Arch:  x64
+1141 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual OS:   darwin
+1141 verbose notsup SKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64
+1142 warn dndbeyond-proxy@1.0.0 No repository field.
+1143 verbose If you need help, you may report this error at:
+1143 verbose     <https://github.com/npm/npm/issues>
+1144 warn optional SKIPPING OPTIONAL DEPENDENCY: fsevents@2.3.3 (node_modules/fsevents):
+1145 warn optional SKIPPING OPTIONAL DEPENDENCY: fsevents@2.3.3 install: `node-gyp rebuild`
+1145 warn optional SKIPPING OPTIONAL DEPENDENCY: Exit status 1
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY:
+1146 verbose optional Failed at the fsevents@2.3.3 install script 'node-gyp rebuild'.
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY: Make sure you have the latest version of node.js and npm installed.
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY: If you do, this is most likely a problem with the fsevents package,
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY: not with npm itself.
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY: Tell the author that this fails on your system:
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY:     node-gyp rebuild
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY: You can get information on how to open an issue for this project with:
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY:     npm bugs fsevents
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY: Or if that isn't available, you can get their info via:
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY:     npm owner ls fsevents
+1146 verbose optional SKIPPING OPTIONAL DEPENDENCY: There is likely additional logging output above.
+1147 verbose stack Error: esbuild@0.23.1 postinstall: `node install.js`
+1147 verbose stack Exit status 1
+1147 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
+1147 verbose stack     at emitTwo (events.js:106:13)
+1147 verbose stack     at EventEmitter.emit (events.js:191:7)
+1147 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+1147 verbose stack     at emitTwo (events.js:106:13)
+1147 verbose stack     at ChildProcess.emit (events.js:191:7)
+1147 verbose stack     at maybeClose (internal/child_process.js:877:16)
+1147 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+1148 verbose pkgid esbuild@0.23.1
+1149 verbose cwd /Users/nathanielblumberg/projects/DnD/packages/dndbeyond-proxy
+1150 error Darwin 23.6.0
+1151 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "-D" "tsx"
+1152 error node v6.9.2
+1153 error npm  v3.10.9
+1154 error code ELIFECYCLE
+1155 error esbuild@0.23.1 postinstall: `node install.js`
+1155 error Exit status 1
+1156 error Failed at the esbuild@0.23.1 postinstall script 'node install.js'.
+1156 error Make sure you have the latest version of node.js and npm installed.
+1156 error If you do, this is most likely a problem with the esbuild package,
+1156 error not with npm itself.
+1156 error Tell the author that this fails on your system:
+1156 error     node install.js
+1156 error You can get information on how to open an issue for this project with:
+1156 error     npm bugs esbuild
+1156 error Or if that isn't available, you can get their info via:
+1156 error     npm owner ls esbuild
+1156 error There is likely additional logging output above.
+1157 verbose exit [ 1, true ]

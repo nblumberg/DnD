@@ -8,6 +8,7 @@
     "clean": "rm -rf dist",
     "build": "yarn build-tsc ",
     "build-tsc": "yarn clean && tsc --build --force --verbose",
+    "tsc-watch": "yarn clean && tsc --build --force --verbose --watch",
     "build-webpack": "yarn clean && webpack ",
     "start": "node --expose-gc ./dist/js/index.js",
     "main": "yarn build-tsc && yarn start",

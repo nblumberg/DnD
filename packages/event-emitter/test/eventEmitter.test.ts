@@ -1,5 +1,5 @@
-import { describe, expect, test } from "@jest/globals";
-import { createEventEmitter } from "../src/js/eventEmitter";
+import { describe, expect, jest, test } from "@jest/globals";
+import { DataChangeHandler, createEventEmitter } from "../src/js/eventEmitter";
 
 interface TestData {
   array: number[];
@@ -52,7 +52,10 @@ describe("createEventEmitter", () => {
         eventEmitter.setData(change);
 
         if (change.hasOwnProperty(property)) {
-          expect(callback).toHaveBeenCalledWith(change[property]);
+          expect(callback).toHaveBeenCalledWith(
+            change[property],
+            initialData[property]
+          );
         } else {
           expect(callback).not.toHaveBeenCalled();
         }
@@ -63,7 +66,7 @@ describe("createEventEmitter", () => {
 
   test('it should unregister a listener with "removeListener"', () => {
     eventEmitter = createEventEmitter({ ...initialData });
-    const listeners: jest.Mock<any, any, any>[] = [];
+    const listeners: jest.Mock<DataChangeHandler<TestData>>[] = [];
     listeners.push(jest.fn());
     eventEmitter.addListener(listeners[0]);
     eventEmitter.removeListener(listeners[0]);

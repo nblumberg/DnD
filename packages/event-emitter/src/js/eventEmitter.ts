@@ -3,7 +3,7 @@ export interface DataChangeHandler<T> {
 }
 
 export interface PropertyChangeHandler<T, P extends keyof T> {
-  (value: T[P]): void;
+  (newValue: T[P], oldValue: T[P]): void;
 }
 
 type PropertyListeners<T> = {
@@ -110,16 +110,20 @@ export function createEventEmitter<T>(data: T): {
       for (const property in propertyChangeListeners) {
         const dataKey: keyof T = property;
         if (oldData[dataKey] !== data[dataKey]) {
-          let result: any;
+          let oldValue: any;
+          let newValue: any;
           if (Array.isArray(data[dataKey])) {
-            result = [...(data[dataKey] as any[])];
+            oldValue = [...(oldData[dataKey] as any[])];
+            newValue = [...(data[dataKey] as any[])];
           } else if (data[dataKey] && typeof data[dataKey] === "object") {
-            result = { ...(data[dataKey] as object) };
+            oldValue = { ...(oldData[dataKey] as object) };
+            newValue = { ...(data[dataKey] as object) };
           } else {
-            result = data[dataKey];
+            oldValue = oldData[dataKey];
+            newValue = data[dataKey];
           }
           for (const listener of propertyChangeListeners[property]!.values()) {
-            listener(result);
+            listener(newValue, oldValue);
           }
         }
       }

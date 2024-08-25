@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "allowArbitraryExtensions": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",

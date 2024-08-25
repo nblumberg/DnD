@@ -1,12 +1,13 @@
 import { initAuth } from "./auth";
-import { parseHTML } from "./parseHtml";
+import { listAllFieldValues } from "./listAllFieldValues";
 
 initAuth().then(async () => {
   initAuth();
   // listEntries("spells", 1);
-  parseHTML("spells");
+  // const targets = listWithFieldValue("spells");
+  // parseHTML("monsters", targets.slice(targets.indexOf("Sir Godfrey Gwilym")));
   // trimHtml("Two-Headed Crocodile.html");
-  // listAllFieldValues("type");
+  listAllFieldValues(["actions", "*", "*", "attack", "toHit", "target"]);
   // readMonsters();
   // readMonsters([
   //   "First-Year Student",

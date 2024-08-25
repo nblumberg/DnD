@@ -11,6 +11,7 @@
     "clean": "rm -rf dist",
     "build": "yarn build-webpack",
     "build-tsc": "yarn clean && tsc --build --force --verbose",
+    "tsc-watch": "yarn clean && tsc --build --force --verbose --watch",
     "build-webpack": "yarn clean && webpack",
     "test": "jest",
     "testWatch": "jest --watch"

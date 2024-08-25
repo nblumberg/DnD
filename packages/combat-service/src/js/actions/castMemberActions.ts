@@ -13,9 +13,9 @@ import {
   StopDelayedAction,
   TriggerReadiedAction,
 } from "state-change";
-import { historyChange, setState, state } from "../state";
+import { setState, state } from "../state";
 import { setCastMemberState } from "../state/castMemberState";
-import { clearUndoneHistory } from "./historyActions";
+import { clearUndoneHistory, historyChange } from "./historyActions";
 import { getTurnOrder } from "./initiativeActions";
 
 function emitChanges(event: ChangeEvent): Record<string, CastMember> {

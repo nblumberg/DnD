@@ -1,13 +1,31 @@
 import { CastMember } from "creature";
 import { ChangeHistoryEntry, History, cloneHistory } from "state-change";
-import { historyChange, state, updateState } from "../state";
+import { onStateChange, state, updateState } from "../state";
 
-const listeners: Array<(undoneHistory: History) => void> = [];
+const historyListeners: Array<(history: History) => void> = [];
+
+export function listenToHistory(listener: (history: History) => void) {
+  historyListeners.push(listener);
+}
+
+function dispatchHistory() {
+  historyListeners.forEach((listener) =>
+    listener({ events: state.events, changes: state.changes })
+  );
+}
+
+export function historyChange({ events, changes }: History) {
+  updateState({ events, changes });
+  dispatchHistory();
+  onStateChange();
+}
+
+const undoHistoryListeners: Array<(undoneHistory: History) => void> = [];
 
 export function listenToUndoneHistory(
   listener: (undoneHistory: History) => void
 ) {
-  listeners.push(listener);
+  undoHistoryListeners.push(listener);
 }
 
 function dispatchUndoneHistory() {
@@ -16,7 +34,7 @@ function dispatchUndoneHistory() {
     undoneHistory.events.push(event);
     undoneHistory.changes.push(...changes);
   });
-  listeners.forEach((listener) => listener(undoneHistory));
+  undoHistoryListeners.forEach((listener) => listener(undoneHistory));
 }
 
 export function clearUndoneHistory() {
@@ -37,8 +55,8 @@ export function undoHistory() {
   // Set undoArray before calling undo, so that the event still has references to its changes
   updateState({
     undoArray: [
-      ...state.undoArray,
       { event, changes: event.getChanges(history) },
+      ...state.undoArray,
     ],
   });
   historyChange(event.undo(history));
@@ -50,7 +68,7 @@ export function redoHistory() {
     console.error("No history to redo");
     return;
   }
-  const { event, changes } = state.undoArray[state.undoArray.length - 1]!;
+  const { event, changes } = state.undoArray[0]!;
 
   if (findEvent(event.id)) {
     console.error(
@@ -78,7 +96,7 @@ export function redoHistory() {
     changes: [...state.changes, ...changes],
   });
   updateState({
-    undoArray: state.undoArray.slice(0, -1),
+    undoArray: state.undoArray.slice(1),
   });
   dispatchUndoneHistory();
 }

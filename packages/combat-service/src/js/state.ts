@@ -5,10 +5,9 @@ import * as path from "path";
 import {
   ChangeEvent,
   ChangeHistoryEntry,
-  History,
   instantiateEvents,
-  listenToHistory,
 } from "state-change";
+import { listenToHistory } from "./actions/historyActions";
 import { getTurnOrder } from "./actions/initiativeActions";
 import { castMembersFromHistory } from "./state/castMemberState";
 
@@ -98,11 +97,6 @@ export function resetGame(): void {
   updateState({ ...defaultState, events, changes }, true);
 }
 
-export function historyChange({ events, changes }: History) {
-  updateState({ events, changes });
-  onStateChange();
-}
-
 export function setState<P extends keyof State>(prop: P, value: State[P]) {
   updateState({ [prop]: value });
   onStateChange();
@@ -112,7 +106,6 @@ castMembersFromHistory();
 
 onStateChange();
 
-// TODO: both historyChange and listenToHistory are notified of changes, pick one
 listenToHistory(() => {
   deriveState();
 

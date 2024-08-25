@@ -53,6 +53,14 @@ function removeHistoryReducer(
   });
   removals.forEach((event) => {
     try {
+      if (!event.changes.length) {
+        console.warn(
+          `${changeEventToString(
+            event
+          )} no changes to undo. This may be caused by React development mode calling the reducer twice but passing different state because state stores ChangeEvents by reference.`
+        );
+        return;
+      }
       ({ events: newEvents, changes: newChanges } = event.undo(state));
     } catch (e) {
       console.error(`Failed to undo ${changeEventToString(event)}`, e);

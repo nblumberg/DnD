@@ -79,7 +79,7 @@ export abstract class ChangeEvent implements IChangeEvent {
   }
 
   undo(history: History): HistoryAndCastMembers {
-    const myChanges = this.getChanges(history);
+    const myChanges: ChangeHistoryEntry<CastMember>[] = [];
     const { events, changes, castMembers } = this.removeChanges(
       history,
       myChanges
