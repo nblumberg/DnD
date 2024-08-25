@@ -53,6 +53,8 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
 
+    "types": ["node", "jest", "express"],
+
     "composite": true,
     "incremental": true,
     "importHelpers": true,
