@@ -10,7 +10,8 @@
     "build-tsc": "yarn clean && tsc --build --force --verbose",
     "tsc-watch": "yarn clean && tsc --build --force --verbose --watch",
     "build-webpack": "yarn clean && webpack ",
-    "start": "node --expose-gc ./dist/js/index.js",
+    "start": "tsx ./src/js/index.ts",
+    "start:old": "node --expose-gc ./dist/js/index.js",
     "main": "yarn build-tsc && yarn start",
     "main-old": "ts-node ./src/js/index.ts"
   },
@@ -21,7 +22,7 @@
     "bufferutil": "^4.0.8",
     "canvas": "^2.11.2",
     "chrome-cookies-secure": "^2.1.1",
-    "creature": "*",
+    "creature": "workspace:*",
     "jsdom": "^22.1.0",
     "utf-8-validate": "^6.0.3",
     "webpack-node-externals": "^3.0.0"
@@ -43,6 +44,7 @@
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
+    "tsx": "^4.18.0",
     "typescript": "^5.2.2",
     "workbox-webpack-plugin": "^7.0.0"
   }

@@ -19,8 +19,8 @@
   "author": "nathanielblumberg@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "roll": "*",
-    "serializable": "*"
+    "roll": "workspace:*",
+    "serializable": "workspace:*"
   },
   "devDependencies": {
     "@babel/core": "^7.23.6",

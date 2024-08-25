@@ -19,7 +19,7 @@
   "author": "nathanielblumberg@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "creature": "*"
+    "creature": "workspace:*"
   },
   "devDependencies": {
     "@babel/core": "^7.23.6",

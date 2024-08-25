@@ -10,9 +10,6 @@
   "devDependencies": {
     "lerna": "^8.0.0"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "build": "lerna run build",
     "build-tsc": "lerna run build-tsc",
