@@ -1,13 +1,14 @@
 import { initAuth } from "./auth";
-import { listAllFieldValues } from "./listAllFieldValues";
+import { saveFeats } from "./feat";
 
 initAuth().then(async () => {
   initAuth();
-  // listEntries("spells", 1);
+  saveFeats();
+  // listEntries("magic-items", 29);
   // const targets = listWithFieldValue("spells");
   // parseHTML("monsters", targets.slice(targets.indexOf("Sir Godfrey Gwilym")));
   // trimHtml("Two-Headed Crocodile.html");
-  listAllFieldValues(["actions", "*", "*", "attack", "toHit", "target"]);
+  // listAllFieldValues(["actions", "*", "*", "attack", "toHit", "target"]);
   // readMonsters();
   // readMonsters([
   //   "First-Year Student",

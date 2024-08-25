@@ -1,11 +1,8 @@
-import axios from "axios";
-import { writeFileSync } from "fs";
 import { JSDOM } from "jsdom";
-import { join } from "path";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "path";
 import { ajax } from "./ajax";
-import { addAuthHeader } from "./auth";
 import { getElementText, stripScripts } from "./dom";
-import { FatalParseError } from "./error";
 import { PathParam, fileRelativeToData } from "./root";
 
 async function getPage(pathParam: PathParam, page: number): Promise<JSDOM> {
@@ -78,31 +75,42 @@ async function saveHtml(
   const baseFilePath = fileRelativeToData(path);
 
   const url = href.startsWith(baseUrl) ? href : `${baseUrl}${href}`;
-  let response: axios.AxiosResponse;
-  try {
-    response = await axios.get(url, {
-      headers: addAuthHeader({
-        ...defaultHeaders,
-        Referer: join(baseUrl, path),
-      }),
-    });
-  } catch (e) {
-    console.error(`${type} ${name} request failed: ${e}`);
-    throw e;
-  }
-  // const response = await fetch(url, addAuthHeader(monsterHeaders));
-  if (response.status !== 200) {
-    throw new FatalParseError(
-      `${type} ${name} request received a ${response.status} ${response.statusText} response`
-    );
-  } else {
-    console.log(`Spell ${name}`);
-  }
-  const rawHTML = response.data as string;
+  // let response: axios.AxiosResponse;
+  // try {
+  //   response = await axios.get(url, {
+  //     headers: addAuthHeader({
+  //       ...defaultHeaders,
+  //       Referer: join(baseUrl, path),
+  //     }),
+  //   });
+  // } catch (e) {
+  //   console.error(`${type} ${name} request failed: ${e}`);
+  //   throw e;
+  // }
+  // // const response = await fetch(url, addAuthHeader(monsterHeaders));
+  // if (response.status !== 200) {
+  //   throw new FatalParseError(
+  //     `${type} ${name} request received a ${response.status} ${response.statusText} response`
+  //   );
+  // } else {
+  //   console.log(`${type.charAt(0).toUpperCase()}${type.slice(1)} ${name}`);
+  // }
+  // const rawHTML = response.data as string;
+  const rawHTML = await ajax(
+    url,
+    {
+      Referer: join(baseUrl, path),
+    },
+    `${type} ${name}`
+  );
+  console.log(`${type.charAt(0).toUpperCase()}${type.slice(1)} ${name}`);
 
   const trimmedHTML = stripScripts(new JSDOM(rawHTML));
   const filePath = join(baseFilePath, "html", `${name}.html`);
   const data = { name, url };
+  if (!existsSync(dirname(filePath))) {
+    mkdirSync(dirname(filePath), { recursive: true });
+  }
   writeFileSync(
     filePath,
     `${trimmedHTML}\n<!-- ORIGINAL_REQUEST_DATA: ${JSON.stringify(
@@ -119,6 +127,8 @@ async function findEntries(
   path: PathParam,
   { window: { document } }: JSDOM
 ): Promise<string[]> {
+  // Change from plural path name to singular and ignore anything before the dash
+  // magic-items -> magic-item
   const type = path.toLowerCase().substring(0, path.length - 1);
   const listingBody = document.querySelector(".listing-body") as HTMLDivElement;
   if (!listingBody) {
@@ -134,8 +144,10 @@ async function findEntries(
   // console.log("Entries", entries.length);
   const entries: Record<string, string> = {};
   const promises = rows.map((row) => {
-    const nameCell: HTMLAnchorElement | null = row.querySelector(
-      `.${type.toLowerCase()}-name .name .link`
+    let nameCell: HTMLAnchorElement | null = row.querySelector(
+      // Ignore anything before the dash
+      // magic-item -> item
+      `.${type.includes("-") ? type.split("-").pop() : type}-name .name .link`
     );
     if (!nameCell) {
       throw new Error("Couldn't find name element");
@@ -147,7 +159,11 @@ async function findEntries(
     //   nameCell.outerHTML
     // );
     const { href } = nameCell;
-    const name = getElementText(nameCell);
+    // Get rid of the rarity element
+    const textElement: HTMLElement = (
+      nameCell.childElementCount ? nameCell.firstElementChild : nameCell
+    ) as HTMLElement;
+    const name = getElementText(textElement);
     entries[name] = href;
     return saveHtml(type, name, href);
   });

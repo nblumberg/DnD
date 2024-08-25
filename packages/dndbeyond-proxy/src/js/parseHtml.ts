@@ -4,8 +4,8 @@ import {
   readFileSync,
   unlinkSync,
   writeFileSync,
-} from "fs";
-import { join } from "path";
+} from "node:fs";
+import { join } from "node:path";
 import { parseMonsterHTML } from "./monsters";
 import { fileRelativeToData, PathParam } from "./root";
 import { parseSpellHTML } from "./spells";
