@@ -1,0 +1,1 @@
+export { attachCrosswordEndpoints } from "./api";
