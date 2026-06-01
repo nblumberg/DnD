@@ -39,3 +39,8 @@ export interface Ability extends Roll20BaseObject, CreatableRoll20Object {
    */
   istokenaction: boolean;
 }
+
+type _Ability = Ability;
+declare global {
+  type Ability = _Ability;
+}

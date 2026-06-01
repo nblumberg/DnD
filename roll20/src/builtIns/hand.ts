@@ -22,3 +22,8 @@ export interface Hand extends Roll20BaseObject {
    */
   currentView: "bydeck" | "bycard";
 }
+
+type _Hand = Hand;
+declare global {
+  type Hand = _Hand;
+}

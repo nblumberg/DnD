@@ -37,3 +37,8 @@ export interface Macro extends Roll20BaseObject, CreatableRoll20Object {
    */
   visibleto: IdList;
 }
+
+type _Macro = Macro;
+declare global {
+  type Macro = _Macro;
+}

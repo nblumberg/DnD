@@ -1,3 +1,4 @@
+import { Id } from "./ids";
 import { Roll20BaseObject } from "./roll20Objects";
 
 export interface JukeboxTrack extends Roll20BaseObject {
@@ -36,4 +37,26 @@ export interface JukeboxTrack extends Roll20BaseObject {
    * @default 30
    */
   volume: number;
+}
+
+type _JukeboxTrack = JukeboxTrack;
+declare global {
+  type JukeboxTrack = _JukeboxTrack;
+  
+  /**
+   *
+   * @param {Id} playlist PLAYLIST_ID(String) The id of the playlist to start playing.
+   * @returns {void}
+   * @example
+   * var playlists = JSON.parse(Campaign().get('jukeboxfolder')),
+   *     myPlaylist = _.find(playlists, (folder) => _.isObject(folder) && folder.n === myPlaylistName);
+   * playJukeboxPlaylist(myPlaylist.id);
+   */
+  function playJukeboxPlaylist(playlist: Id): void;
+
+  /**
+   * Stops all currently playing jukebox playlists.
+   * @example stopJukeboxPlaylist();
+   */
+  function stopJukeboxPlaylist(): void;
 }

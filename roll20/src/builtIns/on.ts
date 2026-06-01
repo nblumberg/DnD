@@ -2,6 +2,7 @@ import { Ability } from "./ability";
 import { Attribute } from "./attribute";
 import { Card } from "./card";
 import { Character } from "./character";
+import { ChatMessage } from "./chat";
 import { ControlledObject } from "./controlledObject";
 import { CustomFx } from "./customFx";
 import { Deck } from "./deck";
@@ -9,13 +10,14 @@ import { Door, Roll20Window } from "./doorAndWindow";
 import { Graphic } from "./graphic";
 import { Hand } from "./hand";
 import { Handout } from "./handout";
-import { JukeboxTrack } from "./jukeboxTrack";
+import { JukeboxTrack } from "./jukebox";
 import { Macro } from "./macro";
 import { Page } from "./page";
 import { Pathv2 } from "./pathV2";
 import { Pin } from "./pin";
 import { Player } from "./player";
 import {
+  AllObjects,
   OBJECT_TYPES,
   ObjectType,
   Roll20BaseObject,
@@ -24,7 +26,6 @@ import {
 import { RollableTable, TableItem } from "./rollableTable";
 import { Text } from "./text";
 
-// TODO
 const BASE_OBJECT_KEYS: (keyof Roll20BaseObject)[] = ["_id", "_type"] as const;
 const OBJECT_KEYS: (keyof Roll20Object)[] = [
   "_id",
@@ -440,3 +441,128 @@ export type EventType =
   | "chat:message"
   | (typeof EVENT_OBJECT_TYPES)[number]
   | (typeof EVENT_OBJECT_ATTRIBUTE_TYPES)[number];
+
+  declare global {
+  /**
+   * Registers an event handler.
+   * @param {EventType} event
+   * @param {Function} listener
+   * @see EventType
+   */
+  function on(event: "ready", listener: () => void): void;
+
+  function on(
+    event: "add:ability",
+    listener: (ability: Ability) => void
+  ): void;
+  function on(
+    event: "add:attribute",
+    listener: (attribute: Attribute) => void
+  ): void;
+  function on(event: "add:card", listener: (card: Card) => void): void;
+  function on(
+    event: "add:character",
+    listener: (character: Character) => void
+  ): void;
+  function on(
+    event: "add:custfx",
+    listener: (customFx: CustomFx) => void
+  ): void;
+  function on(event: "add:deck", listener: (deck: Deck) => void): void;
+  function on(event: "add:door", listener: (door: Door) => void): void;
+  function on(
+    event: "add:graphic",
+    listener: (graphic: Graphic) => void
+  ): void;
+  function on(event: "add:hand", listener: (hand: Hand) => void): void;
+  function on(
+    event: "add:handout",
+    listener: (handout: Handout) => void
+  ): void;
+  function on(
+    event: "add:jukeboxtrack",
+    listener: (jukeboxTrack: JukeboxTrack) => void
+  ): void;
+  function on(event: "add:macro", listener: (macro: Macro) => void): void;
+  function on(event: "add:page", listener: (page: Page) => void): void;
+  function on(event: "add:path", listener: (pathv2: Pathv2) => void): void;
+  function on(event: "add:pin", listener: (pin: Pin) => void): void;
+  function on(event: "add:player", listener: (player: Player) => void): void;
+  function on(
+    event: "add:rollabletable",
+    listener: (rollableTable: RollableTable) => void
+  ): void;
+  function on(
+    event: "add:tableitem",
+    listener: (tableItem: TableItem) => void
+  ): void;
+  function on(event: "add:text", listener: (text: Text) => void): void;
+  function on(
+    event: "add:window",
+    listener: (window: Roll20Window) => void
+  ): void;
+
+  function on(
+    event: "destroy:ability",
+    listener: (ability: Ability) => void
+  ): void;
+  function on(
+    event: "destroy:attribute",
+    listener: (attribute: Attribute) => void
+  ): void;
+  function on(event: "destroy:card", listener: (card: Card) => void): void;
+  function on(
+    event: "destroy:character",
+    listener: (character: Character) => void
+  ): void;
+  function on(
+    event: "destroy:custfx",
+    listener: (customFx: CustomFx) => void
+  ): void;
+  function on(event: "destroy:deck", listener: (deck: Deck) => void): void;
+  function on(event: "destroy:door", listener: (door: Door) => void): void;
+  function on(
+    event: "destroy:graphic",
+    listener: (graphic: Graphic) => void
+  ): void;
+  function on(event: "destroy:hand", listener: (hand: Hand) => void): void;
+  function on(
+    event: "destroy:handout",
+    listener: (handout: Handout) => void
+  ): void;
+  function on(
+    event: "destroy:jukeboxtrack",
+    listener: (jukeboxTrack: JukeboxTrack) => void
+  ): void;
+  function on(event: "destroy:macro", listener: (macro: Macro) => void): void;
+  function on(event: "destroy:page", listener: (page: Page) => void): void;
+  function on(event: "destroy:path", listener: (pathv2: Pathv2) => void): void;
+  function on(event: "destroy:pin", listener: (pin: Pin) => void): void;
+  function on(
+    event: "destroy:player",
+    listener: (player: Player) => void
+  ): void;
+  function on(
+    event: "destroy:rollabletable",
+    listener: (rollableTable: RollableTable) => void
+  ): void;
+  function on(
+    event: "destroy:tableitem",
+    listener: (tableItem: TableItem) => void
+  ): void;
+  function on(event: "destroy:text", listener: (text: Text) => void): void;
+  function on(
+    event: "destroy:window",
+    listener: (window: Roll20Window) => void
+  ): void;
+
+  function on<T extends AllObjects>(
+    event: EventType,
+    listener: (changed: T, previous: T) => void
+  ): void;
+
+  function on(
+    event: "chat:message",
+    listener: (msg: ChatMessage) => void
+  ): void;
+}

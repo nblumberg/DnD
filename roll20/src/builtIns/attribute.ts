@@ -40,3 +40,8 @@ export interface Attribute extends Roll20BaseObject, CreatableRoll20Object {
    */
   max: string;
 }
+
+type _Attribute = Attribute;
+declare global {
+  type Attribute = _Attribute;
+}

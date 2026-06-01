@@ -39,3 +39,10 @@ export interface TableItem extends Roll20BaseObject, CreatableRoll20Object {
    */
   weight: number;
 }
+
+type _RollableTable = RollableTable;
+type _TableItem = TableItem;
+declare global {
+  type RollableTable = _RollableTable;
+  type TableItem = _TableItem;
+}

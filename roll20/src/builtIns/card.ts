@@ -24,3 +24,8 @@ export interface Card extends Roll20BaseObject {
    */
   name: string;
 }
+
+type _Card = Card;
+declare global {
+  type Card = _Card;
+}

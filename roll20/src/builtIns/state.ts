@@ -71,3 +71,14 @@ export type State =
   | string
   | { [key: string]: State }
   | State[];
+
+declare global {
+  /**
+   * state
+   * The state variable is an object in the global scope which is accessible to all scripts running in a game. You can access the state object from any function or callback at any time just by using the global variable named state. Additionally, the state object is persisted between executions of the Sandbox, so you can use it to store information you want to have in future runs of your script.
+   *
+   * Note: You should use the state object to store information that is only needed by the API, since it is not sent to player computers and does not make your game file larger. Store values that are needed in-game in the Roll20 objects' properties.
+   * @see State
+   */
+  const state: { [key: string]: State };
+}

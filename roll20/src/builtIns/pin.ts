@@ -226,3 +226,8 @@ export interface Pin extends Roll20Object, Coordinate {
    */
   visibleTo: All | "";
 }
+
+type _Pin = Pin;
+declare global {
+  type Pin = _Pin;
+}

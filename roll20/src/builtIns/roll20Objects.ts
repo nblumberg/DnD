@@ -9,7 +9,7 @@ import { Graphic } from "./graphic";
 import { Hand } from "./hand";
 import { Handout } from "./handout";
 import { Id } from "./ids";
-import { JukeboxTrack } from "./jukeboxTrack";
+import { JukeboxTrack } from "./jukebox";
 import { Macro } from "./macro";
 import { Page } from "./page";
 import { Pathv2 } from "./pathV2";

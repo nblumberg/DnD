@@ -78,3 +78,8 @@ export interface Character extends Roll20BaseObject, CreatableRoll20Object {
    */
   name: string;
 }
+
+type _Character = Character;
+declare global {
+  type Character = _Character;
+}

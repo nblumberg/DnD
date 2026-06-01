@@ -471,3 +471,36 @@ export type StatusMarker =
   | "all-for-one"
   | "angel-outfit"
   | "archery-target";
+
+type _Graphic = Graphic;
+type _StatusMarker = StatusMarker;
+declare global {
+  type Graphic = _Graphic;
+  type StatusMarker = _StatusMarker;
+
+  /**
+   * Moves a graphic object below all other graphics on the same tabletop layer.
+   * @param {Graphic} obj The graphic to move.
+   * @example
+   * on('chat:message', function(msg) {
+   *     if (msg.type === 'api' && msg.content === '!toback' && msg.selected) {
+   *         _.each(msg.selected, (s) => {
+   *             toBack(getObj(s._type, s._id));
+   *         });
+   *     }
+   * });
+   */
+  function toBack(obj: Graphic): void;
+
+  /**
+   * Moves a graphic object above all other graphics on the same tabletop layer.
+   * @param {Graphic} obj The graphic to move.
+   * @example
+   * on('ready', function() {
+   *     on('add:graphic', function(obj) {
+   *         toFront(obj);
+   *     });
+   * });
+   */
+  function toFront(obj: Graphic): void;
+}

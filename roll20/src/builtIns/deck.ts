@@ -122,3 +122,8 @@ export interface Deck extends Roll20BaseObject {
    */
   shown: boolean;
 }
+
+type _Deck = Deck;
+declare global {
+  type Deck = _Deck;
+}

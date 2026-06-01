@@ -190,3 +190,8 @@ export interface Page extends Roll20BaseObject {
    */
   width: number;
 }
+
+type _Page = Page;
+declare global {
+  type Page = _Page;
+}

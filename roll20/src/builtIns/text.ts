@@ -27,3 +27,8 @@ export interface Text extends CreatableRoll20Object, ControlledObject, Rect {
 
   text: string;
 }
+
+type _Text = Text;
+declare global {
+  type Text = _Text;
+}

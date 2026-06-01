@@ -1,3 +1,4 @@
+import { Id } from "./ids";
 import { Roll20BaseObject } from "./roll20Objects";
 
 export interface Player extends Roll20BaseObject {
@@ -55,4 +56,28 @@ export interface Player extends Roll20BaseObject {
    * @default ""
    */
   speakingas: string;
+}
+
+type _Player = Player;
+declare global {
+  type Player = _Player;
+
+  /**
+   *
+   * @param {Id} playerId PLAYER_ID(String) The id of the player Roll20 object to check.
+   * @returns {boolean} true if the player currently has GM permissions, or false otherwise.
+   * @example
+   * This function is especially useful for limiting Mod (API) commands to GM use.
+   * on('chat:message', function(msg) {
+   *     if (msg.type !== 'api') return;
+   *
+   *     if (msg.content.indexOf('!playercommand') === 0) {
+   *         // ...
+   *     } else if (msg.content.indexOf('!gmcommand') === 0) {
+   *         if (!playerIsGM(msg.playerid)) return;
+   *         // ...
+   *     }
+   * });
+   */
+  function playerIsGM(playerId: Id): boolean;
 }

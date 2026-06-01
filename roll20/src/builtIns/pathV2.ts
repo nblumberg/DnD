@@ -54,3 +54,8 @@ export interface Pathv2
 
   stroke_width: number;
 }
+
+type _Pathv2 = Pathv2;
+declare global {
+  type Pathv2 = _Pathv2;
+}

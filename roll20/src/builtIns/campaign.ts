@@ -1,6 +1,5 @@
 import { Id } from "./ids";
 import { Roll20BaseObject } from "./roll20Objects";
-
 export interface Campaign extends Roll20BaseObject {
   /**
    * A unique ID for this object. Globally unique across all objects in this game. Read-only.
@@ -54,4 +53,12 @@ export interface Campaign extends Roll20BaseObject {
    * @default "".
    */
   turnorder: string;
+}
+
+declare global {
+  /**
+   * A function which returns the Campaign object. Since there is only one campaign, this global always points to the only campaign in the game. Useful for doing things like checking to see if an object is on the active page using Campaign().get("playerpageid").
+   * @returns {_Campaign} The Campaign object. Since there is only one campaign, this global always points to the only campaign in the game. Useful for doing things like checking to see if an object is on the active page using Campaign().get("playerpageid").
+   */
+  function Campaign(): Campaign;
 }

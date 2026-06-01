@@ -51,3 +51,8 @@ export interface TurnOrderEntry {
    */
   pr: number | string;
 }
+
+type _TurnOrderEntry = TurnOrderEntry;
+declare global {
+  type TurnOrder = _TurnOrderEntry[];
+}

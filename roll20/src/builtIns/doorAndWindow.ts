@@ -38,3 +38,10 @@ export interface Door extends Roll20Object, Omit<Roll20Window, "_type"> {
    */
   isSecret: boolean;
 }
+
+type _Door = Door;
+type _Roll20Window = Roll20Window;
+declare global {
+  type Door = _Door;
+  type Window = _Roll20Window;
+}

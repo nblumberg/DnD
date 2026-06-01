@@ -62,3 +62,8 @@ export interface Handout extends Roll20BaseObject, CreatableRoll20Object {
    */
   notes: BioGmNotesNotes;
 }
+
+type _Handout = Handout;
+declare global {
+  type Handout = _Handout;
+}
