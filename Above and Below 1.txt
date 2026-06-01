@@ -1,0 +1,979 @@
+5
+An ancient archway looms above you, carved by a long-dead civilization. As you pass underneath, walls etched in a strange language surround you. Deciphering the script might reveal secrets about the area, but would take valuable time. Do you continue exploring, or attempt to read the wall?
+CONTINUE EXPLORING: Explore 2 (coin)
+ATTEMPT TO READ THE WALL: Explore 4 (three coins, +l reputation), Explore 6 (two coins, ore, +1 reputation) Bonus: +1 lantern if you own paper.
+
+6
+You reach a great, dark lake in a wide cavern. Eyeless fish swim about next to a leaky boat. Do you take the boat to the other side, or search the shore?
+SEARCH THE SHORE: Explore 2 (potion)
+TAKE THE BOAT: Explore 4 (four coins), Explore 6 (three coins, pot)
+
+7
+You come across a traveling merchant dressed in yellow and reining in an old, green-skinned pack-lizard. "Come, take a look at my wares," says the merchant as shafts of daylight slice through the ceiling and light up his veiled face. The man is traveling alone, and as far as you can tell, he is unarmed. You could probably snatch one of his bags and run before he would be able to stop you. Do you haggle with the man, or steal from him?
+STEAL FROM THE MERCHANT: Explore 3 (coin, fish, -1 reputation), Explore 7 (coin, fish, paper, -2 reputation)
+HAGGLE: Explore 4 and Pay 1 Coin (pot, +1 reputation), Explore 6 and Pay 1 Coin (pot, potion, +1 reputation) Failure Description (for Haggle): You waste too much time arguing , •. ith the merchant and must return to the village before you can find a safe place to build.
+
+8
+You reach a forest of massive, glowing flowers. Huge wasps fly among the towering blooms, their stingers like spears, the buzz oftheir wings an endless roar. Do you skirt the edge of the flower forest, or try to fight off the wasps?
+SKIRT THE EDGE OF THE FLOWER FOREST: Explore 2 (coin)
+FIGHT THE WASPS: Explore 4 (coin, mushroom, +l reputation), Explore 7 (mushroom, fish, potion, +1 reputation)
+
+9
+You cross a thin, trickling stream and arrive at a massive stone door, the carving of a half-moon over mountains on the face of it. With time you could, perhaps, force it open. Do you try to open the door, or continue exploring the area?
+KEEP EXPLORING: Explore 3 (coin)
+TRY TO OPEN THE DOOR: Explore 5 (two coins, paper, + 1 reputation), Explore 8 (three coins, amethyst,+ 1 reputation) Bonus: +1 lantern per hammer. Failure Description (for Open the Door): Try as you may, you can't get the door to open, and you waste so much time that you can't find a safe place for an outpost.
+
+10
+You follow a wide staircase carved into the floor. It leads to a gargantuan, stone head. The mouth opens wide in an eerie, silent scream, and leads down a narrow tunnel crisscrossed with huge spider webs. You think you hear feint cries for help coming up from the dark, or is it just your imagination? Is someone trapped in the passage, by giant spiders perhaps? Do you follow the cries or wander near the stone head?
+WANDER NEAR THE STONE HEAD: Explore 2 (coin)
+FOLLOW THE CRIES FOR HELP: Explore 4 (fruit, +1 reputation), Explore 6 (four coins, rope, + 1 reputation)
+
+11
+You follow a narrow passage where a hot wind blows. In moments, the passage opens up to a wide room filled with boiling lava, glowing bright red in the darkness. At the far side of the room you see the remains of a camp, but to get there, you'd have to cross a thin, stone bridge that threatens to fall into the lava at any moment. Do you search this side, or cross the bridge to the camp?
+SEARCH THIS SIDE: Explore 3 (potion)
+CROSS THE BRIDGE TO THE CAMP: Explore 4 (two coins, fish), Explore 6 (five coins, rope)
+
+12
+Your party walks along an underground riverbright, yellow lanterns lighting the way. You reach a cold, quiet pool where blue fish dart about. With time, you might be able to catch some of them. Do you stop to fish, or continue along the river?
+FOLLOW THE RIVER: Explore 3 (two coins)
+STOP TO FISH: Explore 4 (two fish), Explore 8 (fish, amethyst) 5
+
+13
+·'oJ nead east and enter a vast cavern. In the ::e-,er ·s a souare, stone tower. A single, bright lantern -a..,gs aoove a round, wooden door at the bottom. ·e o,•, ,•:'laows give off a friendly glow in the gloom. ·oi... ,cnoc< on the door and an old man with red robes a"a a square, red hat answers. "If you can prove your .-.· sdom, I'll sell you a valuable artifact." Do you take him 1.1po n his offer, or continue exploring?
+CONTINUE EXPLORING: Expllore 3 (coin)
+PROVE YOUR WISDOM: Explore 4 and Pay 1 Coin (paper, +1 reputation), Explore 7 and Pay 1 Coin (two paper, +2 reputation) Bonus: +1 lantern per quill. Failure Description (for Prove Your Wisdom): The man shakes his head, disappointed, and won't even give advice about the surrounding area when you ask. You spend too much time speaking to him and can't find a safe place for an outpost.
+
+14
+You venture into a maze of icy tunnels. Before going far, you come across some dusty skulls-a few with teeth marks in them. Do you stay near the entrance of the tunnels or delve deeper?
+STAY NEAR THE ENTRANCE: Explore 3 (coin)
+DELVE DEEPER INTO THE TUNNELS: Explore 5 (four coins), Explore 7 (five coins, ore)
+
+15
+You arrive at the shore of a rushing, underground river. At the far side lies a pile of abandoned crates and a coll.apsed tent. Just as you sit to rest your legs, you hear sporadic clicking in the darkness. Spinning around, you see a massive spider rushing toward you, its shinning, green eyes fixed upon its next meal-you. Just beyond the spider, you catch a glimpse of what looks to be another traveler, spun up in sticky silk like a fly. Do you stand and fight or swim to the far side of the river?
+SWIM TO THE FAR SIDE: Explore 3 (potion)
+FIGHT THE SPIDER: Explore 5 (two coins, mushroom, +1 reputation), Explore 6 (five coins, rope, +1 reputation) 6
+
+16
+As you're venturing along a cobbled, cave road, your path is suddenly blocked by a grey wolf, its eyes shining menacingly in the darlkness. The wolf suddenly speaks in a voice like two rocks scraping together. "Who dares to enter my lair?" he says. Do you run away and hide or stand and fight for your lives?
+RUN AND HIDE: Explore 2 (coin, -1 reputation)
+STAND AND FIGHT: Explore 4 (two coins, +1 reputation), Explore 6 (six coins, +2 reputation)
+
+17
+In a tall, narrow cave, a waterfall feeds into a deep pool filled with dark, silvery fish. At the bottom of the pool you spot an old treasure chest, rusty and covered in moss. Do you jump into the frigid water and attempt to retrieve it or continue on your way?
+STAY DRY AND CONTINUE EXPLORING: Explore 3 (coin)
+DIVE FOR THE CHEST: Explore 4 (fish, +1 reputation), Explore 7 {five coins, amethyst, +1 reputation) Failure Description (for Dive): While trying to open the treasure chest, one of your party members gets stuck at the bottom of the pool and almost drowns. He insists you head back to the village immediately. You're unable to find a place to build an outpost.
+
+18
+Your party camps near an abandoned, underground village. As your fire dies, an eerie whistling sends shivers up your spine. Soon, a pale, glowing ghost appears. His eyes are white and have no pupils, and the flesh is rotting on his spectral face. "Listen to my tale and I will reward you!" he screams. Do you try to hide from the ghost or gather your wits and grant his request?
+HIDE FROM THE GHOST: Explore 3 {coin, -1 reputation), Explore 7 (two coins, amethyst, -1 reputation)
+FACE THE GHOST AND LISTEN TO HIS STORY: Explore 5 {three coins, pot, + 1 reputation) Failure Description: The howls and screams overwhelm your terrified party and they flee. You have to follow them all the way back to the village and you can't find a safe place to build an outpost.
+
+19
+Traveling through a windy passage, the rock filled with holes cut out by the constant breeze, you meet a short, sand-colored creature with two bright eyes. His thick hands hold out a bottle filled with a green liquid. "This potion cures any injury. Care to make me an offer?" Do you haggle with the creature or search the windy tunnels?
+BUY THE POTION: Explore 2 and Pay 1 Coin (potion, +1 reputation)
+IGNORE THE CREATURE AND SEARCH THE TUNNELS; Explore 4 (rope), Explore 7 (coin, two ore) Failure Description (for Buy the Potion): You haggle relentlessly with the creature until he finally shake·s his claws at you and leaves in frustration. The interchange took so much time that you are forced to turn around and head home before you can find a safe place to build an outpost. 2Q-At the edge of an underground lake, you find a long pier stretching far out over the glassy surface. The planks are grey and withered and empty baskets are strewn about carelessly. You notice a small house carved into the cave wall nearby, and soon an old woman emerges. She's leaning heavily on a gnarled staff, and a brown cloth is wrapped over her eyes. "If you catch me a fish from my pier, I'd be willing to share. I'm blind and the task is quite difficult for me," she says. Do you stop to catch a fish or search around the lakeshore?
+STOP AND CATCH A FISH: Explore 3 (fish, +1 reputation), Explore 5 (two fish, +2 reputation)
+IGNORE HER AND SEARCH: Explore 4 (four coins, -1 reputation), Explore 6 (four coins, paper, -1 reputation)
+
+21
+You reach a wide hole in the cave floor. An old rope tied to a column of rock hangs down over the edge and disappears into darkness. Do you dare venture down?
+STAY AT THE TOP: Explore 2 (coin)
+CLIMB DOWN THE ROPE: Explore 4 (two coins, potion, +l reputation), Explore 7 (coin, pot, potion, +1 reputation) 2
+
+2
+You travel a path lined with massive, white crystals, when suddenly a strange woman appears. She has pale, blue skin and long, green hair. "I've lost my favorite necklace. Please help me find it," she asks in a voice like the whisper of wind. You decide to help her look. She tells you that the necklace is a beautiful stone on a silver chain. If you find it, will you return the necklace or stuff it into your bag before she notices?
+RETURN THE NECKLACEE:x plore 3 (+2 reputation)
+ATTEMPT TO KEEPT HER NECKLACE: Explore2 (coin, -1 reputation), Explore 6 (coin, amethyst, -1 reputation) Failure Description (for Return the Necklace): You spend so much time looking for the necklace that you can't find a safe place to build an outpost. Failure Description (for Attempt to Keep the Necklace): The woman catches you trying to steal her cherished jewelry and reveals herself to be a powerful sorceress. You drop the necklace and flee back to the village, and are unable to find a safe place for an outpost.
+
+23
+Your party passes a boulder and you come upon two strange creatures. They have round, red eyes and rough, grey skin. Rows of spikes protrude from their backs, and in their thick hands are crude spears. You've heard of their kind from other travelers in town-they are called glogos. "Travelers aren't welcome here. Turn back or die," they say. Do you try to reason with them or fight them?
+REASON WITH THEM: Explore 3 (+1 reputation), Explore 5 (two coins, mushroom, +2 reputation) Bonus: +1 lantern per quill.
+FIGHT THEM: Explore 4 (three coins, -1 reputation), Explore 7 (six coins, pot, -1 reputation) 7
+
+24
+You meet a fat, green-skinned creature with a round, bald head and one eye. He's wearing an apron filled with tools. "I am a great builder," he says. "I will build something for you, for the right price." Do you try to haggle with him or move on?
+HAGGLE WITH THE ONE-EYED BUILDER: Explore 3 and Pay 2 Coins (gain a building that costs 7 or less, +1 reputation)
+MOVE ON AND KEEP EXPLORING: Explore4 (two coins), Explore 7 (coin, ore, potion) Failure Description {for Haggle): You end up insulting the builder and he chases you back to the village before you're able to find a safe place to build an outpost.
+
+25
+Your party camps near a fallen tower from an ancient, underground city. You get a fire started, and you're just starting to warm your hands when three squat creatures with round red eyes approach from the darkness. Rows of spikes protrude from their backs and their skin is rough and grey, like the stone walls that surround you. You've encountered their kind beforethey are called glogos. "Let us share your fire and tell us about your village. If we deem you worthy, we'll let you travel here." Do you let them join you for supper or fight them?
+LET THEM SHARE YOUR FIRE FOR A TALK: Explore 3 (potion, +1 reputation), Explore 5 (fish, potion, +1 reputation)
+FIGHT THEM: Explore 4 (three coins, -1 reputation), Explore 6 (five coins, ore, -1 reputation) 8
+
+26
+Your party reaches the entrance of an abandoned mine. You head inside, hoping that something of value may have been left behind. Soon you reach a large hub where many tunnels connect, rusty mine carts lying here and there on their sides. At the edge of the hub, you suddenly notice an old chest, dark and water stained, but otherwise undamaged. A heavy lock holds it shut. You start toward the chest but stop when you hear a sudden pounding of feet. A fishfolk boy bursts from one of the tunnels, running just ahead of five well-armed bandits. "Help me! They're going to kill me!" calls the fish creature. Some of the bandits hesitate when they see your party, but then notice the chest and start for it. "Stay put if you know what's good for you," one of them says. Do you help the fishfolk boy or go after the chest? GO
+AFTER THE CHEST: Explore 3 (two coins, -1 reputation)
+HELP THE FISHFOLK BOY: Explore 5 (fish, +2 reputation), Explore 8 (three coins, pot, +2 reputation) Failure Description: The bandits are too strong for your party and you flee to the village, unable to spend time looking for a safe place to build an outpost.
+
+27
+You reach the entrance of a great temple carved into the cave walls. Massive stairs lead up toward a square platform. In the center of the platform, a pale woman with golden hair sits inside a cage. "Please let me out. I've been trapped here by evil glogos," she says when you approach. Your first impulse is to break open the lock on the cage and set her free, but you wonder why the glogos would have left her here when normally they would have killed her. Do you set her free or keep exploring?
+SET THE WOMAN FREE: (read paragraph 101)
+IGNORE HER PLEAS AND EXPLORE THE TEMPLE: Explore 5 (four coins), Explore 8 (nine coins)
+
+28
+Your party wanders a huge, dark cavern. You come upon a twisted, iron fence, and follow it until you reach a gate. Beyond it lie hundreds of cracked stones covered in strange writing-an ancient graveyard. No sooner have you entered than a white ghost appears-a young boy, his eyes empty pools, his clothes ragged and torn. "I can't find my mother's grave," says the boy. "Help me find her, or I shall haunt you." Do you stop to help him or ignore the boy's threats?
+HELP THE BOY FIND HIS MOTHER: Explore 3 (coin, +l reputation), Explore 5 (amethyst, +1 reputation)
+IGNORE HIM AND SEARCH THE GRAVES FOR TREASURE: Explore 4 {four coins, -1 reputation), Explore 7 (two coins, two pots, -1 reputation) 2
+
+9
+Your party follows a wide passage lined with old columns until you come upon a cave filled with bright tents of red and yellow. Tall torches and lanterns light up what seems to be an underground market. As you peruse the wares offered by creatures of every shape and size, a red-bearded man leaning on a gnarled staff approaches you. "I have a proposition that will be well worth your time, if you'd care to listen," he says. Do you listen to him or haggle with the merchants?
+LISTEN TO THE MAN'S PROPOSITION: (read paragraph 102)
+HAGGLE: Explore 3 and Pay 2 Coins (paper, +1 reputation), Explore 6 and Pay 2 Coins (ore, fruit, +1 reputation) Failure Description (for Haggle): You spend too much time haggling, unable to make a deal with anyone, and have no time to find a safe place to build an outpost.
+
+30
+Your party comes across a rocky-skinned, red eyed creature with spikes on his back sitting against a cave wall- a glogo. He's breathing heavily and blood covers his leg. "Help, please. I was attacked by thieves," he says. Do you stop to help him or continue exploring?
+HELP THE GLOGO: Explore 3 (mushroom, +1 reputation), Explore 5 (four coins, mushroom, +1 reputation)
+KEEP EXPLORING: Explore 3 (three coins, -1 reputation), Explore 7 (two ore, -1 reputation) Failure Description {for Help the Glogo): You end up making the glogo's injuries even worse as you try to help him. You lose valuable time searching for an underground inn, where you leave him, before heading back up to your village.
+
+31
+Your party reaches a camp in a sandy-floored cave. A lone man with a short beard sits near a fire, roasting what looks like a rodent of some kind on a stick. "Got anything to trade?" he asks. Do you sit and haggle or keep exploring?
+KEEP EXPLORING: Explore 3 (fish)
+TRADE WITH THE MAN: Explore 3 and Pay 1 Coin (paper, +1 reputation), Explore 6 and Pay One 1 (two paper, +1 reputation) Failure Description {for Trade with the Man): You lose too much time arguing with the man and can't find a safe place to build an outpost before heading back to the village. 3
+
+2
+You arrive at a bridge over a deep ravine. A wide, scaly creature with a long snout and four eyes stands at the center. In his hand is a huge club, stained red from previous skull-crushings. "Pay the toll or die!" says the monster. Do you hide, fight, or pay the toll?
+HIDE: Explore 3 (coin, -1 reputation)
+FIGHT THE BRUTE: Explore 7 (three coins, ore, + 1 reputation) Bonus: +1 lantern per hammer.
+PAY THE TOLL: Explore 1 and Pay 2 Coins (mushroom) 9
+
+33
+Yoreuach a tall cave, parts of the walls bricked up. You think you hear a voice behind one of the walls of brick, but you can barely make it out. It seems like someone is calling for help. Do you stop and break through the wall or keep going?
+BREAK THROUGH THE WALL: Explore 4 (gain the lowest available new villager, +l reputation) Bonus: +1 lantern per hammer.
+KEEP EXPLORING: Explore 2 (coin), Explore 7 (three coins, amethyst)
+
+34
+Your party hikes down along the edge of a chasm. Before long you see a creature that looks halfman, half-fish sitting on the opposite side. "I'm stuck over here," he says. "Can you help me?" Do you stop to help him or move on?
+HELP THE FISHFOLK MAN: Explore 4 (fish, +1 reputation), Explore 6 (coin, two fish, +2 reputation) Bonus: +1 lantern if you own rope.
+KEEP EXPLORING: Explore 3 (two coins, -1 reputation}, Explore 7 (three coins, ore, potion, -1 reputation}
+
+35
+Your party arrives at a circle of huts around an underground pool. A thick layer of mist covers the floor of the cave, and the air is warm and thick with moisture. As you draw closer, you realize the steam is coming from the pool-a hot spring. The pool is filled with people wading about, relaxing in the water, their eyes closed. A bald man in a long, white robe approaches you. "The waters of this pool will rejuvenate your spirit. Care for a dip?"
+STOP TO RELAX: (read paragraph 103}
+DECLINE AND CONTINUE EXPLORING: Explore 2 (coin}, Explore 7 (six coins, pot} 10
+
+36
+You follow a passage covered iP -icss --= - dripping with warm water, and come upon a s:--=--I= scene. A group of travelers surrounds a ma" :x:;._ - : gagged, and tied to a heavy wooden stake, p· es c= s-: and twigs at his feet. "Burn the sorcerer!" screa-s the crowd. They're all so distracted that they've e=: their camp at the far end of the cave unguardeo. = . ,::_ choose, you may be able to take a few things ano s ::; away before anyone notices. Do you try to save tPe poor soul, steal from the camp, or just move on before the burning starts?
+MOVE ON: Explore 2 (coin}
+STEAL FROM THE CAMP: Explore 4 (two coins, rope), Explore 8 (two coins, rope, fish}
+SAVE THE CONDEMNED: Explore 5 (gain the lowest available new villager, -1 reputation} Failure Description (for Steal from the Camp): Some of the travelers catch you sneaking around their camp and chase you back to your village before you can find a safe place for a new outpost. Failure Description (for Save the Condemned): You have to flee back to the village and you can't find a safe place to build. 3
+
+7
+You come upon a cavern filled by the skeleton of a massive beast. You crawl through the skull and camp under the ribs. In them iddle of the night, you're awakened by the sound of footsteps. You see a greenskinned creature with three, round eyes and fin-shaped ears going through your supplies and catch him before he can get away. "Oh, please just let me go," he says. "I promise I won't do it again." Do you let him go or tie him up so he can't steal from you again?
+TIE HIM UP: (read paragraph 104)
+LET HIM GO AND KEEP EXPLORING: Explore 3 (coin, +1 reputation), Explore 6 (five coins, pot, +1 reputation)
+
+38
+In the center of a room you find a stone box covered with intricate carvings. On the face of the box is graven an image of a skull. Do you open it?
+ATTEMPT TO OPEN THE BOX: Explore 3 (read paragraph 105)
+LEAVE THE BOX AND KEEP SEARCHING: Explore 5 (two mushrooms), Explore 7 (mushroom, ore) 3
+
+9
+You meet a traveling merchant with a drooping, black mustache and long ponytail. He holds out a bottle filled with a purple liquid. "This potion cures any injury. Care to make me an offer?" Do you haggle with the merchant or move on?
+HAGGLE FOR THE POTION: Explore 2 and Pay 1 Coin (potion, + 1 reputation)
+KEEP EXPLORING: Explore4 (two coins), Explore 7 {five coins, paper) Failure Description (for Haggle for the Potion): You accidentally insult the merchant and he withholds any advice about the surrounding area. You can't find a safe place to build before heading back to the village.
+
+40
+In a cave filled with stalagmites you meet a thin man, his face filled with wrinkles, his eyes rimmed red. He's wearing a ragged robe. On his shoulder rests a black lizard with bright, red eyes, licking the air as you approach. "I've lost my way. Could you help me find the surface?" he asks. Do you lose valuable time and help him? Or do you keep searching the cave?
+HELP THE MAN FIND THE SURFACE: Explore3 {+1 reputation), Explore 7 {seven coins, +2 reputation)
+IGNORE THE REQUEST AND KEEP SEARCHING: Explore 4 (coin, fish, -1 reputation), Explore 6 (three coins, pot, -1 reputation)
+
+41
+After crawling up the side of a steep cliff, your party comes upon two ragged-looking men with pale beards that stretch far past their sandaled feet. They stare at you with glassy eyes, then finally one of them speaks, his voice like the tearing of ancient paper. "We are the immortal ones. Answer our queries and we shall grant you great knowledge. Fail and we shall exact punishment." Do you answer their questions or climb back down?
+CLIMB BACK DOWN: Explore 2 {coin, -1 reputation), Explore 4 (coin, mushroom, -1 reputation)
+ANSWER THEIR QUESTIONS: Explore 6 (paper, +2 reputation) Bonus: +1 lantern per quill. Failure Description (for Answer their Questions): You're unable to impress the old men and the two of them start humming. The humming grows louder and louder, piercing your ears, when suddenly it stops and you realize you're back in the village, as if transported by magic. You were unable to find a safe place for an outpost.
+
+42
+You arrive at a passage blocked by a huge scorpion. Behind the scorpion, you catch sight of a strange fountain, the water glowing bright purple in the darkness. The giant monster steps toward you, its barbed tail swaying back and forth. Do you hide or fight the creature so you can inspect the fountain?
+FIGHT THE SCORPION: Explore 5 (five coins, potion, +1 reputation), Explore 8 (five coins, mushroom, two potions, + 1 reputation)
+HIDE: Explore 3 (coin, -1 reputation) 11
+
+43
+You turn a corner and come across a huge pile of bones, skulls staring at you with their dead, empty eyes. Moments later, a massive, blue cat emerges from the darkness. The cat's eyes are thin slits of purple, its striped, bushy tail swaying back and forth. "Find us some fish," says the cat, eyeing you hungrily. Do you fight the cat, hide from it, or search for some fish to give it?
+HIDE FROM THE CAT: Explore 2 (-1 reputation)
+SEARCH FOR SOME FISH FOR THE CAT: Explore 4 (gain the Cave Cat villager, +1 reputation)
+FIGHT THE CAT: Explore 6 (five coins, rope, -1 reputation)
+
+44
+You arrive at the edge of a huge city carved into the cave rock. It seems abandoned, the windows and doors dark, cob webs hanging from cracked archways and between buildings. You wander through the streets until you come upon what appears to be a man made of metal. He sits on the cobblestones, staring at you with bright eyes. "I'm broken," says the mechanical man. "If you can follow my instructions and fix me, I'd be indebted to you." Do you take time to try and repair him? Or do you move on and explore the city?
+IGNORE HIM AND KEEP EXPLORING THE CITY: Explore 3 (coin, -1 reputation)
+ATTEMPT TO REPAIR THE MECHANICAL MAN: Explore 6 (two coins, gain the Mechanical Man villager, +1 reputation) Bonus: +1 lantern per hammer. Failure Description (for Repair the Mechanical Man): You're unable to fix the metal man. "Pity," he says. "I could have guided you through this city." He tells you to leave him, and you head back to the village. You wasted too much time and couldn't find a suitable place to build an outpost. 12
+
+45
+Your party travels through a cave filled wit'1 blue crystals and soon you come upon a fishfolk worna~ "Can you help me find mushrooms?" she asks. "My village is running out of food and we need help." Do yo"' help her find mushrooms or ignore her and continue exploring?
+SEARCH FOR MUSHROOMS: Explore 3 (mushroom, +1 reputation), Explore 5 (two mushrooms, +2 reputation)
+IGNORE HER AND CONTINUE EXPLORING: Explore 2 (two coins, -1 reputation), Explore 7 (five coins, ore, -1 reputation)
+
+46
+You come upon a massive, underground waterfall. The water roars over the rocks, disappearing into a great, dark chasm below. Glancing down, you suddenly notice two dim eyes staring back at you. Within moments, a giant, blue lizard head emerges from the cavern on a long neck. A strong, sour fish smell fills the air. "I was growing tired of eating fish," says the lizard, grinning hungrily at your party. Do you fight the monster or hide from it?
+HIDE: Explore 2 (coin, -1 reputation), Explore 4 (coin, mushroom, -1 reputation)
+FIGHT THE GIANT LIZARD: Explore 7 (five coins, amethyst, +1 reputation) Failure Description: You have to flee back to the village and you can't find a safe place to build.
+
+47
+You explore the remnants of an ancient, underground temple. Exquisite columns and winding stairways are carved into the pale granite. At the end of a hall lies a huge stone door:. You attempt to open it, but it won't budge. Do you want to stop and force it open or continue exploring the temple?
+STOP AND OPEN THE DOOR: Explore 6 (three coins, ore) Bonus: +1 lantern per hammer.
+KEEP EXPLORING THE TEMPLE: Explore 3 (coin, potion).
+
+48
+You arrive at a huge, underground bay. Dim light shines on the water from thin cracks in the cavern ceiling. At the center of the bay lies a ship, rotting and lying low in the water. Do you attempt to swim out and board or stay on the shore?
+SWIM OUT TO THE SHIP: Explore 4 (pot)
+STAY ON THE SHORE: Explore 2 (two coins), Explore 8 (ore, fish) Failure Description (for Swim out to the Ship): One of your party almost drowns and insists you return to the village immediately. You can', find a safe place to build the next outpost.
+
+49
+vou descend a stairway carved into the rock. As you go lower, the air grows warmer and warmer until you arrive at a cavern cut through the middle by a river o" bright, orange lava. Near the edge of the lava sits a grey glogo with bright, red eyes. Rows of spikes line the creature's back. "Could you find me some food?" he asks as you approach.
+FIND SOME FOOD FOR THE GLOGO: Explore 4 'mushroom, +1 reputation), Explore 8 (mushroom, ore, -2 reputation)
+IGNORE HIM AND KEEP EXPLORING: Explore 3 (two mushrooms, -1 reputation), Explore 6 (three coins, ore, -1 reputation)
+
+50
+You reach a cavern filled with crystals, but a strange smell fills the air. The longer you remain, the sicker you feel. Do you keep exploring the crystals, or play it safe and venture back?
+VENTURE BACK: Explore 3 (coin), Explore 5 (fruit)
+KEEP EXPLORING THE CRYSTALS: Explore 7 (coin, pot, two potions)
+
+51
+You make your way around rough boulders until you arrive at a tall cave. Shafts of daylight shine down from an opening in the ceiling onto a massive tree. The trunk is rough and grey, and purple leaves cover the branches. Small, green fruits hang among the branches. They look so delicious that everyone in your party starts eating. "How dare you steal from me!" says a voice, and in shock you realize it is the tree, opening a dark mouth near the roots. It starts swaying its branches around, making it difficult to grab any more fruit. Do you try to convince the tree to let you eat? Or do you ignore the tree and take what you want, dodging the swishing branches?
+TAKE THE FRUIT: Explore 3 (fruit, -1 reputation)
+ATTEMPT TO CONVINCE THE TREE: Explore 4 (fruit, +1 reputation), Explore 7 (two fruit, +2 reputation) Bonus: +1 lantern per quill. Failure Description: You waste too much time trying to get fruit and can't find a safe place to build the next outpost. 13
+
+52
+You arrive at an underground inn, the windows glowing yellow from a roaring fire inside. The place looks warm and inviting, so you step inside. The common room is filled with travelers-humans, fishfolk, and even a few red-eyed glogos. A sign above the bar says, 'Free curative elixirs with every room!' You're tempted to stay the night, but just as you reach the innkeeper, a man with a scar running along his cheek approaches you. "I've lost my daughter somewhere out there in the cave. Could you help me find her?" Do you help the man or rest at the inn and continue exploring?
+REST AT THE INN AND KEEP EXPLORING: Explore3 and Pay 1 Coin (2 potions, -1 reputation)
+HELP FIND THE DAUGHTER: Explore 4 (mushroom, +1 reputation), Explore 7 (amethyst,+ 1 reputation) Bonus: +1 lantern if you own rope. Failure Description (for Help Find the Daughter): You spend too much time looking for the man's daughter and can't find a safe place to build.
+
+53
+Your party finds a wooden trapdoor in the floor of the cave. It is quite heavy, but you manage to open it. Below the door is a deep pit. Holding your lanterns out over the ledge, you spot a pile of gold coins at the bottom. Sitting next to the coins is a woman, but you can't quite see her face. She has long, brown hair that covers most of her back. Her skin is pale and spotted, and she shifts slightly in the lantern light. The sight of the woman sends shivers down your spine, but there is a lot of gold down there, and perhaps the poor woman just needs help. Do you attempt to get the gold and save the woman? Or do you shut the trap door and continue on your way?
+SHUT THE TRAP DOOR AND KEEP GOING: Explore 3 (mushroom, -1 reputation)
+ATTEMPT TO GET THE WOMAN AND THE GOLD OUT: (read paragraph 107) 14
+
+54
+Your party arrives at a glogo camp. The grey, stone-skinned creatures spot you with their glowing, red eyes and immediately surround your party. Do you try to reason with them or attack them?
+ATTEMP TO REASON: Explore 4 (+l reputation), Explore 6 (pot, +2 reputation) Bonus: +1 lantern per quill.
+FIGHT THE GLOGOS: Explore 3 (two coins, -1 reputation), Explore 7 (five coins, ore, -1 reputation) Failure Description: You have to flee and don't have time to find a safe place to build. 5
+
+5
+You climb upward through a slippery passage with mossy walls. Soon, the cave is filled with ice, a biting, cold wind pulling at your cloaks. You spot something stuck in the ice of the cave wall-a short, grey creature. Its frozen body is bulky and has spikes running down its back-it's a glogo, and its eyes are still glowing behind their frosty prison. Just a bit further down the cave, you find a pile of wood, and beyond, the cave opens up to forested mountainside. If you lit a bonfire near the glogo, you might be able to melt the ice. Do you build the fire or continue exploring?
+BUILD A BONFIRE: Explore 4 (read paragraph 109)
+KEEP EXPLORING THE ICY CAVE: Explore3 (two coins), Explore 6 (four coins, ore) Failure Description (for Build a Bonfire): You waste too much time with the fire and end up having to head back to the village, unable to find a safe place to build the next outpost.
+
+56
+You travel through a warm cave filled with mushrooms. You're about to pick a few of them when you hear a terrifying hissing sound. Seconds later, an enormous, black snake with bright, yellow eyes emerges from the shadows. Do you fight the serpent or run and find a place to hide?
+HIDE FROM THE SNAKE: Explore 3 (coin, -1 reputation)
+FIGHT THE SNAKE: Explore 5 (four coins, mushroom, +1 reputation), Explore 8 (three coins, mushroom, pot, +1 reputation) Failure Description: The snake pursues you and you can't find a safe place to build.
+
+57
+Your party arrives at an abandoned dungeon in the side of the cavern. You venture inside, huddling close together, when out of the darkness jumps a redeyed frog creature with obsidian skin and a vast belly. He swings a deadly club at you. "Give me gold or I smash you!" Do you give him what he wants or attempt to fight him?
+GIVE HIM WHAT YOU'RE CARRYING: Explore 1 and Pay 2 Coins (no reward)
+FIGHT HIM: Explore 6 (four coins, pot, +1 reputation) Failure Description: The frog creature chases you out of the dungeon and you can't find a safe place to build.
+
+58
+You're venturing along a cave with a cobblestone floor when six glogos suddenly surround you, their round, red eyes gllowing in the darkness. They bind you and throw you into a nearby dungeon, leaving only one of them to guard your party. You can see the keys to your cell hanging on a wall nearby. Using what's in your pockets, you're able to snatch the keys with a hook on a string. As soon as you get the door open, the jail keeper comes to check on you. Do you fight him or convince him to let you go?
+FIGHT THE JAIL KEEPER: Explore 3 (mushroom, -1 reputation), Explore 6 (coin, ore, -1 reputation)
+CONVINCE THE JAILKEEPER TO FREE YOU: Explore4 (three coins, + 1 reputation), Explore 7 (four coins, rope, +2 reputation)
+
+59
+You reach a cave with walls as smooth as glass. Hundreds of snails the size of sheep crawl along the walls and ceiling in every direction. They leave gooey trails behind them that crisscross the cave in a complex pattern. Before you're able to take more than a few steps, the snails start sliding slowly toward you, converging on your group. Do you try to fight them off or go back the way you came?
+TURN AROUND: Explore 2 (coin)
+FIGHT THE SNAILS: Explore 4 (two coins, potion, +1 reputation), Explore 7 (mushroom, ore, potion, +1 reputation)
+
+60
+A round doorway, carved into the rock opens on a dark stairway. You climb until you come upon a large, brass wheel, half-buried in the ground. It's covered in strange markings, and soon you discover it is a map of the surrounding caves. You could spend time digging the wheel out of the ground to access the entire map, or you could continue exploring.
+DIG THE WHEEL OUT: Explore 4 (gain 1 extra cave card), Explore 6 (gain 1 extra cave card, amethyst)
+KEEP EXPLORINGE: xplore 3 (three coins), Explore 6 (five coins, rope)
+
+61
+Your party travels through a low, cold grotto, the walls covered in glowing, blue moss. Suddenly you come across a bearded man who carries a case overflowing with scrolls. "I am Breric, the noted cartographer. Care to buy a map?" Do you haggle with the man or continue exploring?
+HAGGLE FOR A MAP: Explore 3 and Pay 1 Coin (gain 1 extra cave card, + 1 reputation)
+KEEP EXPLORING THE GROTTO: Explore 3 (coin, fish), Explore 6 (four coins, rope) Failure Description: You have to flee from the jail keeper and don't have time to find a safe place to build the next outpost . . \(~~,· -5Sst~~~~9~ 12:?!\__·,_~\_)J . 15
+
+62
+You follow a square tunnel, the walls smooth and masterfully cut. Before long you reach a tall chamber; in the center sits a great crystal, floating in mid-air. A dim, violet glow emanates from it and as you approach a voice fills the air. "I am the crystal of oracles. If you can prove your worth, I will give you knowledge." Do you continue speaking to the crystal or explore some of the connecting passages?
+EXPLORE THE PASSAGES: Explore 3 (two coins), Explore 5 (coin, fish, mushroom)
+PROVE YOUR WORTH TO THE CRYSTAL: Explore 3 (+1 reputation), Explore 6 (gain 1 extra cave card, +2 reputation)
+
+63
+You stop at a trading post settled next to an underground river. Bright lanterns hang on the dock, and little boats fastened with thick rope bob up and down in the water. A bald man in a long, red robe is standing nearby, and he approaches as soon as he spots you. "I've got a business proposition. I've obtained a map to an old treasure hold, but the way is crawling with giant rats. I'd be willing to split anything we find if you'd come with me." Do you join the man or stay at the trading post to haggle?
+HAGGLE AT THE TRADING POST: Explore 2 and Pay 1 Coin (fruit)
+JOIN THE MAN'S QUEST: Explore 3 (coin, +1 reputation), Explore 7 (coin, amethyst, +2 reputation) Bonus: +1 lantern if you own rope.
+
+64
+Your party finds a small raft on the side of a huge, underground river, the water smooth and clear. You decide to climb aboard and see what you can find downriver. Tiny, silver fish trail along beside you, growing in number with each moment. Suddenly, the fish scatter in every direction, disappearing into the depths, and something large and dark looms underneath your little raft. Four red eyes open and a monstrous fish emerges from the water, knocking your raft toward the shore. Do you paddle for shore or fight the huge fish?
+PADDLE FOR SHORE: Explore 3 (coin)
+FIGHT THE HUGE FISH: Explore 5 (two fish, + 1 reputation), Explore 8 (fish, amethyst, +l reputation) 16
+
+65
+A thin woman with a wooden staff and dark cloak approaches you, her face hidden in the shadow of her hood. "I must ask something of you," she says. "My traveling companions betrayed me and stole a precious tome of knowledge. It tells the legend of an ancient kingdom that ruled these caves long ago, and is the last of its kind. Could you please help me retrieve it?" Do you decide to help the woman get the tome back, or do you hunt down the group alone and take the tome for yourself?
+HELP THE WOMAN: Explore 3 (+1 reputation), Explore 6 (paper, +2 reputation) GO
+GET THE TOME FOR YOURSELF: Explore 4 (gain 1 extra cave card, -1 reputation), Explore 6 (five coins, gain 1 extra cave card, -1 reputation)
+
+66
+Your party finds a small boat on the side of a smooth, clear river. You decide to board and see what you can find further downstream. You pass forests of huge mushrooms, bats hanging in silent swarms in tall chambers, and even a few outposts along the rocky bank. As you turn into a new passage, the water grows rough. Sharp, deadly rocks jut up in every direction, threatening to cut your little boat to pieces. There's a sandy shore on your right. Do you stop here or brave the rapids?
+STOP THE BOAT AND EXPLORE: Explore 2 (potion), Explore 4 (two fish)
+BRAVE THE RAPIDS: Explore 7 (six coins, ore) 6 7 - You venture into a massive cavern filled with the ruins of a crumbling city. As you wander among the cracked stone walls you smell burning wood, and soon come upon a campfire, a cloaked traveler sitting behind it. "I've explored every inch of this city, and you'll find no treasure. But, for a price, perhaps I could be persuaded to part with my knowledge of this place." For all you know, he may have just arrived. Do you sit and convince him to tell you about the city, or do you continue exploring it yourself?
+CONVINCE THE MAN TO TELL YOU ABOUT THE CITY: Explore 2 and Pay 1 Coin (gain 1 extra cave card, +1 reputation), Explore 5 (gain 1 extra cave card, +2 reputation)
+EXPLORE THE CITY YOURSELF: Explore 3 (potion), Explore 8 (amethyst, pot)
+
+68
+You pass through a grotto covered with ancient carvings of fish and spiders. You spot a circle of tents and an eerie, dying campfire letting off a thin trail of smoke. You start to hear bouts of coughing which grow louder as you approach. Near the fire, a disheveled woman lies in a heap on the ground. She's huddled in a bianket, and it seems a great effort for her to open her eyes and lift her head. "Help us," she croaks. "We've all been poisoned. We need a broth made of Grackroot but we are too weak to find any." Do you search for the Grackroot and help them? Or do you loot their camp while they're powerless to stop you?
+LOOT THE CAMP: Explore 2 (three coins, -1 reputation), Explore 5 (three coins, rope, -1 reputation)
+HELP FIND THE GRACKROOTE: xplore4 (mushroom, +l reputation), Explore 7 (coin, ore, +2 reputation)
+
+69
+Your party finds a tent set up underneath a massive face cut into the cave rock. The face has four eyes and is covered in intricate, geometric designs. The embers of a campfire still glow, and you assume the owner of the tent is nearby. At the far end of the cave, you spot the owner returning-a squat, grey-skinned creature with round, red eyes and rows of spikes on its back-it's a glogo. Do you loot his tent before he can make it back? Or do you wait and attempt to befriend the glogo?
+BEFRIEND THE GLOGO:E xplore 4 (coin, +1 reputation), Explore 6 (two coins, mushroom, +2 reputation)
+LOOT HIS TENT: Explore 3 (potion, -1 reputation), Explore 7 (coin, pot, potion, -1 reputation)
+
+70
+Your party comes upon a chamber filled with white, sticky spider webs. In the center of the chamber, someone has been wrapped in spider silk and is wriggling about making muffled, desperate cries for help. You can't see any spiders, but your pulse quickens at the thought of entering the deadly lair. Do you risk cutting the trapped person loose? Or do you move on as quickly as you can?
+ATTEMPT TO SAVE THE PERSON: Explore 5 (gain the lowest available new villager, +l reputation)
+MOVE ON: Explore 3 (two coins, -1 reputation), Explore 7 (four coins, paper, -1 reputation)
+
+71
+Your party reaches the entrance of a great, underground library. Massive iron doors block the way, but a short doorkeeper sits in front of them at an old desk, perusing an ancient-looking book. "For a fee, you may visit the library," he says. Do you haggle to get inside, or leave the man to his dusty tomes?
+HAGGLE TO VISIT THE LIBRARY: Explore4 and Pay 1 Coin (paper, +1 reputation)
+KEEP EXPLORING: Explore 3 (coin), Explore 6 (four coins, rope) 17
+
+72
+You come upon a bearded traveler in leather armor standing at the entrance to the caverns. He tells you of a haunted cave filled with treasure. As he describes the immeasurable wealth contained in the secret stash, curiosity overwhelms you, and you follow his directions down to the cave. As you approach the entrance, a cold chill runs down your back and you hear a faint whispering on the subterranean breeze. Skulls lie in a heap just inside. You're shinning your lanterns in, gathering your courage to enter, when you hear a sudden scream from the chamber behind you. Do you venture inside the haunted cave, or investigate the scream?
+VENTURE INTO THE HAUNTED CAVE: (read paragraph 110)
+INVESTIGATE THE SCREAM:( read paragraph 111)
+
+73
+You reach a great, black pool. As you walk along the shore, you notice two bright eyes staring at you from beneath the water. Moments later, an enormous fish emerges, scales the size of cart-wheels shimmering in your lantern light. "I am the great Zorhim," says the fish. "And I have need of your assistance. There is an ancient gemstone that holds the soul of my wife. Return the stone to me and I will offer you a reward." Do you accept his quest or keep exploring the surrounding caverns?
+KEEP EXPLORING: Explore 3 (coin, -1 reputation), Explore 7 (five coins, ore, -1 reputation)
+SEARCH FOR THE GEMSTONE: Explore 5 (fish, potion, +1 reputation)
+SEARCH FOR THE GEMSTONE AND KEEP IT: Explore 5 (three coins, amethyst, -2 reputation) 18
+
+74
+You come across a canvas bag in the middle of a cave, coins spilling out of the top. Do you grab the bag and run before anyone else can claim it? Or do you search around for the owner of the bag?
+TAKE THE BAG: (read paragraph 112)
+SEARCH AROUND FOR THE OWNER OF THE BAG: Explore 4 (read paragraph 113) FailureD escriptio(nf or SearchA roundf or the Ownero f the Bag); You spend hours looking, but can't seem to find the owner of the bag. As you head back to get the bag, you find another man snatching it and, though you chase after him, he escapes with the coins. You've wasted too much time, and return to the village without having found a good place for an outpost.
+
+75
+Your party comes upon an old, wrinkled man lying on the floor of the cave. His bag sits nearby, and you catch sight of a pile of coins inside. "I ate a poisonous mushroom," he says, coughing. "Can you take me to the nearest inn?" Do you take him to an inn or attempt to take his bag in his weakened state?
+STEAL THE MAN'S BAG: Explore 2 (three coins, -1 reputation), Explore 5 (six coins, -1 reputation)
+TAKE THE MAN TO AN INN: Explore 3 (+1 reputation), Explore 6 (five coins, +1 reputation) Failure Description (for Steal the Man's Bag): The man calls for help, trying to keep you from his bag with a stone dagger he had hidden in his cloak. A pack of glogos suddenly appear and chase you away from the man, and you're forced to flee to the village without finding a safe place for the next outpost.
+
+76
+You follow a passage that opens into a cavern so huge you can't see where it ends. Suddenly, you hear cries for help, and you round a boulder where you find two travelers surrounded by masked bandits. "Stay put if you know what's good for you," says one of the bandits when they see you. Do you try to stop the them or move on and keep exploring?
+KEEP EXPLORING: Explore 3 (two coins, -1 reputation), Explore 7 (two rope, -1 reputation)
+FIGHT THE BANDITS: Explore 5 (mushroom, +2 reputation), Explore 7 (mushroom, rope, +2 reputation)
+
+77
+As you're venturing along a narrow cave road, onto your path jumps a grey, stone-skinned creature with red eyes and rows of spikes on its back-a glogo. The creature is holding a large spear. "Soft-skins belong on the surface," he says. Do you fight him or convince him you're a friend?
+FIGHT THE GLOGO: Explore 3 (rope, -1 reputation)
+CONVINCE HIM YOU ARE A FRIEND: Explore 4 (coin, +l reputation), Explore 6 (two coins, pot, +1 reputation)
+
+78
+You find a wooden bridge leading over a dark chasm. Bats fly in a swarm past you, squealing as you cross the bridge. On the far side is a wide ledge with a trap-door in the floor. There's a barred window in the middle of the door, and you peer down into an oubliette. At the bottom sits a pale, blue frog-creature. He looks up, his eyes wide in surprise. "Please get me out of here!" he pleads. There's a thick lock on the door. Do you try to break the lock and open the door to save the frog, or move on and keep exploring the area?
+LEAVE THE FROG TO HIS PRISON: Explore 3 (coin, -1 reputation), Explore 7 (two pots, -1 reputation)
+SAVE THE FROG: Explore 4 (rope, +1 reputation)
+
+79
+You follow a narrow ledge along a deep, round pit, descending further and further into the darkness. At the bottom, the rocky floor is covered in dark slime, but you cannot tell where it came from. One of your party sets foot on the slime, but he becomes completely stuck and it takes your entire group to pull him free. At the far end of the slime lies a passage opening lined with cracked columns. Do you attempt to cross the slime or journey back up the way you came?
+CROSS THE SLIME: Explore 6 (amethyst, potion)
+JOURNEY BACK THE WAY YOU CAME: Explore 3 mushroom), Explore 5 (five coins)
+
+80
+You come upon a giant, iron chest as large as a house. The chest is dark and weathered, and covered with intricate, triangular designs. Do you try to open it or continue on your way?
+ATTEMPT TO OPEN THE MASSIVE CHEST: Explore 7 (nine coins, paper, + 1 reputation)
+KEEP EXPLORING: Explore 3 (mushroom), Explore 4 (two coins, mushroom)
+
+81
+You arrive at a trading post at a crossroads of caverns. Travelers of every shape and size surround the little, wooden shack-stone-skinned glogos, wide-eyed fishfolk, and merchants dressed in patched, colorful robes. The air is filled with the smell of spices, dirt, and fried-food. Would you like to stop and haggle?
+KEEP EXPLORING: Explore 2 (coin), Explore 5 (ore)
+HAGGLE: Explore 3 and Pay 1 Coin (paper, +1 reputation), Explore 6 and Pay 2 Coins (two ore, +1 reputation) 19
+
+82
+Your party hikes up the path along a deep chamber. When you arrive at the top, you come upon a huge, black bat, staring at you with red eyes. The bat spreads its wings as if readying itself to swoop down on you. Do you avoid the bat or try to fight it?
+HIDE FROM THE Bat: Explore 3 (coin, -1 reputation)
+FIGHT OFF THE Bat: Explore 5 (two coins, fish, +l reputation), Explore 7 (four coins, ore, +l reputation) Bonus: +1 lantern per hammer.
+
+83
+A thick mist covers the floor of the passage. You climb a small hill and rest on the top. A sudden rumbling fills the air and the hill lurches, moving up through the cavern. You realize you're actually atop the back of a massive creature. You make your way down its neck, toward the head, where a dark, round eye like a pool of water blinks at you. Do you stay aboard the creature or try to hop off before it takes you too far?
+JUMP OFF AND EXPLORE THE AREA: (read paragraph 114)
+STAY ON THE CREATURE(:r ead paragraph 115)
+
+84
+Following calls for help, you find a man stuck at the bottom of a chasm, his leg wedged under a heavy boulder. He looks up at you in pain, and pleads "It fell on me when I was climbing. Please can you help me get out?" Just as you're considering how you might move such a heavy object, you glance upward to see a huge, hairy spider with green eyes. The spider is heading straight for the trapped man. Do you help him or leave before the spider goes for you as well?
+HELP THE MAN FIGHT THE SPIDER: Explore 5 (rope, +2 reputation) Bonus: +1 lantern if you own rope.
+LEAVE THE POOR MAN AND KEEP EXPLORING: Explore 3 (two coins, -1 reputation), Explore 7 (two coins, ore, potion, -1 reputation) 20
+
+85
+Your party passes over a wooden bridge above an underground waterfall. On the other side is a man in a blue cape standing before a wooden cart overflowing with crates and bags. One of the wheels of the cart lies nearby, cracked and broken on the cavern floor. "If you help me repair my cart, I will give you a reward," says the man. The man seems exhausted and weak-if you wanted, you could probably take what you wanted from his cart by force. Do you help him with the wheel or steal from his cart?
+STEAL FROM THE CART: Expllore 3 (mushroom, potion, -1 reputation), Explore 6 (two coins, rope, -1 reputation)
+HELP THE MAN REPAIR THE WHEEL: Explore 5 (pot, potion, +1 reputation), Explore 8 (two pots, potion, +1 reputation) Bonus: +1 lantem per hammer.
+
+86
+In a dark, narrow tunnel your next step sends you tumbling down a muddy chute. You land, bruised and filthy in a large room covered with empty bodies, sucked dry by giant spiders. Webs are everywhere and you hear clicking noises coming toward you through the tunnels. Do you stay and fight them off? Or do you run away and cover the chute with wood to save others?
+COVER THE CHUTE WITH WOOD: Explore 3 (mushroom, + 1 reputation)
+FIGHT THE SPIDERS: Explore 4 (three coins, +1 reputation), Explore 7 (three coins, amethyst, +1 reputation) ~ Malorie Laukat 8 7 - As you walk through the caves filled with buildings, some completed and some under construction, you see an empty patch of mucky swamp that no one has claimed. It would take a lot of work and luck, but you might be able to reclaim it for building. Do you forget the swamp and move on? Or do you claim it and attempt to drain it for building?
+KEEP EXPLORING: Explore 5 (pot)
+ATTEMPT TO DRAIN THE SWAMP: Explore 3 (mushroom, +1 reputation), Explore 8 (two coins, amethyst, + 1 reputation)
+
+88
+As you trudge through a muddy cavern, you come upon a small hut. When you approach, a thinfaced woman answers the dr .>r. "Could you find me some food? I'm awfully hungry. I'd be happy if you could find me a mushroom, or a fish," she says. As you speak to her, you catch a glimpse of a bag on the floor inside spilling over with coins. Clearly the woman could afford her own meal. If you wanted, you could probably push her aside and steal the bag of coins. Do you find her something to eat, or do you steal her bag of coins?
+STEAL THE BAG OF COINS: Explore 3 (four coins, -1 reputation), Explore 6 (seven coins, -1 reputation)
+SEARCH AROUND THE CAVERN FOR FOOD: Explore 4 (three coins, +1 reputation), Explore 7 (six coins, +2 reputation) 8
+
+9
+You come upon a square, stone vault standing in a chilly cavern guarded by glogos. Their red eyes glow in the darkness, and they're carrying heavy spears. Rows of small spikes run down their backs. You watch as a small caravan of them approaches the vault, dropping heavy, wooden chests at the door. The vault is probably brimming with treasure. Do you try to sneak inside, attack the guards, or move on and keep exploring?
+KEEP EXPLORING: Explore 2 (potion)
+SNEAK INSIDE: Explore 4 (four coins)
+FIGHT THE GUARDS: Explore 6 (ten coins, -1 reputation) 9 Q-Near a small inn at the center of a cave filled wrtn slick moss, a cloaked man approaches you. "I ~eed help fighting off a swarm of giant rats that keep attacking our inn. Can you help me fight them?" As :he man speaks, you notice his leg is bandaged and he's ,a ding his side as if in pain. In his weakened state, you cou d probably raid the inn and steal anything valuable. Do you stop to help defend the inn, or do you steal from it?
+DEFEND THE INN FROM THE RATS: Explore 4 (+1 reputation), Explore 6 (coin, rope, +2 reputation)
+STEAL FROM THE INN: Explore 3 (two coins, -1 reputation), Explore 7 (five coins, amethyst, -2 reputation)
+
+91
+Your party stops to rest near a hot spring. While walking near the spring, you notice an old sign post that has been knocked down. You prop it back up again and read "City of Sarsus". What luck! Tales are told among explorers of the lost city of Sarsus, a place brimming with valuable artifacts and ancient wonders. But you can't tell which way the sign pointed. Do you stay near the hot spring and see what you can find, or do you make a guess at the direction of the lost city?
+STAY AT THE HOT SPRING: Explore 3 (mushroom), Explore 5 (two coins, two mushrooms)
+SEARCH FOR THE LOST CITY: Explore 7 (four coins, pot, +1 reputation) Bonus: +1 lantern per quill. 9
+
+2
+Your party returns to a well-explored area of the caves and, what luck! You happen upon a skilled fishfolk guide. He tells you he can show you a secret passage that leads to the richest collection of amethysts he's ever seen. The only challlenge is you have to swim through a long, dangerous underwater tunnel which will give you no opportunity to stop and take a breath. Do you stay in the safety of the familiar caves? Or do you brave the underwater passage, trusting your breath support and the skill of your party?
+STAY WHERE IT'S SAFE: Explore 3 (two coins)
+BRAVE THE UNDERWATER TUNNEL: Explore4 (coin, fish, +1 reputation), Explore 8 (coin, two amethysts, +1 reputation) ~ Malorie Laukat
+
+93
+You find an old well behind an abandoned, stone cave dwelling. As you stop to pull up a drink, you hear soft, soothing singing coming from below. Do you descend to investigate or leave as quickly as possible and keep exploring?
+LEAVE THE WELL QUICKLY: Explore 2 (coin)
+DESCEND TOWARD THE SINGING: (read paragraph 116) 21
+
+94
+You arrive at the door of an underground monastery. A bald monk opens the door when you knock. "We can share with you great knowledge if you prove your worth," he says. As he speaks, you notice a dock nearby where a traveler is fishing. Do you continue speaking with the monk? Or do you bid him farewell and try to catch some fish?
+CATCH SOME FISH: Explore 3 (fish)
+PROVE YOUR WORTH TO THE MONK: Explore 5 (paper, + 1 reputation), Explore 7 (two paper, + 1 reputation)
+
+95
+As you journey through a wide cavern your party is waylaid by a pack of stone-skinned glogos. "These caverns belong to us. Turn back now," they say, blinking their round, red eyes at you. They carry heavy spears. Do you turn back, attempt to befriend them, or stand and fight?
+TURN BACK: Explore 3 (coin)
+ATTEMPT TO BEFRIEND THEM: Explore 4 (mushroom, + 1 reputation)
+ATTACK THE GLOGOS: Explore 7 (four coins, amethyst, -1 reputation)
+
+96
+In a sandy cave, the sunlight streaming down from cracks in the ceiling, a fishfolk man approaches you. He hands you an old, heavy key. "This key opens a door to an ancient vault of treasure, but I cannot find it, and my search has brought me nothing but trouble. Please take it," he says. He explains where he's searched and lists his theories for where it might be. Do you take up his search for the door? Or do you give the key to the next traveler you meet?
+GIVE THE KEY AWAY AND KEEP EXPLORING: Explore 3 (potion, + 1 reputation)
+SEARCH FOR THE DOOR: Explore 4 (two coins, fish), Explore 7 (six coins, amethyst, +1 reputation) 22
+
+97
+Your party comes upon an encampment with glowing torches and a roaring fire. A heavy, bearded man welcomes you and insists you sit and eat with him. The more you talk with him, the more unhinged he seems. He offers you a plate filled with a strange, dark meat. Do you eat the meat and hope that your belly can handle it? Or do you attempt to talk your way out of eating without offending the bearded man?
+EAT THE MEAT: Explore 3 (injure one of your villagers, +2 reputation)
+ATTEMPT TO TALK YOUR WAY OUT OF IT: Explore 5 (pot, potion), Explore 7 (two pots, +1 reputation) Failure Description (for Eat the Meat): You grow extremely ill and crawl your way back to the village. Hopefully with a good night's sleep you'll feel better. Failure Description (for Talk Your Way Out of It}: You anger the large man and he flies into a rage, swinging at you with his hammer-like fists. You flee back to the village, unable to find a good place for the next underground outpost.
+
+98
+You reach a salty, underground bay, the waves lapping softly against a sandy shore. Out on the water, you can see a ship, the windows lit brightly. You consider swimming out to the ship, but as you stand near the water, you notice a bed of clams below the waves. Do you board the ship or dive for the clams? If they had any pearls, you'd be able to sell them.
+DIVE FOR THE PEARLS: Explore 3 (three coins)
+SWIM TO THE SHIP: (read paragraph 117)
+
+99
+You come upon a white-haired man swimming alone in a pool. His gear is piled up on the shore nearby, just beyond a large boulder. You could probably take his coin purse and hide before he got out of the water. On the other hand, he may have valuable information about the surrounding caverns. Do you attempt to steal from the man or befriend him?
+BEFRIEND THE MAN: Explore 3 (potion, +1 reputation)
+STEAL FROM THE MAN: Explore 4 (four coins, -1 reputation), Explore 7 (four coins, amethyst, -1 reputation)
+
+100
+Yoreuach a cavern filled with steaming hot springs, the smell of sulfur filling the air. In one of the springs you spot a glittering rock, but the water is probably too hot for your bare hand. Do you attempt to get the rock? Or do you continue exploring?
+KEEP EXPLORING: Explore 3 (coin), Explore 4 (mushroom)
+ATTEMPT TO GET THE ROCK: Explore 6 {amethyst)
+
+101
+The woman emerges from the bars and laughs wickedly as she transforms into a dark, shadowy demon with flaming eyes. "I'm finally free after hundreds of years! Thank you, foolish creatures. Now I will destroy you," shrieks the creature. Do you try to run and hide, or fight the demon?
+ATTEMPT TO HIDE FROM THE DEMON: Explore 2 (coin, -2 reputation)
+ATTEMPT TO STOP THE DEMON: Explore 8 (amethyst, ...3 reputation)
+
+102
+"I can tell you more when we reach my camp," says the bearded man. He beckons you to follow and leads you away from the circle of merchant tents, down a few dark passages, stopping in a round cave. You don't see any sign of his camp. Suddenly, five men emerge from the shadows, armed with heavy clubs and rocks. 11My proposition is this," says the man with a wicked grin. "Empty your pockets and we won't hurt you." Do you pay the thugs or fight them?
+PAY THE THUGS: Explore 2 and Pay 1 Coin (-1 ~eoutation)
+FIGHT THE THUGS: Explore 5 (two coins, rope, +1 reou~a:.ion), Explore 7 (four coins, rope, +1 reputation)
+
+103
+You decide to accept the bald man's offer and relax in the hot spring. You leave your belongings on the shore nearby and step into the soothing, warm water. You're just closing your eyes and have found a place to sit when you notice something strange. Everyone in the pool is looking at you, their eyes wide and hungry. You watch in horror as they inch toward you, their sharp teeth and snake-eyes shining. It's a trap! Do you run off to hide and leave your belongings? Or do you stand and fight them?
+RUN AND HIDE: Explore 2 (lose two coins)
+FIGHT THE MONSTERS: Explore 5 (four coins, + 1 reputation), Explore 7 (five coins, fish, +2 reputation)
+
+104
+You tie the poor creature to a rock on the ground. He moans and struggles, kicking his legs and letting out a high-pitched wail. As he rages, the creature's skin turns red and he bursts from the ropes, growing almost instantly to a massive size. His huge, round belly is large enough consume your whole party. 111 told you to let me go!" he roars, his voice shaking the cave. 11Now I will eat you up!" Do you try to reason with the monster, fight it, or hide?
+HIDE: Explore 2 (nothing)
+FIGHT THE MONSTER: Explore 6 (seven coins)
+REASON WITH THE MONSTER: Explore 7 (amethyst, +1 reputation) Bonus: +l lantern per quill.
+
+105
+You open the box and place the heavy, stone lid nearby. Inside there appears to be a dark, swirling liquid. The liquid oozes out of the box, forming itself into the figure of a woman, her features dripping, her color, obsidian. "Thank you for freeing me. May I join you to show my gratitude?" Do you allow her to join you or decline?
+DECLINE: (read paragraph 106)
+LET HER JOIN YOU: (gain the Liquid Woman villager) 23
+
+106
+The woman is saddened by your refusal. "Well, at least I can offer yoIu some reward." She tells you where you can find a stash of gold. (three coins}
+
+107
+
+You decide to try and get the woman and the gold out of the pit. She doesn't respond when you call to her. You lower a hand to help her out, and she instantly latches onto it. Her eyes are wild and her face is covered with dirt and grime. You can feel her claw-like nails digging into your wrist. Do you let go and forget about her, or help her up to the top?
+LEAVE HER IN THE PIT AND CONTINUE EXPLORING: Explore 4 (coin, fish, -1 reputation)
+PULL HER OUT OF THE PIT: (read paragraph 108}
+
+108
+You pull her up, wincing from the sharp pain of her nails digging into your skin. When she reaches the top, she sits against the wall and bursts into tears. "Glogos have kept me down there for weeks," she finally says. "As a token of gratitude, I can tell you where they keep a stash of treasure."
+SEARCH FOR TREASURE: Explore 2 (+2 reputation), Explore 6 (six coins, +2 reputation) Failure Description:Y ou spend too much time looking for treasure and can't find a safe place to build.
+
+109
+You light a huge bonfire near the frozen glogo and the ice slowly melts until the creature collapses to the floor. He soon opens his red, round, glowing eyes and thanks you. "I can't remember how long l1ve been stuck there. I'd like to join you until my debt is repaid," he says. Do you let him join you?
+TAKE THE GLOGO WITH YOU: (gain the glogo villager, +1 reputation)
+DECLINE HIS OFFER AND GO ON YOUR WAY: (mushroom, +2 reputation) 24
+
+110
+You ignore the scream and venture into the haunted cave. The passage winds in every direction until you've completely lost your way. A high-pitched wail fills the cave, and soon a pale ghost appears, floating in midair, its clothes ragged and torn. You feel yourself trembling all over, barely able to speak. Do you run and hide from the ghost or attempt to converse with it?
+HIDE FROM THE GHOST: Explore 3 (two coins, -1 reputation)
+CONVERSE WITH THE GHOST: Explore 4 (three coins, +1 reputation), Explore 8 (two amethysts, +1 reputation) Bonus: +1 lantern per quill.
+
+111
+You forget the cave and run toward the scream. You follow a passage and come upon a woman with long, black hair surrounded by snails the size of dogs, inching slowly toward her. She has nowhere to run, and soon the snails will have her. You notice a rock outcropping above her where you might be able to pull her up and flee before the snails caught you. On the other hand, if you fought the snails, you'd also be able to save the woman's possessions, currently spilled on the cave floor nearby. Do you try to fight the snails, or do you avoid them and pull the woman to safety?
+PULL THE WOMAN TO SAFETY: Explore 3 (+1 reputation)
+FIGHT THE SNAILS: Explore 7 (three coins, amethyst, + 1 reputation)
+
+112
+You pick up the bag and run, coins spilling behind you as you rush away. The noise of the coins' rattling fills the cave. Suddenly, an angry man with huge muscles halts you. "Stop! Those are my coins!" Do you stop and reason with him or try to escape and hide with the coins?
+REASON WITH HIM: Explore 2 (+1 reputation)
+TRY TO HIDE FROM THE MAN: Explore 6 (eight coins, -1 reputation) Failure Description (far Reason with Him): Even though you offer to return the coins you can't calm the man's fury and you're forced to flee back to the village before you can find a good place for an outpost. Failure Description (for Hide from the Man): You can't seem to lose the angry man and you have to run back to the village before you 'ind a safe place for an outpost, dropping the bag of coins in your hurry to get away.
+
+113
+Before long you find the owner of the bag- a huge, muscled man, and return his bag of coins. He's so happy, he gives you a few. t\vo coins, + 1 reputation)
+
+114
+You slide down the creature's side, jumping onto a ledge nearby. You're just brushing 1ourself off when a man approaches you. He has eathery, brown skin and his white hair sticks out in e,·ery direction. "That was a rare rock mammoth," he savs. ul've been tracking the creature for months. If you ne p me study it, I'll make it worth your while." Do you ne p nim study the rock mammoth or move on and keep exploring?
+KEEP EXPLORING: Explore 3 (coin)
+HELP THE MAN WITH HIS STUDIES: Explore 5 (paper, +1 ..e pu.:a.-on , Explore 7 (four coins, paper, + 1 reputation) Bonus: +1 lantern per quill.
+
+115
+You stay on the creature and it travels through the web of caverns for hours. As you're sitting on its rocky back, you notice a muffled yell. At first you dismiss it, but then follow the sound up toward the creature's head. Leaning over, you find that there's a man hanging out of the gigantic mouth! His two legs kick sporadically, but he's surely exhausted. Most of the man's body is still inside the creature's mouth. Do you attempt to free him? Perhaps you could hit the massive creature in the eye, hoping that it opens its jaw. On the other hand, it might be a good idea to get away as quickly as possible. What do you do?
+ATTEMPT TO FREE THE MAN: Explore 5 (gain the lowest available new villager, +2 reputation) Bonus: +1 lantern per hammer.
+LEAP OFF AND EXPLORE THE AREA: Explore 3 (two coins), Explore 7 (two ore) Failure Description (for Attempt to Free the Man): You hit the massive creature in the eye and it throws you from its head. It may be large and slow, but it turns and starts to chase you. You run all the way back to your village, unable to find a safe place for the next outpost.
+
+116
+Your party climbs down the well; your feet splash into the icy water as you hit the bottom. Holding out your lanterns, you can make out a woman near the far end of the cistern. She has pale, green skin and large, bright, empty eyes. She has no hair and on the tips of her fingers are long, black claws. "So glad you could join me," she says. "I get so lonely down here." Human bones lie strewn about the well, making your blood turn cold. To your left, you notice a narrow passage where you could run and hide. Do you stand and confront her or try to hide?
+STAND AND FIGHT: Explore 5 (pot, +1 reputation), Explore 7 (two coins, pot, potion, +1 reputation)
+ATTEMPT TO HIDE: Explore 3 (mushroom, -1 reputation) Failure Description (for Stand and Fight}: You try to fight the clawed woman but barely make it out of the well, escaping through the side passage and fleeing all the way back to your village before you can find a safe place for an outpost. Failure Description (for Attempt to Hide): You can't seem to lose the woman and flee back to the village before you find a good place to build the next outpost. 25
+
+117
+You swim through the bay to the ship, climbing up over the side. As soon as you're on your feet, a band of skeletons, armed with curved swords, approaches you. You notice a small boat tied to the side of the ship. You might be able to cut it loose and escape. Do you stand and fight or escape on the boat?
+ESCAPE ON THE BOAT: Explore 3 (coin, fish, -1 reputation)
+FIGHT THE SKELETONS: Explore 4 (two coins, + 1 reputation), Explore 7 (four coins, amethyst, +1 reputation)
+
+118
+Ahead of you, carved into the rock, is a long, narrow stairway. You cannot see where it leads but there is a blue glow illuminating the stone beyond the first turn. As you climb the first few steps, you realize that dried blood covers the way. Do you continue on unafraid? Or do you decide you'll look for something less threatening?
+FOLLOW THE BLOOD: Explore 3 (read paragraph 119), Explore 6 (read paragraph 120)
+TURN AROUND AND EXPLORE ELSEWHERE: Explore4 (two coins, potion) ~ Malorie Loukot 119 _ -You go a bit fmther, but the smell of blood deters you. Your party turns around to explore a lessforbidding path. (mushroom) 120_- You follow the blood into a small room to find a mound of half-eaten fish and small animal carcasses. You quickly search the room and leave before anything comes back. (four coins, rope, +1 reputation) 26
+
+121
+You come upon a group of fishfolk conversing around a small fire. As you approach you see that there is a seriously injured fishfolk child in the midst of them. Someone in your group is trained in medicine and you wonder if you might be able to help the child. Do you offer your help? Or do you leave the fishfolk to their own?
+CONTINUE EXPLORING: Explore 2 (fish, -1 reputation)
+HELP THE FISHFOLK: Explore 4 (fish, +1 reputation), Explore 7 (four coins, pot, +2 reputation) Bonus: +2 lanterns if you have a potion. ~ Malorie Loukat
+
+122
+Your party travels along a cobbled road in a vast, windy cavern. Soon you come upon a man clothed in blue robes and a white, fur hat. Following behind is a rather underfed person weighed down by a heavy pack. "Hurry up, slave!" says the man, hitting the poor soul with his walking stick. The slave cries out, covering the face, and you wonder how the person came to be in such an unfortunate situation. Do you attempt to haggle with the ·man and buy the slave's freedom? Or do you attack the man and steal his possessions, inviting the slave to return to your village with you?
+HAGGLE TO BUY THE SLAVE'S FREEDOM: Explore4 and Pay 2 coins (gain the lowest available new villager, +2 reputation)
+ATTACK THE MAN TO FREE THE SLAVE: Explore 3 (two coins, gain the lowest available new villager, -1 reputation), Explore 7 (six coins, gain the lowest available new villager, -1 reputation)
+
+123
+You reach a precipice and look down to see the ruins of a cave city at the bottom of a large ravine. While the buildings have crumbled and few structures are left intact, it appears that the city was abandoned rather than destroyed. As you scan the walls of the ravine for a way down, you realize you will have to climb down the sheer cliffs. Do you attempt to scale the rock walls to reach the city? Or do you spend more time looking for a way down?
+SCALE THE WALLS: Explore7 (six coins, pot 1 +1 reputation) Bonus: +l lantern per rope you own.
+LOOK FOR ANOTHER WAY DOWN: Explore 3 (Read paragraph 124), Explore 5 (Read paragraph 125) ~ Malorie Loukot
+
+124
+You look around but can't seem to find an easier access to the city. On your way, however, you see what must have been watch stations at the corners of the ravine and search them for anything valuable. jt\-vo coins) ~ "."alorie Loukot
+
+125
+You search the perimeter and discover ,hat while there is no easy way down, there is an access ooim about twenty feet into the ravine that will lead you safely to the city. You slide down to the access successfully but once there, you realize that the way is booby trapped and impassible. After searching the edge for valuables, you have to turn back around. :--,•.oc o·ns, paper)
+
+126
+As you begin your journey, one of your party members becomes violently ill. He must have eaten contaminated food before your departure. Do you turn around and take him back? Or do you continue on, hoping that he will recover quickly from his gastric ailment?
+GO BACK HOME: Explore 3 (+1 reputation)
+FORCE YOUR SICK PARTY MEMBER FORWARD: Explore 5 (five coins, fish, injure a party member, -1 reputation), Explore 8 (five coins, fish, rope, injure a party member, -1 reputation) ~ Malorie Loukat
+
+127
+As you travel through a chamber lined with thin waterfalls, your party meets a muscular woman with a shaved head. "There is a small village of fishfolk near here. They stole a chest of gold from me as I was traveling. Will you help me get it back?" she says, her eyes filled with bitterness. You've never heard of fishfolk attacking travelers before. Perhaps the woman isn't telling the whole truth. Do you help her retrieve the gold or seek out the fishfolk and warn them that the woman plans to attack them?
+
+HELP THE WOMAN: Explore 4 (three coins, -1 reputation), Explore 7 (five coins, ore, -1 reputation)
+FIND AND WARN THE FISHFOLK: Explore 3 (cider, +1 reputation) 27
+
+128
+You descend a short wall into a hot cavern filled with mist. In the thick air you can only see a few paces ahead of you. You follow what you hope is a path until you hear loud snorting in the darkness. Moments later, a heavy pigfolk man approaches you. In his hand is a large pickaxe and his face and clothes are covered in dirt. "Thank goodness I found someone!" he says. "Some sort of shadowy demon attacked my comrades and me just as we found a new vein of gold. I barely escaped! But the rest of my crew is trapped. Can you help me save them?" Do you help him save his comrades or sneak away in search of his mine on your own?
+HELP THE PIGFOLK: Explore 4 (cider, +1 reputation), Explore 7 (coin, ore, cider, +2 reputation)
+RANSACK THE PIGFOLK MINE: Explore 3 (two coins, -1 reputation), Explore 6 (coin, amethyst, -1 reputation)
+
+129
+Your party comes upon a well-dressed man leaning on a walking stick, his golden-brown hair tied in a long braid. "These caves are filled with danger. I can guide you through safely if you let me travel with you," he says. From his belt hangs a leather coin pouch. You could probably attack him and take his gold if you wanted. Do you let him travel with you or do you attack the man?
+HIRE THE MAN AS A GUIDE: Explore 3 and Pay 1 coin (fish, +1 reputation), Explore 7 (six coins, pot, +1 reputation)
+ATTACK THE MAN AND TAKE HIS GOLD: Explore 4 (four coins, -1 reputation), Explore 6 (seven coins, -1 reputation)
+
+130
+Splashing ahead through warm, ankle-deep water, you encounter an enormous three-tined fork sticking out of a piece of bright coral. Below it a plaque reads "Trident of the fishfol k. Do not disturb."
+YANK OUT THE FORK: Explore 3 (Read paragraph 131)
+RESIST THE TEMPTATION AND LEAVE THE FORK ALONE: Explore 4 (coin, fish), Explore 7 (six coins, two fish) ~ Alf Seegert 28
+
+131
+The giant fork i
+PUlls out more easily than you expected. Unfortunately for you, the Trident of the fishfolk is not a magical sword yanked loose by an unknown king from a fabled stone, and lacks the associated benefits. Instead, you discover it was simply plugging a leak in the fishfolk's plumbing system. A big one, it turns out. Water gushes free, flooding the cavern. As you hurry to escape, you catch sight of a leather bag just below the water. It's full of coins! (three coins, -1 reputation) ~At/Seegert
+
+132
+In this square, torchlit chamber you witness what appears to be a game of "Tic-Tac-Toe" in progress on the floor. However, in this case the X's have been replaced with giant mushrooms, and the O's with various strange fruits. You have no idea what sorts of creatures are playing this game, since none appear to be around. Currently the fruit team is one turn away from victory.
+STEAL THE FRUIT AND MUSHROOMS: Explore 3 (read paragraph 133)
+TAKE THE NEXT TURN OF "TIC-TAC-TOE" AND WIN THE GAME: Explore 4 (read paragraph 135), Explore 6 (read paragraph 134) Failure Description (for Steal the Fruit and Mushrooms): The fruit and the mushrooms do not want to be taken! They sprout tiny legs and clamber back into their places. You sense that there are powers best left undisturbed here. (-1 reputation)
+
+133
+The fruit and the mushrooms do not want to be taken! They sprout tiny legs and attempt to clamber back into their places. You sense that there are powers best left undisturbed here, but decide to ignore the dark consequences and stuff them all into your bag anyway, ignoring their squeaky protests. (two mushrooms or two fruit, -1 reputation) ~ Alf Seegert
+
+134
+After scouring the cave you find a spare fruit, which you add to the game and decide the victory. To your surprise, the little fruits all begin bouncing with squeaky glee, including the fruit you just placed! The losing mushroom team sprouts tiny little legs and arms and begins to make feeble wailing noises while wandering aimlessly, mortally stricken with defeat. Before long, they all fall over, motionless. Then they get right up again and begin laughing and dancing with uncanny mirth. It appears they all want to play another game. You find this animated fruit and fungus display unnerving but entertaining, as will your villagers. (fruit, mushroom, +2 reputation) ~ Alj Seegert
+
+135
+After scouring the cave you find a spare fruit, which you add to the game and decide the victory. To your surprise, the little fruits all begin bouncing with squeaky glee, including the fruit you just placed! -he losing mushroom team sprouts tiny little legs and arms and begins to make feeble wailing noises while wandering aimlessly, mortally stricken with defeat. Before long, they all fall over, motionless. Then they get right up again and begin laughing and dancing with uncanny mirth. It appears they all want to play another game. Just as you accept, one of your party members trips on a rock and crushes one of the mushrooms. Little cries of terror fill the cave as the fruit and mushrooms scurry away, but not before you catch one or two of them. (coin, -1 reputation, fruit or mushroom)
+
+136
+You stumble into an echoing, candle-lit chamber strewn thickly with spider silk. Perhaps unsurprisingly, the room also contains a large number of oversized spiders. But oddly enough, each spider in the room seems exceptionally well-dressed, elegant even. Most are seated, while a few rest their abundant limbs on these silky strands. One spider coughs politely, as if to suggest that you are interrupting something. One chair remains unoccupied.
+ATTACK THE SPIDERS, YELLING "DIE, DENIZENS OF THE EIGHT-LEGGED EMPIRE!": Explore3 (readp aragraph 137)
+TAKE A SEAT AND ATTEMPT TO CONVERSE: Explore 6 (read Paragraph 138) ~ Alf Seegert
+
+137
+The booming echo of your voice drives the spiders panicking from the room before you can lay waste to the arachnid horde. You stand alone in a chamber of collapsed chairs as a strangely empty feeling wells up inside you. You can't help but feel that you missed the point somehow. (two coins, -1 reputation) ~ Alf Seegert
+
+138
+If these spiders' multiple lidless eyes could blink nervously, they would do so right now. Their legs and mandibles twitch audibly. But on seeing you take a seat, they eventually settle down. A genteel spider in the corner nods appreciatively, counts eight, and the music begins ... You had never considered what brilliant string players spiders might be, but now you're convinced that you were missing out. Eight players with sixtythree spindly legs (one missing due to misadventure, no doubt) now operate in precision orchestration. The thicker web strands evoke fat bass notes, expertly plucked, whereas the skinnier threads emit harplike jeweled tones. The spell under which you fall is no dark magic, but merely the peculiar passions of spiders made audible. It appears that you've found a new source of entertainment for your villagers! (two coins, rope, +2 reputation) ~ Alf Seegert 29
+
+139
+You hear squeaking ahead, and moments later encounter the wagon of a subterranean traveling salesman. The wagon is hitched to four enormous ferrets, who appear grateful to take a breather. Painted on the side is the proprietor's logo: "
+BELOW WHOLESALE." A mustachioed man in a half-smashed top hat drops the reins, steps down, and bows theatrically. "Greetings from Below!" he bellows. "And sorry about the hat - it's hard to keep it at its best in such cramped quarters!" Winking at you, he offers to display his wares. "As you probably already know, BELOW WHOLESALE carries a solid reputation! What you might not know is that for a limited time we carry a liquid reputation as well!" and with this, he nods meaningfully at a small flask which he removes from his jacket. "Let me offer you a sample of each!" The solid reputation turns out to be a surprisingly palatable brick-shaped treat that tastes not completely unlike chocolate. The liquid reputation tastes uncomfortably like fizzy cod liver oil but it warms your belly. Somehow you feel better about yourself after taking both.
+BUY A SOLID REPUTATION: Pay 1 Coin (+1 reputation)
+BUY A LIQUID REPUTATION: Pay 3 Coins( +3 reputation)
+BID THE MAN FAREWELL AND EXPLORE THE AREA: Explore 6 (two coins, amethyst) ~ Alf Seegert
+
+140
+You hear a dreadful digging and sniffing sound ahead, a noise suggesting both hunger and a complete comfort in total darkness. The sound somehow succeeds at being deeply disconcerting and oddly endearing all at once.
+RUN AND HIDE!: Explore 3 (mushroom, -1 reputation)
+OVERCOME YOUR DREAD AND APPROACH CAUTIOUSLY: (read paragraph 141) ~ Alf Seegert 30
+
+141
+You find yourself face-to-face with a blind, barrel-snouted, vaguely pig-like creature whose stained teeth and composty breath urgently suggest that it's decades overdue for a dental visit. It stomps its enormous hooves, which are matted with mud and fungi. Its giant, moistened nostrils flare excitedly at your presence. Before you know it, you find yourself vacuumed from head to foot by these very nostrils. But apart from feeling somewhat sticky afterwards, you are unharmed. The creature seems to find the contents of your bags and pockets especially interesting, and you're relieved that it seems to hav,e no interest in swallowing you whole. The creature sits attentively, licking the sides of its mouth intermittently, as if waiting for something.
+FIND THE PIG CREATURE SOME FOOD: Explore 6 (read paragraph 142)
+GIVE IT NOTHING AND SEARCH ITS LAIR: Explore 4 (read paragraph 143) ~ Alf Seegert
+
+142
+The pig creatme wriggles excitedly as it devours the food. In fact, it's so overwhelmed with pleasure that it begins spontaneously digging and snuffling at the ground directly beneath its hooves. Before you know it, the creature uncovers valuable treasure! Then it snuffles away. (coin, amethyst, +1 reputation) ~ Alf Seegert
+
+143
+Disappointed, the strange creature snuffles away. You dig through the messy cave and find an old, clay pot. (pot, -1 reputation) ~ Alf Seegert
+
+144
+Multi-colored stalactites droop from the ceiling of this sweet-smelling cave. Small ceramic pots rest beneath several of the larger ones. All are empty. On further inspection you notice that each stalactite has a matching stalagmite whiclh pushes up from the floor in identical color. Hanging from the cave's wall is a small mallet, next to an inscription carved in a language you cannot decipher. Slow drips of moisture echo feebly as you decide what to do.
+STEAL SOME OF THE POTS: Explore 4 (pot, -1 reputation), Explore 7 (four coins, two pots, -1 reputation)
+USE THE MALLET TO TAP A STALAGMITE: Explore 3 (read paragraph 145) - Alf Seegert
+
+145
+The stalagmite vibrates eagerly at the touch of the mallet, emitting a warm, low tone like an earth-hewn xylophone. A resonating sound immediately calls back from the matching-colored stalactite above you. Moments later, a slow drip begins beneath this stalactite, and moments after that a slow stream of liquid pours down. Before you know it, the ceramic pot beneath this stalactite is full of fresh, healing water. two potions) - ->,'Seegert
+
+146
+In the center of this room rests a crude table arid stone seats. Against the wall sits a large rectangular metal apparatus which you don't recognize. Near the top of it is a small slit, exactly the same size as a coin.
+INSERT COIN AND TRY TO OPERATE THE DEVICE: Explore 2 and Pay 1 Coin (two potions)
+SHAKE THE DEVICE: Explore 4 (read paragraph 213), Explore 6 ore, two potions) Failure Description {for Shake the Device}: You accidentally smash four /oor in sna,<ing the machine, and nothing else happens. You feel, ona 'ook, quire foolish. (-1 reputation} - A.j Seegert
+
+147
+The wagon of a traveling magician has broken down here. You can't see any horses, and the reins hang loosely. The magician himself sits patiently on a velvet blanket, drinking blue liquid from a crystal flask. A rabbit works busily behind him, changing out one of the wagon's rear wheels. Two doves coo atop the wagon. "Ah, hello there," says the magician. Rising to meet you, a fine bouquet of fresh flowers appears in his hand, seemingly from nowhere. He presents them to you. He mumb)es a name you can't quite make out, followed by an "At your service." Seeing your confusion, he says, "No, really: I AM at your service. I received summons indicating that I'm on duty. Conjuring duty, that is." He seems unhappy about this. "I made the mistake of telling the judge that as a master prestidigitator, I was Above cheap conjurer's tricks. To punish me properly he sent me here: Below." He sighs. "But let's make the best of it. What can I conjure for you? As usual, I'll need a little help from my audience, so you might want to temper your expectations accordingly."
+ASK HIM TO CONJURE SOMETHING EASY: Explore 3 (read paragraph 150)
+ASK HIM TO CONJURE SOMETHING MODERATELY DIFFICULT: Explore 5 (read paragraph 148)
+ASK HIM TO CONJURE SOMETHING DOWNRIGHT CHALLENGING: Explore 7 (read paragraph 149) Faliure Description (for all choices}: He incants, ''AS ABOVE, SO BELOW!" You cough noisily as the cavern fills with smoke. Unfortunately, the trick didn't work .. The conjurer nervously packs his remaining things, scoops the rabbit into his hat, and hastens away, abandoning his carriage to the darkness. The doves fly quietly after him. ~ Alf Seegert
+
+148
+He incants, "AS ABOVE, SO BELOW!" And _poof_, before you rests precisely what you asked for. The conjurer smiles and bows. His rabbit, plainly finished with his repair work, rubs his oily paws, nods curtly, and disappears into his employer's hat. With the wagon now repaired, the conjurer hops back on. The two doves take the wagon's reins in their beaks, and pull it away into the darkness. (four coins or paper or pot or rope) ~ Alf Seegert 31
+
+149
+He incants, "AS ABOVE, SO BELOW!" And _poof_, before you rests precisely what you asked for. The conjurer smiles and bows. His rabbit, plainly finished with his repair work, rubs his oily paws, nods curtly, and disappears into his employer's hat. With the wagon now repaired, the conjurer hops back on. The two doves take the wagon's reins in their beaks, and pull it away into the darkness. (two amethysts or two ore or seven coins) ~ Alf Seegert
+
+150
+He incants, "AS ABOVE, SO BELOW!" And _poof_, before you rests precisely what you asked for. The conjurer smiles and bows. His rabbit, plainly finished with his repair work, rubs his oily paws, nods curtly, and disappears into his employer's hat. With the wagon now repaired, the conjurer hops back on. The two doves take the wagon's reins in their beaks, and pull it away into the darkness. (two coins or fish or mushroom or fruit) ~ Alf Seegert
+
+151
+A shiny, tiled fountain sits in the middle of this neatly hewn chamber, gushing jubilantly. The pool's bottom is covered with coins. A large plaque contains the words "MAKE A WISH" in many different languages.
+WISH FOR HEALING: Explore 2 and Pay 1 Coin (potion)
+WISH FOR A BETTER REPUTATION: Explore 4 and Pay 1 Coin (+3 reputation)
+STEAL COINS FROM THE WELL: Explore 6 (seven coins, -1 reputation) ~ Al/Seegert 32
+
+152
+A small theatrical stage dominates this narrow room, velvet curtains closed. A multitude of anxious, oversized shrews, sitting upright in their chairs, nervously awaits the performance. One of them squints eagerly at the stage, checks a parchment filled with writing, and shakes his head.
+OFFER AN IMPROMPTU PERFORMANCE FOR THE SHREWS: Explore 4 (read paragraph 153)
+PICK THE AUDIENCE'S POCKETS: Explore 3 (two coins, -1 reputation), Explore 6 (seven coins, -1 reputation)
+Failure Description (for Offer an Impromptu Performance): Your villagers juggle and dance impressively for the benefit of their mousy audience. Alas, shrews being shrews, their feeble eyes can barely make out the nuances of your visual display. Your stunning artistry is lost upon them. {-1 reputation) ~ Alf Seegert
+
+153
+If you never before considered the advantages offered by career yodeling, now you should. Your voices resonate: the shrews turn their ears rapturously towards the stage, reveling in the lush, subterranean acoustics and songs you sing of exotic lands above. The only thing that would have made it any better is if you had wafted hankies laced with enticing perfumes to add an olfactory ambiance. Shrews like that sort of thing-- perhaps next time. Nevertheless, you win the day and are welcome. (coin, +2 reputation) ~ Alf Seegert
+
+154
+A lavish banquet has been prepared on a long stone table. It appears to have been waiting for its diners for a very long time: the candles are burned down to nubs, a thick layer of dust coats the plates and utensils, and the food has long since rotted away. The diners are nowhere to be seen. A metal servant in elegant, though decaying, clothing stands at attention at the table's end, but makes no response to your presence. When you blow the dust away from the table's silverware it glints invitingly.
+STEAL THE SILVERWAREE: xplore 3 (three coins, -1 reputation), Explore 5 (three coins, paper, -1 reputation)
+REPAIR THE AUTOMATON: Explore 6 (read paragraph 155) Faiure Description (for Repair the Automaton): You somehow trigger an alarm system in the automaton and it begins to defend the room from intruders with an astonishing disploy of metal martial arts! You f]ee the chamber, battered, bruised, and unable to find a safe place to build on outpost on this excursion. -;:.;;Seegert
+
+155
+The automaton has been craftily contrived, but you discover that its intricate machinery just needs its springs rewound to begin functioning properly again. With a new set of clothes the automaton will become a helpful villager, scarcely distinguishable ~rom the others. (two coins, gain the Metal Man villager, +1 reputation) -~:SeegetT
+
+156
+A narrow flight of steps leads you to a circular room crammed with mirrors, screens, cabinets and a dizzying assortment of oddly shaped contraptions. A magician's study, perhaps? Beneath a glitter-studded sheet rest two man-sized cages, both empty. The left cage's door is open. Between the cages sits a tempting red button atop an unfamiliar machine. A dilapidated wooden sign between the cages reads, "
+DOUBLE OR NOTHING!"
+LEAVE THE CAGE ALONE AND VENTURE ELSEWHERE: Explore 3 (mushroom, -1 reputation)
+PUT AN ITEM INSIDE THE CAGE AND PRESS THE BUTTON: Choose one good you own to put in the cage --you may choose a good from your Advancement Track. (read paragraph 157)
+PUT A VILLAGER INSIDE AND PRESS THE BUTTON: Choose one of your active explorers to put in the cage. (read paragraph 159) N Alf Seegert
+
+157
+The moment you press the button, the machine begins to spark wildly as a frenzy of light and noise gathers ominously around the cage. You try to turn off the machine, but it's no use! Explore 4 (Read paragraph 158)
+Failure Description: Alas, your item melts in the fire, and you flee the flames. {Return item to the supply.) N Alf Seegert
+
+158
+Moments later the noise ceases and an identical item appears in the empty cage! Your original item is unharmed. Unfortunately for you, the machine then catches fire, preventing you from repeating the experiment. (coin, gain one identical good) N Alf Seegert 33
+
+159
+Your explorer squeezes into the cage nervously. The moment you press the button, the machine sparks wildly as a frenzy of light and noise gathers ominously around the cage. Your explorer's eyes widen with fear, and moments later the cavern is filled with the sound of screaming from inside the cage. You try to turn off the machine, but it's no use! Explore 3 (read paragraph 161), Explore 6 (read paragraph 160)
+Failure Description: Alas, the Explorer in the cage is now injured, and you must flee the flames (injure the chosen villager). ~ Alf Seegert
+
+160
+Moments later, the noise ceases and another villager appears in the empty cage! Your original villager is unharmed. Unfortunately for you, the machine then catches fire, preventing you from repeating the experiment. (gain the lowest available new villager, +1 reputation) ~ Alf Seegert
+
+161
+You barely pull the villager to safety before the machine catches fire and destroys itself. Before heading back to the village you find a few coins. (two coins, -1 reputation) 34
+
+162
+A noisy underground carnival fills this vast chamber, lit by dangling lanterns crammed with multicolored fireflies. Games of chance vie with games of skill as a bizarre assortment of creatures join in for the fun, a bustling intermingling of fur, feathers, scales, and fins. Your attention is taken up by a run-down petting zoo tucked behind the gaming booths. The menagerie presents a bestiary of sad-eyed, exotic animals who have each seen better days. The attendant points at various obligatory notices: "For your own safety, please do not pat the unicorn's head," "Pulling the manticore's tail is ill-advised," "Stare at the basilisk at your own risk," and finally, "Unattended children will be snuggled by a clan of mangy were-bears." The unicorn wearily raises its head as you look its way.
+PLAY THE "SHELL GAME" ADVERTISED BY A CARNIVAL BOOTH: (read paragraph 209)
+DISOBEY THE WARNING SIGNS OF THE PETTING ZOO: (read paragraph 210)
+OFFER TO BUY THE MISERABLE ANIMALS TRAPPED IN THE PETTING ZOO: Explo,re 3 and Pay 1 Coin (read paragraph 211) ~ Alf Seegert
+
+163
+You find yourself in the dark abode of an ancient, eyeless alchemist. He lives amid a litter of dust and tattered papers, with no light other than what you bring with you yourself. Hearing you enter, he is plainly excited for your company and beckons you to join him for a cup of tea. Unfortunately, the cup he hands you appears to have a small fish swimming in it.
+DEMAND THAT HE BREW YOU A HEALING POTION: Explore 3 (coin, potion, -1 reputation)
+SIT WITH HIM, PRETEND TO SIP YOUR TEA, AND TELL HIM A STORY OF THE LANDS ABOVE: Explore 4 (paper, +1 reputation), Explore 7 (three coins, paper, potion, +1 reputation) ~ Alf Seegert
+
+164
+The passageway divides abruptly in two. The left passage descends very steeply and your lamp reveals what might be a scattering of coins in the depths far below. The right passage offers no clues to its secrets but its gentle slope is much easier to navigate.
+DESCEND THE STEEP LEFT PASSAGE: Explore4 (two coins, +1 reputation), Explore 7 (four coins, paper, +1 reputation) Bonus: +1 lantern if you own rope.
+FOLLOW THE EASY RIGHT PASSAGE: Explore 2 (coin), Explore 5 (pot) ~ Alf Seegert
+
+165
+You find yourself at the edge of a vast, underground stream, noisily carving its way through the dark. A small fishing boat lies tethered to one side and a flimsy bridge invites you to cross.
+GET IN THE BOAT: Explore 4 (two fish), Explore 6 (four coins, two fish)
+CROSS THE UNDERGROUND STREAM: Explore 3 (coin, potion, -1 reputation), Explore 5 (five coins, -1 reputation) ~AfSeegen
+
+166
+In a chamber that smells distinctly of a wellJsed litter box, you accidentally interrupt the esoteric mystery rites of the ancient underground cat goddess Friida. Her devotees are jealous of their secrecy. Five seline faithful approach you, tails flicking and malicious ·ritent in their enormous eyes.
+SCARE THEM AWAY AND LOOT THE PLACE: Explore 4 ~nree coins, -1 reputation)
+APOLOGIZE FOR YOUR RUDENESS: Explore 3 (+1 reoutation)
+MAKE AN OFFERING: Explore 6 (four coins, rope) Bonus: + 1 lantern if you own fish. ~ Alf Seegert
+
+167
+You discover the decaying statue of a longneglected god, probably a fishfolk deity fallen from favor. Its tail is crumbling and one of its jeweled eyes is missing altogether. Fragments of glass and a scattering of old gifts lie around the statue.
+REPLACE THE MISSING EYE WITH THE FRAGMENTS OF GLASS: Explore 5 (read paragraph 168) Bonus: +2 lanterns if you pay 1 coin.
+STEAL THE ONE REMAINING JEWELED EYE AND LOOT ANY OFFERINGS YOU CAN FIND: Explore 3 (fish, -1 reputation), Explore 8 (three coins, amethyst, -1 reputation) ~ Alf Seegert
+
+168 \* -In replacing the statue's missing eye you grant this downtrodden god a respect it hasn't seen - literally- in darkest memory. Moments after the eye is replaced, it blinks coyly at you, almost certainly a look of favor. (two paper, + 1 reputation) ~ Alf Seegert
+
+169
+You find yourself entering a mysterious underground temple, where reverential silence is interrupted only by your echoing footsteps. An oddly carved colonnade leads you onward, down a marbled staircase, through a torch-lit mausoleum, and at last to the throne of a hairless, long-toothed, enormous rodent-like creature. Her nose quivers with anticipation as you approach, and her large ears wiggle with excitement. You had heard hushed rumors of the secretshrouded Shrine of the She-Shrew, but beholding her shyness in the flesh leaves you shaking. Moments later she mutters, "Welcome, my new Deshyples! Will you Shing for me?" st
+HN6
+SING FOR HER SHYNESS: Explore 3 (coin, + 1 reputation), Explore 7 (amethyst, +2 reputation)
+EXPLAIN THAT YOU HAVE A SORE THROAT AND OFFER YOUR ALLEGIANCE INSTEAD: Explore 5 (six coins, -1 reputation) ~ Alf Seegert 35
+
+170
+As you stumble upon a fork in the rough passageway, an arrow shoots from your right, just missing your party of explorers. It appears that you stumbled on a trip-line, triggering a trap. The arrow sticks uselessly from the cavern wall, with a note tied to it. The note reads "GO THE OTHER WAY. I MEAN IT." It seems that someone is determined to keep you from proceeding down the passageway to the right.
+IGNORE THE THREAT AND FOLLOW THE PASSAGEWAY TO THE RIGHT ANYWAY: Explore 4 (read paragraph 171)
+AVOID DANGER AND TAKE THE PASSAGE TO THE LEFT: Explore 2 (coin, -1 reputation), Explore 7 (four coins, pot, -1 reputation). Failure Description (for Ignore the Threat): Your dread outweighs your heroism. You return to the surface none the wiser about what looms beyond. ~ Alf Seegert
+
+171
+It appears that whoever set the trap and wrote the threatening note is long gone. You discover an enormous vacant cavern to set up camp within. (gain one extra cave card, + 1 reputation) ~ Alf Seegert
+
+172
+A lonely parlor magician is camped alone inside a small side passage. Grateful for your company, she teaches you some basic street magic. She offers to let you keep some of her props if you can properly perform magic with them.
+PERFORM A SIMPLE COIN TRICK: Explore 2 (coin)
+MAKE A MUSHROOM DISAPPEAR AND REAPPEAR: Explore 4 (mushroom, +2 reputation)
+JUGGLE TWO FISH AND A HANDFUL OF COINS: Explore 7 (five coins, two fish) ~ Alf Seegert 36
+
+173
+You hear low-pitched snuffling noises ahead of you in the dark - but as you approach, whatever creature it might be gallops away in panic. Moments later an exasperated underground fungus farmer catches up to you, panting with exhaustion. He is thoroughly worn out from trying unsuccessfully to catch his longlost nether-pig (the apparent source of the snuffling noises, and which clearly doesn't want to be found). The fungus farmer offers to reward you handsomely if you can return it to him.
+LASSO THE PIG WITH A ROPE YOU BORROW FROM THE FARMER: Explore 3 (rope, -1 reputation)
+LURE THE PIG WITH A TASTY TREAT: Explore 5 (mushroom, +1 reputation)
+SING A SONG OF ENTICING PIGGY MYSTERY: Explore 8 (read paragraph 174) ~ Alf Seegert 17 4 \* - The nether-pig leads an entire herd of pigs back to the farmer! He gives you some valuable treasures in thanks. (two amethysts, potion, +1 reputation)
+
+175
+A tangled tree fills this cavern, its branches desperately angling for the sunlight produced by a thin aperture in the rock. The higher branches yield strange fruits and bear strangely coin-like reflective leaves. Remnants of fruit and leaves litter the floor of the cave.
+SQUEEZE THE FALLEN FRUIT FOR ANY REMAINING JUICE: Explore 4 (coin, two potions)
+CLIMB THE TREE TO GATHER FRUIT AND LEAVES: Explore 3 (fruit, + 1 reputation), Explore 7 (five coins, two fruit, + 1 reputation) ~ Alf Seegert
+
+176
+A deep pool glitters in the starlight produced by a crack in the cave directly over it. Who knows what might live in the water, or what things might have fallen into it from Above?
+DRINK FROM THE POOL: Explore 3 (+1 reputation)
+DIVE INTO THE POOL TO EXAMINE THE BOTTOM: Explore 4 (coin, fish), Explore 8 (fish, ore, +1 reputation) ~ Alf Seegert
+
+177
+Unmindful of the dark, a blind herbalist peddles her wares here. She seems to have lost her way, along with her walking stick. You might be able to fashion her a new one from cave debris.
+CARVE HER A NEW WALKING STICK AND HELP HER FIND HER WAY: Explore 4 (potion, +1 reputation)
+STEAL FROM HER BAG OF GOODS: Explore 3 (coin, mushroom, -2 reputation), Explore 7 (three coins, ore, -2 reputation) ~ AJ/ Seegert
+
+178
+Strange symbols cover the walls of this cavern and a fire burns from a hanging lantern in its center. An impeccably written sign reads, "Sonic School of Summoning: Lessons Available - For a Song!" Arranged on a small altar are three musical instruments: a glass harp, a marble mandolin, and a crystal trumpet. There is no sign of either teacher or students.
+PLAY THE GLASS HARP: Explore 2 (coin), Explore 5 (coin, ore)
+PLAY THE MARBLE MANDOLIN: Explore 4 (pot, +1 reputation)
+PLAY THE TRUMPET: Explore 7 (four coins, +3 reputation)
+
+179
+A wrinkly, blue-skinned fortune teller with feathers in her hair huddles over a luminous crystal. In a croaking voice she promises immediate good fortune if you first call out your true name in the voice of your spirit animal.
+MEOW LIKE A CAT: Explore 3 (fish, +1 reputation)
+BLUB LIKE A FISH: Explore 4 (two coins, fish)
+GO OW OW OW LIKE A SEAL: Explore 7 (fish, ore) ~ Alf Seegert
+
+180
+Ahead of you, back-lit against a wall of the misty corridor, a Mouse of Ill-Repute awaits, a blackbrimmed hat pulled over his eyes and toothpick wedged between his grinning front teeth. In a low, unsavory voice he offers to play a simplle game of chance with you. Each time you roll the die, record the number you roll and collect one coin. If you ever roll a number you've already rolled, you lose everything. You may stop and collect your winnings any time before your next roll. "You can't lose any money this way," insists the rodent. "All I ask ... is to feed off of a little bit of your reputation ... " The Mouse of Ill-Repute then licks his incisors in appeal, appallingly.
+LOSE ONE REPUTATION AND START ROLLING: (Surprisingly enough, the Mouse of Ill-Repute turns out to be as good as his word, and awards winnings as indicated above. Needless to say, the very most you can earn this way would be six coins. You lose only one reputation, no matter how many coins you win.)
+INTIMIDATE THE RODENT INTO GIVING YOU SOME MONEY: (-1 reputation for each coin you extort out of the rodent, up to five coins in total.)
+LEAVE THE MOUSE AND SEARCH ELSEWHERE: Explore 6 (two coins, ore) ~ Alf Seegert 37
+
+181
+You find a faded' map listing treasures hidden in the caverns Below! Or is it a shopping list? No matter: you think you might be able to decipher where some valuable items are hidden if you hold the paper up to a flame and get a closer look at the faint inscriptions marking it.
+HOLD THE MAP FAR FROM THE FLAME: Explore 3 (fruit)
+HOLD THE MAP A MODERATE DISTANCE FROM THE FLAME: Explore 5 (coin, two fruit,+ 1 reputation)
+HOLD THE MAP VERY CLOSE TO THE FLAME IN CASE IT HOLDS SECRETS INSCRIBED IN INVISIBLEI NK: Explore 7 (two coins, amethyst, +2 reputation) Failure description (for all choices): Unfortunately you hold the map a bit too close and it bursts into flames! You head back to the vi/loge empty-handed. ~ Alf Seegert
+
+182
+Amid a jungle of int;rwoven metal pipes you find yourself standing before the legendary, nay - mythical - Mechanical Mynah-Bird of Elation and Regurgitation. Its shiny beak is outstretched and halfway open. From childhood tales you know what to do: place an offering in its beak and pull gently on one of its hammered-metal tail feathers. Before gently pulling on a tail feather, you ....
+PUT NOTHING IN THE BIRD'S MOUTH: Explore 2 (read paragraph 183)
+PLACE 1 COIN IN ITS MOUTH: Explore 4 and Pay 1 Coin (read paragraph 214)
+PLACE 2 COINS IN ITS MOUTH: Explore 6 and Pay 2 Coins (read paragraph 215) Failure Description (for all three choices): You pull too hard and the tail feather comes off in your hand! The bird cranes its neck at you in surprise and horror, eyes wide. It blinks twice, rears its head back, and begins to savage you with its pointy beak. Moments later you find yourselves pursued back to the surface by a very angry, very dangerous Mechanical Mynah-Bird. (injure one villager.) ~ Alf Seegert 38
+
+183
+The moment you pull the tail feather, you hear a faint clunking noise from inside the bird's abdomen. The bird's beak opens wide and it tilts its head backward, swallowing the offering whole. Its beak then closes and a series of grinding mechanical noises follow, culminating in dismaying hacking sounds, as if the bird is trying to cough up something distinctly unpleasant. Eventually the bird opens its beak wide again, cranes its head forward, and deposits a shiny surprise for you. (coin, -1 reputation) ~ Alf Seegert
+
+184
+As you organize your party, someone reaches in their satchel and pulls out a map. "I acquired this on my last expedition," she says. "It's marked with more than a dozen caves filled with jewels and I have good reason to believe they've never been explored." Ignoring the questioning glances, she suggests that the group start out for the first cave. You inspect the map and realize that the path to this supposed crystal cave takes you past a toxic swamp and near the lair of a known man-eating beast. Do you ignore the map and take a safer route? Or do you trust your companion and head for the treasure?
+TAKE THE SAFE ROUTE: Explore 2 (two coins, -1 reputation)
+HEAD FOR THE CAVE: (read paragraph 185) ~ Malorie Laukat
+
+185
+You decide to head for the caves. You follow the trail past the toxic swamp which fills your lungs with burning gas and makes it nearly impossible to continue. Just in time, you reach an air shaft in the cave from which you breathe soothing, fresh air from above. Then you hear it. The rumbling of the beast. Its lair can't be far from where your party has stopped for respite. A pounding beat of footfalls is coming your way. Do you stay and face the beast or do you run back through the swamp and escape?
+FACE THE BEAST: Explore 7 {two coins, amethyst, +2 reputation)
+RUN BACK THROUGH THE SWAMP: Explore 3 (injure one villager), Explore 5 (five coins) - Malorie Laukat
+
+186
+The lantern light darts from rock to rock as you rush through the caves. You've already been down here too long and time and morale are running low. Then the light catches an image on a barely visible cleft in the rock. Carvings made in the shape of animals and people are etched into the surface. You notice that there are depictions of fish and what looks like treasure among the shapes, but you're not sure what they mean or if they can help you. Do you stay and try to decipher the petroglyphs? Or do you ignore them and get what you can before your time is up?
+DECIPHER THE PETROGLYPHS: Explore 2 (fish), Explore 6 (two coins, amethyst, +1 reputation) Bonus: +3 lanterns if you have a fishfolk villager.
+IGNORE THE PETROGLYPHS: Explore 4 (coin, pot)
+
+187
+Your group is looking fatigued and you have no food, but you start up a fire and stop for a drink and a rest. One of your party members pulls out a small flute and begins to play a familiar folk tune. As you close your eyes and enjoy the soft music, the sound of skittering fills the cavern. You open youir eyes and look around to see dozens of tiny, reptilian creatures. They perch on the rocks and fill the cave floor, their eyes fixed on the musician and his flute. Do you try to catch one of the creatures for your meal? Or do you take pity on them and let them stay, unharmed?
+CATCH A CREATURE: Explore 2 (read paragraph 188)
+TAKE PITY ON THE MUSIC-LOVING REPTILES(:R ead paragraph 189) ~ Malorie Laukat
+
+188
+You sneak up and grab one of the creatures. It doesn't put up a fight. You kill it and cook it. The meat is tough but filling and from this meal you and your party members gain enough strength to keep exploring. (three coins, -1 reputation) ~ Malorie Laukat
+
+189
+As the music stops the creatures begin to glow and immediately rush away. You follow them, intrigued by this unusual display. Their luminescent bodies lead you through a maze of passages and you struggle to keep up. Your party is undeterred by the challenge, hoping that these small animals will lead to a new and rewarding part of the caves. Explore 4 (two coins, mushroom), Explore 6 (coin, two rope, +1 reputation) ~ Malorie Laukot 39
+
+190
+"Give me food!" yells a spry skeleton of a man who jumps in front of your group. His eyes are crazed and his wide smile holds few teeth. "I'll show you to treasure if you give me some food," he laughs and dances around on his hands and feet like a primate. Do you search through your supplies for spare food to give to the man? or ignore him and move on?
+SPARE SOME FOOD: Explore 5 (read paragraph 191), Explore 7 (read paragraph 192) Bonus: +1 lantern if you own one of the following: fruit, fish, mushroom, cider.
+IGNORE HIM: Explore 3 (three coins, -1 reputation) ~ Malorie Laukat
+
+191
+Grabbing the food from your bag, you hold it out to the man and he snatches it from you with glee. "Eee hee heel Follow me!" He leads you straight to a hole in the rock that is obviously his home. Tapping on a rough, stone door, he stands aside and allows you to enter. You step through the door and see a pile of treasure twice the size of the shriveled old man. "Take what's worth what you have given. Take no more or I'll bash your head in," he warns with a giggle. You scoop up the treasure and leave with caution. (two coins, pot) ~ Malorie Laukat
+
+192
+Grabbing the food from your bag, you hold it out to the man and he snatches it from you with glee. "Eee hee heel Follow me!" He leads you straight to a hole in the rock that is obviously his home. Tapping on a rough, stone door, he stands aside and allows you to enter. You step through the door and see a pile of treasure twice the size of the shriveled old man. "Take what's worth what you have given. Take no more or I'll bash your head in," he warns with a giggle. You scoop up the treasure and leave with caution. (three coins, amethyst) ~ Malorie laukat 40
+
+193
+Your party arrives at a chamber lined with azure waterfalls. Large fireflies glow like torches, zipping lazily through the moist air, following their own reflections in a deep pool at the bottom of the chamber. As you wander, more and more fireflies gather around you until all you can hear is an intense, maddening buzzing. Do you try to fight off the fireflies or attempt to calm them?
+FIGHT OFF THE FIREFLIES: Explore 3 (read paragraph 194)
+ATTEMPT TO CALM THE FIREFLIES: Explore 4 (read paragraph 195), Explore 7 (read paragraph 196)
+
+194
+You attempt to swat the fireflies away with your weapons and walking sticks. The insects turn a deep, angry red and swarm you, stinging and biting. As a last resort everyone throws themselves into the pool. The fireflies lose interest and fly away, leaving you cold and wet, along with some painful injuries you won't soon forget. At least when you dove into the pool you were able to find a few coins shining in the darkness. (four coins, injure one villager)
+
+195
+One of your party members suddenly hums a quiet tune and beckons the others to sing along. Unfortunately not everyone has spent much time practicing and the harmonies are a bit jarring. Nevertheless, the insects grow calm and fly away, leaving you free to explore the chamber. (rope, + 1 reputation)
+
+196
+One of your party members suddenly hums a quiet tune and beckons the others to sing along. The others weave deft, beautiful harmonies and the fireflies turn a bright blue color. You follow them to a hidden chamber full of amethysts. (two amethysts, +2 reputation)
+
+197
+You travel through a wide, misty cavern until suddenly a man in a red cape appears. You recognize him instantly-the Red Hunter, a legendary adventurer and the source of many a campfire tale. In a silky, tenor voice he greets you. "I require your assistance hunting a dangerous criminal," he says. You're eager to join him and share in his adventures, but you sense there's something not quite right. The Red Hunter seems on edge, and there's a slight twitch to his eye. Do you join him? Or do you decline but follow him to see what happens?
+JOIN THE RED HUNTER IN HIS SEARCH: Explore 4 (read paragraph 198)
+DECLINE BUT FOLLOW THE RED HUNTER: Explore 3 (read paragraph 199), Explore 6 (read paragraph 200)
+
+198
+He gladly accepts your help and you head off in search of the dangerous criminal. Before long you spot someone at a campfire. "That's the one," whispers the Red Hunter as you crawl forward, ready to ambush the criminal. When you leap out, to your dismay you realize the supposed criminal sitting at the fire is a set of clothes stuffed with straw! The Red Hunter knocks the stuffed criminal to the ground, kicking it and stamping on it, finally throwing it into the fire. "That'll teach you!" he says, his eyes gleaming as the lump of clothes and straw burns. Did he set this up himself? You quietly step away and head back to your village, stopping at a mushroom field on your way. (coin, mushroom, +1 reputation)
+
+199
+You follow the Red Hunter from a safe distance. Turning a corner, you lose sight of him. You run 'orward, eager to catch up, when there's a sudden flash of red at the corner of your vision. The Red Hunter eapsa t you, his eyesc razed,a deadly-lookingk nife in rfs ha'ld. Your party flees, barely escaping the madman b\ hiding in a narrow, dark passageway. You find a musnroom patch as you head back to the village. (mushroom, -1 reputation)
+
+200
+Yofoullo w the Red Hunter from a safe distance. He leads you back to a camp where a fire is blazing. A thin man sits next to the fire, but on second glance you realize it's a set of clothes stuffed with straw. The Red Hunter sits next to it, chatting, but you can't make out what he says. Suddenly he lets out a shrieking laugh and tosses the dummy into the fire. He picks up his bag and sets off, leaving you to search the scattered camp he left behind. (six coins, ore)
+
+201
+You walk along a cobbled road in a cavern lit by a glowing, blue moss when a thin, hooded woman emerges from the darkness. "I've a song that must reach the Moss King's ears. Alas, his kingdom is hidden, and so I must teach it to all who will learn in the hopes that he hears it. Would you learn my song? I'd be able to spare some small payment from my pack." Do you simply learn the tune, or do you ask her to join you and search for the Moss King yourselves?
+LEARN THE MOSS KING SONG: Explore 4 (paper, +1 reputation)
+ASK HER TO JOIN YOU: (read paragraph 202) 202 \*-She gladly accepts and you begin your quest to find the legendary Moss King. The hooded woman tells you all she knows, even describing the Moss King's heavy laugh and many specific food preferences as if she knows him personally. You gather clues from all you meet on the road, stopping at underground villages in the search for any spare rumor that might tell you where to go. Your party members soon grow exhausted and start to complain. Do you give up and begin the journey home, or do you press on and keep looking for clues?
+KEEP GATHERING CLUES: Explore 7 (read paragraph 207)
+GIVE UP ON THE SEARCH AND BEGIN THE JOURNEY HOME: Explore 3 (two coins) 41
+
+203
+Your explorers come upon a wooden wagon painted in bright colors. A woman with raven-black hair sits at the front, but there are no beasts to pull the load. "My cavegoats got loose while I was resting. If you could help me find them, I'd be happy to share some of the medicine I'm carrying."
+SEARCH FOR THE CAVEGOATS: Explore3 (coin, potion, +1 reputation), Explore 5 (pot, potion, +l reputation)
+SEARCH FOR THE CAVEGOATS, THEN HOLD THEM FOR RANSOM: Explore 4 (coin, rope, potion, -2 reputation), Explore 6 (two coins, paper, two potions, -2 reputation)
+
+204
+Your party crosses a massive stone bridge, the ancient parapets cracked and crumbling over a deep, rushing river. On the other side, bats flit about before a walled, underground village. "Be on your way-we don't much like visitors here," calls an armored man from a watchtower, hefting a spear with his thick arm, ready to throw it should you give him excuse. Do you try to convince him to let you in and trade with the inhabitants, or do you attempt to sneak inside later?
+CONVINCE THE GUARD TO LET YOU INSIDE: Explore 4 (fish, +l reputation)
+SNEAK INSIDE THE VILLAGE: Explore 3 (read paragraph 205), Explore 6 (read paragraph 206)
+
+205
+You bid the guard farewell and turn back, but as soon as he's out of sight your make your way around the cavern to the far side of the village. You find a narrow door, and after a bit of lock-picking the door opens and you're free to wander about the village. Creatures of every type live here: fishfolk, pigfolk, glogos, and humans. You've just finished trading some supplies and rumors with a street merchant when someone yells in alarm. It's the same guard from the tower, and he charges after you, spear held high. You flee back the way you came., hiding in a dark passage. (mushroom, -1 reputation) 42
+
+206
+You bid the guard farewell and turn back, but as soon as he's out of sight you make your way around the cavern to the far side of the village. You find a narrow door, and after a bit of lock-picking the door opens and you're free to wander through a library stuffed with ancient, leather-bound books. You greet the librarian, and he asks you about your adventures, eager to learn about other places you've been, scribbling notes on a spare bit of parchment as you speak. When you leave he happily spares a few of his tomes and supplies, and even vouches for you at the town gate. (paper, potion, + 1 reputation)
+
+207
+Your persistence pays off and before long you discover a secret entrance near the deadly Acid Pools of Murn. Green-skinned guards seize you as soon as you're inside and bring you to the Moss King's throne room. You stare in wonder at his massive beard of lichen and thick, green hair. "Why have you entered my secret realm?" he demands. Suddenly, the hooded woman stands and sings her song. Tears fall from the Moss King's eyes as he runs to her, throwing his arms around her. "I never gave up the search," cries the Moss King's beloved. The happy couple sends you on your way with bags of treasure. (four coins, amethyst, +2 reputation)
+
+208
+You arrive at the capital city of the glogos, a massive metropolis cut into the cavern wall. As you approach the main gate you spot a fishfolk man running from a group of glogo soldiers. "Help me!" he says when he sees you, "They've had me locked up here for no reason!" Do you help the fishfolk man escape or do you stop him and hand him over to the glogos?
+CATCH THE FISH FOLK MAN AND TURN HIM OVER: Explore 3 (coin, +2 reputation)
+FIGHT THE GLOGOS AND HELP THE FISH FOLK MAN ESCAPE: Explore 4 (two fish, -2 reputation), Explore 6 (three coins, fish, paper, -2 reputation)
+
+209
+Ah, now you get it: the "shell game" consists of competitive snail racing. You place your bets, settle down for a nice, long nap, and await the results. How patient will you be? Explore 4 (two coins, -1 reputation), Explore 7 (two coins, paper, potion) - Afj Seegert
+
+210
+You combine your energies in foolhardy defiance, gearing yourself up to simultaneously rub, yank, and taunt the unhappy denizens of the petting zoo. Explore 4 (read paragraph 212) Failure Description: You give in to your obnoxious fancies and find ;ourself the worse for it. If you had ever read o bestiary, you would no.1e known that unicorn heads are painfully pointy, that the tails of manticores spurt spikes and venom, and that the gaze of a basilisk can wrn you into stone. Thankfully for you, the denizens of the pe~ng zoo ore not robust specimens of their kind, which meons that 1our explorers escape injured but mostly intact. (injure one villager, -1 reputation)
+
+211
+You bring the sad menagerie back to the surface with you. The animals are so grateful to be back in the sunlit lands of Above that they eagerly join your community and help protect it from invaders. The mangy were-bears even grow full coats again, and provide warm companionship on cold nights. (+3 reputation) ~ Alf Seegert
+
+212
+You are stopped in your tracks by a single salty unicorn tear, which undoes your ill intentions. You back away slowly, embarrassed at your folly. On your way through the rest of the carnival, you trade for a bag of mushrooms. (pay one coin, mushroom, +1 reputation) ~ Alf Seegert
+
+213
+You accidentally smash your foot while shaking the machine, but at least a few bottles of potion fall out. You feel, and look, quite foolish. (two potions, -1 reputation) 43
+
+214
+The moment you pull the tail feather, you hear a faint clunking noise from inside the bird's abdomen. The bird's beak opens wide and it tilts its head backward, swallowing the offering whole. Its beak then closes and a series of grinding mechanical noises follow, culminating in dismaying hacking sounds, as if the bird is trying to cough up something distinctly unpleasant. Eventually the bird opens its beak wide again, cranes its head forward, and deposits a shiny surprise for you. {two pots) ~ Alf Seegert
+
+215
+The moment you pull the tail feather, you hear a faint clunking noise from inside the bird's abdomen. The bird's beak opens wide and it tilts its head backward, swallowing the offering whole. Its beak then closes and a series of grinding mechanical noises follow, culminating in dismaying hacking sounds, as if the bird is trying to cough up something distinctly unpleasant. Eventually the bird opens its beak wide again, cranes its head forward, and deposits a shiny surprise for you. (two ore) ~ Alf Seegert 44
+
+Guide to the World of Below The world of Below is a massive underworld made up of immense, sprawling caverns, deep pools, underground villages, strange creatures, and ancient civilizations. Subterranean nations have risen only to disappear in the endless flow of time, but their remains can be found throughout the underworld. Here are some of the creatures and civilizations you might run into as you explore:
+
+Glogos- Glogos are stone-skinned creatures with spine-covered backs and round, red eyes. Glogos are comfortable in the dim light and cold air, and have built many outposts and cities throughout the caverns. They are generally distrusting of strangers, but are sometimes willing to trade or converse. It is unwise to cross them.
+
+Fishfolk- Fishfolk are friendly denizens of the caverns and the nearby coasts, and can usually be found in villages near water. They're known for their knowledge of ancient languages, their spicy cuisine, and their hospitality. Fishfolk can breath above and below water.
+
+Pigfolk- Pigfolk have mastered the art of farming underground, and boast the best and tastiest mushrooms around. They're also known to be cunning hunters of rare metals, and dig deep mines in search of gold. They're usually more than willing to share a bowl of mushroom stew and love to trade tales of adventure.
+
+Spiders- Giant spiders abound in the windy, dark caverns, eager to catch a lost traveller for a meal. Rumors exist, however, of a friendly, well-dressed colony ...
+
+Snails- Giant snails travel in packs and surround unsuspecting travellers before devouring them alive. It is wise to keep someone on watch duty if you stop for a nap!
+
+The Moss King- Rumors abound of a great and wise king whose realm is almost impossible to find, even for those who have already visited.
+
+Ghosts- The lost souls of ruined civilizations walk the caverns, ready to torment -or aid- any travelers they meet.
+
+Merchants- The world of Below boasts a healthy trading culture, and bands of traveling merchants can often be found on routes between villages, ready to bargain with any they meet.
+
+Magicians and Sorcerers- Powerful and mysterious practitioners of magic wander the caverns searching for lost knowledge and hidden artifacts. A demonstration of intellect is sure to impress, but caution ~ is advised- many of them have little patience and quick tempers.

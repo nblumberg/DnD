@@ -12,4 +12,9 @@ export function fileRelativeToData(path: string): string {
   return resolve(join(dataPath, path));
 }
 
-export type PathParam = "items" | "monsters" | "magic-items" | "spells";
+export type PathParam =
+  | "items"
+  | "monsters"
+  | "magic-items"
+  | "spells"
+  | "equipment";

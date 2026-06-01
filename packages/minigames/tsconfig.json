@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "files": ["src/service/start.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["**/browser/**/*", "**/shared/**/*"],
+  "references": [
+    { "path": "./tsconfig.browser.json" },
+    { "path": "./tsconfig.shared.json" }
+  ]
+}

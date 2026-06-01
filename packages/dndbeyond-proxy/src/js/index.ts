@@ -1,10 +1,10 @@
 import { initAuth } from "./auth";
-import { saveFeats } from "./feat";
+import { listEntries } from "./listing";
 
 initAuth().then(async () => {
   initAuth();
-  saveFeats();
-  // listEntries("magic-items", 29);
+  // saveFeats();
+  listEntries("equipment", 5);
   // const targets = listWithFieldValue("spells");
   // parseHTML("monsters", targets.slice(targets.indexOf("Sir Godfrey Gwilym")));
   // trimHtml("Two-Headed Crocodile.html");

@@ -3,10 +3,10 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "outDir": "dist",
-    "rootDir": "src",
+    "outDir": "../minigames/dist",
+    "rootDir": "../minigames/src",
 
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "tsBuildInfoFile": "../minigames/node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
@@ -29,11 +29,11 @@
     "noUncheckedSideEffectImports": true
   },
   "include": [
-    "src/board/**/*",
-    "src/browser/**/*",
-    "src/browser/**/*.scss",
-    "src/shared/**/*",
-    "src/crossword-service/crossWords.ts",
-    "src/crossword-service/wordBank.ts"
+    "../minigames/src/board/**/*",
+    "../minigames/src/browser/**/*",
+    "../minigames/src/browser/**/*.scss",
+    "../minigames/src/shared/**/*",
+    "../minigames/src/crossword-service/crossWords.ts",
+    "../minigames/src/crossword-service/wordBank.ts"
   ]
 }

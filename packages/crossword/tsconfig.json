@@ -3,11 +3,11 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "outDir": "dist",
-    "rootDir": "src"
+    "outDir": "../minigames/dist",
+    "rootDir": "../minigames/src"
   },
-  "files": ["src/index.ts"],
-  "include": ["src/**/*"],
-  "exclude": ["src/browser/**/*"],
+  "files": ["../minigames/src/index.ts"],
+  "include": ["../minigames/src/**/*"],
+  "exclude": ["../minigames/src/browser/**/*"],
   "references": [{ "path": "./tsconfig.browser.json" }]
 }

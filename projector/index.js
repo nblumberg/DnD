@@ -71,7 +71,7 @@
   }
 
   const googleDriveUrlRegExp =
-    /^https:\/\/drive.google.com\/file\/d\/(\w+)\/view\?usp=share_link$/;
+    /^https:\/\/drive.google.com\/file\/d\/([^\/]+)\/view\?usp=(share_link|drive_link)$/;
   const staticWikiaNoCookieNetRegExp = /^https:\/\/static.wikia.nocookie.net\//;
 
   function loadUrl() {
@@ -83,7 +83,8 @@
     }
     let matches = url.match(googleDriveUrlRegExp);
     if (matches && matches.length > 1) {
-      url = `https://drive.google.com/uc?id=${matches[1]}`;
+      // url = `https://drive.google.com/uc?id=${matches[1]}`;
+      url = `https://drive.usercontent.google.com/download?id=${matches[1]}`;
     } else {
       matches = url.match(staticWikiaNoCookieNetRegExp);
       if (matches) {

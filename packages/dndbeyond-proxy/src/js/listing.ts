@@ -51,51 +51,15 @@ function findTotalPages({ window: { document } }: JSDOM): number {
 
 const baseUrl = "https://www.dndbeyond.com";
 
-const defaultHeaders = {
-  Accept: `text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7`,
-  "Accept-Encoding": "gzip, deflate, br",
-  "Accept-Language": "en-US,en;q=0.9,nb;q=0.8",
-  "Sec-Ch-Ua": `"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"`,
-  "Sec-Ch-Ua-Mobile": "?0",
-  "Sec-Ch-Ua-Platform": `"macOS"`,
-  "Sec-Fetch-Dest": "document",
-  "Sec-Fetch-Mode": "navigate",
-  "Sec-Fetch-Site": "same-origin",
-  "Sec-Fetch-User": "?1",
-  "Upgrade-Insecure-Requests": "1",
-  "User-Agent": `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36`,
-};
-
 async function saveHtml(
   type: string,
   name: string,
   href: string
 ): Promise<void> {
-  const path = `${type.toLowerCase()}s`;
+  const path = type === "equipment" ? "equipment" : `${type.toLowerCase()}s`;
   const baseFilePath = fileRelativeToData(path);
 
   const url = href.startsWith(baseUrl) ? href : `${baseUrl}${href}`;
-  // let response: axios.AxiosResponse;
-  // try {
-  //   response = await axios.get(url, {
-  //     headers: addAuthHeader({
-  //       ...defaultHeaders,
-  //       Referer: join(baseUrl, path),
-  //     }),
-  //   });
-  // } catch (e) {
-  //   console.error(`${type} ${name} request failed: ${e}`);
-  //   throw e;
-  // }
-  // // const response = await fetch(url, addAuthHeader(monsterHeaders));
-  // if (response.status !== 200) {
-  //   throw new FatalParseError(
-  //     `${type} ${name} request received a ${response.status} ${response.statusText} response`
-  //   );
-  // } else {
-  //   console.log(`${type.charAt(0).toUpperCase()}${type.slice(1)} ${name}`);
-  // }
-  // const rawHTML = response.data as string;
   const rawHTML = await ajax(
     url,
     {
@@ -129,14 +93,22 @@ async function findEntries(
 ): Promise<string[]> {
   // Change from plural path name to singular and ignore anything before the dash
   // magic-items -> magic-item
-  const type = path.toLowerCase().substring(0, path.length - 1);
-  const listingBody = document.querySelector(".listing-body") as HTMLDivElement;
+  const type =
+    path === "equipment"
+      ? "equipment"
+      : path.toLowerCase().substring(0, path.length - 1);
+  const listingBody = document.querySelector(
+    "#content .listing-body"
+  ) as HTMLDivElement;
   if (!listingBody) {
     throw new Error("Could not find listing body");
   }
   // console.log("listing-body", listingBody.innerHTML);
   const rows: HTMLElement[] = Array.from(
-    listingBody.querySelectorAll(".listing [data-slug]")
+    listingBody.querySelectorAll(
+      // ".listing [data-slug]"
+      ".list-row"
+    )
   );
   if (!rows.length) {
     throw new Error("Found no entries in listing body");
@@ -147,7 +119,7 @@ async function findEntries(
     let nameCell: HTMLAnchorElement | null = row.querySelector(
       // Ignore anything before the dash
       // magic-item -> item
-      `.${type.includes("-") ? type.split("-").pop() : type}-name .name .link`
+      ".list-row-name .link"
     );
     if (!nameCell) {
       throw new Error("Couldn't find name element");
@@ -163,7 +135,7 @@ async function findEntries(
     const textElement: HTMLElement = (
       nameCell.childElementCount ? nameCell.firstElementChild : nameCell
     ) as HTMLElement;
-    const name = getElementText(textElement);
+    const name = getElementText(textElement).trim();
     entries[name] = href;
     return saveHtml(type, name, href);
   });
