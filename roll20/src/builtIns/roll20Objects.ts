@@ -21,19 +21,24 @@ import { Text } from "./text";
 export interface Roll20BaseObject {
   /**
    * A unique ID for this object. Globally unique across all objects in this game. Read-only.
+   * @readonly
    */
-  _id: Id;
+  id: Id;
   /**
    * Can be used to identify the object type or search for the object. Read-only.
+   * @readonly
    */
-  _type: string;
+  type: string;
+
+  get: (attribute: string) => unknown;
 }
 
 export interface Roll20Object extends Roll20BaseObject {
   /**
    * ID of the page the object is in. Read-only.
+   * @readonly
    */
-  _pageid: Id;
+  pageid: Id;
 }
 
 export interface CreatableRoll20Object {

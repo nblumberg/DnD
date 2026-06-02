@@ -4,34 +4,40 @@ export interface Deck extends Roll20BaseObject {
   /**
    * what internal card sequencer index is used to advance the deck when drawing cards.
    * @default -1
+   * @readonly
    */
-  _cardSequencer: number;
+  cardSequencer: number;
   /**
    * a comma-delimited list of cards which are currently in the deck (including those which have been played to the tabletop/hands). Changes when the deck is shuffled.
    * @default ""
+   * @readonly
    */
-  _currentDeck: string;
+  currentDeck: string;
   /**
    * the current index of our place in the deck, 'what card will be drawn next?'
    * @default -1
+   * @readonly
    */
-  _currentIndex: number;
+  currentIndex: number;
   /**
    * show the current card on top of the deck.
    * @default true
+   * @readonly
    */
-  _currentCardShown: boolean;
+  currentCardShown: boolean;
 
   /**
    * what's the current discard pile for this deck? comma-delimited list of cards. These are cards which have been removed from play and will not be put back into the deck on a shuffle until a recall is performed.
    * @default ""
+   * @readonly
    */
-  _discardPile: string;
+  discardPile: string;
 
   /**
    * @default "deck"
+   * @readonly
    */
-  _type: "deck";
+  type: "deck";
 
   /**
    * the 'back' of the cards for this deck.

@@ -5,8 +5,9 @@ export interface JukeboxTrack extends Roll20BaseObject {
   /**
    * Can be used to identify the object type or search for the object. Read-only.
    * @default "jukeboxtrack"
+   * @readonly
    */
-  _type: "jukeboxtrack";
+  type: "jukeboxtrack";
 
   /**
    * Should the track be looped? Set to true if so.

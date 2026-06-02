@@ -3,7 +3,8 @@ import { Id } from "./ids";
 import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
 
 export interface RollableTable extends Roll20BaseObject, CreatableRoll20Object {
-  _type: "rollabletable";
+  /** @readonly */
+  type: "rollabletable";
 
   /**
    * The name of the table.
@@ -19,10 +20,12 @@ export interface RollableTable extends Roll20BaseObject, CreatableRoll20Object {
 export interface TableItem extends Roll20BaseObject, CreatableRoll20Object {
   /**
    * ID of the table this item belongs to. Read-only.
+   * @readonly
    */
-  _rollabletableid: Id;
+  rollabletableid: Id;
 
-  _type: "tableitem";
+  /** @readonly */
+  type: "tableitem";
 
   /**
    * URL to an image used for the table item. See the note about avatar and imgsrc restrictions below.

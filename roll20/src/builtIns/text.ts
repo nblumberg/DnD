@@ -6,8 +6,9 @@ import { CreatableRoll20Object } from "./roll20Objects";
 export interface Text extends CreatableRoll20Object, ControlledObject, Rect {
   /**
    * Read only
+   * @readonly
    */
-  _type: "text";
+  type: "text";
 
   color: Color;
 

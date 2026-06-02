@@ -6,38 +6,44 @@ export interface Player extends Roll20BaseObject {
    * Can be used to identify the object type or search for the object. Read-only.
    */
   /**
-   * User ID — site-wide. For example, the player's user page on the wiki is /User:ID, where ID is the same value stored in _d20userid. Read-only.
+   * User ID — site-wide. For example, the player's user page on the wiki is /User:ID, where ID is the same value stored in d20userid. Read-only.
+   * @readonly
    */
-  _d20userid: string;
+  d20userid: string;
 
   /**
    * The player's current display name. May be changed from the user's settings page. Read-only.
    * @default ""
+   * @readonly
    */
-  _displayname: string;
+  displayname: string;
 
   /**
    * The page id of the last page the player viewed as a GM. This property is not updated for players or GMs that have joined as players. Read-only.
    * @default ""
+   * @readonly
    */
-  _lastpage: string;
+  lastpage: string;
 
   /**
    * Comma-delimited string of the macros in the player's macro bar. Read-only.
    * @default ""
+   * @readonly
    */
-  _macrobar: string;
+  macrobar: string;
 
   /**
    * Read-only.
    * @default false
+   * @readonly
    */
-  _online: boolean;
+  online: boolean;
 
   /**
    * Can be used to identify the object type or search for the object. Read-only.
+   * @readonly
    */
-  _type: "player";
+  type: "player";
 
   /**
    * The color of the square by the player's name, as well as the color of their measurements on the map, their ping circles, etc.
@@ -56,6 +62,8 @@ export interface Player extends Roll20BaseObject {
    * @default ""
    */
   speakingas: string;
+
+  get<K extends keyof Player>(property: K): Player[K];
 }
 
 type _Player = Player;

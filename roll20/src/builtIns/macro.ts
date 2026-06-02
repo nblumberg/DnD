@@ -4,13 +4,15 @@ import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
 export interface Macro extends Roll20BaseObject, CreatableRoll20Object {
   /**
    * The ID of the player that created this macro. Read-only.
+   * @readonly
    */
-  _playerid: Id;
+  playerid: Id;
 
   /**
    * Read only
+   * @readonly
    */
-  _type: "macro";
+  type: "macro";
 
   /**
    * The text of the macro.

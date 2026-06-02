@@ -5,10 +5,12 @@ export interface Hand extends Roll20BaseObject {
   /**
    * ID of the player to whom the hand belongs
    * @default ""
+   * @readonly
    */
-  _parentid: Id;
+  parentid: Id;
 
-  _type: "hand";
+  /** @readonly */
+  type: "hand";
 
   /**
    * comma-delimited list of cards currently in the hand. Note that this is no longer read only. Ideally, it should only be adjusted with the card deck functions.

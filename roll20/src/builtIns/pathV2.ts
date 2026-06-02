@@ -20,8 +20,9 @@ export interface Pathv2
     Coordinate {
   /**
    * Can be used to identify the object type or search for the object. Read-only.
+   * @readonly
    */
-  _type: "pathv2";
+  type: "pathv2";
 
   /**
    * Dynamic Lighting Barrier type

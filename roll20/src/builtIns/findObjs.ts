@@ -21,5 +21,5 @@ declare global {
    * @param {Record<string, unknown>} attributes An object containing a list of attributes to filter by. For example, if you want to find all graphics on the current page, you would pass in {_pageid: Campaign().get("playerpageid"), _type: "graphic"}.
    * @returns {AllObjects[]} An array of all objects that match the provided attributes.
    */
-  function findObjs(attributes: Record<string, unknown>): AllObjects[];
+  function findObjs<T extends AllObjects>(attributes: Record<string, unknown>): T[];
 }

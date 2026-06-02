@@ -59,8 +59,9 @@ type PinIcon =
 export interface Pin extends Roll20Object, Coordinate {
   /**
    * Read only
+   * @readonly
    */
-  _type: "pin";
+  type: "pin";
 
   /**
    * Format for automatically generated notes. Valid values: "" (empty string), "blockquote".

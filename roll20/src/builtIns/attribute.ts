@@ -8,15 +8,17 @@ export interface Attribute extends Roll20BaseObject, CreatableRoll20Object {
    * Can be used to identify the object type or search for the object.
    * Read-only.
    * @default "attribute"
+   * @readonly
    */
-  _type: "attribute";
+  type: "attribute";
 
   /**
    * ID of the character this attribute belongs to.
    * Read-only. Mandatory when using createObj.
    * @default ""
+   * @readonly
    */
-  _characterid: string;
+  characterid: string;
 
   /**
    * Name of the attribute.

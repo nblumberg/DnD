@@ -5,15 +5,17 @@ export interface Ability extends Roll20BaseObject, CreatableRoll20Object {
    * Can be used to identify the object type or search for the object.
    * Read-only.
    * @default "ability"
+   * @readonly
    */
-  _type: "ability";
+  type: "ability";
 
   /**
    * ID of the character this ability belongs to.
    * Read-only. Mandatory when using createObj.
    * @default ""
+   * @readonly
    */
-  _characterid: string;
+  characterid: string;
 
   /**
    * The text of the ability.

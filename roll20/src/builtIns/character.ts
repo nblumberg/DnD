@@ -27,12 +27,14 @@ export interface Character extends Roll20BaseObject, CreatableRoll20Object {
   /**
    * A JSON string that contains the data for the Character's default token if one is set. Note that this is a "blob" similar to "bio" and "notes", so you must pass a callback function to get(). Read-only.
    * @default ""
+   * @readonly
    */
-  _defaulttoken: string;
+  defaulttoken: string;
   /**
    * Read only
+   * @readonly
    */
-  _type: "character";
+  type: "character";
 
   /**
    * @default false

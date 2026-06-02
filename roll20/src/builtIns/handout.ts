@@ -10,13 +10,15 @@ export interface Handout extends Roll20BaseObject, CreatableRoll20Object {
   /**
    * A JSON string containing an array of pin objects associated with parts of this handout
    * @default "[]"
+   * @readonly
    */
-  _pins: string;
+  pins: string;
 
   /**
    * Read-only identifier for the object type
+   * @readonly
    */
-  _type: "handout";
+  type: "handout";
 
   /**
    * @default false

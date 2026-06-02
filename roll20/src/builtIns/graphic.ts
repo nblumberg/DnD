@@ -36,16 +36,19 @@ type SubType = "token" | "card";
 export interface Graphic extends ControlledObject, CreatableRoll20Object, Rect {
   /**
    * Read only
+   * @readonly
    */
-  _type: "graphic";
+  type: "graphic";
   /**
    * May be "token" (for tokens and maps) or "card" (for cards). Read-only.
+   * @readonly
    */
-  _subtype: SubType;
+  subtype: SubType;
   /**
    * Set to an ID if the graphic is a card. Read-only.
+   * @readonly
    */
-  _cardid: Id;
+  cardid: Id;
 
   /**
    * The radius around a token where Advanced Fog of War is revealed.

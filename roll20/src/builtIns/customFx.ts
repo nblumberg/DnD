@@ -373,7 +373,8 @@ interface CustomFxDefinition {
  * A Roll20 FX object, which defines a custom visual effect that can be spawned with spawnFx and spawnFxBetweenPoints.
  */
 export interface CustomFx extends Roll20BaseObject {
-  _type: "custfx";
+  /** @readonly */
+  type: "custfx";
 
   /**
    * Javascript object describing the FX.

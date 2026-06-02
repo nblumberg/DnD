@@ -32,8 +32,10 @@ export interface InlineRoll {
 
 /** A token that was selected when an API command was entered */
 export interface SelectedToken {
-  _id: Id;
-  _type: "graphic";
+  /** @readonly */
+  id: Id;
+  /** @readonly */
+  type: "graphic";
 }
 
 /**

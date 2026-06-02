@@ -25,14 +25,16 @@ type JukeboxTrigger = "nonestopall" | Id;
 export interface Page extends Roll20BaseObject {
   /**
    * Read only
+   * @readonly
    */
-  _type: "page";
+  type: "page";
 
   /**
    * Comma-delimited list of IDs specifying the ordering of objects on the page. toFront and toBack (and their associated context menu items) can re-order this list. Read-only.
    * @default ""
+   * @readonly
    */
-  _zorder: IdList;
+  zorder: IdList;
 
   /**
    * Hexadecimal color of the map background.
