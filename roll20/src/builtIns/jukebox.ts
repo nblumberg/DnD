@@ -44,8 +44,8 @@ declare global {
   type JukeboxTrack = _JukeboxTrack;
   
   /**
-   *
-   * @param {Id} playlist PLAYLIST_ID(String) The id of the playlist to start playing.
+   * The play function takes in the Folder ID (get it from the "_jukeboxfolder" property in the Campaign object) of the playlist, and will begin playing that playlist for everyone in the game.
+   * @param {Id} playlist the Folder ID (get it from the "_jukeboxfolder" property in the Campaign object) of the playlist you want to play.
    * @returns {void}
    * @example
    * var playlists = JSON.parse(Campaign().get('jukeboxfolder')),
@@ -55,7 +55,7 @@ declare global {
   function playJukeboxPlaylist(playlist: Id): void;
 
   /**
-   * Stops all currently playing jukebox playlists.
+   * The stop function does not require any arguments, and will stop any playlist that is currently playing.
    * @example stopJukeboxPlaylist();
    */
   function stopJukeboxPlaylist(): void;

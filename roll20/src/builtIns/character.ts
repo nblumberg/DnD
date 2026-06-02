@@ -1,5 +1,6 @@
 import { AvatarImgSrc } from "./avatarImgSrc";
 import { BioGmNotesNotes } from "./bioGmNotesNotes";
+import { Graphic } from "./graphic";
 import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
 
 /**
@@ -82,4 +83,11 @@ export interface Character extends Roll20BaseObject, CreatableRoll20Object {
 type _Character = Character;
 declare global {
   type Character = _Character;
+
+  /**
+   * Sets the default token for the supplied Character Object to the details of the supplied Token Object. Both objects must already exist. This will overwrite any default token currently associated with the character.
+   * @param {Character} character The character object for which to set the default token.
+   * @param {Graphic} token The token object to set as the default token for the character.
+   */
+  function setDefaultTokenForCharacter(character: Character, token: Graphic): void;
 }
