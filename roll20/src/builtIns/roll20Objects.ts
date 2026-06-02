@@ -30,7 +30,7 @@ export interface Roll20BaseObject {
    */
   type: string;
 
-  get: (attribute: string) => unknown;
+  get<K extends keyof this>(attribute: K): this[K];
 }
 
 export interface Roll20Object extends Roll20BaseObject {

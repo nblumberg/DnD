@@ -63,7 +63,6 @@ export interface Player extends Roll20BaseObject {
    */
   speakingas: string;
 
-  get<K extends keyof Player>(property: K): Player[K];
 }
 
 type _Player = Player;
