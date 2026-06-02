@@ -145,7 +145,7 @@ export interface ParsedRollResult {
 
 export type AllChatMessages = ApiChatMessage | WhisperChatMessage | RollResultMessage | ChatMessage;
 
-type InputHtmlTag = "code" | "span" | "div" | "label" | "a" | "br" | "p" | "b" | "i" | "del" | "strike" | "u" | "img" | "blockquote" | "mark" | "cite" | "small" | "ul" | "ol" | "li" | "hr" | "dl" | "dt" | "dd" | "sup" | "sub" | "big" | "pre" | "figure" | "figcaption" | "strong" | "em" | "table" | "tr" | "td" | "th" | "tbody" | "thead" | "tfoot" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+export type InputHtmlTag ="code" | "span" | "div" | "label" | "a" | "br" | "p" | "b" | "i" | "del" | "strike" | "u" | "img" | "blockquote" | "mark" | "cite" | "small" | "ul" | "ol" | "li" | "hr" | "dl" | "dt" | "dd" | "sup" | "sub" | "big" | "pre" | "figure" | "figcaption" | "strong" | "em" | "table" | "tr" | "td" | "th" | "tbody" | "thead" | "tfoot" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
 declare global {
   /**

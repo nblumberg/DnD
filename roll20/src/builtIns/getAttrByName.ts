@@ -47,9 +47,9 @@ declare global {
    * @param {("current" | "max")} value_type The type of value you want to get.
    * @returns {string | number} The value of the attribute.
    */
-  function getAttrByName(
+  function getAttrByName<K extends keyof Character>(
     character_id: Id,
-    attribute_name: keyof Character,
+    attribute_name: K,
     value_type?: "current" | "max"
-  ): string | number;
+  ): Character[K];
 }

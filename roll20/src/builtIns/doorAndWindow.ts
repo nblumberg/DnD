@@ -29,7 +29,7 @@ export interface Roll20Window extends Roll20Object, Coordinate {
 /**
  * Note: Window and Door use an inverted axis compared to other types of objects. For instance, a top variable that would be 100 for another object is y -100 for window or door.
  */
-export interface Door extends Roll20Object, Omit<Roll20Window, "type"> {
+export interface Door extends Omit<Roll20Window, "type"> {
   /**
    * Read only
    * @readonly

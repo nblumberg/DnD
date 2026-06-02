@@ -17,20 +17,19 @@ import { Pathv2 } from "./pathV2";
 import { Pin } from "./pin";
 import { Player } from "./player";
 import {
-  AllObjects,
-  OBJECT_TYPES,
-  ObjectType,
-  Roll20BaseObject,
-  Roll20Object,
+    AllObjects,
+    APIObject,
+    OBJECT_TYPES,
+    ObjectType,
+    Roll20Object,
 } from "./roll20Objects";
 import { RollableTable, TableItem } from "./rollableTable";
 import { Text } from "./text";
 
-const BASE_OBJECT_KEYS: (keyof Roll20BaseObject)[] = ["_id", "_type"] as const;
+const BASE_OBJECT_KEYS: (keyof APIObject)[] = ["id", "type"] as const;
 const OBJECT_KEYS: (keyof Roll20Object)[] = [
-  "_id",
-  "_type",
-  "_pageid",
+  ...BASE_OBJECT_KEYS,
+  "pageid",
 ] as const;
 const CONTROLLED_OBJECT_KEYS: (keyof ControlledObject)[] = [
   ...OBJECT_KEYS,
@@ -45,7 +44,7 @@ const CONTROLLED_OBJECT_KEYS: (keyof ControlledObject)[] = [
 ] as const;
 const ABILITY_KEYS: (keyof Ability)[] = [
   ...BASE_OBJECT_KEYS,
-  "_characterid",
+  "characterid",
   "action",
   "description",
   "name",
@@ -54,7 +53,7 @@ const ABILITY_KEYS: (keyof Ability)[] = [
 ] as const;
 const ATTRIBUTE_KEYS: (keyof Attribute)[] = [
   ...BASE_OBJECT_KEYS,
-  "_characterid",
+  "characterid",
   "name",
   "current",
   "max",
@@ -62,14 +61,14 @@ const ATTRIBUTE_KEYS: (keyof Attribute)[] = [
 ] as const;
 const CARD_KEYS: (keyof Card)[] = [
   ...BASE_OBJECT_KEYS,
-  "_deckid",
+  "deckid",
   "avatar",
   "card_back",
   "name",
 ] as const;
 const CHARACTER_KEYS: (keyof Character)[] = [
   ...BASE_OBJECT_KEYS,
-  "_defaulttoken",
+  "defaulttoken",
   "archived",
   "avatar",
   "bio",
@@ -86,11 +85,11 @@ const CUSTOMFX_KEYS: (keyof CustomFx)[] = [
 ] as const;
 const DECK_KEYS: (keyof Deck)[] = [
   ...BASE_OBJECT_KEYS,
-  "_cardSequencer",
-  "_currentDeck",
-  "_currentIndex",
-  "_currentCardShown",
-  "_discardPile",
+  "cardSequencer",
+  "currentDeck",
+  "currentIndex",
+  "currentCardShown",
+  "discardPile",
   "avatar",
   "cardsplayed",
   "defaultheight",
@@ -118,8 +117,8 @@ const WINDOW_KEYS: (keyof Roll20Window)[] = [
 ] as const;
 const GRAPHIC_KEYS: (keyof Graphic)[] = [
   ...CONTROLLED_OBJECT_KEYS,
-  "_subtype",
-  "_cardid",
+  "subtype",
+  "cardid",
   "adv_fow_view_distance",
   "aura1_color",
   "aura1_options",
@@ -190,13 +189,13 @@ const GRAPHIC_KEYS: (keyof Graphic)[] = [
 ] as const;
 const HAND_KEYS: (keyof Hand)[] = [
   ...BASE_OBJECT_KEYS,
-  "_parentid",
+  "parentid",
   "currentHand",
   "currentView",
 ] as const;
 const HANDOUT_KEYS: (keyof Handout)[] = [
   ...BASE_OBJECT_KEYS,
-  "_pins",
+  "pins",
   "archived",
   "avatar",
   "controlledby",
@@ -216,7 +215,7 @@ const JUKEBBOXTRACK_KEYS: (keyof JukeboxTrack)[] = [
 ] as const;
 const MACRO_KEYS: (keyof Macro)[] = [
   ...BASE_OBJECT_KEYS,
-  "_playerid",
+  "playerid",
   "action",
   "istokenaction",
   "name",
@@ -225,7 +224,7 @@ const MACRO_KEYS: (keyof Macro)[] = [
 ] as const;
 const PAGE_KEYS: (keyof Page)[] = [
   ...BASE_OBJECT_KEYS,
-  "_zorder",
+  "zorder",
   "background_color",
   "daylight_mode_enabled",
   "daylightModeOpacity",
@@ -300,11 +299,11 @@ const PIN_KEYS: (keyof Pin)[] = [
 ] as const;
 const PLAYER_KEYS: (keyof Player)[] = [
   ...BASE_OBJECT_KEYS,
-  "_d20userid",
-  "_displayname",
-  "_lastpage",
-  "_macrobar",
-  "_online",
+  "d20userid",
+  "displayname",
+  "lastpage",
+  "macrobar",
+  "online",
   "color",
   "showmacrobar",
   "speakingas",
@@ -317,7 +316,7 @@ const ROLLABLETABLE_KEYS: (keyof RollableTable)[] = [
 ] as const;
 const TABLEITEM_KEYS: (keyof TableItem)[] = [
   ...BASE_OBJECT_KEYS,
-  "_rollabletableid",
+  "rollabletableid",
   "avatar",
   "name",
   "weight",
@@ -353,6 +352,15 @@ const OBJECT_TYPE_TO_KEYS: Record<ObjectType, readonly string[]> = {
   window: WINDOW_KEYS,
 } as const;
 
+const READONLY_KEYS = new Set([
+  "id", "type", "pageid",
+  "characterid", "deckid", "defaulttoken",
+  "cardSequencer", "currentDeck", "currentIndex", "currentCardShown", "discardPile",
+  "subtype", "cardid", "parentid", "pins", "playerid",
+  "zorder", "d20userid", "displayname", "lastpage", "macrobar", "online",
+  "rollabletableid",
+]);
+
 const OBJECT_BASE_EVENT_TYPES = ["change", "add", "destroy"] as const;
 const EVENT_OBJECT_TYPES = OBJECT_BASE_EVENT_TYPES.flatMap((baseEvent) =>
   OBJECT_TYPES.map((objectType) => `${baseEvent}:${objectType}` as const)
@@ -360,7 +368,7 @@ const EVENT_OBJECT_TYPES = OBJECT_BASE_EVENT_TYPES.flatMap((baseEvent) =>
 const EVENT_OBJECT_ATTRIBUTE_TYPES = EVENT_OBJECT_TYPES.flatMap((baseEvent) => {
   const objectType = baseEvent.split(":")[1] as ObjectType;
   const objectKeys = OBJECT_TYPE_TO_KEYS[objectType];
-  const attributeKeys = objectKeys.filter((key) => !key.startsWith("_"));
+  const attributeKeys = objectKeys.filter((key) => !READONLY_KEYS.has(key));
   return attributeKeys.map(
     (attributeType) => `${baseEvent}:${attributeType}` as const
   );

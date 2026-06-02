@@ -1,7 +1,8 @@
 import { AvatarImgSrc } from "./avatarImgSrc";
 import { BioGmNotesNotes } from "./bioGmNotesNotes";
+import { DnD2014CharacterAttributes } from "./dNd2014Character";
 import { Graphic } from "./graphic";
-import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
+import { APIObject, CreatableRoll20Object } from "./roll20Objects";
 
 /**
  * Working with Character Sheets
@@ -23,7 +24,7 @@ import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
  *
  * In the case that the requested attribute does not exist, getAttrByName() will return undefined.
  */
-export interface Character extends Roll20BaseObject, CreatableRoll20Object {
+export interface Character extends APIObject, CreatableRoll20Object, DnD2014CharacterAttributes {
   /**
    * A JSON string that contains the data for the Character's default token if one is set. Note that this is a "blob" similar to "bio" and "notes", so you must pass a callback function to get(). Read-only.
    * @default ""
@@ -81,6 +82,7 @@ export interface Character extends Roll20BaseObject, CreatableRoll20Object {
    */
   name: string;
 }
+
 
 type _Character = Character;
 declare global {
