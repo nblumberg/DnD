@@ -1,7 +1,7 @@
 import { Id, IdList } from "./ids";
-import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
+import { APIObject, CreatableRoll20Object } from "./roll20Objects";
 
-export interface Macro extends Roll20BaseObject, CreatableRoll20Object {
+export interface Macro extends APIObject, CreatableRoll20Object {
   /**
    * The ID of the player that created this macro. Read-only.
    * @readonly

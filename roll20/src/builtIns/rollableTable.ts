@@ -1,8 +1,8 @@
 import { AvatarImgSrc } from "./avatarImgSrc";
 import { Id } from "./ids";
-import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
+import { APIObject, CreatableRoll20Object } from "./roll20Objects";
 
-export interface RollableTable extends Roll20BaseObject, CreatableRoll20Object {
+export interface RollableTable extends APIObject, CreatableRoll20Object {
   /** @readonly */
   type: "rollabletable";
 
@@ -17,7 +17,7 @@ export interface RollableTable extends Roll20BaseObject, CreatableRoll20Object {
   showplayers: boolean;
 }
 
-export interface TableItem extends Roll20BaseObject, CreatableRoll20Object {
+export interface TableItem extends APIObject, CreatableRoll20Object {
   /**
    * ID of the table this item belongs to. Read-only.
    * @readonly

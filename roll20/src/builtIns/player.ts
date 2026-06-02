@@ -1,7 +1,7 @@
 import { Id } from "./ids";
-import { Roll20BaseObject } from "./roll20Objects";
+import { APIObject } from "./roll20Objects";
 
-export interface Player extends Roll20BaseObject {
+export interface Player extends APIObject {
   /**
    * Can be used to identify the object type or search for the object. Read-only.
    */

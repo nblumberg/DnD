@@ -1,9 +1,9 @@
-import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
+import { APIObject, CreatableRoll20Object } from "./roll20Objects";
 
 /**
  *  Important: See the note below about working with Character Sheets for information on how Character Sheet default values affect the use of Attributes.
  */
-export interface Attribute extends Roll20BaseObject, CreatableRoll20Object {
+export interface Attribute extends APIObject, CreatableRoll20Object {
   /**
    * Can be used to identify the object type or search for the object.
    * Read-only.

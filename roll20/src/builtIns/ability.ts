@@ -1,6 +1,6 @@
-import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
+import { APIObject, CreatableRoll20Object } from "./roll20Objects";
 
-export interface Ability extends Roll20BaseObject, CreatableRoll20Object {
+export interface Ability extends APIObject, CreatableRoll20Object {
   /**
    * Can be used to identify the object type or search for the object.
    * Read-only.

@@ -1,7 +1,7 @@
 import { Id, IdList } from "./ids";
-import { Roll20BaseObject } from "./roll20Objects";
+import { APIObject } from "./roll20Objects";
 
-export interface Hand extends Roll20BaseObject {
+export interface Hand extends APIObject {
   /**
    * ID of the player to whom the hand belongs
    * @default ""

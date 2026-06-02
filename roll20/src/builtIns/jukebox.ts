@@ -1,7 +1,7 @@
 import { Id } from "./ids";
-import { Roll20BaseObject } from "./roll20Objects";
+import { APIObject } from "./roll20Objects";
 
-export interface JukeboxTrack extends Roll20BaseObject {
+export interface JukeboxTrack extends APIObject {
   /**
    * Can be used to identify the object type or search for the object. Read-only.
    * @default "jukeboxtrack"

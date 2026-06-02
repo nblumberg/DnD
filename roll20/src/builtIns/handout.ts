@@ -1,12 +1,12 @@
 import { AvatarImgSrc } from "./avatarImgSrc";
 import { BioGmNotesNotes } from "./bioGmNotesNotes";
 import { IdList } from "./ids";
-import { CreatableRoll20Object, Roll20BaseObject } from "./roll20Objects";
+import { APIObject, CreatableRoll20Object } from "./roll20Objects";
 
 /**
  * Note: The API does not have access to the folder hierarchy. API created handouts will be placed at the root level.
  */
-export interface Handout extends Roll20BaseObject, CreatableRoll20Object {
+export interface Handout extends APIObject, CreatableRoll20Object {
   /**
    * A JSON string containing an array of pin objects associated with parts of this handout
    * @default "[]"

@@ -1,7 +1,7 @@
 import { ColorAlphaStructure } from "./colors";
 import { Coordinate } from "./coordinateAndRect";
 import { Id } from "./ids";
-import { Roll20BaseObject } from "./roll20Objects";
+import { APIObject } from "./roll20Objects";
 
 /**
  * The type of particle emitter to place. 
@@ -372,7 +372,7 @@ interface CustomFxDefinition {
 /**
  * A Roll20 FX object, which defines a custom visual effect that can be spawned with spawnFx and spawnFxBetweenPoints.
  */
-export interface CustomFx extends Roll20BaseObject {
+export interface CustomFx extends APIObject {
   /** @readonly */
   type: "custfx";
 

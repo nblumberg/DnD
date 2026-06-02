@@ -18,7 +18,7 @@ import { Player } from "./player";
 import { RollableTable, TableItem } from "./rollableTable";
 import { Text } from "./text";
 
-export interface Roll20BaseObject {
+export interface APIObject {
   /**
    * A unique ID for this object. Globally unique across all objects in this game. Read-only.
    * @readonly
@@ -33,7 +33,7 @@ export interface Roll20BaseObject {
   get<K extends keyof this>(attribute: K): this[K];
 }
 
-export interface Roll20Object extends Roll20BaseObject {
+export interface Roll20Object extends APIObject {
   /**
    * ID of the page the object is in. Read-only.
    * @readonly

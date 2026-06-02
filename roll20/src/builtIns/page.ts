@@ -1,5 +1,5 @@
 import { Id, IdList } from "./ids";
-import { Roll20BaseObject } from "./roll20Objects";
+import { APIObject } from "./roll20Objects";
 
 type DarknessEffect = "none" | "darkfog" | "lightfog";
 
@@ -22,7 +22,7 @@ type GridType = "square" | "hex" | "hexr";
  */
 type JukeboxTrigger = "nonestopall" | Id;
 
-export interface Page extends Roll20BaseObject {
+export interface Page extends APIObject {
   /**
    * Read only
    * @readonly

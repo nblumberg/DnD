@@ -1,7 +1,7 @@
 import { Id } from "./ids";
-import { Roll20BaseObject } from "./roll20Objects";
+import { APIObject } from "./roll20Objects";
 
-export interface Card extends Roll20BaseObject {
+export interface Card extends APIObject {
   /**
    * ID of the deck
    * @readonly

@@ -1,6 +1,6 @@
 import { Id } from "./ids";
-import { Roll20BaseObject } from "./roll20Objects";
-export interface Campaign extends Roll20BaseObject {
+import { APIObject } from "./roll20Objects";
+export interface Campaign extends APIObject {
   /**
    * A unique ID for this object. Globally unique across all objects in this game. Read-only.
    * @readonly

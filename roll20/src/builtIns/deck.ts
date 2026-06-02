@@ -1,6 +1,6 @@
-import { Roll20BaseObject } from "./roll20Objects";
+import { APIObject } from "./roll20Objects";
 
-export interface Deck extends Roll20BaseObject {
+export interface Deck extends APIObject {
   /**
    * what internal card sequencer index is used to advance the deck when drawing cards.
    * @default -1
