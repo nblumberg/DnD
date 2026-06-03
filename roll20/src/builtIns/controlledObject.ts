@@ -11,7 +11,7 @@ export interface ControlledObject extends Roll20Object {
    * Comma-delimited list of player IDs who can control the path. Controlling players may delete the path. If the path was created by a player, that player is automatically included in the list.
    * All Players is represented by having 'all' in the list.
    */
-  controlledBy: IdList;
+  controlledby: IdList;
   /**
    * When true, the overlapping of a object layer graphic's inner bound with the foreground layer object will cause its opacity to become the value in fadeOpacity.
    * When false, it will remain at full opacity regardless of overlap.

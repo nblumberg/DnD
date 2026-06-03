@@ -17,11 +17,11 @@ import { Pathv2 } from "./pathV2";
 import { Pin } from "./pin";
 import { Player } from "./player";
 import {
-    AllObjects,
-    APIObject,
-    OBJECT_TYPES,
-    ObjectType,
-    Roll20Object,
+  AllObjects,
+  APIObject,
+  OBJECT_TYPES,
+  ObjectType,
+  Roll20Object,
 } from "./roll20Objects";
 import { RollableTable, TableItem } from "./rollableTable";
 import { Text } from "./text";
@@ -33,7 +33,7 @@ const OBJECT_KEYS: (keyof Roll20Object)[] = [
 ] as const;
 const CONTROLLED_OBJECT_KEYS: (keyof ControlledObject)[] = [
   ...OBJECT_KEYS,
-  "controlledBy",
+  "controlledby",
   "fadeOnOverlap",
   "fadeOpacity",
   "layer",
@@ -183,8 +183,8 @@ const GRAPHIC_KEYS: (keyof Graphic)[] = [
   "token_markers",
   "top",
   "left",
-  "bottom",
-  "right",
+  "width",
+  "height",
   "remove",
 ] as const;
 const HAND_KEYS: (keyof Hand)[] = [
