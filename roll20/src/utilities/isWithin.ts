@@ -16,19 +16,19 @@ export function isWithin(
     height: bHeight,
   }: Rect
 ) {
-  const tokenRight = aLeft + aWidth;
-  const tokenBottom = aTop + aHeight;
-  const portalRight = bLeft + bWidth;
-  const portalBottom = bTop + bHeight;
+  const aRight = aLeft + aWidth;
+  const aBottom = aTop + aHeight;
+  const bRight = bLeft + bWidth;
+  const bBottom = bTop + bHeight;
 
   // log(
-  //   `Checking ${name} [${bLeft}, ${bTop}, ${portalRight}, ${portalBottom}] vs. [${aLeft}, ${aTop}, ${tokenRight}, ${tokenBottom}]`
+  //   `Checking ${name} [${bLeft}, ${bTop}, ${bRight}, ${bBottom}] vs. [${aLeft}, ${aTop}, ${aRight}, ${aBottom}]`
   // );
 
-  const leftEdgeWithin = isBetween(aLeft, bLeft, portalRight);
-  const rightEdgeWithin = isBetween(tokenRight, bLeft, portalRight);
-  const topEdgeWithin = isBetween(aTop, bTop, portalBottom);
-  const bottomEdgeWithin = isBetween(tokenBottom, bTop, portalBottom);
+  const leftEdgeWithin = isBetween(aLeft, bLeft, bRight);
+  const rightEdgeWithin = isBetween(aRight, bLeft, bRight);
+  const topEdgeWithin = isBetween(aTop, bTop, bBottom);
+  const bottomEdgeWithin = isBetween(aBottom, bTop, bBottom);
   const topLeftCornerWithin = leftEdgeWithin && topEdgeWithin;
   const topRightCornerWithin = rightEdgeWithin && topEdgeWithin;
   const bottomLeftCornerWithin = leftEdgeWithin && bottomEdgeWithin;
@@ -41,16 +41,16 @@ export function isWithin(
   if (atLeastACornerWithin) {
     return true;
   }
-  // Because we don't consider exactly matching the portal edges in isBetween so a single edge overlap doesn't count,
-  // we need to check for the case where at least two opposing edges of the token
-  // are exactly overlapping the portal edges as well.
-  // Both horizontal edges matching or both vertical edges matching is considered within the portal,
+  // Because we don't consider exactly matching the rectB edges in isBetween so a single edge overlap doesn't count,
+  // we need to check for the case where at least two opposing edges of rectA
+  // are exactly overlapping the rectB edges as well.
+  // Both horizontal edges matching or both vertical edges matching is considered within rectB,
   // so long at it isn't just a single edge of the opposite orientation also matching (i.e.
-  // the token is next to the portal).
+  // rectA is next to rectB).
   const matchesLeftAndRight =
-    aLeft === bLeft && tokenRight === portalRight;
+    aLeft === bLeft && aRight === bRight;
   const matchesTopAndBottom =
-    aTop === bTop && tokenBottom === portalBottom;
+    aTop === bTop && aBottom === bBottom;
   const matchesBoth = matchesLeftAndRight && matchesTopAndBottom;
   if (
     matchesBoth ||

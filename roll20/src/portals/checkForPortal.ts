@@ -5,6 +5,13 @@ import { isWithin } from "../utilities/isWithin";
 import { getPortal, getPortals } from "./portals";
 import { temporarilyClosePortals } from "./temporarilyClosedPortals";
 
+// ===========================
+// !portal API
+// Support !portal tokens, which allow players to move their characters onto them to be teleported to 
+// another !portal token. The destination portal is determined by the gmnotes field of the token, 
+// which should contain the names of the current and destination portal tokens. 
+// ===========================
+
 /**
  * Check if the Graphic is a Token on the current page and see if it overlaps any portals on the current page.
  * If so, move the Token through the portal and recenter the player's view.
