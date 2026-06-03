@@ -5,22 +5,22 @@ export interface Campaign extends APIObject {
    * A unique ID for this object. Globally unique across all objects in this game. Read-only.
    * @readonly
    */
-  id: "root";
+  readonly id: "root";
   /**
    * A JSON string which contains data about the folder structure of the game. Read-only.
    * @readonly
    */
-  journalfolder: string;
+  readonly journalfolder: string;
   /**
    * A JSON string which contains data about the jukebox playlist structure of the game. Read-only.
    * @readonly
    */
-  jukeboxfolder: string;
+  readonly jukeboxfolder: string;
   /**
    * Read only
    * @readonly
    */
-  type: "campaign";
+  readonly type: "campaign";
 
   /**
    * When true, players will see objects on the foreground layer. When false, they will not.

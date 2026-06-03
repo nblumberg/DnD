@@ -30,12 +30,12 @@ export interface Character extends APIObject, CreatableRoll20Object, DnD2014Char
    * @default ""
    * @readonly
    */
-  defaulttoken: string;
+  readonly defaulttoken: string;
   /**
    * Read only
    * @readonly
    */
-  type: "character";
+  readonly type: "character";
 
   /**
    * @default false

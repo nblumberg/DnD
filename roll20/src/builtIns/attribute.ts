@@ -10,7 +10,7 @@ export interface Attribute extends APIObject, CreatableRoll20Object {
    * @default "attribute"
    * @readonly
    */
-  type: "attribute";
+  readonly type: "attribute";
 
   /**
    * ID of the character this attribute belongs to.
@@ -18,7 +18,7 @@ export interface Attribute extends APIObject, CreatableRoll20Object {
    * @default ""
    * @readonly
    */
-  characterid: string;
+  readonly characterid: string;
 
   /**
    * Name of the attribute.

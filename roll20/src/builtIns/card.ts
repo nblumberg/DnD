@@ -6,10 +6,10 @@ export interface Card extends APIObject {
    * ID of the deck
    * @readonly
    */
-  deckid: Id;
+  readonly deckid: Id;
 
   /** @readonly */
-  type: "card";
+  readonly type: "card";
 
   /**
    * Front of the card

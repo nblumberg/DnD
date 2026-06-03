@@ -10,7 +10,7 @@ export interface Roll20Window extends Roll20Object, Coordinate {
    * Read only
    * @readonly
    */
-  type: "window";
+  readonly type: "window";
   color: Color;
   /**
    * Prevents players from being able to interact with the door.
@@ -34,7 +34,7 @@ export interface Door extends Omit<Roll20Window, "type"> {
    * Read only
    * @readonly
    */
-  type: "door";
+  readonly type: "door";
   /**
    * Removes a door icon from player view and functions as a barrier.
    */

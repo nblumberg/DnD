@@ -22,7 +22,7 @@ export interface Pathv2
    * Can be used to identify the object type or search for the object. Read-only.
    * @readonly
    */
-  type: "pathv2";
+  readonly type: "pathv2";
 
   /**
    * Dynamic Lighting Barrier type

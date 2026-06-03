@@ -12,13 +12,13 @@ export interface Handout extends APIObject, CreatableRoll20Object {
    * @default "[]"
    * @readonly
    */
-  pins: string;
+  readonly pins: string;
 
   /**
    * Read-only identifier for the object type
    * @readonly
    */
-  type: "handout";
+  readonly type: "handout";
 
   /**
    * @default false

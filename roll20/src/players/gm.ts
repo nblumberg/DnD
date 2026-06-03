@@ -1,5 +1,5 @@
 import type { Id } from "../builtIns";
-import { getPlayers } from "./players";
+import { getPlayers } from "./playerStore";
 
 let gm: Player | undefined;
 let gmId: Id | undefined;

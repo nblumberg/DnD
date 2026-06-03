@@ -374,7 +374,7 @@ interface CustomFxDefinition {
  */
 export interface CustomFx extends APIObject {
   /** @readonly */
-  type: "custfx";
+  readonly type: "custfx";
 
   /**
    * Javascript object describing the FX.

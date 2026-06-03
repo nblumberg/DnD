@@ -1,3 +1,4 @@
+export {};
 declare global {
   /**
    * Schedules a function to run after a delay (milliseconds). Returns a numeric timer ID.

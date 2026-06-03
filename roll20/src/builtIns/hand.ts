@@ -7,10 +7,10 @@ export interface Hand extends APIObject {
    * @default ""
    * @readonly
    */
-  parentid: Id;
+  readonly parentid: Id;
 
   /** @readonly */
-  type: "hand";
+  readonly type: "hand";
 
   /**
    * comma-delimited list of cards currently in the hand. Note that this is no longer read only. Ideally, it should only be adjusted with the card deck functions.

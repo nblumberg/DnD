@@ -8,7 +8,7 @@ export interface Text extends CreatableRoll20Object, ControlledObject, Rect {
    * Read only
    * @readonly
    */
-  type: "text";
+  readonly type: "text";
 
   color: Color;
 

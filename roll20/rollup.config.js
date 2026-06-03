@@ -9,5 +9,13 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [typescript()],
+  plugins: [
+    typescript({
+      compilerOptions: {
+        declaration: false,
+        declarationDir: undefined,
+        sourceMap: true,
+      },
+    }),
+  ],
 };

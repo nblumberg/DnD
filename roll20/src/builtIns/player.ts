@@ -9,41 +9,41 @@ export interface Player extends APIObject {
    * User ID — site-wide. For example, the player's user page on the wiki is /User:ID, where ID is the same value stored in d20userid. Read-only.
    * @readonly
    */
-  d20userid: string;
+  readonly d20userid: string;
 
   /**
    * The player's current display name. May be changed from the user's settings page. Read-only.
    * @default ""
    * @readonly
    */
-  displayname: string;
+  readonly displayname: string;
 
   /**
    * The page id of the last page the player viewed as a GM. This property is not updated for players or GMs that have joined as players. Read-only.
    * @default ""
    * @readonly
    */
-  lastpage: string;
+  readonly lastpage: string;
 
   /**
    * Comma-delimited string of the macros in the player's macro bar. Read-only.
    * @default ""
    * @readonly
    */
-  macrobar: string;
+  readonly macrobar: string;
 
   /**
    * Read-only.
    * @default false
    * @readonly
    */
-  online: boolean;
+  readonly online: boolean;
 
   /**
    * Can be used to identify the object type or search for the object. Read-only.
    * @readonly
    */
-  type: "player";
+  readonly type: "player";
 
   /**
    * The color of the square by the player's name, as well as the color of their measurements on the map, their ping circles, etc.

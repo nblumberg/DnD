@@ -7,7 +7,7 @@ export interface Ability extends APIObject, CreatableRoll20Object {
    * @default "ability"
    * @readonly
    */
-  type: "ability";
+  readonly type: "ability";
 
   /**
    * ID of the character this ability belongs to.
@@ -15,7 +15,7 @@ export interface Ability extends APIObject, CreatableRoll20Object {
    * @default ""
    * @readonly
    */
-  characterid: string;
+  readonly characterid: string;
 
   /**
    * The text of the ability.

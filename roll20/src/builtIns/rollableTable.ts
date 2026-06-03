@@ -4,7 +4,7 @@ import { APIObject, CreatableRoll20Object } from "./roll20Objects";
 
 export interface RollableTable extends APIObject, CreatableRoll20Object {
   /** @readonly */
-  type: "rollabletable";
+  readonly type: "rollabletable";
 
   /**
    * The name of the table.
@@ -22,10 +22,10 @@ export interface TableItem extends APIObject, CreatableRoll20Object {
    * ID of the table this item belongs to. Read-only.
    * @readonly
    */
-  rollabletableid: Id;
+  readonly rollabletableid: Id;
 
   /** @readonly */
-  type: "tableitem";
+  readonly type: "tableitem";
 
   /**
    * URL to an image used for the table item. See the note about avatar and imgsrc restrictions below.

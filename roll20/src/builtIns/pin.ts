@@ -61,7 +61,7 @@ export interface Pin extends Roll20Object, Coordinate {
    * Read only
    * @readonly
    */
-  type: "pin";
+  readonly type: "pin";
 
   /**
    * Format for automatically generated notes. Valid values: "" (empty string), "blockquote".

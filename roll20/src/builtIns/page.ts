@@ -27,14 +27,14 @@ export interface Page extends APIObject {
    * Read only
    * @readonly
    */
-  type: "page";
+  readonly type: "page";
 
   /**
    * Comma-delimited list of IDs specifying the ordering of objects on the page. toFront and toBack (and their associated context menu items) can re-order this list. Read-only.
    * @default ""
    * @readonly
    */
-  zorder: IdList;
+  readonly zorder: IdList;
 
   /**
    * Hexadecimal color of the map background.

@@ -23,14 +23,15 @@ export interface APIObject {
    * A unique ID for this object. Globally unique across all objects in this game. Read-only.
    * @readonly
    */
-  id: Id;
+  readonly id: Id;
   /**
    * Can be used to identify the object type or search for the object. Read-only.
    * @readonly
    */
-  type: string;
+  readonly type: string;
 
   get<K extends keyof this>(attribute: K): this[K];
+  set<K extends keyof this>(attribute: K, value: this[K]): void;
 }
 
 export interface Roll20Object extends APIObject {
@@ -38,7 +39,7 @@ export interface Roll20Object extends APIObject {
    * ID of the page the object is in. Read-only.
    * @readonly
    */
-  pageid: Id;
+  readonly pageid: Id;
 }
 
 export interface CreatableRoll20Object {

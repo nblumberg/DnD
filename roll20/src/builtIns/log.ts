@@ -1,3 +1,4 @@
+export {};
 declare global {
   /**
    * Logs a message to the Mod (API) console.

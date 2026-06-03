@@ -1,3 +1,4 @@
+export {};
 declare global {
   /**
    * Generates a random integer between 1 and max (inclusive), using the same pseudorandom algorithm as Roll20's dice engine.

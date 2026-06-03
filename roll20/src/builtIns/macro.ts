@@ -6,13 +6,13 @@ export interface Macro extends APIObject, CreatableRoll20Object {
    * The ID of the player that created this macro. Read-only.
    * @readonly
    */
-  playerid: Id;
+  readonly playerid: Id;
 
   /**
    * Read only
    * @readonly
    */
-  type: "macro";
+  readonly type: "macro";
 
   /**
    * The text of the macro.

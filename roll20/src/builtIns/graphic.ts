@@ -38,17 +38,17 @@ export interface Graphic extends ControlledObject, CreatableRoll20Object, Rect {
    * Read only
    * @readonly
    */
-  type: "graphic";
+  readonly type: "graphic";
   /**
    * May be "token" (for tokens and maps) or "card" (for cards). Read-only.
    * @readonly
    */
-  subtype: SubType;
+  readonly subtype: SubType;
   /**
    * Set to an ID if the graphic is a card. Read-only.
    * @readonly
    */
-  cardid: Id;
+  readonly cardid: Id;
 
   /**
    * The radius around a token where Advanced Fog of War is revealed.

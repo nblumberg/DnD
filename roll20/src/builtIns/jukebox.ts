@@ -7,7 +7,7 @@ export interface JukeboxTrack extends APIObject {
    * @default "jukeboxtrack"
    * @readonly
    */
-  type: "jukeboxtrack";
+  readonly type: "jukeboxtrack";
 
   /**
    * Should the track be looped? Set to true if so.
