@@ -1,23 +1,61 @@
-import { Rect } from "../builtIns";
-import { getRect } from "../utilities";
+import type { Id, Rect } from "../builtIns";
+import { debounce, getCurrentPageId, getRect } from "../utilities";
 
-const positions = new Map<string, Rect>();
+// ===========================
+// !track API
+// Support tracking the movement of graphics on the current page and draw a path of their movement
+// ===========================
+
+type Path = Rect[];
+type PagePaths = Record<Id, Path>;
+type GraphicPaths = Record<Id, PagePaths>;
+interface TrackMovementState {
+  positions: GraphicPaths;
+}
+
+export function getPath(graphic: Graphic): Path {
+  if (!state.trackMovement) {
+    state.trackMovement = { positions: {} };
+  }
+  const trackState = state.trackMovement as unknown as TrackMovementState;
+  const graphicId = graphic.get("id");
+  const pageId = getCurrentPageId();
+  if (!trackState.positions[graphicId]) {
+    trackState.positions[graphicId] = {};
+  }
+  if (!trackState.positions[graphicId][pageId]) {
+    trackState.positions[graphicId][pageId] = [];
+  }
+  return trackState.positions[graphicId][pageId];
+}
 
 /**
- * Get the last known position of the graphic
+ * Get the last known position of the graphic on the current page
  * @param {Graphic} graphic The graphic to get the position of
  * @returns {Rect} The position of the graphic, with left, top, width, and height properties
  */
 export function getLastPosition(graphic: Graphic): Rect {
-  return (
-    positions.get(graphic.id) ?? { ...getRect(graphic), left: -1, top: -1 }
-  );
+  return getPath(graphic)[0] ?? { ...getRect(graphic), left: -1, top: -1 };
 }
 
 /**
- * Set the last known position of the graphic
- * @param {Graphic} graphic The graphic to set the position of
+ * Prepend the current position of the graphic to its history for the current page
+ * @param {Graphic} graphic The graphic to record the position of
  */
 export function updateGraphicPosition(graphic: Graphic): void {
-  positions.set(graphic.id, getRect(graphic));
+  const path = getPath(graphic);
+  const lastPosition = getLastPosition(graphic);
+  const newPosition = getRect(graphic);
+  if (
+    lastPosition.left === newPosition.left &&
+    lastPosition.top === newPosition.top &&
+    lastPosition.width === newPosition.width &&
+    lastPosition.height === newPosition.height
+  ) {
+    return;
+  }
+  path.unshift(newPosition);
 }
+
+on("change:graphic:left", debounce(updateGraphicPosition));
+on("change:graphic:top", debounce(updateGraphicPosition));

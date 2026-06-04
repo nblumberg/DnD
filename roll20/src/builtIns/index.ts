@@ -29,7 +29,7 @@ import "./text";
 import "./timers";
 import "./turnOrder";
 
-export type { ChatMessage } from "./chat";
+export type { ChatMessage, ParsedRollResult } from "./chat";
 export type { ControlledObject } from "./controlledObject";
 export type { Rect } from "./coordinateAndRect";
 export type { Id } from "./ids";
