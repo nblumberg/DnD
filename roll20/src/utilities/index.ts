@@ -1,3 +1,6 @@
+// ===========================
+// Utility functions that are used across multiple modules. 
+// ===========================
 export { centerScreen } from "./centerScreen";
 export { debounce } from "./debounce";
 export { extractProperties } from "./extractProperties";

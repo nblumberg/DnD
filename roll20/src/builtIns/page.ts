@@ -191,6 +191,12 @@ export interface Page extends APIObject {
    * @default 25
    */
   width: number;
+
+  /**
+   * Height in units.
+   * @default 25
+   */
+  height: number;
 }
 
 type _Page = Page;

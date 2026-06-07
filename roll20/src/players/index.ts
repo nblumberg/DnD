@@ -1,3 +1,6 @@
+// ===========================
+// Player & GM utility functions that are used across multiple modules. 
+// ===========================
 import "./onReady";
 
 export { getPCName } from "./getPCName";

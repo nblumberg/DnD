@@ -3,11 +3,6 @@ import { getPCs, getPlayerName, isControlledBy } from "../players";
 import { getCurrentPageId } from "../utilities";
 import { getPath } from "./positions";
 
-// ===========================
-// !track API
-// Support tracking the movement of graphics on the current page and draw a path of their movement
-// ===========================
-
 const TRACK_API_KEY = "!track";
 const TRACK_PATH_DURATION_MS = 10_000;
 const SURVIVAL_DC = 10;
