@@ -24,7 +24,7 @@ function onChatMessage(msg: ChatMessage): void {
   }
 
   const selected = msg.selected ?? [];
-  if (!selected || selected.length === 0) {
+  if (selected.length === 0) {
     sendChat(
       CHECK_API_PREFIX,
       `/w ${getPlayerName(msg.playerid)} Select one or more tokens before using ${CHECK_API_KEY}.`
@@ -56,8 +56,8 @@ function onChatMessage(msg: ChatMessage): void {
     return;
   }
 
-  const dc = dcString.trim() ? parseInt(dcString, 10) : undefined;
-  if (dc && (Number.isNaN(dc) || dc < 0)) {
+  const dc = dcString?.trim() ? parseInt(dcString, 10) : undefined;
+  if (dc !== undefined && (Number.isNaN(dc) || dc <= 0)) {
     sendChat(
       CHECK_API_PREFIX,
       `/w ${getPlayerName(msg.playerid)} The optional third argument to ${CHECK_API_KEY} must be a positive integer.`
