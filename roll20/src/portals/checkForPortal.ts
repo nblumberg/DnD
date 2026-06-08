@@ -1,16 +1,16 @@
 import { graphicToPlayerId } from "../players";
 import { getLastPosition, updateGraphicPosition } from "../trackMovement";
-import { centerScreen, debounce, extractProperties, getCurrentPageId, getRect } from "../utilities";
+import {
+  centerScreen,
+  debounce,
+  extractProperties,
+  getCurrentPageId,
+  getRect,
+} from "../utilities";
 import { isWithin } from "../utilities/isWithin";
+import { debug } from "./debug";
 import { getPortal, getPortals } from "./portals";
 import { temporarilyClosePortals } from "./temporarilyClosedPortals";
-
-// ===========================
-// !portal API
-// Support !portal tokens, which allow players to move their characters onto them to be teleported to 
-// another !portal token. The destination portal is determined by the gmnotes field of the token, 
-// which should contain the names of the current and destination portal tokens. 
-// ===========================
 
 /**
  * Check if the Graphic is a Token on the current page and see if it overlaps any portals on the current page.
@@ -41,7 +41,7 @@ function checkForPortal(graphic: Graphic) {
   // Stop if the token hasn't moved since the last check
   const lastPosition = getLastPosition(graphic);
   const rect = getRect(graphic);
-  log(
+  debug(
     `Checking ${name} for portals, moving from (${lastPosition.left}, ${lastPosition.top}) to (${rect.left}, ${rect.top})`
   );
   if (rect.left === lastPosition.left && rect.top === lastPosition.top) {
@@ -64,7 +64,9 @@ function checkForPortal(graphic: Graphic) {
   // Prevent the token from bouncing back and forth between two-way portals
   const targetPortal = getPortal(portal.targetId);
   if (!targetPortal) {
-    log(`ERROR: Portal ${portal.name} has invalid targetId ${portal.targetId}`);
+    debug(
+      `ERROR: Portal ${portal.name} has invalid targetId ${portal.targetId}`
+    );
     return;
   }
   temporarilyClosePortals(graphic, [portal, targetPortal]);
@@ -73,13 +75,13 @@ function checkForPortal(graphic: Graphic) {
   // }
 
   // Move the token to the target portal and center the screen
-  log(`${name} passing through ${portal.name} to ${targetPortal.name}`);
+  debug(`${name} passing through ${portal.name} to ${targetPortal.name}`);
   graphic.set("left", targetPortal.left);
   graphic.set("top", targetPortal.top);
   updateGraphicPosition(graphic);
   const playerId = graphicToPlayerId(graphic);
   if (!playerId) {
-    log(`ERROR: Could not find player controlling token ${name} (${id})`);
+    debug(`ERROR: Could not find player controlling token ${name} (${id})`);
     return;
   }
   setTimeout(() => {

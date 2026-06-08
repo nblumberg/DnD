@@ -1,7 +1,11 @@
 type BooleanNumber = "0" | "1";
 type BooleanOnOff = "on" | "off";
 
-export interface DnD2014CharacterAttributes {
+interface HomebrewCharacterSheetAttributes {
+  summonOf?: string;
+}
+export interface DnD2014CharacterAttributes
+  extends HomebrewCharacterSheetAttributes {
   npc: BooleanNumber;
   l1mancer_status: "complete";
   rtype: "@{advantagetoggle]";

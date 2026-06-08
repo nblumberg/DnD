@@ -1,3 +1,3 @@
-export { getLastPosition, updateGraphicPosition } from "./positions";
-import "./track";
+import "./initialize";
 
+export { getLastPosition, updateGraphicPosition } from "./positions";

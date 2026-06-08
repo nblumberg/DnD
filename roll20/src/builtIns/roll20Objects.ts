@@ -32,6 +32,7 @@ export interface APIObject {
 
   get<K extends keyof this>(attribute: K): this[K];
   set<K extends keyof this>(attribute: K, value: this[K]): void;
+  set(attributes: Partial<this>): void;
 }
 
 export interface Roll20Object extends APIObject {

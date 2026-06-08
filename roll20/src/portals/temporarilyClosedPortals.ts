@@ -8,7 +8,10 @@ const temporarilyClosedPortalsByGraphic = new Map<Id, Set<Id>>();
  * @param {Graphic} graphic The graphic to temporarily close portals to
  * @param {Portal[]} portals The portals to temporarily close to the graphic
  */
-export function temporarilyClosePortals({ id: graphicId }: Graphic, portals: Portal[]) {
+export function temporarilyClosePortals(
+  { id: graphicId }: Graphic,
+  portals: Portal[]
+) {
   if (!portals || portals.length === 0) {
     return;
   }
@@ -28,6 +31,9 @@ export function temporarilyClosePortals({ id: graphicId }: Graphic, portals: Por
  * @param {Portal} portal The portal to check
  * @returns {boolean} true if the portal is temporarily closed to the token
  */
-export function isPortalTemporarilyClosedToToken({ id: tokenId }: Graphic, { id: portalId }: Portal): boolean {
+export function isPortalTemporarilyClosedToToken(
+  { id: tokenId }: Graphic,
+  { id: portalId }: Portal
+): boolean {
   return temporarilyClosedPortalsByGraphic.get(tokenId)?.has(portalId) ?? false;
 }

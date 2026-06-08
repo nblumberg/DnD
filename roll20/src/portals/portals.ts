@@ -1,11 +1,12 @@
 import type { Id, Rect } from "../builtIns";
+import { debug } from "./debug";
 
-export interface Portal extends Rect { 
-    id: Id;
-    name: string;
-    targetName: string;
-    targetId: Id;
-    pageid: Id;
+export interface Portal extends Rect {
+  id: Id;
+  name: string;
+  targetName: string;
+  targetId: Id;
+  pageid: Id;
 }
 
 const portals = new Map<Id, Portal>();
@@ -13,7 +14,7 @@ const portals = new Map<Id, Portal>();
 export function addPortal(portal: Portal): void {
   const { id, name } = portal;
   if (portals.has(portal.id)) {
-    log(`ERROR: There is already a portal with id ${portal.id}`);
+    debug(`ERROR: There is already a portal with id ${portal.id}`);
     return;
   }
   if (
@@ -22,7 +23,7 @@ export function addPortal(portal: Portal): void {
         name === comparisonName && id !== comparisonId
     )
   ) {
-    log(`ERROR: There is already a portal named ${name}`);
+    debug(`ERROR: There is already a portal named ${name}`);
     return;
   }
   portals.set(portal.id, portal);

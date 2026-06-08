@@ -1,11 +1,6 @@
 import type { Id, Rect } from "../builtIns";
 import { debounce, getCurrentPageId, getRect } from "../utilities";
 
-// ===========================
-// !track API
-// Support tracking the movement of graphics on the current page and draw a path of their movement
-// ===========================
-
 type Path = Rect[];
 type PagePaths = Record<Id, Path>;
 type GraphicPaths = Record<Id, PagePaths>;

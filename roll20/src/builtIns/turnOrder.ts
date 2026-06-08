@@ -50,9 +50,15 @@ export interface TurnOrderEntry {
    * The current value for the item in the list. Can be a number or text.
    */
   pr: number | string;
+  /**
+   * The ID of the page the entry is from.
+   * Not actually part of the turn order entry, but we use it internally to keep track of which page the entry is from so that we can filter out entries from other pages when we read the turn order.
+   */
+  _pageid?: Id;
 }
 
 type _TurnOrderEntry = TurnOrderEntry;
 declare global {
+  type TurnOrderEntry = _TurnOrderEntry;
   type TurnOrder = _TurnOrderEntry[];
 }
