@@ -1,4 +1,5 @@
 import "./builtIns";
+import "./check";
 import "./focus";
 import "./grid";
 import "./initiative";
