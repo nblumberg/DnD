@@ -42,7 +42,7 @@ export function rollGroupCheck({
   );
   sendChat(
     CHECK_API_PREFIX,
-    `&{template:default} {{name=${displayName}${hasDC ? ` (DC ${dc})` : ""}}} {{${lines.join("}} {{")}}}`
+    `&{template:default} {{name=${displayName}${hasDC ? ` (DC ${dc})` : ""}}} {{${lines.join("}} {{")}}`
   );
 
   return results;
