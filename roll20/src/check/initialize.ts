@@ -1,6 +1,7 @@
 import { getPlayerName } from "../players";
 import { startUp } from "../utilities";
 import {
+  ABILITY_NAME_TO_ABBREVIATION,
   ABILITY_TYPES,
   CHECK_API_KEY,
   CHECK_API_PREFIX,
@@ -32,7 +33,8 @@ function onChatMessage(msg: ChatMessage): void {
     return;
   }
 
-  const [, type, subtype, dcString] = msg.content.toLowerCase().split(/\s+/);
+  const [, type, rawSubtype, dcString] = msg.content.toLowerCase().split(/\s+/);
+  const subtype = ABILITY_NAME_TO_ABBREVIATION[rawSubtype] ?? rawSubtype;
   if (!type || !CHECK_TYPES.includes(type)) {
     sendChat(
       CHECK_API_PREFIX,
@@ -48,10 +50,17 @@ function onChatMessage(msg: ChatMessage): void {
         ? ABILITY_TYPES
         : SAVE_TYPES;
   const allowedSubtypeValues = Object.keys(allowedSubtypes);
+  const allowedSubtypeDisplay =
+    type === "skill"
+      ? allowedSubtypeValues
+      : [
+          ...allowedSubtypeValues,
+          ...Object.keys(ABILITY_NAME_TO_ABBREVIATION),
+        ];
   if (!subtype || !allowedSubtypeValues.includes(subtype)) {
     sendChat(
       CHECK_API_PREFIX,
-      `/w ${getPlayerName(msg.playerid)} The second argument to ${CHECK_API_KEY} must be one of ${allowedSubtypeValues.join(", ")}.`
+      `/w ${getPlayerName(msg.playerid)} The second argument to ${CHECK_API_KEY} must be one of ${allowedSubtypeDisplay.join(", ")}.`
     );
     return;
   }

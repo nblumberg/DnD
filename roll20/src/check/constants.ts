@@ -4,6 +4,15 @@ export const CHECK_API_KEY = "!check";
 
 export const CHECK_TYPES = ["ability", "save", "skill"];
 
+export const ABILITY_NAME_TO_ABBREVIATION: Record<string, string> = {
+  strength: "str",
+  dexterity: "dex",
+  constitution: "con",
+  intelligence: "int",
+  wisdom: "wis",
+  charisma: "cha",
+};
+
 export const ABILITY_TYPES: Record<string, [string, keyof Character]> = {
   str: ["Strength check", "strength_mod"],
   dex: ["Dexterity check", "dexterity_mod"],
