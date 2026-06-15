@@ -1,5 +1,4 @@
 import { Id } from "../builtIns";
-import { debug } from "./debug";
 
 export interface CheckResult {
   bonus: number;
@@ -9,16 +8,11 @@ export interface CheckResult {
   success?: boolean;
 }
 
-export function tokenIdToResult(
-  tokenId: Id,
+export function tokenToResult(
+  graphic: Graphic,
   attribute: keyof Character,
   dc?: number
-): CheckResult | undefined {
-  const graphic = getObj("graphic", tokenId);
-  if (!graphic) {
-    debug(`Couldn't find graphic for token ${tokenId}`);
-    return;
-  }
+): CheckResult {
   const characterId = graphic.get("represents");
   let bonus = 0;
   if (characterId) {
@@ -29,7 +23,7 @@ export function tokenIdToResult(
   return {
     bonus,
     graphic,
-    id: tokenId,
+    id: graphic.id,
     roll,
     success: dc !== undefined ? roll >= dc : undefined,
   };
