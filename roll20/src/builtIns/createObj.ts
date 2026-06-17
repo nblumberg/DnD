@@ -43,7 +43,7 @@ declare global {
   function createObj(type: "graphic", attributes: Partial<Graphic>): Graphic;
   function createObj(type: "handout", attributes: Partial<Handout>): Handout;
   function createObj(type: "macro", attributes: Partial<Macro>): Macro;
-  function createObj(type: "path", attributes: Partial<Pathv2>): Pathv2;
+  function createObj(type: "path", attributes: Omit<Partial<Pathv2>, "points"> & { path: string }): Pathv2;
   function createObj(
     type: "rollabletable",
     attributes: Partial<RollableTable>

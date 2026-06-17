@@ -22,21 +22,30 @@ export function drawTrackPath(graphic: Graphic, playerId: Id): void {
   const [originX, originY] = points[0];
   const relativePoints = points.map(([x, y]) => [x - originX, y - originY]);
 
+  // Roll20's createObj("path") requires a "path" property in SVG command format
+  // [["M",x,y],["L",x,y],...], not the Pathv2 "points" array format.
+  const svgPath = relativePoints.map(([x, y], i) => [i === 0 ? "M" : "L", x, y]);
+
   const drawnPath = createObj("path", {
     pageid: getCurrentPageId(),
     x: originX,
     y: originY,
-    points: JSON.stringify(relativePoints),
+    path: JSON.stringify(svgPath),
     shape: "pol",
     stroke: "#ff0000",
     stroke_width: 5,
     layer: "objects",
-  } as Partial<Pathv2>);
+  }) as Pathv2 | undefined;
 
-  setTimeout(() => {
-    drawnPath.remove();
-  }, TRACK_PATH_DURATION_MS);
+  if (!drawnPath) {
+    debug(`Failed to create track path for ${graphic.get("name")}`);
+    return;
+  }
+
   debug(
     `Drew track path for ${graphic.get("name")} with ${points.length} waypoints`
   );
+  setTimeout(() => {
+    drawnPath.remove();
+  }, TRACK_PATH_DURATION_MS);
 }
