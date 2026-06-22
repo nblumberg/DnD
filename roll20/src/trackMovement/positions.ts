@@ -1,5 +1,5 @@
 import type { Id, Rect } from "../builtIns";
-import { debounce, getCurrentPageId, getRect } from "../utilities";
+import { debounce, getRect } from "../utilities";
 
 type Path = Rect[];
 type PagePaths = Record<Id, Path>;
@@ -14,7 +14,7 @@ export function getPath(graphic: Graphic): Path {
   }
   const trackState = state.trackMovement as unknown as TrackMovementState;
   const graphicId = graphic.get("id");
-  const pageId = getCurrentPageId();
+  const pageId = graphic.get("pageid");
   if (!trackState.positions[graphicId]) {
     trackState.positions[graphicId] = {};
   }

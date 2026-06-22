@@ -1,6 +1,6 @@
 import { Id } from "../builtIns";
 import { getPlayerName } from "../players";
-import { getCurrentPageId } from "../utilities";
+
 import { TRACK_PATH_DURATION_MS } from "./constants";
 import { debug } from "./debug";
 import { getPath } from "./positions";
@@ -19,17 +19,14 @@ export function drawTrackPath(graphic: Graphic, playerId: Id): void {
   const points = [...path]
     .reverse()
     .map(({ left, top }) => [left, top] as [number, number]);
-  const [originX, originY] = points[0];
-  const relativePoints = points.map(([x, y]) => [x - originX, y - originY]);
-
   // Roll20's createObj("path") requires a "path" property in SVG command format
-  // [["M",x,y],["L",x,y],...], not the Pathv2 "points" array format.
-  const svgPath = relativePoints.map(([x, y], i) => [i === 0 ? "M" : "L", x, y]);
+  // [["M",x,y],["L",x,y],...]. Use x:0,y:0 with absolute canvas coordinates.
+  const svgPath = points.map(([x, y], i) => [i === 0 ? "M" : "L", x, y]);
 
   const drawnPath = createObj("path", {
-    pageid: getCurrentPageId(),
-    x: originX,
-    y: originY,
+    pageid: graphic.get("pageid"),
+    x: 0,
+    y: 0,
     path: JSON.stringify(svgPath),
     shape: "pol",
     stroke: "#ff0000",
